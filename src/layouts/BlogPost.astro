@@ -1,0 +1,456 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    date: Date;
+    description: string;
+    tags: string[];
+    featured?: boolean;
+  };
+}
+
+const { frontmatter } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(frontmatter.date);
+
+const currentUrl = Astro.url.href;
+const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(frontmatter.title)}&url=${encodeURIComponent(currentUrl)}`;
+
+// Estimate reading time from slot content
+const wordsPerMinute = 220;
+const rawContent = await Astro.slots.render('default');
+const textContent = rawContent.replace(/<[^>]*>/g, '');
+const wordCount = textContent.split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+---
+
+<Layout title={`${frontmatter.title} — Tom Pickup`} description={frontmatter.description} article={true}>
+  <div class="blog-post">
+    <header class="article-header">
+      <a href="/news" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to News
+      </a>
+
+      <h1 class="article-title">{frontmatter.title}</h1>
+
+      <div class="article-meta">
+        <time datetime={frontmatter.date.toISOString()}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 1V3M9.5 1V3M1 5.5H13M2 2.5H12C12.5523 2.5 13 2.94772 13 3.5V12C13 12.5523 12.5523 13 12 13H2C1.44772 13 1 12.5523 1 12V3.5C1 2.94772 1.44772 2.5 2 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {formattedDate}
+        </time>
+
+        <span class="reading-time">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M7 3.5V7L9.5 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {readingTime} min read
+        </span>
+      </div>
+
+      {frontmatter.tags.length > 0 && (
+        <div class="article-tags">
+          {frontmatter.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <article class="prose">
+      <slot />
+    </article>
+
+    <footer class="article-footer">
+      <div class="share-buttons">
+        <span class="share-label">Share this post:</span>
+        <button class="share-btn" id="copy-link-btn" data-url={currentUrl} aria-label="Copy link to clipboard">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.5 8.5C6.82588 8.94689 7.2444 9.31528 7.72717 9.58157C8.20994 9.84787 8.74512 10.0059 9.29489 10.0446C9.84467 10.0833 10.3961 10.0018 10.9104 9.80585C11.4246 9.6099 11.889 9.30412 12.272 8.91L14.272 6.91C14.9635 6.19113 15.3444 5.23175 15.3332 4.23537C15.322 3.23899 14.9195 2.28836 14.2116 1.58437C13.5037 0.880387 12.5508 0.483587 11.5544 0.478745C10.558 0.473903 9.60153 0.861263 8.886 1.556L7.706 2.728" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.5 7.5C9.17412 7.05311 8.7556 6.68472 8.27283 6.41843C7.79006 6.15213 7.25488 5.99413 6.70511 5.95541C6.15533 5.9167 5.60389 5.99821 5.08964 6.19415C4.57539 6.3901 4.11098 6.69588 3.728 7.09L1.728 9.09C1.03647 9.80887 0.655554 10.7683 0.666757 11.7646C0.67796 12.761 1.08045 13.7116 1.78836 14.4156C2.49627 15.1196 3.44924 15.5164 4.44563 15.5213C5.44201 15.5261 6.39847 15.1387 7.114 14.444L8.286 13.272" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="btn-text">Copy link</span>
+        </button>
+
+        <a href={twitterShareUrl} target="_blank" rel="noopener noreferrer" class="share-btn" aria-label="Share on X / Twitter">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.6 0H15.05L9.69 6.08L16 14.77H11.06L7.19 9.61L2.77 14.77H0.31L6.05 8.26L0 0H5.07L8.56 4.73L12.6 0ZM11.74 13.28H13.1L4.32 1.38H2.87L11.74 13.28Z" fill="currentColor"/>
+          </svg>
+          <span class="btn-text">Share on X</span>
+        </a>
+      </div>
+
+      <a href="/news" class="back-link back-link-bottom">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to all news
+      </a>
+    </footer>
+  </div>
+</Layout>
+
+<script>
+  const copyBtn = document.getElementById('copy-link-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      const url = copyBtn.getAttribute('data-url') || window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        const textEl = copyBtn.querySelector('.btn-text');
+        if (textEl) {
+          const original = textEl.textContent;
+          textEl.textContent = 'Copied!';
+          setTimeout(() => { textEl.textContent = original; }, 2000);
+        }
+      } catch {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+    });
+  }
+</script>
+
+<style>
+  .blog-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary, #8e8e93);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    background-image: none;
+  }
+
+  .back-link:hover {
+    color: var(--accent, #12b6cf);
+    background-image: none;
+  }
+
+  .article-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .article-title {
+    font-size: clamp(1.875rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    margin: 1.25rem 0 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #12b6cf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--text-secondary, #8e8e93);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-meta time,
+  .article-meta .reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(18, 182, 207, 0.1);
+    color: #12b6cf;
+    border: 1px solid rgba(18, 182, 207, 0.2);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: lowercase;
+  }
+
+  /* Prose styles for markdown content */
+  .prose {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--text-primary, #ffffff);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+  }
+
+  .prose :global(h4) {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+  }
+
+  .prose :global(a) {
+    color: #12b6cf;
+    text-decoration: none;
+    background-image: linear-gradient(#12b6cf, #12b6cf);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease;
+  }
+
+  .prose :global(a:hover) {
+    background-size: 100% 1px;
+  }
+
+  .prose :global(strong) {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .prose :global(em) {
+    font-style: italic;
+  }
+
+  .prose :global(blockquote) {
+    border-left: 3px solid #12b6cf;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background: rgba(18, 182, 207, 0.05);
+    border-radius: 0 8px 8px 0;
+    color: var(--text-secondary, #8e8e93);
+    font-style: italic;
+  }
+
+  .prose :global(blockquote p) {
+    margin-bottom: 0;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose :global(ul li) {
+    list-style-type: disc;
+  }
+
+  .prose :global(ol li) {
+    list-style-type: decimal;
+  }
+
+  .prose :global(code) {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: 0.875em;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    color: #e4e4e7;
+  }
+
+  .prose :global(pre) {
+    background: #0c0c0f;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2rem 0;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 2.5rem 0;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9375rem;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .prose :global(th) {
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  /* Article footer */
+  .article-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .share-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .share-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #8e8e93);
+    font-weight: 500;
+    margin-right: 0.25rem;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: var(--text-secondary, #8e8e93);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    background-image: none;
+  }
+
+  .share-btn:hover {
+    background: rgba(18, 182, 207, 0.08);
+    border-color: rgba(18, 182, 207, 0.25);
+    color: #12b6cf;
+    background-image: none;
+  }
+
+  .back-link-bottom {
+    margin-top: 1rem;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .blog-post {
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .article-title {
+      font-size: 1.75rem;
+    }
+
+    .article-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .prose {
+      font-size: 1rem;
+    }
+
+    .prose :global(h2) {
+      font-size: 1.3rem;
+    }
+
+    .prose :global(h3) {
+      font-size: 1.15rem;
+    }
+
+    .prose :global(pre) {
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+    }
+
+    .share-buttons {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

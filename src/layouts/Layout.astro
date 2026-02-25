@@ -1,0 +1,167 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  article?: boolean;
+}
+
+const {
+  title,
+  description = 'Tom Pickup — Lancashire County Councillor for Padiham and Burnley West. Reform UK. Transparency, accountability, and action for Lancashire.',
+  ogImage = '/og-image.jpg',
+  article = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const isHome = Astro.url.pathname === '/';
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#000000" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="Tom Pickup" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tompickup" />
+    <meta name="twitter:creator" content="@tompickup" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+
+    <!-- Person Structured Data (home page only) -->
+    {isHome && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Tom Pickup',
+        jobTitle: 'Lancashire County Councillor',
+        description: 'Lancashire County Councillor for Padiham and Burnley West. Reform UK.',
+        url: Astro.site,
+        sameAs: [
+          'https://x.com/tompickup',
+          'https://www.facebook.com/tompickupburnley',
+          'https://www.instagram.com/tompickupburnley',
+        ],
+        memberOf: {
+          '@type': 'Organization',
+          name: 'Lancashire County Council',
+          url: 'https://www.lancashire.gov.uk',
+        },
+        affiliation: {
+          '@type': 'PoliticalParty',
+          name: 'Reform UK',
+          url: 'https://www.reformparty.uk',
+        },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Padiham',
+          addressRegion: 'Lancashire',
+          addressCountry: 'GB',
+        },
+      })} />
+    )}
+  </head>
+  <body>
+    <a href="#main" class="skip-to-content">Skip to content</a>
+
+    <Header />
+
+    <main id="main" class="noise-overlay">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <!-- Scroll reveal observer -->
+    <script>
+      if (typeof IntersectionObserver !== 'undefined') {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+          observer.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Ambient gradient orbs — decorative background */
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(100px);
+  }
+
+  body::before {
+    top: -15%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(18, 182, 207, 0.12) 0%, transparent 70%);
+    animation: gradientShift 20s ease-in-out infinite;
+  }
+
+  body::after {
+    bottom: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(18, 182, 207, 0.08) 0%, transparent 70%);
+    animation: gradientShift 25s ease-in-out infinite reverse;
+  }
+
+  /* Page content needs padding for fixed header */
+  main {
+    padding-top: 72px;
+    min-height: calc(100dvh - 72px);
+  }
+</style>

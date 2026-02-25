@@ -1,0 +1,163 @@
+---
+interface Props {
+  title: string;
+  icon: string;
+  description: string;
+  color?: string;
+}
+
+const { title, icon, description, color = '#12b6cf' } = Astro.props;
+---
+
+<details class="priority-card">
+  <summary>
+    <span class="priority-icon" style={`color: ${color};`} set:html={icon} />
+    <h3>{title}</h3>
+    <svg
+      class="chevron"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </summary>
+  <div class="priority-body">
+    <p>{description}</p>
+  </div>
+</details>
+
+<style>
+  .priority-card {
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+
+  .priority-card:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .priority-card[open] {
+    border-color: rgba(18, 182, 207, 0.2);
+    border-left: 3px solid #12b6cf;
+    background: rgba(28, 28, 30, 0.7);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::marker {
+    display: none;
+    content: '';
+  }
+
+  .priority-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .priority-card:hover .priority-icon {
+    transform: scale(1.05);
+  }
+
+  h3 {
+    flex: 1;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    color: rgba(235, 235, 245, 0.4);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .priority-card[open] .chevron {
+    transform: rotate(180deg);
+    color: #12b6cf;
+  }
+
+  .priority-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .priority-card[open] .priority-body {
+    grid-template-rows: 1fr;
+  }
+
+  .priority-body > p {
+    overflow: hidden;
+    padding: 0 1.5rem 1.25rem;
+    padding-left: calc(1.5rem + 40px + 12px);
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: rgba(235, 235, 245, 0.6);
+  }
+
+  @media (max-width: 768px) {
+    summary {
+      padding: 1rem 1.25rem;
+      gap: 10px;
+    }
+
+    .priority-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    h3 {
+      font-size: 0.9375rem;
+    }
+
+    .priority-body > p {
+      padding: 0 1.25rem 1rem;
+      padding-left: calc(1.25rem + 36px + 10px);
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .priority-card,
+    .chevron,
+    .priority-body,
+    .priority-icon {
+      transition: none;
+    }
+  }
+</style>

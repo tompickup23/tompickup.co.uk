@@ -1,0 +1,202 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  description: string;
+  slug: string;
+  tags?: string[];
+}
+
+const { title, date, description, slug, tags = [] } = Astro.props;
+
+function formatDate(dateStr: string): string {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return dateStr;
+  }
+}
+---
+
+<a href={`/news/${slug}`} class="news-card">
+  <div class="news-card-overlay"></div>
+
+  {tags.length > 0 && (
+    <div class="news-tags">
+      {tags.map((tag) => (
+        <span class="news-tag">{tag}</span>
+      ))}
+    </div>
+  )}
+
+  <h3 class="news-title">{title}</h3>
+
+  <time class="news-date" datetime={date}>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="16" y1="2" x2="16" y2="6"></line>
+      <line x1="8" y1="2" x2="8" y2="6"></line>
+      <line x1="3" y1="10" x2="21" y2="10"></line>
+    </svg>
+    {formatDate(date)}
+  </time>
+
+  <p class="news-description">{description}</p>
+
+  <span class="read-more">
+    Read more
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .news-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1.5rem;
+    background: rgba(28, 28, 30, 0.7);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .news-card-overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+
+  .news-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.12);
+    background-image: none;
+  }
+
+  .news-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .news-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(18, 182, 207, 0.12);
+    color: #12b6cf;
+    border: 1px solid rgba(18, 182, 207, 0.15);
+  }
+
+  .news-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .news-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    color: rgba(235, 235, 245, 0.4);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    z-index: 1;
+  }
+
+  .news-date svg {
+    opacity: 0.5;
+  }
+
+  .news-description {
+    font-size: 0.875rem;
+    color: rgba(235, 235, 245, 0.6);
+    line-height: 1.55;
+    margin: 0;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .read-more {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    color: #12b6cf;
+    font-weight: 500;
+    transition: gap 0.2s ease;
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+  }
+
+  .news-card:hover .read-more {
+    gap: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .news-card {
+      padding: 1.25rem;
+    }
+
+    .news-title {
+      font-size: 1rem;
+    }
+
+    .news-description {
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .news-card {
+      transition: none;
+    }
+
+    .read-more {
+      transition: none;
+    }
+  }
+</style>

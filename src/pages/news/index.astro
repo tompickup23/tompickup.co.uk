@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import ScrollReveal from '../../components/ScrollReveal.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('news', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="News & Updates — Tom Pickup" description="Latest news and updates from Tom Pickup, Lancashire County Councillor for Padiham and Burnley West.">
+  <div class="news-page">
+    <header class="page-header">
+      <h1 class="page-title">News & Updates</h1>
+      <p class="page-subtitle">
+        What I'm working on, what's happening at County Hall, and issues affecting Padiham and Burnley West.
+      </p>
+    </header>
+
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        <p>No posts yet. Check back soon.</p>
+      </div>
+    ) : (
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <ScrollReveal>
+            <NewsCard
+              title={post.data.title}
+              date={post.data.date.toISOString()}
+              description={post.data.description}
+              tags={post.data.tags}
+              slug={post.id}
+            />
+          </ScrollReveal>
+        ))}
+      </div>
+    )}
+
+    <div class="rss-link">
+      <a href="/rss.xml" aria-label="Subscribe to RSS feed">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="2" cy="12" r="1.5" fill="currentColor"/>
+          <path d="M0.5 7.5C3.81 7.5 6.5 10.19 6.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M0.5 2.5C6.58 2.5 11.5 7.42 11.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Subscribe via RSS
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .news-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, #12b6cf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-subtitle {
+    font-size: 1.0625rem;
+    color: var(--text-secondary, #8e8e93);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary, #8e8e93);
+    font-size: 1.0625rem;
+  }
+
+  .rss-link {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .rss-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary, #8e8e93);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    background-image: none;
+  }
+
+  .rss-link a:hover {
+    color: #12b6cf;
+    background-image: none;
+  }
+
+  @media (max-width: 900px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .news-page {
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+  }
+</style>

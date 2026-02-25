@@ -1,0 +1,331 @@
+---
+import StatCard from './StatCard.astro';
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-eyebrow">
+      <span class="pulse-dot"></span>
+      Lancashire County Councillor &middot; Reform UK
+    </span>
+
+    <h1>
+      Fighting for<br />
+      <span class="gradient">Padiham &amp; Burnley West</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Championing transparency, accountability, and value for money. Standing up
+      for the residents of Padiham and Burnley West with data-driven scrutiny of
+      every pound of public spending.
+    </p>
+
+    <div class="hero-actions">
+      <a href="/contact" class="btn btn-primary">Get in Touch</a>
+      <a
+        href="https://aidoge.co.uk/lancashire/lancashirecc/"
+        class="btn btn-secondary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View AI DOGE
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <StatCard
+        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>'
+        value="&pound;3.6B"
+        label="LCC Spending Tracked"
+        color="#12b6cf"
+      />
+      <StatCard
+        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>'
+        value="753K+"
+        label="Transactions Scrutinised"
+        color="#30d158"
+      />
+      <StatCard
+        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+        value="100%"
+        label="Transparency Commitment"
+        color="#bf5af2"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 1.5rem 5rem;
+  }
+
+  .hero::before,
+  .hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+    opacity: 0.15;
+    animation: gradientShift 12s ease-in-out infinite alternate;
+  }
+
+  .hero::before {
+    width: 600px;
+    height: 600px;
+    top: -15%;
+    right: -10%;
+    background: radial-gradient(circle, #12b6cf 0%, transparent 70%);
+  }
+
+  .hero::after {
+    width: 500px;
+    height: 500px;
+    bottom: -10%;
+    left: -8%;
+    background: radial-gradient(circle, #12b6cf 0%, transparent 70%);
+    animation-delay: -6s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes gradientShift {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.12;
+    }
+    50% {
+      transform: translate(30px, -20px) scale(1.1);
+      opacity: 0.2;
+    }
+    100% {
+      transform: translate(-20px, 15px) scale(0.95);
+      opacity: 0.1;
+    }
+  }
+
+  .hero-content {
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: rgba(18, 182, 207, 0.12);
+    border: 1px solid rgba(18, 182, 207, 0.2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #12b6cf;
+    margin-bottom: 1.5rem;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #30d158;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .pulse-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: rgba(48, 209, 88, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin: 0 0 1.25rem;
+  }
+
+  h1 .gradient {
+    background: linear-gradient(90deg, #12b6cf, #64d2ff, #bf5af2, #12b6cf);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 6s ease infinite;
+  }
+
+  @keyframes textShimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: rgba(235, 235, 245, 0.6);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: none;
+    line-height: 1;
+  }
+
+  .btn-primary {
+    background: #12b6cf;
+    color: #000;
+    box-shadow: 0 4px 20px rgba(18, 182, 207, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: #14c8e3;
+    box-shadow: 0 8px 32px rgba(18, 182, 207, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: rgba(235, 235, 245, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary svg {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-secondary:hover svg {
+    opacity: 1;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 6rem 1rem 3rem;
+      min-height: auto;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .hero-stats {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .hero::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .hero::after {
+      width: 250px;
+      height: 250px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero::before,
+    .hero::after {
+      animation: none;
+    }
+
+    h1 .gradient {
+      animation: none;
+    }
+
+    .pulse-dot::after {
+      animation: none;
+    }
+  }
+</style>
