@@ -20,15 +20,8 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     <div class="container">
       <ScrollReveal>
         <div class="bio-grid">
-          <div class="bio-photo-placeholder">
-            <div class="photo-inner">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              <span>Photo coming soon</span>
-            </div>
+          <div class="bio-photo">
+            <img src="/images/headshot.jpg" alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West" class="headshot" loading="eager" />
           </div>
 
           <div class="bio-text">
@@ -316,33 +309,18 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     align-items: start;
   }
 
-  .bio-photo-placeholder {
+  .bio-photo {
     width: 300px;
-    height: 400px;
+    flex-shrink: 0;
+  }
+
+  .headshot {
+    width: 100%;
+    height: auto;
     border-radius: var(--radius-lg);
-    background: var(--bg-tertiary);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .photo-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-md);
-    color: var(--text-tertiary);
-  }
-
-  .photo-inner svg {
-    opacity: 0.4;
-  }
-
-  .photo-inner span {
-    font-size: 0.875rem;
-    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
   }
 
   .bio-text h2 {
@@ -571,10 +549,9 @@ import ScrollReveal from '../components/ScrollReveal.astro';
       gap: var(--space-lg);
     }
 
-    .bio-photo-placeholder {
+    .bio-photo {
       width: 100%;
       max-width: 300px;
-      height: 280px;
       margin: 0 auto;
     }
 
@@ -611,8 +588,8 @@ import ScrollReveal from '../components/ScrollReveal.astro';
   }
 
   @media (max-width: 480px) {
-    .bio-photo-placeholder {
-      height: 240px;
+    .bio-photo {
+      max-width: 250px;
     }
 
     .transparency-links a {
