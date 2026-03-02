@@ -4,6 +4,7 @@ date: 2026-02-23
 description: "The key issues I'm fighting for as your Reform UK councillor — from council tax to local services."
 tags: ["priorities", "reform", "padiham"]
 featured: false
+draft: true
 ---
 
 When I stood for election, I made a simple promise: to put Padiham and Burnley West first and to be honest with you about what's happening at County Hall. Here are the issues I'm focused on and what I'm doing about them.

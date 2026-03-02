@@ -1,4 +1,5 @@
 ---
+import EmailSignup from './EmailSignup.astro';
 const currentYear = new Date().getFullYear();
 ---
 
@@ -14,6 +15,9 @@ const currentYear = new Date().getFullYear();
           Lancashire County Councillor<br />
           <span class="text-accent">Reform UK</span> — Padiham &amp; Burnley West
         </p>
+        <div style="margin-top: var(--space-md);">
+          <EmailSignup variant="compact" />
+        </div>
       </div>
 
       <!-- Quick Links Column -->
@@ -24,17 +28,6 @@ const currentYear = new Date().getFullYear();
             <li><a href="/about/">About</a></li>
             <li><a href="/news/">News</a></li>
             <li><a href="/contact/">Contact</a></li>
-            <li><a href="/transparency/">Transparency</a></li>
-            <li>
-              <a href="https://aidoge.co.uk" target="_blank" rel="noopener noreferrer">
-                AI DOGE
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-left:4px;">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-              </a>
-            </li>
           </ul>
         </nav>
       </div>

@@ -4,6 +4,7 @@ date: 2026-02-24
 description: "How AI DOGE is bringing unprecedented transparency to Lancashire's £12 billion public spending."
 tags: ["transparency", "ai-doge", "lancashire"]
 featured: false
+draft: true
 ---
 
 Lancashire councils collectively spend billions of pounds of public money every year. Yet until recently, there was no easy way for residents to see exactly where that money was going. Individual councils publish spending data in sprawling CSV files that are almost impossible for ordinary people to make sense of. That's why I built [AI DOGE](https://aidoge.co.uk).

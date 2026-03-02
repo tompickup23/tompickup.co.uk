@@ -3,7 +3,8 @@ title: "Welcome to My New Website"
 date: 2026-02-25
 description: "Introducing my new website as your Lancashire County Councillor for Padiham and Burnley West."
 tags: ["personal", "lancashire"]
-featured: true
+featured: false
+draft: true
 ---
 
 I'm Tom Pickup, your Lancashire County Councillor for Padiham and Burnley West, and I'm pleased to launch this website as a direct line of communication between me and the people I represent.

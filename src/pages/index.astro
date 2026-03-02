@@ -2,8 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import PriorityCard from '../components/PriorityCard.astro';
+import ComparisonBar from '../components/ComparisonBar.astro';
+import TrustCertificate from '../components/TrustCertificate.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import EmailSignup from '../components/EmailSignup.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('news', ({ data }) => !data.draft))
@@ -26,26 +29,26 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
         <div class="priorities-grid stagger-children">
           <PriorityCard
-            title="Spending Transparency"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>'
-            description="Every pound of public money should be accounted for. I built the AI DOGE platform to track over £12 billion in council spending across Lancashire — exposing duplicate payments, contract irregularities, and wasteful spending. Transparency isn't optional; it's the foundation of trust."
+            title="Council Tax: 7 Years of Maximum Rises &mdash; Ended"
+            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
+            description="The Conservatives raised council tax to the legal maximum in 7 of their 8 years in control &mdash; including the highest rise in Lancashire&rsquo;s history at 5.99%. Reform&rsquo;s first budget delivered 3.80%, the lowest in 12 years."
           />
           <PriorityCard
-            title="Better Local Services"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
-            description="Potholes, missed bin collections, overgrown verges — the basics matter. I push both Lancashire County Council and Burnley Borough Council to deliver the services residents pay for. If something isn't right in Padiham or Burnley West, I want to know about it."
-            color="#30d158"
-          />
-          <PriorityCard
-            title="Value for Money"
+            title="&pound;28M Inherited Overspend &mdash; Nearly Eliminated"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>'
-            description="Council tax keeps rising while services get cut. I challenge wasteful spending, scrutinise contracts, and ask the uncomfortable questions about where your money goes. Duplicate payments, sole-supplier deals, and inflated costs — I'm on it."
+            description="When Reform took control, LCC was forecasting a &pound;28 million overspend. Through targeted action, we&rsquo;ve cut it to &pound;6.1 million and falling &mdash; without slashing front-line services."
             color="#ff9f0a"
           />
           <PriorityCard
-            title="Community First"
+            title="Care Homes the Conservatives Nearly Closed &mdash; Saved"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
-            description="I'm here to listen. Whether it's a planning concern, an issue with a local road, or an idea to improve our area — your voice matters. I hold regular surgeries and I'm always available to residents of Padiham and Burnley West. This is your seat, not mine."
+            description="We inherited a consultation process to close five county care homes. After listening to 1,600+ residents, we kept all five open and pledged new investment &mdash; because elderly care isn&rsquo;t a line to cut."
+            color="#30d158"
+          />
+          <PriorityCard
+            title="&pound;350M Bond Losses the Conservatives Concealed &mdash; Exposed"
+            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+            description="&pound;519 million invested in VeLTIP bonds now worth an estimated &pound;169 million. The previous Conservative administration failed to transparently report the true scale of these paper losses to councillors or the public."
             color="#bf5af2"
           />
         </div>
@@ -90,32 +93,31 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 4: AI DOGE Highlight -->
-  <section class="doge-section">
+  <!-- Section 4: Reform at LCC -->
+  <section class="reform-section">
     <div class="container">
       <ScrollReveal>
-        <div class="doge-card">
-          <div class="doge-content">
-            <div class="doge-text">
-              <span class="badge badge-teal">Open Data Platform</span>
-              <h2>AI DOGE</h2>
+        <div class="reform-card">
+          <div class="reform-content">
+            <div class="reform-text">
+              <span class="badge badge-teal">Reform UK at Lancashire County Council</span>
+              <h2>Changing Lancashire for the Better</h2>
               <p>
-                I created AI DOGE to bring radical transparency to council spending across Lancashire.
-                Using AI-powered forensic analysis, the platform tracks every transaction, flags duplicate
-                payments, monitors supplier concentration, and benchmarks spending across all 15 Lancashire councils.
+                In May 2025, Reform won a historic landslide &mdash; 53 of 84 seats. In our first year,
+                we&rsquo;ve delivered a balanced &pound;1.33 billion budget with the lowest council tax rise
+                in 12 years. We corrected a &pound;28 million inherited overspend, saved all five county
+                care homes, and stopped councillors collecting salaries for pension fund directorships.
               </p>
               <p>
-                This isn't about politics — it's about making sure your council tax is spent wisely. Every
-                dataset is public, every finding is verifiable, and every resident can see exactly where
-                the money goes.
+                The previous Conservative administration raised council tax to the maximum in 7 of 8 years,
+                saw savings delivery collapse from 91% to 48%, and left &pound;350 million in concealed bond losses.
+                We&rsquo;re doing things differently.
               </p>
               <a
-                href="https://aidoge.co.uk/lancashire/lancashirecc/"
-                class="btn-primary doge-cta"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/news/"
+                class="btn-primary reform-cta"
               >
-                Explore the Data
+                Read the Full Story
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
@@ -123,19 +125,52 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
               </a>
             </div>
 
-            <div class="doge-stats">
-              <div class="doge-stat">
-                <span class="doge-stat-value tabular-nums">15</span>
-                <span class="doge-stat-label">Councils</span>
+            <div class="reform-comparisons">
+              <ComparisonBar
+                title="Council Tax Rise"
+                reformValue="3.80%"
+                reformPercent={63}
+                conValue="4.99%"
+                conPercent={83}
+                lowerIsBetter={true}
+                annotation="Reform delivered the lowest council tax rise in 12 years"
+              />
+              <ComparisonBar
+                title="Savings Delivery Rate"
+                reformValue="90%+"
+                reformPercent={90}
+                conValue="48%"
+                conPercent={48}
+                annotation="Conservative savings delivery collapsed over 8 years"
+              />
+              <ComparisonBar
+                title="Overspend"
+                reformValue="&pound;6.1M"
+                reformPercent={22}
+                conValue="&pound;28M"
+                conPercent={100}
+                lowerIsBetter={true}
+                annotation="78% reduction in inherited overspend without front-line cuts"
+              />
+            </div>
+
+            <div class="reform-stats">
+              <div class="reform-stat">
+                <span class="reform-stat-value tabular-nums">3.80%</span>
+                <span class="reform-stat-label">Lowest CT Rise in 12 Years</span>
               </div>
-              <div class="doge-stat">
-                <span class="doge-stat-value tabular-nums">2.3M+</span>
-                <span class="doge-stat-label">Transactions</span>
+              <div class="reform-stat">
+                <span class="reform-stat-value tabular-nums">&pound;62M</span>
+                <span class="reform-stat-label">Savings Programme</span>
               </div>
-              <div class="doge-stat">
-                <span class="doge-stat-value tabular-nums">&pound;12B+</span>
-                <span class="doge-stat-label">Tracked</span>
+              <div class="reform-stat">
+                <span class="reform-stat-value tabular-nums">&pound;1.33B</span>
+                <span class="reform-stat-label">Balanced Budget</span>
               </div>
+            </div>
+
+            <div class="reform-trust">
+              <TrustCertificate />
             </div>
           </div>
         </div>
@@ -143,7 +178,16 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 5: Contact CTA -->
+  <!-- Section 5: Email Signup -->
+  <section class="signup-section">
+    <div class="container">
+      <ScrollReveal>
+        <EmailSignup variant="inline" />
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 6: Contact CTA -->
   <section class="contact-cta-section">
     <div class="container">
       <ScrollReveal>
@@ -170,8 +214,12 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   /* ---- Section Spacing ---- */
   .priorities-section,
   .news-section,
-  .doge-section {
+  .reform-section {
     padding: var(--space-2xl) 0;
+  }
+
+  .signup-section {
+    padding: 0 0 var(--space-xl);
   }
 
   .contact-cta-section {
@@ -214,8 +262,8 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     padding: var(--space-2xl) var(--space-lg);
   }
 
-  /* ---- AI DOGE Card ---- */
-  .doge-card {
+  /* ---- Reform Card ---- */
+  .reform-card {
     background: rgba(28, 28, 30, 0.6);
     backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
     -webkit-backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
@@ -226,20 +274,31 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
   }
 
-  .doge-card:hover {
+  .reform-card:hover {
     box-shadow: var(--shadow-lg), var(--shadow-glow);
     border-color: rgba(255, 255, 255, 0.1);
     border-left-color: var(--accent);
   }
 
-  .doge-content {
+  .reform-content {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: var(--space-xl);
-    align-items: center;
+    align-items: start;
   }
 
-  .doge-text h2 {
+  .reform-comparisons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    grid-column: 1 / -1;
+  }
+
+  .reform-trust {
+    grid-column: 1 / -1;
+  }
+
+  .reform-text h2 {
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -250,24 +309,24 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     background-clip: text;
   }
 
-  .doge-text p {
+  .reform-text p {
     color: var(--text-secondary);
     font-size: 0.9375rem;
     line-height: 1.7;
     margin-bottom: var(--space-md);
   }
 
-  .doge-cta {
+  .reform-cta {
     margin-top: var(--space-sm);
   }
 
-  .doge-stats {
+  .reform-stats {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
   }
 
-  .doge-stat {
+  .reform-stat {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -279,12 +338,12 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     transition: border-color var(--transition-normal), transform var(--transition-fast);
   }
 
-  .doge-stat:hover {
+  .reform-stat:hover {
     border-color: var(--accent-border);
     transform: translateY(-2px);
   }
 
-  .doge-stat-value {
+  .reform-stat-value {
     font-size: 1.75rem;
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -292,7 +351,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     line-height: 1.1;
   }
 
-  .doge-stat-label {
+  .reform-stat-label {
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--text-secondary);
@@ -416,15 +475,15 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
   /* ---- Responsive ---- */
   @media (max-width: 1024px) {
-    .doge-content {
+    .reform-content {
       grid-template-columns: 1fr;
     }
 
-    .doge-stats {
+    .reform-stats {
       flex-direction: row;
     }
 
-    .doge-stat {
+    .reform-stat {
       flex: 1;
     }
   }
@@ -438,11 +497,11 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
       grid-template-columns: 1fr;
     }
 
-    .doge-stats {
+    .reform-stats {
       flex-direction: column;
     }
 
-    .doge-card {
+    .reform-card {
       padding: var(--space-lg);
     }
 
@@ -463,7 +522,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   @media (max-width: 480px) {
     .priorities-section,
     .news-section,
-    .doge-section {
+    .reform-section {
       padding: var(--space-xl) 0;
     }
 
@@ -472,13 +531,13 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
       border-radius: var(--radius-lg);
     }
 
-    .doge-card {
+    .reform-card {
       padding: var(--space-md);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .doge-stat {
+    .reform-stat {
       transition: none;
     }
   }

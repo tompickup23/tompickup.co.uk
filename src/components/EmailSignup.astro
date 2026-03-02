@@ -1,0 +1,110 @@
+---
+interface Props {
+  variant?: 'inline' | 'compact';
+}
+
+const { variant = 'inline' } = Astro.props;
+---
+
+<div class:list={['email-signup', `email-signup--${variant}`]}>
+  <div class="email-signup-text">
+    {variant === 'inline' ? (
+      <>
+        <h3 class="email-signup-heading">Get the facts your council won&rsquo;t publish</h3>
+        <p class="email-signup-desc">Free updates on Burnley spending, council decisions, and what I&rsquo;m doing about it. Straight to your inbox.</p>
+      </>
+    ) : (
+      <p class="email-signup-desc">Stay updated on Burnley spending</p>
+    )}
+  </div>
+  <a
+    href="mailto:tom@tompickup.co.uk?subject=Subscribe%20to%20Updates&body=Hi%20Tom%2C%0A%0APlease%20add%20me%20to%20your%20mailing%20list%20for%20updates%20on%20Burnley%20spending%20and%20local%20issues.%0A%0AName%3A%20%0AWard%3A%20%0A%0AThanks"
+    class="email-signup-btn"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+    Subscribe for Updates
+  </a>
+</div>
+
+<style>
+  .email-signup {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+    border-radius: var(--radius-lg);
+  }
+
+  .email-signup--inline {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-xl);
+  }
+
+  .email-signup--compact {
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+
+  .email-signup-text {
+    flex: 1;
+  }
+
+  .email-signup-heading {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .email-signup-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    max-width: none;
+  }
+
+  .email-signup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.65rem 1.25rem;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    background-image: none;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: 0 2px 12px rgba(18, 182, 207, 0.2);
+  }
+
+  .email-signup-btn:hover {
+    background: #14c8e3;
+    background-image: none;
+    background-size: 0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(18, 182, 207, 0.35);
+  }
+
+  @media (max-width: 768px) {
+    .email-signup {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .email-signup-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

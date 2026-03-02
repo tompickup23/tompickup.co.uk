@@ -1,11 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import ComparisonBar from '../components/ComparisonBar.astro';
+import TrustCertificate from '../components/TrustCertificate.astro';
 ---
 
 <Layout
   title="About — Tom Pickup"
-  description="About Tom Pickup, Lancashire County Councillor for Padiham and Burnley West. Lead Member for Finance and Resources. Reform UK. Creator of AI DOGE."
+  description="About Tom Pickup, Lancashire County Councillor for Padiham and Burnley West. Lead Member for Finance and Resources. Reform UK."
 >
   <!-- Section 1: Page Header -->
   <section class="page-header-section">
@@ -38,12 +40,12 @@ import ScrollReveal from '../components/ScrollReveal.astro';
               something about it.
             </p>
             <p>
-              Before entering politics, I worked in technology, which gave me the skills to build
-              tools that can make sense of vast amounts of public data. That background led me to create
-              <a href="https://aidoge.co.uk" target="_blank" rel="noopener noreferrer">AI DOGE</a> — a
-              platform that tracks over 2.3 million transactions and more than &pound;12 billion in spending
-              across all 15 Lancashire councils. I believe technology can and should be used to hold power
-              to account.
+              In May 2025, Lancashire voted for change &mdash; decisively. Reform won 53 of 84 seats,
+              the largest majority any party has held at County Hall. As Lead Member for Finance and
+              Resources, I inherited a &pound;28 million overspend, &pound;350 million in concealed bond
+              losses, and a savings programme that had collapsed from 91% delivery to just 48%.
+              We&rsquo;ve turned it around &mdash; the lowest council tax rise in 12 years, a balanced
+              budget, and all five care homes saved.
             </p>
             <p>
               I was elected in 2025 on a Reform UK ticket, standing on a simple promise: transparency,
@@ -110,12 +112,12 @@ import ScrollReveal from '../components/ScrollReveal.astro';
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-card card">
-              <span class="timeline-date">2024</span>
-              <h3>Created AI DOGE</h3>
+              <span class="timeline-date">2026</span>
+              <h3>Delivered Reform&rsquo;s First Budget</h3>
               <p>
-                Built the AI DOGE open data platform from scratch — tracking spending for all
-                15 Lancashire councils with forensic AI analysis. Over 2.3 million transactions
-                and &pound;12 billion in public spending made searchable and transparent.
+                Balanced a &pound;1.33 billion budget with the lowest council tax rise in
+                12 years (3.80%). Identified &pound;62 million in savings and corrected a
+                &pound;28 million inherited overspend &mdash; all without cutting front-line services.
               </p>
             </div>
           </div>
@@ -123,12 +125,12 @@ import ScrollReveal from '../components/ScrollReveal.astro';
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-card card">
-              <span class="timeline-date">2024</span>
-              <h3>Began Investigating Council Spending</h3>
+              <span class="timeline-date">2025</span>
+              <h3>Saved All Five Care Homes</h3>
               <p>
-                Started analysing publicly available council spending data, uncovering patterns
-                of duplicate payments, supplier concentration risks, and contract irregularities
-                across Lancashire.
+                Inherited a Conservative consultation to close five county care homes. Listened
+                to over 1,600 residents and reversed course &mdash; keeping all five open with
+                new investment pledged.
               </p>
             </div>
           </div>
@@ -150,7 +152,50 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     </div>
   </section>
 
-  <!-- Section 4: Political Priorities -->
+  <!-- Section 4: What I've Achieved -->
+  <section class="achievements-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">What I&rsquo;ve Achieved</h2>
+        </div>
+
+        <div class="achievements-grid stagger-children">
+          <div class="achievement-card card">
+            <span class="achievement-number" style="color: #30d158;">3.80%</span>
+            <h3>Lowest CT Rise in 12 Years</h3>
+            <p>The Conservatives raised council tax to the maximum in 7 of 8 years. Reform&rsquo;s first budget broke that pattern &mdash; saving households &pound;17.55 each versus the Tory approach.</p>
+          </div>
+
+          <div class="achievement-card card">
+            <span class="achievement-number" style="color: #ff453a;">&pound;28M&rarr;&pound;6M</span>
+            <h3>Inherited Overspend Corrected</h3>
+            <p>We inherited a &pound;28 million overspend forecast. Through targeted action &mdash; not cuts to front-line services &mdash; we&rsquo;ve reduced it to &pound;6.1 million and falling.</p>
+          </div>
+
+          <div class="achievement-card card">
+            <span class="achievement-number" style="color: var(--accent);">5</span>
+            <h3>Care Homes Saved</h3>
+            <p>Inherited a consultation to close them. Listened to 1,600+ residents. Kept all five open with new investment pledged &mdash; because elderly care isn&rsquo;t a line to cut.</p>
+          </div>
+
+          <div class="achievement-card card">
+            <span class="achievement-number" style="color: #ff9f0a;">&pound;986M</span>
+            <h3>Budget Oversight</h3>
+            <p>As Lead Member for Finance &amp; Resources, overseeing Lancashire County Council&rsquo;s entire annual budget on behalf of residents.</p>
+          </div>
+
+          <div class="achievement-card card">
+            <span class="achievement-number" style="color: #bf5af2;">&pound;18,000</span>
+            <h3>Awarded to Burnley Arts</h3>
+            <p>As Chairman of the Advisory Committee of the charity, distributed grants to 15 local arts organisations serving the community.</p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 5: Political Priorities -->
   <section class="political-priorities-section">
     <div class="container">
       <ScrollReveal>
@@ -223,48 +268,63 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     </div>
   </section>
 
-  <!-- Section 5: Transparency Work -->
+  <!-- Section 5: Reform at LCC -->
   <section class="transparency-section">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
-          <h2 class="section-heading">Transparency &amp; AI DOGE</h2>
+          <h2 class="section-heading">Reform at Lancashire County Council</h2>
         </div>
 
         <div class="transparency-content">
           <p>
-            The AI DOGE platform is my biggest contribution to transparency in Lancashire.
-            Built from scratch, it uses artificial intelligence to analyse council spending
-            data across all 15 Lancashire councils — from district councils like Burnley and
-            Pendle to Lancashire County Council itself and the unitary authorities of Blackpool
-            and Blackburn with Darwen.
+            When the Conservatives left County Hall, they left behind a mess: a &pound;28 million
+            overspend, savings delivery that had collapsed from 91% to 48%, council tax raised to
+            the legal maximum in 7 of 8 years, and &pound;350 million in bond losses they never
+            transparently reported.
           </p>
           <p>
-            The platform performs forensic checks including duplicate payment detection, split
-            payment evasion analysis, supplier concentration risk assessment, Benford's Law
-            statistical screening, and cross-council price comparison. All data is publicly
-            accessible and all findings are verifiable.
-          </p>
-          <p>
-            I believe this kind of transparency should be the norm, not the exception. If you
-            want to explore the data yourself or learn more about how it works, visit the links below.
+            In less than a year, Reform has delivered the lowest council tax rise in 12 years,
+            identified &pound;62 million in savings, corrected the inherited overspend, saved all five
+            county care homes, and stopped councillors collecting salaries for pension fund
+            directorships. The 2026/27 budget is balanced at &pound;1.33 billion &mdash; without
+            cutting front-line services.
           </p>
 
+          <div class="about-comparisons">
+            <ComparisonBar
+              title="Council Tax Rise"
+              reformValue="3.80%"
+              reformPercent={63}
+              conValue="4.99%"
+              conPercent={83}
+              lowerIsBetter={true}
+              annotation="Reform delivered the lowest council tax rise in 12 years"
+            />
+            <ComparisonBar
+              title="Savings Delivery Rate"
+              reformValue="90%+"
+              reformPercent={90}
+              conValue="48%"
+              conPercent={48}
+              annotation="Conservative savings delivery collapsed over 8 years"
+            />
+          </div>
+
+          <p>
+            This is what happens when you put people who care about value for money in charge of
+            the public purse. Lancashire voted for change &mdash; and change is being delivered.
+          </p>
+
+          <div class="about-trust">
+            <TrustCertificate />
+          </div>
+
           <div class="transparency-links">
-            <a
-              href="https://aidoge.co.uk/lancashire/lancashirecc/"
-              class="btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Explore AI DOGE
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
+            <a href="/news/" class="btn-primary">
+              Read the Full Story
             </a>
-            <a href="/transparency/" class="btn-secondary">Transparency Page</a>
+            <a href="/contact/" class="btn-secondary">Get in Touch</a>
           </div>
         </div>
       </ScrollReveal>
@@ -457,6 +517,45 @@ import ScrollReveal from '../components/ScrollReveal.astro';
   .timeline-item:nth-child(5) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.5s forwards; }
   .timeline-item:nth-child(6) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.6s forwards; }
 
+  /* ---- Achievements ---- */
+  .achievements-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .achievement-card {
+    text-align: center;
+  }
+
+  .achievement-number {
+    display: block;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .achievement-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .achievement-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
   /* ---- Political Priorities ---- */
   .political-priorities-section {
     padding: 0 0 var(--space-2xl);
@@ -519,6 +618,19 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     margin-bottom: var(--space-md);
   }
 
+  .about-comparisons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+    max-width: none;
+  }
+
+  .about-trust {
+    margin: var(--space-lg) 0;
+    max-width: none;
+  }
+
   .transparency-links {
     display: flex;
     gap: var(--space-md);
@@ -569,6 +681,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
       margin: 0 auto;
     }
 
+    .achievements-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .priorities-grid {
       grid-template-columns: 1fr;
     }
@@ -594,6 +710,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 
     .timeline-card {
       margin-left: var(--space-sm);
+    }
+
+    .about-comparisons {
+      grid-template-columns: 1fr;
     }
 
     .transparency-links {

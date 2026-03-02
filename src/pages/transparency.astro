@@ -99,10 +99,11 @@ import ScrollReveal from '../components/ScrollReveal.astro';
       </section>
     </ScrollReveal>
 
-    <!-- Section 4: What We've Found -->
+    <!-- Section 4: What We've Found in Burnley -->
     <ScrollReveal>
       <section class="findings-section">
-        <h2 class="section-heading">What We've Found</h2>
+        <h2 class="section-heading">What We Found at Burnley Council</h2>
+        <p class="findings-intro">These are real findings from AI DOGE&rsquo;s forensic analysis of 30,580 Burnley Council transactions totalling &pound;355 million. Every finding is backed by evidence you can verify yourself.</p>
         <div class="findings-grid stagger-children">
 
           <div class="finding-card card">
@@ -117,8 +118,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 <path d="M14 8h.01"></path>
               </svg>
             </div>
-            <h3>Duplicate Payments</h3>
-            <p>Identifying identical or near-identical payments across council records that suggest processing errors or worse.</p>
+            <span class="finding-stat">&pound;510,700</span>
+            <h3>Payments Made Twice</h3>
+            <p>137 high-confidence duplicate payment groups &mdash; identical amounts to the same suppliers on the same dates. That&rsquo;s money that could fund Burnley&rsquo;s library service for a year.</p>
+            <a href="https://aidoge.co.uk/lancashire/burnleycouncil/doge" target="_blank" rel="noopener noreferrer" class="finding-link">See the evidence &rarr;</a>
           </div>
 
           <div class="finding-card card">
@@ -130,8 +133,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 <path d="M6 20v-6"></path>
               </svg>
             </div>
-            <h3>Supplier Concentration</h3>
-            <p>Analysing market concentration using the Herfindahl-Hirschman Index (HHI) to flag monopolistic supplier relationships.</p>
+            <span class="finding-stat">&pound;5.1M</span>
+            <h3>Bills Split to Avoid Checks</h3>
+            <p>11 suspected split payment instances where invoices appear to have been broken up to stay below approval thresholds &mdash; 80% or more of the limit each time.</p>
+            <a href="https://aidoge.co.uk/lancashire/burnleycouncil/doge" target="_blank" rel="noopener noreferrer" class="finding-link">See the evidence &rarr;</a>
           </div>
 
           <div class="finding-card card">
@@ -143,10 +148,16 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
               </svg>
             </div>
-            <h3>Benford's Law</h3>
-            <p>Applying mathematical forensic analysis to payment distributions to detect anomalous number patterns that may indicate data manipulation.</p>
+            <span class="finding-stat">23</span>
+            <h3>Contracts Without Proper Competition</h3>
+            <p>Contracts awarded with limited competition indicators &mdash; short tender windows, single bidders, or rapid awards that suggest the outcome was predetermined.</p>
+            <a href="https://aidoge.co.uk/lancashire/burnleycouncil/doge" target="_blank" rel="noopener noreferrer" class="finding-link">See the evidence &rarr;</a>
           </div>
 
+        </div>
+
+        <div class="findings-note">
+          <p>100% of Burnley Council transactions have no description &mdash; the worst transparency of any East Lancashire council. 13.2% are missing department data entirely.</p>
         </div>
       </section>
     </ScrollReveal>
@@ -158,19 +169,15 @@ import ScrollReveal from '../components/ScrollReveal.astro';
           <div class="cta-inner">
             <div class="cta-screenshot">
               <div class="screenshot-placeholder">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <line x1="8" y1="21" x2="16" y2="21"></line>
-                  <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-                <span>AI DOGE Platform</span>
+                <span class="screenshot-stat">&pound;12B+</span>
+                <span>Tracked Across Lancashire</span>
                 <small>aidoge.co.uk</small>
               </div>
             </div>
             <div class="cta-content">
-              <h2 class="section-heading">Explore the Platform</h2>
+              <h2 class="section-heading">Check Your Council&rsquo;s Spending</h2>
               <p>
-                Search every transaction, review forensic findings, check councillor integrity data, and explore budget breakdowns across all 15 Lancashire councils. All free, all open, all the time.
+                Search every transaction. Review forensic findings. Check councillor integrity data. See exactly where your council tax goes &mdash; across all 15 Lancashire councils. Free, open, and verifiable.
               </p>
               <div class="cta-buttons">
                 <a href="https://aidoge.co.uk/lancashire/lancashirecc/" class="btn-primary" target="_blank" rel="noopener noreferrer">
@@ -445,10 +452,56 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     color: var(--text-primary);
   }
 
+  .findings-intro {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 700px;
+    margin-bottom: var(--space-xl);
+  }
+
+  .finding-stat {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    margin-bottom: var(--space-xs);
+  }
+
   .finding-card p {
     font-size: 0.9rem;
     color: var(--text-secondary);
     line-height: 1.65;
+    max-width: none;
+  }
+
+  .finding-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .finding-link:hover {
+    text-decoration: underline;
+  }
+
+  .findings-note {
+    margin-top: var(--space-xl);
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255, 69, 58, 0.06);
+    border: 1px solid rgba(255, 69, 58, 0.15);
+    border-radius: var(--radius-md);
+  }
+
+  .findings-note p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
     max-width: none;
   }
 
@@ -489,6 +542,14 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     color: var(--text-secondary);
     font-size: 0.875rem;
     font-weight: 500;
+  }
+
+  .screenshot-stat {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    line-height: 1;
   }
 
   .screenshot-placeholder svg {

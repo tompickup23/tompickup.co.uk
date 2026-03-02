@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import EmailSignup from '../components/EmailSignup.astro';
 
 interface Props {
   frontmatter: {
@@ -31,6 +32,17 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 ---
 
 <Layout title={`${frontmatter.title} — Tom Pickup`} description={frontmatter.description} article={true}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: frontmatter.title,
+    description: frontmatter.description,
+    datePublished: frontmatter.date.toISOString(),
+    author: { '@type': 'Person', name: 'Tom Pickup', url: 'https://tompickup.co.uk/about/' },
+    publisher: { '@type': 'Person', name: 'Tom Pickup' },
+    wordCount: wordCount,
+    keywords: frontmatter.tags.join(', '),
+  })} />
   <div class="blog-post">
     <header class="article-header">
       <a href="/news" class="back-link">
@@ -90,6 +102,19 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
           <span class="btn-text">Share on X</span>
         </a>
       </div>
+
+      <!-- What You Can Do -->
+      <div class="action-box">
+        <h3>What you can do</h3>
+        <ul class="action-list">
+          <li><a href="/about/">See what Reform has achieved at LCC</a></li>
+          <li><a href="/contact/">Report an issue in your area</a></li>
+          <li><a href="/news/">Read the latest news</a></li>
+        </ul>
+      </div>
+
+      <!-- Email Signup -->
+      <EmailSignup variant="inline" />
 
       <a href="/news" class="back-link back-link-bottom">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -407,6 +432,51 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     background: rgba(18, 182, 207, 0.08);
     border-color: rgba(18, 182, 207, 0.25);
     color: #12b6cf;
+    background-image: none;
+  }
+
+  .action-box {
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .action-box h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.75rem;
+  }
+
+  .action-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .action-list li {
+    margin: 0;
+  }
+
+  .action-list a {
+    color: #12b6cf;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s ease;
+    background-image: none;
+  }
+
+  .action-list a:hover {
+    color: #14c8e3;
     background-image: none;
   }
 

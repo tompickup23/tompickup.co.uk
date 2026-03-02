@@ -23,9 +23,8 @@ import ScrollReveal from '../components/ScrollReveal.astro';
           <!-- Contact Form -->
           <div class="contact-form-wrapper">
             <form
-              action="https://formspree.io/f/placeholder"
-              method="POST"
               class="contact-form"
+              id="contact-form"
             >
               <div class="form-row">
                 <div class="form-group">
@@ -60,7 +59,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                   <option value="Casework / Local Issue">Casework / Local Issue</option>
                   <option value="Council Spending">Council Spending</option>
                   <option value="Media / Press">Media / Press</option>
-                  <option value="AI DOGE / Transparency">AI DOGE / Transparency</option>
+                  <option value="LCC Budget / Finance">LCC Budget / Finance</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
@@ -94,6 +93,14 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 Your information is handled securely and will not be shared with third parties.
               </p>
             </form>
+
+            <div class="what-happens card" style="margin-top: var(--space-lg); border-left: 3px solid var(--accent);">
+              <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm);">What happens next</h3>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.65; margin: 0; max-width: none;">
+                I read every message personally. Most enquiries get a response within 48 hours.
+                If it&rsquo;s a council matter, I&rsquo;ll raise it formally on your behalf with the relevant authority.
+              </p>
+            </div>
           </div>
 
           <!-- Contact Info Sidebar -->
@@ -166,13 +173,13 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                   <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
               </div>
-              <h3>Surgery Hours</h3>
+              <h3>Meet In Person</h3>
               <p class="surgery-notice">
-                Surgery details coming soon — check back for dates and locations where you
-                can meet me in person.
+                I&rsquo;m available to meet residents of Padiham and Burnley West to discuss
+                any local issue. Use the contact form or email me to arrange a time.
               </p>
               <p class="info-card-note">
-                In the meantime, feel free to email me or use the contact form to arrange a meeting.
+                I respond to most enquiries within 48 hours. If your issue is urgent, email me directly.
               </p>
             </div>
           </div>
@@ -426,3 +433,19 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     }
   }
 </style>
+
+<script>
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = (form.querySelector('#name') as HTMLInputElement)?.value || '';
+      const email = (form.querySelector('#email') as HTMLInputElement)?.value || '';
+      const subject = (form.querySelector('#subject') as HTMLSelectElement)?.value || 'General Enquiry';
+      const message = (form.querySelector('#message') as HTMLTextAreaElement)?.value || '';
+      const body = `From: ${name} (${email})\n\n${message}`;
+      const mailto = `mailto:tom@tompickup.co.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    });
+  }
+</script>

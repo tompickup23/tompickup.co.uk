@@ -1,0 +1,155 @@
+---
+interface Props {
+  sources?: string[];
+  label?: string;
+}
+
+const {
+  sources = ['LCC Budget Book 2026/27', 'LCC Cabinet Reports', 'GOV.UK MHCLG Data'],
+  label = 'All figures independently verifiable from public records',
+} = Astro.props;
+---
+
+<div class="trust-cert">
+  <div class="trust-shield">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      <polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline>
+    </svg>
+  </div>
+  <div class="trust-body">
+    <h4 class="trust-title">
+      <span class="trust-dot"></span>
+      Data Verified
+    </h4>
+    <ul class="trust-sources">
+      {sources.map((src) => (
+        <li>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          {src}
+        </li>
+      ))}
+    </ul>
+    <span class="trust-label">{label}</span>
+  </div>
+</div>
+
+<style>
+  .trust-cert {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: rgba(48, 209, 88, 0.04);
+    border: 1px solid rgba(48, 209, 88, 0.15);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-normal);
+  }
+
+  .trust-cert:hover {
+    border-color: rgba(48, 209, 88, 0.3);
+  }
+
+  .trust-shield {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: rgba(48, 209, 88, 0.08);
+  }
+
+  .trust-shield svg {
+    margin-top: 12px;
+  }
+
+  .trust-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trust-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #30d158;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .trust-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #30d158;
+    position: relative;
+  }
+
+  .trust-dot::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: rgba(48, 209, 88, 0.4);
+    animation: trustPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes trustPulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.8); opacity: 0; }
+  }
+
+  .trust-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .trust-sources li {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .trust-sources li svg {
+    flex-shrink: 0;
+  }
+
+  .trust-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+
+  @media (max-width: 480px) {
+    .trust-cert {
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .trust-shield {
+      width: 40px;
+      height: 40px;
+    }
+
+    .trust-shield svg {
+      width: 20px;
+      height: 20px;
+      margin-top: 10px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trust-dot::after {
+      animation: none;
+    }
+  }
+</style>

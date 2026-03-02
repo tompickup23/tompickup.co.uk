@@ -1,0 +1,172 @@
+---
+interface Props {
+  title?: string;
+  reformLabel?: string;
+  reformValue: string;
+  reformPercent: number;
+  conLabel?: string;
+  conValue: string;
+  conPercent: number;
+  annotation?: string;
+  lowerIsBetter?: boolean;
+}
+
+const {
+  title,
+  reformLabel = 'Reform',
+  reformValue,
+  reformPercent,
+  conLabel = 'Conservative',
+  conValue,
+  conPercent,
+  annotation,
+  lowerIsBetter = false,
+} = Astro.props;
+
+const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >= conPercent;
+---
+
+<div class="cbar">
+  {title && <h4 class="cbar-title">{title}</h4>}
+
+  <div class="cbar-row">
+    <div class="cbar-meta">
+      <span class="cbar-label cbar-reform">{reformLabel}</span>
+      <span class="cbar-value cbar-reform">
+        {reformValue}
+        {reformWins && (
+          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        )}
+      </span>
+    </div>
+    <div class="cbar-track">
+      <div class="cbar-fill cbar-fill-reform" style={`--fill-width: ${reformPercent}%;`}></div>
+    </div>
+  </div>
+
+  <div class="cbar-row">
+    <div class="cbar-meta">
+      <span class="cbar-label cbar-con">{conLabel}</span>
+      <span class="cbar-value cbar-con">
+        {conValue}
+        {!reformWins && (
+          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        )}
+      </span>
+    </div>
+    <div class="cbar-track">
+      <div class="cbar-fill cbar-fill-con" style={`--fill-width: ${conPercent}%;`}></div>
+    </div>
+  </div>
+
+  {annotation && <span class="cbar-annotation">{annotation}</span>}
+</div>
+
+<style>
+  .cbar {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-normal);
+  }
+
+  .cbar:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .cbar-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-md);
+  }
+
+  .cbar-row {
+    margin-bottom: var(--space-md);
+  }
+
+  .cbar-row:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .cbar-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .cbar-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .cbar-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9375rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cbar-reform {
+    color: #12b6cf;
+  }
+
+  .cbar-con {
+    color: #ff453a;
+  }
+
+  .cbar-check {
+    flex-shrink: 0;
+  }
+
+  .cbar-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .cbar-fill {
+    height: 100%;
+    border-radius: 4px;
+    width: 0;
+    animation: barFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+  }
+
+  .cbar-fill-reform {
+    background: linear-gradient(90deg, #12b6cf, #64d2ff);
+  }
+
+  .cbar-fill-con {
+    background: linear-gradient(90deg, #ff453a, #ff6961);
+  }
+
+  @keyframes barFill {
+    to {
+      width: var(--fill-width);
+    }
+  }
+
+  .cbar-annotation {
+    display: block;
+    margin-top: var(--space-md);
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cbar-fill {
+      animation: none;
+      width: var(--fill-width);
+    }
+  }
+</style>
