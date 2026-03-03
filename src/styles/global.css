@@ -1,7 +1,7 @@
 /* ============================================================
-   AI DOGE Design System — iOS Dark Glassmorphism
+   Tom Pickup Design System - iOS Dark Glassmorphism
    Reform UK Teal (#12b6cf) primary accent
-   Tom Pickup — Lancashire County Councillor
+   Lancashire County Councillor
    ============================================================ */
 
 /* ---- Design Tokens ---- */
@@ -597,7 +597,7 @@ code {
   }
 }
 
-/* Stagger children — apply to grid/list containers */
+/* Stagger children - apply to grid/list containers */
 .stagger-children > *:nth-child(1) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.06s forwards; }
 .stagger-children > *:nth-child(2) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.12s forwards; }
 .stagger-children > *:nth-child(3) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.18s forwards; }

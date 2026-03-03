@@ -1,17 +1,18 @@
 ---
-title: "£18,000 Awarded to Burnley Arts & Culture — 2026 Applications Open Soon"
+title: "Stocks Massey awards over £20,000+ across Burnley: 2026 Applications Open Soon"
+image: "/images/stocks-massey-2025-main.jpg"
 date: 2026-03-01
 description: "The Edward Stocks Massey Bequest Fund has distributed £18,000 to 15 Burnley organisations in 2025. Applications for 2026 open late April."
 tags: ["charity", "burnley", "community"]
 featured: true
 ---
 
-The Edward Stocks Massey Bequest Fund has awarded **£18,000** in grants to 15 Burnley organisations in 2025, plus annual university bursaries to two outstanding students. As Chairman of the Advisory Committee of the charity, I'm pleased to share the full details — and to let eligible groups know that **2026 applications open in late April**.
+The Edward Stocks Massey Bequest Fund has awarded **£18,000** in grants to 15 Burnley organisations in 2025, plus annual university bursaries to two outstanding students. As Chairman of the Advisory Committee of the charity, I'm pleased to share the full details, and to let eligible groups know that **2026 applications open in late April**.
 
 <div style="margin: 24px 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.06);">
-<img src="/images/stocks-massey-2025-main.jpg" alt="Chairman Tom Pickup with County Cllr Liam Thomson and trustee Paul Halstead at the 2025 Stocks Massey Bequest Fund awards" style="width: 100%; height: auto; display: block;" />
+<img src="/images/stocks-massey-2025-main.jpg" alt="Naimah Miah receiving her Stocks Massey Bequest Fund student bursary from Chairman Tom Pickup, County Cllr Liam Thomson and trustee Paul Halstead" style="width: 100%; height: auto; display: block;" />
 <div style="padding: 12px 16px; background: rgba(28, 28, 30, 0.6); font-size: 0.8125rem; color: #8e8e93;">
-Chairman Tom Pickup with County Cllr Liam Thomson and trustee Paul Halstead at the 2025 Stocks Massey Bequest Fund awards.
+Naimah Miah receiving her Stocks Massey Bequest Fund student bursary from Chairman Tom Pickup, County Cllr Liam Thomson and trustee Paul Halstead.
 </div>
 </div>
 
@@ -32,20 +33,20 @@ Chairman Tom Pickup with County Cllr Liam Thomson and trustee Paul Halstead at t
 
 ## The Fund's History
 
-Edward Stocks Massey was born in Brierfield in 1850 and, with his brother Charles, built Massey's Brewery into one of Burnley's great businesses. When he died childless in 1909, he left **£135,000** to the town — worth millions today — to advance education, science, learning, music and the arts. The fund has been distributing grants annually ever since.
+Edward Stocks Massey was born in Brierfield in 1850 and, with his brother Charles, built Massey's Brewery into one of Burnley's great businesses. When he died childless in 1909, he left **£135,000** to the town, worth millions today, to advance education, science, learning, music and the arts. The fund has been distributing grants annually ever since.
 
 ## 2025 Awards
 
-### Local Services — £11,000
+### Local Services: £11,000
 
 | Organisation | Award |
 |---|---|
 | Towneley Hall Museum & Art Gallery | **£4,000** |
 | Burnley Mechanics Theatre | **£3,000** |
 | Burnley Music Centre | **£2,000** |
-| Lancashire County Library Service — Burnley District | **£2,000** |
+| Lancashire County Library Service, Burnley District | **£2,000** |
 
-### Voluntary Organisations — £7,000
+### Voluntary Organisations: £7,000
 
 | Organisation | Award |
 |---|---|
@@ -66,9 +67,9 @@ Edward Stocks Massey was born in Brierfield in 1850 and, with his brother Charle
 Annual bursaries awarded to **Caden Redmond** and **Naimah Miah**, selected after presentation and interview from all applicants. Both receive funding throughout their university studies.
 
 <div style="margin: 24px 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.06);">
-<img src="/images/stocks-massey-2025.jpg" alt="Naimah Miah receiving her Stocks Massey Bequest Fund student bursary" style="width: 100%; height: auto; display: block;" />
+<img src="/images/stocks-massey-2025.jpg" alt="Caden Redmond receiving his Stocks Massey Bequest Fund student bursary from Chairman Tom Pickup, County Cllr Liam Thomson and trustee Paul Halstead" style="width: 100%; height: auto; display: block;" />
 <div style="padding: 12px 16px; background: rgba(28, 28, 30, 0.6); font-size: 0.8125rem; color: #8e8e93;">
-Naimah Miah receiving her Stocks Massey Bequest Fund student bursary from Chairman Tom Pickup, County Cllr Liam Thomson and trustee Paul Halstead.
+Caden Redmond receiving his Stocks Massey Bequest Fund student bursary from Chairman Tom Pickup, County Cllr Liam Thomson and trustee Paul Halstead.
 </div>
 </div>
 

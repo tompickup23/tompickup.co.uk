@@ -14,7 +14,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   .slice(0, 3);
 ---
 
-<Layout title="Tom Pickup — Lancashire County Councillor for Padiham & Burnley West">
+<Layout title="Tom Pickup | Lancashire County Councillor for Padiham & Burnley West">
   <!-- Section 1: Hero -->
   <Hero />
 
@@ -29,24 +29,24 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
         <div class="priorities-grid stagger-children">
           <PriorityCard
-            title="Council Tax: 7 Years of Maximum Rises &mdash; Ended"
+            title="Council Tax: 7 Years of Maximum Rises: Ended"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
-            description="The Conservatives raised council tax to the legal maximum in 7 of their 8 years in control &mdash; including the highest rise in Lancashire&rsquo;s history at 5.99%. Reform&rsquo;s first budget delivered 3.80%, the lowest in 12 years."
+            description="The Conservatives raised council tax to the legal maximum in 7 of their 8 years in control, including the highest rise in Lancashire&rsquo;s history at 5.99%. Reform&rsquo;s first budget delivered 3.80%, the lowest in 12 years."
           />
           <PriorityCard
-            title="&pound;28M Inherited Overspend &mdash; Nearly Eliminated"
+            title="&pound;28M Inherited Overspend: Nearly Eliminated"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>'
-            description="When Reform took control, LCC was forecasting a &pound;28 million overspend. Through targeted action, we&rsquo;ve cut it to &pound;6.1 million and falling &mdash; without slashing front-line services."
+            description="When Reform took control, LCC was forecasting a &pound;28 million overspend. Through targeted action, we&rsquo;ve cut it to &pound;6.1 million and falling, without slashing front-line services."
             color="#ff9f0a"
           />
           <PriorityCard
-            title="Care Homes the Conservatives Nearly Closed &mdash; Saved"
+            title="Care Homes the Conservatives Nearly Closed: Saved"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
-            description="We inherited a consultation process to close five county care homes. After listening to 1,600+ residents, we kept all five open and pledged new investment &mdash; because elderly care isn&rsquo;t a line to cut."
+            description="We inherited a consultation process to close five county care homes. After listening to 1,600+ residents, we kept all five open and pledged new investment, because elderly care isn&rsquo;t a line to cut."
             color="#30d158"
           />
           <PriorityCard
-            title="&pound;350M Bond Losses the Conservatives Concealed &mdash; Exposed"
+            title="&pound;350M Bond Losses the Conservatives Concealed: Exposed"
             icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
             description="&pound;519 million invested in VeLTIP bonds now worth an estimated &pound;169 million. The previous Conservative administration failed to transparently report the true scale of these paper losses to councillors or the public."
             color="#bf5af2"
@@ -73,6 +73,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
                 description={post.data.description}
                 tags={post.data.tags}
                 slug={post.id}
+                image={post.data.image}
               />
             ))}
           </div>
@@ -103,7 +104,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
               <span class="badge badge-teal">Reform UK at Lancashire County Council</span>
               <h2>Changing Lancashire for the Better</h2>
               <p>
-                In May 2025, Reform won a historic landslide &mdash; 53 of 84 seats. In our first year,
+                In May 2025, Reform won a historic landslide, 53 of 84 seats. In our first year,
                 we&rsquo;ve delivered a balanced &pound;1.33 billion budget with the lowest council tax rise
                 in 12 years. We corrected a &pound;28 million inherited overspend, saved all five county
                 care homes, and stopped councillors collecting salaries for pension fund directorships.
@@ -197,7 +198,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
             <h2>Have a Question or Concern?</h2>
             <p>
               I'm here to help. Whether it's a local issue, a question about council decisions, or
-              you just want to say hello — get in touch.
+              you just want to say hello, get in touch.
             </p>
             <div class="contact-cta-actions">
               <a href="/contact/" class="cta-btn-white">Contact Me</a>

@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dev",
+      "name": "tompickup-dev",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["astro", "dev"],
+      "runtimeArgs": ["astro", "dev", "--port", "4321"],
       "port": 4321
     }
   ]

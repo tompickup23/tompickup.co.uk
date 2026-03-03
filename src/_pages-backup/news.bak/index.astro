@@ -8,7 +8,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Layout title="News & Updates — Tom Pickup" description="Latest news and updates from Tom Pickup, Lancashire County Councillor for Padiham and Burnley West.">
+<Layout title="News & Updates | Tom Pickup" description="Latest news and updates from Tom Pickup, Lancashire County Councillor for Padiham and Burnley West.">
   <div class="news-page">
     <header class="page-header">
       <h1 class="page-title">News & Updates</h1>

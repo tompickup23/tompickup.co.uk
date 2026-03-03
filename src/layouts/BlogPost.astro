@@ -31,7 +31,7 @@ const wordCount = textContent.split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 ---
 
-<Layout title={`${frontmatter.title} — Tom Pickup`} description={frontmatter.description} article={true}>
+<Layout title={`${frontmatter.title} | Tom Pickup`} description={frontmatter.description} article={true}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -45,7 +45,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   })} />
   <div class="blog-post">
     <header class="article-header">
-      <a href="/news" class="back-link">
+      <a href="/news/" class="back-link">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -116,7 +116,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       <!-- Email Signup -->
       <EmailSignup variant="inline" />
 
-      <a href="/news" class="back-link back-link-bottom">
+      <a href="/news/" class="back-link back-link-bottom">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -368,20 +368,47 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   .prose :global(table) {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin: 1.5rem 0;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    background: rgba(28, 28, 30, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
-  .prose :global(th),
-  .prose :global(td) {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  .prose :global(thead) {
+    background: linear-gradient(135deg, rgba(18, 182, 207, 0.12), rgba(18, 182, 207, 0.04));
   }
 
   .prose :global(th) {
+    padding: 0.875rem 1rem;
+    text-align: left;
     font-weight: 600;
+    color: #12b6cf;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(18, 182, 207, 0.15);
+  }
+
+  .prose :global(td) {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary, #8e8e93);
+  }
+
+  .prose :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+
+  .prose :global(tbody tr:nth-child(even)) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .prose :global(td strong) {
     color: #ffffff;
   }
 
