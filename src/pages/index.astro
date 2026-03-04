@@ -7,6 +7,7 @@ import TrustCertificate from '../components/TrustCertificate.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
+import WardMap3D from '../components/WardMap3D.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('news', ({ data }) => !data.draft))
@@ -56,7 +57,23 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 3: Latest News -->
+  <!-- Section 3: Find Your Ward -->
+  <section class="ward-finder-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header" style="text-align: center;">
+          <h2 class="section-heading">Your Ward. Your Councillors. Your Services.</h2>
+          <p class="section-subtitle" style="max-width: 600px; margin: var(--space-sm) auto 0;">
+            Select your ward to see who represents you, how your area compares, and what&rsquo;s happening locally.
+          </p>
+        </div>
+
+        <WardMap3D size="full" />
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 4: Latest News -->
   <section class="news-section">
     <div class="container">
       <ScrollReveal>
@@ -215,7 +232,8 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   /* ---- Section Spacing ---- */
   .priorities-section,
   .news-section,
-  .reform-section {
+  .reform-section,
+  .ward-finder-section {
     padding: var(--space-2xl) 0;
   }
 

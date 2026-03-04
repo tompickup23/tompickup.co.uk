@@ -1,0 +1,106 @@
+---
+interface Props {
+  title: string;
+  defaultOpen?: boolean;
+}
+
+const { title, defaultOpen = false } = Astro.props;
+---
+
+<details class="accordion" open={defaultOpen ? true : undefined}>
+  <summary class="accordion-trigger">
+    <span class="accordion-title">{title}</span>
+    <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  </summary>
+  <div class="accordion-content">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .accordion {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    background: rgba(28, 28, 30, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: border-color var(--transition-normal);
+  }
+
+  .accordion:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .accordion[open] {
+    border-color: var(--accent-border);
+  }
+
+  .accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--transition-fast);
+  }
+
+  .accordion-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-trigger::marker {
+    display: none;
+    content: '';
+  }
+
+  .accordion-trigger:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .accordion-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .accordion-chevron {
+    flex-shrink: 0;
+    color: var(--text-tertiary);
+    transition: transform var(--transition-normal);
+  }
+
+  .accordion[open] .accordion-chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  .accordion-content {
+    padding: 0 var(--space-lg) var(--space-lg);
+    animation: accordionSlideIn 0.3s var(--ease-smooth);
+  }
+
+  @keyframes accordionSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .accordion-trigger {
+      padding: var(--space-md);
+    }
+
+    .accordion-content {
+      padding: 0 var(--space-md) var(--space-md);
+    }
+  }
+</style>

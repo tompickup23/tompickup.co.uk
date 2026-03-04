@@ -1,0 +1,498 @@
+---
+import wardData from '../data/burnley-wards.json';
+
+interface Props {
+  activeWard?: string;
+  size?: 'full' | 'mini';
+}
+
+const { activeWard = '', size = 'full' } = Astro.props;
+
+// Coordinate bounds for Burnley
+const BOUNDS = {
+  minLng: -2.3500,
+  maxLng: -2.1050,
+  minLat: 53.7180,
+  maxLat: 53.8300,
+};
+
+const WIDTH = 800;
+const HEIGHT = 700;
+const PAD = 20;
+
+function projectLng(lng: number): number {
+  return PAD + ((lng - BOUNDS.minLng) / (BOUNDS.maxLng - BOUNDS.minLng)) * (WIDTH - 2 * PAD);
+}
+
+function projectLat(lat: number): number {
+  return PAD + ((BOUNDS.maxLat - lat) / (BOUNDS.maxLat - BOUNDS.minLat)) * (HEIGHT - 2 * PAD);
+}
+
+function coordsToPath(coords: number[][]): string {
+  return coords
+    .map((c, i) => `${i === 0 ? 'M' : 'L'}${projectLng(c[0]).toFixed(1)},${projectLat(c[1]).toFixed(1)}`)
+    .join(' ') + 'Z';
+}
+
+// Build ward SVG data
+const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) => {
+  const coords = ward.boundary?.coordinates?.[0] || [];
+  const path = coordsToPath(coords);
+  const cx = projectLng(ward.centroid[0]);
+  const cy = projectLat(ward.centroid[1]);
+  const isActive = slug === activeWard;
+  const depDecile = ward.deprivation?.avg_imd_decile || 5;
+  const electorate = ward.elections?.electorate || 0;
+
+  return {
+    slug,
+    name: ward.name,
+    path,
+    cx,
+    cy,
+    isActive,
+    party: ward.primary_party,
+    partyColor: ward.party_color,
+    depDecile,
+    depLevel: ward.deprivation?.deprivation_level || 'Unknown',
+    electorate,
+  };
+});
+---
+
+<div class={`ward-map-container ${size === 'mini' ? 'ward-map-mini' : ''}`} data-ward-map>
+  <svg
+    viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+    class="ward-map-svg"
+    aria-label="Interactive map of Burnley borough wards"
+    role="img"
+  >
+    <defs>
+      <filter id="ward-glow">
+        <feGaussianBlur stdDeviation="4" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="ward-shadow">
+        <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.5)" flood-opacity="0.6" />
+      </filter>
+      <linearGradient id="ward-edge" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.12)" />
+        <stop offset="100%" stop-color="rgba(255,255,255,0.02)" />
+      </linearGradient>
+    </defs>
+
+    {/* Shadow layer */}
+    {wards.map((w) => (
+      <path
+        d={w.path}
+        class="ward-shadow-path"
+        transform="translate(3, 5)"
+      />
+    ))}
+
+    {/* Ward faces */}
+    {wards.map((w) => (
+      <a href={w.isActive ? undefined : `/wards/${w.slug}/`} class="ward-link" data-ward={w.slug}>
+        <g class={`ward-group ${w.isActive ? 'ward-active' : ''}`} data-slug={w.slug} data-party-color={w.partyColor}>
+          <path
+            d={w.path}
+            class="ward-face"
+            style={`--party-color: ${w.partyColor}`}
+          />
+          <path
+            d={w.path}
+            class="ward-edge"
+            fill="url(#ward-edge)"
+          />
+          {w.isActive && (
+            <path
+              d={w.path}
+              class="ward-active-glow"
+              filter="url(#ward-glow)"
+            />
+          )}
+          <title>{w.name}</title>
+        </g>
+      </a>
+    ))}
+
+    {/* Ward labels (full size only) */}
+    {size === 'full' && wards.map((w) => (
+      <text
+        x={w.cx}
+        y={w.cy}
+        class={`ward-label ${w.isActive ? 'ward-label-active' : ''}`}
+        text-anchor="middle"
+        dominant-baseline="central"
+        pointer-events="none"
+      >
+        {w.name.replace(/ with /g, '\nw/ ').split('\n').map((line: string, i: number) => (
+          <tspan x={w.cx} dy={i === 0 ? '0' : '1.1em'}>{line}</tspan>
+        ))}
+      </text>
+    ))}
+  </svg>
+
+  {/* Tooltip */}
+  <div class="ward-tooltip" id="ward-tooltip" aria-hidden="true">
+    <span class="tooltip-name"></span>
+    <span class="tooltip-party"></span>
+    <span class="tooltip-stat"></span>
+  </div>
+
+  {/* Data overlay toggles (full size only) */}
+  {size === 'full' && (
+    <div class="map-overlays">
+      <button class="overlay-btn overlay-active" data-overlay="party">Party Control</button>
+      <button class="overlay-btn" data-overlay="deprivation">Deprivation</button>
+      <button class="overlay-btn" data-overlay="neutral">Neutral</button>
+    </div>
+  )}
+</div>
+
+<script>
+  function initWardMap() {
+    const maps = document.querySelectorAll('[data-ward-map]');
+
+    maps.forEach((mapContainer) => {
+      const tooltip = mapContainer.querySelector('#ward-tooltip') as HTMLElement;
+      const groups = mapContainer.querySelectorAll('.ward-group');
+      const overlayBtns = mapContainer.querySelectorAll('.overlay-btn');
+
+      // Ward data embedded for tooltips
+      const wardInfo: Record<string, { name: string; party: string; depLevel: string; electorate: number }> = {};
+      const dataScript = document.getElementById('ward-map-data');
+      if (dataScript) {
+        try { Object.assign(wardInfo, JSON.parse(dataScript.textContent || '{}')); } catch {}
+      }
+
+      // Hover interactions
+      groups.forEach((g) => {
+        const el = g as HTMLElement;
+        const slug = el.dataset.slug || '';
+
+        el.addEventListener('mouseenter', (e) => {
+          if (!tooltip) return;
+          const info = wardInfo[slug];
+          const nameEl = tooltip.querySelector('.tooltip-name');
+          const partyEl = tooltip.querySelector('.tooltip-party');
+          const statEl = tooltip.querySelector('.tooltip-stat');
+          if (nameEl && info) nameEl.textContent = info.name;
+          if (partyEl && info) partyEl.textContent = info.party;
+          if (statEl && info) statEl.textContent = `${info.electorate.toLocaleString()} voters · ${info.depLevel}`;
+
+          tooltip.classList.add('visible');
+          tooltip.setAttribute('aria-hidden', 'false');
+        });
+
+        el.addEventListener('mousemove', (e) => {
+          if (!tooltip) return;
+          const rect = mapContainer.getBoundingClientRect();
+          const x = (e as MouseEvent).clientX - rect.left;
+          const y = (e as MouseEvent).clientY - rect.top;
+          tooltip.style.left = `${x + 12}px`;
+          tooltip.style.top = `${y - 10}px`;
+        });
+
+        el.addEventListener('mouseleave', () => {
+          if (!tooltip) return;
+          tooltip.classList.remove('visible');
+          tooltip.setAttribute('aria-hidden', 'true');
+        });
+      });
+
+      // Data overlay toggles
+      overlayBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          overlayBtns.forEach((b) => b.classList.remove('overlay-active'));
+          btn.classList.add('overlay-active');
+          const mode = (btn as HTMLElement).dataset.overlay;
+          const svg = mapContainer.querySelector('.ward-map-svg');
+          if (svg) {
+            svg.setAttribute('data-overlay', mode || 'party');
+          }
+        });
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWardMap);
+  initWardMap();
+</script>
+
+{/* Embed ward info for tooltips */}
+<script type="application/json" id="ward-map-data" set:html={JSON.stringify(
+  Object.fromEntries(
+    Object.entries(wardData.wards).map(([slug, ward]: [string, any]) => [
+      slug,
+      {
+        name: ward.name,
+        party: ward.primary_party,
+        depLevel: ward.deprivation?.deprivation_level || 'Unknown',
+        electorate: ward.elections?.electorate || 0,
+      }
+    ])
+  )
+)} />
+
+<style>
+  /* ---- Container ---- */
+  .ward-map-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    perspective: 900px;
+  }
+
+  .ward-map-mini {
+    max-width: 400px;
+  }
+
+  /* ---- 3D Transform ---- */
+  .ward-map-svg {
+    width: 100%;
+    height: auto;
+    transform: rotateX(38deg) rotateZ(-2deg);
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease-smooth);
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+  }
+
+  .ward-map-mini .ward-map-svg {
+    transform: rotateX(35deg) rotateZ(-1deg);
+  }
+
+  /* ---- Shadow layer ---- */
+  .ward-shadow-path {
+    fill: rgba(0, 0, 0, 0.3);
+    stroke: none;
+  }
+
+  /* ---- Ward faces ---- */
+  .ward-face {
+    fill: rgba(28, 28, 30, 0.8);
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 1.5;
+    transition: fill 0.3s var(--ease-smooth), stroke 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+    cursor: pointer;
+  }
+
+  .ward-edge {
+    stroke: none;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  /* ---- Hover state ---- */
+  .ward-group:hover .ward-face {
+    fill: rgba(18, 182, 207, 0.2);
+    stroke: var(--accent);
+    stroke-width: 2;
+    filter: drop-shadow(0 0 8px rgba(18, 182, 207, 0.4));
+  }
+
+  .ward-group:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ---- Active state ---- */
+  .ward-active .ward-face {
+    fill: rgba(18, 182, 207, 0.25);
+    stroke: var(--accent);
+    stroke-width: 2.5;
+  }
+
+  .ward-active-glow {
+    fill: rgba(18, 182, 207, 0.15);
+    stroke: none;
+    animation: wardPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes wardPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+  }
+
+  /* ---- Party overlay mode ---- */
+  .ward-map-svg[data-overlay="party"] .ward-face {
+    fill: color-mix(in srgb, var(--party-color) 30%, rgba(28, 28, 30, 0.8));
+    stroke: var(--party-color);
+    stroke-opacity: 0.5;
+  }
+
+  .ward-map-svg[data-overlay="party"] .ward-group:hover .ward-face {
+    fill: color-mix(in srgb, var(--party-color) 50%, rgba(28, 28, 30, 0.8));
+    stroke: var(--party-color);
+    stroke-opacity: 1;
+  }
+
+  /* ---- Deprivation overlay mode ---- */
+  .ward-map-svg[data-overlay="deprivation"] .ward-face {
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ---- Neutral overlay mode ---- */
+  .ward-map-svg[data-overlay="neutral"] .ward-face {
+    fill: rgba(40, 40, 44, 0.8);
+    stroke: rgba(255, 255, 255, 0.12);
+  }
+
+  .ward-map-svg[data-overlay="neutral"] .ward-group:hover .ward-face {
+    fill: rgba(18, 182, 207, 0.15);
+    stroke: var(--accent);
+  }
+
+  /* ---- Labels ---- */
+  .ward-label {
+    font-size: 9px;
+    font-weight: 600;
+    fill: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    paint-order: stroke;
+    stroke: rgba(0, 0, 0, 0.6);
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.3s var(--ease-smooth);
+  }
+
+  .ward-group:hover + text.ward-label,
+  .ward-label-active {
+    fill: rgba(255, 255, 255, 0.9);
+  }
+
+  /* ---- Links ---- */
+  .ward-link {
+    text-decoration: none;
+    background-image: none;
+  }
+
+  .ward-link:hover {
+    background-image: none;
+    background-size: 0;
+  }
+
+  /* ---- Tooltip ---- */
+  .ward-tooltip {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    background: rgba(9, 9, 11, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  .ward-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .tooltip-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .tooltip-party {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .tooltip-stat {
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Overlay toggles ---- */
+  .map-overlays {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .overlay-btn {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 100px;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+  }
+
+  .overlay-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .overlay-btn.overlay-active {
+    color: var(--accent);
+    border-color: var(--accent-border);
+    background: var(--accent-glow);
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .ward-map-svg {
+      transform: rotateX(30deg) rotateZ(-1deg);
+    }
+
+    .ward-label {
+      font-size: 7px;
+    }
+
+    .ward-tooltip {
+      display: none;
+    }
+
+    .map-overlays {
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ward-map-svg {
+      transform: rotateX(25deg);
+    }
+
+    .ward-label {
+      font-size: 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ward-map-svg {
+      transition: none;
+    }
+
+    .ward-group:hover {
+      transform: none;
+    }
+
+    .ward-active-glow {
+      animation: none;
+      opacity: 0.4;
+    }
+  }
+</style>
