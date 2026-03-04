@@ -31,7 +31,7 @@ function isActive(href: string): boolean {
 }
 
 const isCouncilActive = pathname.startsWith('/my-ward') || pathname.startsWith('/clowbridge') || pathname.startsWith('/burnley') || pathname.startsWith('/lancashire');
-const isAreaActive = pathname.startsWith('/wards/');
+const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roadworks');
 ---
 
 <header class="site-header">
@@ -123,6 +123,10 @@ const isAreaActive = pathname.startsWith('/wards/');
               <span>Burnley</span>
               <span class="dropdown-tag">All 15 Wards</span>
             </a>
+            <a href="/roadworks/" class:list={['dropdown-link', { active: pathname.startsWith('/roadworks') }]}>
+              <span>Roads &amp; Roadworks</span>
+              <span class="dropdown-tag">Live</span>
+            </a>
           </div>
           <div class="dropdown-sep"></div>
           <div class="dropdown-section">
@@ -203,6 +207,9 @@ const isAreaActive = pathname.startsWith('/wards/');
       <div class="mobile-submenu" data-mobile-submenu-panel>
         <a href="/burnley/" class:list={['mobile-sub-link', { active: pathname === '/burnley/' }]}>
           Burnley <span class="mobile-tag">Town</span>
+        </a>
+        <a href="/roadworks/" class:list={['mobile-sub-link', { active: pathname.startsWith('/roadworks') }]}>
+          Roads &amp; Roadworks <span class="mobile-tag">Live</span>
         </a>
         <div class="mobile-sep"></div>
         <span class="mobile-section-label">Wards</span>

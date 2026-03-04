@@ -1,0 +1,1479 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import Accordion from '../components/Accordion.astro';
+---
+
+<Layout
+  title="Roads & Roadworks | Tom Pickup"
+  description="Burnley's road network: current roadworks, TTROs, major projects, problem areas, and the £650M Lancashire highways backlog. Report potholes and track repairs."
+>
+  <!-- Hero -->
+  <section class="rw-hero">
+    <div class="container">
+      <ScrollReveal>
+        <div class="rw-hero-inner">
+          <span class="badge badge-teal">Highways &amp; Transport</span>
+          <h1>Roads &amp; Roadworks</h1>
+          <p class="hero-sub">
+            Current roadworks, active traffic orders, major projects, and everything you need
+            to know about Burnley&rsquo;s road network. Lancashire County Council is the highways
+            authority responsible for all roads except the M65 motorway.
+          </p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">&pound;650M+</span>
+              <span class="hero-stat-label">Highways Backlog</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">&pound;72M</span>
+              <span class="hero-stat-label">2026/27 Investment</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">7,400 km</span>
+              <span class="hero-stat-label">LCC Road Network</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">&pound;55M</span>
+              <span class="hero-stat-label">Levelling Up Programme</span>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Who Maintains What -->
+  <section class="responsibility-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Who Maintains What?</h2>
+          <p class="section-subtitle">Different organisations are responsible for different parts of the road network</p>
+        </div>
+        <div class="resp-grid stagger-children">
+          <div class="resp-card">
+            <span class="resp-badge" style="background: rgba(18, 182, 207, 0.12); color: #12b6cf;">County Council</span>
+            <h3>Lancashire County Council</h3>
+            <p>
+              All A-roads, B-roads, and local roads. Potholes, resurfacing, street lighting,
+              drainage, bridges, traffic signals, road markings, and winter gritting.
+              Also responsible for the M65 from Junction 10 to Junction 14.
+            </p>
+            <a href="https://www.lancashire.gov.uk/roads-parking-and-travel/report-it/" class="resp-link" target="_blank" rel="noopener">
+              Report to LCC
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+          <div class="resp-card">
+            <span class="resp-badge" style="background: rgba(48, 209, 88, 0.12); color: #30d158;">National Highways</span>
+            <h3>National Highways</h3>
+            <p>
+              The M65 motorway from the M6 (Junction 1) to Junction 10 at Burnley Barracks.
+              Also manages the A56 south of Burnley toward Manchester.
+              Different reporting process from LCC.
+            </p>
+            <a href="https://nationalhighways.co.uk/report-an-issue/" class="resp-link" target="_blank" rel="noopener">
+              Report to National Highways
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+          <div class="resp-card">
+            <span class="resp-badge" style="background: rgba(255, 159, 10, 0.12); color: #ff9f0a;">Utility Companies</span>
+            <h3>Gas, Water, Electric, Broadband</h3>
+            <p>
+              Many roadworks are caused by utility companies (Cadent Gas, United Utilities,
+              Electricity North West, Openreach) digging up roads. LCC coordinates but cannot
+              always control the timing.
+            </p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Active TTROs -->
+  <section class="ttro-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Active Traffic Orders (TTROs)</h2>
+          <p class="section-subtitle">
+            Temporary Traffic Regulation Orders currently in force across Burnley borough.
+            These are legal orders that allow road closures, diversions, and parking restrictions for roadworks.
+          </p>
+        </div>
+
+        <div class="ttro-list stagger-children">
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Padiham Road</h3>
+              <span class="ttro-status ttro-active">Active</span>
+            </div>
+            <p class="ttro-detail">Temporary traffic regulation between Burnley Barracks Interchange and Ightenhill Park Lane. Related to the &pound;55M Levelling Up highway improvement programme.</p>
+            <span class="ttro-ref">Ref: TTRO-02</span>
+          </div>
+
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Accrington Road, Burnley</h3>
+              <span class="ttro-status ttro-amended">Amended</span>
+            </div>
+            <p class="ttro-detail">Date amendment to existing traffic regulation order. Accrington Road is a key route connecting Burnley to the M65 Junction 9 via the Rosegrove junction.</p>
+            <span class="ttro-ref">Ref: TTRO-08 Amendment</span>
+          </div>
+
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Barden Lane, Burnley</h3>
+              <span class="ttro-status ttro-active">Active</span>
+            </div>
+            <p class="ttro-detail">Traffic regulation in force from 16 February to 23 March 2026. Near the Lower Manor Lane junction. One of the roads identified by Burnley MP as severely affected by roadworks.</p>
+            <span class="ttro-ref">Ref: TTRO-02 + TTRO-08</span>
+            <span class="ttro-dates">16 Feb 2026 to 23 Mar 2026</span>
+          </div>
+
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Deer Park Road, Burnley</h3>
+              <span class="ttro-status ttro-short">Short Notice</span>
+            </div>
+            <p class="ttro-detail">Single-day traffic regulation order.</p>
+            <span class="ttro-ref">Ref: TTRO-02</span>
+            <span class="ttro-dates">10 Mar 2026 to 11 Mar 2026</span>
+          </div>
+
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Queen Victoria Road, Burnley</h3>
+              <span class="ttro-status ttro-active">Active</span>
+            </div>
+            <p class="ttro-detail">Temporary traffic regulation order in effect.</p>
+            <span class="ttro-ref">Ref: TTRO-02</span>
+          </div>
+
+          <div class="ttro-card">
+            <div class="ttro-header">
+              <h3>Moseley Road, Burnley</h3>
+              <span class="ttro-status ttro-active">Active</span>
+            </div>
+            <p class="ttro-detail">Temporary traffic regulation order in effect.</p>
+            <span class="ttro-ref">Ref: TTRO-02</span>
+          </div>
+        </div>
+
+        <div class="ttro-source">
+          <a href="https://www.lancashire.gov.uk/roads-parking-and-travel/roads/roadworks-and-traffic-regulation-orders/temporary/?District=Burnley" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            View all Burnley TTROs on LCC website
+          </a>
+          <span class="ttro-updated">Last checked: 4 March 2026</span>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Major Current Projects -->
+  <section class="projects-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Major Projects (2025&ndash;2026)</h2>
+          <p class="section-subtitle">
+            Significant highway schemes currently underway or recently completed in the Burnley area
+          </p>
+        </div>
+
+        <div class="project-cards stagger-children">
+          <div class="project-card project-highlight">
+            <div class="project-badge">&pound;55M</div>
+            <h3>Levelling Up East Lancashire</h3>
+            <p class="project-funder">Funded by: &pound;50M Government Levelling Up Fund + &pound;5M LCC</p>
+            <p>
+              The largest highways investment in East Lancashire in decades. Three connected projects
+              transforming roads across Burnley, Nelson, and Rawtenstall.
+            </p>
+            <div class="project-details">
+              <div class="project-sub">
+                <h4>Manchester Road (Burnley Town Centre)</h4>
+                <p>
+                  One-way system introduced February 2026 between Nelson Square and Red Lion Street.
+                  Wider pavements, upgraded pedestrian crossings, refreshed public spaces. Part of
+                  the Civic Quarter Masterplan connecting Manchester Road Station to the bus station.
+                  Has caused significant disruption and congestion during works.
+                </p>
+              </div>
+              <div class="project-sub">
+                <h4>Colne Road Improvements</h4>
+                <p>
+                  Major highway works from January 2026, potentially running to August 2026.
+                  Two-way traffic signals during construction. Wider pavements, upgraded pedestrian
+                  crossings, and new average speed cameras installed following stakeholder feedback.
+                </p>
+              </div>
+              <div class="project-sub">
+                <h4>Hammerton Street</h4>
+                <p>
+                  Highway improvement works from January to April 2026. Part of the wider
+                  town centre connectivity improvements.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-badge">&pound;6.1M</div>
+            <h3>Town2Turf Scheme</h3>
+            <p class="project-funder">Funded by: Levelling Up Fund</p>
+            <p>
+              Improving links between Burnley town centre and Turf Moor stadium. The Centenary Way
+              roundabout at Yorkshire Street and Church Street has been demolished and replaced with a
+              signalised junction. Yorkshire Street aqueduct (the culvert carrying the Leeds and Liverpool
+              Canal over the road) has been renovated. The old pedestrian subway has been decommissioned
+              and landscaped. New crossings, paving, seating, and lighting installed.
+            </p>
+          </div>
+
+          <div class="project-card">
+            <div class="project-badge">&pound;72M</div>
+            <h3>LCC 2026/27 Highways Programme</h3>
+            <p class="project-funder">Funded by: &pound;48.5M DfT + &pound;18.5M LCC + carry-over</p>
+            <p>
+              Reform&rsquo;s first full highways capital programme. Focus on the roads residents
+              use every day, not just strategic routes. Includes resurfacing, pothole repair,
+              drainage, street lighting, and bridge maintenance across the county. Lancashire
+              has committed &pound;45 million specifically for pothole and highway repairs over three years.
+            </p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Major Roads Guide -->
+  <section class="roads-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Burnley&rsquo;s Road Network</h2>
+          <p class="section-subtitle">
+            The major routes through and around Burnley, what they connect, and known issues
+          </p>
+        </div>
+
+        <div class="roads-accordions">
+          <Accordion title="M65 Motorway (Junctions 9, 10, 11)" defaultOpen={true}>
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">Motorway</span>
+                <span class="road-maintainer">National Highways (J1-10) / LCC (J10-14)</span>
+              </div>
+              <p>
+                The M65 runs east-west across Lancashire from the M6 near Preston through Blackburn,
+                Accrington, and Burnley, ending at Colne. Burnley is served by three junctions:
+              </p>
+              <ul>
+                <li><strong>Junction 9</strong> &mdash; Rosegrove. Access to Accrington Road, Rossendale Road, and south Burnley. Connects to the A679.</li>
+                <li><strong>Junction 10</strong> &mdash; Burnley Barracks Interchange. The main junction for Burnley town centre via Cavalry Way. A large two-island roundabout spanning 500 metres. Known air quality exceedance area.</li>
+                <li><strong>Junction 11</strong> &mdash; Barracks/Brierfield. Access to north Burnley and Brierfield via the A6114.</li>
+              </ul>
+              <div class="road-issue">
+                <strong>Safety concerns:</strong> A series of fatal crashes in 2024 prompted calls for an urgent safety review
+                of the M65 between Junctions 5 and 14. A multi-vehicle collision at Junction 9 in October 2024
+                killed one person. Much of the M65 is unlit east of Blackburn. National Highways completed
+                an &pound;84M safety programme in 2004 but concerns persist.
+              </div>
+            </div>
+          </Accordion>
+
+          <Accordion title="A56 (Burnley to Manchester)">
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">A-Road</span>
+                <span class="road-maintainer">National Highways / LCC</span>
+              </div>
+              <p>
+                Runs south from Burnley as a dual carriageway, skirting the western edge of the town.
+                Links to the M66 motorway heading toward Manchester and the M62. This is the primary
+                north-south route connecting Burnley to Greater Manchester and is heavily used by commuters.
+              </p>
+            </div>
+          </Accordion>
+
+          <Accordion title="A671 (Cavalry Way / through Padiham)">
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">A-Road</span>
+                <span class="road-maintainer">LCC</span>
+              </div>
+              <p>
+                Runs south from Bacup over Deerplay Moor into Burnley, crossing the A646 at the town
+                centre. North of Burnley it becomes a primary road at M65 Junction 10 (Cavalry Way),
+                then passes through Padiham as Main Street, bypasses Whalley, and ends at the A59.
+              </p>
+              <div class="road-issue">
+                <strong>Air quality:</strong> A 271-metre section at Junction 10 exceeds annual NO2 limits.
+                43% of nitrogen oxides come from cars. The large motorway junction with two traffic islands
+                is a known bottleneck causing idling traffic.
+              </div>
+            </div>
+          </Accordion>
+
+          <Accordion title="A679 (Accrington Road / Burnley Road, Hapton)">
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">A-Road</span>
+                <span class="road-maintainer">LCC</span>
+              </div>
+              <p>
+                Connects Burnley westward to Accrington via Hapton. Speed enforcement operates on the
+                30mph section at Hapton. The junction with Rossendale Road and Liverpool Road near
+                M65 Junction 9 (Rosegrove junction) is a known congestion hotspot, widened in a
+                12-month project in 2019-2020 but still regularly disrupted by utility works and
+                housing development traffic.
+              </p>
+            </div>
+          </Accordion>
+
+          <Accordion title="A646 (Todmorden Road / Rossendale Road)">
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">A-Road</span>
+                <span class="road-maintainer">LCC</span>
+              </div>
+              <p>
+                Runs south-east from Burnley town centre toward Todmorden and West Yorkshire through
+                the Cliviger Gorge. A key cross-Pennine route carrying significant HGV traffic.
+                The road follows the River Calder valley and is prone to flooding in heavy rainfall.
+              </p>
+            </div>
+          </Accordion>
+
+          <Accordion title="A682 (Centenary Way / to Rawtenstall and Nelson)">
+            <div class="road-detail">
+              <div class="road-meta">
+                <span class="road-tag">A-Road</span>
+                <span class="road-maintainer">LCC</span>
+              </div>
+              <p>
+                Runs south to Rawtenstall through Rossendale and north-east to Nelson and the
+                Yorkshire Dales. This road is carried through Burnley town centre on the
+                <strong>Centenary Way Viaduct</strong>, a seven-span continuous bridge that underwent
+                a &pound;1.65M refurbishment in 2015-16, addressing chloride-induced concrete damage
+                from decades of de-icing salt, bearing replacement, expansion joints, and deck waterproofing.
+              </p>
+            </div>
+          </Accordion>
+
+          <Accordion title="Key Local Roads">
+            <div class="road-detail">
+              <div class="local-roads-grid">
+                <div class="local-road">
+                  <h4>Padiham Road</h4>
+                  <p>One of Burnley&rsquo;s oldest routes connecting to Padiham, Whalley, and Blackburn. Currently subject to a TTRO for improvement works.</p>
+                </div>
+                <div class="local-road">
+                  <h4>Manchester Road</h4>
+                  <p>Key gateway into Burnley from the south. Currently under one-way system for the &pound;55M Levelling Up programme. Severe congestion reported.</p>
+                </div>
+                <div class="local-road">
+                  <h4>Colne Road</h4>
+                  <p>Major improvements underway (Jan&ndash;Aug 2026). Two-way signals during construction. New average speed cameras installed.</p>
+                </div>
+                <div class="local-road">
+                  <h4>Briercliffe Road</h4>
+                  <p>Connects Burnley northeast to Briercliffe village. Subject to emergency traffic regulation orders for maintenance.</p>
+                </div>
+                <div class="local-road">
+                  <h4>Barden Lane</h4>
+                  <p>Local road identified as severely affected by concurrent roadworks. Active TTRO near Lower Manor Lane junction.</p>
+                </div>
+                <div class="local-road">
+                  <h4>Brunshaw Road / Brunshaw Avenue</h4>
+                  <p>Listed for resurfacing work from Brunshaw Road to Redlees Road, plus surface dressing.</p>
+                </div>
+              </div>
+            </div>
+          </Accordion>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Problem Areas -->
+  <section class="problems-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Known Problem Areas</h2>
+          <p class="section-subtitle">
+            Locations with recurring congestion, safety concerns, or infrastructure issues
+          </p>
+        </div>
+
+        <div class="problems-grid stagger-children">
+          <div class="problem-card">
+            <span class="problem-icon" style="color: #ff453a;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <h3>Rosegrove Junction (M65 J9)</h3>
+            <p>
+              Accrington Road, Rossendale Road, and Liverpool Road junction. Widened 2019-20 but
+              still a bottleneck from housing development traffic and repeated utility works.
+              Gas main installation caused months of disruption.
+            </p>
+          </div>
+
+          <div class="problem-card">
+            <span class="problem-icon" style="color: #ff9f0a;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <h3>Cavalry Way / Gannow Roundabout</h3>
+            <p>
+              M65 Junction 10 (Burnley Barracks Interchange). One of Burnley&rsquo;s busiest
+              junctions. Two-island roundabout spanning 500 metres. Frequent accidents and
+              congestion. Air quality exceedance area for NO2.
+            </p>
+          </div>
+
+          <div class="problem-card">
+            <span class="problem-icon" style="color: #ff453a;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </span>
+            <h3>Manchester Road Corridor</h3>
+            <p>
+              The &pound;55M Levelling Up one-way system has caused severe disruption since February
+              2026. Journeys normally taking 10 minutes reportedly taking over an hour.
+              Businesses have reported lost footfall and delivery access problems.
+            </p>
+          </div>
+
+          <div class="problem-card">
+            <span class="problem-icon" style="color: #12b6cf;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </span>
+            <h3>River Calder Flood Risk</h3>
+            <p>
+              The River Calder runs through Burnley town centre. Roads at risk include Centenary Way,
+              Parker Lane, Hammerton Street, St. James Street, Curzon Street, and Calder Vale Road.
+              The M65 eastbound between Junctions 11-12 flooded in October 2023.
+            </p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Bridge Infrastructure -->
+  <section class="bridges-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Bridge &amp; Structure Infrastructure</h2>
+          <p class="section-subtitle">
+            Key bridges and structures that are critical to Burnley&rsquo;s road network
+          </p>
+        </div>
+
+        <div class="bridges-grid stagger-children">
+          <div class="bridge-card">
+            <h3>Centenary Way Viaduct</h3>
+            <span class="bridge-carries">Carries: A682 through town centre</span>
+            <p>
+              Seven-span continuous bridge. &pound;1.65M refurbishment completed January 2016 after chloride
+              damage from de-icing salt caused concrete spalling and exposed steel reinforcement.
+              Bearings replaced, expansion joints replaced, deck waterproofed and resurfaced.
+            </p>
+          </div>
+          <div class="bridge-card">
+            <h3>Yorkshire Street Aqueduct</h3>
+            <span class="bridge-carries">Carries: Leeds and Liverpool Canal over Yorkshire Street</span>
+            <p>
+              Renovated as part of the Town2Turf scheme. Yorkshire Street was closed for essential
+              maintenance, with pavement widening under and around the aqueduct.
+            </p>
+          </div>
+          <div class="bridge-card">
+            <h3>East Lancashire Railway Bridges</h3>
+            <span class="bridge-carries">Carries: Colne-Blackburn railway line</span>
+            <p>
+              Network Rail invested &pound;3.95M upgrading two railway bridges over the Leeds and
+              Liverpool Canal on the East Lancashire line through Burnley.
+            </p>
+          </div>
+          <div class="bridge-card">
+            <h3>Rose Grove Viaduct</h3>
+            <span class="bridge-carries">Carries: Copy Pit railway line (Todmorden-Burnley)</span>
+            <p>
+              Historic 100-foot-high railway viaduct on the line through the Cliviger Gorge.
+              A landmark structure in the Burnley skyline.
+            </p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- The Backlog -->
+  <section class="backlog-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="backlog-card">
+          <div class="backlog-inner">
+            <span class="backlog-label">The Lancashire Highways Backlog</span>
+            <div class="backlog-figure">&pound;650M+</div>
+            <p class="backlog-sub">
+              The assessed cost to bring Lancashire&rsquo;s entire highway network up to standard.
+              The true figure is likely far higher.
+            </p>
+            <div class="backlog-facts">
+              <div class="backlog-fact">
+                <span class="bf-value">12 years</span>
+                <span class="bf-label">of Conservative underspend that built it</span>
+              </div>
+              <div class="backlog-fact">
+                <span class="bf-value">&pound;48.5M</span>
+                <span class="bf-label">annual DfT allocation (needs trebling)</span>
+              </div>
+              <div class="backlog-fact">
+                <span class="bf-value">Amber</span>
+                <span class="bf-label">DfT traffic-light rating for Lancashire</span>
+              </div>
+              <div class="backlog-fact">
+                <span class="bf-value">42%</span>
+                <span class="bf-label">reduction in defects achieved (Sep 2024 to Sep 2025)</span>
+              </div>
+            </div>
+            <p class="backlog-reform">
+              Reform&rsquo;s approach: larger repairs (averaging 6m&sup2; vs 2m&sup2; previously),
+              lower cost per square metre (&pound;100/m&sup2; vs &pound;200/m&sup2;), and
+              &pound;45 million committed to pothole and highway repairs over three years.
+            </p>
+            <a href="/news/lancashire-highways-650m-backlog/" class="backlog-link">Read the full highways article &rarr;</a>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Report & Useful Links -->
+  <section class="links-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Report &amp; Track Issues</h2>
+          <p class="section-subtitle">How to report road problems and where to find live information</p>
+        </div>
+
+        <div class="links-grid stagger-children">
+          <a href="/report/" class="useful-link-card link-highlight">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <h3>Report an Issue</h3>
+            <p>Report potholes, street lights, flooding, and other road problems to the right council</p>
+          </a>
+
+          <a href="https://experience.arcgis.com/experience/c8bdf392fada4b73bafcfb4798138e26/page/Road-works-details/" class="useful-link-card" target="_blank" rel="noopener">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <h3>LCC Roadworks Map</h3>
+            <p>Live interactive map of all current and planned roadworks across Lancashire</p>
+          </a>
+
+          <a href="https://www.fixmystreet.com/reports/Lancashire" class="useful-link-card" target="_blank" rel="noopener">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <h3>FixMyStreet</h3>
+            <p>Report and track local problems. See what others have reported in your area</p>
+          </a>
+
+          <a href="https://check-for-flooding.service.gov.uk/target-area/012FWFL30A" class="useful-link-card" target="_blank" rel="noopener">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+            <h3>Flood Warnings</h3>
+            <p>Check current flood risk for the River Calder at Burnley (GOV.UK)</p>
+          </a>
+
+          <a href="https://www.lancashire.gov.uk/roads-parking-and-travel/roads/roadworks-and-traffic-regulation-orders/temporary/?District=Burnley" class="useful-link-card" target="_blank" rel="noopener">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <h3>All Burnley TTROs</h3>
+            <p>Full list of Temporary Traffic Regulation Orders for the Burnley district</p>
+          </a>
+
+          <a href="https://one.network/?tm=Map" class="useful-link-card" target="_blank" rel="noopener">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+            <h3>one.network Live Map</h3>
+            <p>National live roadworks map used by 170+ highway authorities including Lancashire</p>
+          </a>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="contact-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="contact-cta-card">
+          <div class="contact-cta-lines"></div>
+          <div class="contact-cta-inner">
+            <h2>Got a road issue in Padiham or Burnley West?</h2>
+            <p>
+              As your county councillor I can chase repairs, raise issues with the highways department,
+              and push for investment in our local roads. Get in touch.
+            </p>
+            <a href="/contact/" class="cta-btn-white">Contact Me</a>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Sources -->
+  <section class="sources-section">
+    <div class="container-narrow">
+      <div class="sources-card card">
+        <span class="sources-label">Data Sources</span>
+        <p>
+          Lancashire County Council TTROs &bull;
+          LCC Roadworks Map (ArcGIS) &bull;
+          one.network &bull;
+          DfT Highways Maintenance Funding Allocations &bull;
+          DfT Local Road Maintenance Ratings 2025/26 &bull;
+          National Highways &bull;
+          GOV.UK Check for Flooding &bull;
+          Burnley Express &bull;
+          LCC News
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .rw-hero {
+    padding: var(--space-2xl) 0 var(--space-xl);
+  }
+
+  .rw-hero-inner {
+    max-width: 720px;
+  }
+
+  .rw-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    margin: var(--space-md) 0 var(--space-md);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .hero-stat {
+    padding: var(--space-md);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  .hero-stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  .hero-stat-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+  }
+
+  /* ---- Responsibility Section ---- */
+  .responsibility-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .resp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .resp-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .resp-badge {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .resp-card h3 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .resp-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .resp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    background-image: none;
+    margin-top: auto;
+    transition: gap 0.2s ease;
+  }
+
+  .resp-link:hover {
+    gap: 10px;
+    background-image: none;
+    background-size: 0;
+  }
+
+  /* ---- TTRO Section ---- */
+  .ttro-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .ttro-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .ttro-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ttro-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .ttro-header h3 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .ttro-status {
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .ttro-active {
+    background: rgba(255, 69, 58, 0.12);
+    color: #ff453a;
+  }
+
+  .ttro-amended {
+    background: rgba(255, 159, 10, 0.12);
+    color: #ff9f0a;
+  }
+
+  .ttro-short {
+    background: rgba(48, 209, 88, 0.12);
+    color: #30d158;
+  }
+
+  .ttro-detail {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ttro-ref {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  .ttro-dates {
+    font-size: 0.6875rem;
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ttro-source {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+    border-radius: var(--radius-md);
+  }
+
+  .ttro-source a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    background-image: none;
+  }
+
+  .ttro-source a:hover {
+    background-image: none;
+    background-size: 0;
+  }
+
+  .ttro-updated {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+  }
+
+  /* ---- Projects Section ---- */
+  .projects-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .project-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .project-card {
+    padding: var(--space-xl);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+
+  .project-highlight {
+    border-color: rgba(18, 182, 207, 0.2);
+    background: rgba(18, 182, 207, 0.03);
+  }
+
+  .project-badge {
+    display: inline-flex;
+    padding: 4px 14px;
+    background: rgba(18, 182, 207, 0.12);
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 800;
+    border-radius: 9999px;
+    margin-bottom: var(--space-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+  }
+
+  .project-funder {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    margin: 0 0 var(--space-md);
+  }
+
+  .project-card > p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .project-details {
+    display: grid;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .project-sub h4 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .project-sub p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ---- Roads Section ---- */
+  .roads-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .roads-accordions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .road-detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .road-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .road-tag {
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(18, 182, 207, 0.12);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .road-maintainer {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  .road-detail p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .road-detail ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .road-detail li {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .road-detail li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .road-issue {
+    padding: var(--space-md);
+    background: rgba(255, 69, 58, 0.06);
+    border: 1px solid rgba(255, 69, 58, 0.15);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .local-roads-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .local-road h4 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .local-road p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ---- Problems Section ---- */
+  .problems-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .problem-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .problem-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .problem-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .problem-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ---- Bridges Section ---- */
+  .bridges-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .bridges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .bridge-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bridge-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .bridge-carries {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .bridge-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ---- Backlog Section ---- */
+  .backlog-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .backlog-card {
+    background: linear-gradient(135deg, rgba(255, 69, 58, 0.08) 0%, rgba(255, 159, 10, 0.06) 100%);
+    border: 1px solid rgba(255, 69, 58, 0.2);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+  }
+
+  .backlog-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .backlog-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+  }
+
+  .backlog-figure {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff453a 0%, #ff9f0a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin: var(--space-sm) 0;
+  }
+
+  .backlog-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-xl);
+  }
+
+  .backlog-facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .backlog-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bf-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bf-label {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+
+  .backlog-reform {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: var(--space-lg);
+    text-align: left;
+    padding: var(--space-md);
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+    border-radius: var(--radius-md);
+  }
+
+  .backlog-link {
+    display: inline-flex;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    background-image: none;
+    transition: opacity 0.2s;
+  }
+
+  .backlog-link:hover {
+    opacity: 0.8;
+    background-image: none;
+    background-size: 0;
+  }
+
+  /* ---- Links Section ---- */
+  .links-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .useful-link-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: border-color var(--transition-normal), transform var(--transition-fast);
+    background-image: none;
+  }
+
+  .useful-link-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+    background-image: none;
+    background-size: 0;
+  }
+
+  .useful-link-card.link-highlight {
+    border-color: var(--accent-border);
+    background: rgba(18, 182, 207, 0.04);
+  }
+
+  .useful-link-card svg {
+    color: var(--accent);
+  }
+
+  .useful-link-card h3 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .useful-link-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ---- Contact CTA ---- */
+  .contact-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .contact-cta-card {
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(18, 182, 207, 0.4) 0%, transparent 50%),
+      linear-gradient(135deg, #0a2a3a 0%, #12b6cf 100%);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+  }
+
+  .contact-cta-lines {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 40px,
+        rgba(255, 255, 255, 0.03) 40px,
+        rgba(255, 255, 255, 0.03) 41px
+      );
+    pointer-events: none;
+  }
+
+  .contact-cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .contact-cta-inner h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-cta-inner p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: var(--space-lg);
+  }
+
+  .cta-btn-white {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.75rem;
+    background: #ffffff;
+    color: #0a2a3a;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    background-image: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+  }
+
+  .cta-btn-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background-image: none;
+    background-size: 0;
+  }
+
+  /* ---- Sources ---- */
+  .sources-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .sources-card {
+    border-left: 3px solid var(--accent);
+  }
+
+  .sources-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .sources-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 1024px) {
+    .backlog-facts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rw-hero {
+      padding: var(--space-xl) 0 var(--space-lg);
+    }
+
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .resp-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ttro-list {
+      grid-template-columns: 1fr;
+    }
+
+    .problems-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .bridges-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .links-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .local-roads-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .backlog-facts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ttro-source {
+      flex-direction: column;
+      gap: var(--space-sm);
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .backlog-facts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
