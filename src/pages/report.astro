@@ -1,0 +1,556 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+---
+
+<Layout
+  title="Report an Issue | Tom Pickup"
+  description="Report a local issue in Burnley or Padiham. Potholes, street lights, fly-tipping, flooding — I'll make sure it gets to the right council."
+>
+  <!-- Header -->
+  <section class="page-header-section">
+    <div class="container">
+      <h1 class="gradient-text">Report an Issue</h1>
+      <p class="page-subtitle">
+        Something wrong in your area? Tell me and I&rsquo;ll make sure it gets to the right council.
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="quick-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="quick-grid stagger-children">
+          <a href="https://www.lancashire.gov.uk/roads-parking-and-travel/report-it/" target="_blank" rel="noopener noreferrer" class="quick-card">
+            <div class="quick-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            </div>
+            <h3>Pothole or Road Damage</h3>
+            <p>Report directly to Lancashire CC Highways</p>
+            <span class="quick-tag">County Council</span>
+          </a>
+
+          <a href="https://www.lancashire.gov.uk/roads-parking-and-travel/report-it/" target="_blank" rel="noopener noreferrer" class="quick-card">
+            <div class="quick-icon" style="color: var(--accent-green);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <h3>Street Light Out</h3>
+            <p>Report directly to Lancashire CC</p>
+            <span class="quick-tag">County Council</span>
+          </a>
+
+          <a href="https://burnley.gov.uk/environmental-services/report-it/" target="_blank" rel="noopener noreferrer" class="quick-card">
+            <div class="quick-icon" style="color: #ff9f0a;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </div>
+            <h3>Missed Bin or Fly-Tipping</h3>
+            <p>Report directly to Burnley Borough Council</p>
+            <span class="quick-tag">Borough Council</span>
+          </a>
+
+          <a href="https://www.lancashire.gov.uk/flooding/" target="_blank" rel="noopener noreferrer" class="quick-card">
+            <div class="quick-icon" style="color: #0a84ff;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <h3>Flooding or Drainage</h3>
+            <p>Report directly to Lancashire CC</p>
+            <span class="quick-tag">County Council</span>
+          </a>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Report Form -->
+  <section class="form-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="form-grid">
+          <div class="form-wrapper">
+            <h2 class="section-heading">Not Sure Who to Contact?</h2>
+            <p class="form-intro">
+              Tell me about the issue and I&rsquo;ll make sure it gets to the right council department. I follow up on every report.
+            </p>
+
+            <form class="report-form" id="report-form">
+              <div class="form-group">
+                <label for="report-category">What&rsquo;s the issue about? <span class="required">*</span></label>
+                <select id="report-category" name="category" required>
+                  <option value="" disabled selected>Select a category</option>
+                  <option value="roads">Roads &amp; Potholes</option>
+                  <option value="pavements">Pavements &amp; Footpaths</option>
+                  <option value="streetlights">Street Lighting</option>
+                  <option value="waste">Bins &amp; Waste Collection</option>
+                  <option value="flytipping">Fly-Tipping &amp; Litter</option>
+                  <option value="flooding">Flooding &amp; Drainage</option>
+                  <option value="planning">Planning &amp; Development</option>
+                  <option value="antisocial">Anti-Social Behaviour</option>
+                  <option value="parks">Parks &amp; Green Spaces</option>
+                  <option value="housing">Housing</option>
+                  <option value="other">Something Else</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="report-location">Where is it? <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="report-location"
+                  name="location"
+                  required
+                  placeholder="Street name, postcode, or landmark"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="report-description">Describe the issue <span class="required">*</span></label>
+                <textarea
+                  id="report-description"
+                  name="description"
+                  required
+                  rows="5"
+                  placeholder="What's the problem? How long has it been going on?"
+                ></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="report-name">Your Name <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="report-name"
+                    name="name"
+                    required
+                    autocomplete="name"
+                    placeholder="Your full name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="report-email">Your Email <span class="required">*</span></label>
+                  <input
+                    type="email"
+                    id="report-email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="report-phone">Phone (optional)</label>
+                <input
+                  type="tel"
+                  id="report-phone"
+                  name="phone"
+                  autocomplete="tel"
+                  placeholder="In case I need to call you back"
+                />
+              </div>
+
+              <button type="submit" class="btn-primary submit-btn">
+                Send Report
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </form>
+
+            <div class="form-success" id="form-success" style="display: none;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3>Report Received</h3>
+              <p>Thanks for letting me know. I&rsquo;ll look into this and get back to you.</p>
+            </div>
+          </div>
+
+          <!-- Who Handles What -->
+          <div class="info-sidebar">
+            <div class="info-card">
+              <h3>Who Handles What?</h3>
+              <div class="tier-list">
+                <div class="tier-item">
+                  <span class="tier-badge" style="background: rgba(18, 182, 207, 0.15); color: var(--accent);">County</span>
+                  <div class="tier-detail">
+                    <strong>Lancashire County Council</strong>
+                    <p>Roads, potholes, street lights, pavements, flooding, schools, social care, libraries</p>
+                  </div>
+                </div>
+                <div class="tier-item">
+                  <span class="tier-badge" style="background: rgba(48, 209, 88, 0.15); color: #30d158;">Borough</span>
+                  <div class="tier-detail">
+                    <strong>Burnley Borough Council</strong>
+                    <p>Bins, recycling, fly-tipping, planning, housing, parks, council tax, leisure centres</p>
+                  </div>
+                </div>
+                <div class="tier-item">
+                  <span class="tier-badge" style="background: rgba(191, 90, 242, 0.15); color: #bf5af2;">Parish</span>
+                  <div class="tier-detail">
+                    <strong>Clowbridge with Dunnockshaw</strong>
+                    <p>Noticeboards, benches, footpaths, local environment in the parish area</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3>Not Sure?</h3>
+              <p>Don&rsquo;t worry about which council it is. Just tell me what&rsquo;s wrong and where, and I&rsquo;ll make sure it gets to the right place.</p>
+              <a href="/contact/" class="info-link">
+                Or contact me directly &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  function initReportForm() {
+    const form = document.getElementById('report-form') as HTMLFormElement;
+    const success = document.getElementById('form-success') as HTMLElement;
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // For now, show success message (form backend to be connected)
+        form.style.display = 'none';
+        if (success) success.style.display = 'flex';
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initReportForm);
+  initReportForm();
+</script>
+
+<style>
+  /* ---- Header ---- */
+  .page-header-section {
+    padding: var(--space-2xl) 0 var(--space-lg);
+    text-align: center;
+  }
+
+  .page-header-section h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .page-subtitle {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* ---- Quick Links ---- */
+  .quick-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
+
+  .quick-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform var(--transition-fast), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    background-image: none;
+  }
+
+  .quick-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    background-image: none;
+  }
+
+  .quick-icon {
+    color: var(--accent);
+  }
+
+  .quick-card h3 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .quick-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .quick-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background: rgba(18, 182, 207, 0.1);
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+
+  /* ---- Form Section ---- */
+  .form-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .form-wrapper {
+    padding: var(--space-xl);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+
+  .form-intro {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: var(--space-lg);
+  }
+
+  .report-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .required {
+    color: var(--accent);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.65rem 0.85rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-family: inherit;
+    transition: border-color var(--transition-fast);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(18, 182, 207, 0.15);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .submit-btn {
+    align-self: flex-start;
+    margin-top: var(--space-sm);
+  }
+
+  /* ---- Success ---- */
+  .form-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-md);
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .form-success h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #30d158;
+  }
+
+  .form-success p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  /* ---- Sidebar ---- */
+  .info-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .info-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+  }
+
+  .info-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .tier-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .tier-item {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .tier-detail strong {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .tier-detail p {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .info-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .info-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 1024px) {
+    .quick-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .quick-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .page-header-section {
+      padding: var(--space-xl) 0 var(--space-md);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quick-card {
+      transition: none;
+    }
+  }
+</style>

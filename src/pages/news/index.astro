@@ -6,14 +6,29 @@ import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const featured = posts.find((p) => p.data.featured) || posts[0];
+const rest = posts.filter((p) => p !== featured);
+
+function formatDate(dateStr: Date): string {
+  try {
+    return dateStr.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return '';
+  }
+}
 ---
 
 <Layout title="News & Updates | Tom Pickup" description="Latest news and updates from Tom Pickup, Lancashire County Councillor for Padiham and Burnley West.">
   <div class="news-page">
     <header class="page-header">
-      <h1 class="page-title">News & Updates</h1>
+      <h1 class="page-title">News &amp; Updates</h1>
       <p class="page-subtitle">
-        What I'm working on, what's happening at County Hall, and issues affecting Padiham and Burnley West.
+        What I&rsquo;m working on, what&rsquo;s happening at County Hall, and issues affecting Padiham and Burnley West.
       </p>
     </header>
 
@@ -22,20 +37,59 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
         <p>No posts yet. Check back soon.</p>
       </div>
     ) : (
-      <div class="posts-grid">
-        {posts.map((post) => (
+      <>
+        {/* Featured Article */}
+        {featured && (
           <ScrollReveal>
-            <NewsCard
-              title={post.data.title}
-              date={post.data.date.toISOString()}
-              description={post.data.description}
-              tags={post.data.tags}
-              slug={post.id}
-              image={post.data.image}
-            />
+            <a href={`/news/${featured.id}`} class="featured-card">
+              {featured.data.image && (
+                <div class="featured-image">
+                  <img src={featured.data.image} alt="" loading="eager" decoding="async" />
+                </div>
+              )}
+              <div class="featured-content">
+                {featured.data.tags && featured.data.tags.length > 0 && (
+                  <div class="featured-tags">
+                    {featured.data.tags.map((tag) => (
+                      <span class="featured-tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+                <h2 class="featured-title">{featured.data.title}</h2>
+                <time class="featured-date" datetime={featured.data.date.toISOString()}>
+                  {formatDate(featured.data.date)}
+                </time>
+                <p class="featured-description">{featured.data.description}</p>
+                <span class="featured-read">
+                  Read full article
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </span>
+              </div>
+            </a>
           </ScrollReveal>
-        ))}
-      </div>
+        )}
+
+        {/* Rest of the articles */}
+        {rest.length > 0 && (
+          <div class="posts-grid stagger-children">
+            {rest.map((post) => (
+              <ScrollReveal>
+                <NewsCard
+                  title={post.data.title}
+                  date={post.data.date.toISOString()}
+                  description={post.data.description}
+                  tags={post.data.tags}
+                  slug={post.id}
+                  image={post.data.image}
+                />
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
+      </>
     )}
 
     <div class="rss-link">
@@ -84,6 +138,114 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     line-height: 1.6;
   }
 
+  /* ---- Featured Card ---- */
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: rgba(28, 28, 30, 0.7);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    margin-bottom: var(--space-xl, 2rem);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    background-image: none;
+  }
+
+  .featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.12);
+    background-image: none;
+  }
+
+  .featured-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .featured-card:hover .featured-image img {
+    transform: scale(1.04);
+  }
+
+  .featured-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-xl, 2rem);
+    gap: 10px;
+  }
+
+  .featured-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .featured-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(18, 182, 207, 0.12);
+    color: #12b6cf;
+    border: 1px solid rgba(18, 182, 207, 0.15);
+  }
+
+  .featured-title {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .featured-date {
+    font-size: 0.8125rem;
+    color: rgba(235, 235, 245, 0.4);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .featured-description {
+    font-size: 0.9375rem;
+    color: rgba(235, 235, 245, 0.6);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .featured-read {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: #12b6cf;
+    font-weight: 500;
+    margin-top: auto;
+    transition: gap 0.2s ease;
+  }
+
+  .featured-card:hover .featured-read {
+    gap: 10px;
+  }
+
+  /* ---- Posts Grid ---- */
   .posts-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -127,6 +289,20 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     }
   }
 
+  @media (max-width: 768px) {
+    .featured-card {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-image {
+      aspect-ratio: 16 / 9;
+    }
+
+    .featured-content {
+      padding: var(--space-lg, 1.5rem);
+    }
+  }
+
   @media (max-width: 600px) {
     .news-page {
       padding: 1.5rem 1rem 3rem;
@@ -138,6 +314,14 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
     .page-title {
       font-size: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured-card,
+    .featured-image img,
+    .featured-read {
+      transition: none;
     }
   }
 </style>

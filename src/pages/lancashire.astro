@@ -224,28 +224,6 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     </div>
   </section>
 
-  <!-- AI DOGE CTA -->
-  <section class="lcc-doge">
-    <div class="container">
-      <ScrollReveal>
-        <a href="https://aidoge.co.uk/lancashirecc/" target="_blank" rel="noopener" class="doge-card">
-          <div class="doge-card-inner">
-            <span class="badge badge-teal">AI DOGE</span>
-            <h3>Explore LCC Spending in Full</h3>
-            <p>
-              753,000+ transactions. &pound;3.6 billion tracked. Search every payment,
-              explore forensic findings, and see exactly where your money goes.
-            </p>
-            <span class="doge-link">
-              Open AI DOGE for Lancashire CC
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-            </span>
-          </div>
-        </a>
-      </ScrollReveal>
-    </div>
-  </section>
-
   <!-- Contact CTA -->
   <section class="lcc-contact">
     <div class="container">
@@ -402,60 +380,6 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     font-size: 0.75rem;
     color: var(--text-secondary);
     font-weight: 500;
-  }
-
-  /* ---- DOGE CTA ---- */
-  .lcc-doge {
-    padding: 0 0 var(--space-2xl);
-  }
-
-  .doge-card {
-    display: block;
-    text-decoration: none;
-    background-image: none;
-    background:
-      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(18, 182, 207, 0.15) 0%, transparent 50%),
-      rgba(28, 28, 30, 0.6);
-    border: 1px solid rgba(18, 182, 207, 0.15);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: border-color var(--transition-normal), transform var(--transition-fast), box-shadow var(--transition-normal);
-  }
-
-  .doge-card:hover {
-    border-color: rgba(18, 182, 207, 0.35);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(18, 182, 207, 0.1);
-    background-image: none;
-    background-size: unset;
-  }
-
-  .doge-card-inner {
-    max-width: 540px;
-  }
-
-  .doge-card h3 {
-    font-size: 1.375rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin: var(--space-md) 0 var(--space-sm);
-    letter-spacing: -0.02em;
-  }
-
-  .doge-card p {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-    margin-bottom: var(--space-md);
-  }
-
-  .doge-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--accent);
   }
 
   /* ---- Contact CTA ---- */

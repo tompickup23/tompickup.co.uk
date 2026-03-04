@@ -28,7 +28,7 @@ LCC's waste spending has been climbing for years with no strategy to bring it do
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2021-22</td>
 <td style="padding: 12px 16px; text-align: right; color: #fff; font-weight: 600;">&pound;75.5M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">&mdash;</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">-</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2022-23</td>
@@ -58,9 +58,9 @@ Reform's 2026-27 budget starts to reverse this. Food waste reforms are projected
 
 ## How We Got Here
 
-**2007&ndash;2014: A &pound;2 billion PFI that collapsed.** LCC signed a 25-year deal with Global Renewables. Two plants built at &pound;125 million each. Over 70% of waste still ended up in landfill. By 2014 it was costing &pound;2 million a week. Terminated &mdash; years of investment written off, no replacement plan.
+**2007 to 2014: A &pound;2 billion PFI that collapsed.** LCC signed a 25-year deal with Global Renewables. Two plants built at &pound;125 million each. Over 70% of waste still ended up in landfill. By 2014 it was costing &pound;2 million a week. Terminated, with years of investment written off and no replacement plan.
 
-**2014&ndash;2023: Stuck on an ageing landfill.** Without an alternative, East Lancashire's waste went to Whinney Hill in Altham &mdash; a site from the 1970s, generating persistent complaints about smell and vermin. SUEZ received **&pound;57.7 million** over this period. A temporary measure that lasted a decade.
+**2014 to 2023: Stuck on an ageing landfill.** Without an alternative, East Lancashire's waste went to Whinney Hill in Altham, a site from the 1970s that generated persistent complaints about smell and vermin. SUEZ received **&pound;57.7 million** over this period. A temporary measure that lasted a decade.
 
 **2022: A &pound;600 million procurement, paused.** LCC shelved a major Energy from Waste procurement. Another delay.
 
@@ -72,7 +72,7 @@ The bill for all this indecision: **&pound;8&ndash;10 million extra per year** a
 
 ## What Reform Did
 
-Open competitive tender. Four lots. Two bidders per lot. Assessed on quality and price.
+LCC followed the proper procurement process. The contract was advertised on the Find a Tender Service (reference AP/CORP/LCC/25/012R), assessed on both quality and price, and announced shortly after the contract was signed in December 2025. Four lots. Two bidders per lot.
 
 <div style="overflow-x: auto; margin: 2rem 0;">
 <table style="width: 100%; border-collapse: collapse; font-size: 0.9375rem;">
@@ -121,7 +121,7 @@ LCC&rsquo;s payments to SUEZ at Whinney Hill had reached **&pound;76.2 million i
 
 Residents near Hapton Valley have raised legitimate concerns about environmental impact. Those concerns are taken seriously.
 
-Under the old arrangement, complaints about waste sites went to SUEZ &mdash; a contractor based outside Lancashire. Issues at Whinney Hill were managed at arm&rsquo;s length for years.
+Under the old arrangement, complaints about waste sites went to SUEZ, a contractor based outside Lancashire. Issues at Whinney Hill were managed at arm&rsquo;s length for years.
 
 Now, residents can raise concerns directly with Lancashire County Council and their local county councillor. The Environment Agency regulates the site. Reform ensured the contract was awarded through open competition; our job now is to hold the operator to the highest standards.
 
@@ -168,11 +168,11 @@ Without this contract, each district faced absorbing costs on its own:
 </table>
 </div>
 
-Pendle was already facing an &pound;8.26 million cumulative budget gap &mdash; this would have pushed it to &pound;11 million. Hyndburn, with no waste transfer station, would have faced the highest transport costs of any East Lancashire borough.
+Pendle was already facing an &pound;8.26 million cumulative budget gap. This would have pushed it to &pound;11 million. Hyndburn, with no waste transfer station, would have faced the highest transport costs of any East Lancashire borough.
 
 ## Where the Money Goes
 
-Published LCC spending data shows **&pound;78 million in waste payments across more than 1,100 transactions** &mdash; and not one of them has a description explaining what it was for. The Whinney Hill landfill alone: **&pound;73.6 million across 374 payments**, all without a single line of explanation.
+Published LCC spending data shows **&pound;78 million in waste payments across more than 1,100 transactions**, and not one of them has a description explaining what it was for. The Whinney Hill landfill alone: **&pound;73.6 million across 374 payments**, all without a single line of explanation.
 
 Nobody can challenge whether that represented value for money, because nobody was told what the money was for.
 
@@ -222,7 +222,7 @@ Reform acted. Open tender. Law followed. Taxpayer benefits.
 <p style="font-size: 0.875rem; color: #8e8e93; margin: 8px 0 0; line-height: 1.6;">
 LCC Published Spending Data (FOI/Transparency Code) &bull;
 GOV.UK Revenue Outturn (MHCLG) &bull;
-Find a Tender Service &mdash; AP/CORP/LCC/25/012R &bull;
+Find a Tender Service (AP/CORP/LCC/25/012R) &bull;
 Lancashire County Council public records &bull;
 Burnley Borough Council Modern.gov
 </p>
