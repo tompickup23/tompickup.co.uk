@@ -2,7 +2,7 @@
 title: "Reform's First Budget: The Numbers Don't Lie"
 date: 2026-03-02
 description: "How Reform UK balanced a £1.33 billion budget, delivered the lowest council tax rise in a decade, and corrected a £28 million inherited overspend."
-image: "/images/county-hall-preston.jpg"
+image: "/images/lcc-budget.jpg"
 tags: ["lancashire", "reform", "budget"]
 featured: true
 ---

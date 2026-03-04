@@ -80,6 +80,8 @@ function formatDate(dateStr: string): string {
     position: relative;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    box-sizing: border-box;
   }
 
   .news-card-image {
@@ -131,10 +133,12 @@ function formatDate(dateStr: string): string {
 
   .news-tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 6px;
     position: relative;
     z-index: 1;
+    overflow: hidden;
+    max-height: 24px;
   }
 
   .news-tag {
