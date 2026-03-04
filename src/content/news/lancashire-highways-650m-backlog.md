@@ -1,7 +1,8 @@
 ---
 title: "Lancashire's Roads: A £650 Million Backlog and the Parties Who Created It"
 date: 2026-03-03
-description: "The assessed highways maintenance backlog in Lancashire exceeds £650 million. Sixteen years of Conservative neglect built it. Labour's repackaged funding won't fix it. Here's what's actually needed — and what Reform is doing about it."
+description: "Lancashire's assessed highways backlog exceeds £650 million — the true figure is likely far higher. Twelve years of Conservative neglect built it. Labour spends billions on the Chagos deal and foreign aid instead of fixing it. Both parties waste more in weeks than it would cost to repair every road in Lancashire. Here's what Reform is doing about it."
+image: "/images/highways-pothole.jpg"
 tags: ["lancashire", "highways", "reform", "infrastructure"]
 featured: true
 ---
@@ -45,11 +46,11 @@ Lancashire County Council maintains one of the largest highway networks in Engla
 
 Every kilometre. Every bridge. Every streetlight. Every drain. All of it deteriorating. All of it on a clock.
 
-And that clock has been running for sixteen years.
+And that clock has been running for over a decade.
 
-## Sixteen Years of Conservative Decline
+## Twelve Years of Conservative Decline
 
-The Conservatives controlled Lancashire County Council from 2009 to 2025. In that time, they made a choice. They could invest in the roads. They didn't.
+The Conservatives controlled Lancashire County Council for twelve of the last sixteen years — from 2009 to 2013 in coalition with the Liberal Democrats, and again from 2017 to 2025. In those twelve years, they made a choice. They could invest in the roads. They didn't. The four-year period of no overall control in between did nothing to reverse the trajectory either.
 
 <div style="margin: 32px 0; padding: 24px; background: rgba(28, 28, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px;">
 <div style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #636366; margin-bottom: 20px;">Conservative Highway Capital &mdash; The Borrowing Collapse</div>
@@ -280,7 +281,7 @@ The assessed backlog is &pound;650 million. &pound;46.8 million is 7.2% of what 
 <div style="padding: 16px; background: rgba(228, 0, 59, 0.04); border-left: 3px solid #E4003B; border-radius: 0 12px 12px 0;">
 <span style="font-size: 0.6875rem; color: #E4003B; font-weight: 600;">Oliver Ryan MP (Labour) &mdash; Lancashire Evening Post, March 2026</span>
 <span style="display: block; font-size: 0.875rem; color: #8e8e93; margin-top: 8px; line-height: 1.6; font-style: italic;">"We've still got roads so full of potholes that cars are being damaged on a near daily basis. It's a disgrace."</span>
-<span style="display: block; font-size: 0.75rem; color: #636366; margin-top: 8px;">Yes. It is a disgrace. A &pound;650 million disgrace. Built over 16 years of Conservative control that Labour's central government funding does not come close to addressing. Defects are down 42% in 12 months under Reform. What did Labour's government deliver? A 7.2% dent in the backlog.</span>
+<span style="display: block; font-size: 0.75rem; color: #636366; margin-top: 8px;">Yes. It is a disgrace. A &pound;650 million disgrace. Built over twelve years of Conservative control that Labour's central government funding does not come close to addressing. Defects are down 42% in 12 months under Reform. What did Labour's government deliver? A 7.2% dent in the backlog.</span>
 </div>
 <div style="padding: 16px; background: rgba(228, 0, 59, 0.04); border-left: 3px solid #E4003B; border-radius: 0 12px 12px 0;">
 <span style="font-size: 0.6875rem; color: #E4003B; font-weight: 600;">Oliver Ryan (then Labour Councillor) &mdash; Tameside Council Budget, February 2021</span>
@@ -290,7 +291,7 @@ The assessed backlog is &pound;650 million. &pound;46.8 million is 7.2% of what 
 <div style="padding: 16px; background: rgba(0, 135, 220, 0.04); border-left: 3px solid #0087DC; border-radius: 0 12px 12px 0;">
 <span style="font-size: 0.6875rem; color: #0087DC; font-weight: 600;">Cllr Aidy Riggott (Conservative Opposition Leader)</span>
 <span style="display: block; font-size: 0.875rem; color: #8e8e93; margin-top: 8px; line-height: 1.6; font-style: italic;">Potholes are "the number one complaint" residents raise with councillors.</span>
-<span style="display: block; font-size: 0.75rem; color: #636366; margin-top: 8px;">Mr Riggott's party controlled LCC for 16 years. They halved their own highway borrowing from &pound;25.5m to &pound;12.9m. They left 27.56% of residential roads structurally impaired &mdash; 62% worse than the national average. The number one complaint exists because of the party making it.</span>
+<span style="display: block; font-size: 0.75rem; color: #636366; margin-top: 8px;">Mr Riggott's party controlled LCC for twelve of the last sixteen years. They halved their own highway borrowing from &pound;25.5m to &pound;12.9m. They left 27.56% of residential roads structurally impaired &mdash; 62% worse than the national average. The number one complaint exists because of the party making it.</span>
 </div>
 <div style="padding: 16px; background: rgba(99, 102, 106, 0.06); border-left: 3px solid #636366; border-radius: 0 12px 12px 0;">
 <span style="font-size: 0.6875rem; color: #636366; font-weight: 600;">Cllr Azhar Ali (Progressive Lancashire Opposition)</span>
@@ -307,7 +308,7 @@ The assessed backlog is &pound;650 million. &pound;46.8 million is 7.2% of what 
 
 Every opposition party has the same script: attack Reform on roads. None of them can answer the question that matters: **where were you when the backlog was being built?**
 
-The Conservatives had 16 years and halved their own investment. Labour's central government provides 7% of the backlog in annual funding and calls it progress. Their own MP called a maximum 4.99% council tax rise a "small ask" at Tameside &mdash; but Reform's 3.80% is apparently unacceptable. The Lib Dems were in coalition when the cuts started. Progressive Lancashire's lead criticism is about a motorway that LCC does not even maintain.
+The Conservatives had twelve years in power and halved their own investment. Labour's central government provides 7% of the backlog in annual funding and calls it progress. Their own MP called a maximum 4.99% council tax rise a "small ask" at Tameside &mdash; but Reform's 3.80% is apparently unacceptable. The Lib Dems were in coalition when the cuts started. Progressive Lancashire's lead criticism is about a motorway that LCC does not even maintain.
 
 Reform inherited a &pound;650 million problem, increased investment by 45%, cut repair costs in half, reduced defects by 42%, and delivered the lowest council tax rise in 12 years.
 
@@ -365,9 +366,150 @@ That is the real number. Not &pound;50 million. Not &pound;70 million. Over &pou
 
 After those ten years, the steady-state requirement drops to &pound;42-45 million per year. That is affordable. That is sustainable. But you only get there by investing properly now.
 
-The Conservatives spent 16 years not doing this. The backlog grew. The cost compounded. Reactive repairs &mdash; patching individual potholes at &pound;82 per fix &mdash; cost 40-50% more than planned, preventative resurfacing at &pound;58 per fix. Every year of underinvestment makes the next year more expensive.
+And &pound;650 million is only the assessed backlog &mdash; the engineering-grade figure from what has actually been surveyed and costed. The true figure is almost certainly higher. Not every road has been condition-surveyed. Not every drain has been scoped. Not every bridge has had a full structural assessment. The &pound;650 million is the minimum. The real number could be significantly north of that.
 
-That is the price of neglect. It compounds.
+The Conservatives spent twelve years not doing this.
+
+## A Question of National Priorities
+
+The money exists. It is just being spent elsewhere &mdash; by both parties.
+
+Lancashire's &pound;650 million assessed highways backlog sounds enormous. It is. But set it against what the UK government routinely spends on projects that deliver nothing to the people of this county, and it starts to look like loose change.
+
+<div style="margin: 32px 0; padding: 28px; background: linear-gradient(135deg, rgba(255, 159, 10, 0.06) 0%, rgba(255, 69, 58, 0.06) 100%); border: 1px solid rgba(255, 159, 10, 0.2); border-radius: 20px;">
+<div style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #636366; margin-bottom: 20px;">What the Government Spends Instead of Fixing Roads</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+<div style="padding: 20px; background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; text-align: center;">
+<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #ff9f0a; line-height: 1;">&pound;4.7B</span>
+<span style="display: block; font-size: 0.75rem; color: #8e8e93; margin-top: 6px;">UK asylum support per year</span>
+<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 2px;">Home Office, 2023/24</span>
+</div>
+<div style="padding: 20px; background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; text-align: center;">
+<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #E4003B; line-height: 1;">&pound;9B+</span>
+<span style="display: block; font-size: 0.75rem; color: #8e8e93; margin-top: 6px;">Chagos Islands deal (99 years)</span>
+<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 2px;">Labour, 2024. For uninhabited islands.</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+<div style="padding: 20px; background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; text-align: center;">
+<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #ff453a; line-height: 1;">&pound;14B</span>
+<span style="display: block; font-size: 0.75rem; color: #8e8e93; margin-top: 6px;">Foreign aid per year</span>
+<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 2px;">Both parties. AI projects in Kuala Lumpur,<br>opera in Shanghai, flood walls in Mexico City.</span>
+</div>
+<div style="padding: 20px; background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; text-align: center;">
+<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #0087DC; line-height: 1;">&pound;350M</span>
+<span style="display: block; font-size: 0.75rem; color: #8e8e93; margin-top: 6px;">LCC concealed bond losses</span>
+<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 2px;">Conservatives. Hidden from councillors<br>for years.</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+<div style="padding: 20px; background: linear-gradient(135deg, rgba(255, 69, 58, 0.06), rgba(255, 159, 10, 0.06)); border: 1px solid rgba(255, 69, 58, 0.15); border-radius: 16px; text-align: center;">
+<span style="display: block; font-size: 3rem; font-weight: 900; color: #ff453a; line-height: 1;">&pound;650M</span>
+<span style="display: block; font-size: 0.875rem; color: #8e8e93; margin-top: 8px;">Lancashire's entire assessed roads backlog</span>
+<span style="display: block; font-size: 0.75rem; color: #636366; margin-top: 4px;">Every pothole, every bridge, every streetlight, every drain. A fraction of what both parties waste.</span>
+</div>
+</div>
+<div style="margin-top: 16px; padding: 12px 16px; background: rgba(255, 159, 10, 0.08); border: 1px solid rgba(255, 159, 10, 0.15); border-radius: 12px;">
+<span style="font-size: 0.8125rem; color: #ff9f0a; font-weight: 700;">The Conservatives built the backlog. Labour refuses to fund its clearance. Both parties find billions for projects that benefit nobody in Lancashire. The roads budget is a rounding error on what they waste.</span>
+</div>
+</div>
+
+### The Conservative Legacy: &pound;350 Million Hidden in Plain Sight
+
+The Conservatives did not just neglect Lancashire's roads. They actively concealed the financial damage they were doing. LCC's bond portfolio &mdash; invested in long-dated gilts and other fixed-income instruments &mdash; lost an estimated **&pound;350 million** in value. These losses were not reported to councillors. They were not disclosed in public-facing accounts in a way that made their scale clear. The administration chose silence over transparency.
+
+That &pound;350 million &mdash; had it been prudently managed or even acknowledged &mdash; would have cleared over half the highways backlog on its own. Instead, it evaporated on the Conservatives' watch, and the roads kept crumbling.
+
+### Labour's Priorities: The Chagos Deal and Foreign Aid
+
+Labour's record at national level is no better. In 2024, the Starmer government agreed to hand sovereignty of the Chagos Islands to Mauritius &mdash; uninhabited atolls in the Indian Ocean &mdash; in a deal with a reported cost exceeding **&pound;9 billion** over 99 years. That is approximately &pound;101 million per year, for 99 years, for islands with no permanent population. The annual cost of that single deal would nearly cover the &pound;65 million per year needed to clear Lancashire's entire roads backlog.
+
+Then there is foreign aid. The UK spends approximately **&pound;14 billion per year** on overseas development assistance. Both parties maintained this for decades. The Institute of Economic Affairs catalogued where some of it goes: AI research projects in Kuala Lumpur, flood prevention walls in Mexico City, Chinese opera productions in Shanghai, climate consultancies in countries with higher GDP per capita than parts of Lancashire. None of this is spent on a single road in Burnley, Preston, or Lancaster.
+
+And of that &pound;14 billion, roughly **&pound;2.8 billion** &mdash; 20% of the entire aid budget &mdash; is spent domestically on asylum costs. The government counts housing asylum seekers in UK hotels as "overseas aid." Lancashire's roads do not qualify.
+
+### Asylum: &pound;4.7 Billion and Counting
+
+In 2023/24, the UK government spent **&pound;4.7 billion** on asylum support &mdash; &pound;12.9 million every single day. Of that, &pound;3.1 billion went on hotel accommodation alone. The National Audit Office found that accommodation contracts originally estimated at &pound;4.5 billion now have a projected 10-year cost of **&pound;15.3 billion**.
+
+Lancashire's entire assessed roads backlog could be cleared for the cost of **50 days** of national asylum spending.
+
+<div style="margin: 32px 0; padding: 28px; background: rgba(28, 28, 30, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px;">
+<div style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #636366; margin-bottom: 20px;">Lancashire's Share of the Asylum Bill</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+<div style="padding: 16px; background: rgba(255, 159, 10, 0.06); border: 1px solid rgba(255, 159, 10, 0.12); border-radius: 12px; text-align: center;">
+<span style="display: block; font-size: 1.75rem; font-weight: 800; color: #ff9f0a;">5,400+</span>
+<span style="display: block; font-size: 0.625rem; color: #8e8e93; margin-top: 4px;">asylum seekers<br>housed in Lancashire</span>
+</div>
+<div style="padding: 16px; background: rgba(255, 159, 10, 0.06); border: 1px solid rgba(255, 159, 10, 0.12); border-radius: 12px; text-align: center;">
+<span style="display: block; font-size: 1.75rem; font-weight: 800; color: #ff9f0a;">5.1%</span>
+<span style="display: block; font-size: 0.625rem; color: #8e8e93; margin-top: 4px;">of the national total<br>in one county</span>
+</div>
+<div style="padding: 16px; background: rgba(255, 159, 10, 0.06); border: 1px solid rgba(255, 159, 10, 0.12); border-radius: 12px; text-align: center;">
+<span style="display: block; font-size: 1.75rem; font-weight: 800; color: #ff9f0a;">&pound;240M</span>
+<span style="display: block; font-size: 0.625rem; color: #8e8e93; margin-top: 4px;">Lancashire's annual share<br>of asylum costs</span>
+</div>
+</div>
+<div style="font-size: 0.8125rem; color: #8e8e93; line-height: 1.6;">Burnley: 461. Blackburn with Darwen: 759. Pendle: 448. Hyndburn: 415. Blackpool: 577. Lancaster: 475. Preston: 619. These are among the highest dispersal rates per capita in England.</div>
+</div>
+
+Lancashire hosts 5.1% of the UK's 107,000 asylum seekers. The county's annual share of asylum spending &mdash; approximately &pound;240 million &mdash; would clear the entire assessed roads backlog in under three years. The &pound;65 million per year needed to fix the roads on a ten-year plan is less than a third of Lancashire's asylum bill alone.
+
+### The Scorecard
+
+<div style="margin: 32px 0; padding: 28px; background: linear-gradient(135deg, rgba(255, 69, 58, 0.04) 0%, rgba(255, 159, 10, 0.04) 100%); border: 1px solid rgba(255, 69, 58, 0.15); border-radius: 20px;">
+<div style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #636366; margin-bottom: 16px;">How Many Times Each Item Could Fix Lancashire's Roads</div>
+<div style="display: flex; flex-direction: column; gap: 12px;">
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 120px; font-size: 0.6875rem; color: #8e8e93; text-align: right; flex-shrink: 0;">Foreign aid<br><span style="font-size: 0.5625rem; color: #636366;">&pound;14B/yr &middot; Both</span></span>
+<div style="flex: 1; height: 28px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; overflow: hidden; position: relative;">
+<div style="height: 100%; width: 100%; background: rgba(255, 69, 58, 0.5); border-radius: 6px;"></div>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 800; color: #fff;">21.5&times;</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 120px; font-size: 0.6875rem; color: #8e8e93; text-align: right; flex-shrink: 0;">Chagos deal<br><span style="font-size: 0.5625rem; color: #E4003B;">Labour</span></span>
+<div style="flex: 1; height: 28px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; overflow: hidden; position: relative;">
+<div style="height: 100%; width: 65%; background: rgba(228, 0, 59, 0.5); border-radius: 6px;"></div>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 800; color: #fff;">14&times;</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 120px; font-size: 0.6875rem; color: #8e8e93; text-align: right; flex-shrink: 0;">Asylum support<br><span style="font-size: 0.5625rem; color: #636366;">Both</span></span>
+<div style="flex: 1; height: 28px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; overflow: hidden; position: relative;">
+<div style="height: 100%; width: 48%; background: rgba(255, 159, 10, 0.5); border-radius: 6px;"></div>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 800; color: #fff;">7.2&times;</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 120px; font-size: 0.6875rem; color: #8e8e93; text-align: right; flex-shrink: 0;">Asylum hotels<br><span style="font-size: 0.5625rem; color: #636366;">Both</span></span>
+<div style="flex: 1; height: 28px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; overflow: hidden; position: relative;">
+<div style="height: 100%; width: 32%; background: rgba(255, 159, 10, 0.4); border-radius: 6px;"></div>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 800; color: #fff;">4.8&times;</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 120px; font-size: 0.6875rem; color: #8e8e93; text-align: right; flex-shrink: 0;">LCC bond losses<br><span style="font-size: 0.5625rem; color: #0087DC;">Conservative</span></span>
+<div style="flex: 1; height: 28px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; overflow: hidden; position: relative;">
+<div style="height: 100%; width: 5%; background: rgba(0, 135, 220, 0.5); border-radius: 6px; min-width: 60px;"></div>
+<span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; font-weight: 800; color: #fff;">0.5&times;</span>
+</div>
+</div>
+</div>
+<div style="margin-top: 16px; padding: 12px 16px; background: rgba(255, 69, 58, 0.06); border: 1px solid rgba(255, 69, 58, 0.1); border-radius: 12px;">
+<span style="font-size: 0.8125rem; color: #ff453a; font-weight: 700;">One single year of foreign aid could fix every road in Lancashire 21 times over. Both parties chose not to redirect a penny of it.</span>
+</div>
+</div>
+
+The question is not whether the money exists. The question is where the government chooses to spend it. And both parties &mdash; Conservative and Labour &mdash; have consistently chosen to spend it anywhere but on the infrastructure that 1.5 million Lancashire residents rely on every day.
+
+The Conservatives concealed &pound;350 million in bond losses while halving highway investment. Labour agreed to spend over &pound;9 billion on uninhabited islands while telling Lancashire its road funding was "generous." Both parties maintained a &pound;14 billion annual foreign aid budget that funds AI projects in southeast Asia and opera in China while Lancashire's roads fall apart.
+
+The backlog grew. The cost compounded. Reactive repairs &mdash; patching individual potholes at &pound;82 per fix &mdash; cost 40-50% more than planned, preventative resurfacing at &pound;58 per fix. Every year of underinvestment makes the next year more expensive.
+
+Only national government has the power to fund a fast solution. A one-off &pound;650 million highways investment programme for Lancashire would cost less than two months of asylum spending, less than 5% of one year's foreign aid, and less than 7% of the Chagos deal. It would transform the county's infrastructure within a decade. But it requires a government that puts its own people first.
+
+That is the price of neglect. It compounds. And only Reform is willing to say it.
 
 ## What Reform Is Delivering
 
@@ -541,9 +683,13 @@ Throwing money at a broken system achieves nothing. Reform's approach is not jus
 </div>
 </div>
 
-The previous administration's manual pothole recording captured less than 5% of actual defects. They did not even know what they were not fixing. AI sensors on bin lorries now systematically scan every road, every collection cycle. Prevention instead of reaction. The share of preventative maintenance has risen from 59% to 61% &mdash; and climbing.
+The previous administration's manual pothole recording captured less than 5% of actual defects. They did not even know what they were not fixing. Reform is harnessing technology to change that. AI sensors on bin lorries now systematically scan every road, every collection cycle. Data-driven prioritisation replaces guesswork. Prevention instead of reaction. These are the efficiencies that technology unlocks when it is applied with purpose, not just purchased for a press release.
+
+The share of preventative maintenance has risen from 59% to 61% &mdash; and climbing.
 
 97,757 potholes repaired in 2024/25. Up 16% from 84,142 the year before. But more importantly, each repair now covers three times the area. That is not patching. That is rebuilding.
+
+And every repair now comes with a **12-month guarantee**. If it fails within a year, it is fixed again at the contractor's cost, not the taxpayer's. Under the Conservatives, repairs had no such guarantee. Contractors were paid, the patch failed, and the council paid again. Reform ended that. Quality or consequences.
 
 ## The Verdict
 
@@ -558,5 +704,5 @@ The previous administration's manual pothole recording captured less than 5% of 
 
 <div style="margin: 32px 0 0; padding: 16px 20px; background: rgba(48, 209, 88, 0.04); border: 1px solid rgba(48, 209, 88, 0.15); border-radius: 12px; display: flex; align-items: flex-start; gap: 10px;">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
-<span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: LCC Budget Book 2026/27 (Final Settlement version). GOV.UK MHCLG Revenue Outturn Service Expenditure. DfT Highways Maintenance Block Allocations 2025-2030. DfT Local Transport Grant Allocations 2025-2030. ALARM Survey 2021-2025 (Asphalt Industry Alliance). LCC Highways Maintenance Transparency Report. House of Commons Library CBP-9975. Institute for Fiscal Studies settlement analyses. County Councils Network. District Councils Network. National Audit Office: The Condition and Maintenance of Local Roads in England (July 2024). Local Government Association road maintenance analysis.</span>
+<span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: LCC Budget Book 2026/27 (Final Settlement version). GOV.UK MHCLG Revenue Outturn Service Expenditure. DfT Highways Maintenance Block Allocations 2025-2030. DfT Local Transport Grant Allocations 2025-2030. ALARM Survey 2021-2025 (Asphalt Industry Alliance). LCC Highways Maintenance Transparency Report. House of Commons Library CBP-9975. Institute for Fiscal Studies settlement analyses. County Councils Network. District Councils Network. National Audit Office: The Condition and Maintenance of Local Roads in England (July 2024). Local Government Association road maintenance analysis. Home Office: Asylum Support Costs 2023/24. National Audit Office: Asylum Accommodation Contracts. IEA: Robin Hood in Reverse (foreign aid analysis). FCDO: Statistics on International Development. Chagos Islands Treaty financial disclosures. Asylum Statistics UK dispersal data. LCC Budget Reform First Year Analysis (bond portfolio losses).</span>
 </div>

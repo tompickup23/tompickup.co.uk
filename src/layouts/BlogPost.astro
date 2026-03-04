@@ -9,6 +9,7 @@ interface Props {
     description: string;
     tags: string[];
     featured?: boolean;
+    image?: string;
   };
 }
 
@@ -31,7 +32,7 @@ const wordCount = textContent.split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 ---
 
-<Layout title={`${frontmatter.title} | Tom Pickup`} description={frontmatter.description} article={true}>
+<Layout title={`${frontmatter.title} | Tom Pickup`} description={frontmatter.description} article={true} ogImage={frontmatter.image || '/og-image.jpg'}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -79,6 +80,12 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
         </div>
       )}
     </header>
+
+    {frontmatter.image && (
+      <div class="article-hero-image">
+        <img src={frontmatter.image} alt="" loading="eager" decoding="async" />
+      </div>
+    )}
 
     <article class="prose">
       <slot />
@@ -179,9 +186,24 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   }
 
   .article-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .article-hero-image {
+    margin: 0 -20px 2.5rem;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .article-hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 400px;
+    object-fit: cover;
   }
 
   .article-title {
@@ -511,7 +533,46 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     margin-top: 1rem;
   }
 
-  /* Mobile responsive */
+  /* Mobile responsive — inline visualisation overrides */
+  @media (max-width: 768px) {
+    /* Force 4-column grids to 2 columns on tablet */
+    .prose :global(div[style*="repeat(4"]) {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    /* Force 3-column grids to 2 columns on tablet */
+    .prose :global(div[style*="repeat(3"]) {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    /* Scale down large stat numbers for narrower screens */
+    .prose :global(span[style*="font-size: 4.5rem"]) {
+      font-size: 3rem !important;
+    }
+    .prose :global(span[style*="font-size: 3rem"]) {
+      font-size: 2.25rem !important;
+    }
+    .prose :global(span[style*="font-size: 2.5rem"]) {
+      font-size: 1.75rem !important;
+    }
+    /* Table horizontal scroll */
+    .prose :global(table) {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .prose :global(thead),
+    .prose :global(tbody),
+    .prose :global(tr) {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    .prose :global(th),
+    .prose :global(td) {
+      padding: 8px 10px !important;
+      font-size: 0.75rem !important;
+    }
+  }
+
   @media (max-width: 640px) {
     .blog-post {
       padding: 1.5rem 1rem 3rem;
@@ -548,6 +609,53 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     .share-buttons {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    /* Force all multi-column grids to single column on mobile */
+    .prose :global(div[style*="repeat(4"]),
+    .prose :global(div[style*="repeat(3"]),
+    .prose :global(div[style*="repeat(2"]),
+    .prose :global(div[style*="1fr 1fr"]) {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Scale down large stat numbers for small screens */
+    .prose :global(span[style*="font-size: 4.5rem"]) {
+      font-size: 2.5rem !important;
+    }
+    .prose :global(span[style*="font-size: 3rem"]) {
+      font-size: 2rem !important;
+    }
+    .prose :global(span[style*="font-size: 2.5rem"]) {
+      font-size: 1.5rem !important;
+    }
+    .prose :global(span[style*="font-size: 2rem"]) {
+      font-size: 1.25rem !important;
+    }
+
+    /* Tighten padding on inline styled cards */
+    .prose :global(div[style*="padding: 48px"]) {
+      padding: 24px 16px !important;
+    }
+    .prose :global(div[style*="padding: 32px"]) {
+      padding: 20px 16px !important;
+    }
+    .prose :global(div[style*="padding: 28px"]) {
+      padding: 16px 12px !important;
+    }
+
+    /* Ensure bar chart label text wraps properly */
+    .prose :global(div[style*="grid-template-columns: 56px"]) {
+      grid-template-columns: 44px 1fr 44px !important;
+    }
+    .prose :global(div[style*="grid-template-columns: 64px"]) {
+      grid-template-columns: 48px 1fr 48px !important;
+    }
+
+    /* Table: allow horizontal scroll on narrow screens */
+    .prose :global(div[style*="border-radius: 20px"][style*="overflow: hidden"]) {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
   }
 </style>
