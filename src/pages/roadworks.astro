@@ -38,6 +38,92 @@ function heatColor(level: string): string {
     default: return '#1e293b';
   }
 }
+
+// --- Chart data ---
+const weekdayProfile = trafficData.profiles?.weekday || {};
+const weekendProfile = trafficData.profiles?.weekend || {};
+const schoolOverlay = trafficData.profiles?.school_run_overlay || {};
+
+// SVG chart dimensions
+const chartW = 720;
+const chartH = 280;
+const chartPad = { top: 20, right: 20, bottom: 40, left: 50 };
+const plotW = chartW - chartPad.left - chartPad.right;
+const plotH = chartH - chartPad.top - chartPad.bottom;
+
+// Build line path from profile
+function profilePath(profile: Record<string, number>, maxY: number): string {
+  return Object.entries(profile)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([h, v], i) => {
+      const x = chartPad.left + (Number(h) / 23) * plotW;
+      const y = chartPad.top + plotH - (v / maxY) * plotH;
+      return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+
+// Build area path (line + close bottom)
+function areaPath(profile: Record<string, number>, maxY: number): string {
+  const entries = Object.entries(profile).sort(([a], [b]) => Number(a) - Number(b));
+  const line = entries.map(([h, v], i) => {
+    const x = chartPad.left + (Number(h) / 23) * plotW;
+    const y = chartPad.top + plotH - (v / maxY) * plotH;
+    return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const lastX = chartPad.left + plotW;
+  const firstX = chartPad.left;
+  const bottom = chartPad.top + plotH;
+  return `${line} L${lastX},${bottom} L${firstX},${bottom} Z`;
+}
+
+const maxFlow = Math.max(...Object.values(weekdayProfile).map(Number), ...Object.values(weekendProfile).map(Number), 10);
+const yTicks = [0, 2, 4, 6, 8];
+if (maxFlow > 8) yTicks.push(10);
+
+// Combined weekday+school profile
+const weekdaySchool: Record<string, number> = {};
+for (const h of Object.keys(weekdayProfile)) {
+  weekdaySchool[h] = (Number(weekdayProfile[h]) || 0) + (Number(schoolOverlay[h]) || 0);
+}
+const maxFlowAll = Math.max(...Object.values(weekdaySchool).map(Number), maxFlow);
+
+// Bar chart data (top roads)
+const barRoads = keyRoads.slice(0, 9);
+const maxVehicles = barRoads.length > 0 ? Math.max(...barRoads.map((r: any) => r.daily_vehicles || 0)) : 60000;
+
+// Vehicle composition for busiest road
+const busiestRoad = keyRoads[0] || {};
+const compData = busiestRoad.daily_vehicles ? [
+  { label: 'Cars & Taxis', value: busiestRoad.cars || 0, color: '#12b6cf' },
+  { label: 'LGVs', value: busiestRoad.daily_vehicles - (busiestRoad.cars || 0) - (busiestRoad.hgvs || 0) - (busiestRoad.buses || 0) - (busiestRoad.cycles || 0), color: '#8b5cf6' },
+  { label: 'HGVs', value: busiestRoad.hgvs || 0, color: '#f97316' },
+  { label: 'Buses', value: busiestRoad.buses || 0, color: '#22c55e' },
+  { label: 'Cycles', value: busiestRoad.cycles || 0, color: '#eab308' },
+] : [];
+const compTotal = compData.reduce((s: number, d: any) => s + d.value, 0);
+
+// Donut chart params
+const donutR = 80;
+const donutInner = 50;
+const donutCx = 100;
+const donutCy = 100;
+function donutArc(startAngle: number, endAngle: number, r: number): string {
+  const s = startAngle - Math.PI / 2;
+  const e = endAngle - Math.PI / 2;
+  const x1 = donutCx + r * Math.cos(s);
+  const y1 = donutCy + r * Math.sin(s);
+  const x2 = donutCx + r * Math.cos(e);
+  const y2 = donutCy + r * Math.sin(e);
+  const large = endAngle - startAngle > Math.PI ? 1 : 0;
+  return `M${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)}`;
+}
+
+// School run highlight bands
+const schoolBands = [
+  { start: 7, end: 9, label: 'Morning school run' },
+  { start: 14, end: 16, label: 'Afternoon school run' },
+];
 ---
 
 <Layout
@@ -240,6 +326,307 @@ function heatColor(level: string): string {
           </Accordion>
         </ScrollReveal>
       )}
+    </div>
+  </section>
+  )}
+
+  <!-- Traffic Flow Analysis -->
+  {(Object.keys(weekdayProfile).length > 0 || barRoads.length > 0) && (
+  <section class="charts-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Traffic Flow Analysis</h2>
+          <p class="section-sub">Hourly traffic patterns, road volumes, and vehicle composition from DfT automatic traffic count data</p>
+        </div>
+      </ScrollReveal>
+
+      {Object.keys(weekdayProfile).length > 0 && (
+      <ScrollReveal>
+        <div class="chart-card">
+          <h3 class="chart-title">Daily Traffic Profile</h3>
+          <p class="chart-desc">Relative traffic volume by hour — weekday vs weekend, with school run overlay</p>
+          <svg viewBox={`0 0 ${chartW} ${chartH}`} class="svg-chart" role="img" aria-label="Daily traffic profile chart">
+            {/* Grid lines */}
+            {yTicks.map(t => {
+              const y = chartPad.top + plotH - (t / maxFlowAll) * plotH;
+              return (
+                <g>
+                  <line x1={chartPad.left} y1={y} x2={chartPad.left + plotW} y2={y} stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4" />
+                  <text x={chartPad.left - 8} y={y + 4} fill="#71717a" font-size="10" text-anchor="end">{t}%</text>
+                </g>
+              );
+            })}
+            {/* Hour labels */}
+            {[0, 3, 6, 9, 12, 15, 18, 21].map(h => {
+              const x = chartPad.left + (h / 23) * plotW;
+              return <text x={x} y={chartH - 8} fill="#71717a" font-size="10" text-anchor="middle">{h.toString().padStart(2, '0')}:00</text>;
+            })}
+            {/* School run bands */}
+            {schoolBands.map(band => {
+              const x1 = chartPad.left + (band.start / 23) * plotW;
+              const x2 = chartPad.left + (band.end / 23) * plotW;
+              return <rect x={x1} y={chartPad.top} width={x2 - x1} height={plotH} fill="rgba(249,115,22,0.06)" rx="4" />;
+            })}
+            {/* Weekend area */}
+            <path d={areaPath(weekendProfile, maxFlowAll)} fill="rgba(139,92,246,0.08)" />
+            <path d={profilePath(weekendProfile, maxFlowAll)} fill="none" stroke="#8b5cf6" stroke-width="1.5" opacity="0.5" />
+            {/* Weekday + school area */}
+            <path d={areaPath(weekdaySchool, maxFlowAll)} fill="rgba(18,182,207,0.1)" />
+            <path d={profilePath(weekdaySchool, maxFlowAll)} fill="none" stroke="#12b6cf" stroke-width="2" />
+            {/* Axes */}
+            <line x1={chartPad.left} y1={chartPad.top} x2={chartPad.left} y2={chartPad.top + plotH} stroke="rgba(255,255,255,0.1)" />
+            <line x1={chartPad.left} y1={chartPad.top + plotH} x2={chartPad.left + plotW} y2={chartPad.top + plotH} stroke="rgba(255,255,255,0.1)" />
+          </svg>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#12b6cf"></span> Weekday + school run</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#8b5cf6"></span> Weekend</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(249,115,22,0.3)"></span> School run periods</span>
+          </div>
+        </div>
+      </ScrollReveal>
+      )}
+
+      {barRoads.length > 0 && (
+      <ScrollReveal>
+        <div class="chart-card">
+          <h3 class="chart-title">Key Road Volumes</h3>
+          <p class="chart-desc">Average annual daily flow (AADF) from DfT automatic traffic counts</p>
+          <div class="bar-chart">
+            {barRoads.map((r: any) => {
+              const pct = ((r.daily_vehicles || 0) / maxVehicles * 100).toFixed(1);
+              const hgvPct = r.daily_vehicles > 0 ? ((r.hgvs || 0) / r.daily_vehicles * 100).toFixed(0) : '0';
+              return (
+                <div class="bar-row">
+                  <div class="bar-label">{r.road_name || r.road}</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style={`width:${pct}%`}>
+                      <span class="bar-value">{(r.daily_vehicles || 0).toLocaleString()}</span>
+                    </div>
+                  </div>
+                  <div class="bar-meta">{hgvPct}% HGV</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </ScrollReveal>
+      )}
+
+      {compData.length > 0 && compTotal > 0 && (
+      <ScrollReveal>
+        <div class="chart-card chart-card-donut">
+          <div class="donut-wrap">
+            <div>
+              <h3 class="chart-title">Vehicle Composition</h3>
+              <p class="chart-desc">{busiestRoad.road_name || busiestRoad.road || 'Busiest road'} — {compTotal.toLocaleString()} vehicles/day</p>
+              <div class="donut-legend">
+                {compData.map(d => (
+                  <div class="donut-legend-item">
+                    <span class="legend-swatch" style={`background:${d.color}`}></span>
+                    <span class="donut-legend-label">{d.label}</span>
+                    <span class="donut-legend-val">{compTotal > 0 ? (d.value / compTotal * 100).toFixed(0) : 0}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <svg viewBox="0 0 200 200" class="donut-svg" role="img" aria-label="Vehicle composition donut chart">
+              {(() => {
+                let angle = 0;
+                return compData.map(d => {
+                  const slice = (d.value / compTotal) * Math.PI * 2;
+                  if (slice < 0.01) { angle += slice; return null; }
+                  const outerArc = donutArc(angle, angle + slice, donutR);
+                  const innerArc = donutArc(angle + slice, angle, donutInner);
+                  const path = `${outerArc} L${donutCx + donutInner * Math.cos(angle + slice - Math.PI / 2)},${donutCy + donutInner * Math.sin(angle + slice - Math.PI / 2)} ${innerArc} Z`;
+                  angle += slice;
+                  return <path d={path} fill={d.color} opacity="0.85" />;
+                });
+              })()}
+              <circle cx={donutCx} cy={donutCy} r={donutInner - 2} fill="#09090b" />
+              <text x={donutCx} y={donutCy - 4} text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="700">{(compTotal / 1000).toFixed(0)}k</text>
+              <text x={donutCx} y={donutCy + 12} text-anchor="middle" fill="#71717a" font-size="9">vehicles/day</text>
+            </svg>
+          </div>
+        </div>
+      </ScrollReveal>
+      )}
+    </div>
+  </section>
+  )}
+
+  <!-- Junction Congestion Model -->
+  {trafficData.congestion_model?.junctions?.length > 0 && (
+  <section class="congestion-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Junction Congestion Index</h2>
+          <p class="section-sub">Model scoring 15 key Burnley junctions on traffic volume, signal density, roadworks proximity, school impact, defect reports, and crossing frequency</p>
+        </div>
+      </ScrollReveal>
+      <ScrollReveal>
+        <div class="jci-grid">
+          {trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci).map((j: any) => {
+            const jciColor = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
+            return (
+              <div class="jci-card" style={`border-left: 3px solid ${jciColor}`}>
+                <div class="jci-top">
+                  <span class="jci-name">{j.name}</span>
+                  <span class="jci-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(1)}</span>
+                </div>
+                <div class="jci-bar-track">
+                  <div class="jci-bar-fill" style={`width:${j.jci || 0}%;background:${jciColor}`}></div>
+                </div>
+                <div class="jci-factors">
+                  <span>Vol: {(j.traffic_volume || 0).toLocaleString()}</span>
+                  {j.nearby_schools > 0 && <span>Schools: {j.nearby_schools}</span>}
+                  {j.nearby_defects > 0 && <span>Defects: {j.nearby_defects}</span>}
+                </div>
+                <div class="jci-severity">
+                  <span class={`severity-badge severity-${j.jci_level}`}>{j.jci_level}</span>
+                  {j.type && <span class="jci-type">{j.type}</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </ScrollReveal>
+
+      {trafficData.congestion_model.corridors?.length > 0 && (
+      <ScrollReveal>
+        <Accordion title="Congestion Corridors" defaultOpen={false}>
+          <div class="corridor-grid">
+            {trafficData.congestion_model.corridors.sort((a: any, b: any) => (b.severity || 0) - (a.severity || 0)).map((c: any) => {
+              const cColor = c.level === 'critical' ? '#dc2626' : c.level === 'high' ? '#f97316' : c.level === 'moderate' ? '#eab308' : '#22c55e';
+              return (
+                <div class="corridor-card">
+                  <div class="corridor-head">
+                    <span class="corridor-name">{c.name}</span>
+                    <span class={`severity-badge severity-${c.level}`}>{c.level}</span>
+                  </div>
+                  <div class="jci-bar-track">
+                    <div class="jci-bar-fill" style={`width:${((c.severity || 0) * 100).toFixed(0)}%;background:${cColor}`}></div>
+                  </div>
+                  {c.avg_daily_vehicles > 0 && <div class="corridor-stat">{c.avg_daily_vehicles.toLocaleString()} avg. daily vehicles</div>}
+                </div>
+              );
+            })}
+          </div>
+        </Accordion>
+      </ScrollReveal>
+      )}
+    </div>
+  </section>
+  )}
+
+  <!-- Legal Powers & Framework -->
+  <section class="legal-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Legal Powers &amp; Framework</h2>
+          <p class="section-sub">The legislation that gives LCC and the Secretary of State power to control roadworks, charge for disruption, and enforce compliance</p>
+        </div>
+      </ScrollReveal>
+      <ScrollReveal>
+        <div class="legal-grid">
+          <div class="legal-card legal-card-primary">
+            <div class="legal-icon">&#9878;</div>
+            <h3>Network Management Duty</h3>
+            <p class="legal-cite">Traffic Management Act 2004, s16-17</p>
+            <p>Every local traffic authority <strong>must</strong> manage their road network to secure expeditious movement of traffic. LCC must consider the needs of <em>all road users</em> including pedestrians, cyclists, and public transport.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#128176;</div>
+            <h3>Lane Rental Charges</h3>
+            <p class="legal-cite">TMA 2004, s74A &bull; SI 2012/3073</p>
+            <p>Up to <strong>&pound;2,500/day</strong> charged to utilities for occupying traffic-sensitive roads during peak hours. Currently operating in London, Kent, Surrey, and Sussex. LCC is actively exploring adoption.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#9200;</div>
+            <h3>Overrun Charges (s74)</h3>
+            <p class="legal-cite">NRSWA 1991, s74 &bull; SI 2025/1074</p>
+            <p>Up to <strong>&pound;10,000/day</strong> on traffic-sensitive roads when works overrun the agreed duration. From January 2026, charges now apply on <strong>weekends and bank holidays</strong> too.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#128203;</div>
+            <h3>Permit Scheme</h3>
+            <p class="legal-cite">TMA 2004, s37 &bull; SI 2007/3372</p>
+            <p>Lancashire Permit Scheme requires all utility works to obtain a permit before starting. Conditions can specify <strong>timing, methods, and traffic management</strong>. Working without a permit: <strong>&pound;500 fixed penalty</strong>.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#128337;</div>
+            <h3>Timing Directions (s56)</h3>
+            <p class="legal-cite">NRSWA 1991, s56</p>
+            <p>LCC can direct utility companies to carry out works at <strong>specific times or on specific days</strong> where works would cause serious disruption. Underused power that could force overnight working on critical corridors.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#128683;</div>
+            <h3>Resurfacing Embargoes</h3>
+            <p class="legal-cite">NRSWA 1991, s58-58A</p>
+            <p>After substantial road resurfacing, LCC can <strong>restrict further excavation for up to 3 years</strong> (5 years on new roads). This prevents the costly cycle of &ldquo;dig-fill-dig&rdquo; on recently repaired surfaces.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#128200;</div>
+            <h3>Fixed Penalty Notices</h3>
+            <p class="legal-cite">NRSWA 1991, s95A-D &bull; SI 2025/1074</p>
+            <p>FPNs <strong>doubled from &pound;120 to &pound;240</strong> from 5 January 2026 for permit breaches and notice failures. Working without a permit now attracts a <strong>&pound;500 FPN</strong>. Strong financial incentive for compliance.</p>
+          </div>
+          <div class="legal-card">
+            <div class="legal-icon">&#127970;</div>
+            <h3>Protected Streets</h3>
+            <p class="legal-cite">NRSWA 1991, s61 &bull; TMA 2004 s36A</p>
+            <p>LCC can designate streets where no works may be carried out without specific permission. Used for <strong>high-footfall town centres</strong> and critical transport corridors.</p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Options Appraisal -->
+  {trafficData.congestion_model?.options_appraisal?.length > 0 && (
+  <section class="options-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Congestion Reduction: Options Appraisal</h2>
+          <p class="section-sub">What LCC can do — {trafficData.congestion_model.options_appraisal.length} interventions scored by impact, feasibility, cost, and evidence base</p>
+        </div>
+      </ScrollReveal>
+      <ScrollReveal>
+        <div class="options-grid">
+          {trafficData.congestion_model.options_appraisal.sort((a: any, b: any) => (b.overall_score || 0) - (a.overall_score || 0)).map((opt: any, i: number) => {
+            const maxScore = 30;
+            const pct = Math.min(100, ((opt.overall_score || 0) / maxScore * 100));
+            return (
+            <div class="option-card">
+              <div class="option-rank">#{i + 1}</div>
+              <div class="option-body">
+                <div class="option-head">
+                  <h3 class="option-name">{opt.intervention}</h3>
+                  <div class="option-score-ring" style={`--score: ${pct.toFixed(0)}%`}>
+                    <span class="option-score-val">{(opt.overall_score || 0).toFixed(0)}</span>
+                  </div>
+                </div>
+                <p class="option-desc">{opt.description}</p>
+                <div class="option-meta">
+                  <span class={`severity-badge severity-${opt.priority}`}>{opt.priority}</span>
+                  {opt.congestion_reduction_pct > 0 && <span class="option-tag">-{opt.congestion_reduction_pct}% congestion</span>}
+                  <span class="option-tag">Timeline: {opt.timeline}</span>
+                </div>
+                <div class="option-details">
+                  <span class="option-detail"><strong>Legal basis:</strong> {opt.legal_basis}</span>
+                  <span class="option-detail"><strong>Est. cost:</strong> {opt.cost}</span>
+                  {opt.status && <span class="option-detail"><strong>Status:</strong> {opt.status}</span>}
+                </div>
+                {opt.evidence && <p class="option-evidence">{opt.evidence}</p>}
+              </div>
+            </div>
+            );
+          })}
+        </div>
+      </ScrollReveal>
     </div>
   </section>
   )}
@@ -2289,4 +2676,160 @@ function heatColor(level: string): string {
 
   .badge-orange { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
   .badge-purple { background: rgba(168,85,247,0.12); color: #a855f7; border: 1px solid rgba(168,85,247,0.25); }
+
+  /* ---- Charts Section ---- */
+  .charts-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .chart-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .chart-title { font-size: 1.1rem; font-weight: 700; color: #e4e4e7; margin: 0 0 0.25rem; }
+  .chart-desc { font-size: 0.8rem; color: #a1a1aa; margin: 0 0 1rem; line-height: 1.4; }
+  .svg-chart { width: 100%; height: auto; display: block; }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.75rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: #a1a1aa; }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* Bar chart */
+  .bar-chart { display: grid; gap: 0.5rem; }
+  .bar-row { display: grid; grid-template-columns: 140px 1fr 60px; align-items: center; gap: 0.75rem; }
+  .bar-label { font-size: 0.75rem; color: #d4d4d8; font-weight: 500; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { height: 22px; background: rgba(255,255,255,0.04); border-radius: 6px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, #12b6cf, #0e8fa3); border-radius: 6px; min-width: 40px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; transition: width 0.6s ease-out; }
+  .bar-value { font-size: 0.65rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+  .bar-meta { font-size: 0.65rem; color: #71717a; font-variant-numeric: tabular-nums; }
+
+  /* Donut chart */
+  .chart-card-donut { }
+  .donut-wrap { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+  .donut-svg { width: 160px; height: 160px; flex-shrink: 0; }
+  .donut-legend { display: grid; gap: 0.4rem; margin-top: 0.75rem; }
+  .donut-legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
+  .donut-legend-label { color: #a1a1aa; }
+  .donut-legend-val { color: #e4e4e7; font-weight: 600; font-variant-numeric: tabular-nums; margin-left: auto; }
+
+  @media (max-width: 640px) {
+    .bar-row { grid-template-columns: 100px 1fr 50px; }
+    .donut-wrap { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ---- Congestion Section ---- */
+  .congestion-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .jci-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .jci-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1rem 1rem 0.75rem;
+  }
+  .jci-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+  .jci-name { font-size: 0.85rem; font-weight: 600; color: #e4e4e7; line-height: 1.3; }
+  .jci-score { font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; flex-shrink: 0; margin-left: 0.5rem; }
+  .jci-bar-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem; }
+  .jci-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease-out; }
+  .jci-factors { display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.65rem; color: #71717a; margin-bottom: 0.4rem; }
+  .jci-severity { display: flex; align-items: center; gap: 0.5rem; }
+  .severity-badge {
+    font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 0.15rem 0.5rem; border-radius: 10px;
+  }
+  .severity-critical { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .severity-high { background: rgba(249,115,22,0.15); color: #f97316; }
+  .severity-moderate { background: rgba(234,179,8,0.15); color: #eab308; }
+  .severity-low { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .jci-type { font-size: 0.65rem; color: #52525b; }
+
+  .corridor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
+  .corridor-card {
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .corridor-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .corridor-name { font-size: 0.85rem; font-weight: 600; color: #d4d4d8; }
+  .corridor-stat { font-size: 0.7rem; color: #71717a; font-variant-numeric: tabular-nums; }
+
+  /* ---- Legal Section ---- */
+  .legal-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .legal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .legal-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .legal-card:hover { border-color: rgba(18,182,207,0.2); transform: translateY(-2px); }
+  .legal-card-primary { border-color: rgba(18,182,207,0.25); background: rgba(18,182,207,0.04); }
+  .legal-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .legal-card h3 { font-size: 1rem; font-weight: 700; color: #e4e4e7; margin: 0 0 0.25rem; }
+  .legal-cite { font-size: 0.7rem; color: var(--accent); margin: 0 0 0.5rem; font-weight: 500; }
+  .legal-card p:last-child { font-size: 0.8rem; color: #a1a1aa; line-height: 1.5; margin: 0; }
+
+  /* ---- Options Section ---- */
+  .options-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .options-grid { display: grid; gap: 1rem; }
+  .option-card {
+    display: flex; gap: 1rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .option-card:hover { border-color: rgba(18,182,207,0.2); }
+  .option-rank {
+    font-size: 1.5rem; font-weight: 800; color: rgba(18,182,207,0.3);
+    flex-shrink: 0; width: 40px; text-align: center; padding-top: 0.25rem;
+  }
+  .option-body { flex: 1; min-width: 0; }
+  .option-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.4rem; }
+  .option-name { font-size: 1rem; font-weight: 700; color: #e4e4e7; margin: 0; }
+  .option-score-ring {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(#12b6cf var(--score, 0%), rgba(255,255,255,0.06) 0);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .option-score-val {
+    font-size: 0.8rem; font-weight: 800; color: #e4e4e7;
+    background: #09090b; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .option-desc { font-size: 0.8rem; color: #a1a1aa; line-height: 1.5; margin: 0 0 0.6rem; }
+  .option-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
+  .option-tag {
+    font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 10px;
+    background: rgba(18,182,207,0.08); color: var(--accent); font-weight: 500;
+  }
+  .option-details { display: flex; flex-direction: column; gap: 0.2rem; }
+  .option-detail { font-size: 0.75rem; color: #71717a; }
+  .option-detail strong { color: #a1a1aa; }
+  .option-evidence { font-size: 0.7rem; color: #52525b; margin: 0.4rem 0 0; font-style: italic; line-height: 1.4; }
+
+  @media (max-width: 640px) {
+    .option-card { flex-direction: column; }
+    .option-rank { width: auto; font-size: 1rem; }
+    .jci-grid { grid-template-columns: 1fr; }
+    .legal-grid { grid-template-columns: 1fr; }
+  }
 </style>

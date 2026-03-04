@@ -92,6 +92,8 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-boundary-toggles">
       <label class="rw-toggle"><input type="checkbox" id="ced-toggle" checked /><span>County divisions</span></label>
       <label class="rw-toggle"><input type="checkbox" id="ward-toggle" /><span>Wards</span></label>
+      <label class="rw-toggle rw-toggle-intel"><input type="checkbox" id="traffic-intel-toggle" /><span>Traffic intelligence</span></label>
+      <label class="rw-toggle rw-toggle-intel"><input type="checkbox" id="corridor-toggle" /><span>Congestion corridors</span></label>
     </div>
   </div>
 
@@ -579,6 +581,128 @@ const cedBoundaries = cedBoundariesData as any[];
   if (cedT) cedT.addEventListener('change', function() { if (cedT.checked && cedLayer) cedLayer.addTo(map); else if (cedLayer) map.removeLayer(cedLayer); });
   var wardT = document.getElementById('ward-toggle');
   if (wardT) wardT.addEventListener('change', function() { if (!wardLayer) drawWards(); if (wardT.checked && wardLayer) wardLayer.addTo(map); else if (wardLayer) map.removeLayer(wardLayer); });
+
+  // Traffic intelligence layers
+  var intelLayer = null, corridorLayer = null;
+  var intelT = document.getElementById('traffic-intel-toggle');
+  var corrT = document.getElementById('corridor-toggle');
+
+  function loadTrafficIntel() {
+    fetch('/data/traffic.json').then(function(r){return r.json()}).then(function(td) {
+      if (!td.infrastructure && !td.congestion_model) return;
+
+      // Traffic intelligence layer: signals, junctions, DfT count points, schools
+      if (!intelLayer) {
+        intelLayer = L.layerGroup();
+        var infra = td.infrastructure || {};
+        var model = td.congestion_model || {};
+
+        // Traffic signal clusters (small green dots)
+        (infra.traffic_signals || []).forEach(function(s) {
+          L.circleMarker([s.lat, s.lng], {
+            radius: 3, fillColor: '#22c55e', color: '#166534', weight: 1,
+            fillOpacity: 0.7, className: 'intel-signal'
+          }).bindTooltip('Traffic signal' + (s.signal_count > 1 ? ' cluster (' + s.signal_count + ')' : ''), {className:'rw-popup'}).addTo(intelLayer);
+        });
+
+        // Signal crossings (small blue dots)
+        (infra.signal_crossings || []).forEach(function(c) {
+          var typeLabel = c.type || 'signal';
+          L.circleMarker([c.lat, c.lng], {
+            radius: 2.5, fillColor: c.bicycle ? '#a855f7' : '#3b82f6',
+            color: c.bicycle ? '#6b21a8' : '#1e40af', weight: 1,
+            fillOpacity: 0.6
+          }).bindTooltip(typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1) + ' crossing' + (c.bicycle ? ' (cycle)' : ''), {className:'rw-popup'}).addTo(intelLayer);
+        });
+
+        // Named junction JCI markers (larger, color-coded)
+        (model.junctions || []).forEach(function(j) {
+          var col = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
+          var sz = j.jci >= 70 ? 10 : j.jci >= 50 ? 8 : j.jci >= 30 ? 7 : 6;
+          L.circleMarker([j.lat, j.lng], {
+            radius: sz, fillColor: col, color: '#000', weight: 2,
+            fillOpacity: 0.85
+          }).bindPopup(
+            '<div style="color:#fff;font-weight:700;font-size:14px;margin-bottom:4px">' + esc(j.name) + '</div>' +
+            '<div style="display:flex;gap:8px;margin-bottom:6px">' +
+              '<span style="background:' + col + ';color:#fff;padding:2px 8px;border-radius:4px;font-weight:600">JCI ' + j.jci + '</span>' +
+              '<span style="color:#aaa;text-transform:uppercase;font-size:11px">' + j.jci_level + '</span>' +
+            '</div>' +
+            (j.traffic_volume ? '<div style="color:#ccc;font-size:12px">' + j.traffic_volume.toLocaleString() + ' vehicles/day</div>' : '') +
+            (j.nearby_schools ? '<div style="color:#ccc;font-size:12px">' + j.nearby_schools + ' school(s) within 500m</div>' : '') +
+            (j.nearby_defects ? '<div style="color:#ccc;font-size:12px">' + j.nearby_defects + ' FixMyStreet report(s) nearby</div>' : '') +
+            (j.notes ? '<div style="color:#888;font-size:11px;margin-top:4px">' + esc(j.notes) + '</div>' : ''),
+            {className: 'rw-popup', maxWidth: 280}
+          ).addTo(intelLayer);
+        });
+
+        // DfT count points (proportionally sized by volume)
+        (td.count_points || []).forEach(function(cp) {
+          if (!cp.aadf || !cp.lat || !cp.lng) return;
+          var vol = cp.aadf.all_motor_vehicles || 0;
+          if (vol < 1000) return;
+          var sz = Math.max(3, Math.min(vol / 5000, 12));
+          L.circleMarker([cp.lat, cp.lng], {
+            radius: sz, fillColor: '#12b6cf', color: '#0e7490', weight: 1,
+            fillOpacity: 0.4
+          }).bindTooltip(
+            cp.road + ': ' + vol.toLocaleString() + ' vehicles/day (' + (cp.aadf.year || '?') + ')',
+            {className: 'rw-popup'}
+          ).addTo(intelLayer);
+        });
+
+        // Schools (orange squares)
+        (infra.schools || []).forEach(function(sc) {
+          L.circleMarker([sc.lat, sc.lng], {
+            radius: 5, fillColor: '#f59e0b', color: '#92400e', weight: 1.5,
+            fillOpacity: 0.7
+          }).bindTooltip(esc(sc.name) + ' (~' + sc.pupils + ' pupils)', {className:'rw-popup'}).addTo(intelLayer);
+        });
+
+        // Turf Moor
+        if (infra.turf_moor) {
+          L.circleMarker([infra.turf_moor.lat, infra.turf_moor.lng], {
+            radius: 8, fillColor: '#7c3aed', color: '#4c1d95', weight: 2,
+            fillOpacity: 0.8
+          }).bindTooltip('Turf Moor (' + (infra.turf_moor.capacity||'').toLocaleString() + ' capacity)', {className:'rw-popup'}).addTo(intelLayer);
+        }
+      }
+
+      // Congestion corridor layer
+      if (!corridorLayer) {
+        corridorLayer = L.layerGroup();
+        (model.corridors || []).forEach(function(cor) {
+          var col = cor.level === 'critical' ? '#dc2626' : cor.level === 'severe' ? '#f97316' : cor.level === 'high' ? '#eab308' : cor.level === 'moderate' ? '#22c55e' : '#64748b';
+          var w = cor.severity >= 0.8 ? 6 : cor.severity >= 0.6 ? 5 : cor.severity >= 0.4 ? 4 : 3;
+          var latlngs = cor.coords.map(function(c){return [c[0], c[1]]});
+          L.polyline(latlngs, {
+            color: col, weight: w, opacity: 0.7,
+            dashArray: cor.level === 'critical' ? null : '8 4'
+          }).bindPopup(
+            '<div style="color:#fff;font-weight:700;font-size:13px">' + esc(cor.name) + '</div>' +
+            '<div style="color:' + col + ';font-weight:600;margin:4px 0">' + cor.level.toUpperCase() + ' (severity ' + (cor.severity * 100).toFixed(0) + '%)</div>' +
+            (cor.avg_daily_vehicles ? '<div style="color:#ccc;font-size:12px">' + cor.avg_daily_vehicles.toLocaleString() + ' avg daily vehicles</div>' : ''),
+            {className: 'rw-popup', maxWidth: 250}
+          ).addTo(corridorLayer);
+        });
+      }
+
+      // Apply toggle state
+      if (intelT && intelT.checked && intelLayer) intelLayer.addTo(map);
+      if (corrT && corrT.checked && corridorLayer) corridorLayer.addTo(map);
+    }).catch(function(e) { console.warn('Traffic intel load failed:', e); });
+  }
+
+  if (intelT) intelT.addEventListener('change', function() {
+    if (!intelLayer) loadTrafficIntel();
+    else if (intelT.checked) intelLayer.addTo(map);
+    else map.removeLayer(intelLayer);
+  });
+  if (corrT) corrT.addEventListener('change', function() {
+    if (!corridorLayer) loadTrafficIntel();
+    else if (corrT.checked) corridorLayer.addTo(map);
+    else map.removeLayer(corridorLayer);
+  });
 
   // Timeline
   var tSlider = document.getElementById('timeline-slider');

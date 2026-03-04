@@ -2,16 +2,21 @@ name: Data ETL Pipeline
 
 on:
   schedule:
-    # Twice daily: 7am and 7pm UTC
-    - cron: '0 7,19 * * *'
+    # Twice daily: 6am and 6pm UTC (roadworks, FixMyStreet, LCC highways, traffic intelligence)
+    - cron: '0 6,18 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: data-etl
+  cancel-in-progress: false
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,9 +38,21 @@ jobs:
         run: python3 scripts/lcc_highways_etl.py public/data/lcc_highways.json
         continue-on-error: true
 
-      - name: Run traffic impact ETL
+      - name: Run traffic intelligence ETL
         run: python3 scripts/traffic_etl.py public/data/traffic.json
         continue-on-error: true
+
+      - name: Summary
+        run: |
+          echo "### Data ETL Results" >> $GITHUB_STEP_SUMMARY
+          for f in roadworks fixmystreet lcc_highways traffic; do
+            if [ -f "public/data/${f}.json" ]; then
+              SIZE=$(wc -c < "public/data/${f}.json" | tr -d ' ')
+              echo "- **${f}.json**: ${SIZE} bytes" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- **${f}.json**: missing" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
 
       - name: Check for changes
         id: changes
