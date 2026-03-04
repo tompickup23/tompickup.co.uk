@@ -533,6 +533,304 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     margin-top: 1rem;
   }
 
+  /* ============================================================
+     Article Visualisation Infrastructure
+     Reusable CSS classes for article inline HTML visualisations.
+     Use these in markdown articles instead of verbose inline styles.
+     ============================================================ */
+
+  /* Panels — dark glassmorphic containers */
+  .prose :global(.viz-panel) {
+    margin: 32px 0;
+    padding: 28px;
+    background: rgba(28, 28, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+  }
+
+  .prose :global(.viz-panel-gradient) {
+    background: linear-gradient(135deg, rgba(18, 182, 207, 0.06) 0%, rgba(48, 209, 88, 0.04) 100%);
+    border-color: rgba(18, 182, 207, 0.2);
+  }
+
+  .prose :global(.viz-panel-alert) {
+    background: linear-gradient(135deg, rgba(255, 159, 10, 0.06), rgba(255, 69, 58, 0.04));
+    border-color: rgba(255, 159, 10, 0.15);
+  }
+
+  .prose :global(.viz-panel-success) {
+    background: rgba(48, 209, 88, 0.04);
+    border-color: rgba(48, 209, 88, 0.15);
+  }
+
+  .prose :global(.viz-panel-bordered) {
+    padding: 4px;
+    background: linear-gradient(135deg, rgba(18, 182, 207, 0.3), rgba(48, 209, 88, 0.3));
+    border: none;
+    border-radius: 24px;
+  }
+
+  .prose :global(.viz-panel-bordered > .viz-panel-inner) {
+    padding: 28px;
+    background: rgba(10, 10, 12, 0.95);
+    border-radius: 22px;
+  }
+
+  /* Section labels */
+  .prose :global(.viz-label) {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #636366;
+    margin-bottom: 16px;
+  }
+
+  .prose :global(.viz-label.teal) { color: #12b6cf; }
+  .prose :global(.viz-label.center) { text-align: center; }
+
+  /* Stat grids */
+  .prose :global(.viz-grid) {
+    display: grid;
+    gap: 16px;
+  }
+
+  .prose :global(.viz-grid-2) { grid-template-columns: repeat(2, 1fr); }
+  .prose :global(.viz-grid-3) { grid-template-columns: repeat(3, 1fr); }
+  .prose :global(.viz-grid-4) { grid-template-columns: repeat(4, 1fr); }
+
+  /* Stat cards */
+  .prose :global(.viz-stat) {
+    padding: 20px;
+    background: rgba(28, 28, 30, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    text-align: center;
+  }
+
+  .prose :global(.viz-stat.teal) {
+    background: rgba(18, 182, 207, 0.04);
+    border-color: rgba(18, 182, 207, 0.12);
+  }
+
+  .prose :global(.viz-stat.green) {
+    background: rgba(48, 209, 88, 0.04);
+    border-color: rgba(48, 209, 88, 0.12);
+  }
+
+  .prose :global(.viz-stat.red) {
+    background: rgba(255, 69, 58, 0.04);
+    border-color: rgba(255, 69, 58, 0.12);
+  }
+
+  .prose :global(.viz-stat.orange) {
+    background: rgba(255, 159, 10, 0.04);
+    border-color: rgba(255, 159, 10, 0.12);
+  }
+
+  .prose :global(.viz-stat.purple) {
+    background: rgba(191, 90, 242, 0.04);
+    border-color: rgba(191, 90, 242, 0.12);
+  }
+
+  .prose :global(.viz-stat.blue) {
+    background: rgba(0, 135, 220, 0.04);
+    border-color: rgba(0, 135, 220, 0.12);
+  }
+
+  .prose :global(.viz-stat .value) {
+    display: block;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .prose :global(.viz-stat .value.lg) { font-size: 2.5rem; }
+  .prose :global(.viz-stat .value.xl) { font-size: 3rem; }
+
+  .prose :global(.viz-stat .label) {
+    display: block;
+    font-size: 0.75rem;
+    color: #8e8e93;
+    margin-top: 8px;
+  }
+
+  .prose :global(.viz-stat .sublabel) {
+    display: block;
+    font-size: 0.6875rem;
+    color: #636366;
+    margin-top: 4px;
+  }
+
+  /* Callout — full-width banner */
+  .prose :global(.viz-callout) {
+    margin: 40px 0;
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(18, 182, 207, 0.08) 0%, rgba(48, 209, 88, 0.06) 100%);
+    border: 2px solid rgba(18, 182, 207, 0.2);
+    border-radius: 24px;
+    text-align: center;
+  }
+
+  /* Quote cards */
+  .prose :global(.viz-quote) {
+    padding: 16px 20px;
+    background: rgba(18, 182, 207, 0.04);
+    border-left: 3px solid #12b6cf;
+    border-radius: 0 12px 12px 0;
+    margin: 16px 0;
+  }
+
+  .prose :global(.viz-quote.red) {
+    background: rgba(228, 0, 59, 0.04);
+    border-left-color: #E4003B;
+  }
+
+  .prose :global(.viz-quote.blue) {
+    background: rgba(0, 135, 220, 0.04);
+    border-left-color: #0087DC;
+  }
+
+  .prose :global(.viz-quote.grey) {
+    background: rgba(99, 102, 106, 0.06);
+    border-left-color: #636366;
+  }
+
+  .prose :global(.viz-quote .source) {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #636366;
+  }
+
+  .prose :global(.viz-quote .text) {
+    display: block;
+    font-size: 0.875rem;
+    color: #8e8e93;
+    margin-top: 8px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .prose :global(.viz-quote .context) {
+    display: block;
+    font-size: 0.75rem;
+    color: #636366;
+    margin-top: 8px;
+  }
+
+  /* Sources footer */
+  .prose :global(.viz-sources) {
+    margin: 32px 0 0;
+    padding: 16px 20px;
+    background: rgba(48, 209, 88, 0.04);
+    border: 1px solid rgba(48, 209, 88, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Info box */
+  .prose :global(.viz-info) {
+    margin: 24px 0;
+    padding: 20px 24px;
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.2);
+    border-left: 3px solid #12b6cf;
+    border-radius: 0 16px 16px 0;
+  }
+
+  /* Highlight bar — accent-tinted inline summary */
+  .prose :global(.viz-highlight) {
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-radius: 12px;
+  }
+
+  .prose :global(.viz-highlight.teal) {
+    background: rgba(18, 182, 207, 0.06);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+  }
+
+  .prose :global(.viz-highlight.green) {
+    background: rgba(48, 209, 88, 0.04);
+    border: 1px solid rgba(48, 209, 88, 0.15);
+  }
+
+  .prose :global(.viz-highlight.orange) {
+    background: rgba(255, 159, 10, 0.08);
+    border: 1px solid rgba(255, 159, 10, 0.15);
+  }
+
+  .prose :global(.viz-highlight.red) {
+    background: rgba(255, 69, 58, 0.06);
+    border: 1px solid rgba(255, 69, 58, 0.1);
+  }
+
+  /* Progress bar */
+  .prose :global(.viz-progress) {
+    margin: 24px 0;
+    padding: 20px 24px;
+    background: rgba(28, 28, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+  }
+
+  .prose :global(.viz-progress .bar-track) {
+    height: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .prose :global(.viz-progress .bar-fill) {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #30d158, #12b6cf);
+  }
+
+  /* Text color utilities for viz */
+  .prose :global(.text-teal) { color: #12b6cf; }
+  .prose :global(.text-green) { color: #30d158; }
+  .prose :global(.text-red) { color: #ff453a; }
+  .prose :global(.text-orange) { color: #ff9f0a; }
+  .prose :global(.text-purple) { color: #bf5af2; }
+  .prose :global(.text-blue) { color: #0087DC; }
+  .prose :global(.text-labour) { color: #E4003B; }
+  .prose :global(.text-muted) { color: #8e8e93; }
+  .prose :global(.text-dim) { color: #636366; }
+  .prose :global(.text-white) { color: #ffffff; }
+  .prose :global(.text-bold) { font-weight: 700; }
+
+  /* Viz-class responsive overrides */
+  @media (max-width: 768px) {
+    .prose :global(.viz-grid-3),
+    .prose :global(.viz-grid-4) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .prose :global(.viz-stat .value) { font-size: 1.75rem; }
+    .prose :global(.viz-stat .value.lg) { font-size: 2rem; }
+    .prose :global(.viz-stat .value.xl) { font-size: 2.25rem; }
+    .prose :global(.viz-panel) { padding: 20px; }
+    .prose :global(.viz-callout) { padding: 24px 16px; }
+  }
+
+  @media (max-width: 640px) {
+    .prose :global(.viz-grid-2),
+    .prose :global(.viz-grid-3),
+    .prose :global(.viz-grid-4) {
+      grid-template-columns: 1fr;
+    }
+
+    .prose :global(.viz-stat .value) { font-size: 1.5rem; }
+    .prose :global(.viz-stat .value.lg) { font-size: 1.75rem; }
+    .prose :global(.viz-stat .value.xl) { font-size: 2rem; }
+    .prose :global(.viz-panel) { padding: 16px 12px; }
+    .prose :global(.viz-callout) { padding: 20px 16px; }
+  }
+
   /* Mobile responsive — inline visualisation overrides */
   @media (max-width: 768px) {
     /* Force 4-column grids to 2 columns on tablet */

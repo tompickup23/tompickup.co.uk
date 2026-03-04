@@ -75,11 +75,10 @@ Ten years. Three administrations. One clear picture.
 <div style="flex: 1; height: 6px; background: rgba(255, 255, 255, 0.04); border-radius: 3px; overflow: hidden;"><div style="width: 83%; height: 100%; background: #0087DC; border-radius: 3px;"></div></div>
 <span style="font-size: 0.6875rem; font-weight: 600; color: #0087DC; width: 48px; text-align: right;">4.99%</span>
 </div>
-<div style="height: 1px; background: rgba(255, 255, 255, 0.06); margin: 4px 0;"></div>
 <div style="display: flex; align-items: center; gap: 8px;">
-<span style="width: 56px; font-size: 0.6875rem; color: #ff9f0a; font-weight: 600; flex-shrink: 0; text-align: right;">25/26</span>
-<div style="flex: 1; height: 6px; background: rgba(255, 255, 255, 0.04); border-radius: 3px; overflow: hidden;"><div style="width: 83%; height: 100%; background: #ff9f0a; border-radius: 3px;"></div></div>
-<span style="font-size: 0.6875rem; font-weight: 600; color: #ff9f0a; width: 48px; text-align: right;">4.99%</span>
+<span style="width: 56px; font-size: 0.6875rem; color: #0087DC; font-weight: 600; flex-shrink: 0; text-align: right;">25/26</span>
+<div style="flex: 1; height: 6px; background: rgba(255, 255, 255, 0.04); border-radius: 3px; overflow: hidden;"><div style="width: 83%; height: 100%; background: #0087DC; border-radius: 3px;"></div></div>
+<span style="font-size: 0.6875rem; font-weight: 600; color: #0087DC; width: 48px; text-align: right;">4.99%</span>
 </div>
 <div style="display: flex; align-items: center; gap: 8px;">
 <span style="width: 56px; font-size: 0.75rem; color: #12b6cf; font-weight: 700; flex-shrink: 0; text-align: right;">26/27</span>
@@ -90,15 +89,14 @@ Ten years. Three administrations. One clear picture.
 <div style="margin-top: 12px; font-size: 0.625rem; color: #636366; display: flex; gap: 12px; flex-wrap: wrap;">
 <span><span style="color: #E4003B;">&#9632;</span> Labour</span>
 <span><span style="color: #0087DC;">&#9632;</span> Conservative</span>
-<span><span style="color: #ff9f0a;">&#9632;</span> No Overall Control</span>
 <span><span style="color: #12b6cf;">&#9632;</span> Reform UK</span>
 </div>
 </div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0;">
 <div style="padding: 20px 16px; background: rgba(0, 135, 220, 0.06); border: 1px solid rgba(0, 135, 220, 0.15); border-radius: 16px; text-align: center;">
-<span style="display: block; font-size: 2rem; font-weight: 800; color: #0087DC; line-height: 1.1;">+&pound;432</span>
-<span style="display: block; font-size: 0.6875rem; color: #8e8e93; margin-top: 6px; line-height: 1.4;">Added to Band D per household<br>under 7 Conservative budgets</span>
+<span style="display: block; font-size: 2rem; font-weight: 800; color: #0087DC; line-height: 1.1;">+&pound;514</span>
+<span style="display: block; font-size: 0.6875rem; color: #8e8e93; margin-top: 6px; line-height: 1.4;">Added to Band D per household<br>under 8 Conservative budgets</span>
 </div>
 <div style="padding: 20px 16px; background: rgba(18, 182, 207, 0.06); border: 1px solid rgba(18, 182, 207, 0.15); border-radius: 16px; text-align: center;">
 <span style="display: block; font-size: 2rem; font-weight: 800; color: #12b6cf; line-height: 1.1;">+&pound;66</span>
@@ -106,7 +104,7 @@ Ten years. Three administrations. One clear picture.
 </div>
 </div>
 
-Labour's last budget set Band D at &pound;1,222. Over the next seven Conservative budgets, it rose to &pound;1,653: an extra &pound;432 per household, a 35% increase. They never once went below 3.99%, and hit 5.99% in their first full year.
+Labour's last budget set Band D at &pound;1,222. Over the next eight Conservative budgets, including the 2025/26 budget set before Reform took control, it rose to approximately &pound;1,736: an extra &pound;514 per household, a 42% increase. They never once went below 3.99%, and hit 5.99% in their first full year.
 
 Reform's first budget set council tax at 3.80%. The lowest rise in a decade.
 
@@ -164,6 +162,38 @@ Over 1,600 residents responded to the consultation. Reform listened. Every home 
 
 Under the previous administration, councillors serving as pension fund directors received additional salaries on top of their councillor allowances. Reform ended this practice immediately. If you're elected to serve the public, you serve the public. You don't collect extra pay from funds that belong to council workers.
 
+## Councillor Allowance Freeze
+
+The Independent Remuneration Panel recommended an increase to councillor allowances. Reform rejected it. While residents across Lancashire face rising costs, it would be wrong for councillors to vote themselves a pay rise.
+
+This is not a symbolic gesture. It is a principle. Councillors are elected to serve. If we are asking departments to find efficiencies and do more with less, we should hold ourselves to the same standard. The allowance freeze stands.
+
+## &pound;5 Saved for Every &pound;100 Spent
+
+Reform made a clear election promise: find savings, cut waste, protect front-line services. The &pound;62 million savings programme delivers exactly that, approximately **&pound;5 for every &pound;100** the council spends.
+
+<div class="viz-panel viz-panel-gradient">
+<div class="viz-grid viz-grid-3">
+<div class="viz-stat teal">
+<span class="value text-teal">&pound;62M</span>
+<span class="label">Savings identified</span>
+<span class="sublabel">~5% of net revenue budget</span>
+</div>
+<div class="viz-stat green">
+<span class="value text-green">&pound;5</span>
+<span class="label">Saved per &pound;100 spent</span>
+<span class="sublabel">Election promise delivered</span>
+</div>
+<div class="viz-stat purple">
+<span class="value text-purple">90%+</span>
+<span class="label">Delivery target</span>
+<span class="sublabel">Up from 48% under Conservatives</span>
+</div>
+</div>
+</div>
+
+These are not theoretical savings on a spreadsheet. They come from renegotiating contracts where suppliers had gone unchallenged for years, stopping duplicate payments, closing vacancies that added no value, and introducing competitive procurement where cosy relationships had persisted.
+
 ## What the Conservatives Left Behind
 
 <div style="margin: 24px 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.06); background: rgba(28, 28, 30, 0.5);">
@@ -210,6 +240,11 @@ Under the previous administration, councillors serving as pension fund directors
 <td style="padding: 12px 16px; color: #8e8e93; font-weight: 500;">Budget</td>
 <td style="padding: 12px 16px; color: #ff453a; text-align: center;">Reserves declining yearly</td>
 <td style="padding: 12px 16px; color: #30d158; text-align: center; font-weight: 600;">&pound;1.33B balanced</td>
+</tr>
+<tr style="background: rgba(255, 255, 255, 0.02);">
+<td style="padding: 12px 16px; color: #8e8e93; font-weight: 500;">Cllr allowances</td>
+<td style="padding: 12px 16px; color: #ff453a; text-align: center;">Accepted panel increases</td>
+<td style="padding: 12px 16px; color: #30d158; text-align: center; font-weight: 600;">Frozen. Increase rejected</td>
 </tr>
 </tbody>
 </table>
