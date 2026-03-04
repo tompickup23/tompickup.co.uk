@@ -6,6 +6,13 @@ import WardMap3D from '../../components/WardMap3D.astro';
 import wardData from '../../data/burnley-wards.json';
 import roadworksData from '../../../public/data/roadworks.json';
 
+// FixMyStreet data
+let fixmystreetData: any = { reports: [], stats: {} };
+try {
+  const fmsRaw = await import('../../../public/data/fixmystreet.json');
+  fixmystreetData = fmsRaw.default || fmsRaw;
+} catch {}
+
 export function getStaticPaths() {
   return Object.entries(wardData.wards).map(([slug, ward]: [string, any]) => ({
     params: { slug },
@@ -59,6 +66,15 @@ const activeRoadworks = wardRoadworks.filter((rw: any) => rw.status === 'Works s
 const plannedRoadworks = wardRoadworks.filter((rw: any) => rw.status === 'Planned works');
 const highSevRoadworks = wardRoadworks.filter((rw: any) => rw.severity === 'high');
 
+// FixMyStreet reports for this ward
+const wardFms = (fixmystreetData.reports || []).filter((r: any) =>
+  r.ward && r.ward.toLowerCase().replace(/\s+/g, '') === wardNameNorm
+);
+const openFms = wardFms.filter((r: any) => r.status === 'open');
+
+// Ward population (from enrichment)
+const population = ward.population || 0;
+
 function fmtRwDate(iso: string): string {
   if (!iso) return '—';
   try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch { return '—'; }
@@ -105,6 +121,13 @@ function humanRestriction(r: string): string {
             <span class="stat-value tabular-nums">{electorate.toLocaleString()}</span>
             <span class="stat-label">Registered Voters</span>
           </div>
+          {population > 0 && (
+          <div class="stat-card">
+            <span class="stat-value tabular-nums">{population.toLocaleString()}</span>
+            <span class="stat-label">Population</span>
+            <span class="stat-detail" style="color: #a1a1aa;">Census 2021</span>
+          </div>
+          )}
           <div class="stat-card">
             <span class="stat-value tabular-nums">{planTotal}</span>
             <span class="stat-label">Planning Applications</span>
@@ -354,7 +377,7 @@ function humanRestriction(r: string): string {
                 {history.slice(0, 15).map((h: any) => (
                   <tr>
                     <td class="tabular-nums">{h.year}</td>
-                    <td class="tabular-nums">{h.turnout_pct ? `${h.turnout_pct}%` : 'N/A'}</td>
+                    <td class="tabular-nums">{h.turnout_pct ? `${h.turnout_pct}%` : h.turnout ? `${(h.turnout * 100).toFixed(1)}%` : 'N/A'}</td>
                     <td class="tabular-nums">{h.majority || 'N/A'}</td>
                     <td>{h.candidates?.[0]?.name || 'N/A'} ({h.candidates?.[0]?.party || ''})</td>
                   </tr>
@@ -390,6 +413,12 @@ function humanRestriction(r: string): string {
             <div class="local-stat card">
               <span class="local-stat-value tabular-nums" style={`color: ${activeRoadworks.length > 0 ? '#ef4444' : '#f59e0b'}`}>{wardRoadworks.length}</span>
               <span class="local-stat-label">Roadworks ({activeRoadworks.length} active, {plannedRoadworks.length} planned)</span>
+            </div>
+          )}
+          {openFms.length > 0 && (
+            <div class="local-stat card">
+              <span class="local-stat-value tabular-nums" style="color: #a855f7;">{openFms.length}</span>
+              <span class="local-stat-label">Open FixMyStreet reports</span>
             </div>
           )}
         </div>
@@ -450,6 +479,24 @@ function humanRestriction(r: string): string {
             </div>
             <div class="rw-ward-footer">
               <a href="/roadworks/" class="rw-ward-link">View full roadworks map →</a>
+            </div>
+          </Accordion>
+        )}
+
+        {wardFms.length > 0 && (
+          <Accordion title={`FixMyStreet Reports (${wardFms.length})`}>
+            <div class="fms-ward-list">
+              {wardFms.slice(0, 15).map((r: any) => (
+                <div class="fms-ward-item">
+                  <div class="fms-ward-head">
+                    <span class={`fms-ward-status fms-${r.status}`}>{r.status}</span>
+                    <span class="fms-ward-cat">{r.category}</span>
+                    <span class="fms-ward-date">{r.reported ? new Date(r.reported).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''}</span>
+                  </div>
+                  <p class="fms-ward-title">{r.title || r.category}</p>
+                  {r.description && <p class="fms-ward-desc">{r.description.slice(0, 100)}{r.description.length > 100 ? '...' : ''}</p>}
+                </div>
+              ))}
             </div>
           </Accordion>
         )}
@@ -1250,4 +1297,22 @@ function humanRestriction(r: string): string {
     transition: color 0.15s ease;
   }
   .rw-ward-link:hover { color: #12b6cf; }
+
+  /* FixMyStreet on ward page */
+  .fms-ward-list { display: grid; gap: 0.6rem; }
+  .fms-ward-item {
+    padding: 0.6rem 0.8rem; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+  }
+  .fms-ward-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; flex-wrap: wrap; }
+  .fms-ward-status {
+    font-size: 0.6rem; font-weight: 600; padding: 0.1rem 0.4rem;
+    border-radius: 8px; text-transform: uppercase;
+  }
+  .fms-open { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .fms-closed { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .fms-ward-cat { font-size: 0.7rem; color: #a855f7; font-weight: 500; }
+  .fms-ward-date { font-size: 0.65rem; color: #71717a; margin-left: auto; font-variant-numeric: tabular-nums; }
+  .fms-ward-title { font-size: 0.8rem; font-weight: 500; color: #e4e4e7; margin: 0 0 0.15rem; }
+  .fms-ward-desc { font-size: 0.7rem; color: #a1a1aa; margin: 0; line-height: 1.4; }
 </style>

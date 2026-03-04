@@ -1,0 +1,59 @@
+name: Data ETL Pipeline
+
+on:
+  schedule:
+    # Twice daily: 7am and 7pm UTC
+    - cron: '0 7,19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run roadworks ETL
+        run: python3 scripts/roadworks_etl.py public/data/roadworks.json
+        continue-on-error: true
+
+      - name: Run FixMyStreet ETL
+        run: python3 scripts/fixmystreet_etl.py public/data/fixmystreet.json
+        continue-on-error: true
+
+      - name: Run LCC highways ETL
+        run: python3 scripts/lcc_highways_etl.py public/data/lcc_highways.json
+        continue-on-error: true
+
+      - name: Run traffic impact ETL
+        run: python3 scripts/traffic_etl.py public/data/traffic.json
+        continue-on-error: true
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet public/data/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to data files"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Data files updated:"
+            git diff --stat public/data/
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/roadworks.json public/data/fixmystreet.json public/data/lcc_highways.json public/data/traffic.json
+          git commit -m "data: refresh all feeds $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          git push

@@ -3,6 +3,41 @@ import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import Accordion from '../components/Accordion.astro';
 import RoadworksMap from '../components/RoadworksMap.astro';
+
+// Traffic + FixMyStreet data
+let trafficData: any = { heatmap: [], key_roads: [], fixtures: [], school_terms: { in_term: false }, count_points: [] };
+let fixmystreetData: any = { reports: [], stats: { total: 0, open: 0, by_category: {} } };
+
+try {
+  const trafficRaw = await import('../../public/data/traffic.json');
+  trafficData = trafficRaw.default || trafficRaw;
+} catch {}
+try {
+  const fmsRaw = await import('../../public/data/fixmystreet.json');
+  fixmystreetData = fmsRaw.default || fmsRaw;
+} catch {}
+
+const heatmap = trafficData.heatmap || [];
+const keyRoads = trafficData.key_roads || [];
+const fixtures = (trafficData.fixtures || []).filter((f: any) => f.is_home && f.date >= new Date().toISOString().slice(0, 10));
+const inTerm = trafficData.school_terms?.in_term || false;
+const currentTerm = trafficData.school_terms?.current_term || 'Unknown';
+const fmsOpen = fixmystreetData.stats?.open || 0;
+const fmsTotal = fixmystreetData.stats?.total || 0;
+const fmsCats = fixmystreetData.stats?.by_category || {};
+const fmsReports = fixmystreetData.reports || [];
+const topFmsCats = Object.entries(fmsCats).slice(0, 6);
+
+// Heatmap colour
+function heatColor(level: string): string {
+  switch (level) {
+    case 'severe': return '#dc2626';
+    case 'high': return '#f97316';
+    case 'moderate': return '#eab308';
+    case 'low': return '#22c55e';
+    default: return '#1e293b';
+  }
+}
 ---
 
 <Layout
@@ -52,7 +87,7 @@ import RoadworksMap from '../components/RoadworksMap.astro';
           <span class="badge badge-red">Live Data</span>
           <h2>Live Roadworks Map</h2>
           <p class="section-sub">
-            All current and planned roadworks across Burnley Borough, updated every 2 hours
+            All current and planned roadworks across Burnley Borough, updated twice daily
             from Lancashire County Council&rsquo;s official highways database. Click any marker for details.
           </p>
         </div>
@@ -60,6 +95,154 @@ import RoadworksMap from '../components/RoadworksMap.astro';
       <RoadworksMap />
     </div>
   </section>
+
+  <!-- Traffic Impact Heatmap -->
+  {heatmap.length > 0 && (
+  <section class="traffic-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-orange">Traffic Intelligence</span>
+          <h2>Traffic Impact Timeline</h2>
+          <p class="section-sub">
+            7-day congestion forecast combining roadworks, school runs, Burnley FC home matches,
+            and rush hour patterns. Based on DfT traffic count data from {trafficData.count_points?.length || 0} monitoring points.
+          </p>
+        </div>
+
+        <!-- Context chips -->
+        <div class="traffic-context">
+          <span class={`traffic-chip ${inTerm ? 'chip-active' : 'chip-inactive'}`}>
+            {inTerm ? `🏫 Term Time (${currentTerm})` : '☀️ School Holiday'}
+          </span>
+          {fixtures.length > 0 && (
+            <span class="traffic-chip chip-match">
+              ⚽ Next home: {fixtures[0].opponent} ({fixtures[0].date})
+            </span>
+          )}
+          <span class="traffic-chip chip-info">
+            📊 {trafficData.meta?.active_roadworks || 0} active roadworks
+          </span>
+        </div>
+
+        <!-- Heatmap Grid -->
+        <div class="heatmap-scroll">
+          <div class="heatmap-grid">
+            <div class="heatmap-header">
+              <div class="heatmap-label"></div>
+              {Array.from({length: 24}, (_, i) => (
+                <div class="heatmap-hour-label">{i.toString().padStart(2, '0')}</div>
+              ))}
+            </div>
+            {heatmap.map((day: any) => (
+              <div class="heatmap-row">
+                <div class="heatmap-label">
+                  <span class="heatmap-day">{day.day.slice(0, 3)}</span>
+                  <span class="heatmap-date">{day.date.slice(5)}</span>
+                </div>
+                {day.hours.map((h: any) => (
+                  <div
+                    class={`heatmap-cell ${h.school_run ? 'cell-school' : ''} ${h.match_day ? 'cell-match' : ''}`}
+                    style={`background: ${heatColor(h.level)};`}
+                    title={`${day.day} ${h.hour}:00 — ${h.flow_pct}% flow (${h.level})${h.school_run ? ' + school run' : ''}${h.match_day ? ' + match day' : ''}`}
+                  >
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="heatmap-legend">
+          <span class="legend-item"><span class="legend-dot" style="background: #1e293b"></span>Minimal</span>
+          <span class="legend-item"><span class="legend-dot" style="background: #22c55e"></span>Low</span>
+          <span class="legend-item"><span class="legend-dot" style="background: #eab308"></span>Moderate</span>
+          <span class="legend-item"><span class="legend-dot" style="background: #f97316"></span>High</span>
+          <span class="legend-item"><span class="legend-dot" style="background: #dc2626"></span>Severe</span>
+          <span class="legend-item"><span class="legend-dot legend-school"></span>School Run</span>
+          <span class="legend-item"><span class="legend-dot legend-match"></span>Match Day</span>
+        </div>
+      </ScrollReveal>
+
+      <!-- Key Roads -->
+      {keyRoads.length > 0 && (
+        <ScrollReveal>
+          <Accordion title={`Busiest Roads — DfT Traffic Counts (${keyRoads.length})`}>
+            <div class="key-roads-grid">
+              {keyRoads.map((road: any) => (
+                <div class="key-road-card">
+                  <div class="road-name-bar">
+                    <span class="road-name">{road.road}</span>
+                    <span class="road-category">{road.category}</span>
+                  </div>
+                  <div class="road-stats">
+                    <span class="road-stat"><strong>{road.daily_vehicles?.toLocaleString()}</strong> vehicles/day</span>
+                    <span class="road-stat">{road.cars?.toLocaleString()} cars</span>
+                    <span class="road-stat">{road.hgvs?.toLocaleString()} HGVs</span>
+                    {road.year && <span class="road-stat year">({road.year} data)</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Accordion>
+        </ScrollReveal>
+      )}
+
+      <!-- FixMyStreet Reports -->
+      {fmsTotal > 0 && (
+        <ScrollReveal>
+          <div class="fms-section">
+            <div class="section-header">
+              <span class="badge badge-purple">Community Reports</span>
+              <h3>FixMyStreet — Recent Reports</h3>
+              <p class="section-sub">{fmsOpen} open reports in the Burnley area (last 90 days via FixMyStreet Open311 API)</p>
+            </div>
+            <div class="fms-cats">
+              {topFmsCats.map(([cat, count]: [string, any]) => (
+                <div class="fms-cat-chip">
+                  <span class="fms-cat-name">{cat}</span>
+                  <span class="fms-cat-count">{count}</span>
+                </div>
+              ))}
+            </div>
+            <Accordion title={`All Reports (${fmsReports.length})`}>
+              <div class="fms-list">
+                {fmsReports.slice(0, 30).map((r: any) => (
+                  <div class="fms-report">
+                    <div class="fms-report-head">
+                      <span class={`fms-status fms-${r.status}`}>{r.status}</span>
+                      <span class="fms-date">{r.reported ? new Date(r.reported).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''}</span>
+                    </div>
+                    <p class="fms-title">{r.title || r.category}</p>
+                    <p class="fms-desc">{(r.description || '').slice(0, 120)}{(r.description || '').length > 120 ? '...' : ''}</p>
+                    {r.ward && <span class="fms-ward">{r.ward}</span>}
+                  </div>
+                ))}
+              </div>
+            </Accordion>
+          </div>
+        </ScrollReveal>
+      )}
+
+      <!-- Burnley FC Fixtures Impact -->
+      {fixtures.length > 0 && (
+        <ScrollReveal>
+          <Accordion title={`Burnley FC Home Matches — Traffic Impact (${fixtures.length})`}>
+            <p class="fixture-note">Home matches at Turf Moor generate significant traffic on Yorkshire Road, Brunshaw Road, and the M65 Junction 10/11 approaches. Plan alternative routes on match days.</p>
+            <div class="fixtures-grid">
+              {fixtures.slice(0, 10).map((f: any) => (
+                <div class="fixture-card">
+                  <span class="fixture-date">{new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+                  <span class="fixture-time">{f.time} KO</span>
+                  <span class="fixture-opponent">vs {f.opponent}</span>
+                </div>
+              ))}
+            </div>
+          </Accordion>
+        </ScrollReveal>
+      )}
+    </div>
+  </section>
+  )}
 
   <!-- Who Maintains What -->
   <section class="responsibility-section">
@@ -1990,4 +2173,120 @@ import RoadworksMap from '../components/RoadworksMap.astro';
       grid-template-columns: 1fr;
     }
   }
+
+  /* ---- Traffic Section ---- */
+  .traffic-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .traffic-context {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+  }
+  .traffic-chip {
+    padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #a1a1aa;
+  }
+  .chip-active { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.25); color: #22c55e; }
+  .chip-inactive { background: rgba(234,179,8,0.12); border-color: rgba(234,179,8,0.25); color: #eab308; }
+  .chip-match { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.25); color: #ef4444; }
+  .chip-info { background: rgba(18,182,207,0.12); border-color: rgba(18,182,207,0.25); color: var(--accent); }
+
+  /* Heatmap */
+  .heatmap-scroll { overflow-x: auto; margin-bottom: 1rem; -webkit-overflow-scrolling: touch; }
+  .heatmap-grid { min-width: 700px; }
+  .heatmap-header, .heatmap-row {
+    display: grid; grid-template-columns: 80px repeat(24, 1fr); gap: 2px;
+  }
+  .heatmap-header { margin-bottom: 2px; }
+  .heatmap-hour-label {
+    font-size: 0.6rem; color: #71717a; text-align: center; padding: 2px 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .heatmap-label {
+    display: flex; flex-direction: column; justify-content: center; padding-right: 8px;
+  }
+  .heatmap-day { font-size: 0.75rem; font-weight: 600; color: #e4e4e7; }
+  .heatmap-date { font-size: 0.6rem; color: #71717a; font-variant-numeric: tabular-nums; }
+  .heatmap-cell {
+    aspect-ratio: 1; border-radius: 3px; transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default; position: relative; min-height: 18px;
+  }
+  .heatmap-cell:hover { transform: scale(1.4); z-index: 2; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
+  .cell-school::after {
+    content: ''; position: absolute; bottom: 1px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px; border-radius: 50%; background: #3b82f6;
+  }
+  .cell-match::after {
+    content: ''; position: absolute; top: 1px; right: 1px;
+    width: 4px; height: 4px; border-radius: 50%; background: #a855f7;
+  }
+
+  .heatmap-legend {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+    padding: 0.75rem 0; font-size: 0.7rem; color: #a1a1aa;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .legend-school { background: #3b82f6; border-radius: 50%; }
+  .legend-match { background: #a855f7; border-radius: 50%; }
+
+  /* Key Roads */
+  .key-roads-grid { display: grid; gap: 0.75rem; }
+  .key-road-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; padding: 0.75rem 1rem;
+  }
+  .road-name-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+  .road-name { font-weight: 600; color: #e4e4e7; }
+  .road-category {
+    font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 10px;
+    background: rgba(18,182,207,0.12); color: var(--accent); font-weight: 600;
+  }
+  .road-stats { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8rem; color: #a1a1aa; }
+  .road-stat strong { color: #e4e4e7; }
+  .road-stat.year { font-size: 0.7rem; color: #52525b; }
+
+  /* FixMyStreet */
+  .fms-section { margin-top: 2rem; }
+  .fms-cats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .fms-cat-chip {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.75rem;
+    background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2);
+  }
+  .fms-cat-name { color: #c4b5fd; }
+  .fms-cat-count { font-weight: 700; color: #a855f7; font-variant-numeric: tabular-nums; }
+  .fms-list { display: grid; gap: 0.75rem; }
+  .fms-report {
+    padding: 0.75rem 1rem; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
+  }
+  .fms-report-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+  .fms-status {
+    font-size: 0.65rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 10px; text-transform: uppercase;
+  }
+  .fms-open { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .fms-closed { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .fms-date { font-size: 0.7rem; color: #71717a; font-variant-numeric: tabular-nums; }
+  .fms-title { font-weight: 500; color: #e4e4e7; margin: 0 0 0.2rem; font-size: 0.85rem; }
+  .fms-desc { font-size: 0.75rem; color: #a1a1aa; margin: 0; line-height: 1.4; }
+  .fms-ward {
+    display: inline-block; margin-top: 0.3rem; font-size: 0.65rem; padding: 0.1rem 0.5rem;
+    border-radius: 10px; background: rgba(18,182,207,0.1); color: var(--accent);
+  }
+
+  /* Fixtures */
+  .fixture-note { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 1rem; line-height: 1.5; }
+  .fixtures-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+  .fixture-card {
+    display: flex; flex-direction: column; gap: 0.2rem;
+    padding: 0.75rem; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
+  }
+  .fixture-date { font-weight: 600; color: #e4e4e7; font-size: 0.85rem; }
+  .fixture-time { font-size: 0.75rem; color: var(--accent); font-weight: 500; }
+  .fixture-opponent { font-size: 0.8rem; color: #a1a1aa; }
+
+  .badge-orange { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+  .badge-purple { background: rgba(168,85,247,0.12); color: #a855f7; border: 1px solid rgba(168,85,247,0.25); }
 </style>
