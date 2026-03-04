@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import Accordion from '../components/Accordion.astro';
+import RoadworksMap from '../components/RoadworksMap.astro';
 ---
 
 <Layout
@@ -40,6 +41,23 @@ import Accordion from '../components/Accordion.astro';
           </div>
         </div>
       </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Live Roadworks Map -->
+  <section class="map-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-red">Live Data</span>
+          <h2>Live Roadworks Map</h2>
+          <p class="section-sub">
+            All current and planned roadworks across Burnley Borough, updated every 2 hours
+            from Lancashire County Council&rsquo;s official highways database. Click any marker for details.
+          </p>
+        </div>
+      </ScrollReveal>
+      <RoadworksMap />
     </div>
   </section>
 
@@ -852,6 +870,12 @@ import Accordion from '../components/Accordion.astro';
 </Layout>
 
 <style>
+  /* ---- Map Section ---- */
+  .map-section {
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
   /* ---- Hero ---- */
   .rw-hero {
     padding: var(--space-2xl) 0 var(--space-xl);
