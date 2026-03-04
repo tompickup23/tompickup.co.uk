@@ -4,6 +4,7 @@ import ScrollReveal from '../../components/ScrollReveal.astro';
 import Accordion from '../../components/Accordion.astro';
 import WardMap3D from '../../components/WardMap3D.astro';
 import wardData from '../../data/burnley-wards.json';
+import roadworksData from '../../../public/data/roadworks.json';
 
 export function getStaticPaths() {
   return Object.entries(wardData.wards).map(([slug, ward]: [string, any]) => ({
@@ -48,6 +49,23 @@ const cc = ward.county_council || {};
 const mp = wardData.meta?.mp || {};
 const pcc = wardData.meta?.pcc || {};
 const isTomWard = cc.councillor === 'Tom Pickup';
+
+// Roadworks — filter by ward name (handle Coal Clough vs Coalclough mismatch)
+const wardNameNorm = ward.name.toLowerCase().replace(/\s+/g, '');
+const wardRoadworks = (roadworksData as any).roadworks?.filter((rw: any) =>
+  rw.ward && rw.ward.toLowerCase().replace(/\s+/g, '') === wardNameNorm
+) || [];
+const activeRoadworks = wardRoadworks.filter((rw: any) => rw.status === 'Works started');
+const plannedRoadworks = wardRoadworks.filter((rw: any) => rw.status === 'Planned works');
+const highSevRoadworks = wardRoadworks.filter((rw: any) => rw.severity === 'high');
+
+function fmtRwDate(iso: string): string {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch { return '—'; }
+}
+function humanRestriction(r: string): string {
+  return r ? r.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c: string) => c.toUpperCase()) : '';
+}
 ---
 
 <Layout
@@ -368,6 +386,12 @@ const isTomWard = cc.councillor === 'Tom Pickup';
               <span class="local-stat-label">Top crime concern in Burnley ({crimeCategories[0]?.count?.toLocaleString() || 0} incidents)</span>
             </div>
           )}
+          {wardRoadworks.length > 0 && (
+            <div class="local-stat card">
+              <span class="local-stat-value tabular-nums" style={`color: ${activeRoadworks.length > 0 ? '#ef4444' : '#f59e0b'}`}>{wardRoadworks.length}</span>
+              <span class="local-stat-label">Roadworks ({activeRoadworks.length} active, {plannedRoadworks.length} planned)</span>
+            </div>
+          )}
         </div>
 
         {planRecent.length > 0 && (
@@ -396,6 +420,36 @@ const isTomWard = cc.councillor === 'Tom Pickup';
                   <span class="crime-count tabular-nums">{cat.count?.toLocaleString()}</span>
                 </div>
               ))}
+            </div>
+          </Accordion>
+        )}
+
+        {wardRoadworks.length > 0 && (
+          <Accordion title={`Current & Planned Roadworks (${wardRoadworks.length})`}>
+            <div class="rw-ward-summary">
+              {activeRoadworks.length > 0 && <span class="rw-ward-chip rw-chip-active">{activeRoadworks.length} active</span>}
+              {plannedRoadworks.length > 0 && <span class="rw-ward-chip rw-chip-planned">{plannedRoadworks.length} planned</span>}
+              {highSevRoadworks.length > 0 && <span class="rw-ward-chip rw-chip-high">{highSevRoadworks.length} high severity</span>}
+            </div>
+            <div class="rw-ward-list">
+              {wardRoadworks.slice(0, 20).map((rw: any) => (
+                <div class="rw-ward-item">
+                  <div class="rw-ward-item-head">
+                    <span class="rw-ward-road">{rw.road || 'Unknown road'}</span>
+                    <span class={`rw-ward-sev rw-sev-${rw.severity || 'low'}`}>{rw.severity || 'low'}</span>
+                  </div>
+                  <div class="rw-ward-item-meta">
+                    <span>{fmtRwDate(rw.start_date)} — {fmtRwDate(rw.end_date)}</span>
+                    <span class="rw-ward-sep">·</span>
+                    <span>{rw.operator || 'Unknown operator'}</span>
+                    {rw.restrictions && <><span class="rw-ward-sep">·</span><span>{humanRestriction(rw.restrictions)}</span></>}
+                  </div>
+                  {rw.description && <p class="rw-ward-desc">{rw.description.slice(0, 120)}{rw.description.length > 120 ? '...' : ''}</p>}
+                </div>
+              ))}
+            </div>
+            <div class="rw-ward-footer">
+              <a href="/roadworks/" class="rw-ward-link">View full roadworks map →</a>
             </div>
           </Accordion>
         )}
@@ -1109,4 +1163,91 @@ const isTomWard = cc.councillor === 'Tom Pickup';
       border-radius: var(--radius-lg);
     }
   }
+
+  /* --- Roadworks ward section --- */
+  .rw-ward-summary {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .rw-ward-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .rw-chip-active { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .rw-chip-planned { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .rw-chip-high { background: rgba(255,69,58,0.12); color: #ff453a; }
+
+  .rw-ward-list { display: flex; flex-direction: column; gap: 0; }
+
+  .rw-ward-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .rw-ward-item:last-child { border-bottom: none; }
+
+  .rw-ward-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rw-ward-road {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(235,235,245,0.85);
+  }
+
+  .rw-ward-sev {
+    font-size: 0.5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .rw-sev-high { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .rw-sev-medium { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .rw-sev-low { background: rgba(34,197,94,0.15); color: #22c55e; }
+
+  .rw-ward-item-meta {
+    font-size: 0.6875rem;
+    color: rgba(235,235,245,0.3);
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rw-ward-sep { margin: 0 0.2rem; opacity: 0.4; }
+
+  .rw-ward-desc {
+    font-size: 0.625rem;
+    color: rgba(235,235,245,0.2);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  .rw-ward-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .rw-ward-link {
+    font-size: 0.75rem;
+    color: rgba(18,182,207,0.7);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+  .rw-ward-link:hover { color: #12b6cf; }
 </style>
