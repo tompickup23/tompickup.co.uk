@@ -60,7 +60,7 @@ LCC's environmental services budget tells the story of a decade without a plan:
 
 Waste disposal alone cost **&pound;88.3 million** in 2024-25. The running total was &pound;105.9 million, offset by &pound;17.7 million in income. Without competitive tendering, these costs would have kept climbing.
 
-AI DOGE tracks **over &pound;78 million in LCC waste spending across more than 1,100 transactions** &mdash; and every single one has an empty payment description. That is a 100% vague description rate. The largest transparency black hole in Lancashire's &pound;3.6 billion spending record.
+Published spend data reveals **over &pound;78 million in LCC waste spending across more than 1,100 transactions** &mdash; and every single one has an empty payment description. That is a 100% vague description rate. The largest transparency black hole in Lancashire's &pound;3.6 billion spending record.
 
 ## How We Got Here: Twenty Years of Failure
 
@@ -170,9 +170,9 @@ Without this contract, each district faced absorbing the costs independently:
 
 For Pendle, already facing an &pound;8.26 million cumulative budget gap, this would have pushed the shortfall to approximately &pound;11 million. Hyndburn, with no waste transfer station at all, would have faced the highest transport costs of any East Lancashire borough.
 
-## The &pound;79 Million Transparency Black Hole
+## The &pound;78 Million Transparency Black Hole
 
-AI DOGE analysis reveals something striking about LCC's waste spending. Across every waste-related department &mdash; Whinney Hill landfill, waste management, hazardous waste, clinical waste, recycling &mdash; there are **over 1,100 transactions totalling more than &pound;78 million, all with a 100% vague description rate**.
+Published spend data reveals something striking about LCC's waste spending. Across every waste-related department &mdash; Whinney Hill landfill, waste management, hazardous waste, clinical waste, recycling &mdash; there are **over 1,100 transactions totalling more than &pound;78 million, all with a 100% vague description rate**.
 
 Every single payment description is empty. Not one of these transactions tells the public what the money was actually spent on.
 
@@ -200,7 +200,7 @@ Burnley awarded an **8-year waste collection contract to FCC Environment (2026&n
 
 The Public Contracts Regulations 2015 require services contracts exceeding the threshold (&pound;214,904 for local authorities) to be advertised through the Find a Tender Service.
 
-AI DOGE analysis shows comparable Lancashire authorities achieving **8&ndash;12% cost reductions** through competitive tendering. Even a 5% saving on this contract would be worth &pound;1.88 million over eight years. A 10% saving would deliver &pound;3.76 million back to Burnley taxpayers.
+Analysis of comparable Lancashire authorities shows **8&ndash;12% cost reductions** achieved through competitive tendering. Even a 5% saving on this contract would be worth &pound;1.88 million over eight years. A 10% saving would deliver &pound;3.76 million back to Burnley taxpayers.
 
 <div style="overflow-x: auto; margin: 2rem 0;">
 <table style="width: 100%; border-collapse: collapse; font-size: 0.9375rem;">
@@ -241,7 +241,7 @@ AI DOGE analysis shows comparable Lancashire authorities achieving **8&ndash;12%
 </table>
 </div>
 
-AI DOGE also flagged Burnley's previous Urbaser VEAT contract (&pound;2.7 million) as a **weak competition anomaly**: it was awarded with a tender period of negative four days and zero days for evaluation. The contract was signed before the tender deadline.
+Published contract data also shows Burnley's previous Urbaser VEAT contract (&pound;2.7 million) as a **weak competition anomaly**: it was awarded with a tender period of negative four days and zero days for evaluation. The contract was signed before the tender deadline.
 
 ## The Bottom Line
 
@@ -252,7 +252,7 @@ Reform acted. The tender was open. The law was followed. The taxpayer benefits.
 <div style="background: rgba(18, 182, 207, 0.08); border: 1px solid rgba(18, 182, 207, 0.2); border-radius: 12px; padding: 20px; margin: 2rem 0;">
 <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #12b6cf;">Data Sources</span>
 <p style="font-size: 0.875rem; color: #8e8e93; margin: 8px 0 0; line-height: 1.6;">
-AI DOGE Transparency Platform &mdash; <a href="https://aidoge.co.uk" style="color: #12b6cf;">aidoge.co.uk</a> &bull;
+LCC Published Spending Data (FOI/Transparency Code) &bull;
 GOV.UK Revenue Outturn (MHCLG) &bull;
 Find a Tender Service &mdash; Notice AP/CORP/LCC/25/012R &bull;
 Lancashire County Council public records &bull;
