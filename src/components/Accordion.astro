@@ -1,16 +1,47 @@
 ---
 interface Props {
   title: string;
+  subtitle?: string;
+  value?: string;
+  stats?: string;
+  accentColor?: string;
+  progress?: number;
+  progressLabel?: string;
   defaultOpen?: boolean;
 }
 
-const { title, defaultOpen = false } = Astro.props;
+const { title, subtitle, value, stats, accentColor, progress, progressLabel, defaultOpen = false } = Astro.props;
+const isRich = !!(subtitle || value || stats || progress !== undefined);
+const hasIcon = Astro.slots.has('icon');
 ---
 
-<details class="accordion" open={defaultOpen ? true : undefined}>
-  <summary class="accordion-trigger">
-    <span class="accordion-title">{title}</span>
-    <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<details class:list={["accordion", { "accordion-rich": isRich }]} open={defaultOpen ? true : undefined}>
+  <summary class="accordion-trigger" style={isRich && accentColor ? `--acc-color: ${accentColor};` : undefined}>
+    {isRich && <div class="accordion-stripe"></div>}
+    <div class="accordion-left">
+      {hasIcon && (
+        <div class="accordion-icon-wrap" style={accentColor ? `color: ${accentColor}; background: ${accentColor}15;` : undefined}>
+          <slot name="icon" />
+        </div>
+      )}
+      <div class="accordion-text">
+        <span class="accordion-title">{title}</span>
+        {subtitle && <span class="accordion-subtitle">{subtitle}</span>}
+        {progress !== undefined && (
+          <div class="accordion-progress-wrap">
+            <div class="accordion-progress-track">
+              <div class="accordion-progress-fill" style={`width: ${Math.min(progress, 100)}%; ${accentColor ? `background: ${accentColor};` : ''}`}></div>
+            </div>
+            {progressLabel && <span class="accordion-progress-label">{progressLabel}</span>}
+          </div>
+        )}
+      </div>
+    </div>
+    <div class="accordion-right">
+      {value && <span class="accordion-value" style={accentColor ? `color: ${accentColor};` : undefined}>{value}</span>}
+      {stats && <span class="accordion-stats">{stats}</span>}
+      <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
   </summary>
   <div class="accordion-content">
     <slot />
@@ -25,7 +56,7 @@ const { title, defaultOpen = false } = Astro.props;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     overflow: hidden;
-    transition: border-color var(--transition-normal);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
   }
 
   .accordion:hover {
@@ -34,12 +65,35 @@ const { title, defaultOpen = false } = Astro.props;
 
   .accordion[open] {
     border-color: var(--accent-border);
+    box-shadow: 0 0 20px rgba(18, 182, 207, 0.06);
   }
 
+  /* ---- Rich mode: stripe accent ---- */
+  .accordion-rich {
+    position: relative;
+  }
+
+  .accordion-stripe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--acc-color, var(--accent));
+    opacity: 0.6;
+    transition: opacity var(--transition-normal);
+  }
+
+  .accordion-rich[open] .accordion-stripe {
+    opacity: 1;
+  }
+
+  /* ---- Trigger ---- */
   .accordion-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-md);
     padding: var(--space-md) var(--space-lg);
     cursor: pointer;
     list-style: none;
@@ -48,23 +102,117 @@ const { title, defaultOpen = false } = Astro.props;
     transition: background-color var(--transition-fast);
   }
 
-  .accordion-trigger::-webkit-details-marker {
-    display: none;
+  .accordion-rich .accordion-trigger {
+    padding: var(--space-lg) var(--space-lg) var(--space-lg) calc(var(--space-lg) + 3px);
   }
 
-  .accordion-trigger::marker {
-    display: none;
-    content: '';
-  }
+  .accordion-trigger::-webkit-details-marker { display: none; }
+  .accordion-trigger::marker { display: none; content: ''; }
 
   .accordion-trigger:hover {
     background: rgba(255, 255, 255, 0.03);
+  }
+
+  /* ---- Left side ---- */
+  .accordion-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    min-width: 0;
+    flex: 1;
+  }
+
+  .accordion-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    flex-shrink: 0;
+  }
+
+  .accordion-icon-wrap :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+
+  .accordion-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
   }
 
   .accordion-title {
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--text-primary);
+  }
+
+  .accordion-subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* ---- Progress bar ---- */
+  .accordion-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: 4px;
+  }
+
+  .accordion-progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 180px;
+  }
+
+  .accordion-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.6s var(--ease-smooth);
+  }
+
+  .accordion-progress-label {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Right side ---- */
+  .accordion-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-shrink: 0;
+  }
+
+  .accordion-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .accordion-stats {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    padding: 3px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 9999px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
 
   .accordion-chevron {
@@ -78,29 +226,69 @@ const { title, defaultOpen = false } = Astro.props;
     color: var(--accent);
   }
 
+  /* ---- Content ---- */
   .accordion-content {
     padding: 0 var(--space-lg) var(--space-lg);
     animation: accordionSlideIn 0.3s var(--ease-smooth);
   }
 
-  @keyframes accordionSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .accordion-rich .accordion-content {
+    padding-left: calc(var(--space-lg) + 3px);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
 
+  @keyframes accordionSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Responsive ---- */
   @media (max-width: 768px) {
     .accordion-trigger {
       padding: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .accordion-rich .accordion-trigger {
+      padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 3px);
     }
 
     .accordion-content {
       padding: 0 var(--space-md) var(--space-md);
+    }
+
+    .accordion-rich .accordion-content {
+      padding-left: calc(var(--space-md) + 3px);
+    }
+
+    .accordion-value {
+      font-size: 1.0625rem;
+    }
+
+    .accordion-icon-wrap {
+      width: 38px;
+      height: 38px;
+    }
+
+    .accordion-icon-wrap :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .accordion-left {
+      flex: 1 1 100%;
+    }
+
+    .accordion-right {
+      flex: 1 1 100%;
+      justify-content: flex-end;
+      margin-top: var(--space-sm);
+    }
+
+    .accordion-progress-track {
+      max-width: 120px;
     }
   }
 </style>
