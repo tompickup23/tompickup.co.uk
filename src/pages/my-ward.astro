@@ -268,6 +268,80 @@ import Accordion from '../components/Accordion.astro';
     </div>
   </section>
 
+  <!-- LCC Spending Context -->
+  <section class="context-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Your Division in Context</h2>
+          <p class="section-subtitle">
+            How Padiham &amp; Burnley West&rsquo;s &pound;1.71M fits within Lancashire County Council&rsquo;s &pound;3.56 billion total spending (Apr 2024 &ndash; Dec 2025).
+          </p>
+        </div>
+
+        <div class="context-bar-card card">
+          <div class="context-bar-label">
+            <span>LCC Total Spend: <strong>&pound;3.56B</strong></span>
+            <span>753,220 transactions</span>
+          </div>
+          <div class="context-bar-outer">
+            <div class="context-bar-inner" style="width: 0.048%;"></div>
+            <div class="context-bar-marker">
+              <span class="marker-label">PBW &pound;1.71M</span>
+            </div>
+          </div>
+          <p class="context-bar-note">Your division&rsquo;s direct spending represents a fraction of LCC&rsquo;s total &mdash; but every pound is tracked to a named facility.</p>
+        </div>
+
+        <div class="lcc-spend-grid stagger-children">
+          <div class="lcc-spend-card">
+            <span class="lcc-spend-icon" style="color: #ff453a;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </span>
+            <span class="lcc-spend-value">&pound;242M</span>
+            <span class="lcc-spend-label">Adult Social Care</span>
+            <span class="lcc-spend-detail">Residential placements (largest single item)</span>
+          </div>
+          <div class="lcc-spend-card">
+            <span class="lcc-spend-icon" style="color: #30d158;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            </span>
+            <span class="lcc-spend-value">&pound;181M</span>
+            <span class="lcc-spend-label">Schools Funding</span>
+            <span class="lcc-spend-detail">Dedicated Schools Grant passthrough</span>
+          </div>
+          <div class="lcc-spend-card">
+            <span class="lcc-spend-icon" style="color: #bf5af2;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </span>
+            <span class="lcc-spend-value">&pound;164M</span>
+            <span class="lcc-spend-label">NHS / Health</span>
+            <span class="lcc-spend-detail">Integrated care &amp; public health commissioning</span>
+          </div>
+          <div class="lcc-spend-card">
+            <span class="lcc-spend-icon" style="color: #ff9f0a;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </span>
+            <span class="lcc-spend-value">&pound;127M</span>
+            <span class="lcc-spend-label">Waste &amp; Recycling</span>
+            <span class="lcc-spend-detail">Lancashire Renewables + Suez contracts</span>
+          </div>
+        </div>
+
+        <div class="lcc-cta-row">
+          <a href="https://aidoge.co.uk/lancashirecc/" class="lcc-cta-link" target="_blank" rel="noopener">
+            Explore All LCC Spending on AI DOGE
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+          <a href="https://aidoge.co.uk/burnleycouncil/" class="lcc-cta-link lcc-cta-secondary" target="_blank" rel="noopener">
+            Burnley Borough Spending
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
   <!-- Capital Programme -->
   <section class="capital-section">
     <div class="container">
@@ -368,7 +442,8 @@ import Accordion from '../components/Accordion.astro';
           LCC Published Spending Data (Transparency Code, April 2024 &ndash; December 2025) &bull;
           LCC Highways Capital Programme 2026/27 (Cabinet, March 2026) &bull;
           LCC Property Asset Register &bull;
-          Census 2021 (ONS)
+          Census 2021 (ONS) &bull;
+          <a href="https://aidoge.co.uk/lancashirecc/" target="_blank" rel="noopener" style="color: var(--accent);">AI DOGE Lancashire</a>
         </p>
       </div>
     </div>
@@ -566,6 +641,165 @@ import Accordion from '../components/Accordion.astro';
     font-style: italic;
   }
 
+  /* ---- LCC Context ---- */
+  .context-section { padding: 0 0 var(--space-2xl); }
+
+  .context-bar-card {
+    margin-bottom: var(--space-lg);
+  }
+
+  .context-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  .context-bar-label strong {
+    color: var(--text-primary);
+  }
+
+  .context-bar-outer {
+    position: relative;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    overflow: visible;
+    margin-bottom: var(--space-md);
+  }
+
+  .context-bar-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 12px;
+    min-width: 4px;
+  }
+
+  .context-bar-marker {
+    position: absolute;
+    left: 3%;
+    top: -8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .marker-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(18, 182, 207, 0.15);
+    border: 1px solid rgba(18, 182, 207, 0.3);
+    padding: 2px 8px;
+    border-radius: 9999px;
+    white-space: nowrap;
+  }
+
+  .context-bar-note {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .lcc-spend-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .lcc-spend-card {
+    padding: var(--space-md);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .lcc-spend-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 4px;
+  }
+
+  .lcc-spend-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .lcc-spend-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .lcc-spend-detail {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+  }
+
+  .lcc-cta-row {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .lcc-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: rgba(18, 182, 207, 0.1);
+    border: 1px solid rgba(18, 182, 207, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    background-image: none;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .lcc-cta-link:hover {
+    background: rgba(18, 182, 207, 0.15);
+    border-color: rgba(18, 182, 207, 0.35);
+    background-image: none;
+    background-size: 0;
+  }
+
+  .lcc-cta-secondary {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+  }
+
+  .lcc-cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+  }
+
   /* ---- Capital ---- */
   .capital-section { padding: 0 0 var(--space-2xl); }
 
@@ -736,6 +970,7 @@ import Accordion from '../components/Accordion.astro';
     .hero-section { padding: var(--space-xl) 0 var(--space-lg); }
     .hero-stats { grid-template-columns: repeat(2, 1fr); }
     .achievements-grid { grid-template-columns: 1fr; }
+    .lcc-spend-grid { grid-template-columns: repeat(2, 1fr); }
     .capital-cards { grid-template-columns: repeat(2, 1fr); }
     .properties-grid { grid-template-columns: 1fr; }
     .detail-row { grid-template-columns: 1fr 0.8fr auto; }
@@ -744,8 +979,11 @@ import Accordion from '../components/Accordion.astro';
 
   @media (max-width: 480px) {
     .hero-stats { grid-template-columns: 1fr; }
+    .lcc-spend-grid { grid-template-columns: 1fr; }
     .capital-cards { grid-template-columns: 1fr; }
     .detail-row { grid-template-columns: 1fr auto; }
+    .lcc-cta-row { flex-direction: column; }
+    .lcc-cta-link { justify-content: center; }
     .detail-bar-wrap { display: none; }
     .cta-links a { width: 100%; }
   }

@@ -49,16 +49,6 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
           </div>
 
           <div class="achievement-card">
-            <div class="achievement-icon" style="color: #ff9f0a; background: rgba(255, 159, 10, 0.08);">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </div>
-            <div class="achievement-stat" style="color: #ff9f0a;">5 Saved</div>
-            <h3 class="achievement-title">County Care Homes Secured</h3>
-            <p class="achievement-desc">The Conservatives were consulting on closures. After hearing 1,600+ residents, Reform secured their future with new investment pledged.</p>
-            <span class="achievement-before">Was: Facing closure consultation</span>
-          </div>
-
-          <div class="achievement-card">
             <div class="achievement-icon" style="color: #bf5af2; background: rgba(191, 90, 242, 0.08);">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </div>
@@ -303,7 +293,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   /* ---- Achievement Cards ---- */
   .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
   }
 
