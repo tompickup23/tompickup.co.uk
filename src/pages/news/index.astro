@@ -252,6 +252,11 @@ function formatDate(dateStr: Date): string {
     gap: 1.5rem;
   }
 
+  /* Ensure ScrollReveal wrappers stretch to fill grid cells for uniform card heights */
+  .posts-grid > :global(.reveal) {
+    height: 100%;
+  }
+
   .empty-state {
     text-align: center;
     padding: 4rem 2rem;

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """
-LCC Highways ETL — Fetches highway defects, road status, street lighting from LCC ArcGIS.
+LCC Highways ETL — Fetches road status, works lines, planning apps from LCC ArcGIS.
 
 Data sources (all LCC MARIO ArcGIS FeatureServer, no auth required):
-- Highway Defects: potholes, surface damage, drainage
-- Road Status: live road conditions
-- Street Lighting: faults/outages
-- Highway Surfacing: planned resurfacing schemes
-- Highway Schemes: capital highway schemes
+- Road Status: live road conditions and closures
+- Road Works (lines): polyline road works stretches
+- LCC Planning Applications: county-level planning
 
-Scope: Burnley area (bounding box filter)
+Scope: All Lancashire (config-driven bbox from highways_config.json)
 Output: public/data/lcc_highways.json
 Schedule: Every 12 hours via GitHub Actions
 """
@@ -25,13 +23,17 @@ from urllib.error import URLError, HTTPError
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "..", "public", "data", "lcc_highways.json")
+CONFIG_PATH = os.path.join(SCRIPT_DIR, "highways_config.json")
 
-# Burnley District bounding box (WGS84)
-BURNLEY_BBOX = {
-    "xmin": -2.35,
-    "ymin": 53.72,
-    "xmax": -2.10,
-    "ymax": 53.82,
+# Load bbox from config — Lancashire-wide
+with open(CONFIG_PATH) as f:
+    _cfg = json.load(f)
+_lancs_bbox = _cfg["lancashire"]["bbox"]
+LANCASHIRE_BBOX = {
+    "xmin": _lancs_bbox["west"],
+    "ymin": _lancs_bbox["south"],
+    "xmax": _lancs_bbox["east"],
+    "ymax": _lancs_bbox["north"],
 }
 
 # ArcGIS service endpoints (all JSON, no auth)
@@ -63,10 +65,10 @@ def fetch_arcgis(service_key: str, max_records: int = 2000) -> list:
 
     # Build envelope geometry for bbox filter
     envelope = json.dumps({
-        "xmin": BURNLEY_BBOX["xmin"],
-        "ymin": BURNLEY_BBOX["ymin"],
-        "xmax": BURNLEY_BBOX["xmax"],
-        "ymax": BURNLEY_BBOX["ymax"],
+        "xmin": LANCASHIRE_BBOX["xmin"],
+        "ymin": LANCASHIRE_BBOX["ymin"],
+        "xmax": LANCASHIRE_BBOX["xmax"],
+        "ymax": LANCASHIRE_BBOX["ymax"],
         "spatialReference": {"wkid": 4326},
     })
 
@@ -232,7 +234,7 @@ def main():
     output_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_OUTPUT
 
     print(f"LCC Highways ETL — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"Fetching from LCC MARIO ArcGIS (Burnley area)...")
+    print(f"Fetching from LCC MARIO ArcGIS (All Lancashire)...")
 
     t0 = time.time()
     results = {}
@@ -273,7 +275,7 @@ def main():
         "meta": {
             "source": "Lancashire County Council MARIO ArcGIS",
             "services": list(SERVICES.keys()),
-            "bbox": BURNLEY_BBOX,
+            "bbox": LANCASHIRE_BBOX,
             "generated": datetime.now(timezone.utc).isoformat(),
             "fetch_time_ms": int((time.time() - t0) * 1000),
         },

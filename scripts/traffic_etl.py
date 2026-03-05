@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Traffic Intelligence ETL — Comprehensive traffic model for Burnley.
+Traffic Intelligence ETL — Central Lancashire Highways System (under LCC).
+
+Comprehensive traffic model covering all 12 Lancashire districts.
+Config-driven via highways_config.json — no hardcoded values.
 
 Data sources:
 - DfT Road Traffic Statistics API (AADF counts, count points)
 - OpenStreetMap Overpass API (traffic signals, pedestrian crossings)
-- Lancashire school term dates (hardcoded through 2028)
-- Burnley FC fixtures (fixturedownload.com JSON)
-- Rush hour patterns (empirical UK traffic distribution)
-- Roadworks data (from roadworks.json) — active works, TTROs
+- Lancashire school term dates (from config)
+- Sport venue fixtures (all venues from config)
+- Rush hour patterns (empirical UK traffic distribution from config)
+- Roadworks data (from roadworks.json) — Lancashire-wide active works, TTROs
 - FixMyStreet data (from fixmystreet.json) — pothole/defect reports
 
 Congestion model outputs:
@@ -16,8 +19,8 @@ Congestion model outputs:
 - 7-day × 24-hour impact heatmap with congestion severity
 - Junction Congestion Index (JCI) — per signalised junction scoring
 - Road Corridor Congestion Score — per key road corridor
-- Infrastructure map: 119 traffic signals, 100+ signal crossings from OSM
-- DfT count point AADF volumes at 92 monitoring locations
+- Infrastructure map: traffic signals, signal crossings from OSM
+- DfT count point AADF volumes across Lancashire
 - Congestion pinch points with severity ranking
 - Options appraisal: scored LCC interventions
 
@@ -37,77 +40,60 @@ from urllib.error import URLError, HTTPError
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "..", "public", "data", "traffic.json")
+CONFIG_PATH = os.path.join(SCRIPT_DIR, "highways_config.json")
 
-# --- DfT Traffic API ---
-DFT_BASE = "https://roadtraffic.dft.gov.uk/api"
-LANCASHIRE_LA_ID = 76  # Lancashire county LA ID in DfT system
+# --- Load config ---
+with open(CONFIG_PATH) as f:
+    HIGHWAYS_CONFIG = json.load(f)
 
+# Lancashire-wide bbox from config
+_lancs = HIGHWAYS_CONFIG["lancashire"]
+LANCASHIRE_BBOX = _lancs["bbox"]  # {south, north, west, east}
 
-# --- UK Rush Hour Empirical Profiles (% of daily traffic by hour) ---
-# Source: DfT National Road Traffic Survey typical profiles
-WEEKDAY_PROFILE = {
-    0: 0.8, 1: 0.5, 2: 0.4, 3: 0.4, 4: 0.7, 5: 1.8,
-    6: 3.8, 7: 6.8, 8: 7.9, 9: 6.2, 10: 5.3, 11: 5.5,
-    12: 5.8, 13: 5.6, 14: 5.8, 15: 6.8, 16: 7.5, 17: 7.8,
-    18: 6.2, 19: 4.2, 20: 3.2, 21: 2.5, 22: 2.0, 23: 1.4,
-}
+# --- DfT Traffic API (from config) ---
+DFT_BASE = HIGHWAYS_CONFIG["dft"]["base_url"]
+LANCASHIRE_LA_ID = HIGHWAYS_CONFIG["dft"]["lancashire_la_id"]
 
-WEEKEND_PROFILE = {
-    0: 1.5, 1: 1.0, 2: 0.7, 3: 0.5, 4: 0.5, 5: 0.8,
-    6: 1.5, 7: 2.5, 8: 4.0, 9: 5.5, 10: 6.5, 11: 7.0,
-    12: 7.2, 13: 7.0, 14: 6.8, 15: 6.5, 16: 6.0, 17: 5.5,
-    18: 5.0, 19: 4.5, 20: 4.0, 21: 3.5, 22: 2.8, 23: 2.2,
-}
+# --- Traffic profiles (from config) ---
+def _int_keys(d):
+    """Convert string keys to int keys for profile dicts."""
+    return {int(k): v for k, v in d.items()}
 
-# School run overlay (additional % increase during term time)
-SCHOOL_RUN_OVERLAY = {
-    7: 3.0, 8: 8.0, 9: 4.0,  # Morning school run: ~8:15-8:55 peak
-    14: 2.0, 15: 6.0, 16: 3.0,  # Afternoon pickup: ~3:00-3:30 peak
-}
+WEEKDAY_PROFILE = _int_keys(HIGHWAYS_CONFIG["profiles"]["weekday"])
+WEEKEND_PROFILE = _int_keys(HIGHWAYS_CONFIG["profiles"]["weekend"])
+SCHOOL_RUN_OVERLAY = _int_keys(HIGHWAYS_CONFIG["profiles"]["school_run_overlay"])
+MATCH_DAY_OVERLAY_3PM = _int_keys(HIGHWAYS_CONFIG["profiles"]["match_day_overlay_3pm"])
+MATCH_DAY_OVERLAY_EVENING = _int_keys(HIGHWAYS_CONFIG["profiles"]["match_day_overlay_evening"])
 
-# Match day overlay for Burnley FC (additional % for 3pm KO Saturday)
-MATCH_DAY_OVERLAY_3PM = {
-    12: 2.0, 13: 4.0, 14: 6.0, 15: 2.0,  # Pre-match arrival
-    16: 1.0, 17: 8.0, 18: 5.0, 19: 2.0,  # Post-match departure
-}
+# --- School terms (from config) ---
+SCHOOL_TERMS = HIGHWAYS_CONFIG["school_terms"]
 
-MATCH_DAY_OVERLAY_EVENING = {
-    17: 3.0, 18: 5.0, 19: 6.0, 20: 2.0,  # Pre-match evening
-    21: 1.0, 22: 7.0, 23: 4.0,  # Post-match evening
-}
+# --- Aggregate all district data from config ---
+ALL_SPORT_VENUES = []
+ALL_MAJOR_PROJECTS = []
+ALL_NAMED_JUNCTIONS_SEED = []
+ALL_SCHOOLS_SEED = []
+ALL_CORRIDORS_SEED = []
 
+for _council_id, _council_cfg in HIGHWAYS_CONFIG["councils"].items():
+    for v in _council_cfg.get("sport_venues", []):
+        v["district"] = _council_id
+        ALL_SPORT_VENUES.append(v)
+    for p in _council_cfg.get("major_projects", []):
+        p["district"] = _council_id
+        ALL_MAJOR_PROJECTS.append(p)
+    for j in _council_cfg.get("named_junctions_seed", []):
+        j["district"] = _council_id
+        ALL_NAMED_JUNCTIONS_SEED.append(j)
+    for s in _council_cfg.get("schools_seed", []):
+        s["district"] = _council_id
+        ALL_SCHOOLS_SEED.append(s)
+    for c in _council_cfg.get("corridors_seed", []):
+        c["district"] = _council_id
+        ALL_CORRIDORS_SEED.append(c)
 
-# --- Lancashire School Term Dates (hardcoded through 2028) ---
-SCHOOL_TERMS = [
-    # 2024-25
-    {"start": "2024-09-02", "end": "2024-10-25", "name": "Autumn 1 2024"},
-    {"start": "2024-11-04", "end": "2024-12-20", "name": "Autumn 2 2024"},
-    {"start": "2025-01-06", "end": "2025-02-14", "name": "Spring 1 2025"},
-    {"start": "2025-02-24", "end": "2025-04-04", "name": "Spring 2 2025"},
-    {"start": "2025-04-22", "end": "2025-05-23", "name": "Summer 1 2025"},
-    {"start": "2025-06-02", "end": "2025-07-18", "name": "Summer 2 2025"},
-    # 2025-26
-    {"start": "2025-09-01", "end": "2025-10-24", "name": "Autumn 1 2025"},
-    {"start": "2025-11-03", "end": "2025-12-19", "name": "Autumn 2 2025"},
-    {"start": "2026-01-05", "end": "2026-02-13", "name": "Spring 1 2026"},
-    {"start": "2026-02-23", "end": "2026-03-27", "name": "Spring 2 2026"},
-    {"start": "2026-04-13", "end": "2026-05-22", "name": "Summer 1 2026"},
-    {"start": "2026-06-01", "end": "2026-07-17", "name": "Summer 2 2026"},
-    # 2026-27
-    {"start": "2026-09-07", "end": "2026-10-23", "name": "Autumn 1 2026"},
-    {"start": "2026-11-02", "end": "2026-12-18", "name": "Autumn 2 2026"},
-    {"start": "2027-01-04", "end": "2027-02-12", "name": "Spring 1 2027"},
-    {"start": "2027-02-22", "end": "2027-03-26", "name": "Spring 2 2027"},
-    {"start": "2027-04-12", "end": "2027-05-28", "name": "Summer 1 2027"},
-    {"start": "2027-06-07", "end": "2027-07-23", "name": "Summer 2 2027"},
-    # 2027-28
-    {"start": "2027-09-06", "end": "2027-10-22", "name": "Autumn 1 2027"},
-    {"start": "2027-11-01", "end": "2027-12-17", "name": "Autumn 2 2027"},
-    {"start": "2028-01-04", "end": "2028-02-18", "name": "Spring 1 2028"},
-    {"start": "2028-02-28", "end": "2028-03-31", "name": "Spring 2 2028"},
-    {"start": "2028-04-17", "end": "2028-05-26", "name": "Summer 1 2028"},
-    {"start": "2028-06-05", "end": "2028-07-21", "name": "Summer 2 2028"},
-]
+# --- Legal keywords (from config) ---
+_legal = HIGHWAYS_CONFIG.get("legal_keywords", {})
 
 
 def is_term_time(check_date: date) -> bool:
@@ -161,7 +147,7 @@ def fetch_dft_count_points() -> list:
             except (ValueError, TypeError):
                 continue
 
-            if lat and lng and 53.72 < lat < 53.82 and -2.35 < lng < -2.10:
+            if lat and lng and LANCASHIRE_BBOX["south"] < lat < LANCASHIRE_BBOX["north"] and LANCASHIRE_BBOX["west"] < lng < LANCASHIRE_BBOX["east"]:
                 burnley_points.append({
                     "id": p.get("count_point_id", p.get("id")),
                     "road": p.get("road_name", ""),
@@ -187,7 +173,7 @@ def fetch_dft_aadf(count_point_ids: list) -> dict:
     """Fetch Annual Average Daily Flow data for Burnley count points."""
     aadf_data = {}
 
-    for cp_id in count_point_ids[:30]:  # Limit to avoid rate limits
+    for cp_id in count_point_ids[:50]:  # Limit to avoid rate limits (raised from 30)
         url = f"{DFT_BASE}/average-annual-daily-flow?filter[count_point_id]={cp_id}&page[size]=10"
         req = Request(url, headers={"User-Agent": "TomPickup-Traffic-ETL/1.0", "Accept": "application/json"})
 
@@ -216,39 +202,56 @@ def fetch_dft_aadf(count_point_ids: list) -> dict:
     return aadf_data
 
 
-def fetch_burnley_fc_fixtures() -> list:
-    """Fetch Burnley FC fixtures from fixturedownload.com JSON API."""
-    # Try current and previous season URLs
-    fixture_urls = [
-        "https://fixturedownload.com/feed/json/epl-2025/burnley",
-        "https://fixturedownload.com/feed/json/efl-championship-2025/burnley",
-        "https://fixturedownload.com/feed/ical/epl-2025/burnley",  # Also returns JSON
-    ]
+def fetch_sport_fixtures() -> list:
+    """Fetch fixtures for all sport venues from config."""
+    all_fixtures = []
 
-    for url in fixture_urls:
-        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        try:
-            with urlopen(req, timeout=15) as resp:
-                raw = resp.read().decode("utf-8")
-
-            data = json.loads(raw)
-            if isinstance(data, list) and data:
-                fixtures = parse_fixture_json(data)
-                print(f"  Burnley FC fixtures: {len(fixtures)} (from fixturedownload.com)")
-                return fixtures
-        except json.JSONDecodeError:
-            # Not JSON, try iCal parsing
-            if "BEGIN:VCALENDAR" in raw:
-                fixtures = parse_ical(raw)
-                if fixtures:
-                    print(f"  Burnley FC fixtures: {len(fixtures)} (iCal)")
-                    return fixtures
-        except Exception as e:
-            print(f"  Fixture fetch failed ({url}): {e}", file=sys.stderr)
+    for venue in ALL_SPORT_VENUES:
+        venue_name = venue.get("name", "Unknown")
+        team = venue.get("team", "")
+        urls = venue.get("fixture_urls", [])
+        if not urls:
             continue
 
-    print("  Warning: Could not fetch Burnley FC fixtures", file=sys.stderr)
-    return []
+        for url in urls:
+            req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            try:
+                with urlopen(req, timeout=15) as resp:
+                    raw = resp.read().decode("utf-8")
+
+                data = json.loads(raw)
+                if isinstance(data, list) and data:
+                    fixtures = parse_fixture_json(data)
+                    # Tag each fixture with venue info
+                    for fix in fixtures:
+                        fix["venue"] = venue_name
+                        fix["venue_lat"] = venue.get("lat")
+                        fix["venue_lng"] = venue.get("lng")
+                        fix["venue_capacity"] = venue.get("capacity", 0)
+                        fix["district"] = venue.get("district", "")
+                    all_fixtures.extend(fixtures)
+                    print(f"  {team} fixtures: {len(fixtures)} (from fixturedownload.com)")
+                    break  # Got fixtures for this venue
+            except json.JSONDecodeError:
+                if "BEGIN:VCALENDAR" in raw:
+                    fixtures = parse_ical(raw)
+                    if fixtures:
+                        for fix in fixtures:
+                            fix["venue"] = venue_name
+                            fix["venue_lat"] = venue.get("lat")
+                            fix["venue_lng"] = venue.get("lng")
+                            fix["venue_capacity"] = venue.get("capacity", 0)
+                            fix["district"] = venue.get("district", "")
+                        all_fixtures.extend(fixtures)
+                        print(f"  {team} fixtures: {len(fixtures)} (iCal)")
+                        break
+            except Exception as e:
+                print(f"  Fixture fetch failed for {team} ({url}): {e}", file=sys.stderr)
+                continue
+
+    if not all_fixtures:
+        print("  Warning: Could not fetch any sport fixtures", file=sys.stderr)
+    return sorted(all_fixtures, key=lambda x: x.get("date", ""))
 
 
 def parse_fixture_json(matches: list) -> list:
@@ -341,87 +344,18 @@ def parse_ical(text: str) -> list:
 
 
 
-# --- Burnley signalised junctions (named, for congestion model) ---
-# Key junctions with their approximate coordinates and characteristics
-NAMED_JUNCTIONS = [
-    {"name": "M65 J10 Burnley Barracks", "lat": 53.7896, "lng": -2.2860, "type": "interchange", "lanes": 4, "approaches": 6, "notes": "Two-island roundabout, 500m span, NO2 exceedance"},
-    {"name": "M65 J9 Rosegrove", "lat": 53.7853, "lng": -2.2829, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Widened 2019-20, still bottleneck"},
-    {"name": "M65 J11 Barracks/Brierfield", "lat": 53.8013, "lng": -2.3277, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "A6114 junction"},
-    {"name": "Centenary Way / Yorkshire St", "lat": 53.7925, "lng": -2.2425, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Roundabout demolished 2025, new signalised junction"},
-    {"name": "Manchester Rd / Red Lion St", "lat": 53.7889, "lng": -2.2387, "type": "signals", "lanes": 2, "approaches": 3, "notes": "New one-way system Feb 2026, LUF scheme"},
-    {"name": "Colne Rd / Barracks Rd", "lat": 53.7943, "lng": -2.2325, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Major works Jan-Aug 2026, new avg speed cameras"},
-    {"name": "Todmorden Rd / Manchester Rd", "lat": 53.7868, "lng": -2.2453, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Cross-Pennine route intersection"},
-    {"name": "Parker Lane / Manchester Rd", "lat": 53.7899, "lng": -2.2490, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Town centre approach"},
-    {"name": "Accrington Rd / Rossendale Rd", "lat": 53.7855, "lng": -2.2822, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Rosegrove junction, repeated utility works"},
-    {"name": "Padiham Rd / Active Travel", "lat": 53.7970, "lng": -2.2911, "type": "signals", "lanes": 2, "approaches": 3, "notes": "TTRO in force, LUF improvement"},
-    {"name": "Brunshaw Rd / Brownside Rd", "lat": 53.7738, "lng": -2.2564, "type": "signals", "lanes": 2, "approaches": 3, "notes": "School run congestion"},
-    {"name": "A646 / A682 Centenary Way", "lat": 53.7888, "lng": -2.2619, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Viaduct approach"},
-    {"name": "Colne Rd / North St", "lat": 53.7976, "lng": -2.2392, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Active speed camera zone"},
-    {"name": "A6114 / Colne Rd", "lat": 53.8040, "lng": -2.2346, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Brierfield approach"},
-    {"name": "A646 Glen View / Todmorden Rd", "lat": 53.7697, "lng": -2.2255, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Cliviger Gorge approach"},
-]
-
-# Burnley schools near major roads (cause school run congestion)
-SCHOOL_LOCATIONS = [
-    {"name": "Burnley College", "lat": 53.7930, "lng": -2.2420, "pupils": 3000, "road": "Princess Way"},
-    {"name": "Unity College", "lat": 53.7857, "lng": -2.2478, "pupils": 900, "road": "Todmorden Road"},
-    {"name": "Habergham Eaves Primary", "lat": 53.7820, "lng": -2.2610, "pupils": 350, "road": "Rossendale Road"},
-    {"name": "St Peter's CE Primary", "lat": 53.7896, "lng": -2.2560, "pupils": 240, "road": "Church Street"},
-    {"name": "Burnley Brunshaw Primary", "lat": 53.7740, "lng": -2.2530, "pupils": 400, "road": "Brunshaw Road"},
-    {"name": "Padiham Green CE Primary", "lat": 53.7968, "lng": -2.3100, "pupils": 280, "road": "Padiham Road"},
-    {"name": "Shuttleworth College", "lat": 53.7905, "lng": -2.2670, "pupils": 1100, "road": "Cavalry Way"},
-    {"name": "Blessed Trinity RC College", "lat": 53.7845, "lng": -2.2360, "pupils": 900, "road": "Ormerod Road"},
-    {"name": "Coal Clough Academy", "lat": 53.7752, "lng": -2.2702, "pupils": 750, "road": "Coal Clough Lane"},
-    {"name": "Burnley Campus UCLan", "lat": 53.7910, "lng": -2.2480, "pupils": 2000, "road": "Parker Lane"},
-]
-
-# Turf Moor (Burnley FC) — match day traffic management
-TURF_MOOR = {"lat": 53.7891, "lng": -2.2303, "capacity": 21944, "name": "Turf Moor"}
-
-# --- Major projects (cannot be deferred — structural works in progress) ---
-# These are tagged so the deferral engine knows not to recommend pausing them
-MAJOR_PROJECTS = [
-    {
-        "name": "Burnley Town Centre LUF Programme (Town2Turf + Junctions)",
-        "description": "£19.9M LUF-funded town centre to Turf Moor pedestrian/cycling link. "
-                       "Manchester Rd one-way system, Centenary Way junction rebuild, Hammerton St, "
-                       "Colne Rd/Hebrew Rd junction, Brennand St/Murray St signal installations.",
-        "roads": [
-            "Manchester Road", "Centenary Way", "Hammerton Street", "Yorkshire Street",
-            "Red Lion Street", "Colne Road", "Hebrew Road", "Barracks Road",
-            "Bar Street", "Brennand Street", "Murray Street", "Ribblesdale Street",
-            "Bull Street", "Yorke Street", "Daneshouse Road",
-        ],
-        "lat_range": [53.785, 53.810],
-        "lng_range": [-2.250, -2.225],
-        "start": "2025-06",
-        "end": "2027-03",
-        "cannot_defer": True,
-        "reason": "LUF grant-funded project with DLUHC milestones — deferral risks losing £19.9M funding",
-        # Description keywords — if LCC works inside bounds match these, flag as LUF
-        "description_keywords": [
-            "traffic signal", "kerb line", "drainage", "paving", "landscaping",
-            "resurfacing", "tactile", "ducting", "light column", "footway",
-        ],
-    },
-    {
-        "name": "Padiham Rd Active Travel",
-        "description": "LCC active travel corridor with new signal-controlled crossings and cycle infrastructure.",
-        "roads": ["Padiham Road"],
-        "lat_range": [53.795, 53.802],
-        "lng_range": [-2.310, -2.280],
-        "start": "2025-09",
-        "end": "2026-06",
-        "cannot_defer": True,
-        "reason": "Active Travel Fund grant — deferral risks DfT clawback",
-    },
-]
+# --- All data loaded from config ---
+# Named junctions, schools, sport venues, major projects, corridors are loaded
+# from highways_config.json at module level (ALL_NAMED_JUNCTIONS_SEED, etc.)
+NAMED_JUNCTIONS = ALL_NAMED_JUNCTIONS_SEED
+SCHOOL_LOCATIONS = ALL_SCHOOLS_SEED
+MAJOR_PROJECTS = ALL_MAJOR_PROJECTS
 
 # Bridge and structural works — legally cannot defer under s1 Highways Act 1980
-BRIDGE_KEYWORDS = [
+BRIDGE_KEYWORDS = _legal.get("bridge_keywords", [
     "bridge", "footbridge", "viaduct", "overbridge", "underpass", "abutment",
     "parapet", "bridge deck", "bearing replacement", "structural repair",
-]
+])
 
 # Planning obligation / development works — tied to s106/s278 agreements
 PLANNING_OBLIGATION_KEYWORDS = [
@@ -432,7 +366,7 @@ PLANNING_OBLIGATION_KEYWORDS = [
 ]
 
 # Works-started status means physical work is underway — deferral not feasible
-NON_DEFERRABLE_STATUSES = ["Works started"]
+NON_DEFERRABLE_STATUSES = _legal.get("non_deferrable_statuses", ["Works started"])
 
 
 def is_bridge_or_structural_work(rw):
@@ -517,22 +451,13 @@ def is_major_project_work(rw: dict):
 
     return None
 
-# Key congestion corridors — road segments for corridor scoring
-CONGESTION_CORRIDORS = [
-    {"name": "M65 Corridor (J8-J12)", "road": "M65", "coords": [[53.779,-2.341],[53.783,-2.314],[53.786,-2.285],[53.790,-2.258],[53.793,-2.253],[53.811,-2.253]], "base_severity": 0.3},
-    {"name": "Manchester Rd (Town Centre)", "road": "A671/A682", "coords": [[53.786,-2.245],[53.789,-2.239],[53.791,-2.237],[53.793,-2.233]], "base_severity": 0.8},
-    {"name": "Colne Rd (Burnley-Brierfield)", "road": "A682", "coords": [[53.793,-2.233],[53.797,-2.238],[53.804,-2.235],[53.812,-2.235],[53.818,-2.236]], "base_severity": 0.7},
-    {"name": "Cavalry Way / A671", "road": "A671", "coords": [[53.790,-2.267],[53.790,-2.260],[53.789,-2.255],[53.790,-2.252]], "base_severity": 0.5},
-    {"name": "Accrington Rd (to M65 J9)", "road": "A679", "coords": [[53.785,-2.283],[53.783,-2.290],[53.779,-2.300],[53.777,-2.310]], "base_severity": 0.6},
-    {"name": "Todmorden Rd (Cliviger)", "road": "A646", "coords": [[53.787,-2.245],[53.784,-2.252],[53.781,-2.257],[53.774,-2.254]], "base_severity": 0.3},
-    {"name": "Padiham Rd", "road": "A671", "coords": [[53.790,-2.267],[53.793,-2.278],[53.797,-2.291],[53.800,-2.312]], "base_severity": 0.5},
-    {"name": "A56 (Rawtenstall Rd)", "road": "A56", "coords": [[53.775,-2.330],[53.764,-2.338],[53.749,-2.342]], "base_severity": 0.4},
-]
+# Key congestion corridors — loaded from config (all districts)
+CONGESTION_CORRIDORS = ALL_CORRIDORS_SEED
 
 
 def fetch_osm_infrastructure() -> dict:
     """Fetch traffic signals and pedestrian crossings from OpenStreetMap Overpass API."""
-    bbox = "53.72,-2.36,53.83,-2.15"
+    bbox = f"{LANCASHIRE_BBOX['south']},{LANCASHIRE_BBOX['west']},{LANCASHIRE_BBOX['north']},{LANCASHIRE_BBOX['east']}"
 
     # Traffic signals
     signals_query = f'[out:json][timeout:30];node["highway"="traffic_signals"]({bbox});out;'
@@ -696,14 +621,41 @@ def build_junction_congestion_index(junctions: list, count_points: list,
 
         # Traffic volume score: nearest DfT count point AADF
         nearest_aadf = 0
+        nearest_dist = float("inf")
+        data_quality = "none"  # none | estimated | medium | high
         for cp in count_points:
             if cp.get("aadf") and cp.get("lat") and cp.get("lng"):
                 d = haversine_m(jlat, jlng, cp["lat"], cp["lng"])
-                if d < 1000:
+                if d < 1500:  # Expanded search radius
                     vol = cp["aadf"].get("all_motor_vehicles", 0) or 0
-                    if vol > nearest_aadf:
+                    if vol > 0 and d < nearest_dist:
                         nearest_aadf = vol
+                        nearest_dist = d
+                        if d < 500:
+                            data_quality = "high"
+                        elif d < 1000:
+                            data_quality = "medium"
+                        else:
+                            data_quality = "low"
+
+        # B1 fix: estimate from road category when no DfT data nearby
+        if nearest_aadf == 0:
+            road_name = jn.get("name", "").upper()
+            # Estimate AADF from road classification
+            if any(road_name.startswith(p) for p in ("M6", "M55", "M61", "M65", "M66")):
+                nearest_aadf = 60000  # Motorway
+            elif road_name.startswith("A") and any(c.isdigit() for c in road_name[:4]):
+                nearest_aadf = 15000  # A-road
+            elif road_name.startswith("B") and any(c.isdigit() for c in road_name[:4]):
+                nearest_aadf = 5000   # B-road
+            else:
+                nearest_aadf = 2000   # Unclassified
+            data_quality = "estimated"
+
+        # Confidence penalty for estimated data
         vol_score = min(nearest_aadf / 600, 100)
+        if data_quality == "estimated":
+            vol_score *= 0.75  # 25% penalty for estimated volumes
 
         # Signal density (approaches/complexity)
         signal_score = min(jn.get("approaches", 3) * 15, 100)
@@ -788,6 +740,7 @@ def build_junction_congestion_index(junctions: list, count_points: list,
             "jci": min(jci, 100),
             "jci_level": level,
             "traffic_volume": nearest_aadf,
+            "data_quality": data_quality,
             "nearby_schools": sum(1 for sc in SCHOOL_LOCATIONS if haversine_m(jlat, jlng, sc["lat"], sc["lng"]) < 500),
             "nearby_defects": defect_count,
             "nearby_closures": nearby_closures,
@@ -976,16 +929,30 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
     today_str = today.isoformat()
     in_term = is_term_time(today)
 
-    # Match days in next 14 days
-    match_dates = set()
+    # Match days in next 14 days — track venue location for proximity checks
+    match_events = []  # [{date, venue_lat, venue_lng, venue_capacity, venue}]
     for f in fixtures:
         if f.get("is_home") and f.get("date"):
             try:
                 fd = date.fromisoformat(f["date"])
                 if 0 <= (fd - today).days <= 14:
-                    match_dates.add(f["date"])
+                    match_events.append({
+                        "date": f["date"],
+                        "venue_lat": f.get("venue_lat"),
+                        "venue_lng": f.get("venue_lng"),
+                        "venue_capacity": f.get("venue_capacity", 0),
+                        "venue": f.get("venue", ""),
+                    })
             except ValueError:
                 pass
+
+    # Next school holiday for specific deferral target
+    next_holiday_date = None
+    for term in SCHOOL_TERMS:
+        term_end = date.fromisoformat(term["end"])
+        if term_end > today:
+            next_holiday_date = (term_end + timedelta(days=1)).isoformat()
+            break
 
     # Build critical junction lookup
     critical_junctions = [j for j in junctions if j.get("jci", 0) >= 50]
@@ -1098,10 +1065,24 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
         if in_term:
             timing_score += 8
             timing_flags.append("school_term")
-        # Check if works span any match day
-        for md in match_dates:
+        # Check if works span any match day AND are near the venue (within 2km)
+        for me in match_events:
+            md = me["date"]
             if start <= md and (not end or end >= md):
-                timing_score += 7
+                # Only flag if work is within 2km of the match venue
+                vlat = me.get("venue_lat")
+                vlng = me.get("venue_lng")
+                if vlat and vlng:
+                    try:
+                        venue_dist = haversine_m(float(rlat), float(rlng), vlat, vlng)
+                    except (ValueError, TypeError):
+                        venue_dist = 99999
+                    if venue_dist > 2000:
+                        continue  # Too far from venue — match day irrelevant
+                # Scale impact by venue capacity (PNE/Burnley > Accrington)
+                cap = me.get("venue_capacity", 5000)
+                match_impact = 7 if cap >= 10000 else 4 if cap >= 5000 else 2
+                timing_score += match_impact
                 timing_flags.append("match_day")
                 break
         timing_score = min(timing_score, 15)
@@ -1110,6 +1091,52 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
 
         if total_score < 15:
             continue  # Not worth flagging
+
+        # B2: Confidence scoring (0.0-1.0)
+        confidence = 1.0
+        confidence_flags = []
+
+        # Check traffic data quality for affected junctions
+        has_estimated_traffic = any(
+            j.get("data_quality") == "estimated" for j in affected_junctions
+        )
+        has_no_traffic = not affected_junctions  # No junction proximity data at all
+        if has_no_traffic:
+            confidence -= 0.15
+            confidence_flags.append("no_traffic_data")
+        elif has_estimated_traffic:
+            confidence -= 0.10
+            confidence_flags.append("estimated_traffic_volume")
+
+        # Auto-discovered corridors (from config seed) have less certainty
+        is_on_auto_corridor = clash_score > 0  # If clashing, it's corridor-based
+        if is_on_auto_corridor and not any(
+            j.get("data_quality") in ("high", "medium") for j in affected_junctions
+        ):
+            confidence -= 0.15
+            confidence_flags.append("auto_corridor_no_verified_data")
+
+        # Inferred restriction (no explicit description)
+        if not (rw.get("description") or "").strip():
+            confidence -= 0.10
+            confidence_flags.append("inferred_restriction")
+
+        # School term proximity is seasonal assumption
+        if "school_term" in timing_flags:
+            # Check if any school is actually nearby
+            has_nearby_school = False
+            for sc in SCHOOL_LOCATIONS:
+                try:
+                    if haversine_m(float(rlat), float(rlng), sc["lat"], sc["lng"]) < 800:
+                        has_nearby_school = True
+                        break
+                except (ValueError, TypeError):
+                    pass
+            if not has_nearby_school:
+                confidence -= 0.10
+                confidence_flags.append("school_term_no_nearby_school")
+
+        confidence = round(max(confidence, 0.1), 2)
 
         # Build reasoning
         reasons = []
@@ -1123,13 +1150,93 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
         if clash_score > 0:
             reasons.append(f"{concurrent_count} other works within 400m — corridor overload")
         if "school_term" in timing_flags:
-            reasons.append("School term — school run traffic compounds delays")
+            # Check if any school is actually nearby (for more specific text)
+            has_school_nearby_for_reason = False
+            for sc in SCHOOL_LOCATIONS:
+                try:
+                    if haversine_m(float(rlat), float(rlng), sc["lat"], sc["lng"]) < 800:
+                        has_school_nearby_for_reason = True
+                        reasons.append(f"School term — near {sc['name']} ({sc.get('pupils', '?')} pupils)")
+                        break
+                except (ValueError, TypeError):
+                    pass
+            if not has_school_nearby_for_reason:
+                reasons.append("School term — general network congestion increased")
         if "match_day" in timing_flags:
-            reasons.append("Burnley FC home match nearby — match day traffic spike")
+            reasons.append("Match day — pre/post-match traffic disruption")
+
+        # Determine road classification for feasibility of night works
+        road_name = rw.get("road", "")
+        road_class = "minor"
+        if road_name:
+            rn = road_name.upper().strip()
+            if rn.startswith("M") and rn[1:2].isdigit():
+                road_class = "motorway"
+            elif rn.startswith("A") and rn[1:2].isdigit():
+                road_class = "a_road"
+            elif rn.startswith("B") and rn[1:2].isdigit():
+                road_class = "b_road"
+            # Check if road name in description contains a classified road
+            desc_upper = (rw.get("description") or "").upper()
+            for prefix in ("A6", "A59", "A56", "A583", "A585", "A682", "A679", "A680", "A681", "A671", "A584"):
+                if prefix in desc_upper:
+                    road_class = "a_road"
+                    break
+
+        # Check advance notice feasibility for s56 (need >3 days notice)
+        days_until_start = 0
+        try:
+            start_date_obj = date.fromisoformat(start)
+            days_until_start = (start_date_obj - today).days
+        except (ValueError, TypeError):
+            pass
+        s56_feasible = days_until_start > 3
+
+        # Build recommendation text
+        if is_lcc:
+            # LCC deferral — specify target window
+            has_nearby_school_for_text = "school_term" in timing_flags and "school_term_no_nearby_school" not in confidence_flags
+            if has_nearby_school_for_text and next_holiday_date:
+                defer_target = f"school holiday (from {next_holiday_date})"
+            elif next_holiday_date:
+                defer_target = f"off-peak period or school holiday (from {next_holiday_date})"
+            else:
+                defer_target = "off-peak period"
+
+            rec_text = (
+                f"Defer to {defer_target} — "
+                f"{'full closure' if rc == 'full_closure' else 'lane restriction'} "
+                f"causing {int(cap_red * 100)}% capacity loss"
+            )
+            action = "DEFER"
+        elif s56_feasible:
+            # Utility s56 timing direction — only recommend night works on classified roads
+            if cap_red >= 0.5 and road_class in ("motorway", "a_road", "b_road"):
+                timing_text = "night works (20:00-06:00)"
+            elif cap_red >= 0.5:
+                # Residential street — night works inappropriate due to EPA 1990 noise
+                timing_text = "off-peak hours (09:30-15:30) to avoid peak traffic"
+            else:
+                timing_text = "off-peak hours (avoid 07:30-09:30 and 16:00-18:30)"
+            rec_text = (
+                f"Issue s56 timing direction — require {timing_text} "
+                f"to reduce {int(cap_red * 100)}% capacity impact"
+            )
+            action = "s56_TIMING_DIRECTION"
+        else:
+            # Too late for s56 — can only monitor
+            rec_text = (
+                f"Monitor — works start within {days_until_start} days, "
+                f"s56 timing direction no longer feasible. "
+                f"Consider s74 overrun charges if works exceed permitted duration"
+            )
+            action = "MONITOR"
+            # Reduce score — we can't actually do anything about these
+            total_score = round(total_score * 0.6, 1)
 
         recommendation = {
             "id": rw.get("id"),
-            "road": rw.get("road", ""),
+            "road": road_name,
             "operator": operator,
             "is_lcc_controlled": is_lcc,
             "category": rw.get("category", ""),
@@ -1140,9 +1247,12 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
             "restriction_class": rc,
             "capacity_reduction": cap_red,
             "impact_label": restriction["impact_label"],
+            "road_class": road_class,
             "lat": rlat,
             "lng": rlng,
             "deferral_score": total_score,
+            "confidence": confidence,
+            "confidence_flags": confidence_flags,
             "junction_score": round(junction_score, 1),
             "severity_score": round(severity_score, 1),
             "clash_score": round(clash_score, 1),
@@ -1151,15 +1261,8 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
             "clashing_works": clashing_works[:4],
             "timing_flags": timing_flags,
             "reasons": reasons,
-            "action": "DEFER" if is_lcc else "s56_TIMING_DIRECTION",
-            "recommendation": (
-                f"Defer to {'school holiday' if 'school_term' in timing_flags else 'off-peak period'} — "
-                f"{'full closure' if rc == 'full_closure' else 'lane restriction'} "
-                f"causing {int(cap_red * 100)}% capacity loss"
-                if is_lcc else
-                f"Issue s56 timing direction — require {'night works (8pm-6am)' if cap_red >= 0.5 else 'off-peak hours'} "
-                f"to reduce {int(cap_red * 100)}% capacity impact"
-            ),
+            "action": action,
+            "recommendation": rec_text,
         }
         recommendations.append(recommendation)
 
@@ -1227,6 +1330,39 @@ def build_clash_detection(roadworks: list, corridors: list, today: date) -> list
                 total_cap_reduction = sum(w["capacity_reduction"] for w in cor_works)
                 severity = "critical" if total_cap_reduction >= 1.5 else "high" if total_cap_reduction >= 1.0 else "moderate"
 
+                is_breach = total_cap_reduction >= 1.5 or (total_cap_reduction >= 1.0 and len(cor_works) >= 3)
+                is_coordination = total_cap_reduction >= 1.0
+                # B4: s59 monitoring tier — developing situation that could escalate
+                is_monitor = (
+                    not is_breach and not is_coordination
+                    and total_cap_reduction >= 0.5
+                    and len(cor_works) >= 2
+                )
+
+                if is_breach:
+                    rec_text = (
+                        f"s59 NRSWA breach likely — {len(cor_works)} concurrent works on {cor['name']} "
+                        f"with combined {int(total_cap_reduction * 100)}% capacity reduction. "
+                        f"LCC should use s56 timing powers to stagger these works and avoid s59 breach."
+                    )
+                elif is_coordination:
+                    rec_text = (
+                        f"s59 coordination needed — {len(cor_works)} concurrent works on {cor['name']} "
+                        f"with combined {int(total_cap_reduction * 100)}% capacity reduction. "
+                        f"LCC should phase these works to reduce cumulative impact."
+                    )
+                elif is_monitor:
+                    rec_text = (
+                        f"s59 monitoring — {len(cor_works)} works on {cor['name']} "
+                        f"with combined {int(total_cap_reduction * 100)}% capacity impact. "
+                        f"Developing situation — could breach s59 threshold if additional works approved."
+                    )
+                else:
+                    rec_text = (
+                        f"Monitor — {len(cor_works)} works on {cor['name']}, "
+                        f"combined {int(total_cap_reduction * 100)}% capacity impact."
+                    )
+
                 clashes.append({
                     "corridor": cor["name"],
                     "road": cor["road"],
@@ -1235,15 +1371,10 @@ def build_clash_detection(roadworks: list, corridors: list, today: date) -> list
                     "overlapping_pairs": len(overlapping_pairs),
                     "total_capacity_reduction": round(total_cap_reduction, 2),
                     "severity": severity,
-                    "s59_breach": total_cap_reduction >= 1.0,  # s59 duty to coordinate likely breached
-                    "recommendation": (
-                        f"s59 NRSWA breach likely — {len(cor_works)} concurrent works on {cor['name']} "
-                        f"with combined {int(total_cap_reduction * 100)}% capacity reduction. "
-                        f"LCC must stagger these works sequentially."
-                        if total_cap_reduction >= 1.0 else
-                        f"Monitor — {len(cor_works)} works on {cor['name']}, "
-                        f"combined {int(total_cap_reduction * 100)}% capacity impact."
-                    ),
+                    "s59_breach": is_breach,
+                    "s59_coordination_needed": is_coordination,
+                    "s59_monitor": is_monitor,
+                    "recommendation": rec_text,
                 })
 
     return sorted(clashes, key=lambda x: -x["total_capacity_reduction"])
@@ -1294,9 +1425,21 @@ def build_timing_recommendations(roadworks: list, junctions: list, today: date) 
         if "emergency" in category:
             continue  # Emergency works exempt from timing directions
 
-        # Determine recommended timing
-        if cap_red >= 0.6:
+        # Classify road for appropriate timing direction
+        road_name_td = rw.get("road", "").upper().strip()
+        is_classified_road = (
+            (road_name_td.startswith("A") and len(road_name_td) > 1 and road_name_td[1:2].isdigit())
+            or (road_name_td.startswith("B") and len(road_name_td) > 1 and road_name_td[1:2].isdigit())
+            or (road_name_td.startswith("M") and len(road_name_td) > 1 and road_name_td[1:2].isdigit())
+        )
+
+        # Determine recommended timing — only suggest night works on classified roads
+        # (residential night works create EPA 1990 s80 statutory nuisance complaints)
+        if cap_red >= 0.6 and is_classified_road:
             timing = "Night works only (20:00-06:00)"
+            urgency = "critical"
+        elif cap_red >= 0.6:
+            timing = "Off-peak hours (09:30-15:30) — night works inappropriate for residential area"
             urgency = "critical"
         elif cap_red >= 0.4:
             timing = "Off-peak hours (09:30-15:30 or 19:00-07:00)"
@@ -1406,7 +1549,7 @@ def build_impact_heatmap(today: date, roadworks_count: int, fixtures: list) -> l
 def main():
     output_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_OUTPUT
 
-    print(f"Traffic Intelligence ETL — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Traffic Intelligence ETL v2 (Lancashire-wide) — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     t0 = time.time()
     today = date.today()
@@ -1428,9 +1571,9 @@ def main():
         if cp_id in aadf_data:
             cp["aadf"] = aadf_data[cp_id]
 
-    # 3. Burnley FC fixtures
-    print("\n3. Fetching Burnley FC fixtures...")
-    fixtures = fetch_burnley_fc_fixtures()
+    # 3. Sport fixtures (all venues from config)
+    print(f"\n3. Fetching sport fixtures ({len(ALL_SPORT_VENUES)} venues)...")
+    fixtures = fetch_sport_fixtures()
 
     # 4. Load existing roadworks — full records for intelligent analysis
     rw_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "roadworks.json")
@@ -1610,14 +1753,67 @@ def main():
             next_holiday_start = (term_end + timedelta(days=1)).isoformat()
             break
 
+    # B3: Data freshness — track per-source staleness
+    now_utc = datetime.now(timezone.utc)
+    data_freshness = {
+        "dft_count_points": {
+            "source": "DfT Road Traffic Statistics API",
+            "records": len(count_points),
+            "note": "Annual counts, last updated by DfT typically in Oct/Nov",
+        },
+        "dft_aadf": {
+            "source": "DfT AADF Data",
+            "records": len(aadf_data),
+            "note": "Annual average daily flow; latest year varies by count point",
+        },
+        "osm_infrastructure": {
+            "source": "OpenStreetMap Overpass API",
+            "records": len(infra["signals"]) + len(infra["crossings"]),
+            "note": "Community-maintained; updated in real-time by OSM mappers",
+        },
+        "roadworks": {
+            "source": "LCC MARIO ArcGIS (roadworks.json)",
+            "records": len(roadworks_records),
+            "stale_hours": None,
+            "note": "Depends on roadworks_etl.py schedule (every 2 hours)",
+        },
+        "sport_fixtures": {
+            "source": "fixturedownload.com",
+            "records": len(fixtures),
+            "note": "Season fixtures; static after season start",
+        },
+        "school_terms": {
+            "source": "highways_config.json (manual)",
+            "records": len(SCHOOL_TERMS),
+            "note": "Set annually; update before September each year",
+        },
+    }
+
+    # Try to determine roadworks freshness from file mtime
+    try:
+        rw_mtime = os.path.getmtime(rw_path)
+        rw_age_hours = (time.time() - rw_mtime) / 3600
+        data_freshness["roadworks"]["stale_hours"] = round(rw_age_hours, 1)
+        data_freshness["roadworks"]["stale"] = rw_age_hours > 6  # >6h = stale
+    except Exception:
+        pass
+
+    # JCI data quality summary
+    jci_quality = {"high": 0, "medium": 0, "low": 0, "estimated": 0, "none": 0}
+    for j in jci_results:
+        q = j.get("data_quality", "none")
+        jci_quality[q] = jci_quality.get(q, 0) + 1
+
     output = {
         "meta": {
             "source": "DfT Road Traffic API + OSM Overpass + LCC School Terms + MARIO ArcGIS",
-            "generated": datetime.now(timezone.utc).isoformat(),
+            "generated": now_utc.isoformat(),
             "analysis_date": today.isoformat(),
             "fetch_time_ms": int((time.time() - t0) * 1000),
             "active_roadworks": active_roadworks,
             "restriction_summary": restriction_summary,
+            "data_freshness": data_freshness,
+            "jci_data_quality": jci_quality,
             "validity": {
                 "roadworks_window": {"from": earliest_start, "to": latest_end},
                 "analysis_valid_until": (today + timedelta(days=1)).isoformat(),
@@ -1645,7 +1841,8 @@ def main():
             "traffic_signals": signal_clusters,
             "signal_crossings": infra["crossings"],
             "schools": SCHOOL_LOCATIONS,
-            "turf_moor": TURF_MOOR,
+            "sport_venues": ALL_SPORT_VENUES,
+            "turf_moor": ALL_SPORT_VENUES[0] if ALL_SPORT_VENUES else None,  # backward compat
         },
         "congestion_model": {
             "junctions": jci_results,

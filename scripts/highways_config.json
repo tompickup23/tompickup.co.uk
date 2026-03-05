@@ -1,0 +1,446 @@
+{
+  "_comment": "Central Lancashire Highways System — under Lancashire County Council. Covers all 12 MARIO districts in a single ETL pass. Blackpool and Blackburn (unitaries) manage their own highways and are NOT in MARIO.",
+  "lancashire": {
+    "bbox": {"south": 53.48, "north": 54.24, "west": -3.06, "east": -2.04},
+    "map_center": [53.78, -2.70],
+    "map_zoom": 9,
+    "mario_districts": ["Burnley District (B)", "Hyndburn District (B)", "Pendle District (B)", "Rossendale District (B)", "Lancaster District (B)", "Ribble Valley District (B)", "Chorley District (B)", "South Ribble District (B)", "Preston District (B)", "West Lancashire District (B)", "Wyre District (B)", "Fylde District (B)"],
+    "output_dir": "lancashire_cc"
+  },
+  "councils": {
+    "burnley": {
+      "mario_town_name": "Burnley District (B)",
+      "bbox": {"south": 53.72, "north": 53.83, "west": -2.35, "east": -2.11},
+      "map_center": [53.789, -2.248],
+      "map_zoom": 13,
+      "sport_venues": [
+        {"name": "Turf Moor", "lat": 53.7891, "lng": -2.2303, "capacity": 21944, "team": "Burnley FC", "league": "epl", "fixture_urls": ["https://fixturedownload.com/feed/json/epl-2025/burnley", "https://fixturedownload.com/feed/json/efl-championship-2025/burnley"]}
+      ],
+      "major_projects": [
+        {
+          "name": "Burnley Town Centre LUF Programme (Town2Turf + Junctions)",
+          "description": "£19.9M LUF-funded town centre to Turf Moor pedestrian/cycling link. Manchester Rd one-way system, Centenary Way junction rebuild, Hammerton St, Colne Rd/Hebrew Rd junction, Brennand St/Murray St signal installations.",
+          "roads": ["Manchester Road", "Centenary Way", "Hammerton Street", "Yorkshire Street", "Red Lion Street", "Colne Road", "Hebrew Road", "Barracks Road", "Bar Street", "Brennand Street", "Murray Street", "Ribblesdale Street", "Bull Street", "Yorke Street", "Daneshouse Road"],
+          "lat_range": [53.785, 53.810],
+          "lng_range": [-2.250, -2.225],
+          "start": "2025-06",
+          "end": "2027-03",
+          "cannot_defer": true,
+          "reason": "LUF grant-funded project with DLUHC milestones — deferral risks losing £19.9M funding",
+          "description_keywords": ["traffic signal", "kerb line", "drainage", "paving", "landscaping", "resurfacing", "tactile", "ducting", "light column", "footway"]
+        },
+        {
+          "name": "Padiham Rd Active Travel",
+          "description": "LCC active travel corridor with new signal-controlled crossings and cycle infrastructure.",
+          "roads": ["Padiham Road"],
+          "lat_range": [53.795, 53.802],
+          "lng_range": [-2.310, -2.280],
+          "start": "2025-09",
+          "end": "2026-06",
+          "cannot_defer": true,
+          "reason": "Active Travel Fund grant — deferral risks DfT clawback"
+        }
+      ],
+      "corridors_seed": [
+        {"name": "M65 Corridor (J8-J12)", "road": "M65", "coords": [[53.779,-2.341],[53.783,-2.314],[53.786,-2.285],[53.790,-2.258],[53.793,-2.253],[53.811,-2.253]], "base_severity": 0.3},
+        {"name": "Manchester Rd (Town Centre)", "road": "A671/A682", "coords": [[53.786,-2.245],[53.789,-2.239],[53.791,-2.237],[53.793,-2.233]], "base_severity": 0.8},
+        {"name": "Colne Rd (Burnley-Brierfield)", "road": "A682", "coords": [[53.793,-2.233],[53.797,-2.238],[53.804,-2.235],[53.812,-2.235],[53.818,-2.236]], "base_severity": 0.7},
+        {"name": "Cavalry Way / A671", "road": "A671", "coords": [[53.790,-2.267],[53.790,-2.260],[53.789,-2.255],[53.790,-2.252]], "base_severity": 0.5},
+        {"name": "Accrington Rd (to M65 J9)", "road": "A679", "coords": [[53.785,-2.283],[53.783,-2.290],[53.779,-2.300],[53.777,-2.310]], "base_severity": 0.6},
+        {"name": "Todmorden Rd (Cliviger)", "road": "A646", "coords": [[53.787,-2.245],[53.784,-2.252],[53.781,-2.257],[53.774,-2.254]], "base_severity": 0.3},
+        {"name": "Padiham Rd", "road": "A671", "coords": [[53.790,-2.267],[53.793,-2.278],[53.797,-2.291],[53.800,-2.312]], "base_severity": 0.5},
+        {"name": "A56 (Rawtenstall Rd)", "road": "A56", "coords": [[53.775,-2.330],[53.764,-2.338],[53.749,-2.342]], "base_severity": 0.4}
+      ],
+      "named_junctions_seed": [
+        {"name": "M65 J10 Burnley Barracks", "lat": 53.7896, "lng": -2.2860, "type": "interchange", "lanes": 4, "approaches": 6, "notes": "Two-island roundabout, 500m span, NO2 exceedance"},
+        {"name": "M65 J9 Rosegrove", "lat": 53.7853, "lng": -2.2829, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Widened 2019-20, still bottleneck"},
+        {"name": "M65 J11 Barracks/Brierfield", "lat": 53.8013, "lng": -2.3277, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "A6114 junction"},
+        {"name": "Centenary Way / Yorkshire St", "lat": 53.7925, "lng": -2.2425, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Roundabout demolished 2025, new signalised junction"},
+        {"name": "Manchester Rd / Red Lion St", "lat": 53.7889, "lng": -2.2387, "type": "signals", "lanes": 2, "approaches": 3, "notes": "New one-way system Feb 2026, LUF scheme"},
+        {"name": "Colne Rd / Barracks Rd", "lat": 53.7943, "lng": -2.2325, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Major works Jan-Aug 2026, new avg speed cameras"},
+        {"name": "Todmorden Rd / Manchester Rd", "lat": 53.7868, "lng": -2.2453, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Cross-Pennine route intersection"},
+        {"name": "Parker Lane / Manchester Rd", "lat": 53.7899, "lng": -2.2490, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Town centre approach"},
+        {"name": "Accrington Rd / Rossendale Rd", "lat": 53.7855, "lng": -2.2822, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Rosegrove junction, repeated utility works"},
+        {"name": "Padiham Rd / Active Travel", "lat": 53.7970, "lng": -2.2911, "type": "signals", "lanes": 2, "approaches": 3, "notes": "TTRO in force, LUF improvement"},
+        {"name": "Brunshaw Rd / Brownside Rd", "lat": 53.7738, "lng": -2.2564, "type": "signals", "lanes": 2, "approaches": 3, "notes": "School run congestion"},
+        {"name": "A646 / A682 Centenary Way", "lat": 53.7888, "lng": -2.2619, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Viaduct approach"},
+        {"name": "Colne Rd / North St", "lat": 53.7976, "lng": -2.2392, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Active speed camera zone"},
+        {"name": "A6114 / Colne Rd", "lat": 53.8040, "lng": -2.2346, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Brierfield approach"},
+        {"name": "A646 Glen View / Todmorden Rd", "lat": 53.7697, "lng": -2.2255, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Cliviger Gorge approach"}
+      ],
+      "schools_seed": [
+        {"name": "Burnley College", "lat": 53.7930, "lng": -2.2420, "pupils": 3000, "road": "Princess Way"},
+        {"name": "Unity College", "lat": 53.7857, "lng": -2.2478, "pupils": 900, "road": "Todmorden Road"},
+        {"name": "Habergham Eaves Primary", "lat": 53.7820, "lng": -2.2610, "pupils": 350, "road": "Rossendale Road"},
+        {"name": "St Peter's CE Primary", "lat": 53.7896, "lng": -2.2560, "pupils": 240, "road": "Church Street"},
+        {"name": "Burnley Brunshaw Primary", "lat": 53.7740, "lng": -2.2530, "pupils": 400, "road": "Brunshaw Road"},
+        {"name": "Padiham Green CE Primary", "lat": 53.7968, "lng": -2.3100, "pupils": 280, "road": "Padiham Road"},
+        {"name": "Shuttleworth College", "lat": 53.7905, "lng": -2.2670, "pupils": 1100, "road": "Cavalry Way"},
+        {"name": "Blessed Trinity RC College", "lat": 53.7845, "lng": -2.2360, "pupils": 900, "road": "Ormerod Road"},
+        {"name": "Coal Clough Academy", "lat": 53.7752, "lng": -2.2702, "pupils": 750, "road": "Coal Clough Lane"},
+        {"name": "Burnley Campus UCLan", "lat": 53.7910, "lng": -2.2480, "pupils": 2000, "road": "Parker Lane"}
+      ]
+    },
+    "hyndburn": {
+      "mario_town_name": "Hyndburn District (B)",
+      "bbox": {"south": 53.70, "north": 53.82, "west": -2.47, "east": -2.31},
+      "map_center": [53.761, -2.390],
+      "map_zoom": 13,
+      "sport_venues": [
+        {"name": "Wham Stadium", "lat": 53.7648, "lng": -2.3713, "capacity": 5057, "team": "Accrington Stanley", "league": "efl-league-one", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-one-2025/accrington-stanley"]}
+      ],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M65 Corridor (J6-J8)", "road": "M65", "coords": [[53.752,-2.442],[53.762,-2.415],[53.770,-2.380],[53.779,-2.341]], "base_severity": 0.4},
+        {"name": "Blackburn Rd (Accrington Centre)", "road": "A679", "coords": [[53.748,-2.400],[53.752,-2.385],[53.754,-2.370],[53.755,-2.360]], "base_severity": 0.6},
+        {"name": "Whalley Rd (Accrington-Rishton)", "road": "A680", "coords": [[53.754,-2.365],[53.756,-2.380],[53.760,-2.395],[53.765,-2.420]], "base_severity": 0.4},
+        {"name": "Burnley Rd (Baxenden)", "road": "B6236", "coords": [[53.768,-2.365],[53.764,-2.355],[53.758,-2.340],[53.754,-2.332]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "M65 J7 Accrington", "lat": 53.762, "lng": -2.395, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Main town access, retail park traffic"},
+        {"name": "M65 J6 Whitebirk", "lat": 53.752, "lng": -2.440, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Retail/industrial park junction, shared with Blackburn"},
+        {"name": "M65 J8 Hapton", "lat": 53.779, "lng": -2.341, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "Hyndburn-Burnley boundary"},
+        {"name": "A679/A680 Accrington Centre", "lat": 53.754, "lng": -2.364, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Town centre bottleneck, Blackburn Rd/Whalley Rd"},
+        {"name": "A679 Broadway Junction", "lat": 53.757, "lng": -2.357, "type": "signals", "lanes": 2, "approaches": 3, "notes": "One-way system approach"},
+        {"name": "Whalley Rd / Abbey St", "lat": 53.756, "lng": -2.372, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Near Wham Stadium"}
+      ],
+      "schools_seed": [
+        {"name": "Accrington Academy", "lat": 53.758, "lng": -2.358, "pupils": 1100, "road": "Blackburn Road"},
+        {"name": "Hyndburn Park Academy", "lat": 53.755, "lng": -2.370, "pupils": 700, "road": "Queens Road"},
+        {"name": "Mount Carmel RC College", "lat": 53.769, "lng": -2.370, "pupils": 700, "road": "Burnley Road"},
+        {"name": "Accrington & Rossendale College", "lat": 53.753, "lng": -2.362, "pupils": 3500, "road": "Sandy Lane"}
+      ]
+    },
+    "pendle": {
+      "mario_town_name": "Pendle District (B)",
+      "bbox": {"south": 53.80, "north": 53.96, "west": -2.34, "east": -2.04},
+      "map_center": [53.879, -2.190],
+      "map_zoom": 12,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M65 Corridor (J12-J14)", "road": "M65", "coords": [[53.811,-2.253],[53.823,-2.240],[53.836,-2.221],[53.848,-2.195]], "base_severity": 0.3},
+        {"name": "A6068 Colne-Nelson", "road": "A6068", "coords": [[53.856,-2.175],[53.852,-2.190],[53.845,-2.205],[53.838,-2.218]], "base_severity": 0.5},
+        {"name": "Scotland Rd / Leeds Rd (Nelson)", "road": "A682/A56", "coords": [[53.838,-2.218],[53.842,-2.210],[53.848,-2.198],[53.855,-2.180]], "base_severity": 0.5},
+        {"name": "A56 Colne-Skipton", "road": "A56", "coords": [[53.856,-2.175],[53.862,-2.160],[53.870,-2.140],[53.878,-2.118]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "M65 J12 Brierfield", "lat": 53.823, "lng": -2.240, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "Brierfield access, shared with Burnley boundary"},
+        {"name": "M65 J13 Barrowford", "lat": 53.836, "lng": -2.221, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "Nelson/Barrowford access"},
+        {"name": "M65 J14 Boundary", "lat": 53.848, "lng": -2.195, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "Eastern M65 terminus approach"},
+        {"name": "A6068/A56 Colne Centre", "lat": 53.856, "lng": -2.175, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Colne town centre convergence"},
+        {"name": "Scotland Rd / Leeds Rd Nelson", "lat": 53.838, "lng": -2.218, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Nelson town centre"},
+        {"name": "Railway St / Every St Nelson", "lat": 53.836, "lng": -2.213, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Nelson centre pedestrian crossing bottleneck"}
+      ],
+      "schools_seed": [
+        {"name": "Pendle Vale College", "lat": 53.840, "lng": -2.220, "pupils": 1200, "road": "Oxford Road Nelson"},
+        {"name": "Colne Primet Academy", "lat": 53.856, "lng": -2.170, "pupils": 800, "road": "Primet Hill"},
+        {"name": "Marsden Heights Community College", "lat": 53.843, "lng": -2.225, "pupils": 700, "road": "Walton Lane Nelson"},
+        {"name": "Nelson and Colne College", "lat": 53.840, "lng": -2.215, "pupils": 4000, "road": "Scotland Road Nelson"}
+      ]
+    },
+    "rossendale": {
+      "mario_town_name": "Rossendale District (B)",
+      "bbox": {"south": 53.61, "north": 53.76, "west": -2.42, "east": -2.14},
+      "map_center": [53.685, -2.278],
+      "map_zoom": 12,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "A681 Bacup Road (Rawtenstall-Bacup)", "road": "A681", "coords": [[53.702,-2.287],[53.705,-2.270],[53.710,-2.258],[53.718,-2.240]], "base_severity": 0.5},
+        {"name": "A56 Haslingden Bypass", "road": "A56", "coords": [[53.702,-2.332],[53.706,-2.320],[53.712,-2.310],[53.720,-2.298]], "base_severity": 0.4},
+        {"name": "A680 Edenfield-Haslingden", "road": "A680", "coords": [[53.666,-2.385],[53.675,-2.370],[53.690,-2.340],[53.700,-2.330]], "base_severity": 0.5},
+        {"name": "A671 Whitworth-Rochdale", "road": "A671", "coords": [[53.688,-2.186],[53.680,-2.178],[53.670,-2.170],[53.655,-2.162]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "A56/A682 Rising Bridge Roundabout", "lat": 53.720, "lng": -2.298, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Key interchange, A56/A682"},
+        {"name": "A681/A682 Rawtenstall Centre", "lat": 53.702, "lng": -2.287, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Valley convergence point"},
+        {"name": "A56/A680 Haslingden", "lat": 53.704, "lng": -2.330, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Bypass junction"},
+        {"name": "A56/M66 Edenfield Junction", "lat": 53.660, "lng": -2.383, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "M66 terminus, strategic gateway to Manchester"},
+        {"name": "Bacup Centre A671/A681", "lat": 53.710, "lng": -2.203, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Narrow valley road convergence"}
+      ],
+      "schools_seed": [
+        {"name": "Alder Grange Community & Technology School", "lat": 53.705, "lng": -2.292, "pupils": 1200, "road": "Calder Road Rawtenstall"},
+        {"name": "Haslingden High School", "lat": 53.704, "lng": -2.332, "pupils": 1000, "road": "Broadway Haslingden"},
+        {"name": "Whitworth Community High School", "lat": 53.680, "lng": -2.184, "pupils": 650, "road": "Hall Fold Whitworth"}
+      ]
+    },
+    "lancaster": {
+      "mario_town_name": "Lancaster District (B)",
+      "bbox": {"south": 53.91, "north": 54.24, "west": -2.93, "east": -2.46},
+      "map_center": [54.047, -2.801],
+      "map_zoom": 11,
+      "sport_venues": [
+        {"name": "Giant Axe", "lat": 54.0436, "lng": -2.8044, "capacity": 3500, "team": "Lancaster City", "league": "national-league-north", "fixture_urls": []},
+        {"name": "Mazuma Stadium", "lat": 54.0699, "lng": -2.8688, "capacity": 6476, "team": "Morecambe FC", "league": "efl-league-two", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-two-2025/morecambe"]}
+      ],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M6 Corridor (J33-J35)", "road": "M6", "coords": [[53.965,-2.770],[53.990,-2.780],[54.030,-2.789],[54.060,-2.800],[54.115,-2.810]], "base_severity": 0.4},
+        {"name": "A6 Lancaster-Carnforth", "road": "A6", "coords": [[54.048,-2.799],[54.060,-2.797],[54.080,-2.795],[54.110,-2.786]], "base_severity": 0.3},
+        {"name": "A683 Caton Road", "road": "A683", "coords": [[54.048,-2.799],[54.048,-2.780],[54.052,-2.760],[54.060,-2.720]], "base_severity": 0.6},
+        {"name": "A589 Morecambe Road", "road": "A589", "coords": [[54.048,-2.808],[54.055,-2.825],[54.062,-2.845],[54.068,-2.862]], "base_severity": 0.5}
+      ],
+      "named_junctions_seed": [
+        {"name": "M6 J33 Lancaster South", "lat": 53.965, "lng": -2.770, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "A6 junction, heavy commuter traffic"},
+        {"name": "M6 J34 Lancaster", "lat": 54.060, "lng": -2.800, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "A683 junction, main city access from M6"},
+        {"name": "M6 J35 Carnforth", "lat": 54.115, "lng": -2.810, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "A601(M) junction, Morecambe Bay gateway"},
+        {"name": "A6/A683 Caton Road Junction", "lat": 54.048, "lng": -2.799, "type": "signals", "lanes": 2, "approaches": 4, "notes": "City centre approach, frequent congestion"},
+        {"name": "A589/A683 Scale Hall", "lat": 54.055, "lng": -2.830, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Morecambe Road junction"},
+        {"name": "A6/A586 Galgate", "lat": 53.950, "lng": -2.781, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Village bottleneck on A6 south of Lancaster"},
+        {"name": "Lancaster University Main Gate", "lat": 54.010, "lng": -2.784, "type": "signals", "lanes": 2, "approaches": 3, "notes": "15,000+ students, peak congestion term-time"}
+      ],
+      "schools_seed": [
+        {"name": "Lancaster Royal Grammar School", "lat": 54.046, "lng": -2.797, "pupils": 1200, "road": "East Road Lancaster"},
+        {"name": "Ripley St Thomas CE Academy", "lat": 54.042, "lng": -2.795, "pupils": 1500, "road": "Ashton Road Lancaster"},
+        {"name": "Lancaster & Morecambe College", "lat": 54.065, "lng": -2.862, "pupils": 5000, "road": "Morecambe Road"},
+        {"name": "Lancaster University", "lat": 54.010, "lng": -2.784, "pupils": 15000, "road": "A6 Bailrigg"},
+        {"name": "Morecambe Bay Academy", "lat": 54.072, "lng": -2.862, "pupils": 900, "road": "Dallam Avenue Morecambe"}
+      ]
+    },
+    "ribble_valley": {
+      "mario_town_name": "Ribble Valley District (B)",
+      "bbox": {"south": 53.75, "north": 54.05, "west": -2.66, "east": -2.18},
+      "map_center": [53.903, -2.418],
+      "map_zoom": 11,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "A59 Skipton Road (Clitheroe)", "road": "A59", "coords": [[53.871,-2.393],[53.875,-2.378],[53.880,-2.360],[53.886,-2.340]], "base_severity": 0.4},
+        {"name": "A671 Whalley-Burnley", "road": "A671", "coords": [[53.820,-2.410],[53.815,-2.390],[53.810,-2.370],[53.804,-2.345]], "base_severity": 0.3},
+        {"name": "A666 Langho-Blackburn", "road": "A666", "coords": [[53.814,-2.430],[53.800,-2.440],[53.785,-2.455],[53.770,-2.470]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "A59/A666 Clitheroe Bypass", "lat": 53.871, "lng": -2.393, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Bypass/town access junction"},
+        {"name": "A59/A671 Whalley", "lat": 53.820, "lng": -2.410, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Whalley village, narrow bridge bottleneck"},
+        {"name": "A59/B6243 Chatburn", "lat": 53.878, "lng": -2.363, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Cross-Pennine route junction"},
+        {"name": "A671/A6119 Billington", "lat": 53.818, "lng": -2.422, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Whalley approach"}
+      ],
+      "schools_seed": [
+        {"name": "Clitheroe Royal Grammar School", "lat": 53.870, "lng": -2.389, "pupils": 1400, "road": "York Street Clitheroe"},
+        {"name": "Ribblesdale High School", "lat": 53.868, "lng": -2.394, "pupils": 800, "road": "Queens Road Clitheroe"},
+        {"name": "Bowland High School", "lat": 53.870, "lng": -2.396, "pupils": 700, "road": "Sawley Road Clitheroe"}
+      ]
+    },
+    "chorley": {
+      "mario_town_name": "Chorley District (B)",
+      "bbox": {"south": 53.59, "north": 53.76, "west": -2.83, "east": -2.51},
+      "map_center": [53.653, -2.632],
+      "map_zoom": 12,
+      "sport_venues": [
+        {"name": "Victory Park", "lat": 53.6507, "lng": -2.6316, "capacity": 4100, "team": "Chorley FC", "league": "national-league-north", "fixture_urls": []}
+      ],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M61 Corridor (J6-J8)", "road": "M61", "coords": [[53.623,-2.590],[53.635,-2.600],[53.650,-2.620],[53.665,-2.635]], "base_severity": 0.4},
+        {"name": "M65 J1 Approach (Wheelton)", "road": "M65/A674", "coords": [[53.665,-2.635],[53.672,-2.620],[53.680,-2.600],[53.690,-2.580]], "base_severity": 0.3},
+        {"name": "A6 Chorley Centre", "road": "A6", "coords": [[53.640,-2.630],[53.645,-2.632],[53.650,-2.633],[53.658,-2.635]], "base_severity": 0.5},
+        {"name": "A49 Euxton-Wigan", "road": "A49", "coords": [[53.655,-2.658],[53.640,-2.665],[53.625,-2.672],[53.610,-2.680]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "M61 J8 Chorley South", "lat": 53.635, "lng": -2.600, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Main Chorley access from motorway"},
+        {"name": "M61 J6 Horwich", "lat": 53.595, "lng": -2.565, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Bolton border, retail traffic"},
+        {"name": "M65 J1 Wheelton/Brinscall", "lat": 53.680, "lng": -2.600, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "M65 western terminus"},
+        {"name": "A6/B5251 Market St Chorley", "lat": 53.652, "lng": -2.632, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Town centre junction"},
+        {"name": "A49/B5252 Euxton", "lat": 53.654, "lng": -2.658, "type": "roundabout", "lanes": 2, "approaches": 3, "notes": "Near Buckshaw Village development"}
+      ],
+      "schools_seed": [
+        {"name": "Parklands High School", "lat": 53.656, "lng": -2.625, "pupils": 1300, "road": "Southport Road Chorley"},
+        {"name": "Holy Cross Catholic High School", "lat": 53.650, "lng": -2.640, "pupils": 900, "road": "Harpers Lane Chorley"},
+        {"name": "Albany Academy", "lat": 53.645, "lng": -2.628, "pupils": 800, "road": "Rawlinson Lane Chorley"},
+        {"name": "Runshaw College", "lat": 53.685, "lng": -2.680, "pupils": 4500, "road": "Langdale Road Leyland border"}
+      ]
+    },
+    "south_ribble": {
+      "mario_town_name": "South Ribble District (B)",
+      "bbox": {"south": 53.67, "north": 53.79, "west": -2.87, "east": -2.54},
+      "map_center": [53.727, -2.706],
+      "map_zoom": 13,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M6 Corridor (J28-J29)", "road": "M6", "coords": [[53.697,-2.665],[53.710,-2.670],[53.725,-2.672],[53.737,-2.673]], "base_severity": 0.5},
+        {"name": "M65 J1 / M6 J29 Interchange", "road": "M6/M65", "coords": [[53.737,-2.673],[53.740,-2.668],[53.742,-2.660],[53.745,-2.650]], "base_severity": 0.7},
+        {"name": "A6 London Road (Leyland-Bamber Bridge)", "road": "A6", "coords": [[53.693,-2.688],[53.700,-2.685],[53.715,-2.680],[53.737,-2.670]], "base_severity": 0.5},
+        {"name": "A582 Penwortham Way", "road": "A582", "coords": [[53.744,-2.730],[53.740,-2.715],[53.738,-2.700],[53.737,-2.680]], "base_severity": 0.4}
+      ],
+      "named_junctions_seed": [
+        {"name": "M6 J29 / M65 J1 Bamber Bridge", "lat": 53.737, "lng": -2.668, "type": "interchange", "lanes": 4, "approaches": 6, "notes": "MAJOR strategic interchange, M6/M65 merge"},
+        {"name": "M6 J28 Leyland", "lat": 53.697, "lng": -2.665, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Leyland access, industrial traffic"},
+        {"name": "A6/A582 Broad Oak Roundabout", "lat": 53.740, "lng": -2.715, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Penwortham bypass junction"},
+        {"name": "A582/A59 Penwortham", "lat": 53.745, "lng": -2.730, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "New Longton road junction"},
+        {"name": "A6/B5254 Leyland Centre", "lat": 53.693, "lng": -2.688, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Town centre approach"},
+        {"name": "Station Rd / Brownedge Rd Bamber Bridge", "lat": 53.735, "lng": -2.665, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Near M6 J29, heavy commuter traffic"}
+      ],
+      "schools_seed": [
+        {"name": "Leyland St Marys Catholic Technology College", "lat": 53.695, "lng": -2.690, "pupils": 1000, "road": "Royal Avenue Leyland"},
+        {"name": "Wellfield Academy", "lat": 53.700, "lng": -2.680, "pupils": 900, "road": "Yewlands Drive Leyland"},
+        {"name": "Penwortham Priory Academy", "lat": 53.748, "lng": -2.725, "pupils": 1100, "road": "Fleetwood Street Penwortham"},
+        {"name": "Worden Sports College", "lat": 53.688, "lng": -2.692, "pupils": 800, "road": "Worden Lane Leyland"}
+      ]
+    },
+    "preston": {
+      "mario_town_name": "Preston District (B)",
+      "bbox": {"south": 53.74, "north": 53.90, "west": -2.83, "east": -2.59},
+      "map_center": [53.763, -2.703],
+      "map_zoom": 13,
+      "sport_venues": [
+        {"name": "Deepdale", "lat": 53.7722, "lng": -2.6884, "capacity": 23404, "team": "Preston North End", "league": "efl-championship", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-championship-2025/preston-north-end"]}
+      ],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M55 J1 / Broughton Roundabout", "road": "M55/A6", "coords": [[53.800,-2.720],[53.798,-2.710],[53.793,-2.703],[53.785,-2.700]], "base_severity": 0.8},
+        {"name": "A6 Ring Road (North)", "road": "A6", "coords": [[53.770,-2.695],[53.768,-2.704],[53.765,-2.713],[53.763,-2.725]], "base_severity": 0.6},
+        {"name": "A59 Eastway-Longridge", "road": "A59", "coords": [[53.770,-2.695],[53.778,-2.680],[53.790,-2.670],[53.800,-2.660]], "base_severity": 0.4},
+        {"name": "A583 Blackpool Road", "road": "A583", "coords": [[53.765,-2.715],[53.768,-2.735],[53.772,-2.755],[53.780,-2.780]], "base_severity": 0.5},
+        {"name": "A6 London Road (South Preston)", "road": "A6", "coords": [[53.763,-2.703],[53.758,-2.703],[53.750,-2.700],[53.742,-2.695]], "base_severity": 0.5}
+      ],
+      "named_junctions_seed": [
+        {"name": "M55 J1 Broughton Roundabout", "lat": 53.800, "lng": -2.720, "type": "roundabout", "lanes": 3, "approaches": 5, "notes": "Lancashire's worst congestion hotspot — M55/A6/B5269 convergence"},
+        {"name": "M6 J31 Samlesbury", "lat": 53.770, "lng": -2.638, "type": "interchange", "lanes": 3, "approaches": 4, "notes": "Tickled Trout roundabout, A59 junction"},
+        {"name": "A6/A5085 Garstang Road", "lat": 53.775, "lng": -2.703, "type": "signals", "lanes": 2, "approaches": 4, "notes": "North Preston, heavy commuter route"},
+        {"name": "Ringway / Friargate", "lat": 53.760, "lng": -2.707, "type": "signals", "lanes": 2, "approaches": 4, "notes": "City centre ring road junction"},
+        {"name": "A583/Strand Road", "lat": 53.765, "lng": -2.725, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Dock area approach"},
+        {"name": "A59/A6 Eastway/Ring Road", "lat": 53.770, "lng": -2.695, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Ring road / Eastway junction"},
+        {"name": "Blackpool Road / Tag Lane", "lat": 53.775, "lng": -2.750, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Ingol approach, school run congestion"}
+      ],
+      "schools_seed": [
+        {"name": "UCLan Campus", "lat": 53.762, "lng": -2.707, "pupils": 30000, "road": "Adelphi Street Preston"},
+        {"name": "Cardinal Newman College", "lat": 53.770, "lng": -2.716, "pupils": 3500, "road": "Lark Hill Road Preston"},
+        {"name": "Moor Park High School", "lat": 53.778, "lng": -2.714, "pupils": 1100, "road": "Moor Park Avenue Preston"},
+        {"name": "Broughton High School", "lat": 53.798, "lng": -2.720, "pupils": 900, "road": "Woodplumpton Lane Broughton"},
+        {"name": "Ashton Community Science College", "lat": 53.758, "lng": -2.690, "pupils": 850, "road": "Aldersgate Ashton-on-Ribble"}
+      ]
+    },
+    "west_lancashire": {
+      "mario_town_name": "West Lancashire District (B)",
+      "bbox": {"south": 53.48, "north": 53.74, "west": -3.05, "east": -2.69},
+      "map_center": [53.608, -2.868],
+      "map_zoom": 11,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M58 Corridor (J1-J3)", "road": "M58", "coords": [[53.520,-2.810],[53.535,-2.825],[53.550,-2.840],[53.565,-2.855]], "base_severity": 0.3},
+        {"name": "A59 Ormskirk-Preston", "road": "A59", "coords": [[53.569,-2.882],[53.590,-2.870],[53.620,-2.850],[53.650,-2.830]], "base_severity": 0.4},
+        {"name": "A570 Ormskirk-Southport", "road": "A570", "coords": [[53.569,-2.882],[53.580,-2.890],[53.595,-2.905],[53.610,-2.920]], "base_severity": 0.3},
+        {"name": "A5209 Parbold-Newburgh", "road": "A5209", "coords": [[53.600,-2.770],[53.595,-2.790],[53.585,-2.810],[53.575,-2.840]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "M58 J3 Bickerstaffe", "lat": 53.535, "lng": -2.830, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "M58/A570 junction"},
+        {"name": "A59/A570 Ormskirk Centre", "lat": 53.569, "lng": -2.882, "type": "signals", "lanes": 2, "approaches": 4, "notes": "Town centre convergence, bottleneck"},
+        {"name": "A577/A570 Ormskirk", "lat": 53.568, "lng": -2.878, "type": "signals", "lanes": 2, "approaches": 3, "notes": "One-way system approach"},
+        {"name": "A59/B5246 Rufford", "lat": 53.620, "lng": -2.850, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Rural crossroads, limited visibility"},
+        {"name": "A577/B5320 Skelmersdale", "lat": 53.553, "lng": -2.783, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "New town centre approach"}
+      ],
+      "schools_seed": [
+        {"name": "Ormskirk School", "lat": 53.571, "lng": -2.880, "pupils": 1200, "road": "Wigan Road Ormskirk"},
+        {"name": "Edge Hill University", "lat": 53.562, "lng": -2.876, "pupils": 26000, "road": "St Helens Road Ormskirk"},
+        {"name": "West Lancashire College", "lat": 53.554, "lng": -2.786, "pupils": 3000, "road": "College Way Skelmersdale"}
+      ]
+    },
+    "wyre": {
+      "mario_town_name": "Wyre District (B)",
+      "bbox": {"south": 53.82, "north": 53.99, "west": -3.06, "east": -2.61},
+      "map_center": [53.900, -2.832],
+      "map_zoom": 11,
+      "sport_venues": [
+        {"name": "Mill Farm", "lat": 53.8464, "lng": -2.9847, "capacity": 6000, "team": "AFC Fylde", "league": "national-league", "fixture_urls": []},
+        {"name": "Highbury Stadium", "lat": 53.9218, "lng": -3.0098, "capacity": 5327, "team": "Fleetwood Town FC", "league": "efl-league-two", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-two-2025/fleetwood-town"]}
+      ],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "A585 Fleetwood Road", "road": "A585", "coords": [[53.840,-2.960],[53.855,-2.970],[53.875,-2.980],[53.895,-2.995],[53.920,-3.010]], "base_severity": 0.6},
+        {"name": "A6 Garstang", "road": "A6", "coords": [[53.850,-2.775],[53.870,-2.780],[53.890,-2.785],[53.900,-2.790]], "base_severity": 0.4},
+        {"name": "A586 Pilling-Knott End", "road": "A586", "coords": [[53.900,-2.790],[53.910,-2.820],[53.920,-2.860],[53.935,-2.910]], "base_severity": 0.2},
+        {"name": "A585 Amounderness Way", "road": "A585", "coords": [[53.840,-2.960],[53.835,-2.940],[53.830,-2.920],[53.828,-2.900]], "base_severity": 0.5}
+      ],
+      "named_junctions_seed": [
+        {"name": "A585/B5269 Skippool Junction", "lat": 53.855, "lng": -2.960, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "Notorious congestion hotspot, A585 bottleneck"},
+        {"name": "A585/A588 Shard Bridge", "lat": 53.875, "lng": -2.980, "type": "signals", "lanes": 2, "approaches": 3, "notes": "River Wyre crossing, single carriageway"},
+        {"name": "A6/B6430 Garstang Centre", "lat": 53.900, "lng": -2.775, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Market town centre bottleneck"},
+        {"name": "A585/A586 Windy Harbour", "lat": 53.860, "lng": -2.968, "type": "roundabout", "lanes": 2, "approaches": 4, "notes": "New bypass junction (A585 improvement scheme)"},
+        {"name": "B5267/A588 Over Wyre", "lat": 53.930, "lng": -2.920, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Rural junction, limited capacity"}
+      ],
+      "schools_seed": [
+        {"name": "Fleetwood High School", "lat": 53.920, "lng": -3.005, "pupils": 900, "road": "Broadway Fleetwood"},
+        {"name": "Garstang Community Academy", "lat": 53.898, "lng": -2.778, "pupils": 750, "road": "Bowgreave Drive Garstang"},
+        {"name": "Millfield Science & Performing Arts College", "lat": 53.845, "lng": -2.988, "pupils": 1100, "road": "Fleetwood Road Thornton"}
+      ]
+    },
+    "fylde": {
+      "mario_town_name": "Fylde District (B)",
+      "bbox": {"south": 53.73, "north": 53.87, "west": -3.06, "east": -2.78},
+      "map_center": [53.798, -2.919],
+      "map_zoom": 12,
+      "sport_venues": [],
+      "major_projects": [],
+      "corridors_seed": [
+        {"name": "M55 Corridor (J3-J4)", "road": "M55", "coords": [[53.790,-2.873],[53.797,-2.896],[53.805,-2.920],[53.810,-2.945]], "base_severity": 0.4},
+        {"name": "A583 Kirkham Bypass", "road": "A583", "coords": [[53.787,-2.873],[53.782,-2.900],[53.778,-2.925],[53.770,-2.950]], "base_severity": 0.4},
+        {"name": "A584 Lytham-Blackpool", "road": "A584", "coords": [[53.738,-2.964],[53.743,-2.976],[53.750,-2.990],[53.758,-3.005]], "base_severity": 0.3},
+        {"name": "B5261 Kirkham-Wesham", "road": "B5261", "coords": [[53.787,-2.873],[53.784,-2.860],[53.780,-2.848],[53.775,-2.835]], "base_severity": 0.3}
+      ],
+      "named_junctions_seed": [
+        {"name": "M55 J3 Kirkham", "lat": 53.790, "lng": -2.873, "type": "interchange", "lanes": 2, "approaches": 4, "notes": "Kirkham/Wesham access"},
+        {"name": "M55 J4 Whitehills Roundabout", "lat": 53.810, "lng": -2.945, "type": "roundabout", "lanes": 3, "approaches": 4, "notes": "Blackpool boundary, heavy traffic"},
+        {"name": "A583/B5261 Kirkham Centre", "lat": 53.787, "lng": -2.873, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Town centre junction"},
+        {"name": "A584/A5230 Lytham", "lat": 53.738, "lng": -2.964, "type": "signals", "lanes": 2, "approaches": 3, "notes": "Lytham centre approach"},
+        {"name": "A583/Queensway", "lat": 53.775, "lng": -2.940, "type": "roundabout", "lanes": 2, "approaches": 3, "notes": "St Annes approach"}
+      ],
+      "schools_seed": [
+        {"name": "Lytham St Annes High Technology College", "lat": 53.743, "lng": -2.986, "pupils": 1300, "road": "Worsley Road Lytham St Annes"},
+        {"name": "Carr Hill High School", "lat": 53.787, "lng": -2.875, "pupils": 1100, "road": "Kirkham Road Wesham"},
+        {"name": "Kirkham Grammar School", "lat": 53.784, "lng": -2.870, "pupils": 900, "road": "Ribby Road Kirkham"}
+      ]
+    }
+  },
+  "school_terms": [
+    {"start": "2024-09-02", "end": "2024-10-25", "name": "Autumn 1 2024"},
+    {"start": "2024-11-04", "end": "2024-12-20", "name": "Autumn 2 2024"},
+    {"start": "2025-01-06", "end": "2025-02-14", "name": "Spring 1 2025"},
+    {"start": "2025-02-24", "end": "2025-04-04", "name": "Spring 2 2025"},
+    {"start": "2025-04-22", "end": "2025-05-23", "name": "Summer 1 2025"},
+    {"start": "2025-06-02", "end": "2025-07-18", "name": "Summer 2 2025"},
+    {"start": "2025-09-01", "end": "2025-10-24", "name": "Autumn 1 2025"},
+    {"start": "2025-11-03", "end": "2025-12-19", "name": "Autumn 2 2025"},
+    {"start": "2026-01-05", "end": "2026-02-13", "name": "Spring 1 2026"},
+    {"start": "2026-02-23", "end": "2026-03-27", "name": "Spring 2 2026"},
+    {"start": "2026-04-13", "end": "2026-05-22", "name": "Summer 1 2026"},
+    {"start": "2026-06-01", "end": "2026-07-17", "name": "Summer 2 2026"},
+    {"start": "2026-09-07", "end": "2026-10-23", "name": "Autumn 1 2026"},
+    {"start": "2026-11-02", "end": "2026-12-18", "name": "Autumn 2 2026"},
+    {"start": "2027-01-04", "end": "2027-02-12", "name": "Spring 1 2027"},
+    {"start": "2027-02-22", "end": "2027-03-26", "name": "Spring 2 2027"},
+    {"start": "2027-04-12", "end": "2027-05-28", "name": "Summer 1 2027"},
+    {"start": "2027-06-07", "end": "2027-07-23", "name": "Summer 2 2027"},
+    {"start": "2027-09-06", "end": "2027-10-22", "name": "Autumn 1 2027"},
+    {"start": "2027-11-01", "end": "2027-12-17", "name": "Autumn 2 2027"},
+    {"start": "2028-01-04", "end": "2028-02-18", "name": "Spring 1 2028"},
+    {"start": "2028-02-28", "end": "2028-03-31", "name": "Spring 2 2028"},
+    {"start": "2028-04-17", "end": "2028-05-26", "name": "Summer 1 2028"},
+    {"start": "2028-06-05", "end": "2028-07-21", "name": "Summer 2 2028"}
+  ],
+  "profiles": {
+    "weekday": {"0": 0.8, "1": 0.5, "2": 0.4, "3": 0.4, "4": 0.7, "5": 1.8, "6": 3.8, "7": 6.8, "8": 7.9, "9": 6.2, "10": 5.3, "11": 5.5, "12": 5.8, "13": 5.6, "14": 5.8, "15": 6.8, "16": 7.5, "17": 7.8, "18": 6.2, "19": 4.2, "20": 3.2, "21": 2.5, "22": 2.0, "23": 1.4},
+    "weekend": {"0": 1.5, "1": 1.0, "2": 0.7, "3": 0.5, "4": 0.5, "5": 0.8, "6": 1.5, "7": 2.5, "8": 4.0, "9": 5.5, "10": 6.5, "11": 7.0, "12": 7.2, "13": 7.0, "14": 6.8, "15": 6.5, "16": 6.0, "17": 5.5, "18": 5.0, "19": 4.5, "20": 4.0, "21": 3.5, "22": 2.8, "23": 2.2},
+    "school_run_overlay": {"7": 3.0, "8": 8.0, "9": 4.0, "14": 2.0, "15": 6.0, "16": 3.0},
+    "match_day_overlay_3pm": {"12": 2.0, "13": 4.0, "14": 6.0, "15": 2.0, "16": 1.0, "17": 8.0, "18": 5.0, "19": 2.0},
+    "match_day_overlay_evening": {"17": 3.0, "18": 5.0, "19": 6.0, "20": 2.0, "21": 1.0, "22": 7.0, "23": 4.0}
+  },
+  "legal_keywords": {
+    "bridge_keywords": ["bridge", "footbridge", "viaduct", "aqueduct", "overpass", "underpass", "culvert", "structural"],
+    "planning_obligation_keywords": ["drainage connection", "s278", "s106", "developer", "planning condition", "construction access", "development site", "planning obligation", "reserved matters", "developer funded"],
+    "non_deferrable_statuses": ["Works started"]
+  },
+  "dft": {
+    "base_url": "https://roadtraffic.dft.gov.uk/api",
+    "lancashire_la_id": 76,
+    "max_count_points": 50,
+    "aadf_rate_limit_seconds": 0.5
+  },
+  "mario": {
+    "base_url": "https://services-eu1.arcgis.com/9MmxkLJT84uEwsJx/arcgis/rest/services/Road_Works_Point/FeatureServer/0/query",
+    "max_records": 2000,
+    "note": "Covers 12 Lancashire districts. Blackpool and Blackburn with Darwen (unitaries) are NOT in MARIO — they maintain their own highways."
+  }
+}

@@ -160,7 +160,7 @@ const schoolBands = [
 
 <Layout
   title="Roads & Roadworks | Tom Pickup"
-  description="Burnley's road network: current roadworks, TTROs, major projects, problem areas, and the £650M Lancashire highways backlog. Report potholes and track repairs."
+  description="Lancashire's road network: live roadworks across all 12 districts, TTROs, major projects, congestion corridors, and the £650M highways backlog. Powered by LCC MARIO data."
 >
   <!-- Hero -->
   <section class="rw-hero">
@@ -170,9 +170,9 @@ const schoolBands = [
           <span class="badge badge-teal">Highways &amp; Transport</span>
           <h1>Roads &amp; Roadworks</h1>
           <p class="hero-sub">
-            Current roadworks, active traffic orders, major projects, and everything you need
-            to know about Burnley&rsquo;s road network. Lancashire County Council is the highways
-            authority responsible for all roads except the M65 motorway.
+            Live roadworks across all 12 Lancashire districts, traffic orders, major projects, and
+            congestion analysis. Lancashire County Council is the highways authority responsible
+            for all roads except the M65 motorway and unitary areas.
           </p>
           <div class="hero-stats">
             <div class="hero-stat">
@@ -494,42 +494,61 @@ const schoolBands = [
       <ScrollReveal>
         <div class="section-header">
           <h2 class="section-heading">Junction Congestion Index</h2>
-          <p class="section-sub">Restriction-aware scoring of 15 key junctions — full road closures, lane restrictions, and minor works weighted by actual capacity reduction, not just flat counts</p>
+          <p class="section-sub">Restriction-aware scoring of {trafficData.congestion_model.junctions.length} key junctions — weighted by actual capacity reduction</p>
         </div>
-      </ScrollReveal>
-      <ScrollReveal>
-        <div class="jci-grid">
-          {trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci).map((j: any) => {
-            const jciColor = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
-            return (
-              <div class="jci-card" style={`border-left: 3px solid ${jciColor}`}>
-                <div class="jci-top">
-                  <span class="jci-name">{j.name}</span>
-                  <span class="jci-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(1)}</span>
+        {/* Headline: critical/high junctions */}
+        {(() => {
+          const sorted = trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci);
+          const critical = sorted.filter((j: any) => j.jci_level === 'critical' || j.jci_level === 'high');
+          return critical.length > 0 ? (
+            <div class="jci-headline-chips">
+              {critical.slice(0, 4).map((j: any) => {
+                const jciColor = j.jci_level === 'critical' ? '#dc2626' : '#f97316';
+                return (
+                  <div class="jci-headline-chip" style={`border-color: ${jciColor}`}>
+                    <span class="jci-headline-name">{j.name}</span>
+                    <span class="jci-headline-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(0)}</span>
+                    <span class={`severity-badge severity-${j.jci_level}`}>{j.jci_level}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null;
+        })()}
+        <Accordion title={`All ${trafficData.congestion_model.junctions.length} Junctions — Full Scoring`} defaultOpen={false}>
+          <div class="jci-grid">
+            {trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci).map((j: any) => {
+              const jciColor = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
+              return (
+                <div class="jci-card" style={`border-left: 3px solid ${jciColor}`}>
+                  <div class="jci-top">
+                    <span class="jci-name">{j.name}</span>
+                    <span class="jci-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(1)}</span>
+                  </div>
+                  <div class="jci-bar-track">
+                    <div class="jci-bar-fill" style={`width:${j.jci || 0}%;background:${jciColor}`}></div>
+                  </div>
+                  <div class="jci-factors">
+                    <span>{j.traffic_volume ? `Vol: ${j.traffic_volume.toLocaleString()}` : 'Vol: no data'}</span>
+                    {j.nearby_closures > 0 && <span class="factor-closure">Closures: {j.nearby_closures}</span>}
+                    {j.nearby_lane_restrictions > 0 && <span class="factor-lane">Lane: {j.nearby_lane_restrictions}</span>}
+                    {j.nearby_schools > 0 && <span>Schools: {j.nearby_schools}</span>}
+                    {j.nearby_defects > 0 && <span>Defects: {j.nearby_defects}</span>}
+                  </div>
+                  <div class="jci-severity">
+                    <span class={`severity-badge severity-${j.jci_level}`}>{j.jci_level}</span>
+                    {j.type && <span class="jci-type">{j.type}</span>}
+                  </div>
                 </div>
-                <div class="jci-bar-track">
-                  <div class="jci-bar-fill" style={`width:${j.jci || 0}%;background:${jciColor}`}></div>
-                </div>
-                <div class="jci-factors">
-                  <span>Vol: {(j.traffic_volume || 0).toLocaleString()}</span>
-                  {j.nearby_closures > 0 && <span class="factor-closure">Closures: {j.nearby_closures}</span>}
-                  {j.nearby_lane_restrictions > 0 && <span class="factor-lane">Lane: {j.nearby_lane_restrictions}</span>}
-                  {j.nearby_schools > 0 && <span>Schools: {j.nearby_schools}</span>}
-                  {j.nearby_defects > 0 && <span>Defects: {j.nearby_defects}</span>}
-                </div>
-                <div class="jci-severity">
-                  <span class={`severity-badge severity-${j.jci_level}`}>{j.jci_level}</span>
-                  {j.type && <span class="jci-type">{j.type}</span>}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </Accordion>
       </ScrollReveal>
 
       {trafficData.congestion_model.corridors?.length > 0 && (
       <ScrollReveal>
-        <Accordion title="Congestion Corridors" defaultOpen={false}>
+        <Accordion title={`Congestion Corridors (${trafficData.congestion_model.corridors.length})`} defaultOpen={false}>
           <div class="corridor-grid">
             {trafficData.congestion_model.corridors.sort((a: any, b: any) => (b.severity || 0) - (a.severity || 0)).map((c: any) => {
               const cColor = c.level === 'critical' ? '#dc2626' : c.level === 'high' ? '#f97316' : c.level === 'moderate' ? '#eab308' : '#22c55e';
@@ -572,34 +591,31 @@ const schoolBands = [
         </div>
       </ScrollReveal>
 
-      <!-- Restriction Summary Cards -->
+      <!-- Restriction Summary + Filtering Funnel — show your workings -->
       <ScrollReveal>
-        <div class="restriction-summary">
-          <div class="restriction-card restriction-closure">
-            <div class="restriction-icon">&#x26D4;</div>
-            <div class="restriction-count">{restrictionSummary.full_closure || 0}</div>
-            <div class="restriction-label">Full Closures</div>
-            <div class="restriction-desc">Road blocked — all traffic diverted. Maximum congestion impact.</div>
+        <Accordion title={`Restriction Breakdown & Filtering Funnel — ${totalWorks} works analysed`} defaultOpen={false}>
+          <div class="restriction-summary">
+            <div class="restriction-card restriction-closure">
+              <div class="restriction-icon">&#x26D4;</div>
+              <div class="restriction-count">{restrictionSummary.full_closure || 0}</div>
+              <div class="restriction-label">Full Closures</div>
+              <div class="restriction-desc">Road blocked — all traffic diverted. Maximum congestion impact.</div>
+            </div>
+            <div class="restriction-card restriction-lane">
+              <div class="restriction-icon">&#x26A0;</div>
+              <div class="restriction-count">{restrictionSummary.lane_restriction || 0}</div>
+              <div class="restriction-label">Lane Restrictions</div>
+              <div class="restriction-desc">Reduced capacity — temp lights, lane closures, alternating flow.</div>
+            </div>
+            <div class="restriction-card restriction-minor">
+              <div class="restriction-icon">&#x1F6A7;</div>
+              <div class="restriction-count">{restrictionSummary.minor || 0}</div>
+              <div class="restriction-label">Minor Works</div>
+              <div class="restriction-desc">Footway or verge — minimal traffic impact.</div>
+            </div>
           </div>
-          <div class="restriction-card restriction-lane">
-            <div class="restriction-icon">&#x26A0;</div>
-            <div class="restriction-count">{restrictionSummary.lane_restriction || 0}</div>
-            <div class="restriction-label">Lane Restrictions</div>
-            <div class="restriction-desc">Reduced capacity — temp lights, lane closures, alternating flow.</div>
-          </div>
-          <div class="restriction-card restriction-minor">
-            <div class="restriction-icon">&#x1F6A7;</div>
-            <div class="restriction-count">{restrictionSummary.minor || 0}</div>
-            <div class="restriction-label">Minor Works</div>
-            <div class="restriction-desc">Footway or verge — minimal traffic impact.</div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      <!-- Deferral Filtering Funnel — transparency on why most works can't be deferred -->
-      <ScrollReveal>
-        <div class="funnel-section">
-          <h3 class="intel-subheading">Why Can't LCC Just Delay These?</h3>
+          <div class="funnel-section">
+            <h3 class="intel-subheading">Why Can't LCC Just Delay These?</h3>
           <p class="intel-desc">
             Of {totalWorks} roadworks in Burnley, {lccWorksCount} are LCC's own works and {utilityWorksCount} are utilities
             (BT, Cadent, ENWL, UU, IX Wireless, Virgin Media). LCC can defer its own planned works,
@@ -634,6 +650,7 @@ const schoolBands = [
             </div>
           </div>
         </div>
+        </Accordion>
       </ScrollReveal>
 
       <!-- Corridor Clash Detection -->
@@ -642,7 +659,7 @@ const schoolBands = [
         <div class="clash-section">
           <h3 class="intel-subheading">
             Corridor Clashes
-            <span class="intel-badge intel-badge-critical">{corridorClashes.filter((c: any) => c.s59_breach).length} s59 breaches</span>
+            <span class="intel-badge intel-badge-critical">{corridorClashes.filter((c: any) => c.s59_breach || c.s59_coordination_needed).length} s59 breaches</span>
           </h3>
           <p class="intel-desc">Concurrent works on the same strategic corridor. NRSWA 1991 s59 requires LCC to coordinate — multiple simultaneous closures/restrictions compound delays exponentially.</p>
           <div class="clash-grid">
@@ -658,7 +675,8 @@ const schoolBands = [
                     <span>{cl.concurrent_works} concurrent works</span>
                     <span class="clash-cap">{Math.round(cl.total_capacity_reduction * 100)}% capacity loss</span>
                   </div>
-                  {cl.s59_breach && <div class="clash-breach">s59 duty to coordinate likely breached</div>}
+                  {cl.s59_breach && <div class="clash-breach">s59 DUTY TO COORDINATE LIKELY BREACHED</div>}
+                  {!cl.s59_breach && cl.s59_coordination_needed && <div class="clash-breach clash-breach-warn">s59 COORDINATION NEEDED</div>}
                   <div class="clash-works">
                     {cl.works.slice(0, 4).map((w: any) => (
                       <div class="clash-work-item">
@@ -791,8 +809,7 @@ const schoolBands = [
           <h2 class="section-heading">Legal Powers &amp; Framework</h2>
           <p class="section-sub">The legislation that gives LCC and the Secretary of State power to control roadworks, charge for disruption, and enforce compliance</p>
         </div>
-      </ScrollReveal>
-      <ScrollReveal>
+        <Accordion title="8 Legal Powers — TMA 2004, NRSWA 1991, Permit Schemes" defaultOpen={false}>
         <div class="legal-grid">
           <div class="legal-card legal-card-primary">
             <div class="legal-icon">&#9878;</div>
@@ -843,6 +860,7 @@ const schoolBands = [
             <p>LCC can designate streets where no works may be carried out without specific permission. Used for <strong>high-footfall town centres</strong> and critical transport corridors.</p>
           </div>
         </div>
+        </Accordion>
       </ScrollReveal>
     </div>
   </section>
@@ -858,37 +876,39 @@ const schoolBands = [
         </div>
       </ScrollReveal>
       <ScrollReveal>
-        <div class="options-grid">
-          {trafficData.congestion_model.options_appraisal.sort((a: any, b: any) => (b.overall_score || 0) - (a.overall_score || 0)).map((opt: any, i: number) => {
-            const maxScore = 30;
-            const pct = Math.min(100, ((opt.overall_score || 0) / maxScore * 100));
-            return (
-            <div class="option-card">
-              <div class="option-rank">#{i + 1}</div>
-              <div class="option-body">
-                <div class="option-head">
-                  <h3 class="option-name">{opt.intervention}</h3>
-                  <div class="option-score-ring" style={`--score: ${pct.toFixed(0)}%`}>
-                    <span class="option-score-val">{(opt.overall_score || 0).toFixed(0)}</span>
+        <Accordion title={`${trafficData.congestion_model.options_appraisal.length} Interventions — Scored by Impact, Feasibility & Cost`} defaultOpen={false}>
+          <div class="options-grid">
+            {trafficData.congestion_model.options_appraisal.sort((a: any, b: any) => (b.overall_score || 0) - (a.overall_score || 0)).map((opt: any, i: number) => {
+              const maxScore = 30;
+              const pct = Math.min(100, ((opt.overall_score || 0) / maxScore * 100));
+              return (
+              <div class="option-card">
+                <div class="option-rank">#{i + 1}</div>
+                <div class="option-body">
+                  <div class="option-head">
+                    <h3 class="option-name">{opt.intervention}</h3>
+                    <div class="option-score-ring" style={`--score: ${pct.toFixed(0)}%`}>
+                      <span class="option-score-val">{(opt.overall_score || 0).toFixed(0)}</span>
+                    </div>
                   </div>
+                  <p class="option-desc">{opt.description}</p>
+                  <div class="option-meta">
+                    <span class={`severity-badge severity-${opt.priority}`}>{opt.priority}</span>
+                    {opt.congestion_reduction_pct > 0 && <span class="option-tag">-{opt.congestion_reduction_pct}% congestion</span>}
+                    <span class="option-tag">Timeline: {opt.timeline}</span>
+                  </div>
+                  <div class="option-details">
+                    <span class="option-detail"><strong>Legal basis:</strong> {opt.legal_basis}</span>
+                    <span class="option-detail"><strong>Est. cost:</strong> {opt.cost}</span>
+                    {opt.status && <span class="option-detail"><strong>Status:</strong> {opt.status}</span>}
+                  </div>
+                  {opt.evidence && <p class="option-evidence">{opt.evidence}</p>}
                 </div>
-                <p class="option-desc">{opt.description}</p>
-                <div class="option-meta">
-                  <span class={`severity-badge severity-${opt.priority}`}>{opt.priority}</span>
-                  {opt.congestion_reduction_pct > 0 && <span class="option-tag">-{opt.congestion_reduction_pct}% congestion</span>}
-                  <span class="option-tag">Timeline: {opt.timeline}</span>
-                </div>
-                <div class="option-details">
-                  <span class="option-detail"><strong>Legal basis:</strong> {opt.legal_basis}</span>
-                  <span class="option-detail"><strong>Est. cost:</strong> {opt.cost}</span>
-                  {opt.status && <span class="option-detail"><strong>Status:</strong> {opt.status}</span>}
-                </div>
-                {opt.evidence && <p class="option-evidence">{opt.evidence}</p>}
               </div>
-            </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </Accordion>
       </ScrollReveal>
     </div>
   </section>
@@ -3011,6 +3031,23 @@ const schoolBands = [
     padding: var(--space-xl) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
+  /* JCI headline chips — critical/high junctions shown outside accordion */
+  .jci-headline-chips {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1rem 0 1.25rem;
+  }
+  .jci-headline-chip {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(145deg, rgba(28, 28, 30, 0.55), rgba(18,18,20,0.35));
+    border: 1px solid rgba(255,255,255,0.08); border-left: 3px solid;
+    border-radius: 12px;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .jci-headline-chip:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+  .jci-headline-name { font-size: 0.82rem; font-weight: 600; color: #f4f4f5; }
+  .jci-headline-score { font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
   .jci-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
   .jci-card {
     background: linear-gradient(145deg, rgba(28, 28, 30, 0.55), rgba(18,18,20,0.35));
@@ -3208,6 +3245,11 @@ const schoolBands = [
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+  }
+  .clash-breach-warn {
+    color: #f97316;
+    background: rgba(249,115,22,0.08);
+    border-color: rgba(249,115,22,0.15);
   }
   .clash-works { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0; }
   .clash-work-item {
