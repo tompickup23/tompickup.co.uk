@@ -237,7 +237,7 @@ function getPartyColor(party: string) {
         <div class="section-header">
           <h2 class="section-heading">County Council Investment in Burnley</h2>
           <p class="section-subtitle">
-            What Lancashire County Council is spending in and around the Burnley borough &mdash; highways, schools, regeneration, and SEND provision.
+            What Lancashire County Council is spending in and around the Burnley borough. Part of a &pound;292 million county-wide capital programme and &pound;1.33 billion revenue budget for 2026/27.
           </p>
         </div>
 
@@ -277,11 +277,29 @@ function getPartyColor(party: string) {
             <h3>Children&rsquo;s Social Care</h3>
             <p>Annual county council spending on fostering, residential care, family support, and leaving care services across the Burnley district. The single largest service category.</p>
           </div>
+
+          <div class="capital-card">
+            <div class="capital-icon" style="color: #5e5ce6;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <span class="capital-value tabular-nums">&pound;20.7M</span>
+            <h3>Disabled Facilities Grants</h3>
+            <p>Capital grant passported to district councils for home adaptations &mdash; stairlifts, wet rooms, and accessibility works for disabled and elderly residents across Lancashire.</p>
+          </div>
+
+          <div class="capital-card">
+            <div class="capital-icon" style="color: #ff6b6b;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <span class="capital-value tabular-nums">&pound;17.2M</span>
+            <h3>Crisis Resilience Fund</h3>
+            <p>New 3-year programme from April 2026 replacing the Household Support Fund. Crisis payments, affordable warmth, resilience hubs, and employment support &mdash; distributed through district councils.</p>
+          </div>
         </div>
 
         <div class="capital-note">
           <p>
-            Source: LCC Highways Capital Programme 2026/27 (Cabinet, March 2026) &bull; LCC Published Spending Data (Transparency Code) &bull; East Lancashire LUF programme
+            Source: LCC Budget Report 2026/27 (Full Council, February 2026) &bull; LCC Highways Capital Programme 2026/27 (Cabinet, March 2026) &bull; LCC Crisis Resilience Fund (Cabinet, March 2026) &bull; LCC Published Spending Data (Transparency Code) &bull; East Lancashire LUF programme
           </p>
         </div>
       </ScrollReveal>
@@ -652,7 +670,7 @@ function getPartyColor(party: string) {
 
   .capital-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
     margin-bottom: var(--space-lg);
   }
@@ -870,7 +888,7 @@ function getPartyColor(party: string) {
     }
 
     .capital-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .tiers-grid {
@@ -887,6 +905,12 @@ function getPartyColor(party: string) {
 
     .burnley-hero {
       padding: var(--space-xl) 0 var(--space-lg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .capital-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

@@ -397,6 +397,81 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     </div>
   </section>
 
+  <!-- Section 5b: County Budget — The Full Picture -->
+  <section class="budget-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">County Budget: The Full Picture</h2>
+          <p class="section-subtitle">
+            Lancashire County Council&rsquo;s total investment programme for 2026/27 &mdash; approved at Full Council, February 2026.
+          </p>
+        </div>
+
+        <div class="budget-headline">
+          <div class="budget-stat">
+            <span class="budget-value tabular-nums">&pound;1.33B</span>
+            <span class="budget-label">Revenue Budget 2026/27</span>
+          </div>
+          <div class="budget-stat">
+            <span class="budget-value tabular-nums">&pound;292M</span>
+            <span class="budget-label">Capital Programme 2026/27</span>
+          </div>
+          <div class="budget-stat">
+            <span class="budget-value tabular-nums">&pound;62M</span>
+            <span class="budget-label">Savings Delivered</span>
+          </div>
+          <div class="budget-stat">
+            <span class="budget-value tabular-nums">3.80%</span>
+            <span class="budget-label">Council Tax Rise (Lowest in 12 Years)</span>
+          </div>
+        </div>
+
+        <div class="budget-cards stagger-children">
+          <div class="budget-card card">
+            <div class="budget-card-icon" style="color: #ff9f0a;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>
+            </div>
+            <h4>DfT Highway Funding: 4-Year Settlement</h4>
+            <p>Government has confirmed a 4-year highway maintenance settlement for Lancashire &mdash; rising from <strong>&pound;48.5M</strong> in 2026/27 to <strong>&pound;70.1M by 2029/30</strong>. Certainty that road investment will increase every year.</p>
+          </div>
+
+          <div class="budget-card card">
+            <div class="budget-card-icon" style="color: #30d158;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h4>Crisis Resilience Fund: &pound;17.2M</h4>
+            <p>New 3-year programme replacing the Household Support Fund from April 2026. Crisis payments, affordable warmth, employment support, and resilience hubs &mdash; distributed through district councils including Burnley.</p>
+          </div>
+
+          <div class="budget-card card">
+            <div class="budget-card-icon" style="color: #bf5af2;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            </div>
+            <h4>Schools Capital: &pound;73M</h4>
+            <p>&pound;39M for new school places, &pound;20M for building condition works (tackling a &pound;30M backlog), and &pound;11M for SEND provision. Across Lancashire, including Burnley&rsquo;s schools.</p>
+          </div>
+
+          <div class="budget-card card">
+            <div class="budget-card-icon" style="color: var(--accent);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <h4>Tour de France 2027</h4>
+            <p>Lancashire has been approached to host <strong>Stage 2 of the Grand D&eacute;part</strong> of the 2027 Tour de France. Cabinet has authorised negotiations. A once-in-a-generation event for the county.</p>
+          </div>
+        </div>
+
+        <div class="budget-context card">
+          <p>
+            <strong>The &pound;292 million capital programme</strong> breaks down as: &pound;73M schools, &pound;72M highways, &pound;70M transport,
+            &pound;26M property, &pound;21M disabled facilities, &pound;10M economic development, &pound;6M digital, &pound;4M waste, &pound;4M vehicles.
+            Funded by &pound;234M in grants, &pound;53M prudential borrowing, and &pound;5M from other sources.
+          </p>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
   <!-- Section 6: LCC Properties -->
   <section class="properties-section">
     <div class="container">
@@ -542,7 +617,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
         <span class="sources-label">Data Sources</span>
         <p>
           LCC Published Spending Data (Transparency Code, May&ndash;December 2025) &bull;
+          LCC Budget Report 2026/27 (Full Council, February 2026) &bull;
           LCC Highways Capital Programme 2026/27 (Cabinet, March 2026) &bull;
+          LCC Crisis Resilience Fund (Cabinet, March 2026) &bull;
+          DfT Highway Maintenance Settlement 2026&ndash;2030 &bull;
           LCC Property Asset Register &bull;
           GOV.UK Revenue Outturn (MHCLG) &bull;
           Edward Stocks Massey Bequest Fund annual report
@@ -820,6 +898,92 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     margin: 0;
   }
 
+  /* ---- Budget Full Picture ---- */
+  .budget-section {
+    padding: 0 0 var(--space-2xl);
+  }
+
+  .budget-headline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .budget-stat {
+    text-align: center;
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+
+  .budget-value {
+    display: block;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .budget-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  .budget-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .budget-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .budget-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .budget-card h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  .budget-card p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .budget-context {
+    border-left: 3px solid var(--accent);
+  }
+
+  .budget-context p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
+  }
+
   /* ---- Wider Impact ---- */
   .wider-section {
     padding: 0 0 var(--space-2xl);
@@ -1023,6 +1187,14 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     }
 
     .investment-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .budget-headline {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .budget-cards {
       grid-template-columns: 1fr;
     }
 
