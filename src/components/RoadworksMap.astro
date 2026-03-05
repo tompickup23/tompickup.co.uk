@@ -256,9 +256,13 @@ const cedBoundaries = cedBoundariesData as any[];
 
   var TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
   var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>';
-  // Lancashire-wide default, zoom into district on filter
+  // Burnley default for tompickup.co.uk, Lancashire-wide as secondary
+  var BURNLEY_CENTER = [53.789, -2.248];
+  var BURNLEY_ZOOM = 13;
   var LANCASHIRE_CENTER = [53.78, -2.70];
   var LANCASHIRE_ZOOM = 9;
+  var DEFAULT_CENTER = BURNLEY_CENTER;
+  var DEFAULT_ZOOM = BURNLEY_ZOOM;
   var DISTRICT_CENTERS = {
     burnley:        { center: [53.789, -2.248], zoom: 13 },
     hyndburn:       { center: [53.761, -2.390], zoom: 13 },
@@ -312,7 +316,7 @@ const cedBoundaries = cedBoundariesData as any[];
   var WARD_STYLE = { color: 'rgba(18,182,207,0.45)', weight: 1.5, fillColor: 'rgba(18,182,207,0.05)', fillOpacity: 1, dashArray: '5 5', interactive: false };
 
   var allRoadworks = [], markers = [], cedLayer = null, wardLayer = null, map = null, clusterGroup = null;
-  var filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'all' };
+  var filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'burnley' };
   var timelineMode = 'all', selectedDate = null, dateRangeStart = null, dateRangeEnd = null, playInterval = null, sortBy = 'severity', selectedHour = null, playSpeed = 600;
   var postcodeMarker = null;
   var currentPage = 0;
@@ -338,13 +342,13 @@ const cedBoundaries = cedBoundariesData as any[];
     if (!btn) return;
     var anyActive = filters.status !== 'all' || filters.severity !== 'all' || filters.operator !== 'all'
       || filters.ward !== 'all' || filters.restriction !== 'all' || filters.road !== ''
-      || filters.district !== 'all' || timelineMode !== 'all';
+      || filters.district !== 'burnley' || timelineMode !== 'all';
     btn.style.display = anyActive ? '' : 'none';
   }
 
   function resetAllFilters() {
     stopPlay();
-    filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'all' };
+    filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'burnley' };
     timelineMode = 'all'; selectedHour = null; currentPage = 0;
     // Reset chip UI
     document.querySelectorAll('.rw-chip[data-filter]').forEach(function(b) {
@@ -353,16 +357,17 @@ const cedBoundaries = cedBoundariesData as any[];
       b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
     });
     // Reset selects
-    ['district-filter','operator-filter','ward-filter','restriction-filter'].forEach(function(id) {
+    ['operator-filter','ward-filter','restriction-filter'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = 'all';
     });
+    var dSel = document.getElementById('district-filter'); if (dSel) dSel.value = 'burnley';
     // Reset search
     var si = document.getElementById('postcode-search'); if (si) si.value = '';
     var sc = document.getElementById('search-clear'); if (sc) sc.style.display = 'none';
     // Reset timeline
     updateTimelineDisplay();
-    // Fly back to Lancashire
-    if (map) map.flyTo(LANCASHIRE_CENTER, LANCASHIRE_ZOOM, { duration: 1 });
+    // Fly back to Burnley (default)
+    if (map) map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { duration: 1 });
     updateResetBtn();
     updateStats(); renderMarkers(); renderList();
   }
@@ -427,8 +432,8 @@ const cedBoundaries = cedBoundariesData as any[];
 
     map = L.map(container, { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
     L.tileLayer(TILE_URL, { attribution: TILE_ATTR, maxZoom: 18, subdomains: 'abcd' }).addTo(map);
-    map.setView(LANCASHIRE_CENTER, LANCASHIRE_ZOOM);
-    setTimeout(function() { map.invalidateSize(); map.setView(LANCASHIRE_CENTER, LANCASHIRE_ZOOM); }, 250);
+    map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+    setTimeout(function() { map.invalidateSize(); map.setView(DEFAULT_CENTER, DEFAULT_ZOOM); }, 250);
 
     drawCEDs();
     fetchRoadworks();
@@ -507,9 +512,13 @@ const cedBoundaries = cedBoundariesData as any[];
         } else {
           map.flyTo(LANCASHIRE_CENTER, LANCASHIRE_ZOOM, { duration: 1 });
         }
+        // Dispatch event so page can react to region change
+        window.dispatchEvent(new CustomEvent('regionchange', { detail: { district: this.value } }));
         stopPlay();
         updateStats(); renderMarkers(); buildWorksChart(); renderList();
       });
+      // Default to Burnley
+      dSel.value = 'burnley';
     }
     // Operator filter
     var opSel = document.getElementById('operator-filter');
@@ -1517,6 +1526,23 @@ const cedBoundaries = cedBoundariesData as any[];
 
   document.getElementById('hourly-clear')?.addEventListener('click', function() {
     stopPlay(); selectedHour = null; buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
+  });
+
+  // Listen for external region change events (from page-level toggle)
+  window.addEventListener('setregion', function(e) {
+    var district = e.detail && e.detail.district;
+    if (!district) return;
+    var dSel = document.getElementById('district-filter');
+    if (dSel) { dSel.value = district; }
+    filters.district = district;
+    currentPage = 0;
+    if (district !== 'all' && DISTRICT_CENTERS[district]) {
+      map.flyTo(DISTRICT_CENTERS[district].center, DISTRICT_CENTERS[district].zoom, { duration: 1 });
+    } else {
+      map.flyTo(LANCASHIRE_CENTER, LANCASHIRE_ZOOM, { duration: 1 });
+    }
+    stopPlay();
+    updateStats(); renderMarkers(); buildWorksChart(); renderList();
   });
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', initMap); else initMap();

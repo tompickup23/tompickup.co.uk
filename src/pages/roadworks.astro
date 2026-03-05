@@ -197,6 +197,27 @@ const schoolBands = [
     </div>
   </section>
 
+  <!-- Regional Toggle -->
+  <section class="region-toggle-section">
+    <div class="container">
+      <div class="region-toggle" id="region-toggle" role="tablist" aria-label="Select region">
+        <button class="region-pill" data-region="burnley" role="tab" aria-selected="true">Burnley</button>
+        <button class="region-pill" data-region="hyndburn" role="tab" aria-selected="false">Hyndburn</button>
+        <button class="region-pill" data-region="pendle" role="tab" aria-selected="false">Pendle</button>
+        <button class="region-pill" data-region="rossendale" role="tab" aria-selected="false">Rossendale</button>
+        <button class="region-pill" data-region="lancaster" role="tab" aria-selected="false">Lancaster</button>
+        <button class="region-pill" data-region="ribble_valley" role="tab" aria-selected="false">Ribble Valley</button>
+        <button class="region-pill" data-region="chorley" role="tab" aria-selected="false">Chorley</button>
+        <button class="region-pill" data-region="south_ribble" role="tab" aria-selected="false">South Ribble</button>
+        <button class="region-pill" data-region="preston" role="tab" aria-selected="false">Preston</button>
+        <button class="region-pill" data-region="west_lancashire" role="tab" aria-selected="false">West Lancs</button>
+        <button class="region-pill" data-region="wyre" role="tab" aria-selected="false">Wyre</button>
+        <button class="region-pill" data-region="fylde" role="tab" aria-selected="false">Fylde</button>
+        <button class="region-pill region-pill-all" data-region="all" role="tab" aria-selected="false">All Lancashire</button>
+      </div>
+    </div>
+  </section>
+
   <!-- Live Roadworks Map -->
   <section class="map-section">
     <div class="container">
@@ -515,7 +536,7 @@ const schoolBands = [
             </div>
           ) : null;
         })()}
-        <Accordion title={`All ${trafficData.congestion_model.junctions.length} Junctions — Full Scoring`} defaultOpen={false}>
+        <Accordion title={`All ${trafficData.congestion_model.junctions.length} Junctions — Full Scoring`} defaultOpen={true}>
           <div class="jci-grid">
             {trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci).map((j: any) => {
               const jciColor = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
@@ -548,7 +569,7 @@ const schoolBands = [
 
       {trafficData.congestion_model.corridors?.length > 0 && (
       <ScrollReveal>
-        <Accordion title={`Congestion Corridors (${trafficData.congestion_model.corridors.length})`} defaultOpen={false}>
+        <Accordion title={`Congestion Corridors (${trafficData.congestion_model.corridors.length})`} defaultOpen={true}>
           <div class="corridor-grid">
             {trafficData.congestion_model.corridors.sort((a: any, b: any) => (b.severity || 0) - (a.severity || 0)).map((c: any) => {
               const cColor = c.level === 'critical' ? '#dc2626' : c.level === 'high' ? '#f97316' : c.level === 'moderate' ? '#eab308' : '#22c55e';
@@ -593,7 +614,7 @@ const schoolBands = [
 
       <!-- Restriction Summary + Filtering Funnel — show your workings -->
       <ScrollReveal>
-        <Accordion title={`Restriction Breakdown & Filtering Funnel — ${totalWorks} works analysed`} defaultOpen={false}>
+        <Accordion title={`Restriction Breakdown & Filtering Funnel — ${totalWorks} works analysed`} defaultOpen={true}>
           <div class="restriction-summary">
             <div class="restriction-card restriction-closure">
               <div class="restriction-icon">&#x26D4;</div>
@@ -695,7 +716,7 @@ const schoolBands = [
             })}
           </div>
           {corridorClashes.length > 6 && (
-            <Accordion title={`${corridorClashes.length - 6} more corridor clashes`} defaultOpen={false}>
+            <Accordion title={`${corridorClashes.length - 6} more corridor clashes`} defaultOpen={true}>
               <div class="clash-grid">
                 {corridorClashes.slice(6).map((cl: any) => {
                   const clashColor = cl.severity === 'critical' ? '#dc2626' : cl.severity === 'high' ? '#f97316' : '#eab308';
@@ -771,7 +792,7 @@ const schoolBands = [
       <!-- Utility s56 Timing Directions -->
       {utilityS56.length > 0 && (
       <ScrollReveal>
-        <Accordion title={`s56 Timing Directions — ${utilityS56.length} Utility Works`} defaultOpen={false}>
+        <Accordion title={`s56 Timing Directions — ${utilityS56.length} Utility Works`} defaultOpen={true}>
           <p class="intel-desc" style="margin-bottom: 1rem">
             NRSWA 1991 s56 gives LCC power to direct utilities when they can work. Works near critical junctions
             or with significant capacity reduction should be directed to night/off-peak hours.
@@ -806,7 +827,7 @@ const schoolBands = [
       <!-- Major Projects (Cannot Defer) -->
       {majorProjects.length > 0 && (
       <ScrollReveal>
-        <Accordion title={`Major Projects — Cannot Defer (${majorProjects.length})`} defaultOpen={false}>
+        <Accordion title={`Major Projects — Cannot Defer (${majorProjects.length})`} defaultOpen={true}>
           <p class="intel-desc" style="margin-bottom: 1rem">
             These works are part of funded major projects with contractual milestones. Deferral would risk losing grant funding.
             Other works near these projects should be scheduled around them, not the other way round.
@@ -841,7 +862,7 @@ const schoolBands = [
           <h2 class="section-heading">Legal Powers &amp; Framework</h2>
           <p class="section-sub">The legislation that gives LCC and the Secretary of State power to control roadworks, charge for disruption, and enforce compliance</p>
         </div>
-        <Accordion title="8 Legal Powers — TMA 2004, NRSWA 1991, Permit Schemes" defaultOpen={false}>
+        <Accordion title="8 Legal Powers — TMA 2004, NRSWA 1991, Permit Schemes" defaultOpen={true}>
         <div class="legal-grid">
           <div class="legal-card legal-card-primary">
             <div class="legal-icon">&#9878;</div>
@@ -908,7 +929,7 @@ const schoolBands = [
         </div>
       </ScrollReveal>
       <ScrollReveal>
-        <Accordion title={`${trafficData.congestion_model.options_appraisal.length} Interventions — Scored by Impact, Feasibility & Cost`} defaultOpen={false}>
+        <Accordion title={`${trafficData.congestion_model.options_appraisal.length} Interventions — Scored by Impact, Feasibility & Cost`} defaultOpen={true}>
           <div class="options-grid">
             {trafficData.congestion_model.options_appraisal.sort((a: any, b: any) => (b.overall_score || 0) - (a.overall_score || 0)).map((opt: any, i: number) => {
               const maxScore = 30;
@@ -995,8 +1016,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Active TTROs -->
-  <section class="ttro-section">
+  <!-- Active TTROs (Burnley-specific) -->
+  <section class="ttro-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1076,8 +1097,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Roadworks Coordination Issue -->
-  <section class="chaos-section">
+  <!-- Roadworks Coordination Issue (Burnley-specific) -->
+  <section class="chaos-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="chaos-card">
@@ -1115,8 +1136,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Major Current Projects -->
-  <section class="projects-section">
+  <!-- Major Current Projects (Burnley-specific) -->
+  <section class="projects-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1192,8 +1213,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Major Roads Guide -->
-  <section class="roads-section">
+  <!-- Major Roads Guide (Burnley-specific) -->
+  <section class="roads-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1342,8 +1363,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Problem Areas -->
-  <section class="problems-section">
+  <!-- Problem Areas (Burnley-specific) -->
+  <section class="problems-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1406,8 +1427,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Bridge Infrastructure -->
-  <section class="bridges-section">
+  <!-- Bridge Infrastructure (Burnley-specific) -->
+  <section class="bridges-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1525,8 +1546,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Speed Cameras & Safety -->
-  <section class="safety-section">
+  <!-- Speed Cameras & Safety (Burnley-specific) -->
+  <section class="safety-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1575,8 +1596,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Winter Maintenance -->
-  <section class="winter-section">
+  <!-- Winter Maintenance (Burnley-specific) -->
+  <section class="winter-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
@@ -1622,8 +1643,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- The Backlog -->
-  <section class="backlog-section">
+  <!-- The Backlog (Burnley-specific) -->
+  <section class="backlog-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="backlog-card">
@@ -1714,8 +1735,8 @@ const schoolBands = [
     </div>
   </section>
 
-  <!-- Contact CTA -->
-  <section class="contact-section">
+  <!-- Contact CTA (Burnley-specific) -->
+  <section class="contact-section" data-region-only="burnley">
     <div class="container">
       <ScrollReveal>
         <div class="contact-cta-card">
@@ -3533,4 +3554,149 @@ const schoolBands = [
     .legal-grid { grid-template-columns: 1fr; }
     .corridor-grid { grid-template-columns: 1fr; }
   }
+
+  /* ---- Regional Toggle ---- */
+  .region-toggle-section {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(9, 9, 11, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 10px 0;
+  }
+
+  .region-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    padding: 0 var(--space-sm);
+  }
+
+  .region-pill {
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    background: rgba(28, 28, 30, 0.5);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+
+  .region-pill:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .region-pill[aria-selected="true"] {
+    background: rgba(18, 182, 207, 0.15);
+    color: #12b6cf;
+    border-color: rgba(18, 182, 207, 0.4);
+    box-shadow: 0 0 12px rgba(18, 182, 207, 0.1);
+  }
+
+  .region-pill-all {
+    font-style: italic;
+  }
+
+  .region-pill-all[aria-selected="true"] {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.1);
+  }
+
+  /* Hide Burnley-only sections when another region is selected */
+  [data-region-only="burnley"].region-hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .region-toggle {
+      gap: 4px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .region-toggle::-webkit-scrollbar { display: none; }
+    .region-pill { font-size: 0.72rem; padding: 5px 10px; flex-shrink: 0; }
+  }
 </style>
+
+<script>
+  // Regional toggle logic
+  (function() {
+    var currentRegion = 'burnley';
+    var DISTRICT_LABELS = {
+      burnley:'Burnley', hyndburn:'Hyndburn', pendle:'Pendle', rossendale:'Rossendale',
+      lancaster:'Lancaster', ribble_valley:'Ribble Valley', chorley:'Chorley',
+      south_ribble:'South Ribble', preston:'Preston', west_lancashire:'West Lancashire',
+      wyre:'Wyre', fylde:'Fylde', all: 'All Lancashire'
+    };
+
+    function setRegion(region) {
+      currentRegion = region;
+      // Update pill states
+      document.querySelectorAll('.region-pill').forEach(function(pill) {
+        var isActive = pill.getAttribute('data-region') === region;
+        pill.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      // Show/hide Burnley-only sections
+      document.querySelectorAll('[data-region-only="burnley"]').forEach(function(section) {
+        if (region === 'burnley') {
+          section.classList.remove('region-hidden');
+        } else {
+          section.classList.add('region-hidden');
+        }
+      });
+      // Tell the map to switch region
+      window.dispatchEvent(new CustomEvent('setregion', { detail: { district: region } }));
+      // Update hero subtitle
+      var heroSub = document.querySelector('.hero-sub');
+      if (heroSub && region !== 'all') {
+        var label = DISTRICT_LABELS[region] || region;
+        heroSub.innerHTML = 'Roadworks, traffic analysis, and congestion intelligence for <strong>' + label + '</strong>. ' +
+          'Lancashire County Council is the highways authority responsible for all roads except the M65 motorway and unitary areas.';
+      } else if (heroSub) {
+        heroSub.innerHTML = 'Live roadworks across all 12 Lancashire districts, traffic orders, major projects, and ' +
+          'congestion analysis. Lancashire County Council is the highways authority responsible for all roads except the M65 motorway and unitary areas.';
+      }
+    }
+
+    // Attach click handlers
+    document.querySelectorAll('.region-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        var region = this.getAttribute('data-region');
+        setRegion(region);
+        // Scroll to map
+        var mapSection = document.querySelector('.map-section');
+        if (mapSection) mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Sync from map's district filter change
+    window.addEventListener('regionchange', function(e) {
+      var district = e.detail && e.detail.district;
+      if (district && district !== currentRegion) {
+        currentRegion = district;
+        document.querySelectorAll('.region-pill').forEach(function(pill) {
+          pill.setAttribute('aria-selected', pill.getAttribute('data-region') === district ? 'true' : 'false');
+        });
+        document.querySelectorAll('[data-region-only="burnley"]').forEach(function(section) {
+          if (district === 'burnley') section.classList.remove('region-hidden');
+          else section.classList.add('region-hidden');
+        });
+      }
+    });
+  })();
+</script>
