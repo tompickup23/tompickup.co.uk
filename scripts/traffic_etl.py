@@ -564,6 +564,414 @@ def fetch_osm_infrastructure() -> dict:
     return {"signals": signals, "crossings": crossings}
 
 
+# --- Road Infrastructure Cache ---
+INFRA_CACHE_PATH = os.path.join(SCRIPT_DIR, ".infra_cache.json")
+INFRA_CACHE_MAX_AGE_HOURS = 24  # Re-fetch after 24 hours
+
+
+def _load_infra_cache():
+    """Load cached road infrastructure if fresh enough."""
+    try:
+        if not os.path.exists(INFRA_CACHE_PATH):
+            return None
+        age_hours = (time.time() - os.path.getmtime(INFRA_CACHE_PATH)) / 3600
+        if age_hours > INFRA_CACHE_MAX_AGE_HOURS:
+            return None
+        with open(INFRA_CACHE_PATH) as f:
+            cached = json.load(f)
+        print(f"  Using cached road infrastructure ({age_hours:.1f}h old, {len(cached.get('traffic_signals', []))} signals)")
+        return cached
+    except Exception:
+        return None
+
+
+def _save_infra_cache(data: dict):
+    """Save road infrastructure to cache file."""
+    try:
+        with open(INFRA_CACHE_PATH, "w") as f:
+            json.dump(data, f, separators=(",", ":"))
+    except Exception as e:
+        print(f"  Warning: Could not save infra cache: {e}", file=sys.stderr)
+
+
+def _compute_union_bbox() -> dict:
+    """Compute the union bounding box across all configured councils.
+    Falls back to the Lancashire-wide bbox from config."""
+    councils = HIGHWAYS_CONFIG.get("councils", {})
+    if not councils:
+        return LANCASHIRE_BBOX
+
+    south = min(c["bbox"]["south"] for c in councils.values() if "bbox" in c)
+    north = max(c["bbox"]["north"] for c in councils.values() if "bbox" in c)
+    west = min(c["bbox"]["west"] for c in councils.values() if "bbox" in c)
+    east = max(c["bbox"]["east"] for c in councils.values() if "bbox" in c)
+    return {"south": south, "north": north, "west": west, "east": east}
+
+
+def _parse_way_center(element: dict, node_lookup: dict) -> tuple:
+    """Compute the centre point of an OSM way from its node refs.
+    Returns (lat, lng) or (None, None) if nodes not found."""
+    nds = element.get("nodes", [])
+    if not nds:
+        return None, None
+    lats, lngs = [], []
+    for nd_id in nds:
+        nd = node_lookup.get(nd_id)
+        if nd:
+            lats.append(nd["lat"])
+            lngs.append(nd["lon"])
+    if not lats:
+        return None, None
+    return round(sum(lats) / len(lats), 6), round(sum(lngs) / len(lngs), 6)
+
+
+def fetch_road_infrastructure(bbox: dict = None) -> dict:
+    """Fetch traffic lights, roundabouts, speed limits, one-way streets,
+    level crossings, narrow roads, bridges, and pedestrian crossings
+    from OpenStreetMap via Overpass API.
+
+    Uses a single union query for efficiency. Results are cached to avoid
+    hammering the Overpass API on repeated runs.
+
+    Args:
+        bbox: Dict with south/north/west/east. Defaults to union of all council bboxes.
+
+    Returns:
+        Dict with arrays for each infrastructure type, plus summary counts.
+    """
+    # Check cache first
+    cached = _load_infra_cache()
+    if cached is not None:
+        return cached
+
+    if bbox is None:
+        bbox = _compute_union_bbox()
+
+    bb = f"{bbox['south']},{bbox['west']},{bbox['north']},{bbox['east']}"
+
+    # Single Overpass union query for all infrastructure types
+    query = f"""[out:json][timeout:90];
+(
+  node["highway"="traffic_signals"]({bb});
+  node["highway"="mini_roundabout"]({bb});
+  way["junction"="roundabout"]({bb});
+  node["railway"="level_crossing"]({bb});
+  node["highway"="bus_stop"]({bb});
+  way["highway"~"^(primary|secondary|tertiary|trunk)$"]["maxspeed"]({bb});
+  way["highway"~"^(primary|secondary|tertiary)$"]["oneway"="yes"]({bb});
+  way["highway"~"^(primary|secondary|tertiary|unclassified)$"]["lanes"="1"]({bb});
+  way["narrow"="yes"]({bb});
+  way["maxweight"]({bb});
+  way["maxheight"]({bb});
+  way["bridge"="yes"]["highway"~"^(primary|secondary|tertiary|trunk|motorway)$"]({bb});
+);
+out body;
+>;
+out skel qt;"""
+
+    url = "https://overpass-api.de/api/interpreter"
+    post_data = f"data={query}".encode("utf-8")
+
+    elements = []
+    try:
+        req = Request(url, data=post_data, headers={
+            "User-Agent": "TomPickup-Traffic-ETL/2.0",
+            "Content-Type": "application/x-www-form-urlencoded",
+        })
+        with urlopen(req, timeout=120) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        elements = data.get("elements", [])
+        print(f"  Overpass returned {len(elements)} elements")
+    except Exception as e:
+        print(f"  ERROR fetching road infrastructure from Overpass: {e}", file=sys.stderr)
+        # Return empty structure on failure
+        return {
+            "traffic_signals": [], "roundabouts": [], "mini_roundabouts": [],
+            "speed_limits": [], "one_way_streets": [], "narrow_roads": [],
+            "level_crossings": [], "weight_restrictions": [], "height_restrictions": [],
+            "bridges": [], "bus_stop_count": 0,
+        }
+
+    # Build node lookup for resolving way geometries
+    node_lookup = {}
+    for el in elements:
+        if el.get("type") == "node":
+            node_lookup[el["id"]] = el
+
+    # Classify elements
+    traffic_signals = []
+    roundabouts = []
+    mini_roundabouts = []
+    speed_limits = []
+    one_way_streets = []
+    narrow_roads = []
+    level_crossings = []
+    weight_restrictions = []
+    height_restrictions = []
+    bridges = []
+    bus_stop_count = 0
+
+    for el in elements:
+        tags = el.get("tags", {})
+        el_type = el.get("type")
+
+        if el_type == "node":
+            lat, lng = el.get("lat"), el.get("lon")
+            if not lat or not lng:
+                continue
+
+            hw = tags.get("highway", "")
+            rw_tag = tags.get("railway", "")
+
+            if hw == "traffic_signals":
+                traffic_signals.append({
+                    "lat": round(lat, 6), "lng": round(lng, 6),
+                    "id": el["id"],
+                    "crossing": tags.get("crossing"),
+                    "crossing_ref": tags.get("crossing_ref"),
+                })
+            elif hw == "mini_roundabout":
+                mini_roundabouts.append({
+                    "lat": round(lat, 6), "lng": round(lng, 6),
+                    "id": el["id"],
+                    "name": tags.get("name", ""),
+                })
+            elif rw_tag == "level_crossing":
+                level_crossings.append({
+                    "lat": round(lat, 6), "lng": round(lng, 6),
+                    "id": el["id"],
+                    "barrier": tags.get("crossing:barrier", tags.get("barrier", "unknown")),
+                    "light": tags.get("crossing:light") == "yes",
+                    "name": tags.get("name", ""),
+                })
+            elif hw == "bus_stop":
+                bus_stop_count += 1
+
+        elif el_type == "way":
+            lat, lng = _parse_way_center(el, node_lookup)
+            if lat is None:
+                continue
+
+            junction = tags.get("junction", "")
+            hw = tags.get("highway", "")
+            road_name = tags.get("name", tags.get("ref", ""))
+
+            if junction == "roundabout":
+                roundabouts.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "name": road_name,
+                    "ref": tags.get("ref", ""),
+                })
+            elif tags.get("maxspeed") and hw in ("primary", "secondary", "tertiary", "trunk"):
+                speed_limits.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "speed": tags["maxspeed"],
+                    "road_class": hw,
+                })
+            elif tags.get("oneway") == "yes" and hw in ("primary", "secondary", "tertiary"):
+                one_way_streets.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "road_class": hw,
+                })
+            elif tags.get("lanes") == "1" or tags.get("narrow") == "yes":
+                narrow_roads.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "road_class": hw,
+                    "lanes": tags.get("lanes", ""),
+                    "width": tags.get("width", ""),
+                })
+
+            # Weight restrictions (can overlap with other categories)
+            if tags.get("maxweight"):
+                weight_restrictions.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "maxweight": tags["maxweight"],
+                })
+
+            # Height restrictions
+            if tags.get("maxheight"):
+                height_restrictions.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "maxheight": tags["maxheight"],
+                })
+
+            # Bridges on classified roads
+            if tags.get("bridge") == "yes" and hw in ("primary", "secondary", "tertiary", "trunk", "motorway"):
+                # Estimate length from node span
+                nds = el.get("nodes", [])
+                bridge_len = None
+                if len(nds) >= 2:
+                    first = node_lookup.get(nds[0])
+                    last = node_lookup.get(nds[-1])
+                    if first and last:
+                        bridge_len = int(haversine_m(first["lat"], first["lon"], last["lat"], last["lon"]))
+                bridges.append({
+                    "lat": lat, "lng": lng,
+                    "id": el["id"],
+                    "road": road_name,
+                    "road_class": hw,
+                    "length_m": bridge_len,
+                    "maxweight": tags.get("maxweight"),
+                    "maxheight": tags.get("maxheight"),
+                    "name": tags.get("bridge:name", tags.get("name", "")),
+                })
+
+    # Build speed limit zone counts
+    speed_zone_counts = {}
+    for sl in speed_limits:
+        spd = sl.get("speed", "")
+        # Normalise — strip "mph" suffix if present
+        spd_clean = spd.replace(" mph", "").replace("mph", "").strip()
+        speed_zone_counts[spd_clean] = speed_zone_counts.get(spd_clean, 0) + 1
+
+    result = {
+        "traffic_signals": traffic_signals,
+        "roundabouts": roundabouts,
+        "mini_roundabouts": mini_roundabouts,
+        "speed_limits": speed_limits,
+        "speed_limit_zones": speed_zone_counts,
+        "one_way_streets": one_way_streets,
+        "narrow_roads": narrow_roads,
+        "level_crossings": level_crossings,
+        "weight_restrictions": weight_restrictions,
+        "height_restrictions": height_restrictions,
+        "bridges": bridges,
+        "bus_stop_count": bus_stop_count,
+    }
+
+    print(f"  Traffic signals: {len(traffic_signals)}, Roundabouts: {len(roundabouts)}, "
+          f"Mini roundabouts: {len(mini_roundabouts)}")
+    print(f"  Level crossings: {len(level_crossings)}, Narrow roads: {len(narrow_roads)}, "
+          f"Bridges: {len(bridges)}")
+    print(f"  One-way streets: {len(one_way_streets)}, Bus stops: {bus_stop_count}")
+    print(f"  Weight restrictions: {len(weight_restrictions)}, Height restrictions: {len(height_restrictions)}")
+    print(f"  Speed zones: {speed_zone_counts}")
+
+    # Cache the result
+    _save_infra_cache(result)
+
+    return result
+
+
+def build_infra_hotspots(road_infra: dict, roadworks: list) -> list:
+    """Identify infrastructure hotspots — clusters of problematic features.
+
+    Hotspot types:
+    - signal_cluster: 3+ traffic signals within 200m (cascade delay risk)
+    - narrow_bottleneck: narrow/single-lane road on classified road
+    - level_crossing: each level crossing is a hotspot (severe disruption when closed)
+    - bridge_restriction: weight/height restricted bridge on major road
+    """
+    hotspots = []
+
+    # 1. Signal clusters — 3+ signals within 200m
+    signals = road_infra.get("traffic_signals", [])
+    used_signal_ids = set()
+    for i, s in enumerate(signals):
+        if s.get("id") in used_signal_ids:
+            continue
+        cluster = [s]
+        for j, s2 in enumerate(signals):
+            if i == j or s2.get("id") in used_signal_ids:
+                continue
+            if haversine_m(s["lat"], s["lng"], s2["lat"], s2["lng"]) < 200:
+                cluster.append(s2)
+        if len(cluster) >= 3:
+            for c in cluster:
+                used_signal_ids.add(c.get("id"))
+            avg_lat = round(sum(c["lat"] for c in cluster) / len(cluster), 6)
+            avg_lng = round(sum(c["lng"] for c in cluster) / len(cluster), 6)
+            # Count nearby roadworks
+            nearby_works = sum(
+                1 for rw in roadworks
+                if rw.get("lat") and rw.get("lng")
+                and haversine_m(avg_lat, avg_lng, float(rw["lat"]), float(rw["lng"])) < 500
+            )
+            hotspots.append({
+                "name": f"Signal cluster ({len(cluster)} signals)",
+                "type": "signal_cluster",
+                "lat": avg_lat, "lng": avg_lng,
+                "severity": "high" if len(cluster) >= 5 else "medium",
+                "detail": f"{len(cluster)} traffic signals within 200m — cascade delay risk during roadworks",
+                "signal_count": len(cluster),
+                "nearby_works": nearby_works,
+            })
+
+    # 2. Level crossings — each is a hotspot
+    for lx in road_infra.get("level_crossings", []):
+        nearby_works = sum(
+            1 for rw in roadworks
+            if rw.get("lat") and rw.get("lng")
+            and haversine_m(lx["lat"], lx["lng"], float(rw["lat"]), float(rw["lng"])) < 500
+        )
+        hotspots.append({
+            "name": lx.get("name") or f"Level crossing ({lx.get('barrier', 'unknown')} barrier)",
+            "type": "level_crossing",
+            "lat": lx["lat"], "lng": lx["lng"],
+            "severity": "high",
+            "detail": f"Level crossing — barrier type: {lx.get('barrier', 'unknown')}. "
+                      f"Closure blocks all traffic; severe disruption if only route",
+            "barrier": lx.get("barrier"),
+            "nearby_works": nearby_works,
+        })
+
+    # 3. Narrow road bottlenecks on classified roads
+    for nr in road_infra.get("narrow_roads", []):
+        if nr.get("road_class") in ("primary", "secondary", "tertiary"):
+            nearby_works = sum(
+                1 for rw in roadworks
+                if rw.get("lat") and rw.get("lng")
+                and haversine_m(nr["lat"], nr["lng"], float(rw["lat"]), float(rw["lng"])) < 500
+            )
+            hotspots.append({
+                "name": nr.get("road") or "Narrow road",
+                "type": "narrow_bottleneck",
+                "lat": nr["lat"], "lng": nr["lng"],
+                "severity": "high" if nr.get("road_class") == "primary" else "medium",
+                "detail": f"Single lane / narrow road on {nr.get('road_class', 'classified')} road — "
+                          f"major bottleneck, no overtaking possible",
+                "road_class": nr.get("road_class"),
+                "nearby_works": nearby_works,
+            })
+
+    # 4. Bridges with restrictions on major roads
+    for br in road_infra.get("bridges", []):
+        if br.get("maxweight") or br.get("maxheight"):
+            nearby_works = sum(
+                1 for rw in roadworks
+                if rw.get("lat") and rw.get("lng")
+                and haversine_m(br["lat"], br["lng"], float(rw["lat"]), float(rw["lng"])) < 500
+            )
+            restrictions = []
+            if br.get("maxweight"):
+                restrictions.append(f"weight limit {br['maxweight']}t")
+            if br.get("maxheight"):
+                restrictions.append(f"height limit {br['maxheight']}m")
+            hotspots.append({
+                "name": br.get("name") or br.get("road") or "Bridge",
+                "type": "bridge_restriction",
+                "lat": br["lat"], "lng": br["lng"],
+                "severity": "medium",
+                "detail": f"Bridge on {br.get('road_class', 'classified')} road — {', '.join(restrictions)}",
+                "road_class": br.get("road_class"),
+                "length_m": br.get("length_m"),
+                "nearby_works": nearby_works,
+            })
+
+    return sorted(hotspots, key=lambda x: {"high": 0, "medium": 1, "low": 2}.get(x.get("severity", "low"), 9))
+
+
 def haversine_m(lat1, lng1, lat2, lng2):
     """Haversine distance in metres."""
     from math import radians, sin, cos, sqrt, atan2
@@ -666,17 +1074,26 @@ def classify_restriction(rw: dict) -> dict:
 
 
 def build_junction_congestion_index(junctions: list, count_points: list,
-                                     roadworks: list, fms_reports: list) -> list:
+                                     roadworks: list, fms_reports: list,
+                                     road_infra: dict = None) -> list:
     """Calculate Junction Congestion Index (JCI) for each named junction.
 
-    Now restriction-aware: full road closure near a junction scores much higher
-    than a minor verge dig. Each nearby roadwork contributes based on its actual
-    capacity reduction, not just a flat count.
+    Now restriction-aware and infrastructure-aware: full road closure near a
+    junction scores much higher than a minor verge dig. Nearby infrastructure
+    (traffic signals, roundabouts, narrow roads, level crossings) adds bonus
+    points reflecting real-world capacity constraints.
 
-    JCI = (traffic_volume × 0.25) + (signal_complexity × 0.10)
-        + (roadworks_impact × 0.30) + (school_proximity × 0.15)
-        + (defect_density × 0.10) + (crossing_frequency × 0.05)
-        + (closure_severity_bonus × 0.05)
+    JCI = (traffic_volume × 0.22) + (signal_complexity × 0.08)
+        + (roadworks_impact × 0.28) + (school_proximity × 0.13)
+        + (defect_density × 0.08) + (crossing_frequency × 0.05)
+        + (closure_severity_bonus × 0.05) + (infra_bonus × 0.11)
+
+    Infrastructure bonus sources:
+    - Traffic signals within 100m → +5 pts (signals cause natural queuing)
+    - Roundabout within 200m → +3 pts (capacity constraint)
+    - Narrow road/single lane within 300m → +8 pts (major bottleneck)
+    - Level crossing within 500m → +10 pts (severe disruption when closed)
+    - One-way street within 200m → +2 pts (routing constraints)
 
     Scale: 0-100. Higher = more congested.
     """
@@ -792,10 +1209,55 @@ def build_junction_congestion_index(junctions: list, count_points: list,
         # Crossing frequency
         crossing_score = min(jn.get("lanes", 2) * 20, 100)
 
+        # Infrastructure proximity bonus (from road_infra if available)
+        infra_bonus_raw = 0.0
+        nearby_infra_signals = 0
+        nearby_infra_roundabouts = 0
+        nearby_infra_narrow = 0
+        nearby_infra_level_crossings = 0
+        nearby_infra_oneway = 0
+
+        if road_infra:
+            # Traffic signals within 100m → +5 pts each (natural queuing)
+            for sig in road_infra.get("traffic_signals", []):
+                if haversine_m(jlat, jlng, sig["lat"], sig["lng"]) < 100:
+                    infra_bonus_raw += 5
+                    nearby_infra_signals += 1
+
+            # Roundabouts within 200m → +3 pts each (capacity constraint)
+            for rb in road_infra.get("roundabouts", []):
+                if haversine_m(jlat, jlng, rb["lat"], rb["lng"]) < 200:
+                    infra_bonus_raw += 3
+                    nearby_infra_roundabouts += 1
+            for mrb in road_infra.get("mini_roundabouts", []):
+                if haversine_m(jlat, jlng, mrb["lat"], mrb["lng"]) < 200:
+                    infra_bonus_raw += 2
+                    nearby_infra_roundabouts += 1
+
+            # Narrow road / single lane within 300m → +8 pts (major bottleneck)
+            for nr in road_infra.get("narrow_roads", []):
+                if haversine_m(jlat, jlng, nr["lat"], nr["lng"]) < 300:
+                    infra_bonus_raw += 8
+                    nearby_infra_narrow += 1
+
+            # Level crossing within 500m → +10 pts (severe disruption when closed)
+            for lx in road_infra.get("level_crossings", []):
+                if haversine_m(jlat, jlng, lx["lat"], lx["lng"]) < 500:
+                    infra_bonus_raw += 10
+                    nearby_infra_level_crossings += 1
+
+            # One-way street within 200m → +2 pts (routing constraints)
+            for ow in road_infra.get("one_way_streets", []):
+                if haversine_m(jlat, jlng, ow["lat"], ow["lng"]) < 200:
+                    infra_bonus_raw += 2
+                    nearby_infra_oneway += 1
+
+        infra_bonus = min(infra_bonus_raw, 100)
+
         jci = round(
-            vol_score * 0.25 + signal_score * 0.10 + rw_score * 0.30
-            + school_score * 0.15 + defect_score * 0.10 + crossing_score * 0.05
-            + closure_bonus * 0.05
+            vol_score * 0.22 + signal_score * 0.08 + rw_score * 0.28
+            + school_score * 0.13 + defect_score * 0.08 + crossing_score * 0.05
+            + closure_bonus * 0.05 + infra_bonus * 0.11
         , 1)
 
         level = "critical" if jci >= 70 else "high" if jci >= 50 else "moderate" if jci >= 30 else "low"
@@ -812,6 +1274,12 @@ def build_junction_congestion_index(junctions: list, count_points: list,
             "nearby_lane_restrictions": nearby_lane_restrictions,
             "nearby_minor_works": nearby_minor,
             "nearby_works": nearby_works[:5],  # Top 5 for display
+            "infra_signals_100m": nearby_infra_signals,
+            "infra_roundabouts_200m": nearby_infra_roundabouts,
+            "infra_narrow_300m": nearby_infra_narrow,
+            "infra_level_crossings_500m": nearby_infra_level_crossings,
+            "infra_oneway_200m": nearby_infra_oneway,
+            "infra_bonus": round(infra_bonus, 1),
         })
 
     return sorted(scored, key=lambda x: -x["jci"])
@@ -1026,7 +1494,8 @@ def estimate_road_traffic(road_name: str, description: str = "") -> int:
 
 
 def build_deferral_recommendations(roadworks: list, junctions: list, corridors: list,
-                                    today: date, fixtures: list, major_events: list = None) -> list:
+                                    today: date, fixtures: list, major_events: list = None,
+                                    road_infra: dict = None) -> list:
     """Identify LCC-controlled works that could be deferred to ease congestion.
 
     Scoring criteria:
@@ -1277,7 +1746,40 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
                 confidence -= 0.10
                 confidence_flags.append("school_term_no_nearby_school")
 
-        confidence = round(max(confidence, 0.1), 2)
+        # Infrastructure-aware confidence/flags
+        infra_flags = []
+        if road_infra:
+            try:
+                rlat_f, rlng_f = float(rlat), float(rlng)
+            except (ValueError, TypeError):
+                rlat_f, rlng_f = None, None
+
+            if rlat_f is not None:
+                # Level crossing nearby — high confidence flag
+                for lx in road_infra.get("level_crossings", []):
+                    if haversine_m(rlat_f, rlng_f, lx["lat"], lx["lng"]) < 500:
+                        confidence += 0.05  # Boost confidence — measurable disruption
+                        confidence_flags.append("near_level_crossing")
+                        infra_flags.append("near level crossing — closure would remove sole alternative route")
+                        break
+
+                # Narrow road — high impact flag
+                for nr in road_infra.get("narrow_roads", []):
+                    if haversine_m(rlat_f, rlng_f, nr["lat"], nr["lng"]) < 300:
+                        confidence_flags.append("narrow_road_no_parallel_route")
+                        infra_flags.append("narrow / single-lane road — no overtaking, works create total blockage")
+                        break
+
+                # Multiple traffic signals nearby — cascade delay flag
+                nearby_signal_count = sum(
+                    1 for sig in road_infra.get("traffic_signals", [])
+                    if haversine_m(rlat_f, rlng_f, sig["lat"], sig["lng"]) < 200
+                )
+                if nearby_signal_count >= 3:
+                    confidence_flags.append("signal_cluster")
+                    infra_flags.append(f"signal-controlled junction — {nearby_signal_count} signals within 200m, works will cascade delays")
+
+        confidence = round(max(min(confidence, 1.0), 0.1), 2)
 
         # Build reasoning
         reasons = []
@@ -1290,6 +1792,9 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
             reasons.append(restriction["impact_label"])
         if clash_score > 0:
             reasons.append(f"{concurrent_count} other works within 400m — corridor overload")
+        # Infrastructure-aware reasons
+        for iflag in infra_flags:
+            reasons.append(iflag)
         if "school_term" in timing_flags:
             # Check if any school is actually nearby (for more specific text)
             has_school_nearby_for_reason = False
@@ -1871,9 +2376,15 @@ def build_strategic_recommendations(roadworks: list, junctions: list, corridors:
 
 
 def main():
-    output_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_OUTPUT
+    # Parse CLI flags
+    args = sys.argv[1:]
+    skip_infra = "--skip-infra" in args
+    args = [a for a in args if a != "--skip-infra"]
+    output_path = args[0] if args else DEFAULT_OUTPUT
 
-    print(f"Traffic Intelligence ETL v2 (Lancashire-wide) — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Traffic Intelligence ETL v3 (Lancashire-wide) — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    if skip_infra:
+        print("  --skip-infra: Skipping road infrastructure fetch")
 
     t0 = time.time()
     today = date.today()
@@ -1930,11 +2441,23 @@ def main():
     except Exception:
         pass
 
-    # 5. OSM traffic infrastructure
+    # 5. OSM traffic infrastructure (basic signals + crossings)
     print("\n4. Fetching OSM traffic infrastructure...")
     infra = fetch_osm_infrastructure()
     signal_clusters = cluster_signals_to_junctions(infra["signals"])
     print(f"  Clustered {len(infra['signals'])} signals into {len(signal_clusters)} junction groups")
+
+    # 5b. Comprehensive road infrastructure from OSM
+    road_infra = None
+    infra_hotspots = []
+    if not skip_infra:
+        print("\n4b. Fetching comprehensive road infrastructure from OSM...")
+        road_infra = fetch_road_infrastructure()
+        if road_infra:
+            infra_hotspots = build_infra_hotspots(road_infra, roadworks_records)
+            print(f"  Infrastructure hotspots: {len(infra_hotspots)}")
+    else:
+        print("\n4b. Skipping road infrastructure (--skip-infra)")
 
     # 6. Load FixMyStreet reports for defect proximity
     fms_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "fixmystreet.json")
@@ -1946,13 +2469,14 @@ def main():
     except Exception:
         pass
 
-    # 7. Build junction congestion index (now restriction-aware)
-    print("\n5. Building Junction Congestion Index (restriction-aware)...")
-    jci_results = build_junction_congestion_index(NAMED_JUNCTIONS, count_points, roadworks_records, fms_reports)
+    # 7. Build junction congestion index (now restriction-aware + infrastructure-aware)
+    print("\n5. Building Junction Congestion Index (restriction + infrastructure aware)...")
+    jci_results = build_junction_congestion_index(NAMED_JUNCTIONS, count_points, roadworks_records, fms_reports, road_infra)
     for j in jci_results[:5]:
         closures = j.get("nearby_closures", 0)
         lanes = j.get("nearby_lane_restrictions", 0)
-        print(f"  {j['name']}: JCI {j['jci']} ({j['jci_level']}) — {closures} closures, {lanes} lane restrictions nearby")
+        infra_b = j.get("infra_bonus", 0)
+        print(f"  {j['name']}: JCI {j['jci']} ({j['jci_level']}) — {closures} closures, {lanes} lane restrictions, infra +{infra_b}")
 
     # 8. Build corridor congestion scores
     print("\n6. Building corridor congestion scores...")
@@ -1960,9 +2484,9 @@ def main():
     for c in corridor_results[:3]:
         print(f"  {c['name']}: severity {c['severity']} ({c['level']})")
 
-    # 9. Deferral recommendations
+    # 9. Deferral recommendations (now infrastructure-aware)
     print("\n7. Building deferral recommendations...")
-    deferrals = build_deferral_recommendations(roadworks_records, jci_results, corridor_results, today, fixtures, major_events)
+    deferrals = build_deferral_recommendations(roadworks_records, jci_results, corridor_results, today, fixtures, major_events, road_infra)
     lcc_deferrals = [d for d in deferrals if d["is_lcc_controlled"]]
     utility_deferrals = [d for d in deferrals if not d["is_lcc_controlled"]]
     print(f"  {len(lcc_deferrals)} LCC works recommended for deferral")
@@ -2135,6 +2659,19 @@ def main():
             "records": len(major_events),
             "note": "Manually curated Lancashire events calendar",
         },
+        "road_infrastructure": {
+            "source": "OpenStreetMap Overpass API (comprehensive)",
+            "records": (
+                sum(len(road_infra.get(k, [])) for k in [
+                    "traffic_signals", "roundabouts", "mini_roundabouts",
+                    "level_crossings", "narrow_roads", "one_way_streets",
+                    "bridges", "weight_restrictions", "height_restrictions",
+                ]) + road_infra.get("bus_stop_count", 0)
+            ) if road_infra else 0,
+            "cached": road_infra is not None and os.path.exists(INFRA_CACHE_PATH),
+            "note": "Cached for 24h. Traffic signals, roundabouts, level crossings, narrow roads, bridges, restrictions",
+            "skipped": skip_infra,
+        },
     }
 
     # Try to determine roadworks freshness from file mtime
@@ -2198,6 +2735,27 @@ def main():
             "sport_venues": ALL_SPORT_VENUES,
             "turf_moor": ALL_SPORT_VENUES[0] if ALL_SPORT_VENUES else None,  # backward compat
         },
+        "road_infrastructure": {
+            "summary": {
+                "traffic_signals": len(road_infra.get("traffic_signals", [])) if road_infra else 0,
+                "roundabouts": len(road_infra.get("roundabouts", [])) if road_infra else 0,
+                "mini_roundabouts": len(road_infra.get("mini_roundabouts", [])) if road_infra else 0,
+                "level_crossings": len(road_infra.get("level_crossings", [])) if road_infra else 0,
+                "narrow_roads": len(road_infra.get("narrow_roads", [])) if road_infra else 0,
+                "one_way_streets": len(road_infra.get("one_way_streets", [])) if road_infra else 0,
+                "bridges": len(road_infra.get("bridges", [])) if road_infra else 0,
+                "weight_restrictions": len(road_infra.get("weight_restrictions", [])) if road_infra else 0,
+                "height_restrictions": len(road_infra.get("height_restrictions", [])) if road_infra else 0,
+                "bus_stops": road_infra.get("bus_stop_count", 0) if road_infra else 0,
+                "speed_limit_zones": road_infra.get("speed_limit_zones", {}) if road_infra else {},
+            },
+            "hotspots": infra_hotspots[:50],
+            "level_crossings": road_infra.get("level_crossings", []) if road_infra else [],
+            "narrow_roads": road_infra.get("narrow_roads", []) if road_infra else [],
+            "bridges": road_infra.get("bridges", []) if road_infra else [],
+            "weight_restrictions": road_infra.get("weight_restrictions", []) if road_infra else [],
+            "height_restrictions": road_infra.get("height_restrictions", []) if road_infra else [],
+        } if road_infra else None,
         "congestion_model": {
             "junctions": jci_results,
             "corridors": corridor_results,
@@ -2239,6 +2797,11 @@ def main():
     print(f"\nDone in {elapsed:.1f}s")
     print(f"Output: {output_path} ({size_kb:.1f} KB)")
     print(f"Infrastructure: {len(infra['signals'])} signals, {len(infra['crossings'])} crossings, {len(signal_clusters)} junctions")
+    if road_infra:
+        ri = road_infra
+        print(f"Road infra: {len(ri.get('traffic_signals', []))} signals, {len(ri.get('roundabouts', []))} roundabouts, "
+              f"{len(ri.get('level_crossings', []))} level crossings, {len(ri.get('narrow_roads', []))} narrow, "
+              f"{len(ri.get('bridges', []))} bridges, {len(infra_hotspots)} hotspots")
     print(f"Congestion: {len(jci_results)} junctions scored, {len(corridor_results)} corridors")
     print(f"Count points: {len(count_points)}, Key roads: {len(key_roads_list)}")
     print(f"Fixtures: {len(fixtures)}, School term: {'Yes' if term_status['in_term'] else 'No'}")

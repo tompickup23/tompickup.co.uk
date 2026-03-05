@@ -174,6 +174,28 @@ const cedBoundaries = cedBoundariesData as any[];
     </div>
   </div>
 
+  <!-- Works over time chart -->
+  <div class="rw-works-chart-section" id="rw-works-chart-section">
+    <div class="rw-works-chart-header">
+      <span class="rw-works-chart-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        Works forecast &mdash; next 90 days
+      </span>
+      <div class="rw-works-chart-legend">
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#dc2626"></span>Closures</span>
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#f59e0b"></span>Lane restrictions</span>
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#6b7280"></span>Minor</span>
+        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px dashed #12b6cf"></span>Utility (non-LCC)</span>
+        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px solid #3b82f6"></span>LCC controlled</span>
+      </div>
+    </div>
+    <div class="rw-works-canvas-wrap">
+      <canvas id="works-chart-canvas" class="rw-works-canvas"></canvas>
+      <div class="rw-works-chart-tooltip" id="works-chart-tooltip" style="display:none"></div>
+    </div>
+    <div class="rw-works-chart-labels" id="works-chart-labels"></div>
+  </div>
+
   <!-- Map -->
   <div class="rw-map-wrapper">
     <div class="rw-map-glow"></div>
@@ -456,6 +478,7 @@ const cedBoundaries = cedBoundariesData as any[];
       updateStats();
       initTimeline();
       renderMarkers();
+      buildWorksChart();
       renderList();
       removeLoadingStates();
     }).catch(function(err) {
@@ -485,7 +508,7 @@ const cedBoundaries = cedBoundariesData as any[];
           map.flyTo(LANCASHIRE_CENTER, LANCASHIRE_ZOOM, { duration: 1 });
         }
         stopPlay();
-        updateStats(); renderMarkers(); renderList();
+        updateStats(); renderMarkers(); buildWorksChart(); renderList();
       });
     }
     // Operator filter
@@ -715,6 +738,224 @@ const cedBoundaries = cedBoundariesData as any[];
         buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
       });
     });
+  }
+
+  // --- Works over time chart (90-day stacked area) ---
+  function buildWorksChart() {
+    var canvas = document.getElementById('works-chart-canvas');
+    var labelsEl = document.getElementById('works-chart-labels');
+    var tooltip = document.getElementById('works-chart-tooltip');
+    if (!canvas || !labelsEl || !allRoadworks.length) return;
+
+    var today = new Date(); today.setHours(0,0,0,0);
+    var DAYS = 90;
+    var PAD_LEFT = 36, PAD_RIGHT = 10, PAD_TOP = 8, PAD_BOTTOM = 4;
+
+    // Build daily data
+    var days = [];
+    for (var d = 0; d < DAYS; d++) {
+      var dt = new Date(today.getTime() + d * 86400000);
+      var closures = 0, lanes = 0, minor = 0, utility = 0, lcc = 0;
+      for (var j = 0; j < allRoadworks.length; j++) {
+        var rw = allRoadworks[j];
+        if (filters.district !== 'all' && rw.district !== filters.district) continue;
+        var s = toDateOnly(rw.start_date), e = toDateOnly(rw.end_date);
+        if (!s || !e) continue;
+        var tt = dt.getTime();
+        if (s.getTime() > tt || e.getTime() < tt) continue;
+        var rc = classifyRestriction(rw);
+        if (rc === 'full_closure') closures++;
+        else if (rc === 'lane_restriction') lanes++;
+        else minor++;
+        var op = (rw.operator || '').toLowerCase();
+        if (op.indexOf('lancashire county council') !== -1 || op.indexOf('lcc') !== -1) lcc++;
+        else utility++;
+      }
+      days.push({ date: dt, closures: closures, lanes: lanes, minor: minor, utility: utility, lcc: lcc, total: closures + lanes + minor });
+    }
+
+    // Find max for Y scale
+    var maxY = 0;
+    for (var i = 0; i < days.length; i++) {
+      if (days[i].total > maxY) maxY = days[i].total;
+    }
+    if (maxY === 0) maxY = 1;
+
+    // Canvas setup
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var cw = rect.width || 600;
+    var ch = canvas.classList.contains('rw-works-canvas') ? 160 : 160;
+    if (window.innerWidth <= 768) ch = 120;
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
+    canvas.style.width = cw + 'px';
+    canvas.style.height = ch + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    var plotW = cw - PAD_LEFT - PAD_RIGHT;
+    var plotH = ch - PAD_TOP - PAD_BOTTOM;
+    var stepX = plotW / (DAYS - 1);
+
+    function yPos(val) { return PAD_TOP + plotH - (val / maxY) * plotH; }
+    function xPos(idx) { return PAD_LEFT + idx * stepX; }
+
+    // Clear
+    ctx.clearRect(0, 0, cw, ch);
+
+    // Y-axis grid lines + labels
+    var yTicks = 4;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+    for (var t = 0; t <= yTicks; t++) {
+      var val = Math.round(maxY * t / yTicks);
+      var y = yPos(val);
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(PAD_LEFT, y);
+      ctx.lineTo(cw - PAD_RIGHT, y);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(235,235,245,0.25)';
+      ctx.fillText(val, PAD_LEFT - 6, y);
+    }
+
+    // Draw stacked areas (bottom to top: minor, lanes, closures)
+    // Build cumulative arrays
+    var stackMinor = [], stackLanes = [], stackClosures = [];
+    for (var i = 0; i < DAYS; i++) {
+      stackMinor.push(days[i].minor);
+      stackLanes.push(days[i].minor + days[i].lanes);
+      stackClosures.push(days[i].minor + days[i].lanes + days[i].closures);
+    }
+
+    // Minor (grey) — bottom
+    ctx.beginPath();
+    ctx.moveTo(xPos(0), yPos(stackMinor[0]));
+    for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackMinor[i]));
+    for (var i = DAYS - 1; i >= 0; i--) ctx.lineTo(xPos(i), yPos(0));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(107,114,128,0.35)';
+    ctx.fill();
+
+    // Lanes (amber) — middle
+    ctx.beginPath();
+    ctx.moveTo(xPos(0), yPos(stackLanes[0]));
+    for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackLanes[i]));
+    for (var i = DAYS - 1; i >= 0; i--) ctx.lineTo(xPos(i), yPos(stackMinor[i]));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(245,158,11,0.4)';
+    ctx.fill();
+
+    // Closures (red) — top
+    ctx.beginPath();
+    ctx.moveTo(xPos(0), yPos(stackClosures[0]));
+    for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackClosures[i]));
+    for (var i = DAYS - 1; i >= 0; i--) ctx.lineTo(xPos(i), yPos(stackLanes[i]));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(220,38,38,0.4)';
+    ctx.fill();
+
+    // Overlay line: Utility (non-LCC) — dashed cyan
+    ctx.beginPath();
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = 'rgba(18,182,207,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(xPos(0), yPos(days[0].utility));
+    for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(days[i].utility));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Overlay line: LCC controlled — solid blue
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(59,130,246,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(xPos(0), yPos(days[0].lcc));
+    for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(days[i].lcc));
+    ctx.stroke();
+
+    // Today marker
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(xPos(0), PAD_TOP);
+    ctx.lineTo(xPos(0), PAD_TOP + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '9px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Today', xPos(0) + 4, PAD_TOP + 10);
+
+    // Date labels (every 7 days)
+    labelsEl.innerHTML = '';
+    for (var i = 0; i < DAYS; i += 7) {
+      var lbl = document.createElement('span');
+      lbl.className = 'rw-wc-date-label';
+      lbl.textContent = fmtDateShort(days[i].date);
+      lbl.style.left = ((PAD_LEFT + i * stepX) / cw * 100) + '%';
+      labelsEl.appendChild(lbl);
+    }
+
+    // Save base image for hover overlay (avoids full redraw)
+    var baseImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    // Hover tooltip
+    var activeTooltipIdx = -1;
+    canvas.onmousemove = function(ev) {
+      var br = canvas.getBoundingClientRect();
+      var mx = ev.clientX - br.left;
+      var idx = Math.round((mx - PAD_LEFT) / stepX);
+      if (idx < 0 || idx >= DAYS) {
+        if (activeTooltipIdx !== -1) {
+          tooltip.style.display = 'none';
+          activeTooltipIdx = -1;
+          ctx.putImageData(baseImage, 0, 0);
+        }
+        return;
+      }
+      if (idx === activeTooltipIdx) return;
+      activeTooltipIdx = idx;
+      var dd = days[idx];
+      tooltip.innerHTML =
+        '<div class="rw-wct-date">' + fmtDateShort(dd.date) + '</div>' +
+        '<div class="rw-wct-row"><span class="rw-wct-dot" style="background:#dc2626"></span>Closures: <b>' + dd.closures + '</b></div>' +
+        '<div class="rw-wct-row"><span class="rw-wct-dot" style="background:#f59e0b"></span>Lane restrictions: <b>' + dd.lanes + '</b></div>' +
+        '<div class="rw-wct-row"><span class="rw-wct-dot" style="background:#6b7280"></span>Minor: <b>' + dd.minor + '</b></div>' +
+        '<div class="rw-wct-divider"></div>' +
+        '<div class="rw-wct-row"><span class="rw-wct-line" style="border-color:#12b6cf"></span>Utility: <b>' + dd.utility + '</b></div>' +
+        '<div class="rw-wct-row"><span class="rw-wct-line rw-wct-solid" style="border-color:#3b82f6"></span>LCC: <b>' + dd.lcc + '</b></div>' +
+        '<div class="rw-wct-total">Total: ' + dd.total + '</div>';
+      tooltip.style.display = '';
+      // Position tooltip
+      var tx = mx + 12;
+      var ty = ev.clientY - br.top - 10;
+      if (tx + 160 > cw) tx = mx - 170;
+      if (ty < 0) ty = 4;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+
+      // Draw hover line over base image
+      ctx.putImageData(baseImage, 0, 0);
+      ctx.save();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      var hx = xPos(idx);
+      ctx.moveTo(hx, PAD_TOP);
+      ctx.lineTo(hx, PAD_TOP + plotH);
+      ctx.stroke();
+      ctx.restore();
+    };
+    canvas.onmouseleave = function() {
+      tooltip.style.display = 'none';
+      activeTooltipIdx = -1;
+      ctx.putImageData(baseImage, 0, 0);
+    };
   }
 
   function countActiveOnDate(date) {
@@ -2238,6 +2479,158 @@ const cedBoundaries = cedBoundariesData as any[];
     :global(.leaflet-popup-content-wrapper) { animation: none !important; }
   }
 
+  /* --- Works over time chart --- */
+  .rw-works-chart-section {
+    padding: 0.5rem 0.875rem;
+    background: rgba(22, 22, 26, 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  .rw-works-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .rw-works-chart-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(235, 235, 245, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .rw-works-chart-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .rw-wc-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.6rem;
+    color: rgba(235, 235, 245, 0.4);
+    white-space: nowrap;
+  }
+
+  .rw-wc-swatch {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .rw-wc-line {
+    display: inline-block;
+    width: 14px;
+    height: 0;
+    flex-shrink: 0;
+  }
+
+  .rw-works-canvas-wrap {
+    position: relative;
+  }
+
+  .rw-works-canvas {
+    width: 100%;
+    height: 160px;
+    display: block;
+    cursor: crosshair;
+  }
+
+  .rw-works-chart-labels {
+    position: relative;
+    height: 16px;
+    margin-top: 2px;
+  }
+
+  .rw-wc-date-label {
+    position: absolute;
+    font-size: 0.5625rem;
+    color: rgba(235, 235, 245, 0.2);
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* Tooltip */
+  .rw-works-chart-tooltip {
+    position: absolute;
+    z-index: 20;
+    padding: 8px 10px;
+    background: rgba(14, 14, 18, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 0.68rem;
+    color: rgba(235, 235, 245, 0.7);
+    min-width: 140px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  :global(.rw-wct-date) {
+    font-weight: 600;
+    color: rgba(235, 235, 245, 0.9);
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+  }
+
+  :global(.rw-wct-row) {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1.6;
+  }
+
+  :global(.rw-wct-dot) {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  :global(.rw-wct-line) {
+    display: inline-block;
+    width: 10px;
+    height: 0;
+    border-bottom: 2px dashed;
+    flex-shrink: 0;
+  }
+
+  :global(.rw-wct-line.rw-wct-solid) {
+    border-bottom-style: solid;
+  }
+
+  :global(.rw-wct-divider) {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 3px 0;
+  }
+
+  :global(.rw-wct-total) {
+    font-weight: 600;
+    color: rgba(235, 235, 245, 0.5);
+    margin-top: 3px;
+    padding-top: 3px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
   /* --- Responsive --- */
   @media (max-width: 768px) {
     .rw-stats-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; }
@@ -2271,6 +2664,11 @@ const cedBoundaries = cedBoundariesData as any[];
     .rw-pagination { flex-direction: column; gap: 8px; text-align: center; }
     .rw-keyboard-hint { display: none; }
     .rw-toggle-hint { display: none !important; }
+    /* Works chart responsive */
+    .rw-works-canvas { height: 120px; }
+    .rw-works-chart-header { flex-direction: column; align-items: flex-start; }
+    .rw-works-chart-legend { gap: 6px; }
+    .rw-wc-legend { font-size: 0.55rem; }
   }
 
   @media (max-width: 480px) {
@@ -2287,5 +2685,9 @@ const cedBoundaries = cedBoundariesData as any[];
     /* Chips wrap on small screens */
     .rw-filter-chips { flex-wrap: wrap; }
     .rw-chip { padding: 6px 12px; font-size: 0.7rem; }
+    /* Works chart small screen */
+    .rw-works-canvas { height: 100px; }
+    .rw-works-chart-section { padding: 0.375rem 0.625rem; }
+    .rw-works-chart-tooltip { display: none !important; }
   }
 </style>
