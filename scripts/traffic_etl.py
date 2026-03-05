@@ -378,6 +378,74 @@ SCHOOL_LOCATIONS = [
 # Turf Moor (Burnley FC) — match day traffic management
 TURF_MOOR = {"lat": 53.7891, "lng": -2.2303, "capacity": 21944, "name": "Turf Moor"}
 
+# --- Major projects (cannot be deferred — structural works in progress) ---
+# These are tagged so the deferral engine knows not to recommend pausing them
+MAJOR_PROJECTS = [
+    {
+        "name": "Town2Turf (Levelling Up Fund)",
+        "description": "£19.9M LUF-funded town centre to Turf Moor pedestrian/cycling link. Manchester Rd one-way system, Centenary Way junction rebuild, Hammerton St improvements.",
+        "roads": ["Manchester Road", "Centenary Way", "Hammerton Street", "Yorkshire Street", "Red Lion Street"],
+        "lat_range": [53.786, 53.795],
+        "lng_range": [-2.248, -2.230],
+        "start": "2025-06",
+        "end": "2027-03",
+        "cannot_defer": True,
+        "reason": "LUF grant-funded project with DLUHC milestones — deferral risks losing £19.9M funding",
+    },
+    {
+        "name": "Colne Rd / Barracks Rd Average Speed Cameras",
+        "description": "Major junction rebuild with new average speed camera installation. Full carriageway works.",
+        "roads": ["Colne Road", "Barracks Road"],
+        "lat_range": [53.793, 53.800],
+        "lng_range": [-2.240, -2.225],
+        "start": "2026-01",
+        "end": "2026-08",
+        "cannot_defer": True,
+        "reason": "Safety-critical infrastructure — average speed camera installation committed",
+    },
+    {
+        "name": "Padiham Rd Active Travel",
+        "description": "LCC active travel corridor with new signal-controlled crossings and cycle infrastructure.",
+        "roads": ["Padiham Road"],
+        "lat_range": [53.795, 53.802],
+        "lng_range": [-2.310, -2.280],
+        "start": "2025-09",
+        "end": "2026-06",
+        "cannot_defer": True,
+        "reason": "Active Travel Fund grant — deferral risks DfT clawback",
+    },
+]
+
+
+def is_major_project_work(rw: dict):
+    """Check if a roadwork is part of a known major project.
+
+    Returns the project dict if matched, None otherwise.
+    Major project works cannot be deferred — they have funding milestones.
+    """
+    rlat = rw.get("lat")
+    rlng = rw.get("lng")
+    road = (rw.get("road") or "").lower()
+
+    if not rlat or not rlng:
+        return None
+
+    try:
+        rlat = float(rlat)
+        rlng = float(rlng)
+    except (ValueError, TypeError):
+        return None
+
+    for proj in MAJOR_PROJECTS:
+        # Check geographic bounds
+        if (proj["lat_range"][0] <= rlat <= proj["lat_range"][1] and
+            proj["lng_range"][0] <= rlng <= proj["lng_range"][1]):
+            # Also check road name match
+            for proad in proj["roads"]:
+                if proad.lower() in road or road in proad.lower():
+                    return proj
+    return None
+
 # Key congestion corridors — road segments for corridor scoring
 CONGESTION_CORRIDORS = [
     {"name": "M65 Corridor (J8-J12)", "road": "M65", "coords": [[53.779,-2.341],[53.783,-2.314],[53.786,-2.285],[53.790,-2.258],[53.793,-2.253],[53.811,-2.253]], "base_severity": 0.3},
@@ -468,13 +536,86 @@ def cluster_signals_to_junctions(signals: list, radius_m: float = 50) -> list:
     return clusters
 
 
+def classify_restriction(rw: dict) -> dict:
+    """Classify a roadwork's actual traffic restriction impact.
+
+    Returns dict with:
+      restriction_class: 'full_closure' | 'lane_restriction' | 'minor'
+      capacity_reduction: 0.0-1.0 (1.0 = fully closed)
+      impact_label: human-readable impact description
+    """
+    tc = (rw.get("traffic_constriction") or "").lower()
+    mt = (rw.get("management_type") or "").lower()
+    rest = (rw.get("restrictions") or "").lower()
+    impact = (rw.get("impact") or "").lower()
+    severity = (rw.get("severity") or "").lower()
+
+    # Full closure: road is blocked
+    if tc == "roadblocked" or mt == "roadclosed":
+        return {
+            "restriction_class": "full_closure",
+            "capacity_reduction": 1.0,
+            "impact_label": "Road closed — all traffic diverted",
+        }
+
+    # Lane restriction: one or more lanes blocked, traffic flows with delays
+    if tc == "lanesblocked" or mt == "laneclosures":
+        # Temp traffic lights typically means one lane open, alternating traffic
+        if rest == "temporarytrafficlights":
+            return {
+                "restriction_class": "lane_restriction",
+                "capacity_reduction": 0.6,  # ~60% capacity loss with temp lights
+                "impact_label": "Lane closed — temp traffic lights, alternating flow",
+            }
+        return {
+            "restriction_class": "lane_restriction",
+            "capacity_reduction": 0.4,
+            "impact_label": "Lane closure — reduced capacity",
+        }
+
+    # Temp traffic lights without explicit lane/road blocking
+    if rest == "temporarytrafficlights":
+        return {
+            "restriction_class": "lane_restriction",
+            "capacity_reduction": 0.5,
+            "impact_label": "Temporary traffic lights — alternating flow",
+        }
+
+    # Infer from impact/severity if constriction data missing
+    if impact == "verylongdelays" and severity == "high":
+        return {
+            "restriction_class": "lane_restriction",
+            "capacity_reduction": 0.4,
+            "impact_label": "Significant disruption expected",
+        }
+
+    if impact in ("longdelays", "verylongdelays"):
+        return {
+            "restriction_class": "lane_restriction",
+            "capacity_reduction": 0.3,
+            "impact_label": "Lane/carriageway restriction likely",
+        }
+
+    # Minor: no explicit closure or lane block
+    return {
+        "restriction_class": "minor",
+        "capacity_reduction": 0.1,
+        "impact_label": "Minor works — footway or verge only",
+    }
+
+
 def build_junction_congestion_index(junctions: list, count_points: list,
-                                     roadworks_count: int, fms_reports: list) -> list:
+                                     roadworks: list, fms_reports: list) -> list:
     """Calculate Junction Congestion Index (JCI) for each named junction.
 
-    JCI = (traffic_volume_score × 0.30) + (signal_density_score × 0.15)
-        + (roadworks_proximity × 0.25) + (school_proximity × 0.15)
+    Now restriction-aware: full road closure near a junction scores much higher
+    than a minor verge dig. Each nearby roadwork contributes based on its actual
+    capacity reduction, not just a flat count.
+
+    JCI = (traffic_volume × 0.25) + (signal_complexity × 0.10)
+        + (roadworks_impact × 0.30) + (school_proximity × 0.15)
         + (defect_density × 0.10) + (crossing_frequency × 0.05)
+        + (closure_severity_bonus × 0.05)
 
     Scale: 0-100. Higher = more congested.
     """
@@ -487,17 +628,58 @@ def build_junction_congestion_index(junctions: list, count_points: list,
         for cp in count_points:
             if cp.get("aadf") and cp.get("lat") and cp.get("lng"):
                 d = haversine_m(jlat, jlng, cp["lat"], cp["lng"])
-                if d < 1000:  # within 1km
+                if d < 1000:
                     vol = cp["aadf"].get("all_motor_vehicles", 0) or 0
                     if vol > nearest_aadf:
                         nearest_aadf = vol
-        vol_score = min(nearest_aadf / 600, 100)  # 60K = max score 100
+        vol_score = min(nearest_aadf / 600, 100)
 
         # Signal density (approaches/complexity)
         signal_score = min(jn.get("approaches", 3) * 15, 100)
 
-        # Roadworks proximity: how many active works within 500m
-        rw_prox_score = min(roadworks_count * 5, 100)  # crude — per-location would be better
+        # Roadworks proximity — now restriction-aware
+        # Each nearby roadwork contributes based on its capacity_reduction and distance
+        rw_impact_total = 0.0
+        nearby_closures = 0
+        nearby_lane_restrictions = 0
+        nearby_minor = 0
+        nearby_works = []
+        for rw in roadworks:
+            rlat = rw.get("lat")
+            rlng = rw.get("lng")
+            if not rlat or not rlng:
+                continue
+            try:
+                d = haversine_m(jlat, jlng, float(rlat), float(rlng))
+            except (ValueError, TypeError):
+                continue
+            if d < 500:  # Within 500m of junction
+                restriction = classify_restriction(rw)
+                cap_red = restriction["capacity_reduction"]
+                # Distance decay: closer works have more impact
+                distance_weight = max(0, 1.0 - d / 500)
+                rw_impact_total += cap_red * distance_weight * 100
+
+                rc = restriction["restriction_class"]
+                if rc == "full_closure":
+                    nearby_closures += 1
+                elif rc == "lane_restriction":
+                    nearby_lane_restrictions += 1
+                else:
+                    nearby_minor += 1
+
+                nearby_works.append({
+                    "road": rw.get("road", ""),
+                    "operator": rw.get("operator", ""),
+                    "class": rc,
+                    "capacity_reduction": cap_red,
+                    "distance_m": int(d),
+                })
+
+        rw_score = min(rw_impact_total, 100)
+
+        # Closure severity bonus: full closures near a junction are catastrophic
+        closure_bonus = min(nearby_closures * 30 + nearby_lane_restrictions * 10, 100)
 
         # School proximity
         school_score = 0
@@ -523,8 +705,9 @@ def build_junction_congestion_index(junctions: list, count_points: list,
         crossing_score = min(jn.get("lanes", 2) * 20, 100)
 
         jci = round(
-            vol_score * 0.30 + signal_score * 0.15 + rw_prox_score * 0.25
+            vol_score * 0.25 + signal_score * 0.10 + rw_score * 0.30
             + school_score * 0.15 + defect_score * 0.10 + crossing_score * 0.05
+            + closure_bonus * 0.05
         , 1)
 
         level = "critical" if jci >= 70 else "high" if jci >= 50 else "moderate" if jci >= 30 else "low"
@@ -536,6 +719,10 @@ def build_junction_congestion_index(junctions: list, count_points: list,
             "traffic_volume": nearest_aadf,
             "nearby_schools": sum(1 for sc in SCHOOL_LOCATIONS if haversine_m(jlat, jlng, sc["lat"], sc["lng"]) < 500),
             "nearby_defects": defect_count,
+            "nearby_closures": nearby_closures,
+            "nearby_lane_restrictions": nearby_lane_restrictions,
+            "nearby_minor_works": nearby_minor,
+            "nearby_works": nearby_works[:5],  # Top 5 for display
         })
 
     return sorted(scored, key=lambda x: -x["jci"])
@@ -701,6 +888,356 @@ def build_options_appraisal(junctions: list, corridors: list, roadworks_count: i
     return sorted(options, key=lambda x: -x["overall_score"])
 
 
+def build_deferral_recommendations(roadworks: list, junctions: list, corridors: list,
+                                    today: date, fixtures: list) -> list:
+    """Identify LCC-controlled works that could be deferred to ease congestion.
+
+    Scoring criteria:
+    1. Is the work LCC-controlled? (only LCC can defer its own works)
+    2. Proximity to critical/high-JCI junctions
+    3. Overlap with other concurrent works on the same corridor
+    4. Severity of restriction (full closure >> lane restriction >> minor)
+    5. School term / match day overlap
+    6. Work category (emergency/urgent cannot be deferred)
+
+    Returns recommendations sorted by deferral benefit (highest first).
+    """
+    today_str = today.isoformat()
+    in_term = is_term_time(today)
+
+    # Match days in next 14 days
+    match_dates = set()
+    for f in fixtures:
+        if f.get("is_home") and f.get("date"):
+            try:
+                fd = date.fromisoformat(f["date"])
+                if 0 <= (fd - today).days <= 14:
+                    match_dates.add(f["date"])
+            except ValueError:
+                pass
+
+    # Build critical junction lookup
+    critical_junctions = [j for j in junctions if j.get("jci", 0) >= 50]
+
+    recommendations = []
+    for rw in roadworks:
+        operator = rw.get("operator", "")
+
+        # Only recommend deferrals for LCC's own works
+        # Utilities can receive s56 timing directions (separate function)
+        is_lcc = "lancashire" in operator.lower() or "lcc" in operator.lower()
+
+        # Emergency/urgent works cannot be deferred
+        category = (rw.get("category") or "").lower()
+        if "emergency" in category or "urgent" in category:
+            continue
+
+        # Major project works cannot be deferred — funding milestones
+        major = is_major_project_work(rw)
+        if major and major.get("cannot_defer"):
+            continue
+
+        # Parse dates
+        start = rw.get("start_date", "")[:10]
+        end = rw.get("end_date", "")[:10]
+        if not start:
+            continue
+
+        # Only consider works that haven't finished
+        if end and end < today_str:
+            continue
+
+        restriction = classify_restriction(rw)
+        cap_red = restriction["capacity_reduction"]
+        rc = restriction["restriction_class"]
+
+        # Skip truly minor works — not worth recommending deferral
+        if cap_red < 0.2:
+            continue
+
+        rlat = rw.get("lat")
+        rlng = rw.get("lng")
+        if not rlat or not rlng:
+            continue
+
+        # 1. Junction impact score (0-40)
+        junction_impact = 0
+        affected_junctions = []
+        for j in critical_junctions:
+            try:
+                d = haversine_m(float(rlat), float(rlng), j["lat"], j["lng"])
+            except (ValueError, TypeError):
+                continue
+            if d < 600:
+                jci = j.get("jci", 0)
+                proximity_factor = max(0, 1.0 - d / 600)
+                junction_impact += jci * proximity_factor * 0.5
+                affected_junctions.append({
+                    "name": j["name"],
+                    "jci": j["jci"],
+                    "distance_m": int(d),
+                })
+        junction_score = min(junction_impact, 40)
+
+        # 2. Restriction severity score (0-25)
+        severity_score = cap_red * 25
+
+        # 3. Concurrent works clash score (0-20)
+        concurrent_count = 0
+        clashing_works = []
+        for other in roadworks:
+            if other.get("id") == rw.get("id"):
+                continue
+            olat = other.get("lat")
+            olng = other.get("lng")
+            if not olat or not olng:
+                continue
+            try:
+                d = haversine_m(float(rlat), float(rlng), float(olat), float(olng))
+            except (ValueError, TypeError):
+                continue
+            # Works within 400m are on the same corridor segment
+            if d < 400:
+                other_start = other.get("start_date", "")[:10]
+                other_end = other.get("end_date", "")[:10]
+                # Check temporal overlap
+                if other_start and other_end:
+                    if not (other_end < start or (end and other_start > end)):
+                        concurrent_count += 1
+                        other_restriction = classify_restriction(other)
+                        clashing_works.append({
+                            "road": other.get("road", ""),
+                            "operator": other.get("operator", ""),
+                            "class": other_restriction["restriction_class"],
+                        })
+        clash_score = min(concurrent_count * 8, 20)
+
+        # 4. School term + match day overlap (0-15)
+        timing_score = 0
+        timing_flags = []
+        if in_term:
+            timing_score += 8
+            timing_flags.append("school_term")
+        # Check if works span any match day
+        for md in match_dates:
+            if start <= md and (not end or end >= md):
+                timing_score += 7
+                timing_flags.append("match_day")
+                break
+        timing_score = min(timing_score, 15)
+
+        total_score = round(junction_score + severity_score + clash_score + timing_score, 1)
+
+        if total_score < 15:
+            continue  # Not worth flagging
+
+        # Build reasoning
+        reasons = []
+        if junction_score >= 10:
+            jnames = ", ".join(j["name"] for j in affected_junctions[:2])
+            reasons.append(f"Near critical junction{'s' if len(affected_junctions) > 1 else ''}: {jnames}")
+        if rc == "full_closure":
+            reasons.append("Full road closure — maximum disruption")
+        elif rc == "lane_restriction":
+            reasons.append(restriction["impact_label"])
+        if clash_score > 0:
+            reasons.append(f"{concurrent_count} other works within 400m — corridor overload")
+        if "school_term" in timing_flags:
+            reasons.append("School term — school run traffic compounds delays")
+        if "match_day" in timing_flags:
+            reasons.append("Burnley FC home match nearby — match day traffic spike")
+
+        recommendation = {
+            "id": rw.get("id"),
+            "road": rw.get("road", ""),
+            "operator": operator,
+            "is_lcc_controlled": is_lcc,
+            "category": rw.get("category", ""),
+            "start_date": start,
+            "end_date": end,
+            "restriction_class": rc,
+            "capacity_reduction": cap_red,
+            "impact_label": restriction["impact_label"],
+            "lat": rlat,
+            "lng": rlng,
+            "deferral_score": total_score,
+            "junction_score": round(junction_score, 1),
+            "severity_score": round(severity_score, 1),
+            "clash_score": round(clash_score, 1),
+            "timing_score": round(timing_score, 1),
+            "affected_junctions": affected_junctions[:3],
+            "clashing_works": clashing_works[:4],
+            "timing_flags": timing_flags,
+            "reasons": reasons,
+            "action": "DEFER" if is_lcc else "s56_TIMING_DIRECTION",
+            "recommendation": (
+                f"Defer to {'school holiday' if 'school_term' in timing_flags else 'off-peak period'} — "
+                f"{'full closure' if rc == 'full_closure' else 'lane restriction'} "
+                f"causing {int(cap_red * 100)}% capacity loss"
+                if is_lcc else
+                f"Issue s56 timing direction — require {'night works (8pm-6am)' if cap_red >= 0.5 else 'off-peak hours'} "
+                f"to reduce {int(cap_red * 100)}% capacity impact"
+            ),
+        }
+        recommendations.append(recommendation)
+
+    return sorted(recommendations, key=lambda x: -x["deferral_score"])
+
+
+def build_clash_detection(roadworks: list, corridors: list, today: date) -> list:
+    """Detect concurrent works on the same road corridor that compound congestion.
+
+    This is the s59 NRSWA 'duty to coordinate' analysis — LCC should not allow
+    multiple concurrent works on the same strategic corridor.
+    """
+    today_str = today.isoformat()
+    clashes = []
+
+    for cor in corridors:
+        cor_coords = cor["coords"]
+        cor_works = []
+
+        for rw in roadworks:
+            rlat = rw.get("lat")
+            rlng = rw.get("lng")
+            if not rlat or not rlng:
+                continue
+
+            # Check if work is near this corridor
+            min_dist = float("inf")
+            for coord in cor_coords:
+                try:
+                    d = haversine_m(float(rlat), float(rlng), coord[0], coord[1])
+                    min_dist = min(min_dist, d)
+                except (ValueError, TypeError):
+                    continue
+
+            if min_dist < 300:  # Within 300m of corridor
+                start = rw.get("start_date", "")[:10]
+                end = rw.get("end_date", "")[:10]
+                if end and end < today_str:
+                    continue
+                restriction = classify_restriction(rw)
+                cor_works.append({
+                    "road": rw.get("road", ""),
+                    "operator": rw.get("operator", ""),
+                    "start": start,
+                    "end": end,
+                    "restriction_class": restriction["restriction_class"],
+                    "capacity_reduction": restriction["capacity_reduction"],
+                    "impact_label": restriction["impact_label"],
+                    "lat": rlat,
+                    "lng": rlng,
+                })
+
+        if len(cor_works) >= 2:
+            # Check for temporal overlap pairs
+            overlapping_pairs = []
+            for i, w1 in enumerate(cor_works):
+                for w2 in cor_works[i+1:]:
+                    s1, e1 = w1["start"], w1["end"]
+                    s2, e2 = w2["start"], w2["end"]
+                    if s1 and s2:
+                        if not (e1 and e1 < s2) and not (e2 and e2 < s1):
+                            overlapping_pairs.append((w1, w2))
+
+            if overlapping_pairs:
+                total_cap_reduction = sum(w["capacity_reduction"] for w in cor_works)
+                severity = "critical" if total_cap_reduction >= 1.5 else "high" if total_cap_reduction >= 1.0 else "moderate"
+
+                clashes.append({
+                    "corridor": cor["name"],
+                    "road": cor["road"],
+                    "concurrent_works": len(cor_works),
+                    "works": cor_works,
+                    "overlapping_pairs": len(overlapping_pairs),
+                    "total_capacity_reduction": round(total_cap_reduction, 2),
+                    "severity": severity,
+                    "s59_breach": total_cap_reduction >= 1.0,  # s59 duty to coordinate likely breached
+                    "recommendation": (
+                        f"s59 NRSWA breach likely — {len(cor_works)} concurrent works on {cor['name']} "
+                        f"with combined {int(total_cap_reduction * 100)}% capacity reduction. "
+                        f"LCC must stagger these works sequentially."
+                        if total_cap_reduction >= 1.0 else
+                        f"Monitor — {len(cor_works)} works on {cor['name']}, "
+                        f"combined {int(total_cap_reduction * 100)}% capacity impact."
+                    ),
+                })
+
+    return sorted(clashes, key=lambda x: -x["total_capacity_reduction"])
+
+
+def build_timing_recommendations(roadworks: list, junctions: list, today: date) -> list:
+    """Generate s56 timing direction recommendations for utility works.
+
+    LCC has power under NRSWA 1991 s56 to direct utilities when they can work.
+    This identifies works that should receive timing directions for off-peak/night working.
+    """
+    recs = []
+    critical_junctions = [j for j in junctions if j.get("jci", 0) >= 50]
+
+    for rw in roadworks:
+        operator = rw.get("operator", "")
+        # s56 only applies to utility works, not LCC's own
+        if "lancashire" in operator.lower():
+            continue
+
+        restriction = classify_restriction(rw)
+        cap_red = restriction["capacity_reduction"]
+        if cap_red < 0.3:
+            continue  # Minor works don't need timing directions
+
+        rlat = rw.get("lat")
+        rlng = rw.get("lng")
+        if not rlat or not rlng:
+            continue
+
+        # Check junction proximity
+        near_critical = False
+        nearest_junction = None
+        for j in critical_junctions:
+            try:
+                d = haversine_m(float(rlat), float(rlng), j["lat"], j["lng"])
+            except (ValueError, TypeError):
+                continue
+            if d < 500:
+                near_critical = True
+                nearest_junction = j["name"]
+                break
+
+        if not near_critical and cap_red < 0.5:
+            continue  # Only flag if near critical junction OR major restriction
+
+        category = (rw.get("category") or "").lower()
+        if "emergency" in category:
+            continue  # Emergency works exempt from timing directions
+
+        # Determine recommended timing
+        if cap_red >= 0.6:
+            timing = "Night works only (20:00-06:00)"
+            urgency = "critical"
+        elif cap_red >= 0.4:
+            timing = "Off-peak hours (09:30-15:30 or 19:00-07:00)"
+            urgency = "high"
+        else:
+            timing = "Avoid AM/PM peaks (not 07:30-09:30 or 16:00-18:30)"
+            urgency = "moderate"
+
+        recs.append({
+            "road": rw.get("road", ""),
+            "operator": operator,
+            "restriction_class": restriction["restriction_class"],
+            "capacity_reduction": cap_red,
+            "impact_label": restriction["impact_label"],
+            "near_critical_junction": nearest_junction,
+            "timing_direction": timing,
+            "urgency": urgency,
+            "legal_basis": "NRSWA 1991 s56 — Directions as to timing of street works",
+        })
+
+    return sorted(recs, key=lambda x: -x["capacity_reduction"])
+
+
 def build_impact_heatmap(today: date, roadworks_count: int, fixtures: list) -> list:
     """Build 7-day × 24-hour traffic impact heatmap."""
     heatmap = []
@@ -813,13 +1350,15 @@ def main():
     print("\n3. Fetching Burnley FC fixtures...")
     fixtures = fetch_burnley_fc_fixtures()
 
-    # 4. Load existing roadworks for impact calculation
+    # 4. Load existing roadworks — full records for intelligent analysis
     rw_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "roadworks.json")
     active_roadworks = 0
+    roadworks_records = []
     try:
         with open(rw_path) as f:
             rw = json.load(f)
         active_roadworks = rw.get("stats", {}).get("works_started", 0)
+        roadworks_records = rw.get("roadworks", [])
     except Exception:
         pass
 
@@ -839,11 +1378,13 @@ def main():
     except Exception:
         pass
 
-    # 7. Build junction congestion index
-    print("\n5. Building Junction Congestion Index...")
-    jci_results = build_junction_congestion_index(NAMED_JUNCTIONS, count_points, active_roadworks, fms_reports)
+    # 7. Build junction congestion index (now restriction-aware)
+    print("\n5. Building Junction Congestion Index (restriction-aware)...")
+    jci_results = build_junction_congestion_index(NAMED_JUNCTIONS, count_points, roadworks_records, fms_reports)
     for j in jci_results[:5]:
-        print(f"  {j['name']}: JCI {j['jci']} ({j['jci_level']})")
+        closures = j.get("nearby_closures", 0)
+        lanes = j.get("nearby_lane_restrictions", 0)
+        print(f"  {j['name']}: JCI {j['jci']} ({j['jci_level']}) — {closures} closures, {lanes} lane restrictions nearby")
 
     # 8. Build corridor congestion scores
     print("\n6. Building corridor congestion scores...")
@@ -851,13 +1392,44 @@ def main():
     for c in corridor_results[:3]:
         print(f"  {c['name']}: severity {c['severity']} ({c['level']})")
 
-    # 9. Options appraisal
-    print("\n7. Building options appraisal...")
+    # 9. Deferral recommendations
+    print("\n7. Building deferral recommendations...")
+    deferrals = build_deferral_recommendations(roadworks_records, jci_results, corridor_results, today, fixtures)
+    lcc_deferrals = [d for d in deferrals if d["is_lcc_controlled"]]
+    utility_deferrals = [d for d in deferrals if not d["is_lcc_controlled"]]
+    print(f"  {len(lcc_deferrals)} LCC works recommended for deferral")
+    print(f"  {len(utility_deferrals)} utility works recommended for s56 timing direction")
+    for d in deferrals[:3]:
+        print(f"    {d['road']} ({d['operator']}): score {d['deferral_score']} — {d['restriction_class']}")
+
+    # 10. Clash detection (s59 coordination duty)
+    print("\n8. Detecting corridor clashes (s59 duty to coordinate)...")
+    clashes = build_clash_detection(roadworks_records, CONGESTION_CORRIDORS, today)
+    for cl in clashes:
+        print(f"  {cl['corridor']}: {cl['concurrent_works']} concurrent works, {cl['severity']} severity")
+    if not clashes:
+        print("  No corridor clashes detected")
+
+    # 11. s56 Timing direction recommendations
+    print("\n9. Building s56 timing recommendations...")
+    timing_recs = build_timing_recommendations(roadworks_records, jci_results, today)
+    print(f"  {len(timing_recs)} works need timing directions")
+
+    # 12. Restriction classification summary
+    restriction_summary = {"full_closure": 0, "lane_restriction": 0, "minor": 0}
+    for rw in roadworks_records:
+        rc = classify_restriction(rw)["restriction_class"]
+        restriction_summary[rc] += 1
+    print(f"\n10. Restriction summary: {restriction_summary['full_closure']} closures, "
+          f"{restriction_summary['lane_restriction']} lane restrictions, {restriction_summary['minor']} minor")
+
+    # 13. Options appraisal
+    print("\n11. Building options appraisal...")
     options = build_options_appraisal(jci_results, corridor_results, active_roadworks)
     print(f"  {len(options)} interventions scored")
 
-    # 10. Build impact heatmap
-    print("\n8. Building traffic impact heatmap...")
+    # 14. Build impact heatmap
+    print("\n12. Building traffic impact heatmap...")
     heatmap = build_impact_heatmap(today, active_roadworks, fixtures)
 
     # 11. School term status
@@ -897,12 +1469,29 @@ def main():
         "match_day_evening": MATCH_DAY_OVERLAY_EVENING,
     }
 
+    # Tag roadworks with restriction classification + major project flags
+    classified_works = []
+    for rw in roadworks_records:
+        restriction = classify_restriction(rw)
+        major = is_major_project_work(rw)
+        classified_works.append({
+            "id": rw.get("id"),
+            "road": rw.get("road", ""),
+            "operator": rw.get("operator", ""),
+            "restriction_class": restriction["restriction_class"],
+            "capacity_reduction": restriction["capacity_reduction"],
+            "impact_label": restriction["impact_label"],
+            "major_project": major["name"] if major else None,
+            "cannot_defer": bool(major and major.get("cannot_defer")),
+        })
+
     output = {
         "meta": {
             "source": "DfT Road Traffic API + OSM Overpass + LCC School Terms",
             "generated": datetime.now(timezone.utc).isoformat(),
             "fetch_time_ms": int((time.time() - t0) * 1000),
             "active_roadworks": active_roadworks,
+            "restriction_summary": restriction_summary,
         },
         "count_points": count_points,
         "key_roads": key_roads_list[:20],
@@ -921,6 +1510,15 @@ def main():
             "corridors": corridor_results,
             "options_appraisal": options,
         },
+        "operational_intelligence": {
+            "deferral_recommendations": deferrals[:20],
+            "lcc_deferrals": lcc_deferrals[:10],
+            "utility_s56_recommendations": utility_deferrals[:10],
+            "corridor_clashes": clashes,
+            "timing_directions": timing_recs[:15],
+            "classified_works": classified_works,
+            "major_projects": MAJOR_PROJECTS,
+        },
     }
 
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
@@ -937,7 +1535,9 @@ def main():
     print(f"Congestion: {len(jci_results)} junctions scored, {len(corridor_results)} corridors")
     print(f"Count points: {len(count_points)}, Key roads: {len(key_roads_list)}")
     print(f"Fixtures: {len(fixtures)}, School term: {'Yes' if term_status['in_term'] else 'No'}")
-    print(f"Active roadworks: {active_roadworks}, Options: {len(options)}")
+    print(f"Active roadworks: {active_roadworks} ({restriction_summary['full_closure']} closures, {restriction_summary['lane_restriction']} lane restrictions)")
+    print(f"Deferrals: {len(lcc_deferrals)} LCC, {len(utility_deferrals)} utility s56. Clashes: {len(clashes)} corridors")
+    print(f"Options: {len(options)}, Timing recs: {len(timing_recs)}")
     if heatmap:
         print(f"7-day peak: {max(h['peak_flow'] for h in heatmap):.1f}% at {max(heatmap, key=lambda h: h['peak_flow'])['day']}")
 
