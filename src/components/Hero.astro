@@ -3,41 +3,68 @@ import StatCard from './StatCard.astro';
 ---
 
 <section class="hero">
+  <div class="hero-bg-glow"></div>
   <div class="hero-content">
-    <span class="hero-eyebrow">
-      <span class="pulse-dot"></span>
-      Lancashire County Councillor &middot; Reform UK
-    </span>
+    <div class="hero-text">
+      <span class="hero-eyebrow">
+        <span class="pulse-dot"></span>
+        Lancashire County Councillor &middot; Reform UK
+      </span>
 
-    <h1>
-      Fighting for<br />
-      <span class="gradient">Padiham &amp; Burnley West</span>
-    </h1>
+      <h1>
+        Tom <span class="gradient">Pickup</span>
+      </h1>
 
-    <p class="hero-subtitle">
-      We inherited a &pound;28 million overspend and cut it to near zero.
-      Delivered the lowest council tax rise in a decade. Saved all five care homes.
-    </p>
+      <p class="hero-role">
+        Your councillor for <strong>Padiham &amp; Burnley West</strong>
+      </p>
 
-    <div class="hero-actions">
-      <a href="/contact/" class="btn btn-primary">Get in Touch</a>
-      <a
-        href="/news/"
-        class="btn btn-secondary"
-      >
-        See What We&rsquo;ve Done
-      </a>
+      <p class="hero-subtitle">
+        We inherited a &pound;28 million overspend and cut it to near zero.
+        Delivered the lowest council tax rise in 12 years. Saved all five county care homes.
+        Now we&rsquo;re rebuilding Lancashire properly.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/contact/" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          Get in Touch
+        </a>
+        <a href="/lancashire/" class="btn btn-secondary">
+          What We&rsquo;ve Delivered
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
     </div>
 
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-glow"></div>
+      <div class="hero-photo">
+        <img
+          src="/images/headshot.jpg"
+          alt="Tom Pickup — Lancashire County Councillor for Padiham and Burnley West"
+          width="400"
+          height="400"
+          loading="eager"
+        />
+      </div>
+      <div class="hero-photo-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        Elected May 2025
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats-wrap">
     <div class="hero-stats">
       <StatCard
         icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
         value="3.80%"
-        label="Lowest CT Rise in a Decade"
+        label="Lowest CT Rise in 12 Years"
         color="#30d158"
       />
       <StatCard
-        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7a4 4 0 0 0-4-4H9a4 4 0 0 0-1 7.87V16H6m2-5h6"></path><line x1="6" y1="20" x2="18" y2="20"></line></svg>'
+        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c-1-2-3.5-3-6-3-3.3 0-6 2.7-6 6 0 1.5.5 2.8 1.3 3.8"></path><path d="M4 17h12"></path><path d="M4 13h8"></path><path d="M10 7v14"></path></svg>'
         value="&pound;62M"
         label="Savings Delivered"
         color="#12b6cf"
@@ -48,35 +75,45 @@ import StatCard from './StatCard.astro';
         label="Overspend Corrected"
         color="#bf5af2"
       />
+      <StatCard
+        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
+        value="5"
+        label="Care Homes Saved"
+        color="#ff9f0a"
+      />
     </div>
-
   </div>
 </section>
 
 <style>
   .hero {
-    min-height: 90vh;
+    min-height: 92vh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    text-align: center;
     position: relative;
     overflow: hidden;
-    padding: 8rem 1.5rem 5rem;
+    padding: 7rem 1.5rem 3rem;
   }
 
-  .hero::before,
-  .hero::after {
+  .hero-bg-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero-bg-glow::before,
+  .hero-bg-glow::after {
     content: '';
     position: absolute;
     border-radius: 50%;
-    pointer-events: none;
     filter: blur(100px);
     opacity: 0.15;
     animation: gradientShift 12s ease-in-out infinite alternate;
   }
 
-  .hero::before {
+  .hero-bg-glow::before {
     width: 600px;
     height: 600px;
     top: -15%;
@@ -84,35 +121,37 @@ import StatCard from './StatCard.astro';
     background: radial-gradient(circle, #12b6cf 0%, transparent 70%);
   }
 
-  .hero::after {
+  .hero-bg-glow::after {
     width: 500px;
     height: 500px;
     bottom: -10%;
     left: -8%;
-    background: radial-gradient(circle, #12b6cf 0%, transparent 70%);
+    background: radial-gradient(circle, #bf5af2 0%, transparent 70%);
     animation-delay: -6s;
     animation-direction: alternate-reverse;
   }
 
   @keyframes gradientShift {
-    0% {
-      transform: translate(0, 0) scale(1);
-      opacity: 0.12;
-    }
-    50% {
-      transform: translate(30px, -20px) scale(1.1);
-      opacity: 0.2;
-    }
-    100% {
-      transform: translate(-20px, 15px) scale(0.95);
-      opacity: 0.1;
-    }
+    0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
+    50% { transform: translate(30px, -20px) scale(1.1); opacity: 0.2; }
+    100% { transform: translate(-20px, 15px) scale(0.95); opacity: 0.1; }
   }
 
   .hero-content {
-    max-width: 800px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--space-2xl);
+    max-width: 1100px;
+    margin: 0 auto;
     position: relative;
     z-index: 1;
+    width: 100%;
+  }
+
+  /* ---- Text side ---- */
+  .hero-text {
+    min-width: 0;
   }
 
   .hero-eyebrow {
@@ -150,23 +189,17 @@ import StatCard from './StatCard.astro';
   }
 
   @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.4;
-    }
-    50% {
-      transform: scale(1.6);
-      opacity: 0;
-    }
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.6); opacity: 0; }
   }
 
   h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2.75rem, 5.5vw, 4rem);
     font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
     color: #fff;
-    margin: 0 0 1.25rem;
+    margin: 0 0 0.75rem;
   }
 
   h1 .gradient {
@@ -179,32 +212,35 @@ import StatCard from './StatCard.astro';
   }
 
   @keyframes textShimmer {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero-role {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin: 0 0 1.25rem;
+    max-width: none;
+  }
+
+  .hero-role strong {
+    color: var(--text-primary);
   }
 
   .hero-subtitle {
-    font-size: 1.25rem;
-    color: rgba(235, 235, 245, 0.6);
-    max-width: 600px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.6;
+    font-size: 1.0625rem;
+    color: rgba(235, 235, 245, 0.55);
+    max-width: 520px;
+    margin: 0 0 2rem;
+    line-height: 1.65;
   }
 
   .hero-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 3rem;
   }
 
   .btn {
@@ -220,6 +256,12 @@ import StatCard from './StatCard.astro';
     cursor: pointer;
     border: none;
     line-height: 1;
+    background-image: none;
+  }
+
+  .btn:hover {
+    background-image: none;
+    background-size: 0;
   }
 
   .btn-primary {
@@ -249,67 +291,170 @@ import StatCard from './StatCard.astro';
     transform: translateY(-2px);
   }
 
-  .btn-secondary svg {
-    opacity: 0.6;
-    transition: opacity 0.2s ease;
+  /* ---- Photo side ---- */
+  .hero-photo-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .btn-secondary:hover svg {
-    opacity: 1;
+  .hero-photo-glow {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(18, 182, 207, 0.2) 0%, transparent 70%);
+    filter: blur(40px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: photoGlow 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes photoGlow {
+    0% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  }
+
+  .hero-photo {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(18, 182, 207, 0.3);
+    box-shadow: 0 0 40px rgba(18, 182, 207, 0.15), 0 20px 60px rgba(0, 0, 0, 0.4);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .hero-photo:hover {
+    border-color: rgba(18, 182, 207, 0.5);
+    box-shadow: 0 0 60px rgba(18, 182, 207, 0.25), 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-photo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-md);
+    padding: 6px 14px;
+    border-radius: 9999px;
+    background: rgba(48, 209, 88, 0.1);
+    border: 1px solid rgba(48, 209, 88, 0.2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #30d158;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-photo-badge svg {
+    flex-shrink: 0;
+  }
+
+  /* ---- Stats strip ---- */
+  .hero-stats-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 3rem auto 0;
+    width: 100%;
   }
 
   .hero-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
-    max-width: 640px;
-    margin: 0 auto;
   }
 
-  @media (max-width: 768px) {
+  /* ---- Responsive ---- */
+  @media (max-width: 900px) {
     .hero {
-      padding: 6rem 1rem 3rem;
+      padding: 6rem 1rem 2rem;
       min-height: auto;
     }
 
-    h1 {
-      font-size: 2.25rem;
+    .hero-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: var(--space-xl);
+    }
+
+    .hero-text {
+      order: 2;
+    }
+
+    .hero-photo-wrap {
+      order: 1;
     }
 
     .hero-subtitle {
-      font-size: 1rem;
-      margin-bottom: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-photo {
+      width: 200px;
+      height: 200px;
+    }
+
+    .hero-photo-glow {
+      width: 240px;
+      height: 240px;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 6vw, 3rem);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .hero-actions {
       flex-direction: column;
-      margin-bottom: 2rem;
+      width: 100%;
     }
 
     .btn {
       width: 100%;
       justify-content: center;
     }
+  }
+
+  @media (max-width: 480px) {
+    .hero-photo {
+      width: 160px;
+      height: 160px;
+    }
+
+    .hero-photo-glow {
+      width: 200px;
+      height: 200px;
+    }
 
     .hero-stats {
       grid-template-columns: 1fr;
       gap: 0.75rem;
     }
-
-    .hero::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .hero::after {
-      width: 250px;
-      height: 250px;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero::before,
-    .hero::after {
+    .hero-bg-glow::before,
+    .hero-bg-glow::after {
       animation: none;
     }
 
@@ -318,6 +463,10 @@ import StatCard from './StatCard.astro';
     }
 
     .pulse-dot::after {
+      animation: none;
+    }
+
+    .hero-photo-glow {
       animation: none;
     }
   }

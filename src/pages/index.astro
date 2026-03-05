@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import PriorityCard from '../components/PriorityCard.astro';
 import ComparisonBar from '../components/ComparisonBar.astro';
 import TrustCertificate from '../components/TrustCertificate.astro';
 import NewsCard from '../components/NewsCard.astro';
@@ -19,39 +18,62 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   <!-- Section 1: Hero -->
   <Hero />
 
-  <!-- Section 2: What I Stand For -->
-  <section class="priorities-section">
+  <!-- Section 2: What We've Delivered -->
+  <section class="achievements-section">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
-          <h2 class="section-heading">What I Stand For</h2>
-          <p class="section-subtitle">My priorities as your councillor for Padiham and Burnley West</p>
+          <h2 class="section-heading">What We&rsquo;ve Delivered</h2>
+          <p class="section-subtitle">Reform took control of Lancashire County Council in May 2025. Here&rsquo;s what&rsquo;s changed.</p>
         </div>
 
-        <div class="priorities-grid stagger-children">
-          <PriorityCard
-            title="Council Tax: 7 Years of Maximum Rises: Ended"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
-            description="The Conservatives raised council tax to the legal maximum in 7 of their 8 years in control, including the highest rise in Lancashire&rsquo;s history at 5.99%. Reform&rsquo;s first budget delivered 3.80%, the lowest in 12 years."
-          />
-          <PriorityCard
-            title="&pound;28M Inherited Overspend: Nearly Eliminated"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7a4 4 0 0 0-4-4H9a4 4 0 0 0-1 7.87V16H6m2-5h6"></path><line x1="6" y1="20" x2="18" y2="20"></line></svg>'
-            description="When Reform took control, LCC was forecasting a &pound;28 million overspend. Through targeted action, we&rsquo;ve cut it to &pound;6.1 million and falling, without slashing front-line services."
-            color="#ff9f0a"
-          />
-          <PriorityCard
-            title="Five County Care Homes: Future Secured"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
-            description="We inherited a Conservative consultation on the future of five county care homes. After listening to 1,600+ residents, we secured their future with new investment pledged, because elderly care isn&rsquo;t a line to cut."
-            color="#30d158"
-          />
-          <PriorityCard
-            title="&pound;350M Bond Losses the Conservatives Concealed: Exposed"
-            icon='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
-            description="&pound;519 million invested in VeLTIP bonds now worth an estimated &pound;169 million. The previous Conservative administration failed to transparently report the true scale of these paper losses to councillors or the public."
-            color="#bf5af2"
-          />
+        <div class="achievements-grid stagger-children">
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #30d158; background: rgba(48, 209, 88, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <div class="achievement-stat" style="color: #30d158;">3.80%</div>
+            <h3 class="achievement-title">Lowest Council Tax Rise in 12 Years</h3>
+            <p class="achievement-desc">The Conservatives raised council tax to the legal maximum in 7 of 8 years, including a record 5.99%. Reform&rsquo;s first budget ended that streak.</p>
+            <span class="achievement-before">Was: 4.99% &ndash; 5.99%</span>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #12b6cf; background: rgba(18, 182, 207, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c-1-2-3.5-3-6-3-3.3 0-6 2.7-6 6 0 1.5.5 2.8 1.3 3.8"></path><path d="M4 17h12"></path><path d="M4 13h8"></path><path d="M10 7v14"></path></svg>
+            </div>
+            <div class="achievement-stat" style="color: #12b6cf;">&pound;28M &rarr; &pound;6M</div>
+            <h3 class="achievement-title">Overspend Nearly Eliminated</h3>
+            <p class="achievement-desc">We inherited a &pound;28 million budget overspend. Through targeted efficiency, not front-line cuts, it&rsquo;s been reduced by 78%.</p>
+            <span class="achievement-before">Inherited: &pound;28M overspend</span>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #ff9f0a; background: rgba(255, 159, 10, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </div>
+            <div class="achievement-stat" style="color: #ff9f0a;">5 Saved</div>
+            <h3 class="achievement-title">County Care Homes Secured</h3>
+            <p class="achievement-desc">The Conservatives were consulting on closures. After hearing 1,600+ residents, Reform secured their future with new investment pledged.</p>
+            <span class="achievement-before">Was: Facing closure consultation</span>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #bf5af2; background: rgba(191, 90, 242, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
+            <div class="achievement-stat" style="color: #bf5af2;">&pound;350M</div>
+            <h3 class="achievement-title">Bond Losses Exposed</h3>
+            <p class="achievement-desc">&pound;519M invested in VeLTIP bonds now worth an estimated &pound;169M. The previous administration failed to transparently report these paper losses.</p>
+            <span class="achievement-before">Was: Concealed from councillors</span>
+          </div>
+        </div>
+
+        <div class="achievements-cta">
+          <a href="/lancashire/" class="btn-secondary">
+            Full LCC Report
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
         </div>
       </ScrollReveal>
     </div>
@@ -62,8 +84,8 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     <div class="container">
       <ScrollReveal>
         <div class="section-header" style="text-align: center;">
-          <h2 class="section-heading">Your Ward. Your Councillors. Your Services.</h2>
-          <p class="section-subtitle" style="max-width: 600px; margin: var(--space-sm) auto 0;">
+          <h2 class="section-heading" style="display: block; text-align: center;">Your Ward. Your Councillors.</h2>
+          <p class="section-subtitle" style="max-width: 560px; margin: var(--space-sm) auto 0; text-align: center;">
             Select your ward to see who represents you, how your area compares, and what&rsquo;s happening locally.
           </p>
         </div>
@@ -73,12 +95,117 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 4: Latest News -->
+  <!-- Section 4: Reform vs Conservative -->
+  <section class="comparison-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <span class="badge badge-teal">Reform UK vs Conservative</span>
+            <h2 class="comparison-title">The Numbers Speak</h2>
+            <p class="comparison-subtitle">Lancashire County Council: first year in office</p>
+          </div>
+
+          <div class="comparison-bars">
+            <ComparisonBar
+              title="Council Tax Rise"
+              reformValue="3.80%"
+              reformPercent={63}
+              conValue="4.99%"
+              conPercent={83}
+              lowerIsBetter={true}
+              annotation="Reform delivered the lowest council tax rise in 12 years"
+            />
+            <ComparisonBar
+              title="Savings Delivery Rate"
+              reformValue="90%+"
+              reformPercent={90}
+              conValue="48%"
+              conPercent={48}
+              annotation="Conservative savings delivery collapsed over 8 years"
+            />
+            <ComparisonBar
+              title="Overspend"
+              reformValue="&pound;6.1M"
+              reformPercent={22}
+              conValue="&pound;28M"
+              conPercent={100}
+              lowerIsBetter={true}
+              annotation="78% reduction in inherited overspend without front-line cuts"
+            />
+          </div>
+
+          <div class="comparison-trust">
+            <TrustCertificate />
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 5: Explore -->
+  <section class="explore-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header" style="text-align: center;">
+          <h2 class="section-heading" style="display: block; text-align: center;">Explore</h2>
+        </div>
+
+        <div class="explore-grid stagger-children">
+          <a href="/lancashire/" class="explore-card">
+            <div class="explore-icon" style="color: #12b6cf; background: rgba(18, 182, 207, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="explore-text">
+              <h3>Lancashire County Council</h3>
+              <p>9 departments, &pound;1.33B budget, inherited crises and Reform achievements</p>
+            </div>
+            <svg class="explore-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+
+          <a href="/my-ward/" class="explore-card">
+            <div class="explore-icon" style="color: #30d158; background: rgba(48, 209, 88, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div class="explore-text">
+              <h3>Padiham &amp; Burnley West</h3>
+              <p>&pound;1.71M LCC spending, 7 schools funded, 18,599 residents served</p>
+            </div>
+            <svg class="explore-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+
+          <a href="/burnley/" class="explore-card">
+            <div class="explore-icon" style="color: #ff9f0a; background: rgba(255, 159, 10, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+            <div class="explore-text">
+              <h3>Burnley Borough Council</h3>
+              <p>All 15 wards, councillor data, elections, deprivation and planning</p>
+            </div>
+            <svg class="explore-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+
+          <a href="/transparency/" class="explore-card">
+            <div class="explore-icon" style="color: #bf5af2; background: rgba(191, 90, 242, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
+            <div class="explore-text">
+              <h3>AI DOGE Transparency</h3>
+              <p>Search every council transaction. &pound;12.9 billion across 15 Lancashire councils</p>
+            </div>
+            <svg class="explore-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 6: Latest News -->
   <section class="news-section">
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
-          <h2 class="section-heading">Latest News &amp; Updates</h2>
+          <h2 class="section-heading">Latest News</h2>
         </div>
 
         {posts.length > 0 ? (
@@ -111,92 +238,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 4: Reform at LCC -->
-  <section class="reform-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="reform-card">
-          <div class="reform-content">
-            <div class="reform-text">
-              <span class="badge badge-teal">Reform UK at Lancashire County Council</span>
-              <h2>Changing Lancashire for the Better</h2>
-              <p>
-                In May 2025, Reform won a historic landslide, 53 of 84 seats. In our first year,
-                we&rsquo;ve delivered a balanced &pound;1.33 billion budget with the lowest council tax rise
-                in 12 years. We corrected a &pound;28 million inherited overspend, saved all five county
-                care homes, and stopped councillors collecting salaries for pension fund directorships.
-              </p>
-              <p>
-                The previous Conservative administration raised council tax to the maximum in 7 of 8 years,
-                saw savings delivery collapse from 91% to 48%, and left &pound;350 million in concealed bond losses.
-                We&rsquo;re doing things differently.
-              </p>
-              <a
-                href="/news/"
-                class="btn-primary reform-cta"
-              >
-                Read the Full Story
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-            </div>
-
-            <div class="reform-comparisons">
-              <ComparisonBar
-                title="Council Tax Rise"
-                reformValue="3.80%"
-                reformPercent={63}
-                conValue="4.99%"
-                conPercent={83}
-                lowerIsBetter={true}
-                annotation="Reform delivered the lowest council tax rise in 12 years"
-              />
-              <ComparisonBar
-                title="Savings Delivery Rate"
-                reformValue="90%+"
-                reformPercent={90}
-                conValue="48%"
-                conPercent={48}
-                annotation="Conservative savings delivery collapsed over 8 years"
-              />
-              <ComparisonBar
-                title="Overspend"
-                reformValue="&pound;6.1M"
-                reformPercent={22}
-                conValue="&pound;28M"
-                conPercent={100}
-                lowerIsBetter={true}
-                annotation="78% reduction in inherited overspend without front-line cuts"
-              />
-            </div>
-
-            <div class="reform-stats">
-              <div class="reform-stat">
-                <span class="reform-stat-value tabular-nums">3.80%</span>
-                <span class="reform-stat-label">Lowest CT Rise in 12 Years</span>
-              </div>
-              <div class="reform-stat">
-                <span class="reform-stat-value tabular-nums">&pound;62M</span>
-                <span class="reform-stat-label">Savings Identified</span>
-              </div>
-              <div class="reform-stat">
-                <span class="reform-stat-value tabular-nums">&pound;1.33B</span>
-                <span class="reform-stat-label">Balanced Budget</span>
-              </div>
-            </div>
-
-            <div class="reform-trust">
-              <TrustCertificate />
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
-  <!-- Section 5: Email Signup -->
+  <!-- Section 7: Email Signup -->
   <section class="signup-section">
     <div class="container">
       <ScrollReveal>
@@ -205,7 +247,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 6: Contact CTA -->
+  <!-- Section 8: Contact CTA -->
   <section class="contact-cta-section">
     <div class="container">
       <ScrollReveal>
@@ -230,9 +272,10 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
 <style>
   /* ---- Section Spacing ---- */
-  .priorities-section,
+  .achievements-section,
   .news-section,
-  .reform-section,
+  .comparison-section,
+  .explore-section,
   .ward-finder-section {
     padding: var(--space-2xl) 0;
   }
@@ -257,11 +300,211 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     max-width: 520px;
   }
 
-  /* ---- Priorities Grid ---- */
-  .priorities-grid {
+  /* ---- Achievement Cards ---- */
+  .achievements-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
+  }
+
+  .achievement-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+  }
+
+  .achievement-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .achievement-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    transition: transform var(--transition-fast);
+  }
+
+  .achievement-card:hover .achievement-icon {
+    transform: scale(1.05);
+  }
+
+  .achievement-stat {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .achievement-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+  }
+
+  .achievement-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--space-md);
+  }
+
+  .achievement-before {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    padding: 3px 10px;
+    background: rgba(255, 69, 58, 0.06);
+    border: 1px solid rgba(255, 69, 58, 0.1);
+    border-radius: 9999px;
+    letter-spacing: 0.01em;
+  }
+
+  .achievements-cta {
+    text-align: center;
+    margin-top: var(--space-xl);
+  }
+
+  /* ---- Comparison Section ---- */
+  .comparison-card {
+    background: rgba(28, 28, 30, 0.6);
+    backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .comparison-card:hover {
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--accent);
+  }
+
+  .comparison-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: var(--space-md) 0 var(--space-xs);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .comparison-subtitle {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    max-width: none;
+  }
+
+  .comparison-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-trust {
+    /* full width */
+  }
+
+  /* ---- Explore Grid ---- */
+  .explore-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .explore-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    background-image: none;
+    color: inherit;
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+  }
+
+  .explore-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    background-image: none;
+    background-size: 0;
+  }
+
+  .explore-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+  }
+
+  .explore-card:hover .explore-icon {
+    transform: scale(1.05);
+  }
+
+  .explore-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .explore-text h3 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+    line-height: 1.3;
+  }
+
+  .explore-text p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .explore-arrow {
+    flex-shrink: 0;
+    color: var(--text-tertiary);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .explore-card:hover .explore-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
   }
 
   /* ---- News Grid ---- */
@@ -279,103 +522,6 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   .empty-state {
     text-align: center;
     padding: var(--space-2xl) var(--space-lg);
-  }
-
-  /* ---- Reform Card ---- */
-  .reform-card {
-    background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-left: 3px solid var(--accent);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
-  }
-
-  .reform-card:hover {
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
-    border-color: rgba(255, 255, 255, 0.1);
-    border-left-color: var(--accent);
-  }
-
-  .reform-content {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: var(--space-xl);
-    align-items: start;
-  }
-
-  .reform-comparisons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    grid-column: 1 / -1;
-  }
-
-  .reform-trust {
-    grid-column: 1 / -1;
-  }
-
-  .reform-text h2 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin: var(--space-md) 0 var(--space-md);
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .reform-text p {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    margin-bottom: var(--space-md);
-  }
-
-  .reform-cta {
-    margin-top: var(--space-sm);
-  }
-
-  .reform-stats {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .reform-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: var(--space-lg) var(--space-md);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-md);
-    transition: border-color var(--transition-normal), transform var(--transition-fast);
-  }
-
-  .reform-stat:hover {
-    border-color: var(--accent-border);
-    transform: translateY(-2px);
-  }
-
-  .reform-stat-value {
-    font-size: 1.75rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--accent);
-    line-height: 1.1;
-  }
-
-  .reform-stat-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
   }
 
   /* ---- Contact CTA ---- */
@@ -494,21 +640,13 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
 
   /* ---- Responsive ---- */
   @media (max-width: 1024px) {
-    .reform-content {
+    .explore-grid {
       grid-template-columns: 1fr;
-    }
-
-    .reform-stats {
-      flex-direction: row;
-    }
-
-    .reform-stat {
-      flex: 1;
     }
   }
 
   @media (max-width: 768px) {
-    .priorities-grid {
+    .achievements-grid {
       grid-template-columns: 1fr;
     }
 
@@ -516,11 +654,7 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
       grid-template-columns: 1fr;
     }
 
-    .reform-stats {
-      flex-direction: column;
-    }
-
-    .reform-card {
+    .comparison-card {
       padding: var(--space-lg);
     }
 
@@ -539,9 +673,10 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
   }
 
   @media (max-width: 480px) {
-    .priorities-section,
+    .achievements-section,
     .news-section,
-    .reform-section {
+    .comparison-section,
+    .explore-section {
       padding: var(--space-xl) 0;
     }
 
@@ -550,13 +685,22 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
       border-radius: var(--radius-lg);
     }
 
-    .reform-card {
+    .comparison-card {
+      padding: var(--space-md);
+    }
+
+    .achievement-stat {
+      font-size: 1.5rem;
+    }
+
+    .explore-card {
       padding: var(--space-md);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reform-stat {
+    .achievement-card,
+    .explore-card {
       transition: none;
     }
   }
