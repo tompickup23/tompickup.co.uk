@@ -137,12 +137,9 @@ const cedBoundaries = cedBoundariesData as any[];
 
   <!-- Legend -->
   <div class="rw-legend">
-    <div class="rw-legend-item"><span class="rw-lg-dot rw-lg-pulse" style="background:#ef4444"></span>Active — High</div>
-    <div class="rw-legend-item"><span class="rw-lg-dot rw-lg-pulse" style="background:#f59e0b"></span>Active — Med</div>
-    <div class="rw-legend-item"><span class="rw-lg-dot rw-lg-pulse" style="background:#22c55e"></span>Active — Low</div>
-    <div class="rw-legend-item"><span class="rw-lg-ring" style="border-color:#ef4444"></span>Planned — High</div>
-    <div class="rw-legend-item"><span class="rw-lg-ring" style="border-color:#f59e0b"></span>Planned — Med</div>
-    <div class="rw-legend-item"><span class="rw-lg-ring" style="border-color:#22c55e"></span>Planned — Low</div>
+    <div class="rw-legend-item"><span class="rw-lg-dot rw-lg-pulse" style="background:#dc2626"></span>Road Closed</div>
+    <div class="rw-legend-item"><span class="rw-lg-dot rw-lg-pulse" style="background:#f59e0b"></span>Lane Restriction</div>
+    <div class="rw-legend-item"><span class="rw-lg-dot" style="background:#6b7280;opacity:0.5"></span>Minor Works</div>
     <div class="rw-legend-item"><span class="rw-lg-line" style="background:rgba(245,158,11,0.5)"></span>County div.</div>
     <div class="rw-legend-item"><span class="rw-lg-line rw-lg-dash" style="background:rgba(18,182,207,0.45)"></span>Ward</div>
   </div>
@@ -176,6 +173,20 @@ const cedBoundaries = cedBoundariesData as any[];
   var SEV_COLORS = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' };
   var SEV_ORDER = { high: 1, medium: 2, low: 3 };
 
+  // Restriction type classification — derived from raw roadworks fields
+  var RESTRICTION_COLORS = { full_closure: '#dc2626', lane_restriction: '#f59e0b', minor: '#6b7280' };
+  var RESTRICTION_LABELS = { full_closure: 'Road Closed', lane_restriction: 'Lane Restriction', minor: 'Minor Works' };
+  var RESTRICTION_ICONS = { full_closure: '\u26D4', lane_restriction: '\u26A0', minor: '\u2022' };
+
+  function classifyRestriction(rw) {
+    var tc = (rw.traffic_constriction || '').toLowerCase();
+    var mt = (rw.management_type || '').toLowerCase();
+    var rest = (rw.restrictions || '').toLowerCase();
+    if (tc === 'roadblocked' || mt === 'roadclosed') return 'full_closure';
+    if (tc === 'lanesblocked' || mt === 'laneclosures' || rest === 'temporarytrafficlights') return 'lane_restriction';
+    return 'minor';
+  }
+
   var CED_STYLE = { color: 'rgba(245,158,11,0.5)', weight: 2.5, fillColor: 'rgba(245,158,11,0.04)', fillOpacity: 1, dashArray: null, interactive: false };
   var WARD_STYLE = { color: 'rgba(18,182,207,0.45)', weight: 1.5, fillColor: 'rgba(18,182,207,0.05)', fillOpacity: 1, dashArray: '5 5', interactive: false };
 
@@ -198,16 +209,21 @@ const cedBoundaries = cedBoundariesData as any[];
   function durationDays(r) { var s=toDateOnly(r.start_date),e=toDateOnly(r.end_date); return (s&&e)?Math.max(1,daysBetween(s,e)):0; }
   function durationLabel(d) { return d<=1?'1 day':d<7?d+' days':d<30?Math.round(d/7)+' wk'+(Math.round(d/7)!==1?'s':''):Math.round(d/30)+' mo'+(Math.round(d/30)!==1?'s':''); }
 
-  // Animate counter
+  // Animate counter — settles at final value, skips animation during play
   function animateCount(el, target) {
     if (!el) return;
-    var start = 0, duration = 600, startTime = null;
+    // During play, just set immediately to avoid perpetual animation
+    if (playInterval) { el.textContent = target; return; }
+    var start = parseInt(el.textContent) || 0;
+    if (start === target) { el.textContent = target; return; }
+    var duration = 400, startTime = null;
     function step(ts) {
       if (!startTime) startTime = ts;
       var p = Math.min((ts - startTime) / duration, 1);
       var ease = 1 - Math.pow(1 - p, 3);
       el.textContent = Math.round(start + (target - start) * ease);
       if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target; // Ensure exact final value
     }
     requestAnimationFrame(step);
   }
@@ -409,7 +425,10 @@ const cedBoundaries = cedBoundariesData as any[];
     if (modeBtn) { modeBtn.textContent = timelineMode === 'all' ? 'All dates' : 'Date filter'; modeBtn.classList.toggle('active', timelineMode === 'date'); }
     var statsEl = document.getElementById('timeline-stats');
     if (statsEl && timelineMode === 'date' && selectedDate) {
-      statsEl.textContent = countActiveOnDate(selectedDate) + ' active';
+      var cnt = countActiveOnDate(selectedDate);
+      var today = new Date(); today.setHours(0,0,0,0);
+      var isToday = selectedDate && selectedDate.getTime() === today.getTime();
+      statsEl.textContent = cnt + ' works' + (isToday ? ' (today)' : '');
       statsEl.style.opacity = '1';
     } else if (statsEl) { statsEl.style.opacity = '0'; }
   }
@@ -458,35 +477,62 @@ const cedBoundaries = cedBoundariesData as any[];
     var filtered = getFiltered();
     filtered.forEach(function(rw) {
       if (!rw.lat || !rw.lng) return;
-      var color = SEV_COLORS[rw.severity] || '#8e8e93';
       var isActive = rw.status === 'Works started';
+      var rc = classifyRestriction(rw);
+      var rcColor = RESTRICTION_COLORS[rc];
+      var rcLabel = RESTRICTION_LABELS[rc];
       var m;
 
-      if (isActive) {
-        // Pulsing div marker for active works
+      if (rc === 'full_closure') {
+        // Full closures — large pulsing marker with X icon
         m = L.marker([rw.lat, rw.lng], {
           icon: L.divIcon({
-            className: 'rw-marker-active',
-            html: '<div class="rw-marker-pulse" style="--mc:'+color+'"></div><div class="rw-marker-core" style="background:'+color+'"></div>',
-            iconSize: [22, 22], iconAnchor: [11, 11],
+            className: 'rw-marker-closure',
+            html: '<div class="rw-marker-pulse" style="--mc:'+rcColor+'"></div>'
+                + '<div class="rw-marker-core rw-marker-closure-core" style="background:'+rcColor+'">'
+                + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+                + '</div>',
+            iconSize: [26, 26], iconAnchor: [13, 13],
+          })
+        });
+      } else if (rc === 'lane_restriction') {
+        // Lane restrictions — medium marker with warning triangle
+        var laneColor = isActive ? '#f59e0b' : '#d97706';
+        m = L.marker([rw.lat, rw.lng], {
+          icon: L.divIcon({
+            className: 'rw-marker-lane' + (isActive ? ' rw-marker-active' : ''),
+            html: (isActive ? '<div class="rw-marker-pulse" style="--mc:'+laneColor+'"></div>' : '')
+                + '<div class="rw-marker-core rw-marker-lane-core" style="background:'+laneColor+'">'
+                + '<svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/></svg>'
+                + '</div>',
+            iconSize: [20, 20], iconAnchor: [10, 10],
           })
         });
       } else {
+        // Minor works — small dot
         m = L.circleMarker([rw.lat, rw.lng], {
-          radius: 7, fillColor: color, fillOpacity: 0.12, color: color, weight: 1.5, opacity: 0.7,
+          radius: isActive ? 5 : 4,
+          fillColor: isActive ? '#6b7280' : '#4b5563',
+          fillOpacity: isActive ? 0.6 : 0.25,
+          color: '#6b7280',
+          weight: 1,
+          opacity: isActive ? 0.8 : 0.4,
         });
       }
 
-      // Popup
-      var sb = '<span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+color+'18;color:'+color+'">'+esc(rw.severity)+'</span>';
+      // Popup — now includes restriction type badge
+      var sevColor = SEV_COLORS[rw.severity] || '#8e8e93';
       var stb = '<span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+(isActive?'#ef444418':'#f59e0b18')+';color:'+(isActive?'#ef4444':'#f59e0b')+'">'+(isActive?'Active':'Planned')+'</span>';
+      var rtb = '<span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+rcColor+'18;color:'+rcColor+'">'+esc(rcLabel)+'</span>';
+      var sb = '<span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+sevColor+'18;color:'+sevColor+'">'+esc(rw.severity)+'</span>';
 
+      var days = durationDays(rw);
       var h = '<div style="font-family:Inter,-apple-system,sans-serif;min-width:240px;max-width:320px">'
         + '<div style="font-weight:700;font-size:15px;margin-bottom:3px;color:#fff;letter-spacing:-.01em">'+esc(rw.road)+'</div>'
         + '<div style="font-size:12px;color:rgba(235,235,245,0.4);margin-bottom:8px">'+esc(rw.ward)+'</div>'
-        + '<div style="display:flex;gap:5px;margin-bottom:10px">'+stb+sb+'</div>'
+        + '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">'+stb+rtb+sb+'</div>'
         + '<div style="font-size:12.5px;color:rgba(235,235,245,0.7);line-height:1.7">'
-        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+'</div>'
+        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' <span style="color:rgba(235,235,245,0.3)">(' + durationLabel(days) + ')</span></div>'
         + '<div><span style="color:rgba(235,235,245,0.35)">Operator</span> '+esc(rw.operator)+'</div>';
       if (rw.restrictions) h += '<div><span style="color:rgba(235,235,245,0.35)">Restrictions</span> '+esc(humanRestriction(rw.restrictions))+'</div>';
       if (rw.impact) h += '<div><span style="color:rgba(235,235,245,0.35)">Impact</span> '+esc(rw.impact.replace(/([a-z])([A-Z])/g,'$1 $2'))+'</div>';
@@ -501,9 +547,10 @@ const cedBoundaries = cedBoundariesData as any[];
 
     var statsEl = document.getElementById('map-stats-showing');
     if (statsEl) {
-      var a = filtered.filter(function(r){return r.status==='Works started';}).length;
-      var p = filtered.filter(function(r){return r.status==='Planned works';}).length;
-      statsEl.textContent = filtered.length + ' roadworks \u00b7 ' + a + ' active \u00b7 ' + p + ' planned';
+      var closures = filtered.filter(function(r){return classifyRestriction(r)==='full_closure';}).length;
+      var lanes = filtered.filter(function(r){return classifyRestriction(r)==='lane_restriction';}).length;
+      var minor = filtered.filter(function(r){return classifyRestriction(r)==='minor';}).length;
+      statsEl.textContent = filtered.length + ' works \u00b7 ' + closures + ' closures \u00b7 ' + lanes + ' lane restrictions \u00b7 ' + minor + ' minor';
     }
   }
 
@@ -518,15 +565,14 @@ const cedBoundaries = cedBoundariesData as any[];
     display.forEach(function(rw) {
       var c = SEV_COLORS[rw.severity]||'#8e8e93', isA = rw.status==='Works started';
       var days = durationDays(rw), dur = durationLabel(days), bp = Math.min(100, days/90*100);
-      var rest = rw.restrictions ? humanRestriction(rw.restrictions) : '';
+      var rc = classifyRestriction(rw), rcColor = RESTRICTION_COLORS[rc], rcLabel = RESTRICTION_LABELS[rc];
       h += '<div class="rw-card" data-id="'+rw.id+'">'
-        + '<div class="rw-card-bar" style="background:'+c+';opacity:'+(isA?'1':'0.3')+'"></div>'
+        + '<div class="rw-card-bar" style="background:'+rcColor+';opacity:'+(isA?'1':'0.4')+'"></div>'
         + '<div class="rw-card-body">'
         + '<div class="rw-card-top"><div class="rw-card-road">'+esc(rw.road)+'</div>'
         + '<div class="rw-card-tags">'
         + '<span class="rw-tag" style="background:'+(isA?'#ef444418':'#f59e0b18')+';color:'+(isA?'#ef4444':'#f59e0b')+'">'+(isA?'Active':'Planned')+'</span>'
-        + '<span class="rw-tag" style="background:'+c+'18;color:'+c+'">'+esc(rw.severity)+'</span>'
-        + (rest?'<span class="rw-tag rw-tag-muted">'+esc(rest)+'</span>':'')
+        + '<span class="rw-tag" style="background:'+rcColor+'18;color:'+rcColor+'">'+esc(rcLabel)+'</span>'
         + '</div></div>'
         + '<div class="rw-card-meta">'+esc(rw.ward)+'<span class="rw-sep">\u00b7</span>'+esc(rw.operator)+'</div>'
         + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' ('+dur+')</div>'
@@ -728,7 +774,8 @@ const cedBoundaries = cedBoundariesData as any[];
     if (playInterval) { clearInterval(playInterval); playInterval=null; document.getElementById('play-icon').style.display=''; document.getElementById('pause-icon').style.display='none'; return; }
     timelineMode='date'; document.getElementById('play-icon').style.display='none'; document.getElementById('pause-icon').style.display='';
     var c = daysBetween(dateRangeStart, selectedDate), mx = daysBetween(dateRangeStart, dateRangeEnd);
-    playInterval = setInterval(function() { c++; if(c>mx){clearInterval(playInterval);playInterval=null;document.getElementById('play-icon').style.display='';document.getElementById('pause-icon').style.display='none';return;} setTimelineDate(c); }, 200);
+    // 600ms per day — readable pace, counters settle between steps
+    playInterval = setInterval(function() { c++; if(c>mx){clearInterval(playInterval);playInterval=null;document.getElementById('play-icon').style.display='';document.getElementById('pause-icon').style.display='none';return;} setTimelineDate(c); }, 600);
   });
 
   var sortEl = document.getElementById('rw-sort');
@@ -1073,28 +1120,43 @@ const cedBoundaries = cedBoundariesData as any[];
     letter-spacing: 0.01em;
   }
 
-  /* --- Pulsing markers --- */
-  :global(.rw-marker-active) { background: transparent !important; border: none !important; }
+  /* --- Markers — restriction-type aware --- */
+  :global(.rw-marker-active),
+  :global(.rw-marker-closure),
+  :global(.rw-marker-lane) { background: transparent !important; border: none !important; }
 
   :global(.rw-marker-pulse) {
     position: absolute;
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: var(--mc, #ef4444);
     opacity: 0.2;
     animation: marker-pulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    top: 0; left: 0;
   }
 
   :global(.rw-marker-core) {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 12px;
-    height: 12px;
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--mc, rgba(239,68,68,0.6)), 0 0 20px var(--mc, rgba(239,68,68,0.2));
-    border: 1.5px solid rgba(255,255,255,0.3);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  :global(.rw-marker-closure-core) {
+    top: 3px; left: 3px;
+    width: 20px; height: 20px;
+    box-shadow: 0 0 14px rgba(220,38,38,0.7), 0 0 28px rgba(220,38,38,0.3);
+  }
+
+  :global(.rw-marker-lane-core) {
+    top: 3px; left: 3px;
+    width: 14px; height: 14px;
+    box-shadow: 0 0 10px rgba(245,158,11,0.5);
+  }
+
+  :global(.rw-marker-lane .rw-marker-pulse) {
+    width: 20px; height: 20px;
   }
 
   @keyframes marker-pulse {

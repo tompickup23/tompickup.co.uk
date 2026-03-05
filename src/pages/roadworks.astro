@@ -36,7 +36,29 @@ const utilityS56 = opsIntel.utility_s56_recommendations || [];
 const corridorClashes = opsIntel.corridor_clashes || [];
 const timingDirections = opsIntel.timing_directions || [];
 const majorProjects = opsIntel.major_projects || [];
+const classifiedWorks = opsIntel.classified_works || [];
 const restrictionSummary = trafficData.meta?.restriction_summary || {};
+const validity = trafficData.meta?.validity || {};
+const coverage = trafficData.meta?.coverage || {};
+
+// Filtering funnel — shows the public exactly how we narrow down to actionable deferrals
+const totalWorks = coverage.total_works || 0;
+const worksStarted = coverage.works_started || 0;
+const lufWorks = coverage.luf_programme_works || 0;
+const bridgeWorks = coverage.bridge_structural_works || 0;
+const nonDeferrable = coverage.non_deferrable_total || 0;
+const lccWorksCount = classifiedWorks.filter((w: any) => (w.operator || '').includes('Lancashire')).length;
+const utilityWorksCount = totalWorks - lccWorksCount;
+
+const planningWorks = coverage.planning_obligation_works || 0;
+
+// Non-deferrable reasons breakdown for funnel
+const nonDeferrableReasons = [
+  { label: 'Works already started', count: worksStarted, reason: 'Road physically dug up \u2014 cannot stop mid-construction' },
+  { label: 'LUF programme works', count: lufWorks, reason: 'Levelling Up Fund grant \u2014 deferral risks losing \u00A319.9M government funding' },
+  { label: 'Bridge/structural safety', count: bridgeWorks, reason: 'S1 Highways Act 1980 duty to maintain \u2014 structural safety obligation' },
+  { label: 'Planning obligations', count: planningWorks, reason: 'Tied to s106/s278 planning agreement \u2014 legal obligation to housing developers' },
+].filter((r: any) => r.count > 0);
 
 // Heatmap colour
 function heatColor(level: string): string {
@@ -540,10 +562,13 @@ const schoolBands = [
         <div class="section-header">
           <h2 class="section-heading">Operational Intelligence</h2>
           <p class="section-sub">
-            Restriction-aware analysis of {restrictionSummary.full_closure || 0} full closures,
-            {restrictionSummary.lane_restriction || 0} lane restrictions, and
-            {restrictionSummary.minor || 0} minor works — identifying deferrals, clashes, and timing opportunities
+            Restriction-aware analysis of {totalWorks} roadworks — identifying which LCC can defer,
+            which need utility timing directions, and where corridor clashes breach coordination duties.
+            {validity.in_school_term && <span class="term-badge">School term ({validity.current_term})</span>}
           </p>
+          {validity.analysis_valid_until && (
+            <p class="intel-validity">Analysis valid until {new Date(validity.analysis_valid_until).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}. Next school holiday: {validity.next_school_holiday ? new Date(validity.next_school_holiday).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' }) : 'unknown'}.</p>
+          )}
         </div>
       </ScrollReveal>
 
@@ -567,6 +592,46 @@ const schoolBands = [
             <div class="restriction-count">{restrictionSummary.minor || 0}</div>
             <div class="restriction-label">Minor Works</div>
             <div class="restriction-desc">Footway or verge — minimal traffic impact.</div>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      <!-- Deferral Filtering Funnel — transparency on why most works can't be deferred -->
+      <ScrollReveal>
+        <div class="funnel-section">
+          <h3 class="intel-subheading">Why Can't LCC Just Delay These?</h3>
+          <p class="intel-desc">
+            Of {totalWorks} roadworks in Burnley, {lccWorksCount} are LCC's own works and {utilityWorksCount} are utilities
+            (BT, Cadent, ENWL, UU, IX Wireless, Virgin Media). LCC can defer its own planned works,
+            but most are constrained by legal, safety, or funding obligations.
+          </p>
+          <div class="funnel-visual">
+            <div class="funnel-step">
+              <div class="funnel-bar" style={`width: 100%`}></div>
+              <div class="funnel-label">{totalWorks} total roadworks</div>
+            </div>
+            <div class="funnel-arrow">&#x25BC;</div>
+            <div class="funnel-step">
+              <div class="funnel-bar funnel-bar-lcc" style={`width: ${Math.round(lccWorksCount / totalWorks * 100)}%`}></div>
+              <div class="funnel-label">{lccWorksCount} LCC works <span class="funnel-note">({utilityWorksCount} utility — LCC can issue s56 timing directions but cannot cancel)</span></div>
+            </div>
+            {nonDeferrableReasons.map((r: any) => (
+              <>
+                <div class="funnel-arrow funnel-arrow-red">&#x2716;</div>
+                <div class="funnel-exclude">
+                  <div class="funnel-exclude-count">-{r.count}</div>
+                  <div class="funnel-exclude-text">
+                    <strong>{r.label}</strong>
+                    <span class="funnel-exclude-reason">{r.reason}</span>
+                  </div>
+                </div>
+              </>
+            ))}
+            <div class="funnel-arrow funnel-arrow-green">&#x25BC;</div>
+            <div class="funnel-step funnel-step-result">
+              <div class="funnel-bar funnel-bar-result" style={`width: ${Math.max(5, Math.round(lccDeferrals.length / totalWorks * 100))}%`}></div>
+              <div class="funnel-label funnel-label-result">{lccDeferrals.length} works LCC could realistically defer</div>
+            </div>
           </div>
         </div>
       </ScrollReveal>
@@ -3025,6 +3090,53 @@ const schoolBands = [
   .restriction-minor .restriction-count { color: #22c55e; }
   .restriction-label { font-size: 0.8rem; font-weight: 600; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
   .restriction-desc { font-size: 0.7rem; color: #71717a; margin-top: 0.5rem; line-height: 1.4; }
+
+  /* Validity + term badges */
+  .intel-validity { font-size: 0.75rem; color: #71717a; margin-top: 0.5rem; }
+  .term-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem;
+    font-weight: 600; background: rgba(245,158,11,0.12); color: #f59e0b;
+    margin-left: 0.5rem; vertical-align: middle;
+  }
+
+  /* Deferral Filtering Funnel */
+  .funnel-section { margin-bottom: 2.5rem; }
+  .funnel-visual { margin-top: 1.25rem; }
+  .funnel-step { display: flex; align-items: center; gap: 1rem; margin: 0.4rem 0; }
+  .funnel-bar {
+    height: 28px; border-radius: 6px; min-width: 8px;
+    background: linear-gradient(90deg, rgba(18,182,207,0.2), rgba(18,182,207,0.08));
+    border: 1px solid rgba(18,182,207,0.15);
+    transition: width 0.6s ease;
+  }
+  .funnel-bar-lcc {
+    background: linear-gradient(90deg, rgba(245,158,11,0.2), rgba(245,158,11,0.08));
+    border-color: rgba(245,158,11,0.15);
+  }
+  .funnel-bar-result {
+    background: linear-gradient(90deg, rgba(34,197,94,0.25), rgba(34,197,94,0.08));
+    border-color: rgba(34,197,94,0.2);
+  }
+  .funnel-label { font-size: 0.8rem; color: #d4d4d8; font-weight: 500; white-space: nowrap; }
+  .funnel-label-result { color: #22c55e; font-weight: 700; }
+  .funnel-note { color: #71717a; font-weight: 400; font-size: 0.72rem; }
+  .funnel-arrow { text-align: center; color: #52525b; font-size: 0.7rem; margin: 0.15rem 0 0.15rem 12px; }
+  .funnel-arrow-red { color: #dc2626; font-size: 0.65rem; }
+  .funnel-arrow-green { color: #22c55e; }
+  .funnel-exclude {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 0.75rem; margin: 0.15rem 0 0.15rem 24px;
+    background: rgba(220,38,38,0.04); border-left: 3px solid rgba(220,38,38,0.3);
+    border-radius: 0 8px 8px 0;
+  }
+  .funnel-exclude-count {
+    font-size: 1rem; font-weight: 800; color: #ef4444; min-width: 32px;
+    font-variant-numeric: tabular-nums;
+  }
+  .funnel-exclude-text { display: flex; flex-direction: column; gap: 2px; }
+  .funnel-exclude-text strong { font-size: 0.78rem; color: #d4d4d8; }
+  .funnel-exclude-reason { font-size: 0.68rem; color: #71717a; line-height: 1.3; }
+  .funnel-step-result { margin-top: 0.25rem; }
   .restriction-closure { border-top: 2px solid rgba(220,38,38,0.3); }
   .restriction-lane { border-top: 2px solid rgba(245,158,11,0.3); }
   .restriction-minor { border-top: 2px solid rgba(34,197,94,0.3); }

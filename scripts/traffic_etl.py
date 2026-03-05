@@ -382,26 +382,27 @@ TURF_MOOR = {"lat": 53.7891, "lng": -2.2303, "capacity": 21944, "name": "Turf Mo
 # These are tagged so the deferral engine knows not to recommend pausing them
 MAJOR_PROJECTS = [
     {
-        "name": "Town2Turf (Levelling Up Fund)",
-        "description": "£19.9M LUF-funded town centre to Turf Moor pedestrian/cycling link. Manchester Rd one-way system, Centenary Way junction rebuild, Hammerton St improvements.",
-        "roads": ["Manchester Road", "Centenary Way", "Hammerton Street", "Yorkshire Street", "Red Lion Street"],
-        "lat_range": [53.786, 53.795],
-        "lng_range": [-2.248, -2.230],
+        "name": "Burnley Town Centre LUF Programme (Town2Turf + Junctions)",
+        "description": "£19.9M LUF-funded town centre to Turf Moor pedestrian/cycling link. "
+                       "Manchester Rd one-way system, Centenary Way junction rebuild, Hammerton St, "
+                       "Colne Rd/Hebrew Rd junction, Brennand St/Murray St signal installations.",
+        "roads": [
+            "Manchester Road", "Centenary Way", "Hammerton Street", "Yorkshire Street",
+            "Red Lion Street", "Colne Road", "Hebrew Road", "Barracks Road",
+            "Bar Street", "Brennand Street", "Murray Street", "Ribblesdale Street",
+            "Bull Street", "Yorke Street", "Daneshouse Road",
+        ],
+        "lat_range": [53.785, 53.810],
+        "lng_range": [-2.250, -2.225],
         "start": "2025-06",
         "end": "2027-03",
         "cannot_defer": True,
         "reason": "LUF grant-funded project with DLUHC milestones — deferral risks losing £19.9M funding",
-    },
-    {
-        "name": "Colne Rd / Barracks Rd Average Speed Cameras",
-        "description": "Major junction rebuild with new average speed camera installation. Full carriageway works.",
-        "roads": ["Colne Road", "Barracks Road"],
-        "lat_range": [53.793, 53.800],
-        "lng_range": [-2.240, -2.225],
-        "start": "2026-01",
-        "end": "2026-08",
-        "cannot_defer": True,
-        "reason": "Safety-critical infrastructure — average speed camera installation committed",
+        # Description keywords — if LCC works inside bounds match these, flag as LUF
+        "description_keywords": [
+            "traffic signal", "kerb line", "drainage", "paving", "landscaping",
+            "resurfacing", "tactile", "ducting", "light column", "footway",
+        ],
     },
     {
         "name": "Padiham Rd Active Travel",
@@ -416,9 +417,59 @@ MAJOR_PROJECTS = [
     },
 ]
 
+# Bridge and structural works — legally cannot defer under s1 Highways Act 1980
+BRIDGE_KEYWORDS = [
+    "bridge", "footbridge", "viaduct", "overbridge", "underpass", "abutment",
+    "parapet", "bridge deck", "bearing replacement", "structural repair",
+]
+
+# Planning obligation / development works — tied to s106/s278 agreements
+PLANNING_OBLIGATION_KEYWORDS = [
+    "drainage connection", "foul drainage", "off-site drainage",
+    "s278", "s106", "section 278", "section 106",
+    "developer contribution", "planning condition",
+    "housing development", "residential development",
+]
+
+# Works-started status means physical work is underway — deferral not feasible
+NON_DEFERRABLE_STATUSES = ["Works started"]
+
+
+def is_bridge_or_structural_work(rw):
+    """Check if a roadwork involves bridge/structural work that cannot legally be deferred.
+
+    Bridge works have legal obligations under s1 Highways Act 1980 (duty to maintain)
+    and structural safety requirements. Mid-construction deferral is not feasible.
+
+    Only matches on description (not road name) to avoid false positives like 'Stockbridge Road'.
+    """
+    desc = (rw.get("description") or "").lower()
+    for kw in BRIDGE_KEYWORDS:
+        if kw in desc:
+            return True
+    return False
+
+
+def is_planning_obligation_work(rw):
+    """Check if a roadwork is tied to a planning obligation (s106/s278).
+
+    These works are required by planning conditions and cannot be deferred without
+    breaching the planning agreement — the developer/contractor has a legal obligation.
+    """
+    desc = (rw.get("description") or "").lower()
+    for kw in PLANNING_OBLIGATION_KEYWORDS:
+        if kw in desc:
+            return True
+    return False
+
 
 def is_major_project_work(rw: dict):
     """Check if a roadwork is part of a known major project.
+
+    Detection methods (layered, any match triggers):
+    1. Geographic bounds + road name match
+    2. Geographic bounds + description keyword match (for side streets)
+    3. Bridge/structural safety detection
 
     Returns the project dict if matched, None otherwise.
     Major project works cannot be deferred — they have funding milestones.
@@ -426,6 +477,8 @@ def is_major_project_work(rw: dict):
     rlat = rw.get("lat")
     rlng = rw.get("lng")
     road = (rw.get("road") or "").lower()
+    desc = (rw.get("description") or "").lower()
+    operator = (rw.get("operator") or "").lower()
 
     if not rlat or not rlng:
         return None
@@ -437,13 +490,31 @@ def is_major_project_work(rw: dict):
         return None
 
     for proj in MAJOR_PROJECTS:
-        # Check geographic bounds
-        if (proj["lat_range"][0] <= rlat <= proj["lat_range"][1] and
-            proj["lng_range"][0] <= rlng <= proj["lng_range"][1]):
-            # Also check road name match
-            for proad in proj["roads"]:
-                if proad.lower() in road or road in proad.lower():
-                    return proj
+        # Check geographic bounds first
+        if not (proj["lat_range"][0] <= rlat <= proj["lat_range"][1] and
+                proj["lng_range"][0] <= rlng <= proj["lng_range"][1]):
+            continue
+
+        # Method 1: Road name match
+        for proad in proj["roads"]:
+            if proad.lower() in road or road in proad.lower():
+                return proj
+
+        # Method 2: Description keyword match (LCC works within bounds with LUF-style descriptions)
+        if "lancashire" in operator and "description_keywords" in proj:
+            keyword_hits = sum(1 for kw in proj["description_keywords"] if kw in desc)
+            if keyword_hits >= 2:  # At least 2 keyword matches = likely part of programme
+                return proj
+
+    # Bridge/structural safety — cannot defer regardless of project
+    if is_bridge_or_structural_work(rw):
+        return {
+            "name": "Bridge / Structural Safety Work",
+            "description": "Bridge or structural maintenance — legal duty to maintain under s1 Highways Act 1980",
+            "cannot_defer": True,
+            "reason": "Structural safety — s1 Highways Act 1980 duty to maintain. Cannot defer mid-construction.",
+        }
+
     return None
 
 # Key congestion corridors — road segments for corridor scoring
@@ -932,9 +1003,18 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
         if "emergency" in category or "urgent" in category:
             continue
 
+        # Works already started cannot be deferred — road is physically dug up
+        status = rw.get("status", "")
+        if status in NON_DEFERRABLE_STATUSES:
+            continue
+
         # Major project works cannot be deferred — funding milestones
         major = is_major_project_work(rw)
         if major and major.get("cannot_defer"):
+            continue
+
+        # Planning obligation works cannot be deferred — s106/s278 legal requirements
+        if is_planning_obligation_work(rw):
             continue
 
         # Parse dates
@@ -1053,6 +1133,8 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
             "operator": operator,
             "is_lcc_controlled": is_lcc,
             "category": rw.get("category", ""),
+            "status": status,
+            "description": (rw.get("description") or "")[:200],
             "start_date": start,
             "end_date": end,
             "restriction_class": rc,
@@ -1471,27 +1553,87 @@ def main():
 
     # Tag roadworks with restriction classification + major project flags
     classified_works = []
+    non_deferrable_count = 0
+    luf_works_count = 0
+    bridge_works_count = 0
+    planning_obligation_count = 0
+    started_count = 0
     for rw in roadworks_records:
         restriction = classify_restriction(rw)
         major = is_major_project_work(rw)
+        status = rw.get("status", "")
+        is_started = status in NON_DEFERRABLE_STATUSES
+        is_bridge = is_bridge_or_structural_work(rw)
+        is_planning = is_planning_obligation_work(rw)
+
+        if major and major.get("cannot_defer"):
+            non_deferrable_count += 1
+            if "LUF" in major.get("name", ""):
+                luf_works_count += 1
+        if is_bridge:
+            bridge_works_count += 1
+        if is_planning:
+            planning_obligation_count += 1
+        if is_started:
+            started_count += 1
+
         classified_works.append({
             "id": rw.get("id"),
             "road": rw.get("road", ""),
             "operator": rw.get("operator", ""),
+            "status": status,
+            "description": (rw.get("description") or "")[:200],
             "restriction_class": restriction["restriction_class"],
             "capacity_reduction": restriction["capacity_reduction"],
             "impact_label": restriction["impact_label"],
             "major_project": major["name"] if major else None,
             "cannot_defer": bool(major and major.get("cannot_defer")),
+            "is_bridge": is_bridge,
+            "is_planning_obligation": is_planning,
+            "is_started": is_started,
+            "start_date": (rw.get("start_date") or "")[:10],
+            "end_date": (rw.get("end_date") or "")[:10],
         })
+
+    # Compute date ranges for validity windows
+    all_starts = [rw.get("start_date", "")[:10] for rw in roadworks_records if rw.get("start_date")]
+    all_ends = [rw.get("end_date", "")[:10] for rw in roadworks_records if rw.get("end_date")]
+    earliest_start = min(all_starts) if all_starts else today.isoformat()
+    latest_end = max(all_ends) if all_ends else today.isoformat()
+
+    # Next school holiday for deferral target
+    next_holiday_start = None
+    for term in SCHOOL_TERMS:
+        term_end = date.fromisoformat(term["end"])
+        if term_end > today:
+            # Holiday starts day after term ends
+            next_holiday_start = (term_end + timedelta(days=1)).isoformat()
+            break
 
     output = {
         "meta": {
-            "source": "DfT Road Traffic API + OSM Overpass + LCC School Terms",
+            "source": "DfT Road Traffic API + OSM Overpass + LCC School Terms + MARIO ArcGIS",
             "generated": datetime.now(timezone.utc).isoformat(),
+            "analysis_date": today.isoformat(),
             "fetch_time_ms": int((time.time() - t0) * 1000),
             "active_roadworks": active_roadworks,
             "restriction_summary": restriction_summary,
+            "validity": {
+                "roadworks_window": {"from": earliest_start, "to": latest_end},
+                "analysis_valid_until": (today + timedelta(days=1)).isoformat(),
+                "next_school_holiday": next_holiday_start,
+                "in_school_term": is_term_time(today),
+                "current_term": get_current_term(today),
+            },
+            "coverage": {
+                "total_works": len(roadworks_records),
+                "works_started": started_count,
+                "planned_works": len(roadworks_records) - started_count,
+                "luf_programme_works": luf_works_count,
+                "bridge_structural_works": bridge_works_count,
+                "planning_obligation_works": planning_obligation_count,
+                "non_deferrable_total": non_deferrable_count + started_count + bridge_works_count + planning_obligation_count,
+            },
         },
         "count_points": count_points,
         "key_roads": key_roads_list[:20],
@@ -1536,6 +1678,7 @@ def main():
     print(f"Count points: {len(count_points)}, Key roads: {len(key_roads_list)}")
     print(f"Fixtures: {len(fixtures)}, School term: {'Yes' if term_status['in_term'] else 'No'}")
     print(f"Active roadworks: {active_roadworks} ({restriction_summary['full_closure']} closures, {restriction_summary['lane_restriction']} lane restrictions)")
+    print(f"Non-deferrable: {non_deferrable_count} (LUF: {luf_works_count}, bridge: {bridge_works_count}, planning: {planning_obligation_count}, started: {started_count})")
     print(f"Deferrals: {len(lcc_deferrals)} LCC, {len(utility_deferrals)} utility s56. Clashes: {len(clashes)} corridors")
     print(f"Options: {len(options)}, Timing recs: {len(timing_recs)}")
     if heatmap:
