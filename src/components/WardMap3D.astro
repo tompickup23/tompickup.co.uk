@@ -58,13 +58,40 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
     electorate,
   };
 });
+
+// Compute focused viewBox for mini mode (zoomed into active ward)
+const isFocused = size === 'mini' && activeWard !== '';
+let focusViewBox = `0 0 ${WIDTH} ${HEIGHT}`;
+
+if (isFocused) {
+  const activeWardData = (wardData.wards as Record<string, any>)[activeWard];
+  if (activeWardData?.boundary?.coordinates?.[0]) {
+    const coords = activeWardData.boundary.coordinates[0];
+    const xs = coords.map((c: number[]) => projectLng(c[0]));
+    const ys = coords.map((c: number[]) => projectLat(c[1]));
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const wardW = maxX - minX;
+    const wardH = maxY - minY;
+    // Pad each axis independently — ward fills ~50% of its dimension
+    const padX = Math.max(wardW * 0.5, 60);
+    const padY = Math.max(wardH * 0.5, 60);
+    const vx = Math.max(0, minX - padX);
+    const vy = Math.max(0, minY - padY);
+    const vw = Math.min(WIDTH, wardW + padX * 2);
+    const vh = Math.min(HEIGHT, wardH + padY * 2);
+    focusViewBox = `${vx.toFixed(0)} ${vy.toFixed(0)} ${vw.toFixed(0)} ${vh.toFixed(0)}`;
+  }
+}
 ---
 
-<div class={`ward-map-container ${size === 'mini' ? 'ward-map-mini' : ''}`} data-ward-map>
+<div class={`ward-map-container ${size === 'mini' ? 'ward-map-mini' : ''} ${isFocused ? 'ward-map-focused' : ''}`} data-ward-map>
   <svg
-    viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+    viewBox={isFocused ? focusViewBox : `0 0 ${WIDTH} ${HEIGHT}`}
     class="ward-map-svg"
-    aria-label="Interactive map of Burnley borough wards"
+    aria-label={isFocused ? `Map of ${wards.find(w=>w.isActive)?.name || 'ward'} and surrounding area` : "Interactive map of Burnley borough wards"}
     role="img"
   >
     <defs>
@@ -119,12 +146,12 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
       </a>
     ))}
 
-    {/* Ward labels (full size only) */}
-    {size === 'full' && wards.map((w) => (
+    {/* Ward labels — full mode: all wards; focused mini: all visible wards */}
+    {(size === 'full' || isFocused) && wards.map((w) => (
       <text
         x={w.cx}
         y={w.cy}
-        class={`ward-label ${w.isActive ? 'ward-label-active' : ''}`}
+        class={`ward-label ${w.isActive ? 'ward-label-active' : ''} ${isFocused && !w.isActive ? 'ward-label-context' : ''}`}
         text-anchor="middle"
         dominant-baseline="central"
         pointer-events="none"
@@ -254,6 +281,69 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
     padding: 0.5rem 0 0;
   }
 
+  /* ---- Focused mini mode (ward pages) — flat, zoomed ---- */
+  .ward-map-focused {
+    max-width: 520px;
+    perspective: none;
+  }
+
+  .ward-map-focused .ward-map-svg {
+    transform: none;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+  }
+
+  .ward-map-focused .ward-shadow-path {
+    fill: rgba(0, 0, 0, 0.35);
+    transform: translate(2px, 3px);
+  }
+
+  /* Context wards in focused mode — clearly visible grey */
+  .ward-map-focused .ward-group:not(.ward-active) .ward-face {
+    fill: rgba(60, 60, 68, 1);
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 1;
+  }
+
+  .ward-map-focused .ward-group:not(.ward-active):hover .ward-face {
+    fill: rgba(75, 75, 84, 1);
+    stroke: rgba(255, 255, 255, 0.25);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
+  }
+
+  .ward-map-focused .ward-group:not(.ward-active) .ward-edge {
+    opacity: 0.4;
+  }
+
+  /* Active ward in focused mode — bold cyan, impossible to miss */
+  .ward-map-focused .ward-active .ward-face {
+    fill: rgba(18, 182, 207, 0.45);
+    stroke: #12b6cf;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 20px rgba(18, 182, 207, 0.5))
+            drop-shadow(0 0 40px rgba(18, 182, 207, 0.2));
+  }
+
+  .ward-map-focused .ward-active .ward-edge {
+    opacity: 1;
+  }
+
+  .ward-map-focused .ward-active-glow {
+    fill: rgba(18, 182, 207, 0.2);
+  }
+
+  /* Label styling in focused mode */
+  .ward-label-context {
+    fill: rgba(255, 255, 255, 0.25) !important;
+    font-size: 7px !important;
+  }
+
+  .ward-map-focused .ward-label-active {
+    fill: rgba(255, 255, 255, 0.95) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    stroke-width: 4px !important;
+  }
+
   /* ---- 3D Transform ---- */
   .ward-map-svg {
     width: 100%;
@@ -266,7 +356,7 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
     will-change: transform;
   }
 
-  .ward-map-mini .ward-map-svg {
+  .ward-map-mini:not(.ward-map-focused) .ward-map-svg {
     transform: rotateX(35deg) rotateZ(-1deg);
     filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.4));
   }
