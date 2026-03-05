@@ -174,28 +174,6 @@ const cedBoundaries = cedBoundariesData as any[];
     </div>
   </div>
 
-  <!-- Works over time chart -->
-  <div class="rw-works-chart-section" id="rw-works-chart-section">
-    <div class="rw-works-chart-header">
-      <span class="rw-works-chart-title">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-        Works forecast &mdash; next 90 days
-      </span>
-      <div class="rw-works-chart-legend">
-        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#dc2626"></span>Closures</span>
-        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#f59e0b"></span>Lane restrictions</span>
-        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#6b7280"></span>Minor</span>
-        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px dashed #12b6cf"></span>Utility (non-LCC)</span>
-        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px solid #3b82f6"></span>LCC controlled</span>
-      </div>
-    </div>
-    <div class="rw-works-canvas-wrap">
-      <canvas id="works-chart-canvas" class="rw-works-canvas"></canvas>
-      <div class="rw-works-chart-tooltip" id="works-chart-tooltip" style="display:none"></div>
-    </div>
-    <div class="rw-works-chart-labels" id="works-chart-labels"></div>
-  </div>
-
   <!-- Map -->
   <div class="rw-map-wrapper">
     <div class="rw-map-glow"></div>
@@ -244,6 +222,28 @@ const cedBoundaries = cedBoundariesData as any[];
         <button class="rw-page-btn" id="rw-page-next">Next &rsaquo;</button>
       </div>
     </div>
+  </div>
+
+  <!-- Works over time chart -->
+  <div class="rw-works-chart-section" id="rw-works-chart-section">
+    <div class="rw-works-chart-header">
+      <span class="rw-works-chart-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        Works forecast &mdash; next 90 days
+      </span>
+      <div class="rw-works-chart-legend">
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#dc2626"></span>Closures</span>
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#f59e0b"></span>Lane restrictions</span>
+        <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#6b7280"></span>Minor</span>
+        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px dashed #12b6cf"></span>Utility (non-LCC)</span>
+        <span class="rw-wc-legend"><span class="rw-wc-line" style="border-bottom:2px solid #3b82f6"></span>LCC controlled</span>
+      </div>
+    </div>
+    <div class="rw-works-canvas-wrap">
+      <canvas id="works-chart-canvas" class="rw-works-canvas"></canvas>
+      <div class="rw-works-chart-tooltip" id="works-chart-tooltip" style="display:none"></div>
+    </div>
+    <div class="rw-works-chart-labels" id="works-chart-labels"></div>
   </div>
 </div>
 

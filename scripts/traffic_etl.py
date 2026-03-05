@@ -649,14 +649,21 @@ def fetch_road_infrastructure(bbox: dict = None) -> dict:
 
     bb = f"{bbox['south']},{bbox['west']},{bbox['north']},{bbox['east']}"
 
-    # Single Overpass union query for all infrastructure types
-    query = f"""[out:json][timeout:90];
+    # Split into node query and way query for efficiency
+    # Nodes: just out; (they already have lat/lon)
+    # Ways: out center; (Overpass calculates centroid, avoids massive node download)
+    node_query = f"""[out:json][timeout:120];
 (
   node["highway"="traffic_signals"]({bb});
   node["highway"="mini_roundabout"]({bb});
-  way["junction"="roundabout"]({bb});
   node["railway"="level_crossing"]({bb});
   node["highway"="bus_stop"]({bb});
+);
+out;"""
+
+    way_query = f"""[out:json][timeout:120];
+(
+  way["junction"="roundabout"]({bb});
   way["highway"~"^(primary|secondary|tertiary|trunk)$"]["maxspeed"]({bb});
   way["highway"~"^(primary|secondary|tertiary)$"]["oneway"="yes"]({bb});
   way["highway"~"^(primary|secondary|tertiary|unclassified)$"]["lanes"="1"]({bb});
@@ -665,38 +672,56 @@ def fetch_road_infrastructure(bbox: dict = None) -> dict:
   way["maxheight"]({bb});
   way["bridge"="yes"]["highway"~"^(primary|secondary|tertiary|trunk|motorway)$"]({bb});
 );
-out body;
->;
-out skel qt;"""
+out center;"""
 
     url = "https://overpass-api.de/api/interpreter"
-    post_data = f"data={query}".encode("utf-8")
+    headers = {
+        "User-Agent": "TomPickup-Traffic-ETL/3.0",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+    empty_result = {
+        "traffic_signals": [], "roundabouts": [], "mini_roundabouts": [],
+        "speed_limits": [], "one_way_streets": [], "narrow_roads": [],
+        "level_crossings": [], "weight_restrictions": [], "height_restrictions": [],
+        "bridges": [], "bus_stop_count": 0,
+    }
 
     elements = []
-    try:
-        req = Request(url, data=post_data, headers={
-            "User-Agent": "TomPickup-Traffic-ETL/2.0",
-            "Content-Type": "application/x-www-form-urlencoded",
-        })
-        with urlopen(req, timeout=120) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        elements = data.get("elements", [])
-        print(f"  Overpass returned {len(elements)} elements")
-    except Exception as e:
-        print(f"  ERROR fetching road infrastructure from Overpass: {e}", file=sys.stderr)
-        # Return empty structure on failure
-        return {
-            "traffic_signals": [], "roundabouts": [], "mini_roundabouts": [],
-            "speed_limits": [], "one_way_streets": [], "narrow_roads": [],
-            "level_crossings": [], "weight_restrictions": [], "height_restrictions": [],
-            "bridges": [], "bus_stop_count": 0,
-        }
 
-    # Build node lookup for resolving way geometries
-    node_lookup = {}
-    for el in elements:
-        if el.get("type") == "node":
-            node_lookup[el["id"]] = el
+    # Fetch nodes (traffic signals, mini roundabouts, level crossings, bus stops)
+    try:
+        req = Request(url, data=f"data={node_query}".encode("utf-8"), headers=headers)
+        with urlopen(req, timeout=150) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        node_els = data.get("elements", [])
+        print(f"  Overpass nodes: {len(node_els)} elements")
+        elements.extend(node_els)
+    except Exception as e:
+        print(f"  ERROR fetching road infrastructure nodes from Overpass: {e}", file=sys.stderr)
+        return empty_result
+
+    # Brief pause to be polite to the API
+    import time
+    time.sleep(2)
+
+    # Fetch ways (roundabouts, speed limits, one-way, narrow, bridges, restrictions)
+    # Uses out center; so ways come back with center lat/lon directly
+    try:
+        req = Request(url, data=f"data={way_query}".encode("utf-8"), headers=headers)
+        with urlopen(req, timeout=150) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        way_els = data.get("elements", [])
+        print(f"  Overpass ways: {len(way_els)} elements")
+        elements.extend(way_els)
+    except Exception as e:
+        print(f"  ERROR fetching road infrastructure ways from Overpass: {e}", file=sys.stderr)
+        # Still use node data if we have it
+        if not elements:
+            return empty_result
+
+    print(f"  Total infrastructure elements: {len(elements)}")
+
+    # No node_lookup needed — ways have center coords from 'out center;'
 
     # Classify elements
     traffic_signals = []
@@ -748,7 +773,13 @@ out skel qt;"""
                 bus_stop_count += 1
 
         elif el_type == "way":
-            lat, lng = _parse_way_center(el, node_lookup)
+            # 'out center;' puts center coords in el["center"]
+            center = el.get("center")
+            if center:
+                lat, lng = center.get("lat"), center.get("lon")
+            else:
+                # Fallback: try node lookup (shouldn't be needed with out center)
+                lat, lng = _parse_way_center(el, {})
             if lat is None:
                 continue
 
@@ -808,14 +839,7 @@ out skel qt;"""
 
             # Bridges on classified roads
             if tags.get("bridge") == "yes" and hw in ("primary", "secondary", "tertiary", "trunk", "motorway"):
-                # Estimate length from node span
-                nds = el.get("nodes", [])
                 bridge_len = None
-                if len(nds) >= 2:
-                    first = node_lookup.get(nds[0])
-                    last = node_lookup.get(nds[-1])
-                    if first and last:
-                        bridge_len = int(haversine_m(first["lat"], first["lon"], last["lat"], last["lon"]))
                 bridges.append({
                     "lat": lat, "lng": lng,
                     "id": el["id"],

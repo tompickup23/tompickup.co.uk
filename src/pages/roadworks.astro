@@ -663,7 +663,7 @@ const schoolBands = [
           </h3>
           <p class="intel-desc">Concurrent works on the same strategic corridor. NRSWA 1991 s59 requires LCC to coordinate — multiple simultaneous closures/restrictions compound delays exponentially.</p>
           <div class="clash-grid">
-            {corridorClashes.map((cl: any) => {
+            {corridorClashes.slice(0, 6).map((cl: any) => {
               const clashColor = cl.severity === 'critical' ? '#dc2626' : cl.severity === 'high' ? '#f97316' : '#eab308';
               return (
                 <div class="clash-card" style={`border-left: 3px solid ${clashColor}`}>
@@ -694,6 +694,38 @@ const schoolBands = [
               );
             })}
           </div>
+          {corridorClashes.length > 6 && (
+            <Accordion title={`${corridorClashes.length - 6} more corridor clashes`} defaultOpen={false}>
+              <div class="clash-grid">
+                {corridorClashes.slice(6).map((cl: any) => {
+                  const clashColor = cl.severity === 'critical' ? '#dc2626' : cl.severity === 'high' ? '#f97316' : '#eab308';
+                  return (
+                    <div class="clash-card" style={`border-left: 3px solid ${clashColor}`}>
+                      <div class="clash-head">
+                        <span class="clash-corridor">{cl.corridor}</span>
+                        <span class={`severity-badge severity-${cl.severity}`}>{cl.severity}</span>
+                      </div>
+                      <div class="clash-stats">
+                        <span>{cl.concurrent_works} concurrent works</span>
+                        <span class="clash-cap">{Math.round(cl.total_capacity_reduction * 100)}% capacity loss</span>
+                      </div>
+                      {cl.s59_breach && <div class="clash-breach">s59 DUTY TO COORDINATE LIKELY BREACHED</div>}
+                      {!cl.s59_breach && cl.s59_coordination_needed && <div class="clash-breach clash-breach-warn">s59 COORDINATION NEEDED</div>}
+                      <div class="clash-works">
+                        {cl.works.slice(0, 3).map((w: any) => (
+                          <div class="clash-work-item">
+                            <span class="clash-work-road">{w.road}</span>
+                            <span class="clash-work-op">{w.operator}</span>
+                          </div>
+                        ))}
+                        {cl.works.length > 3 && <div class="clash-more">+{cl.works.length - 3} more</div>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Accordion>
+          )}
         </div>
       </ScrollReveal>
       )}
@@ -1723,15 +1755,25 @@ const schoolBands = [
 </Layout>
 
 <style>
+  /* ---- Tighten section spacing globally ---- */
+  .section-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .section-header h2 {
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+  }
+
   /* ---- Map Section ---- */
   .map-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   /* ---- Hero ---- */
   .rw-hero {
-    padding: var(--space-2xl) 0 var(--space-xl);
+    padding: var(--space-xl) 0 var(--space-md);
   }
 
   .rw-hero-inner {
@@ -1794,7 +1836,7 @@ const schoolBands = [
 
   /* ---- Responsibility Section ---- */
   .responsibility-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .resp-grid {
@@ -1860,7 +1902,7 @@ const schoolBands = [
 
   /* ---- TTRO Section ---- */
   .ttro-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .ttro-list {
@@ -1973,7 +2015,7 @@ const schoolBands = [
 
   /* ---- Projects Section ---- */
   .projects-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .project-cards {
@@ -2052,7 +2094,7 @@ const schoolBands = [
 
   /* ---- Roads Section ---- */
   .roads-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .roads-accordions {
@@ -2157,7 +2199,7 @@ const schoolBands = [
 
   /* ---- Problems Section ---- */
   .problems-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .problems-grid {
@@ -2203,7 +2245,7 @@ const schoolBands = [
 
   /* ---- Bridges Section ---- */
   .bridges-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .bridges-grid {
@@ -2247,7 +2289,7 @@ const schoolBands = [
 
   /* ---- Backlog Section ---- */
   .backlog-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .backlog-card {
@@ -2255,7 +2297,7 @@ const schoolBands = [
     border: 1px solid rgba(255, 69, 58, 0.2);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
     text-align: center;
   }
 
@@ -2346,7 +2388,7 @@ const schoolBands = [
 
   /* ---- Links Section ---- */
   .links-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .links-grid {
@@ -2401,7 +2443,7 @@ const schoolBands = [
 
   /* ---- Contact CTA ---- */
   .contact-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .contact-cta-card {
@@ -2411,7 +2453,7 @@ const schoolBands = [
       linear-gradient(135deg, #0a2a3a 0%, #12b6cf 100%);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
     text-align: center;
   }
 
@@ -2474,7 +2516,7 @@ const schoolBands = [
 
   /* ---- Sources ---- */
   .sources-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .sources-card {
@@ -2500,7 +2542,7 @@ const schoolBands = [
 
   /* ---- Chaos Section ---- */
   .chaos-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .chaos-card {
@@ -2565,7 +2607,7 @@ const schoolBands = [
 
   /* ---- Pothole Section ---- */
   .pothole-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .pothole-steps {
@@ -2644,7 +2686,7 @@ const schoolBands = [
 
   /* ---- Safety Section ---- */
   .safety-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .safety-grid {
@@ -2688,7 +2730,7 @@ const schoolBands = [
 
   /* ---- Winter Section ---- */
   .winter-section {
-    padding: 0 0 var(--space-2xl);
+    padding: 0 0 var(--space-lg);
   }
 
   .winter-content {
@@ -2779,7 +2821,7 @@ const schoolBands = [
 
   @media (max-width: 768px) {
     .rw-hero {
-      padding: var(--space-xl) 0 var(--space-lg);
+      padding: var(--space-lg) 0 var(--space-md);
     }
 
     .hero-stats {
@@ -2846,7 +2888,7 @@ const schoolBands = [
 
   /* ---- Traffic Section ---- */
   .traffic-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
   .traffic-context {
@@ -2962,7 +3004,7 @@ const schoolBands = [
 
   /* ---- Charts Section ---- */
   .charts-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
   .chart-card {
@@ -3028,7 +3070,7 @@ const schoolBands = [
 
   /* ---- Congestion Section ---- */
   .congestion-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
   /* JCI headline chips — critical/high junctions shown outside accordion */
@@ -3099,7 +3141,7 @@ const schoolBands = [
 
   /* ---- Operational Intelligence Section ---- */
   .intel-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
 
@@ -3377,7 +3419,7 @@ const schoolBands = [
 
   /* ---- Legal Section ---- */
   .legal-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
   .legal-grid {
@@ -3425,7 +3467,7 @@ const schoolBands = [
 
   /* ---- Options Section ---- */
   .options-section {
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
   .options-grid { display: grid; gap: 1rem; }
