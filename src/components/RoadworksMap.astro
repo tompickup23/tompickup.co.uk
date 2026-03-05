@@ -75,22 +75,27 @@ const cedBoundaries = cedBoundariesData as any[];
   <div class="rw-controls">
     <div class="rw-search-box">
       <svg class="rw-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="postcode-search" class="rw-search-input" placeholder="Search postcode or road..." />
+      <input type="text" id="postcode-search" class="rw-search-input" placeholder="Search postcode or road..." aria-label="Search by postcode or road name" />
+      <button class="rw-search-clear" id="search-clear" type="button" aria-label="Clear search" style="display:none">&times;</button>
       <kbd class="rw-search-kbd">Enter</kbd>
     </div>
     <div class="rw-filter-chips">
-      <button class="rw-chip active" data-filter="status" data-value="all">All</button>
-      <button class="rw-chip rw-chip-red" data-filter="status" data-value="Works started">
+      <button class="rw-chip active" data-filter="status" data-value="all" aria-pressed="true">All</button>
+      <button class="rw-chip rw-chip-red" data-filter="status" data-value="Works started" aria-pressed="false">
         <span class="rw-pulse-dot"></span> Active
       </button>
-      <button class="rw-chip rw-chip-amber" data-filter="status" data-value="Planned works">Planned</button>
+      <button class="rw-chip rw-chip-amber" data-filter="status" data-value="Planned works" aria-pressed="false">Planned</button>
     </div>
     <div class="rw-filter-chips">
-      <button class="rw-chip active" data-filter="severity" data-value="all">All</button>
-      <button class="rw-chip rw-chip-red" data-filter="severity" data-value="high">High</button>
-      <button class="rw-chip rw-chip-amber" data-filter="severity" data-value="medium">Med</button>
-      <button class="rw-chip rw-chip-green" data-filter="severity" data-value="low">Low</button>
+      <button class="rw-chip active" data-filter="severity" data-value="all" aria-pressed="true">All</button>
+      <button class="rw-chip rw-chip-red" data-filter="severity" data-value="high" aria-pressed="false">High</button>
+      <button class="rw-chip rw-chip-amber" data-filter="severity" data-value="medium" aria-pressed="false">Med</button>
+      <button class="rw-chip rw-chip-green" data-filter="severity" data-value="low" aria-pressed="false">Low</button>
     </div>
+    <button class="rw-reset-btn" id="reset-filters" title="Clear all filters and reset view" style="display:none">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Reset filters
+    </button>
   </div>
 
   <!-- Filters row 2 -->
@@ -102,10 +107,19 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-boundary-toggles">
       <label class="rw-toggle"><input type="checkbox" id="ced-toggle" checked /><span>County divisions</span></label>
       <label class="rw-toggle"><input type="checkbox" id="ward-toggle" /><span>Wards</span></label>
-      <label class="rw-toggle rw-toggle-intel"><input type="checkbox" id="traffic-intel-toggle" /><span>Traffic intelligence</span></label>
-      <label class="rw-toggle rw-toggle-intel"><input type="checkbox" id="corridor-toggle" /><span>Congestion corridors</span></label>
+      <label class="rw-toggle rw-toggle-intel" title="Show traffic signals, junctions, DfT count points, and schools"><input type="checkbox" id="traffic-intel-toggle" /><span>Traffic intelligence</span><span class="rw-toggle-hint">Signals, junctions, schools</span></label>
+      <label class="rw-toggle rw-toggle-intel" title="Show modelled congestion corridors with severity levels"><input type="checkbox" id="corridor-toggle" /><span>Congestion corridors</span><span class="rw-toggle-hint">Modelled severity</span></label>
     </div>
   </div>
+
+  <!-- Staleness warning -->
+  <div class="rw-stale-warning" id="rw-stale-warning" style="display:none">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span id="rw-stale-text">Data may be stale</span>
+  </div>
+
+  <!-- Postcode not found toast -->
+  <div class="rw-toast" id="rw-toast" style="display:none"></div>
 
   <!-- Timeline -->
   <div class="rw-timeline">
@@ -167,6 +181,7 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-map-loading" id="rw-map-loading">
       <div class="rw-spinner"></div>
       <div class="rw-loading-text">Loading roadworks data…</div>
+      <div class="rw-loading-bar"><div class="rw-loading-bar-fill" id="rw-loading-bar-fill"></div></div>
     </div>
     <div class="rw-map-overlay" id="rw-map-meta">
       <span id="map-stats-showing">Loading...</span>
@@ -181,7 +196,9 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-legend-item"><span class="rw-lg-dot" style="background:#6b7280;opacity:0.5"></span>Minor Works</div>
     <div class="rw-legend-item"><span class="rw-lg-line" style="background:rgba(245,158,11,0.5)"></span>County div.</div>
     <div class="rw-legend-item"><span class="rw-lg-line rw-lg-dash" style="background:rgba(18,182,207,0.45)"></span>Ward</div>
+    <div class="rw-legend-item rw-legend-jci" id="legend-jci" style="display:none"><span class="rw-lg-dot" style="background:#f97316"></span>JCI Junction</div>
   </div>
+  <div class="rw-keyboard-hint" aria-live="polite">Use <kbd>Space</kbd> to play/pause, <kbd>&larr;</kbd><kbd>&rarr;</kbd> to navigate days</div>
 
   <!-- List -->
   <div class="rw-list-panel">
@@ -192,10 +209,19 @@ const cedBoundaries = cedBoundariesData as any[];
         <option value="road">Road A-Z</option>
         <option value="start">Start date</option>
         <option value="end">End date</option>
+        <option value="duration">Duration</option>
         <option value="operator">Operator</option>
       </select>
     </div>
     <div class="rw-list" id="rw-list"></div>
+    <div class="rw-pagination" id="rw-pagination" style="display:none">
+      <span class="rw-page-info" id="rw-page-info"></span>
+      <div class="rw-page-btns">
+        <button class="rw-page-btn" id="rw-page-prev" disabled>&lsaquo; Previous</button>
+        <span class="rw-page-num" id="rw-page-num"></span>
+        <button class="rw-page-btn" id="rw-page-next">Next &rsaquo;</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -267,8 +293,57 @@ const cedBoundaries = cedBoundariesData as any[];
   var filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'all' };
   var timelineMode = 'all', selectedDate = null, dateRangeStart = null, dateRangeEnd = null, playInterval = null, sortBy = 'severity', selectedHour = null, playSpeed = 600;
   var postcodeMarker = null;
+  var currentPage = 0;
+  var PAGE_SIZE = 30;
+  var metaGenerated = null;
 
   function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+  function showToast(msg, duration) {
+    var el = document.getElementById('rw-toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = '';
+    el.classList.add('rw-toast-show');
+    setTimeout(function() {
+      el.classList.remove('rw-toast-show');
+      setTimeout(function() { el.style.display = 'none'; }, 300);
+    }, duration || 3000);
+  }
+
+  function updateResetBtn() {
+    var btn = document.getElementById('reset-filters');
+    if (!btn) return;
+    var anyActive = filters.status !== 'all' || filters.severity !== 'all' || filters.operator !== 'all'
+      || filters.ward !== 'all' || filters.restriction !== 'all' || filters.road !== ''
+      || filters.district !== 'all' || timelineMode !== 'all';
+    btn.style.display = anyActive ? '' : 'none';
+  }
+
+  function resetAllFilters() {
+    stopPlay();
+    filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '', district: 'all' };
+    timelineMode = 'all'; selectedHour = null; currentPage = 0;
+    // Reset chip UI
+    document.querySelectorAll('.rw-chip[data-filter]').forEach(function(b) {
+      var isAll = b.getAttribute('data-value') === 'all';
+      b.classList.toggle('active', isAll);
+      b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+    });
+    // Reset selects
+    ['district-filter','operator-filter','ward-filter','restriction-filter'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.value = 'all';
+    });
+    // Reset search
+    var si = document.getElementById('postcode-search'); if (si) si.value = '';
+    var sc = document.getElementById('search-clear'); if (sc) sc.style.display = 'none';
+    // Reset timeline
+    updateTimelineDisplay();
+    // Fly back to Lancashire
+    if (map) map.flyTo(LANCASHIRE_CENTER, LANCASHIRE_ZOOM, { duration: 1 });
+    updateResetBtn();
+    updateStats(); renderMarkers(); renderList();
+  }
 
   function fmtDate(iso) {
     if (!iso) return '\u2014';
@@ -277,14 +352,14 @@ const cedBoundaries = cedBoundariesData as any[];
   function fmtDateShort(d) { return d ? d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : ''; }
   function fmtDateFull(d) { return d ? d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}) : ''; }
   function toDateOnly(iso) { if (!iso) return null; try { return new Date(iso.substring(0,10)+'T00:00:00Z'); } catch(e) { return null; } }
-  function daysBetween(a,b) { return Math.round((b-a)/(86400000)); }
+  function daysBetween(a,b) { var ua=Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()), ub=Date.UTC(b.getFullYear(),b.getMonth(),b.getDate()); return Math.round((ub-ua)/86400000); }
   function humanRestriction(r) { return r ? r.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,function(c){return c.toUpperCase();}) : 'None'; }
   function durationDays(r) { var s=toDateOnly(r.start_date),e=toDateOnly(r.end_date); return (s&&e)?Math.max(1,daysBetween(s,e)):0; }
   function durationLabel(d) { return d<=1?'1 day':d<7?d+' days':d<30?Math.round(d/7)+' wk'+(Math.round(d/7)!==1?'s':''):Math.round(d/30)+' mo'+(Math.round(d/30)!==1?'s':''); }
 
   // --- Time-of-day helpers ---
-  function getHourFromISO(iso) { if (!iso) return null; var m = iso.match(/T(\d{2}):/); return m ? parseInt(m[1]) : null; }
-  function getMinuteFromISO(iso) { if (!iso) return 0; var m = iso.match(/T\d{2}:(\d{2})/); return m ? parseInt(m[1]) : 0; }
+  function getHourFromISO(iso) { if (!iso) return null; var m = iso.match(/T(\d{2}):/); return m ? parseInt(m[1], 10) : null; }
+  function getMinuteFromISO(iso) { if (!iso) return 0; var m = iso.match(/T\d{2}:(\d{2})/); return m ? parseInt(m[1], 10) : 0; }
   function isAllDayWork(rw) { var sh = getHourFromISO(rw.start_date); return sh === 0 || sh === null; }
   function getWorkingHours(rw) {
     if (isAllDayWork(rw)) return null;
@@ -309,7 +384,7 @@ const cedBoundaries = cedBoundariesData as any[];
     if (!el) return;
     // During play, just set immediately to avoid perpetual animation
     if (playInterval) { el.textContent = target; return; }
-    var start = parseInt(el.textContent) || 0;
+    var start = parseInt(el.textContent, 10) || 0;
     if (start === target) { el.textContent = target; return; }
     var duration = 400, startTime = null;
     function step(ts) {
@@ -329,7 +404,6 @@ const cedBoundaries = cedBoundariesData as any[];
     if (!container || typeof L === 'undefined') return;
 
     map = L.map(container, { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
-    window._rwMap = map;
     L.tileLayer(TILE_URL, { attribution: TILE_ATTR, maxZoom: 18, subdomains: 'abcd' }).addTo(map);
     map.setView(LANCASHIRE_CENTER, LANCASHIRE_ZOOM);
     setTimeout(function() { map.invalidateSize(); map.setView(LANCASHIRE_CENTER, LANCASHIRE_ZOOM); }, 250);
@@ -371,7 +445,11 @@ const cedBoundaries = cedBoundariesData as any[];
   }
 
   function fetchRoadworks() {
-    fetch('/data/roadworks.json').then(function(r){return r.json();}).then(function(data) {
+    // Animate loading bar
+    var barFill = document.getElementById('rw-loading-bar-fill');
+    if (barFill) { barFill.style.width = '40%'; }
+    fetch('/data/roadworks.json').then(function(r){ if(barFill) barFill.style.width = '70%'; return r.json();}).then(function(data) {
+      if(barFill) barFill.style.width = '100%';
       allRoadworks = data.roadworks || [];
       populateFilters(data.stats);
       updateMeta(data);
@@ -398,7 +476,7 @@ const cedBoundaries = cedBoundariesData as any[];
         dSel.appendChild(o);
       });
       dSel.addEventListener('change', function() {
-        filters.district = this.value;
+        filters.district = this.value; currentPage = 0;
         // Fly to district or back to Lancashire
         if (this.value !== 'all' && DISTRICT_CENTERS[this.value]) {
           var dc = DISTRICT_CENTERS[this.value];
@@ -434,6 +512,18 @@ const cedBoundaries = cedBoundariesData as any[];
   function updateMeta(data) {
     var el = document.getElementById('map-stats-updated');
     if (el && data.meta) el.textContent = 'Updated ' + fmtDate(data.meta.generated);
+    // Check staleness
+    if (data.meta && data.meta.generated) {
+      metaGenerated = data.meta.generated;
+      var genTime = new Date(data.meta.generated).getTime();
+      var hoursAgo = Math.floor((Date.now() - genTime) / 3600000);
+      if (hoursAgo >= 6) {
+        var warn = document.getElementById('rw-stale-warning');
+        var txt = document.getElementById('rw-stale-text');
+        if (warn) warn.style.display = '';
+        if (txt) txt.textContent = 'Data may be stale \u2014 last updated ' + hoursAgo + ' hour' + (hoursAgo !== 1 ? 's' : '') + ' ago';
+      }
+    }
   }
 
   function updateStats() {
@@ -469,8 +559,10 @@ const cedBoundaries = cedBoundariesData as any[];
             postcodeMarker = L.marker([lat, lng], {
               icon: L.divIcon({ className: 'postcode-pin', html: '<div class="pc-pin"></div>', iconSize: [20, 20], iconAnchor: [10, 10] })
             }).addTo(map).bindPopup('<div style="color:#fff;font-weight:600">' + esc(query.toUpperCase()) + '</div><div style="color:#aaa;font-size:12px">' + esc(data.result.admin_ward || '') + '</div>', { className: 'rw-popup' }).openPopup();
+          } else {
+            showToast('Postcode not found: ' + query.toUpperCase());
           }
-        }).catch(function(){});
+        }).catch(function(){ showToast('Postcode lookup failed \u2014 please try again'); });
     } else {
       // Search road names
       filters.road = query;
@@ -618,7 +710,7 @@ const cedBoundaries = cedBoundariesData as any[];
     // Click handlers for bars
     chart.querySelectorAll('.rw-hour-bar').forEach(function(b) {
       b.addEventListener('click', function() {
-        var h = parseInt(b.getAttribute('data-hour'));
+        var h = parseInt(b.getAttribute('data-hour'), 10);
         selectedHour = selectedHour === h ? null : h;
         buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
       });
@@ -689,6 +781,7 @@ const cedBoundaries = cedBoundariesData as any[];
       case 'road': s.sort(function(a,b){return(a.road||'').localeCompare(b.road||'');}); break;
       case 'start': s.sort(function(a,b){return(a.start_date||'').localeCompare(b.start_date||'');}); break;
       case 'end': s.sort(function(a,b){return(a.end_date||'').localeCompare(b.end_date||'');}); break;
+      case 'duration': s.sort(function(a,b){return durationDays(b)-durationDays(a);}); break;
       case 'operator': s.sort(function(a,b){return(a.operator||'').localeCompare(b.operator||'');}); break;
       default: s.sort(function(a,b){return(SEV_ORDER[a.severity]||9)-(SEV_ORDER[b.severity]||9);});
     }
@@ -831,13 +924,26 @@ const cedBoundaries = cedBoundariesData as any[];
     if (!el) return;
     var filtered = sortRecords(getFiltered());
     if (cEl) cEl.textContent = '(' + filtered.length + ')';
-    if (!filtered.length) { el.innerHTML = '<div class="rw-list-empty">No roadworks match your filters</div>'; return; }
-    var display = filtered.slice(0, 60), h = '';
+    updateResetBtn();
+    if (!filtered.length) {
+      el.innerHTML = '<div class="rw-list-empty">No roadworks match your filters</div>';
+      var pg = document.getElementById('rw-pagination'); if (pg) pg.style.display = 'none';
+      return;
+    }
+    // Pagination
+    var totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    if (currentPage >= totalPages) currentPage = totalPages - 1;
+    if (currentPage < 0) currentPage = 0;
+    var startIdx = currentPage * PAGE_SIZE;
+    var endIdx = Math.min(startIdx + PAGE_SIZE, filtered.length);
+    var display = filtered.slice(startIdx, endIdx), h = '';
     display.forEach(function(rw) {
       var c = SEV_COLORS[rw.severity]||'#8e8e93', isA = rw.status==='Works started';
       var days = durationDays(rw), dur = durationLabel(days), bp = Math.min(100, days/90*100);
       var rc = classifyRestriction(rw), rcColor = RESTRICTION_COLORS[rc], rcLabel = RESTRICTION_LABELS[rc];
-      h += '<div class="rw-card" data-id="'+rw.id+'">'
+      var capPct = getCapacityPct(rc);
+      var capColor = capPct >= 80 ? '#ef4444' : capPct >= 40 ? '#f59e0b' : '#22c55e';
+      h += '<div class="rw-card" data-id="'+rw.id+'" data-sev-color="'+rcColor+'">'
         + '<div class="rw-card-bar" style="background:'+rcColor+';opacity:'+(isA?'1':'0.4')+'"></div>'
         + '<div class="rw-card-body">'
         + '<div class="rw-card-top"><div class="rw-card-road">'+esc(rw.road)+'</div>'
@@ -847,6 +953,7 @@ const cedBoundaries = cedBoundariesData as any[];
         + '</div></div>'
         + '<div class="rw-card-meta">'+(rw.district?'<span class="rw-district-badge">'+esc(DISTRICT_LABELS[rw.district]||rw.district)+'</span>':'')+esc(rw.ward)+'<span class="rw-sep">\u00b7</span>'+esc(rw.operator)+'</div>'
         + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' ('+dur+')' + (function(){ var wh=getWorkingHours(rw); return wh ? ' <span class="rw-card-hours">\u00b7 '+wh.start+'\u2013'+wh.end+'</span>' : ''; })() + '</div>'
+        + '<div class="rw-card-capacity"><div class="rw-cap-track"><div class="rw-cap-fill" style="width:'+capPct+'%;background:'+capColor+'"></div></div><span class="rw-cap-label" style="color:'+capColor+'">'+capPct+'% capacity loss</span></div>'
         + '<div class="rw-dur-track"><div class="rw-dur-fill" style="width:'+bp+'%;background:'+c+';opacity:'+(isA?'0.6':'0.2')+'"></div></div>';
       if (rw.description && rw.description.length > 30) {
         var d = rw.description.split('|')[0];
@@ -855,15 +962,27 @@ const cedBoundaries = cedBoundariesData as any[];
       if (rw.one_network_url) h += '<a href="'+esc(rw.one_network_url)+'" target="_blank" rel="noopener" class="rw-card-link" onclick="event.stopPropagation()">one.network \u2192</a>';
       h += '</div></div>';
     });
-    if (filtered.length > 60) h += '<div class="rw-list-more">Showing 60 of '+filtered.length+'</div>';
     el.innerHTML = h;
     el.querySelectorAll('.rw-card').forEach(function(card) {
       card.addEventListener('click', function() {
-        var id = parseInt(card.getAttribute('data-id'));
+        var id = parseInt(card.getAttribute('data-id'), 10);
         var mk = markers.find(function(m){return m.rwData && m.rwData.id===id;});
         if (mk) { map.setView(mk.getLatLng(), 16); mk.openPopup(); document.getElementById('roadworks-map').scrollIntoView({behavior:'smooth',block:'center'}); }
       });
     });
+    // Pagination controls
+    var pgEl = document.getElementById('rw-pagination');
+    if (pgEl) {
+      pgEl.style.display = totalPages > 1 ? '' : 'none';
+      var info = document.getElementById('rw-page-info');
+      var num = document.getElementById('rw-page-num');
+      var prevBtn = document.getElementById('rw-page-prev');
+      var nextBtn = document.getElementById('rw-page-next');
+      if (info) info.textContent = 'Showing ' + (startIdx + 1) + '\u2013' + endIdx + ' of ' + filtered.length + ' results';
+      if (num) num.textContent = 'Page ' + (currentPage + 1) + ' of ' + totalPages;
+      if (prevBtn) prevBtn.disabled = currentPage <= 0;
+      if (nextBtn) nextBtn.disabled = currentPage >= totalPages - 1;
+    }
   }
 
   // --- Stop playback helper ---
@@ -883,29 +1002,66 @@ const cedBoundaries = cedBoundariesData as any[];
   // --- Events ---
   document.querySelectorAll('.rw-chip[data-filter]').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      stopPlay();
+      stopPlay(); currentPage = 0;
       var ft = btn.getAttribute('data-filter'), v = btn.getAttribute('data-value');
       filters[ft] = v;
-      btn.closest('.rw-filter-chips').querySelectorAll('.rw-chip').forEach(function(b){b.classList.remove('active');});
+      btn.closest('.rw-filter-chips').querySelectorAll('.rw-chip').forEach(function(b){
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       renderMarkers(); renderList(); updateStats();
     });
+  });
+
+  // Reset all filters
+  var resetBtn = document.getElementById('reset-filters');
+  if (resetBtn) resetBtn.addEventListener('click', resetAllFilters);
+
+  // Search clear button
+  var searchClearBtn = document.getElementById('search-clear');
+  var searchInput = document.getElementById('postcode-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var sc = document.getElementById('search-clear');
+      if (sc) sc.style.display = searchInput.value ? '' : 'none';
+    });
+  }
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener('click', function() {
+      var si = document.getElementById('postcode-search');
+      if (si) si.value = '';
+      searchClearBtn.style.display = 'none';
+      filters.road = '';
+      if (postcodeMarker) { map.removeLayer(postcodeMarker); postcodeMarker = null; }
+      currentPage = 0;
+      renderMarkers(); renderList(); updateStats(); updateResetBtn();
+    });
+  }
+
+  // Pagination
+  document.getElementById('rw-page-prev')?.addEventListener('click', function() {
+    if (currentPage > 0) { currentPage--; renderList(); var el = document.getElementById('rw-list'); if (el) el.scrollTop = 0; }
+  });
+  document.getElementById('rw-page-next')?.addEventListener('click', function() {
+    currentPage++; renderList(); var el = document.getElementById('rw-list'); if (el) el.scrollTop = 0;
   });
 
   ['operator-filter','ward-filter','restriction-filter'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('change', function() {
-      stopPlay();
+      stopPlay(); currentPage = 0;
       filters[id.replace('-filter','')] = el.value;
       renderMarkers(); renderList(); updateStats();
     });
   });
 
-  // Postcode/road search
-  var searchInput = document.getElementById('postcode-search');
-  if (searchInput) {
-    searchInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { stopPlay(); searchPostcode(searchInput.value); }
+  // Postcode/road search (keydown handler)
+  var searchEl = document.getElementById('postcode-search');
+  if (searchEl) {
+    searchEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { stopPlay(); currentPage = 0; searchPostcode(searchEl.value); }
     });
   }
 
@@ -1030,6 +1186,9 @@ const cedBoundaries = cedBoundariesData as any[];
     if (!intelLayer) loadTrafficIntel();
     else if (intelT.checked) intelLayer.addTo(map);
     else map.removeLayer(intelLayer);
+    // Toggle JCI legend entry
+    var jciLeg = document.getElementById('legend-jci');
+    if (jciLeg) jciLeg.style.display = intelT.checked ? '' : 'none';
   });
   if (corrT) corrT.addEventListener('change', function() {
     if (!corridorLayer) loadTrafficIntel();
@@ -1039,7 +1198,7 @@ const cedBoundaries = cedBoundariesData as any[];
 
   // Timeline
   var tSlider = document.getElementById('timeline-slider');
-  if (tSlider) tSlider.addEventListener('input', function() { stopPlay(); if (timelineMode==='all') timelineMode='date'; setTimelineDate(parseInt(tSlider.value)); });
+  if (tSlider) tSlider.addEventListener('input', function() { stopPlay(); if (timelineMode==='all') timelineMode='date'; setTimelineDate(parseInt(tSlider.value, 10)); });
 
   document.getElementById('timeline-prev')?.addEventListener('click', function() {
     stopPlay(); if (timelineMode==='all') timelineMode='date';
@@ -1080,7 +1239,7 @@ const cedBoundaries = cedBoundariesData as any[];
   // Speed controls
   document.querySelectorAll('.rw-speed-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      playSpeed = parseInt(btn.dataset.speed) || 600;
+      playSpeed = parseInt(btn.dataset.speed, 10) || 600;
       document.querySelectorAll('.rw-speed-btn').forEach(function(b){ b.classList.remove('rw-speed-active'); });
       btn.classList.add('rw-speed-active');
       // If playing, restart with new speed
@@ -1113,7 +1272,7 @@ const cedBoundaries = cedBoundariesData as any[];
   });
 
   var sortEl = document.getElementById('rw-sort');
-  if (sortEl) sortEl.addEventListener('change', function() { sortBy = sortEl.value; renderList(); });
+  if (sortEl) sortEl.addEventListener('change', function() { sortBy = sortEl.value; currentPage = 0; renderList(); });
 
   document.getElementById('hourly-clear')?.addEventListener('click', function() {
     stopPlay(); selectedHour = null; buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
@@ -1932,6 +2091,143 @@ const cedBoundaries = cedBoundariesData as any[];
 
   :global(.rw-card-hours) { color: rgba(18, 182, 207, 0.5); font-weight: 500; }
 
+  /* --- Capacity bar in cards --- */
+  :global(.rw-card-capacity) {
+    display: flex; align-items: center; gap: 8px; margin-top: 5px;
+  }
+  :global(.rw-cap-track) {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden;
+  }
+  :global(.rw-cap-fill) {
+    height: 100%; border-radius: 2px; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :global(.rw-cap-label) {
+    font-size: 0.6rem; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Card hover left-border color --- */
+  :global(.rw-card:hover .rw-card-bar) { opacity: 1 !important; box-shadow: 2px 0 8px rgba(0,0,0,0.3); }
+
+  /* --- Search clear button --- */
+  .rw-search-clear {
+    display: flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border: none; background: rgba(255,255,255,0.08);
+    border-radius: 50%; color: rgba(235,235,245,0.5); font-size: 14px; line-height: 1;
+    cursor: pointer; flex-shrink: 0; transition: all 0.15s ease; padding: 0;
+  }
+  .rw-search-clear:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  /* --- Reset filters button --- */
+  .rw-reset-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border: 1px solid rgba(239,68,68,0.25); border-radius: 100px;
+    background: rgba(239,68,68,0.08); color: rgba(239,68,68,0.8);
+    font-size: 0.7rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: rw-fade-in 0.2s ease;
+  }
+  .rw-reset-btn:hover {
+    background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4);
+    color: #ef4444; transform: translateY(-1px);
+  }
+  .rw-reset-btn:active { transform: scale(0.96); }
+  @keyframes rw-fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- Staleness warning --- */
+  .rw-stale-warning {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0.5rem 0.875rem;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 10px; margin-bottom: 0.5rem;
+    color: rgba(245,158,11,0.9); font-size: 0.75rem; font-weight: 500;
+    animation: rw-fade-in 0.3s ease;
+  }
+
+  /* --- Toast notification --- */
+  .rw-toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(10px);
+    padding: 0.625rem 1.25rem;
+    background: rgba(16,16,18,0.95); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; color: rgba(235,235,245,0.85);
+    font-size: 0.8rem; font-weight: 500; z-index: 10000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .rw-toast.rw-toast-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* --- Loading bar --- */
+  .rw-loading-bar {
+    width: 120px; height: 3px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; overflow: hidden; margin-top: 8px;
+  }
+  .rw-loading-bar-fill {
+    height: 100%; width: 0; background: linear-gradient(90deg, #12b6cf, #f59e0b);
+    border-radius: 2px; transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* --- Toggle hints --- */
+  .rw-toggle-hint {
+    font-size: 0.55rem; color: rgba(235,235,245,0.2);
+    font-weight: 400; display: none;
+  }
+  .rw-toggle:hover .rw-toggle-hint { display: inline; }
+
+  /* --- Keyboard hint --- */
+  .rw-keyboard-hint {
+    font-size: 0.625rem; color: rgba(235,235,245,0.15);
+    text-align: center; margin-top: 0.375rem;
+    letter-spacing: 0.02em;
+  }
+  .rw-keyboard-hint kbd {
+    display: inline-block; padding: 1px 5px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px; font-family: inherit; font-size: 0.6rem;
+    color: rgba(235,235,245,0.3);
+  }
+
+  /* --- Pagination --- */
+  .rw-pagination {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.625rem 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.015);
+  }
+  .rw-page-info {
+    font-size: 0.7rem; color: rgba(235,235,245,0.35);
+    font-variant-numeric: tabular-nums;
+  }
+  .rw-page-btns { display: flex; align-items: center; gap: 8px; }
+  .rw-page-btn {
+    padding: 5px 12px; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; background: transparent;
+    color: rgba(235,235,245,0.6); font-size: 0.7rem; font-weight: 500;
+    cursor: pointer; transition: all 0.18s ease;
+  }
+  .rw-page-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.06); color: #fff; transform: translateY(-1px);
+  }
+  .rw-page-btn:disabled {
+    opacity: 0.25; cursor: not-allowed;
+  }
+  .rw-page-num {
+    font-size: 0.7rem; color: rgba(235,235,245,0.5);
+    font-weight: 600; font-variant-numeric: tabular-nums; min-width: 80px; text-align: center;
+  }
+
+  /* --- Improved shimmer --- */
+  .rw-stat-card.rw-shimmer {
+    overflow: hidden;
+  }
+  .rw-stat-card.rw-shimmer::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+    animation: rw-shimmer-sweep 2s ease-in-out infinite;
+  }
+  @keyframes rw-shimmer-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
   /* --- Accessibility --- */
   @media (prefers-reduced-motion: reduce) {
     .rw-stat-card, .rw-chip, :global(.rw-card) { transition: none !important; }
@@ -1953,7 +2249,8 @@ const cedBoundaries = cedBoundariesData as any[];
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
     .rw-controls-secondary::-webkit-scrollbar { display: none; }
     .rw-search-box { max-width: 100%; }
@@ -1963,6 +2260,17 @@ const cedBoundaries = cedBoundariesData as any[];
     .rw-timeline-top { flex-direction: column; gap: 4px; align-items: flex-start; }
     .rw-tl-date { min-width: unset; text-align: left; }
     :global(.rw-card) { padding: 0.875rem 1rem !important; }
+    /* Larger touch targets for timeline */
+    .rw-tl-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+    .rw-tl-action { padding: 8px 14px; font-size: 0.75rem; }
+    /* Speed controls touch-friendly */
+    .rw-speed-btn { min-width: 36px; min-height: 36px; padding: 6px 10px; font-size: 12px; }
+    .rw-speed-controls { gap: 3px; padding: 3px; }
+    .rw-play-btn { padding: 10px 20px; }
+    /* Pagination stacks */
+    .rw-pagination { flex-direction: column; gap: 8px; text-align: center; }
+    .rw-keyboard-hint { display: none; }
+    .rw-toggle-hint { display: none !important; }
   }
 
   @media (max-width: 480px) {
@@ -1976,5 +2284,8 @@ const cedBoundaries = cedBoundariesData as any[];
     .rw-map-glow { border-radius: 16px; }
     .rw-list-panel { border-radius: 14px; }
     .rw-section { margin: 1rem 0; }
+    /* Chips wrap on small screens */
+    .rw-filter-chips { flex-wrap: wrap; }
+    .rw-chip { padding: 6px 12px; font-size: 0.7rem; }
   }
 </style>
