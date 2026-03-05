@@ -125,6 +125,24 @@ const cedBoundaries = cedBoundariesData as any[];
     </div>
   </div>
 
+  <!-- 24-hour disruption strip (date mode only) -->
+  <div class="rw-hourly" id="rw-hourly-section" style="display:none">
+    <div class="rw-hourly-header">
+      <span class="rw-hourly-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Hourly disruption
+      </span>
+      <div class="rw-hourly-actions">
+        <span class="rw-hourly-info" id="hourly-info"></span>
+        <button class="rw-tl-action" id="hourly-clear" style="display:none">Clear hour</button>
+      </div>
+    </div>
+    <div class="rw-hourly-chart" id="hourly-chart"></div>
+    <div class="rw-hourly-labels">
+      <span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span>
+    </div>
+  </div>
+
   <!-- Map -->
   <div class="rw-map-wrapper">
     <div class="rw-map-glow"></div>
@@ -192,7 +210,7 @@ const cedBoundaries = cedBoundariesData as any[];
 
   var allRoadworks = [], markers = [], cedLayer = null, wardLayer = null, map = null;
   var filters = { status: 'all', severity: 'all', operator: 'all', ward: 'all', restriction: 'all', road: '' };
-  var timelineMode = 'all', selectedDate = null, dateRangeStart = null, dateRangeEnd = null, playInterval = null, sortBy = 'severity';
+  var timelineMode = 'all', selectedDate = null, dateRangeStart = null, dateRangeEnd = null, playInterval = null, sortBy = 'severity', selectedHour = null;
   var postcodeMarker = null;
 
   function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
@@ -208,6 +226,28 @@ const cedBoundaries = cedBoundariesData as any[];
   function humanRestriction(r) { return r ? r.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,function(c){return c.toUpperCase();}) : 'None'; }
   function durationDays(r) { var s=toDateOnly(r.start_date),e=toDateOnly(r.end_date); return (s&&e)?Math.max(1,daysBetween(s,e)):0; }
   function durationLabel(d) { return d<=1?'1 day':d<7?d+' days':d<30?Math.round(d/7)+' wk'+(Math.round(d/7)!==1?'s':''):Math.round(d/30)+' mo'+(Math.round(d/30)!==1?'s':''); }
+
+  // --- Time-of-day helpers ---
+  function getHourFromISO(iso) { if (!iso) return null; var m = iso.match(/T(\d{2}):/); return m ? parseInt(m[1]) : null; }
+  function getMinuteFromISO(iso) { if (!iso) return 0; var m = iso.match(/T\d{2}:(\d{2})/); return m ? parseInt(m[1]) : 0; }
+  function isAllDayWork(rw) { var sh = getHourFromISO(rw.start_date); return sh === 0 || sh === null; }
+  function getWorkingHours(rw) {
+    if (isAllDayWork(rw)) return null;
+    var sh = getHourFromISO(rw.start_date), sm = getMinuteFromISO(rw.start_date);
+    var eh = getHourFromISO(rw.end_date), em = getMinuteFromISO(rw.end_date);
+    return { start: String(sh).padStart(2,'0')+':'+String(sm).padStart(2,'0'), end: String(eh).padStart(2,'0')+':'+String(em).padStart(2,'0'), startH: sh, endH: eh };
+  }
+  function isActiveAtHour(rw, date, hour) {
+    var s = toDateOnly(rw.start_date), e = toDateOnly(rw.end_date);
+    if (!s || !e) return false;
+    var t = date.getTime();
+    if (s.getTime() > t || e.getTime() < t) return false;
+    if (isAllDayWork(rw)) return true;
+    var sh = getHourFromISO(rw.start_date) || 0;
+    var eh = getHourFromISO(rw.end_date);
+    if (eh === null || eh === 0) eh = 23;
+    return hour >= sh && hour <= eh;
+  }
 
   // Animate counter — settles at final value, skips animation during play
   function animateCount(el, target) {
@@ -413,6 +453,84 @@ const cedBoundaries = cedBoundariesData as any[];
     }
   }
 
+  function buildHourlyStrip() {
+    var section = document.getElementById('rw-hourly-section');
+    if (!section) return;
+    if (timelineMode !== 'date' || !selectedDate) { section.style.display = 'none'; return; }
+    section.style.display = '';
+
+    var chart = document.getElementById('hourly-chart');
+    if (!chart) return;
+    chart.innerHTML = '';
+
+    var maxCount = 0, hourlyCounts = [];
+    for (var h = 0; h < 24; h++) {
+      var count = allRoadworks.filter(function(rw) { return isActiveAtHour(rw, selectedDate, h); }).length;
+      hourlyCounts.push(count);
+      if (count > maxCount) maxCount = count;
+    }
+
+    // Subtract baseline so bar heights show relative disruption
+    var minCount = Math.min.apply(null, hourlyCounts);
+    var range = maxCount - minCount;
+
+    for (var i = 0; i < 24; i++) {
+      var bar = document.createElement('div');
+      var pct = range > 0 ? (hourlyCounts[i] - minCount) / range : 0;
+      var barH = Math.max(4, Math.round(6 + pct * 38));
+      var isRush = (i >= 7 && i < 9) || (i >= 15 && i < 18);
+      var isSchoolRun = i === 8 || i === 15;
+
+      bar.className = 'rw-hour-bar'
+        + (isSchoolRun ? ' rw-hour-school' : isRush ? ' rw-hour-rush' : '')
+        + (selectedHour === i ? ' rw-hour-selected' : '');
+      bar.style.height = barH + 'px';
+      bar.setAttribute('data-hour', i);
+      bar.title = String(i).padStart(2,'0') + ':00 \u2014 ' + hourlyCounts[i] + ' works';
+      chart.appendChild(bar);
+    }
+
+    // Now-marker if viewing today
+    var now = new Date(), td = new Date(); td.setHours(0,0,0,0);
+    if (selectedDate.getTime() === td.getTime()) {
+      var nowPct = (now.getHours() + now.getMinutes() / 60) / 24 * 100;
+      var marker = document.createElement('div');
+      marker.className = 'rw-hour-now';
+      marker.style.left = nowPct + '%';
+      marker.title = 'Now (' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ')';
+      chart.appendChild(marker);
+    }
+
+    // Info label
+    var info = document.getElementById('hourly-info');
+    var clearBtn = document.getElementById('hourly-clear');
+    if (selectedHour !== null) {
+      var rushTag = (selectedHour >= 7 && selectedHour < 9) ? ' \u00b7 AM rush' : (selectedHour >= 15 && selectedHour < 18) ? ' \u00b7 PM rush' : '';
+      if (info) info.textContent = String(selectedHour).padStart(2,'0') + ':00 \u2014 ' + hourlyCounts[selectedHour] + ' works' + rushTag;
+      if (clearBtn) clearBtn.style.display = '';
+    } else {
+      var peakH = hourlyCounts.indexOf(Math.max.apply(null, hourlyCounts));
+      var timedCount = allRoadworks.filter(function(rw) {
+        var s = toDateOnly(rw.start_date), e = toDateOnly(rw.end_date);
+        if (!s || !e) return false; var t = selectedDate.getTime();
+        if (s.getTime() > t || e.getTime() < t) return false;
+        return !isAllDayWork(rw);
+      }).length;
+      if (info && maxCount > 0) info.textContent = 'Peak ' + String(peakH).padStart(2,'0') + ':00 (' + hourlyCounts[peakH] + ') \u00b7 ' + timedCount + ' with timed hours';
+      else if (info) info.textContent = '';
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+
+    // Click handlers for bars
+    chart.querySelectorAll('.rw-hour-bar').forEach(function(b) {
+      b.addEventListener('click', function() {
+        var h = parseInt(b.getAttribute('data-hour'));
+        selectedHour = selectedHour === h ? null : h;
+        buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
+      });
+    });
+  }
+
   function countActiveOnDate(date) {
     var t = date.getTime();
     return allRoadworks.filter(function(r) {
@@ -434,9 +552,11 @@ const cedBoundaries = cedBoundariesData as any[];
       statsEl.textContent = cnt + ' works' + (isToday ? ' (today)' : '');
       statsEl.style.opacity = '1';
     } else if (statsEl) { statsEl.style.opacity = '0'; }
+    buildHourlyStrip();
   }
 
   function setTimelineDate(idx) {
+    selectedHour = null;
     selectedDate = new Date(dateRangeStart.getTime()+idx*86400000);
     var s = document.getElementById('timeline-slider'); if (s) s.value = idx;
     updateTimelineDisplay(); renderMarkers(); renderList(); updateStats();
@@ -457,6 +577,7 @@ const cedBoundaries = cedBoundariesData as any[];
         if (!s||!e) return false;
         var t=selectedDate.getTime();
         if (s.getTime()>t || e.getTime()<t) return false;
+        if (selectedHour !== null && !isActiveAtHour(r, selectedDate, selectedHour)) return false;
       }
       return true;
     });
@@ -535,8 +656,11 @@ const cedBoundaries = cedBoundariesData as any[];
         + '<div style="font-size:12px;color:rgba(235,235,245,0.4);margin-bottom:8px">'+esc(rw.ward)+'</div>'
         + '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">'+stb+rtb+sb+'</div>'
         + '<div style="font-size:12.5px;color:rgba(235,235,245,0.7);line-height:1.7">'
-        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' <span style="color:rgba(235,235,245,0.3)">(' + durationLabel(days) + ')</span></div>'
-        + '<div><span style="color:rgba(235,235,245,0.35)">Operator</span> '+esc(rw.operator)+'</div>';
+        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' <span style="color:rgba(235,235,245,0.3)">(' + durationLabel(days) + ')</span></div>';
+      var wh = getWorkingHours(rw);
+      if (wh) h += '<div><span style="color:rgba(235,235,245,0.35)">Hours</span> '+wh.start+' \u2014 '+wh.end+'</div>';
+      else h += '<div><span style="color:rgba(235,235,245,0.35)">Hours</span> All day</div>';
+      h += '<div><span style="color:rgba(235,235,245,0.35)">Operator</span> '+esc(rw.operator)+'</div>';
       if (rw.restrictions) h += '<div><span style="color:rgba(235,235,245,0.35)">Restrictions</span> '+esc(humanRestriction(rw.restrictions))+'</div>';
       if (rw.impact) h += '<div><span style="color:rgba(235,235,245,0.35)">Impact</span> '+esc(rw.impact.replace(/([a-z])([A-Z])/g,'$1 $2'))+'</div>';
       if (rw.description) { var desc = rw.description.split('|')[0]; h += '<div style="margin-top:6px;color:rgba(235,235,245,0.3);font-size:11.5px;line-height:1.4">'+esc(desc.substring(0,180))+'</div>'; }
@@ -578,7 +702,7 @@ const cedBoundaries = cedBoundariesData as any[];
         + '<span class="rw-tag" style="background:'+rcColor+'18;color:'+rcColor+'">'+esc(rcLabel)+'</span>'
         + '</div></div>'
         + '<div class="rw-card-meta">'+esc(rw.ward)+'<span class="rw-sep">\u00b7</span>'+esc(rw.operator)+'</div>'
-        + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' ('+dur+')</div>'
+        + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' ('+dur+')' + (function(){ var wh=getWorkingHours(rw); return wh ? ' <span class="rw-card-hours">\u00b7 '+wh.start+'\u2013'+wh.end+'</span>' : ''; })() + '</div>'
         + '<div class="rw-dur-track"><div class="rw-dur-fill" style="width:'+bp+'%;background:'+c+';opacity:'+(isA?'0.6':'0.2')+'"></div></div>';
       if (rw.description && rw.description.length > 30) {
         var d = rw.description.split('|')[0];
@@ -771,7 +895,7 @@ const cedBoundaries = cedBoundariesData as any[];
     setTimelineDate(idx);
   });
   document.getElementById('timeline-mode')?.addEventListener('click', function() {
-    timelineMode = timelineMode==='all'?'date':'all'; updateTimelineDisplay(); renderMarkers(); renderList(); updateStats();
+    timelineMode = timelineMode==='all'?'date':'all'; if(timelineMode==='all')selectedHour=null; updateTimelineDisplay(); renderMarkers(); renderList(); updateStats();
   });
   document.getElementById('timeline-play')?.addEventListener('click', function() {
     var playBtn = document.getElementById('timeline-play');
@@ -785,6 +909,10 @@ const cedBoundaries = cedBoundariesData as any[];
 
   var sortEl = document.getElementById('rw-sort');
   if (sortEl) sortEl.addEventListener('change', function() { sortBy = sortEl.value; renderList(); });
+
+  document.getElementById('hourly-clear')?.addEventListener('click', function() {
+    selectedHour = null; buildHourlyStrip(); renderMarkers(); renderList(); updateStats();
+  });
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', initMap); else initMap();
 })();
@@ -1369,6 +1497,87 @@ const cedBoundaries = cedBoundariesData as any[];
   :global(.leaflet-control-zoom a:hover) { background: rgba(22,22,24,1) !important; color: #fff !important; transform: scale(1.05) !important; }
   :global(.leaflet-control-attribution) { background: rgba(16,16,18,0.7) !important; color: rgba(235,235,245,0.2) !important; font-size: 9px !important; border-radius: 6px 0 0 0 !important; padding: 2px 6px !important; }
   :global(.leaflet-control-attribution a) { color: rgba(18,182,207,0.5) !important; }
+
+  /* --- Hourly strip --- */
+  .rw-hourly {
+    padding: 0.5rem 0.875rem;
+    background: rgba(22, 22, 26, 0.55);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  .rw-hourly-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+  }
+
+  .rw-hourly-title {
+    font-size: 0.68rem; font-weight: 600; color: rgba(235, 235, 245, 0.4);
+    display: flex; align-items: center; gap: 5px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  .rw-hourly-actions { display: flex; align-items: center; gap: 8px; }
+
+  .rw-hourly-info {
+    font-size: 0.68rem; color: rgba(18, 182, 207, 0.7); font-weight: 500;
+    font-variant-numeric: tabular-nums; letter-spacing: 0.01em;
+  }
+
+  .rw-hourly-chart {
+    display: flex; align-items: flex-end; gap: 1.5px;
+    height: 48px; position: relative;
+  }
+
+  :global(.rw-hour-bar) {
+    flex: 1; min-width: 0;
+    background: rgba(18, 182, 207, 0.5);
+    border-radius: 2px 2px 0 0;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  :global(.rw-hour-bar:hover) {
+    background: rgba(18, 182, 207, 0.65) !important;
+    filter: drop-shadow(0 0 6px rgba(18,182,207,0.3));
+    transform: scaleY(1.15); transform-origin: bottom;
+  }
+
+  :global(.rw-hour-rush) { background: rgba(239, 68, 68, 0.45); }
+  :global(.rw-hour-rush:hover) { background: rgba(239, 68, 68, 0.7) !important; filter: drop-shadow(0 0 6px rgba(239,68,68,0.3)); }
+  :global(.rw-hour-school) { background: rgba(245, 158, 11, 0.55); }
+  :global(.rw-hour-school:hover) { background: rgba(245, 158, 11, 0.75) !important; filter: drop-shadow(0 0 6px rgba(245,158,11,0.3)); }
+
+  :global(.rw-hour-selected) {
+    background: rgba(18, 182, 207, 0.75) !important;
+    box-shadow: 0 0 10px rgba(18, 182, 207, 0.5), 0 0 3px rgba(18,182,207,0.8);
+    filter: drop-shadow(0 -2px 4px rgba(18,182,207,0.3));
+  }
+  :global(.rw-hour-rush.rw-hour-selected) { background: rgba(239, 68, 68, 0.7) !important; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+  :global(.rw-hour-school.rw-hour-selected) { background: rgba(245, 158, 11, 0.7) !important; box-shadow: 0 0 10px rgba(245,158,11,0.5); }
+
+  :global(.rw-hour-now) {
+    position: absolute; bottom: 0; width: 2px;
+    height: calc(100% + 6px);
+    background: rgba(255, 255, 255, 0.85);
+    pointer-events: none; z-index: 2;
+  }
+  :global(.rw-hour-now::before) {
+    content: ''; position: absolute; top: -1px; left: -3px;
+    border-left: 4px solid transparent; border-right: 4px solid transparent;
+    border-top: 5px solid #fff;
+  }
+
+  .rw-hourly-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 3px; padding: 0 1px;
+    font-size: 0.5625rem; color: rgba(235, 235, 245, 0.2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :global(.rw-card-hours) { color: rgba(18, 182, 207, 0.5); font-weight: 500; }
 
   /* --- Accessibility --- */
   @media (prefers-reduced-motion: reduce) {
