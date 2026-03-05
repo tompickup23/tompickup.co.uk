@@ -245,125 +245,166 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
     width: 100%;
     max-width: 700px;
     margin: 0 auto;
-    perspective: 900px;
+    perspective: 1000px;
+    padding: 1.5rem 0 0;
   }
 
   .ward-map-mini {
     max-width: 400px;
+    padding: 0.5rem 0 0;
   }
 
   /* ---- 3D Transform ---- */
   .ward-map-svg {
     width: 100%;
     height: auto;
-    transform: rotateX(38deg) rotateZ(-2deg);
+    transform: rotateX(40deg) rotateZ(-2deg);
     transform-style: preserve-3d;
-    transition: transform 0.6s var(--ease-smooth);
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+    will-change: transform;
   }
 
   .ward-map-mini .ward-map-svg {
     transform: rotateX(35deg) rotateZ(-1deg);
+    filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.4));
+  }
+
+  /* ---- Ambient glow beneath map ---- */
+  .ward-map-container::before {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: 10%;
+    right: 10%;
+    height: 50%;
+    background: radial-gradient(ellipse at 50% 100%, rgba(18, 182, 207, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
   }
 
   /* ---- Shadow layer ---- */
   .ward-shadow-path {
-    fill: rgba(0, 0, 0, 0.3);
+    fill: rgba(0, 0, 0, 0.4);
     stroke: none;
+    filter: blur(1px);
   }
 
   /* ---- Ward faces ---- */
   .ward-face {
-    fill: rgba(28, 28, 30, 0.8);
-    stroke: rgba(255, 255, 255, 0.15);
-    stroke-width: 1.5;
-    transition: fill 0.3s var(--ease-smooth), stroke 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+    fill: rgba(28, 28, 30, 0.85);
+    stroke: rgba(255, 255, 255, 0.12);
+    stroke-width: 1.2;
+    transition: fill 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                stroke 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                stroke-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
   }
 
   .ward-edge {
     stroke: none;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
   /* ---- Hover state ---- */
   .ward-group:hover .ward-face {
-    fill: rgba(18, 182, 207, 0.2);
-    stroke: var(--accent);
+    fill: rgba(18, 182, 207, 0.18);
+    stroke: rgba(18, 182, 207, 0.8);
     stroke-width: 2;
-    filter: drop-shadow(0 0 8px rgba(18, 182, 207, 0.4));
+    filter: drop-shadow(0 0 10px rgba(18, 182, 207, 0.35))
+            drop-shadow(0 0 24px rgba(18, 182, 207, 0.15));
   }
 
   .ward-group:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ward-group:hover .ward-edge {
+    opacity: 0.85;
   }
 
   /* ---- Active state ---- */
   .ward-active .ward-face {
-    fill: rgba(18, 182, 207, 0.25);
-    stroke: var(--accent);
+    fill: rgba(18, 182, 207, 0.22);
+    stroke: rgba(18, 182, 207, 0.9);
     stroke-width: 2.5;
+    filter: drop-shadow(0 0 12px rgba(18, 182, 207, 0.4));
+  }
+
+  .ward-active .ward-edge {
+    opacity: 0.9;
   }
 
   .ward-active-glow {
-    fill: rgba(18, 182, 207, 0.15);
+    fill: rgba(18, 182, 207, 0.12);
     stroke: none;
-    animation: wardPulse 2.5s ease-in-out infinite;
+    animation: wardPulse 3s ease-in-out infinite;
   }
 
   @keyframes wardPulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+    0%, 100% { opacity: 0.2; filter: blur(0px); }
+    50% { opacity: 0.55; filter: blur(2px); }
   }
 
   /* ---- Party overlay mode ---- */
   .ward-map-svg[data-overlay="party"] .ward-face {
-    fill: color-mix(in srgb, var(--party-color) 30%, rgba(28, 28, 30, 0.8));
-    stroke: var(--party-color);
-    stroke-opacity: 0.5;
+    fill: color-mix(in srgb, var(--party-color) 28%, rgba(28, 28, 30, 0.85));
+    stroke: color-mix(in srgb, var(--party-color) 60%, transparent);
+    stroke-width: 1.5;
   }
 
   .ward-map-svg[data-overlay="party"] .ward-group:hover .ward-face {
-    fill: color-mix(in srgb, var(--party-color) 50%, rgba(28, 28, 30, 0.8));
+    fill: color-mix(in srgb, var(--party-color) 50%, rgba(28, 28, 30, 0.7));
     stroke: var(--party-color);
     stroke-opacity: 1;
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--party-color) 40%, transparent));
   }
 
   /* ---- Deprivation overlay mode ---- */
   .ward-map-svg[data-overlay="deprivation"] .ward-face {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 1;
+  }
+
+  .ward-map-svg[data-overlay="deprivation"] .ward-group:hover .ward-face {
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 1.5;
   }
 
   /* ---- Neutral overlay mode ---- */
   .ward-map-svg[data-overlay="neutral"] .ward-face {
-    fill: rgba(40, 40, 44, 0.8);
-    stroke: rgba(255, 255, 255, 0.12);
+    fill: rgba(38, 38, 42, 0.85);
+    stroke: rgba(255, 255, 255, 0.08);
   }
 
   .ward-map-svg[data-overlay="neutral"] .ward-group:hover .ward-face {
-    fill: rgba(18, 182, 207, 0.15);
-    stroke: var(--accent);
+    fill: rgba(18, 182, 207, 0.12);
+    stroke: rgba(18, 182, 207, 0.6);
+    filter: drop-shadow(0 0 8px rgba(18, 182, 207, 0.2));
   }
 
   /* ---- Labels ---- */
   .ward-label {
-    font-size: 9px;
-    font-weight: 600;
-    fill: rgba(255, 255, 255, 0.5);
-    letter-spacing: 0.02em;
+    font-size: 8.5px;
+    font-weight: 700;
+    fill: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     paint-order: stroke;
-    stroke: rgba(0, 0, 0, 0.6);
+    stroke: rgba(0, 0, 0, 0.7);
     stroke-width: 3px;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: fill 0.3s var(--ease-smooth);
+    transition: fill 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .ward-group:hover + text.ward-label,
   .ward-label-active {
-    fill: rgba(255, 255, 255, 0.9);
+    fill: rgba(255, 255, 255, 0.95);
   }
 
   /* ---- Links ---- */
@@ -382,41 +423,46 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
     position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: 10px 14px;
-    background: rgba(9, 9, 11, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
+    gap: 3px;
+    padding: 12px 16px;
+    background: rgba(9, 9, 11, 0.94);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                0 1px 0 rgba(255, 255, 255, 0.03) inset;
     pointer-events: none;
     opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+    transform: translateY(6px) scale(0.97);
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     z-index: 10;
     white-space: nowrap;
   }
 
   .ward-tooltip.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .tooltip-name {
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #fff;
+    letter-spacing: -0.01em;
   }
 
   .tooltip-party {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--accent, #12b6cf);
   }
 
   .tooltip-stat {
     font-size: 0.6875rem;
-    color: var(--text-secondary);
+    color: rgba(235, 235, 245, 0.45);
     font-variant-numeric: tabular-nums;
   }
 
@@ -424,38 +470,48 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
   .map-overlays {
     display: flex;
     justify-content: center;
-    gap: var(--space-sm);
-    margin-top: var(--space-lg);
+    gap: 0.5rem;
+    margin-top: 1.5rem;
   }
 
   .overlay-btn {
-    padding: 0.35rem 0.85rem;
+    padding: 0.4rem 1rem;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 100px;
-    color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(235, 235, 245, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(255, 255, 255, 0.03);
-    transition: all var(--transition-fast);
+    backdrop-filter: blur(8px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    letter-spacing: 0.01em;
   }
 
   .overlay-btn:hover {
-    color: var(--text-primary);
+    color: rgba(235, 235, 245, 0.85);
     border-color: rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .overlay-btn:active {
+    transform: scale(0.97);
   }
 
   .overlay-btn.overlay-active {
-    color: var(--accent);
-    border-color: var(--accent-border);
-    background: var(--accent-glow);
+    color: #12b6cf;
+    border-color: rgba(18, 182, 207, 0.3);
+    background: rgba(18, 182, 207, 0.08);
+    box-shadow: 0 0 12px rgba(18, 182, 207, 0.15),
+                0 2px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 12px rgba(18, 182, 207, 0.3);
   }
 
   /* ---- Responsive ---- */
   @media (max-width: 768px) {
     .ward-map-svg {
-      transform: rotateX(30deg) rotateZ(-1deg);
+      transform: rotateX(32deg) rotateZ(-1deg);
     }
 
     .ward-label {
@@ -468,16 +524,27 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
 
     .map-overlays {
       flex-wrap: wrap;
+      gap: 0.375rem;
+    }
+
+    .overlay-btn {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.6875rem;
     }
   }
 
   @media (max-width: 480px) {
+    .ward-map-container {
+      padding: 0.5rem 0 0;
+    }
+
     .ward-map-svg {
-      transform: rotateX(25deg);
+      transform: rotateX(26deg);
     }
 
     .ward-label {
       font-size: 6px;
+      stroke-width: 2.5px;
     }
   }
 
@@ -492,7 +559,16 @@ const wards = Object.entries(wardData.wards).map(([slug, ward]: [string, any]) =
 
     .ward-active-glow {
       animation: none;
-      opacity: 0.4;
+      opacity: 0.35;
+    }
+
+    .ward-tooltip {
+      transition: opacity 0.15s ease;
+      transform: translateY(0) scale(1);
+    }
+
+    .ward-tooltip.visible {
+      transform: translateY(0) scale(1);
     }
   }
 </style>
