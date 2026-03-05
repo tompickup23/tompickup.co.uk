@@ -14,7 +14,7 @@
       "map_center": [53.789, -2.248],
       "map_zoom": 13,
       "sport_venues": [
-        {"name": "Turf Moor", "lat": 53.7891, "lng": -2.2303, "capacity": 21944, "team": "Burnley FC", "league": "epl", "fixture_urls": ["https://fixturedownload.com/feed/json/epl-2025/burnley", "https://fixturedownload.com/feed/json/efl-championship-2025/burnley"]}
+        {"name": "Turf Moor", "lat": 53.7891, "lng": -2.2303, "capacity": 21944, "team": "Burnley FC", "league": "epl-2025", "fixture_urls": ["https://fixturedownload.com/feed/json/epl-2025/burnley"]}
       ],
       "major_projects": [
         {
@@ -87,7 +87,7 @@
       "map_center": [53.761, -2.390],
       "map_zoom": 13,
       "sport_venues": [
-        {"name": "Wham Stadium", "lat": 53.7648, "lng": -2.3713, "capacity": 5057, "team": "Accrington Stanley", "league": "efl-league-one", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-one-2025/accrington-stanley"]}
+        {"name": "Wham Stadium", "lat": 53.7648, "lng": -2.3713, "capacity": 5057, "team": "Accrington Stanley", "league": "efl-league-one", "fixture_urls": ["https://fixturedownload.com/feed/json/league-two-2025/accrington-stanley"]}
       ],
       "major_projects": [],
       "corridors_seed": [
@@ -172,9 +172,21 @@
       "map_zoom": 11,
       "sport_venues": [
         {"name": "Giant Axe", "lat": 54.0436, "lng": -2.8044, "capacity": 3500, "team": "Lancaster City", "league": "national-league-north", "fixture_urls": []},
-        {"name": "Mazuma Stadium", "lat": 54.0699, "lng": -2.8688, "capacity": 6476, "team": "Morecambe FC", "league": "efl-league-two", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-two-2025/morecambe"]}
+        {"name": "Mazuma Stadium", "lat": 54.0699, "lng": -2.8688, "capacity": 6476, "team": "Morecambe FC", "league": "efl-league-two", "fixture_urls": []}
       ],
-      "major_projects": [],
+      "major_projects": [
+        {
+          "name": "A683 Caton Road Flood Resilience",
+          "description": "Flood defence-linked highway improvements — drainage, kerb raising, resurfacing. Part of Lancaster flood risk management.",
+          "roads": ["A683", "Caton Road"],
+          "lat_range": [54.045, 54.060],
+          "lng_range": [-2.810, -2.760],
+          "start": "2025-03",
+          "end": "2026-12",
+          "cannot_defer": true,
+          "reason": "DEFRA/EA flood defence grant — deferral risks losing flood resilience funding"
+        }
+      ],
       "corridors_seed": [
         {"name": "M6 Corridor (J33-J35)", "road": "M6", "coords": [[53.965,-2.770],[53.990,-2.780],[54.030,-2.789],[54.060,-2.800],[54.115,-2.810]], "base_severity": 0.4},
         {"name": "A6 Lancaster-Carnforth", "road": "A6", "coords": [[54.048,-2.799],[54.060,-2.797],[54.080,-2.795],[54.110,-2.786]], "base_severity": 0.3},
@@ -228,9 +240,21 @@
       "map_center": [53.653, -2.632],
       "map_zoom": 12,
       "sport_venues": [
-        {"name": "Victory Park", "lat": 53.6507, "lng": -2.6316, "capacity": 4100, "team": "Chorley FC", "league": "national-league-north", "fixture_urls": []}
+        {"name": "Victory Park", "lat": 53.6407, "lng": -2.6242, "capacity": 4100, "team": "Chorley FC", "league": "national-league-north", "fixture_urls": []}
       ],
-      "major_projects": [],
+      "major_projects": [
+        {
+          "name": "Chorley Town Centre Public Realm",
+          "description": "Town Deal funded public realm improvements — Market Street, High Street, paving and access.",
+          "roads": ["Market Street", "High Street", "Chapel Street"],
+          "lat_range": [53.648, 53.656],
+          "lng_range": [-2.638, -2.625],
+          "start": "2025-04",
+          "end": "2026-03",
+          "cannot_defer": true,
+          "reason": "Towns Fund grant with DLUHC delivery milestones"
+        }
+      ],
       "corridors_seed": [
         {"name": "M61 Corridor (J6-J8)", "road": "M61", "coords": [[53.623,-2.590],[53.635,-2.600],[53.650,-2.620],[53.665,-2.635]], "base_severity": 0.4},
         {"name": "M65 J1 Approach (Wheelton)", "road": "M65/A674", "coords": [[53.665,-2.635],[53.672,-2.620],[53.680,-2.600],[53.690,-2.580]], "base_severity": 0.3},
@@ -257,7 +281,19 @@
       "map_center": [53.727, -2.706],
       "map_zoom": 13,
       "sport_venues": [],
-      "major_projects": [],
+      "major_projects": [
+        {
+          "name": "A582/B5253 South Ribble Western Corridor",
+          "description": "Dualling of A582 Penwortham Way and B5253 Flensburg Way. Planning approved.",
+          "roads": ["A582", "B5253", "Penwortham Way", "Flensburg Way"],
+          "lat_range": [53.728, 53.748],
+          "lng_range": [-2.740, -2.690],
+          "start": "2025-06",
+          "end": "2027-12",
+          "cannot_defer": true,
+          "reason": "LCC City Deal funded — £100M+ programme with contractual milestones"
+        }
+      ],
       "corridors_seed": [
         {"name": "M6 Corridor (J28-J29)", "road": "M6", "coords": [[53.697,-2.665],[53.710,-2.670],[53.725,-2.672],[53.737,-2.673]], "base_severity": 0.5},
         {"name": "M65 J1 / M6 J29 Interchange", "road": "M6/M65", "coords": [[53.737,-2.673],[53.740,-2.668],[53.742,-2.660],[53.745,-2.650]], "base_severity": 0.7},
@@ -285,9 +321,22 @@
       "map_center": [53.763, -2.703],
       "map_zoom": 13,
       "sport_venues": [
-        {"name": "Deepdale", "lat": 53.7722, "lng": -2.6884, "capacity": 23404, "team": "Preston North End", "league": "efl-championship", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-championship-2025/preston-north-end"]}
+        {"name": "Deepdale", "lat": 53.7722, "lng": -2.6884, "capacity": 23404, "team": "Preston North End", "league": "efl-championship", "fixture_urls": ["https://fixturedownload.com/feed/json/championship-2025/preston-north-end"]},
+        {"name": "Sir Tom Finney Stadium", "lat": 53.7292, "lng": -2.6703, "capacity": 2642, "team": "Bamber Bridge FC", "league": "npl-premier", "fixture_urls": [], "district": "South Ribble"}
       ],
-      "major_projects": [],
+      "major_projects": [
+        {
+          "name": "Preston Western Distributor / East-West Link Road",
+          "description": "Major road scheme linking M55 J2 to A6 north of Preston. Includes new bridge over railway and River Ribble.",
+          "roads": ["A583", "Tom Benson Way", "Preston Western Distributor"],
+          "lat_range": [53.770, 53.810],
+          "lng_range": [-2.790, -2.730],
+          "start": "2023-01",
+          "end": "2026-06",
+          "cannot_defer": true,
+          "reason": "DfT Housing Infrastructure Fund + LCC capital programme — multi-year construction contract"
+        }
+      ],
       "corridors_seed": [
         {"name": "M55 J1 / Broughton Roundabout", "road": "M55/A6", "coords": [[53.800,-2.720],[53.798,-2.710],[53.793,-2.703],[53.785,-2.700]], "base_severity": 0.8},
         {"name": "A6 Ring Road (North)", "road": "A6", "coords": [[53.770,-2.695],[53.768,-2.704],[53.765,-2.713],[53.763,-2.725]], "base_severity": 0.6},
@@ -344,10 +393,21 @@
       "map_center": [53.900, -2.832],
       "map_zoom": 11,
       "sport_venues": [
-        {"name": "Mill Farm", "lat": 53.8464, "lng": -2.9847, "capacity": 6000, "team": "AFC Fylde", "league": "national-league", "fixture_urls": []},
-        {"name": "Highbury Stadium", "lat": 53.9218, "lng": -3.0098, "capacity": 5327, "team": "Fleetwood Town FC", "league": "efl-league-two", "fixture_urls": ["https://fixturedownload.com/feed/json/efl-league-two-2025/fleetwood-town"]}
+        {"name": "Highbury Stadium", "lat": 53.9218, "lng": -3.0098, "capacity": 5327, "team": "Fleetwood Town FC", "league": "efl-league-two", "fixture_urls": ["https://fixturedownload.com/feed/json/league-two-2025/fleetwood-town"]}
       ],
-      "major_projects": [],
+      "major_projects": [
+        {
+          "name": "A585 Skippool-Windy Harbour Improvement",
+          "description": "National Highways A585 bypass/improvement scheme — dualling, new junctions, bridge works.",
+          "roads": ["A585", "Skippool Road", "Amounderness Way"],
+          "lat_range": [53.845, 53.880],
+          "lng_range": [-2.990, -2.950],
+          "start": "2023-09",
+          "end": "2026-09",
+          "cannot_defer": true,
+          "reason": "National Highways RIS2 scheme — fully funded, contractor on site since 2023"
+        }
+      ],
       "corridors_seed": [
         {"name": "A585 Fleetwood Road", "road": "A585", "coords": [[53.840,-2.960],[53.855,-2.970],[53.875,-2.980],[53.895,-2.995],[53.920,-3.010]], "base_severity": 0.6},
         {"name": "A6 Garstang", "road": "A6", "coords": [[53.850,-2.775],[53.870,-2.780],[53.890,-2.785],[53.900,-2.790]], "base_severity": 0.4},
@@ -372,7 +432,9 @@
       "bbox": {"south": 53.73, "north": 53.87, "west": -3.06, "east": -2.78},
       "map_center": [53.798, -2.919],
       "map_zoom": 12,
-      "sport_venues": [],
+      "sport_venues": [
+        {"name": "Mill Farm", "lat": 53.7966, "lng": -2.8892, "capacity": 6000, "team": "AFC Fylde", "league": "national-league-north", "fixture_urls": []}
+      ],
       "major_projects": [],
       "corridors_seed": [
         {"name": "M55 Corridor (J3-J4)", "road": "M55", "coords": [[53.790,-2.873],[53.797,-2.896],[53.805,-2.920],[53.810,-2.945]], "base_severity": 0.4},
@@ -427,6 +489,72 @@
     "match_day_overlay_3pm": {"12": 2.0, "13": 4.0, "14": 6.0, "15": 2.0, "16": 1.0, "17": 8.0, "18": 5.0, "19": 2.0},
     "match_day_overlay_evening": {"17": 3.0, "18": 5.0, "19": 6.0, "20": 2.0, "21": 1.0, "22": 7.0, "23": 4.0}
   },
+  "hardcoded_fixtures": [
+    {"date": "2026-03-14", "time": "15:00", "team": "Burnley FC", "opponent": "AFC Bournemouth", "venue": "Turf Moor", "venue_lat": 53.7891, "venue_lng": -2.2306, "capacity": 21944},
+    {"date": "2026-04-11", "time": "15:00", "team": "Burnley FC", "opponent": "Brighton & Hove Albion", "venue": "Turf Moor", "venue_lat": 53.7891, "venue_lng": -2.2306, "capacity": 21944},
+    {"date": "2026-04-26", "time": "14:00", "team": "Burnley FC", "opponent": "Manchester City", "venue": "Turf Moor", "venue_lat": 53.7891, "venue_lng": -2.2306, "capacity": 21944},
+    {"date": "2026-05-09", "time": "15:00", "team": "Burnley FC", "opponent": "Aston Villa", "venue": "Turf Moor", "venue_lat": 53.7891, "venue_lng": -2.2306, "capacity": 21944},
+    {"date": "2026-05-24", "time": "16:00", "team": "Burnley FC", "opponent": "Wolverhampton Wanderers", "venue": "Turf Moor", "venue_lat": 53.7891, "venue_lng": -2.2306, "capacity": 21944},
+
+    {"date": "2026-03-20", "time": "20:00", "team": "Preston North End", "opponent": "Stoke City", "venue": "Deepdale", "venue_lat": 53.7700, "venue_lng": -2.6862, "capacity": 23404},
+    {"date": "2026-04-06", "time": "15:00", "team": "Preston North End", "opponent": "Queens Park Rangers", "venue": "Deepdale", "venue_lat": 53.7700, "venue_lng": -2.6862, "capacity": 23404},
+    {"date": "2026-04-18", "time": "15:00", "team": "Preston North End", "opponent": "West Bromwich Albion", "venue": "Deepdale", "venue_lat": 53.7700, "venue_lng": -2.6862, "capacity": 23404},
+    {"date": "2026-05-02", "time": "12:30", "team": "Preston North End", "opponent": "Southampton", "venue": "Deepdale", "venue_lat": 53.7700, "venue_lng": -2.6862, "capacity": 23404},
+
+    {"date": "2026-03-17", "time": "19:45", "team": "Accrington Stanley", "opponent": "Notts County", "venue": "Wham Stadium", "venue_lat": 53.7592, "venue_lng": -2.3692, "capacity": 5450},
+    {"date": "2026-03-21", "time": "15:00", "team": "Accrington Stanley", "opponent": "Chesterfield", "venue": "Wham Stadium", "venue_lat": 53.7592, "venue_lng": -2.3692, "capacity": 5450},
+    {"date": "2026-04-03", "time": "15:00", "team": "Accrington Stanley", "opponent": "Crewe Alexandra", "venue": "Wham Stadium", "venue_lat": 53.7592, "venue_lng": -2.3692, "capacity": 5450},
+    {"date": "2026-04-11", "time": "15:00", "team": "Accrington Stanley", "opponent": "Fleetwood Town", "venue": "Wham Stadium", "venue_lat": 53.7592, "venue_lng": -2.3692, "capacity": 5450},
+    {"date": "2026-04-25", "time": "15:00", "team": "Accrington Stanley", "opponent": "Crawley Town", "venue": "Wham Stadium", "venue_lat": 53.7592, "venue_lng": -2.3692, "capacity": 5450},
+
+    {"date": "2026-03-14", "time": "17:30", "team": "Morecambe FC", "opponent": "Braintree Town", "venue": "Mazuma Stadium", "venue_lat": 54.0615, "venue_lng": -2.8672, "capacity": 6476},
+    {"date": "2026-03-25", "time": "19:45", "team": "Morecambe FC", "opponent": "Hartlepool United", "venue": "Mazuma Stadium", "venue_lat": 54.0615, "venue_lng": -2.8672, "capacity": 6476},
+    {"date": "2026-03-28", "time": "15:00", "team": "Morecambe FC", "opponent": "Aldershot Town", "venue": "Mazuma Stadium", "venue_lat": 54.0615, "venue_lng": -2.8672, "capacity": 6476},
+    {"date": "2026-04-06", "time": "15:00", "team": "Morecambe FC", "opponent": "Carlisle United", "venue": "Mazuma Stadium", "venue_lat": 54.0615, "venue_lng": -2.8672, "capacity": 6476},
+    {"date": "2026-04-18", "time": "15:00", "team": "Morecambe FC", "opponent": "Boreham Wood", "venue": "Mazuma Stadium", "venue_lat": 54.0615, "venue_lng": -2.8672, "capacity": 6476},
+
+    {"date": "2026-03-10", "time": "19:45", "team": "Fleetwood Town FC", "opponent": "Cheltenham Town", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+    {"date": "2026-03-14", "time": "15:00", "team": "Fleetwood Town FC", "opponent": "Tranmere Rovers", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+    {"date": "2026-03-21", "time": "15:00", "team": "Fleetwood Town FC", "opponent": "Crawley Town", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+    {"date": "2026-04-06", "time": "15:00", "team": "Fleetwood Town FC", "opponent": "Barnet", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+    {"date": "2026-04-18", "time": "15:00", "team": "Fleetwood Town FC", "opponent": "Chesterfield", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+    {"date": "2026-05-02", "time": "15:00", "team": "Fleetwood Town FC", "opponent": "Milton Keynes Dons", "venue": "Highbury Stadium", "venue_lat": 53.9165, "venue_lng": -3.0247, "capacity": 5327},
+
+    {"date": "2026-03-10", "time": "19:45", "team": "AFC Fylde", "opponent": "AFC Telford United", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+    {"date": "2026-03-14", "time": "15:00", "team": "AFC Fylde", "opponent": "King's Lynn Town", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+    {"date": "2026-03-24", "time": "19:45", "team": "AFC Fylde", "opponent": "Marine", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+    {"date": "2026-03-28", "time": "15:00", "team": "AFC Fylde", "opponent": "Darlington", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+    {"date": "2026-04-06", "time": "15:00", "team": "AFC Fylde", "opponent": "Radcliffe", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+    {"date": "2026-04-18", "time": "15:00", "team": "AFC Fylde", "opponent": "Southport", "venue": "Mill Farm", "venue_lat": 53.7966, "venue_lng": -2.8892, "capacity": 6000},
+
+    {"date": "2026-03-10", "time": "19:45", "team": "Chorley FC", "opponent": "South Shields", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100},
+    {"date": "2026-03-14", "time": "15:00", "team": "Chorley FC", "opponent": "Buxton", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100},
+    {"date": "2026-03-17", "time": "19:45", "team": "Chorley FC", "opponent": "Kidderminster Harriers", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100},
+    {"date": "2026-04-03", "time": "15:00", "team": "Chorley FC", "opponent": "AFC Fylde", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100},
+    {"date": "2026-04-11", "time": "15:00", "team": "Chorley FC", "opponent": "Curzon Ashton", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100},
+    {"date": "2026-04-25", "time": "15:00", "team": "Chorley FC", "opponent": "Worksop Town", "venue": "Victory Park", "venue_lat": 53.6407, "venue_lng": -2.6242, "capacity": 4100}
+  ],
+  "major_events": [
+    {"name": "Eid al-Fitr", "dates": ["2026-03-20", "2026-03-21"], "lat": 53.789, "lng": -2.248, "crowd": 15000, "impact_radius_km": 3, "roads_affected": ["Colne Road", "Abel Street", "Hammerton Street", "Brierfield", "Deepdale Road"], "districts": ["Burnley", "Pendle", "Preston"], "type": "religious"},
+    {"name": "Blackpool Festival of Running", "dates": ["2026-04-26"], "lat": 53.821, "lng": -3.054, "crowd": 8000, "impact_radius_km": 2, "roads_affected": ["Promenade", "Gynn Square", "Squires Gate Lane"], "districts": [], "type": "sport", "note": "Blackpool (unitary) — impacts M55 J4"},
+    {"name": "Eid al-Adha", "dates": ["2026-05-27", "2026-05-28", "2026-05-29"], "lat": 53.789, "lng": -2.248, "crowd": 20000, "impact_radius_km": 3, "roads_affected": ["Colne Road", "Brierfield", "Deepdale Road", "Corporation Park"], "districts": ["Burnley", "Pendle", "Preston"], "type": "religious"},
+    {"name": "Great Harwood Agricultural Show", "dates": ["2026-05-25"], "lat": 53.785, "lng": -2.408, "crowd": 7000, "impact_radius_km": 2, "roads_affected": ["A680 Whalley Road", "Great Harwood approaches"], "districts": ["Hyndburn"], "type": "show"},
+    {"name": "Preston Caribbean Carnival", "dates": ["2026-05-23", "2026-05-24"], "lat": 53.770, "lng": -2.710, "crowd": 12000, "impact_radius_km": 2, "roads_affected": ["Moor Park Avenue", "A6 Ring Road", "Garstang Road"], "districts": ["Preston"], "type": "festival"},
+    {"name": "Colne Grand Prix (cycling)", "dates": ["2026-06-16"], "lat": 53.855, "lng": -2.175, "crowd": 4000, "impact_radius_km": 1.5, "roads_affected": ["Church Street", "Market Street", "Albert Road", "A56"], "districts": ["Pendle"], "type": "sport"},
+    {"name": "Armed Forces Day Lancaster", "dates": ["2026-06-20", "2026-06-21"], "lat": 54.072, "lng": -2.869, "crowd": 8000, "impact_radius_km": 2, "roads_affected": ["Marine Road", "A589 Morecambe Road"], "districts": ["Lancaster"], "type": "civic"},
+    {"name": "Lytham Festival", "dates": ["2026-07-01", "2026-07-02", "2026-07-03", "2026-07-04", "2026-07-05"], "lat": 53.736, "lng": -2.964, "crowd": 25000, "impact_radius_km": 5, "roads_affected": ["B5261 Lytham Road", "Church Road", "A584", "M55 J3", "M55 J4"], "districts": ["Fylde"], "type": "festival"},
+    {"name": "Royal Lancashire Agricultural Show", "dates": ["2026-07-03", "2026-07-04", "2026-07-05"], "lat": 53.821, "lng": -2.530, "crowd": 18000, "impact_radius_km": 4, "roads_affected": ["B6245 Ribchester Road", "A59", "A6 Longridge"], "districts": ["Ribble Valley"], "type": "show"},
+    {"name": "UCLan Graduation Week", "dates": ["2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10"], "lat": 53.762, "lng": -2.707, "crowd": 3000, "impact_radius_km": 1.5, "roads_affected": ["Corporation Street", "Adelphi Street", "Fylde Road"], "districts": ["Preston"], "type": "graduation"},
+    {"name": "Lancaster Grand Prix (cycling)", "dates": ["2026-07-12"], "lat": 54.049, "lng": -2.790, "crowd": 7000, "impact_radius_km": 3, "roads_affected": ["Quernmore Road", "Caton Road", "A683"], "districts": ["Lancaster"], "type": "sport"},
+    {"name": "Lancaster University Graduation", "dates": ["2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17"], "lat": 54.010, "lng": -2.785, "crowd": 3500, "impact_radius_km": 2, "roads_affected": ["A6 Bailrigg", "M6 J33"], "districts": ["Lancaster"], "type": "graduation"},
+    {"name": "Fleetwood Festival of Transport (Tram Sunday)", "dates": ["2026-07-19"], "lat": 53.922, "lng": -3.011, "crowd": 70000, "impact_radius_km": 5, "roads_affected": ["Lord Street", "Adelaide Street", "A585", "M55"], "districts": ["Wyre"], "type": "festival"},
+    {"name": "Edge Hill University Graduation", "dates": ["2026-07-20", "2026-07-21", "2026-07-22", "2026-07-23", "2026-07-24"], "lat": 53.561, "lng": -2.879, "crowd": 2000, "impact_radius_km": 1.5, "roads_affected": ["A570 St Helens Road", "Ruff Lane"], "districts": ["West Lancashire"], "type": "graduation"},
+    {"name": "Chorley Flower Show", "dates": ["2026-07-31", "2026-08-01", "2026-08-02"], "lat": 53.653, "lng": -2.630, "crowd": 12000, "impact_radius_km": 2, "roads_affected": ["Astley Park approaches", "Hallgate", "M61 J8"], "districts": ["Chorley"], "type": "show"},
+    {"name": "Garstang Agricultural Show", "dates": ["2026-08-01"], "lat": 53.898, "lng": -2.772, "crowd": 7000, "impact_radius_km": 3, "roads_affected": ["A6 Garstang", "B6430", "M6 J32-J33"], "districts": ["Wyre"], "type": "show"},
+    {"name": "Clitheroe Food Festival", "dates": ["2026-08-08"], "lat": 53.871, "lng": -2.393, "crowd": 25000, "impact_radius_km": 4, "roads_affected": ["Castle Street", "Market Place", "A59", "A671"], "districts": ["Ribble Valley"], "type": "festival"},
+    {"name": "Lytham 1940s Weekend", "dates": ["2026-08-15", "2026-08-16"], "lat": 53.736, "lng": -2.964, "crowd": 35000, "impact_radius_km": 4, "roads_affected": ["Clifton Street", "B5261", "A584", "M55 J3-J4"], "districts": ["Fylde"], "type": "festival"},
+    {"name": "Colne Great British R&B Festival", "dates": ["2026-08-28", "2026-08-29", "2026-08-30"], "lat": 53.855, "lng": -2.175, "crowd": 12000, "impact_radius_km": 2, "roads_affected": ["Albert Road", "New Market Street", "A56", "M65 J14"], "districts": ["Pendle"], "type": "festival"}
+  ],
   "legal_keywords": {
     "bridge_keywords": ["bridge", "footbridge", "viaduct", "aqueduct", "overpass", "underpass", "culvert", "structural"],
     "planning_obligation_keywords": ["drainage connection", "s278", "s106", "developer", "planning condition", "construction access", "development site", "planning obligation", "reserved matters", "developer funded"],

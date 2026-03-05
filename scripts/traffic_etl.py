@@ -92,6 +92,8 @@ for _council_id, _council_cfg in HIGHWAYS_CONFIG["councils"].items():
         c["district"] = _council_id
         ALL_CORRIDORS_SEED.append(c)
 
+ALL_MAJOR_EVENTS = HIGHWAYS_CONFIG.get("major_events", [])
+
 # --- Legal keywords (from config) ---
 _legal = HIGHWAYS_CONFIG.get("legal_keywords", {})
 
@@ -254,6 +256,65 @@ def fetch_sport_fixtures() -> list:
     return sorted(all_fixtures, key=lambda x: x.get("date", ""))
 
 
+def load_hardcoded_fixtures() -> list:
+    """Load hardcoded fixtures from config as fallback when APIs fail."""
+    hardcoded = HIGHWAYS_CONFIG.get("hardcoded_fixtures", [])
+    if not hardcoded:
+        return []
+
+    today_str = date.today().isoformat()
+    fixtures = []
+    for f in hardcoded:
+        d = f.get("date", "")
+        if d < today_str:
+            continue  # Skip past fixtures
+        time_str = f.get("time", "15:00")
+        try:
+            ko_hour = int(time_str.split(":")[0])
+        except (ValueError, IndexError):
+            ko_hour = 15
+        fixtures.append({
+            "date": d,
+            "time": time_str,
+            "kickoff_hour": ko_hour,
+            "opponent": f.get("opponent", ""),
+            "summary": f"{f.get('team', '')} vs {f.get('opponent', '')}",
+            "venue": f.get("venue", ""),
+            "venue_lat": f.get("venue_lat"),
+            "venue_lng": f.get("venue_lng"),
+            "venue_capacity": f.get("capacity", 0),
+            "is_home": True,  # All hardcoded fixtures are home games
+            "source": "config",
+        })
+    return sorted(fixtures, key=lambda x: x["date"])
+
+
+def get_upcoming_major_events(today: date, days_ahead: int = 90) -> list:
+    """Get major events from config that are upcoming and could affect traffic."""
+    cutoff = (today + timedelta(days=days_ahead)).isoformat()
+    today_str = today.isoformat()
+    upcoming = []
+    for ev in ALL_MAJOR_EVENTS:
+        dates = ev.get("dates", [])
+        future_dates = [d for d in dates if today_str <= d <= cutoff]
+        if future_dates:
+            upcoming.append({
+                "name": ev["name"],
+                "dates": future_dates,
+                "first_date": future_dates[0],
+                "last_date": future_dates[-1],
+                "lat": ev.get("lat"),
+                "lng": ev.get("lng"),
+                "crowd": ev.get("crowd", 0),
+                "impact_radius_km": ev.get("impact_radius_km", 2),
+                "roads_affected": ev.get("roads_affected", []),
+                "districts": ev.get("districts", []),
+                "type": ev.get("type", "event"),
+                "note": ev.get("note", ""),
+            })
+    return sorted(upcoming, key=lambda x: x["first_date"])
+
+
 def parse_fixture_json(matches: list) -> list:
     """Parse fixturedownload.com JSON into fixture list."""
     now = datetime.now()
@@ -281,7 +342,11 @@ def parse_fixture_json(matches: list) -> list:
         home_team = m.get("HomeTeam", "")
         away_team = m.get("AwayTeam", "")
         location = m.get("Location", "")
-        is_home = home_team.lower().strip() == "burnley"
+        # Check if home team matches any of our configured venues
+        is_home = any(
+            home_team.lower().strip() in v.get("team", "").lower()
+            for v in ALL_SPORT_VENUES
+        )
 
         opponent = away_team if is_home else home_team
         summary = f"{home_team} vs {away_team}"
@@ -912,8 +977,56 @@ def build_options_appraisal(junctions: list, corridors: list, roadworks_count: i
     return sorted(options, key=lambda x: -x["overall_score"])
 
 
+def estimate_road_traffic(road_name: str, description: str = "") -> int:
+    """Estimate daily traffic volume from road name when no DfT data available.
+
+    Returns estimated AADT (Annual Average Daily Traffic).
+    Used to filter out genuinely low-traffic backstreets from high-priority recommendations.
+    """
+    if not road_name:
+        return 500  # Unknown — conservative estimate
+
+    rn = road_name.upper().strip()
+    desc = (description or "").lower()
+
+    # Motorway
+    if rn.startswith("M") and rn[1:2].isdigit():
+        return 80000
+
+    # A-road
+    if rn.startswith("A") and rn[1:2].isdigit():
+        return 15000
+
+    # B-road
+    if rn.startswith("B") and rn[1:2].isdigit():
+        return 5000
+
+    # Indicators of low-traffic streets
+    low_traffic_indicators = [
+        "rear of", "back of", "alley", "lane", "court", "close", "mews",
+        "cul-de-sac", "terrace", "grove", "place", "rise", "walk",
+        "crescent", "gardens", "square", "yard", "passage",
+        "footpath", "footway", "bridleway", "access road", "service road",
+    ]
+
+    road_lower = road_name.lower()
+    desc_lower = desc.lower()
+
+    for indicator in low_traffic_indicators:
+        if indicator in road_lower or indicator in desc_lower:
+            return 200  # Very low traffic
+
+    # Common high-traffic road name patterns
+    high_traffic = ["road", "street", "avenue", "way", "drive", "boulevard", "highway"]
+    for ht in high_traffic:
+        if road_lower.endswith(ht) or road_lower.endswith(ht + " "):
+            return 3000  # Moderate
+
+    return 1500  # Default residential
+
+
 def build_deferral_recommendations(roadworks: list, junctions: list, corridors: list,
-                                    today: date, fixtures: list) -> list:
+                                    today: date, fixtures: list, major_events: list = None) -> list:
     """Identify LCC-controlled works that could be deferred to ease congestion.
 
     Scoring criteria:
@@ -945,6 +1058,9 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
                     })
             except ValueError:
                 pass
+
+    # Major events in next 90 days — check proximity to works
+    upcoming_events = major_events or []
 
     # Next school holiday for specific deferral target
     next_holiday_date = None
@@ -1001,6 +1117,11 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
         # Skip truly minor works — not worth recommending deferral
         if cap_red < 0.2:
             continue
+
+        # Skip works on very low-traffic roads — not worth the political cost of deferral
+        est_traffic = estimate_road_traffic(rw.get("road", ""), rw.get("description", ""))
+        if est_traffic < 500 and cap_red < 0.8:
+            continue  # Backstreet — no meaningful traffic impact even with lane restriction
 
         rlat = rw.get("lat")
         rlng = rw.get("lng")
@@ -1085,6 +1206,26 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
                 timing_score += match_impact
                 timing_flags.append("match_day")
                 break
+        # Check major event proximity
+        for ev in upcoming_events:
+            for ev_date in ev.get("dates", []):
+                if start <= ev_date and (not end or end >= ev_date):
+                    ev_lat = ev.get("lat")
+                    ev_lng = ev.get("lng")
+                    if ev_lat and ev_lng:
+                        try:
+                            ev_dist = haversine_m(float(rlat), float(rlng), ev_lat, ev_lng)
+                        except (ValueError, TypeError):
+                            ev_dist = 99999
+                        radius = ev.get("impact_radius_km", 2) * 1000
+                        if ev_dist <= radius:
+                            crowd = ev.get("crowd", 0)
+                            ev_impact = 7 if crowd >= 20000 else 5 if crowd >= 10000 else 3 if crowd >= 5000 else 1
+                            timing_score += ev_impact
+                            timing_flags.append(f"major_event:{ev['name']}")
+                            break  # One event match is enough
+            if f"major_event:" in str(timing_flags):
+                break  # Already matched an event
         timing_score = min(timing_score, 15)
 
         total_score = round(junction_score + severity_score + clash_score + timing_score, 1)
@@ -1164,6 +1305,11 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
                 reasons.append("School term — general network congestion increased")
         if "match_day" in timing_flags:
             reasons.append("Match day — pre/post-match traffic disruption")
+        # Major event reasons
+        event_flags = [f for f in timing_flags if f.startswith("major_event:")]
+        for ef in event_flags:
+            ev_name = ef.split(":", 1)[1]
+            reasons.append(f"Major event — {ev_name} creating additional traffic pressure")
 
         # Determine road classification for feasibility of night works
         road_name = rw.get("road", "")
@@ -1263,6 +1409,7 @@ def build_deferral_recommendations(roadworks: list, junctions: list, corridors: 
             "reasons": reasons,
             "action": action,
             "recommendation": rec_text,
+            "estimated_traffic": est_traffic,
         }
         recommendations.append(recommendation)
 
@@ -1546,6 +1693,183 @@ def build_impact_heatmap(today: date, roadworks_count: int, fixtures: list) -> l
     return heatmap
 
 
+def build_strategic_recommendations(roadworks: list, junctions: list, corridors: list,
+                                     clashes: list, deferrals: list, timing_recs: list,
+                                     today: date, fixtures: list, major_events: list) -> dict:
+    """Build top-level strategic recommendations — what LCC should do NOW.
+
+    This is the executive summary: prioritised actions based on ALL data,
+    not dependent on timeline position.
+    """
+    today_str = today.isoformat()
+
+    # 1. Immediate actions (this week)
+    immediate = []
+
+    # s59 breaches need action TODAY
+    for clash in clashes:
+        if clash.get("s59_breach"):
+            immediate.append({
+                "priority": "critical",
+                "category": "s59_breach",
+                "action": f"Issue s56 timing directions to stagger works on {clash['corridor']}",
+                "detail": f"{clash['concurrent_works']} concurrent works creating {int(clash['total_capacity_reduction'] * 100)}% capacity loss. LCC has duty under NRSWA s59 to coordinate.",
+                "legal_basis": "NRSWA 1991 s59 — Duty to coordinate",
+                "corridor": clash.get("corridor", ""),
+            })
+
+    # High-scoring LCC deferrals that can still be actioned
+    for d in deferrals[:10]:
+        if d.get("is_lcc_controlled") and d.get("action") == "DEFER" and d.get("deferral_score", 0) >= 30:
+            immediate.append({
+                "priority": "high",
+                "category": "lcc_deferral",
+                "action": f"Defer LCC works on {d['road']}",
+                "detail": d.get("recommendation", ""),
+                "road": d.get("road", ""),
+                "score": d.get("deferral_score", 0),
+            })
+
+    # Critical s56 timing directions
+    critical_s56 = [t for t in timing_recs if t.get("urgency") == "critical"]
+    for t in critical_s56[:5]:
+        immediate.append({
+            "priority": "high",
+            "category": "s56_timing",
+            "action": f"Issue s56 timing direction for {t['operator']} works on {t['road']}",
+            "detail": f"{t['timing_direction']} — {int(t['capacity_reduction'] * 100)}% capacity impact" + (f" near {t['near_critical_junction']}" if t.get('near_critical_junction') else ""),
+            "legal_basis": "NRSWA 1991 s56 — Directions as to timing",
+            "road": t.get("road", ""),
+        })
+
+    # 2. Upcoming event preparations
+    event_preps = []
+    for ev in (major_events or []):
+        first_date = ev.get("first_date", "")
+        days_away = 0
+        try:
+            days_away = (date.fromisoformat(first_date) - today).days
+        except (ValueError, TypeError):
+            continue
+
+        if days_away > 60:
+            continue  # Too far out
+
+        # Check if any works clash with this event
+        clashing = []
+        for rw in roadworks:
+            start = rw.get("start_date", "")[:10]
+            end = rw.get("end_date", "")[:10]
+            if not start:
+                continue
+            for ev_date in ev.get("dates", []):
+                if start <= ev_date and (not end or end >= ev_date):
+                    ev_lat = ev.get("lat")
+                    ev_lng = ev.get("lng")
+                    rlat = rw.get("lat")
+                    rlng = rw.get("lng")
+                    if ev_lat and ev_lng and rlat and rlng:
+                        try:
+                            d = haversine_m(float(rlat), float(rlng), ev_lat, ev_lng)
+                            if d < ev.get("impact_radius_km", 2) * 1000:
+                                clashing.append({
+                                    "road": rw.get("road", ""),
+                                    "operator": rw.get("operator", ""),
+                                    "distance_m": int(d),
+                                })
+                        except (ValueError, TypeError):
+                            pass
+                    break
+
+        prep = {
+            "event": ev["name"],
+            "date": first_date,
+            "days_away": days_away,
+            "crowd": ev.get("crowd", 0),
+            "districts": ev.get("districts", []),
+            "roads_affected": ev.get("roads_affected", []),
+            "clashing_works": len(clashing),
+            "clashing_details": clashing[:5],
+        }
+
+        if clashing:
+            prep["action"] = f"Reschedule {len(clashing)} works near {ev['name']} ({first_date}) — {ev.get('crowd', 0):,} expected crowd"
+            prep["priority"] = "high" if ev.get("crowd", 0) >= 10000 else "medium"
+        else:
+            prep["action"] = f"Monitor traffic management plan for {ev['name']} ({first_date})"
+            prep["priority"] = "low"
+
+        event_preps.append(prep)
+
+    # 3. Network-wide summary stats
+    total_works = len(roadworks)
+    active = sum(1 for rw in roadworks if rw.get("status") == "Works started")
+    closures = sum(1 for rw in roadworks if "closure" in (rw.get("restrictions") or rw.get("management_type") or "").lower())
+    lcc_works = sum(1 for rw in roadworks if "lancashire" in (rw.get("operator") or "").lower())
+    utility_works = total_works - lcc_works
+
+    # 4. Key metrics
+    critical_junctions = [j for j in junctions if j.get("jci", 0) >= 70]
+    stressed_corridors = [c for c in corridors if c.get("severity", 0) >= 0.6]
+
+    # 5. Match day preparations
+    match_preps = []
+    for f in fixtures:
+        if f.get("is_home") and f.get("date"):
+            d = f["date"]
+            try:
+                days = (date.fromisoformat(d) - today).days
+            except (ValueError, TypeError):
+                continue
+            if 0 < days <= 14:
+                # Check for works near venue
+                vlat = f.get("venue_lat")
+                vlng = f.get("venue_lng")
+                nearby_works = 0
+                if vlat and vlng:
+                    for rw in roadworks:
+                        rlat = rw.get("lat")
+                        rlng = rw.get("lng")
+                        if rlat and rlng:
+                            try:
+                                dist = haversine_m(float(rlat), float(rlng), vlat, vlng)
+                                if dist < 2000:
+                                    start = rw.get("start_date", "")[:10]
+                                    end = rw.get("end_date", "")[:10]
+                                    if start <= d and (not end or end >= d):
+                                        nearby_works += 1
+                            except (ValueError, TypeError):
+                                pass
+
+                match_preps.append({
+                    "date": d,
+                    "days_away": days,
+                    "venue": f.get("venue", ""),
+                    "opponent": f.get("opponent", ""),
+                    "capacity": f.get("venue_capacity", 0),
+                    "nearby_works": nearby_works,
+                    "action": f"{'Issue timing directions for' if nearby_works > 0 else 'No works near'} {f.get('venue', '')} — {f.get('opponent', '')} ({d})" + (f" — {nearby_works} works within 2km" if nearby_works else ""),
+                })
+
+    return {
+        "generated": datetime.now().isoformat(),
+        "summary": {
+            "total_works": total_works,
+            "active_works": active,
+            "road_closures": closures,
+            "lcc_controlled": lcc_works,
+            "utility_works": utility_works,
+            "critical_junctions": len(critical_junctions),
+            "stressed_corridors": len(stressed_corridors),
+            "s59_breaches": len([c for c in clashes if c.get("s59_breach")]),
+            "actionable_deferrals": len([d for d in deferrals if d.get("action") == "DEFER" and d.get("deferral_score", 0) >= 25]),
+        },
+        "immediate_actions": sorted(immediate, key=lambda x: {"critical": 0, "high": 1, "medium": 2, "low": 3}.get(x.get("priority", "low"), 9)),
+        "event_preparations": sorted(event_preps, key=lambda x: x.get("days_away", 999)),
+        "match_preparations": match_preps,
+    }
+
+
 def main():
     output_path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_OUTPUT
 
@@ -1574,6 +1898,25 @@ def main():
     # 3. Sport fixtures (all venues from config)
     print(f"\n3. Fetching sport fixtures ({len(ALL_SPORT_VENUES)} venues)...")
     fixtures = fetch_sport_fixtures()
+
+    # Merge hardcoded fixtures for clubs where API failed
+    api_venues = set(f.get("venue", "") for f in fixtures)
+    hardcoded = load_hardcoded_fixtures()
+    hardcoded_merged = 0
+    for hf in hardcoded:
+        if hf["venue"] not in api_venues:
+            fixtures.append(hf)
+            hardcoded_merged += 1
+    if hardcoded_merged:
+        print(f"  + {hardcoded_merged} hardcoded fixtures merged (API fallback)")
+        fixtures.sort(key=lambda x: x.get("date", ""))
+
+    # 3b. Major events
+    major_events = get_upcoming_major_events(today)
+    if major_events:
+        print(f"  Major events upcoming: {len(major_events)}")
+        for ev in major_events[:5]:
+            print(f"    {ev['name']} ({ev['first_date']}, ~{ev['crowd']:,} crowd)")
 
     # 4. Load existing roadworks — full records for intelligent analysis
     rw_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "roadworks.json")
@@ -1619,7 +1962,7 @@ def main():
 
     # 9. Deferral recommendations
     print("\n7. Building deferral recommendations...")
-    deferrals = build_deferral_recommendations(roadworks_records, jci_results, corridor_results, today, fixtures)
+    deferrals = build_deferral_recommendations(roadworks_records, jci_results, corridor_results, today, fixtures, major_events)
     lcc_deferrals = [d for d in deferrals if d["is_lcc_controlled"]]
     utility_deferrals = [d for d in deferrals if not d["is_lcc_controlled"]]
     print(f"  {len(lcc_deferrals)} LCC works recommended for deferral")
@@ -1787,6 +2130,11 @@ def main():
             "records": len(SCHOOL_TERMS),
             "note": "Set annually; update before September each year",
         },
+        "major_events": {
+            "source": "highways_config.json",
+            "records": len(major_events),
+            "note": "Manually curated Lancashire events calendar",
+        },
     }
 
     # Try to determine roadworks freshness from file mtime
@@ -1803,6 +2151,12 @@ def main():
     for j in jci_results:
         q = j.get("data_quality", "none")
         jci_quality[q] = jci_quality.get(q, 0) + 1
+
+    # Build strategic recommendations — actions LCC can take NOW based on all data
+    strategic_recs = build_strategic_recommendations(
+        roadworks_records, jci_results, corridor_results, clashes,
+        deferrals, timing_recs, today, fixtures, major_events
+    )
 
     output = {
         "meta": {
@@ -1858,6 +2212,20 @@ def main():
             "classified_works": classified_works,
             "major_projects": MAJOR_PROJECTS,
         },
+        "strategic_recommendations": strategic_recs,
+        "major_events": [
+            {
+                "name": ev["name"],
+                "dates": ev["dates"],
+                "crowd": ev.get("crowd", 0),
+                "districts": ev.get("districts", []),
+                "type": ev.get("type", ""),
+                "roads_affected": ev.get("roads_affected", []),
+                "lat": ev.get("lat"),
+                "lng": ev.get("lng"),
+            }
+            for ev in major_events
+        ],
     }
 
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
