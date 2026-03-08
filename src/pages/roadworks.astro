@@ -198,7 +198,7 @@ const schoolBands = [
 
 <Layout
   title="Roads & Roadworks | Tom Pickup"
-  description="Lancashire's road network: live roadworks across all 12 districts, TTROs, major projects, congestion corridors, and the £650M highways backlog. Powered by LCC MARIO data."
+  description="Lancashire's road network: live roadworks, £650M highways backlog, 14 years of underinvestment vs £14.1B foreign aid and £4.7B asylum spending. Traffic intelligence across all 12 districts."
 >
   <!-- Hero -->
   <section class="rw-hero">
@@ -208,9 +208,9 @@ const schoolBands = [
           <span class="badge badge-teal">Highways &amp; Transport</span>
           <h1>Roads &amp; Roadworks</h1>
           <p class="hero-sub">
-            Live roadworks across all 12 Lancashire districts, traffic orders, major projects, and
-            congestion analysis. Lancashire County Council is the highways authority responsible
-            for all roads except the M65 motorway and unitary areas.
+            Live roadworks across all 12 Lancashire districts, traffic intelligence, and the full picture
+            on 14 years of underinvestment. The UK spends &pound;14.1B/year on foreign aid and &pound;4.7B/year on
+            asylum hotels &mdash; while Lancashire&rsquo;s roads have a &pound;650M backlog.
           </p>
           <div class="hero-stats" id="hero-stats">
             <div class="hero-stat">
@@ -1372,6 +1372,11 @@ const schoolBands = [
               <span class="asset-stat-note">AIA ALARM 2025. Lancashire = ~{nationalContext.lancashire_backlog_pct_of_national}%</span>
             </div>
             <div class="asset-stat-card">
+              <span class="asset-stat-value">&pound;4.8B</span>
+              <span class="asset-stat-label">Total UK Road Spend</span>
+              <span class="asset-stat-note">All councils combined (2023/24). HoC Library CBP-9975</span>
+            </div>
+            <div class="asset-stat-card">
               <span class="asset-stat-value">{nationalContext.resurfacing_cycle_years}yr</span>
               <span class="asset-stat-label">Resurfacing Cycle</span>
               <span class="asset-stat-note">At current rates. Should be every 25 years</span>
@@ -1381,13 +1386,9 @@ const schoolBands = [
               <span class="asset-stat-label">Funding Disparity</span>
               <span class="asset-stat-note">National Highways &pound;{(nationalContext.national_highways_per_mile / 1000).toFixed(0)}K/mi vs &pound;{(nationalContext.local_authority_per_mile / 1000).toFixed(0)}K/mi local</span>
             </div>
-            <div class="asset-stat-card">
-              <span class="asset-stat-value">&pound;{(nationalContext.decade_spend_total / 1e9).toFixed(0)}B</span>
-              <span class="asset-stat-label">Decade of Spend</span>
-              <span class="asset-stat-note">{nationalContext.decade_spend_note}</span>
-            </div>
           </div>
           )}
+          <p class="chart-subtitle" style="margin-top: 8px">The UK spends &pound;4.8B/year maintaining all local roads. By comparison, it spends &pound;4.7B/year on asylum accommodation and &pound;14.1B/year on foreign aid. 94% of highway authorities reported no improvement to their network in the past year.</p>
         </Accordion>
 
         <Accordion title="Lifecycle Economics" defaultOpen={false}>
@@ -1428,6 +1429,158 @@ const schoolBands = [
     </div>
   </section>
   )}
+
+  <!-- Spending Priorities: Roads vs Government Spending -->
+  <section class="spending-section" id="spending-priorities">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Spending Context</span>
+          <h2 class="section-heading">Where the Money Goes Instead</h2>
+          <p class="section-sub">Lancashire&rsquo;s &pound;650M road backlog &mdash; accumulated over 14 years of underinvestment &mdash; in context. Successive governments chose to prioritise foreign aid and asylum accommodation while local roads crumbled.</p>
+        </div>
+
+        <!-- Comparison cards -->
+        <div class="spending-compare-grid">
+          <div class="spending-card spending-card--roads">
+            <div class="spending-card-icon">&#128679;</div>
+            <div class="spending-card-amount">&pound;4.8B</div>
+            <div class="spending-card-label">Total UK local road maintenance</div>
+            <div class="spending-card-note">All councils combined, 2023/24</div>
+            <div class="spending-card-source">Source: House of Commons Library CBP-9975, April 2025</div>
+          </div>
+          <div class="spending-card spending-card--asylum">
+            <div class="spending-card-icon">&#127464;</div>
+            <div class="spending-card-amount">&pound;4.7B</div>
+            <div class="spending-card-label">UK asylum accommodation</div>
+            <div class="spending-card-note">2023/24 &mdash; including &pound;3B on hotels at &pound;8M/day</div>
+            <div class="spending-card-source">Source: NAO Investigation into Asylum Accommodation, HC 635, March 2024</div>
+          </div>
+          <div class="spending-card spending-card--aid">
+            <div class="spending-card-icon">&#127758;</div>
+            <div class="spending-card-amount">&pound;14.1B</div>
+            <div class="spending-card-label">UK foreign aid (ODA)</div>
+            <div class="spending-card-note">2024 &mdash; &pound;2.8B of this went to in-UK asylum costs</div>
+            <div class="spending-card-source">Source: FCDO Statistics on International Development, Final UK ODA Spend 2024</div>
+          </div>
+          <div class="spending-card spending-card--hs2">
+            <div class="spending-card-icon">&#128646;</div>
+            <div class="spending-card-amount">&pound;40.5B</div>
+            <div class="spending-card-label">HS2 spent to date</div>
+            <div class="spending-card-note">Truncated project &mdash; est. &pound;81B+ final cost (Phase 1 only)</div>
+            <div class="spending-card-source">Source: DfT 6-monthly report to Parliament, July 2025</div>
+          </div>
+        </div>
+
+        <!-- The key comparison -->
+        <div class="spending-comparison-box">
+          <h4>The core problem: roads were never the priority</h4>
+          <div class="spending-comparison-table">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Annual Cost</th>
+                  <th>Comparison</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Asylum accommodation</strong></td>
+                  <td>&pound;4.7 billion/year</td>
+                  <td>Nearly <strong>equals</strong> the entire UK local road maintenance budget (&pound;4.8B)</td>
+                </tr>
+                <tr>
+                  <td><strong>Foreign aid</strong></td>
+                  <td>&pound;14.1 billion/year</td>
+                  <td><strong>3&times;</strong> the entire UK road maintenance budget</td>
+                </tr>
+                <tr>
+                  <td><strong>Lancashire road backlog</strong></td>
+                  <td>&pound;650M <em>(one-off)</em></td>
+                  <td>Equivalent to <strong>50 days</strong> of national asylum spending</td>
+                </tr>
+                <tr>
+                  <td><strong>Rwanda scheme (cancelled)</strong></td>
+                  <td>&pound;715M total spent</td>
+                  <td>Would have fixed Lancashire&rsquo;s <strong>entire road backlog</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>HS2 (spent so far)</strong></td>
+                  <td>&pound;40.5 billion</td>
+                  <td>Would fix <strong>every potholed road in England</strong> nearly 2.5&times; over</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Political narrative -->
+        <Accordion title="How We Got Here: 14 Years of Misplaced Priorities" defaultOpen={true}>
+          <div class="spending-timeline">
+            <div class="spending-era">
+              <div class="spending-era-header spending-era--con">
+                <span class="spending-era-years">2010&ndash;2024</span>
+                <span class="spending-era-party">Conservative Government</span>
+              </div>
+              <div class="spending-era-body">
+                <ul>
+                  <li><strong>Foreign aid locked at 0.7% of GNI</strong> &mdash; rising from &pound;8.5B (2010) to &pound;15.3B (2023), even while cutting DfT local road grants. The 0.7% target was enshrined in law in 2015 despite crumbling local infrastructure.</li>
+                  <li><strong>Asylum accommodation costs exploded</strong> from &pound;739M (2019/20) to &pound;4.7B (2023/24) &mdash; a 536% increase &mdash; due to processing backlogs and hotel dependency at &pound;145/person/night.</li>
+                  <li><strong>DfT Highway Maintenance Block</strong> for Lancashire averaged just &pound;25M/year from 2013&ndash;2021, while LCC managed a &pound;10B asset base needing &pound;95&ndash;110M/year investment.</li>
+                  <li><strong>&pound;715M spent on the Rwanda deportation scheme</strong> &mdash; zero involuntary deportations. That money alone would have cleared Lancashire&rsquo;s entire &pound;650M road backlog.</li>
+                  <li><strong>HS2 absorbed &pound;40.5B</strong> and counting, while the national local road backlog grew to &pound;16.81B. The cancelled northern legs wasted &pound;2.6B alone.</li>
+                </ul>
+                <div class="spending-era-result">
+                  <strong>Result for Lancashire:</strong> 14 years of cumulative underfunding created an &pound;834M investment shortfall. Only 39% of what roads needed was actually invested. 27.6% of residential roads now need structural maintenance &mdash; 10 points worse than the national average.
+                </div>
+              </div>
+            </div>
+
+            <div class="spending-era">
+              <div class="spending-era-header spending-era--lab">
+                <span class="spending-era-years">2024&ndash;present</span>
+                <span class="spending-era-party">Labour Government</span>
+              </div>
+              <div class="spending-era-body">
+                <ul>
+                  <li><strong>Foreign aid maintained</strong> at 0.5% of GNI (&pound;14.1B in 2024) &mdash; announced cut to 0.3% by 2027, but money redirected to defence, not roads.</li>
+                  <li><strong>Asylum costs continuing</strong> at &pound;4.9B (2024/25 estimate, NAO). The hotel-dependency model persists. Processing backlogs remain.</li>
+                  <li><strong>No step-change in local road funding</strong> &mdash; the 2025/26 DfT Highway Maintenance Block was &pound;1.6B for all of England. Lancashire&rsquo;s share: &pound;43M. The &pound;16.81B national backlog continues to grow.</li>
+                  <li><strong>HS2 costs escalating</strong> &mdash; programme reset expected in 2026 with completion pushed to late 2030s. More money absorbed by a project most taxpayers will never use.</li>
+                </ul>
+                <div class="spending-era-result">
+                  <strong>The pattern continues:</strong> Labour inherited a road crisis and chose to maintain foreign aid commitments and asylum spending levels rather than redirect funding to crumbling local infrastructure.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="key-insight-box">
+            <strong>The bottom line:</strong> Lancashire&rsquo;s &pound;650M road backlog &mdash; 14 years in the making &mdash; is less than the UK spends on asylum hotels in a single year (&pound;3B). It is less than 5% of what has been spent on HS2. It is equivalent to just 17 days of foreign aid spending. These were political choices, not inevitabilities.
+          </div>
+        </Accordion>
+
+        <Accordion title="Reform UK: A Different Approach at County Level" defaultOpen={false}>
+          <div class="spending-era-body">
+            <p>Following the May 2025 local elections, Reform UK took control of Lancashire County Council with 53 of 84 seats. The 2026/27 budget represents the first Reform-controlled highways programme:</p>
+            <ul>
+              <li><strong>&pound;72M capital programme</strong> &mdash; the highest in LCC&rsquo;s history. Up from &pound;54M the previous year.</li>
+              <li><strong>&pound;45M additional borrowing</strong> approved for pothole repair over 3 years (&pound;15M/year).</li>
+              <li><strong>New maintenance contract</strong> delivering 42% fewer defects, 3&times; larger repairs, and 50% lower unit costs.</li>
+              <li><strong>DfT 4-year settlement secured:</strong> &pound;268M over 2026&ndash;2030, rising from &pound;55M to &pound;79.4M/year.</li>
+            </ul>
+            <p>At &pound;72M/year, the programme is still only 65% of the &pound;110M practical steady-state needed &mdash; but it represents a genuine step-change from the &pound;26&ndash;35M years of 2013&ndash;2020. The question is whether central government will match this local ambition with adequate DfT funding.</p>
+          </div>
+        </Accordion>
+
+        <!-- Sources -->
+        <p class="assets-sources">
+          Sources: NAO <em>Investigation into Asylum Accommodation</em> HC 635 (Mar 2024) &bull; FCDO <em>Statistics on International Development 2024</em> &bull; House of Commons Library CBP-9975 (Apr 2025) &bull; Home Office <em>MEDP with Rwanda Associated Costs</em> (Dec 2024) &bull; DfT <em>HS2 6-monthly Report</em> (Jul 2025) &bull; DfT <em>Highway Maintenance Block Allocations</em> 2025/26 &amp; 2026&ndash;30 &bull; LCC Full Council Budget Feb 2026.
+        </p>
+      </ScrollReveal>
+    </div>
+  </section>
 
   <!-- Active TTROs (Burnley-specific) -->
   <section class="ttro-section" data-region-only="burnley">
@@ -4440,6 +4593,139 @@ const schoolBands = [
     background-image: none;
   }
 
+  /* ---- Spending Priorities section ---- */
+  .spending-section {
+    padding: var(--space-xl) 0;
+  }
+  .spending-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+  }
+  .spending-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    text-align: center;
+    position: relative;
+  }
+  .spending-card--roads { border-top: 3px solid #ff9f0a; }
+  .spending-card--asylum { border-top: 3px solid #ff453a; }
+  .spending-card--aid { border-top: 3px solid #bf5af2; }
+  .spending-card--hs2 { border-top: 3px solid #5e5ce6; }
+  .spending-card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+  .spending-card-amount {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+  .spending-card-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .spending-card-note {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .spending-card-source {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 8px;
+    font-style: italic;
+    line-height: 1.3;
+  }
+
+  .spending-comparison-box {
+    background: rgba(255,69,58,0.06);
+    border: 1px solid rgba(255,69,58,0.15);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+  }
+  .spending-comparison-box h4 {
+    color: #ff453a;
+    font-size: 1.1rem;
+    margin: 0 0 var(--space-md) 0;
+  }
+  .spending-comparison-table { overflow-x: auto; }
+  .spending-comparison-table .data-table { margin: 0; }
+  .spending-comparison-table .data-table td:nth-child(3) { color: #ff9f0a; }
+
+  /* Political timeline */
+  .spending-timeline { display: flex; flex-direction: column; gap: var(--space-lg); }
+  .spending-era {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .spending-era-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px var(--space-md);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .spending-era--con {
+    background: linear-gradient(90deg, rgba(0,135,220,0.15), rgba(0,135,220,0.05));
+    border-bottom: 2px solid rgba(0,135,220,0.3);
+    color: #64b5f6;
+  }
+  .spending-era--lab {
+    background: linear-gradient(90deg, rgba(220,36,31,0.15), rgba(220,36,31,0.05));
+    border-bottom: 2px solid rgba(220,36,31,0.3);
+    color: #ef9a9a;
+  }
+  .spending-era-years { font-size: 0.9rem; }
+  .spending-era-party { font-size: 0.8rem; opacity: 0.8; }
+  .spending-era-body {
+    padding: var(--space-md);
+    background: rgba(255,255,255,0.02);
+  }
+  .spending-era-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .spending-era-body li {
+    padding: 8px 0 8px 20px;
+    position: relative;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .spending-era-body li:last-child { border-bottom: none; }
+  .spending-era-body li::before {
+    content: '\25B8';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .spending-era-body p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0 0 var(--space-sm) 0;
+  }
+  .spending-era-result {
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 12px var(--space-md);
+    margin-top: var(--space-sm);
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    border-left: 3px solid #ff9f0a;
+  }
+
   /* ---- Responsive for assets section ---- */
   @media (max-width: 768px) {
     .asset-stat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -4449,6 +4735,8 @@ const schoolBands = [
     .condition-label { width: 80px; font-size: 0.75rem; }
     .condition-note { padding-left: 88px; }
     .borough-stats-row { gap: var(--space-sm); }
+    .spending-compare-grid { grid-template-columns: repeat(2, 1fr); }
+    .spending-era-header { flex-direction: column; gap: 4px; text-align: center; }
   }
 
   @media (max-width: 480px) {
@@ -4456,6 +4744,8 @@ const schoolBands = [
     .scenario-grid { grid-template-columns: 1fr; }
     .asset-stat-value { font-size: 1.25rem; }
     .borough-stats-row { flex-wrap: wrap; justify-content: center; }
+    .spending-compare-grid { grid-template-columns: 1fr; }
+    .spending-card-amount { font-size: 1.4rem; }
   }
 
   @media (max-width: 768px) {
