@@ -82,6 +82,15 @@ const budgetYears = budgetTrend.years || [];
 const assetCategories = assetsData.asset_categories || [];
 const maintenanceContract = assetsData.maintenance_contract_performance || {};
 const innovationOpps = assetsData.innovation_opportunities || [];
+const costInflation = assetsData.cost_inflation || {};
+const componentCosts = costInflation.component_costs || [];
+const buyingPower = costInflation.buying_power_analysis || {};
+const bcisForecast = costInflation.bcis_forecasts_2025_2030 || {};
+const backlogInflation = costInflation.backlog_inflation_impact || {};
+const futureOutlook = assetsData.future_outlook || {};
+const spendingIntegration = assetsData.spending_integration || {};
+const topContractors = spendingIntegration.top_contractors || [];
+const valuationQuestions = assetsData.valuation_questions || {};
 
 // Roadworks by-district stats (for dynamic hero)
 const byDistrict = trafficData.meta?.by_district || {};
@@ -1257,6 +1266,10 @@ const schoolBands = [
           <div class="key-insight-box">{investmentAnalysis.key_insight}</div>
           )}
 
+          {backlogInflation.backlog_today && (
+          <p class="chart-subtitle" style="margin-top: 8px; color: #ff9f0a;"><strong>&#9888; Important:</strong> The &pound;{(backlogInflation.backlog_today / 1e6).toFixed(0)}M backlog is in today&rsquo;s prices. At {(backlogInflation.construction_inflation_rate * 100).toFixed(0)}% annual construction inflation, the real cost of clearing it in 10 years is &pound;{(backlogInflation.backlog_in_10yr / 1e6).toFixed(0)}M. Even the &pound;72M budget buys only ~&pound;{buyingPower.budget_2027_in_2015_terms ? (buyingPower.budget_2027_in_2015_terms / 1e6).toFixed(0) : '50'}M of 2015 road work.</p>
+          )}
+
           <!-- 14-year investment gap summary -->
           {cumulativeAnalysis.total_invested && (
           <div class="cumulative-grid">
@@ -1425,6 +1438,284 @@ const schoolBands = [
         <p class="assets-sources">
           Sources: LCC Local Highways Maintenance Transparency Report, GOV.UK MHCLG Revenue Outturn, AIA ALARM Survey 2025, DfT Road Condition Statistics, CIPFA Transport Infrastructure Code, DfT Highways Maintenance Block Allocations.
         </p>
+      </ScrollReveal>
+    </div>
+  </section>
+  )}
+
+  <!-- Construction Cost Inflation -->
+  {componentCosts.length > 0 && (
+  <section class="inflation-section" id="cost-inflation">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Cost Analysis</span>
+          <h2 class="section-heading">The Real Cost: Construction Inflation vs Budgets</h2>
+          <p class="section-sub">Road construction costs have outpaced general inflation since 2015. The &pound;72M budget doesn&rsquo;t buy &pound;72M of road work &mdash; it buys approximately &pound;50M in 2015 terms.</p>
+        </div>
+
+        <!-- Buying power key insight -->
+        <div class="inflation-insight">
+          <div class="inflation-insight-icon">&#128200;</div>
+          <div class="inflation-insight-text">
+            <strong>The &pound;72M illusion:</strong> LCC&rsquo;s 2026/27 highways capital budget of &pound;72M sounds like a massive increase from &pound;{buyingPower.budget_2015 ? (buyingPower.budget_2015 / 1e6).toFixed(0) : '25'}M in 2015. But construction costs have risen {costInflation.indices?.construction_infrastructure_2015_2025 || 45}% &mdash; outpacing CPI ({costInflation.indices?.cpi_cumulative_2015_2025 || 40}%). In real terms, &pound;72M buys approximately &pound;{buyingPower.budget_2027_in_2015_terms ? (buyingPower.budget_2027_in_2015_terms / 1e6).toFixed(0) : '50'}M of 2015 road work. The nominal {buyingPower.nominal_increase_pct || 188}% increase is actually ~{buyingPower.real_increase_pct_construction || 85}% in construction-adjusted terms.
+          </div>
+        </div>
+
+        <!-- Component cost cards -->
+        <h3 class="inflation-sub-heading">What&rsquo;s Driving the Cost?</h3>
+        <div class="inflation-grid">
+          {componentCosts.map((c: any) => (
+          <div class="inflation-card">
+            <div class="inflation-card-icon">
+              {c.icon === 'oil' ? '🛢️' : c.icon === 'stone' ? '🪨' : c.icon === 'asphalt' ? '🛤️' : c.icon === 'fuel' ? '⛽' : c.icon === 'labour' ? '👷' : c.icon === 'electricity' ? '⚡' : '📊'}
+            </div>
+            <div class="inflation-card-body">
+              <div class="inflation-card-header">
+                <span class="inflation-card-material">{c.material}</span>
+                <span class={`inflation-card-change ${c.change_pct >= 80 ? 'extreme' : c.change_pct >= 50 ? 'high' : 'moderate'}`}>+{c.change_pct}%</span>
+              </div>
+              <p class="inflation-card-note">{c.note}</p>
+              <span class="inflation-card-source">{c.source}</span>
+            </div>
+          </div>
+          ))}
+        </div>
+
+        <!-- BCIS forecast -->
+        <div class="inflation-forecast">
+          <h3 class="inflation-sub-heading">What&rsquo;s Coming Next (BCIS Forecasts to 2030)</h3>
+          <div class="forecast-grid">
+            <div class="forecast-card">
+              <span class="forecast-value">+{bcisForecast.civil_engineering_tender_prices_pct || 25}%</span>
+              <span class="forecast-label">Civil Engineering Tenders</span>
+            </div>
+            <div class="forecast-card">
+              <span class="forecast-value">+{bcisForecast.labour_costs_pct || 17}%</span>
+              <span class="forecast-label">Labour Costs</span>
+            </div>
+            <div class="forecast-card">
+              <span class="forecast-value">+{bcisForecast.building_costs_pct || 15}%</span>
+              <span class="forecast-label">Building Costs</span>
+            </div>
+          </div>
+          <p class="chart-subtitle">BCIS chief economist described the current situation as a &ldquo;stagflation-type squeeze&rdquo; &mdash; weak economic growth with elevated construction costs. Every year of delay makes the backlog more expensive to clear.</p>
+        </div>
+
+        <!-- Backlog inflation impact -->
+        {backlogInflation.backlog_today && (
+        <div class="backlog-compound">
+          <h3 class="inflation-sub-heading">The Cost of Delay</h3>
+          <div class="backlog-timeline">
+            <div class="backlog-step">
+              <span class="backlog-year">Today</span>
+              <span class="backlog-amount">&pound;{(backlogInflation.backlog_today / 1e6).toFixed(0)}M</span>
+            </div>
+            <div class="backlog-arrow">&rarr;</div>
+            <div class="backlog-step">
+              <span class="backlog-year">+5 years</span>
+              <span class="backlog-amount">&pound;{(backlogInflation.backlog_in_5yr / 1e6).toFixed(0)}M</span>
+            </div>
+            <div class="backlog-arrow">&rarr;</div>
+            <div class="backlog-step">
+              <span class="backlog-year">+10 years</span>
+              <span class="backlog-amount">&pound;{(backlogInflation.backlog_in_10yr / 1e6).toFixed(0)}M</span>
+            </div>
+          </div>
+          <p class="chart-subtitle">At {(backlogInflation.construction_inflation_rate * 100).toFixed(0)}% annual construction inflation, today&rsquo;s &pound;{(backlogInflation.backlog_today / 1e6).toFixed(0)}M backlog would cost &pound;{(backlogInflation.backlog_in_10yr / 1e6).toFixed(0)}M to clear in 10 years. Delay is not free &mdash; it compounds the problem.</p>
+        </div>
+        )}
+
+        <p class="assets-sources">Sources: {costInflation.source_note || 'ONS CPI, ONS Construction Output Price Indices, BCIS Labour Cost Index, DBT Construction Materials Statistics, BCIS Five-Year Forecasts Q4 2024'}</p>
+      </ScrollReveal>
+    </div>
+  </section>
+  )}
+
+  <!-- Future Pressures on the Network -->
+  {futureOutlook.summary && (
+  <section class="future-section" id="future-pressures">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Forward Look</span>
+          <h2 class="section-heading">The Road Ahead: Future Pressures</h2>
+          <p class="section-sub">{futureOutlook.summary}</p>
+        </div>
+
+        <div class="future-grid">
+          <!-- Population Growth -->
+          {futureOutlook.population && (
+          <div class="future-card">
+            <div class="future-card-icon">👥</div>
+            <div class="future-card-header">
+              <h3>Population Growth</h3>
+              <span class="future-card-stat">+{futureOutlook.population.growth_pct_25yr}%</span>
+            </div>
+            <p class="future-card-detail">Lancashire: {(futureOutlook.population.lancashire_2022 / 1000).toFixed(0)}K &rarr; {(futureOutlook.population.lancashire_2047 / 1000).toFixed(0)}K by 2047. Over-65s growing {futureOutlook.population.over_65_growth_pct_2022_2032}% by 2032 &mdash; more demand for smooth surfaces, dropped kerbs, and accessible footways.</p>
+            <span class="future-card-source">{futureOutlook.population.source}</span>
+          </div>
+          )}
+
+          <!-- EV Transition -->
+          {futureOutlook.ev_transition && (
+          <div class="future-card future-card--warning">
+            <div class="future-card-icon">🔋</div>
+            <div class="future-card-header">
+              <h3>Electric Vehicle Weight</h3>
+              <span class="future-card-stat">{futureOutlook.ev_transition.ev_weight_premium_pct}% heavier</span>
+            </div>
+            <p class="future-card-detail">{(futureOutlook.ev_transition.uk_evs_2025 / 1e6).toFixed(1)}M EVs on UK roads. {futureOutlook.ev_transition.fourth_power_law_note} ICE sales ban from {futureOutlook.ev_transition.ice_ban_year}. New eVED at {futureOutlook.ev_transition.eved_rate_bev_pence_per_mile}p/mile from {futureOutlook.ev_transition.eved_start_year}.</p>
+            <span class="future-card-source">{futureOutlook.ev_transition.source}</span>
+          </div>
+          )}
+
+          <!-- Delivery Van Surge -->
+          {futureOutlook.lgv_growth && (
+          <div class="future-card">
+            <div class="future-card-icon">🚚</div>
+            <div class="future-card-header">
+              <h3>Delivery Van Surge</h3>
+              <span class="future-card-stat">+{futureOutlook.lgv_growth.lgv_increase_2010_2023_pct}%</span>
+            </div>
+            <p class="future-card-detail">LGV traffic up {futureOutlook.lgv_growth.lgv_increase_2010_2023_pct}% since 2010 &mdash; {futureOutlook.lgv_growth.lgv_share_of_traffic_pct}% of all traffic. Amazon, DPD, Evri vans concentrate on unclassified residential streets designed for cars &mdash; the 87.5% of the network already at 27.6% red.</p>
+            <span class="future-card-source">{futureOutlook.lgv_growth.source}</span>
+          </div>
+          )}
+
+          <!-- Climate Change -->
+          {futureOutlook.climate_change && (
+          <div class="future-card future-card--danger">
+            <div class="future-card-icon">🌧️</div>
+            <div class="future-card-header">
+              <h3>Climate Damage</h3>
+              <span class="future-card-stat">+41% deterioration</span>
+            </div>
+            <p class="future-card-detail">2024 was the wettest year since {futureOutlook.climate_change.wettest_year_since}. B&amp;C roads jumped from 4.6% to 6.5% red in a single year. Met Office projects {futureOutlook.climate_change.met_office_winter_rainfall_increase_by_2050_pct}% wetter winters by 2050.</p>
+            <span class="future-card-source">{futureOutlook.climate_change.source}</span>
+          </div>
+          )}
+
+          <!-- Autonomous Vehicles -->
+          {futureOutlook.autonomous_vehicles && (
+          <div class="future-card">
+            <div class="future-card-icon">🤖</div>
+            <div class="future-card-header">
+              <h3>Autonomous Vehicles</h3>
+              <span class="future-card-stat">Act 2024</span>
+            </div>
+            <p class="future-card-detail">{futureOutlook.autonomous_vehicles.realistic_uk_timeline} Roads will need HD lane markings, V2I communications, 5G coverage, and higher surface quality. Lancashire&rsquo;s ~100,000 lighting columns = essential hosting infrastructure.</p>
+            <span class="future-card-source">{futureOutlook.autonomous_vehicles.source}</span>
+          </div>
+          )}
+
+          <!-- Motoring Tax Crisis -->
+          {futureOutlook.motoring_tax_crisis && (
+          <div class="future-card future-card--warning">
+            <div class="future-card-icon">💰</div>
+            <div class="future-card-header">
+              <h3>Motoring Tax Crisis</h3>
+              <span class="future-card-stat">&pound;{(futureOutlook.motoring_tax_crisis.cost_of_freeze_since_2011 / 1e9).toFixed(0)}B lost</span>
+            </div>
+            <p class="future-card-detail">{futureOutlook.motoring_tax_crisis.consecutive_years_frozen} consecutive years of frozen fuel duty have cost &pound;{(futureOutlook.motoring_tax_crisis.cost_of_freeze_since_2011 / 1e9).toFixed(0)}B in foregone revenue. Fuel duty share of tax: {futureOutlook.motoring_tax_crisis.fuel_duty_share_of_tax_2020_pct}% (2020) &rarr; {futureOutlook.motoring_tax_crisis.fuel_duty_share_of_tax_2026_pct}% (2026). The political case for road investment weakens as motoring tax revenues decline.</p>
+            <span class="future-card-source">{futureOutlook.motoring_tax_crisis.source}</span>
+          </div>
+          )}
+        </div>
+
+        <p class="assets-sources">Sources: ONS 2022-based SNPP, OBR Fuel Duties forecast, DfT Road Traffic Statistics, Met Office State of UK Climate 2024, Automated Vehicles Act 2024, HM Treasury eVED Consultation.</p>
+      </ScrollReveal>
+    </div>
+  </section>
+  )}
+
+  <!-- Innovation & Asset Revaluation -->
+  {innovationOpps.length > 0 && (
+  <section class="innovation-section" id="innovation">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Opportunities</span>
+          <h2 class="section-heading">Innovation &amp; Untapped Value</h2>
+          <p class="section-sub">{innovationOpps.length} opportunities to cut costs, generate revenue, and improve asset intelligence across the &pound;10B highway network.</p>
+        </div>
+
+        <div class="innovation-grid">
+          {innovationOpps.map((opp: any) => (
+          <div class={`innovation-card ${opp.estimated_saving_annual ? 'innovation-card--costed' : ''}`}>
+            <div class="innovation-card-top">
+              <span class="innovation-card-category">{opp.category}</span>
+              {opp.payback_years && <span class="innovation-card-payback">{opp.payback_years}yr payback</span>}
+            </div>
+            <h3 class="innovation-card-title">{opp.title}</h3>
+            <span class={`innovation-card-status ${opp.status?.includes('Pilot') || opp.status?.includes('Partially') ? 'active' : 'emerging'}`}>{opp.status}</span>
+            <p class="innovation-card-summary">{opp.value_summary}</p>
+            <p class="innovation-card-lancashire"><strong>Lancashire:</strong> {opp.lancashire_angle}</p>
+            {opp.estimated_saving_annual && (
+            <div class="innovation-card-saving">
+              <span class="innovation-saving-value">&pound;{(opp.estimated_saving_annual / 1e6).toFixed(0)}M/yr</span>
+              <span class="innovation-saving-basis">{opp.saving_basis}</span>
+            </div>
+            )}
+            <p class="innovation-card-risk"><strong>Risk:</strong> {opp.risk_note}</p>
+            <span class="innovation-card-policy">{opp.policy_driver}</span>
+          </div>
+          ))}
+        </div>
+
+        <!-- Valuation Questions -->
+        {valuationQuestions.questions && (
+        <Accordion title="Asset Revaluation Questions" defaultOpen={false}>
+          <p class="chart-subtitle" style="margin-bottom: 16px">{valuationQuestions.intro}</p>
+          <div class="valuation-grid">
+            {valuationQuestions.questions.map((q: any) => (
+            <div class="valuation-card">
+              <h4>{q.title}</h4>
+              <p class="valuation-question">{q.question}</p>
+              <p class="valuation-analysis">{q.analysis}</p>
+              <p class="valuation-implication"><strong>Implication:</strong> {q.implication}</p>
+            </div>
+            ))}
+          </div>
+        </Accordion>
+        )}
+
+        <p class="assets-sources">Sources: CIPFA Transport Infrastructure Code, UKPMS, BCIS, Environment Act 2021, HMEP lifecycle toolkit, NUAR, Centre for Digital Built Britain.</p>
+      </ScrollReveal>
+    </div>
+  </section>
+  )}
+
+  <!-- Who Maintains Lancashire's Roads (Contractor Data) -->
+  {topContractors.length > 0 && (
+  <section class="contractor-section" id="contractors">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Spending Intelligence</span>
+          <h2 class="section-heading">Who Maintains Lancashire&rsquo;s Roads?</h2>
+          <p class="section-sub">LCC&rsquo;s identifiable highways maintenance spend: &pound;{spendingIntegration.total_identifiable_highways_spend ? (spendingIntegration.total_identifiable_highways_spend / 1e6).toFixed(1) : '8.1'}M/year across {spendingIntegration.budget_departments_count || 42} department codes. Cross-referenced from council spending data.</p>
+        </div>
+
+        <div class="contractor-grid">
+          {topContractors.map((c: any, i: number) => (
+          <div class="contractor-card">
+            <div class="contractor-rank">#{i + 1}</div>
+            <div class="contractor-info">
+              <span class="contractor-name">{c.supplier}</span>
+              <span class="contractor-spend">&pound;{(c.annual_spend / 1e6).toFixed(1)}M/yr</span>
+              <div class="contractor-bar-track">
+                <div class="contractor-bar-fill" style={`width: ${c.share_pct}%`}></div>
+              </div>
+              <span class="contractor-share">{c.share_pct}% of identifiable spend</span>
+              {c.note && <span class="contractor-note">{c.note}</span>}
+            </div>
+          </div>
+          ))}
+        </div>
+
+        <p class="contractor-concentration">{spendingIntegration.concentration_note}</p>
+        <p class="chart-subtitle"><a href="https://aidoge.co.uk/lancashirecc" target="_blank" rel="noopener">Full spending analysis at AI DOGE &rarr;</a></p>
       </ScrollReveal>
     </div>
   </section>
@@ -4726,6 +5017,397 @@ const schoolBands = [
     border-left: 3px solid #ff9f0a;
   }
 
+  /* ---- Construction Cost Inflation Section ---- */
+  .inflation-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .inflation-insight {
+    display: flex;
+    gap: var(--space-md);
+    background: rgba(255, 159, 10, 0.08);
+    border: 1px solid rgba(255, 159, 10, 0.25);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+  .inflation-insight-icon { font-size: 2rem; flex-shrink: 0; }
+  .inflation-insight-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+  }
+  .inflation-sub-heading {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--space-md) 0 var(--space-sm) 0;
+  }
+  .inflation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+  .inflation-card {
+    display: flex;
+    gap: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-sm);
+  }
+  .inflation-card-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .inflation-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .inflation-card-material {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+  .inflation-card-change {
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .inflation-card-change.extreme { background: rgba(255,69,58,0.2); color: #ff453a; }
+  .inflation-card-change.high { background: rgba(255,159,10,0.2); color: #ff9f0a; }
+  .inflation-card-change.moderate { background: rgba(48,209,88,0.15); color: #30d158; }
+  .inflation-card-note {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 4px 0;
+  }
+  .inflation-card-source {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+  }
+  .forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+  .forecast-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    text-align: center;
+  }
+  .forecast-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff453a;
+    margin-bottom: 4px;
+  }
+  .forecast-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  .backlog-compound { margin: var(--space-md) 0; }
+  .backlog-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin: var(--space-md) 0;
+  }
+  .backlog-step {
+    text-align: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-sm) var(--space-md);
+    min-width: 100px;
+  }
+  .backlog-year {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .backlog-amount {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ff453a;
+  }
+  .backlog-arrow {
+    font-size: 1.5rem;
+    color: var(--text-tertiary);
+  }
+
+  /* ---- Future Pressures Section ---- */
+  .future-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  .future-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+  }
+  .future-card--warning { border-left: 3px solid #ff9f0a; }
+  .future-card--danger { border-left: 3px solid #ff453a; }
+  .future-card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+  .future-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .future-card-header h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .future-card-stat {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #ff9f0a;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .future-card-detail {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0 0 8px 0;
+  }
+  .future-card-source {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+  }
+
+  /* ---- Innovation Section ---- */
+  .innovation-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .innovation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  .innovation-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+  }
+  .innovation-card--costed { border-top: 2px solid #30d158; }
+  .innovation-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .innovation-card-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .innovation-card-payback {
+    font-size: 0.7rem;
+    background: rgba(48,209,88,0.15);
+    color: #30d158;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .innovation-card-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 6px 0;
+  }
+  .innovation-card-status {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    align-self: flex-start;
+  }
+  .innovation-card-status.active { background: rgba(48,209,88,0.15); color: #30d158; }
+  .innovation-card-status.emerging { background: rgba(255,159,10,0.15); color: #ff9f0a; }
+  .innovation-card-summary {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 8px 0;
+  }
+  .innovation-card-lancashire {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 8px 0;
+    padding: 8px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 4px;
+  }
+  .innovation-card-saving {
+    background: rgba(48,209,88,0.08);
+    border: 1px solid rgba(48,209,88,0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+  }
+  .innovation-saving-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #30d158;
+  }
+  .innovation-saving-basis {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .innovation-card-risk {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+  }
+  .innovation-card-policy {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    margin-top: auto;
+  }
+  .valuation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+  .valuation-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+  }
+  .valuation-card h4 {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+  }
+  .valuation-question {
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-style: italic;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+  }
+  .valuation-analysis {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 8px 0;
+  }
+  .valuation-implication {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ---- Contractor Section ---- */
+  .contractor-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .contractor-grid {
+    display: grid;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  .contractor-card {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+  }
+  .contractor-rank {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 40px;
+    text-align: center;
+  }
+  .contractor-info { flex: 1; }
+  .contractor-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .contractor-spend {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ff9f0a;
+    margin-bottom: 8px;
+  }
+  .contractor-bar-track {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .contractor-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9f0a, #ff6b35);
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .contractor-share {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+  .contractor-note {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+  .contractor-concentration {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    padding: var(--space-sm);
+    background: rgba(255,69,58,0.06);
+    border: 1px solid rgba(255,69,58,0.15);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-sm);
+  }
+
   /* ---- Responsive for assets section ---- */
   @media (max-width: 768px) {
     .asset-stat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -4737,6 +5419,13 @@ const schoolBands = [
     .borough-stats-row { gap: var(--space-sm); }
     .spending-compare-grid { grid-template-columns: repeat(2, 1fr); }
     .spending-era-header { flex-direction: column; gap: 4px; text-align: center; }
+    .inflation-grid { grid-template-columns: 1fr; }
+    .forecast-grid { grid-template-columns: repeat(3, 1fr); }
+    .future-grid { grid-template-columns: 1fr; }
+    .innovation-grid { grid-template-columns: repeat(2, 1fr); }
+    .valuation-grid { grid-template-columns: 1fr; }
+    .backlog-timeline { flex-direction: column; gap: var(--space-xs); }
+    .backlog-arrow { transform: rotate(90deg); }
   }
 
   @media (max-width: 480px) {
@@ -4746,6 +5435,12 @@ const schoolBands = [
     .borough-stats-row { flex-wrap: wrap; justify-content: center; }
     .spending-compare-grid { grid-template-columns: 1fr; }
     .spending-card-amount { font-size: 1.4rem; }
+    .innovation-grid { grid-template-columns: 1fr; }
+    .forecast-grid { grid-template-columns: 1fr; }
+    .forecast-value { font-size: 1.2rem; }
+    .inflation-insight { flex-direction: column; gap: var(--space-sm); }
+    .contractor-card { flex-direction: column; align-items: flex-start; }
+    .contractor-rank { min-width: auto; }
   }
 
   @media (max-width: 768px) {

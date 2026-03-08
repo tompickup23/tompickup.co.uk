@@ -700,6 +700,45 @@
       "lancashire_angle": "Every utility strike during roadworks causes delay and road surface damage. A comprehensive subsurface asset register enables LCC to charge full s59 NRSWA costs.",
       "policy_driver": "PAS 128:2022, NRSWA 1991 s69 (Records), National Underground Asset Register (NUAR)",
       "risk_note": "Significant upfront survey investment. Data sovereignty concerns. Benefits accrue over many years."
+    },
+    {
+      "id": "gpr_network_survey",
+      "title": "Ground-Penetrating Radar (GPR) Network Survey",
+      "category": "Asset Intelligence",
+      "status": "Proven technology — limited UK adoption",
+      "payback_years": 2,
+      "value_summary": "Non-destructive subsurface condition mapping. Identifies voids, sub-base failure, and moisture ingress before surface shows distress. £15-25K/km vs £500/core sample. Can survey entire A-road network in weeks.",
+      "lancashire_angle": "LCC's £650M backlog is based on surface condition (DVS surveys). GPR would reveal sub-base condition — the hidden 60% of the problem. Targeting reconstruction only where sub-base has failed, rather than resurfacing over a failing foundation, could redirect £10-20M/yr of capital spend to more effective treatments.",
+      "policy_driver": "UKPMS enhancement, CIPFA Code requirement for asset condition data, HMEP lifecycle planning toolkit",
+      "risk_note": "Requires specialist equipment and interpretation expertise. Data volumes are large. Not cost-effective for unclassified rural roads. Most valuable on A/B roads and heavily trafficked urban routes.",
+      "estimated_saving_annual": 15000000,
+      "saving_basis": "Preventing unnecessary reconstruction on roads where sub-base is sound but surface has failed. £50K reconstruction/km vs £8K surface dressing/km."
+    },
+    {
+      "id": "ai_defect_detection",
+      "title": "AI-Driven Defect Detection & Classification",
+      "category": "Efficiency & Safety",
+      "status": "Piloting — LCC exploring on A-road network",
+      "payback_years": 1.5,
+      "value_summary": "Camera-equipped vehicles + ML image classification. Detects and categorises potholes, cracking, rutting, edge deterioration automatically. Reduces inspector time by 60-70% and enables continuous monitoring vs annual survey snapshots.",
+      "lancashire_angle": "LCC currently relies on annual DVS machine surveys (A/B/C roads) plus reactive reports for unclassified roads. AI detection from routine council vehicle cameras (refuse trucks, highways vans) would provide continuous 7,142km coverage at near-zero marginal cost. The 87.5% unclassified network — currently only surveyed when reported — would gain systematic data for the first time.",
+      "policy_driver": "PAS 2161:2021 (new 5-category condition classification from March 2027), UKRLG Code of Practice (risk-based approach requires evidence)",
+      "risk_note": "ML models need training on UK-specific defect types. False positives create inspection overhead. Camera quality and lighting affect accuracy. Data processing infrastructure needed.",
+      "estimated_saving_annual": 2000000,
+      "saving_basis": "60-70% reduction in manual inspection time (~£1.5M) plus early defect detection preventing 10-15% of emergency repairs (~£0.5M)."
+    },
+    {
+      "id": "digital_twin",
+      "title": "Digital Twin / Predictive Asset Management Platform",
+      "category": "Strategic Intelligence",
+      "status": "Emerging — national pathfinder programmes",
+      "payback_years": 4,
+      "value_summary": "Real-time network condition model linking DVS surveys, roadworks history, traffic volumes, weather data, spending records, and contractor performance. Enables predictive maintenance scheduling — fixing roads before they fail rather than after.",
+      "lancashire_angle": "LCC already generates most of the data needed: DVS surveys, MARIO roadworks records, DfT traffic counts, Met Office weather data, spending data (£8.1M/yr identifiable highways spend). A digital twin would integrate these into a single decision platform. AI DOGE's highways intelligence system demonstrates the concept — linking roadworks, traffic, budgets, and condition data across 7,142km.",
+      "policy_driver": "National Digital Twin Programme (Centre for Digital Built Britain), BIM Level 3 for infrastructure, DfT Technology Strategy",
+      "risk_note": "High upfront platform cost (£2-5M). Requires clean, interoperable data across multiple council systems. Change management challenge — moving from reactive 'worst first' to predictive prioritisation. Vendor lock-in risk.",
+      "estimated_saving_annual": 8000000,
+      "saving_basis": "10-15% capital programme efficiency through optimised timing and treatment selection. Reduced emergency repairs. Better contractor scheduling. Evidence-based business cases for investment."
     }
   ],
 
@@ -751,5 +790,151 @@
       { "standard": "Highway Maintenance Efficiency Programme (HMEP)", "version": "LGA guidance", "purpose": "Lifecycle planning toolkit — models funding impact on asset performance and calculates steady-state" },
       { "standard": "PAS 128", "version": "2022", "purpose": "Specification for underground utility detection, verification, and location — 4 quality levels for SUE surveys" }
     ]
+  },
+
+  "cost_inflation": {
+    "summary": "Road construction costs have risen 40-50% since 2015, outpacing general CPI (40%). Bitumen +70%, aggregates +40%, labour +40%. The April 2022 red diesel ban added 5-6% overnight. Civil engineering tender prices forecast to rise a further 25% by 2030.",
+    "source_note": "ONS CPI, ONS Construction Output Price Indices, BCIS Labour Cost Index, DBT Construction Materials Statistics, BCIS Five-Year Forecasts Q4 2024",
+    "indices": {
+      "cpi_cumulative_2015_2025": 39.8,
+      "construction_infrastructure_2015_2025": 45,
+      "bitumen_2015_2025": 70,
+      "aggregates_2015_2025": 40,
+      "labour_bcis_2015_2025": 40,
+      "source": "ONS CPI, ONS Construction Output Price Indices, BCIS Labour Cost Index, DBT Construction Materials Statistics"
+    },
+    "component_costs": [
+      { "material": "Bitumen", "unit": "per tonne delivered", "price_2015": 280, "price_2025": 515, "change_pct": 84, "note": "Petroleum derivative — tracks crude oil with lag. Peak $525/t Dec 2024. Asphalt & concrete account for 77% of road construction inputs.", "source": "IndexBox, market data", "icon": "oil" },
+      { "material": "Aggregates", "unit": "per tonne", "price_2015": null, "price_2025": null, "change_pct": 40, "note": "6.6% rise in 12 months to Jan 2026. Aggregate Levy frozen at £2/t since 2009. Record low sales volumes in 2025 (-22% on 2015) driving higher per-unit prices.", "source": "MPA, GOV.UK DBT", "icon": "stone" },
+      { "material": "Hot-mix asphalt", "unit": "per tonne delivered", "price_2015": 42, "price_2025": 65, "change_pct": 55, "note": "Asphalt rises ~0.7% for every 1% oil price increase. Construction materials for All Work in 2025 are more than double what they were in 2005.", "source": "DBT Construction Materials Statistics", "icon": "asphalt" },
+      { "material": "Red diesel → white diesel", "unit": "per litre", "price_2021": 0.55, "price_2022": 1.35, "change_pct": 145, "note": "HMRC removed rebate 1 April 2022 for construction. Added 5-6% to all operating costs. £480M/yr additional cost sector-wide. Average contractor fuel costs rose from £30K to £51-87K/yr.", "source": "HMRC, SAPCA, Building.co.uk", "icon": "fuel" },
+      { "material": "Construction labour", "unit": "CIJC craft rate/week", "price_2015": null, "price_2025": 598, "change_pct": 40, "note": "NJC 3.2% settlement 2025. Employer NIC 13.8%→15% from Apr 2025. NLW £12.21/hr (+6.7%). BCIS Labour Cost Index rose 7.1% in Q2 2025. Labour is now the primary cost driver, having overtaken materials.", "source": "BCIS Labour Cost Index, NJC/CIJC settlements", "icon": "labour" },
+      { "material": "Street lighting electricity", "unit": "per kWh", "price_2020": 0.15, "price_2025": 0.294, "change_pct": 96, "note": "UK council electricity at 29.4p/kWh (11% increase). UK spending on street lighting reached £1.07B in 2023/24. LED conversion offsets per-lamp costs by 50-85% but total bill still rising due to non-power charges.", "source": "LGA, Statista, council reports", "icon": "electricity" }
+    ],
+    "buying_power_analysis": {
+      "budget_2015": 25000000,
+      "budget_2027": 72000000,
+      "nominal_increase_pct": 188,
+      "real_increase_pct_cpi": 106,
+      "real_increase_pct_construction": 85,
+      "budget_2027_in_2015_terms": 50000000,
+      "tamp_minimum_2015": 35000000,
+      "tamp_minimum_2025_adjusted": 51000000,
+      "note": "£72M in 2026/27 buys approximately £50M of 2015 road work. The nominal 188% increase is actually ~85% in construction-adjusted terms. The 2015 TAMP said £35M was the minimum needed — adjusted for construction inflation that's £51M today. At the pre-Reform baseline of £32M/year, buying power was ~£22M in 2015 terms — barely above the £21M of a decade earlier."
+    },
+    "bcis_forecasts_2025_2030": {
+      "civil_engineering_tender_prices_pct": 25,
+      "labour_costs_pct": 17,
+      "building_costs_pct": 15,
+      "source": "BCIS Five-Year Forecasts Q4 2024",
+      "note": "Civil engineering tender prices forecast to rise a further 25% by 2030. BCIS chief economist described the current situation as a 'stagflation-type squeeze' — weak growth with elevated costs. Every year of delayed investment makes the backlog more expensive to clear."
+    },
+    "backlog_inflation_impact": {
+      "backlog_today": 650000000,
+      "construction_inflation_rate": 0.04,
+      "backlog_in_5yr": 791000000,
+      "backlog_in_10yr": 962000000,
+      "note": "At 4% annual construction inflation, today's £650M backlog would cost £791M to clear in 5 years or £962M in 10 years. Delay is not free — it compounds the problem."
+    }
+  },
+
+  "future_outlook": {
+    "section_title": "The Road Ahead: Future Pressures on the Network",
+    "summary": "Lancashire's highway network faces converging pressures: population growth, heavier electric vehicles, delivery van explosion on residential streets, climate-driven deterioration, and a collapsing motoring tax base. These are not distant threats — they are happening now.",
+
+    "population": {
+      "lancashire_2022": 1253922,
+      "lancashire_2027": 1305757,
+      "lancashire_2032": 1342399,
+      "lancashire_2037": 1373979,
+      "lancashire_2042": 1402521,
+      "lancashire_2047": 1429718,
+      "growth_pct_25yr": 14.0,
+      "over_65_2022": 263319,
+      "over_65_2032": 321412,
+      "over_65_growth_pct_2022_2032": 21.9,
+      "under_16_decline_pct_2022_2032": -8.8,
+      "working_age_pct_2022": 61.1,
+      "working_age_pct_2037": 59.8,
+      "highway_impact": "14% more people means more vehicles, more road wear, more demand for maintenance. The aging population (+21.9% over-65s by 2032) shifts traffic from peak commutes to off-peak healthcare/leisure trips, and increases demand for accessible footways, dropped kerbs, and smooth surfaces.",
+      "source": "ONS 2022-based Subnational Population Projections"
+    },
+
+    "ev_transition": {
+      "uk_evs_2019": 115000,
+      "uk_evs_2025": 1505000,
+      "uk_evs_growth_rate": "13× in 6 years",
+      "ice_ban_year": 2035,
+      "ev_weight_premium_pct": 20,
+      "fourth_power_law_note": "Road damage scales with the 4th power of axle weight. A vehicle 20% heavier inflicts approximately 2.1× the surface damage (1.2⁴ = 2.07). As the fleet transitions to EVs, residential roads designed for lighter cars will deteriorate faster.",
+      "fuel_duty_2024_25": 24400000000,
+      "vex_duty_2024_25": 8400000000,
+      "total_motoring_taxes": 40000000000,
+      "fuel_duty_projected_loss_by_2035": 13000000000,
+      "eved_start_year": 2028,
+      "eved_rate_bev_pence_per_mile": 3,
+      "eved_rate_phev_pence_per_mile": 1.5,
+      "eved_revenue_2028_29": 1100000000,
+      "eved_revenue_2050_51": 7000000000,
+      "highway_impact": "Heavier EVs accelerate surface wear on residential streets. Meanwhile, fuel duty revenue is collapsing — from 7% of total tax receipts (2020) to a projected 2% (2026). The new eVED (3p/mile from 2028) will only partially bridge the gap. Road maintenance funding becomes politically harder to justify as the direct link between motoring taxes and road spending weakens.",
+      "source": "OBR Fuel Duties forecast, DfT, HM Treasury eVED Consultation Nov 2025, RAC Foundation"
+    },
+
+    "lgv_growth": {
+      "lgv_increase_2010_2023_pct": 53,
+      "lgv_share_of_traffic_pct": 16,
+      "lgv_daily_km_billions": 5.2,
+      "highway_impact": "Online shopping deliveries have driven a 53% increase in light goods vehicle traffic since 2010. LGVs now account for 16% of all road traffic. Amazon/DPD/Evri vans are heavier than typical car traffic and concentrate on unclassified residential streets — the 87.5% of the network already at 27.6% red. These are roads designed for occasional car use, not continuous commercial delivery traffic.",
+      "source": "DfT Road Traffic Statistics TRA0101"
+    },
+
+    "climate_change": {
+      "rainfall_2024_pct_of_avg": 125,
+      "wettest_year_since": 1891,
+      "bc_roads_deterioration_2024_25_pct": 41,
+      "met_office_winter_rainfall_increase_by_2050_pct": "10-20",
+      "highway_impact": "2024 was the UK's wettest year since 1891, with 125% of the 1991-2020 average rainfall. The direct result: Lancashire's B&C roads jumped from 4.6% to 6.5% red in a single year — a 41% deterioration. Water infiltrates cracks, freezes, expands, and creates potholes. The Met Office projects 10-20% wetter winters by 2050. Roads designed for historical climate patterns are failing under the new normal.",
+      "source": "Met Office State of the UK Climate 2024, LCC DVS survey data"
+    },
+
+    "autonomous_vehicles": {
+      "uk_legislation": "Automated Vehicles Act 2024",
+      "infrastructure_needs": [
+        "HD lane markings (machine-readable, retro-reflective)",
+        "V2I communication nodes (DSRC/C-V2X at junctions)",
+        "5G/LTE coverage on strategic routes",
+        "Sensor-ready street furniture (mounting points on lighting columns/signals)",
+        "Digital HD mapping (sub-10cm accuracy)",
+        "Updated road signs (machine-readable format)"
+      ],
+      "realistic_uk_timeline": "Limited AV deployment on motorways by 2028-2030. Urban AV services unlikely before mid-2030s. Full mixed-traffic autonomy not expected before 2040.",
+      "highway_impact": "LCC will need to upgrade lane markings, install V2I equipment on signal poles, and maintain higher surface quality (AVs sensors struggle with degraded markings and uneven surfaces). Lancashire's ~100,000 lighting columns and 5,778 traffic signals represent essential AV hosting infrastructure. The 5G small cell opportunity (3-year payback) becomes a strategic necessity, not just a revenue option.",
+      "source": "Automated Vehicles Act 2024, Centre for Connected and Autonomous Vehicles, DfT Connected & Automated Mobility roadmap"
+    },
+
+    "motoring_tax_crisis": {
+      "total_motoring_taxes_2024": 40000000000,
+      "fuel_duty_frozen_since": 2011,
+      "consecutive_years_frozen": 15,
+      "cost_of_freeze_since_2011": 120000000000,
+      "fuel_duty_share_of_tax_2020_pct": 7,
+      "fuel_duty_share_of_tax_2026_pct": 2,
+      "highway_impact": "15 consecutive years of frozen fuel duty have cost the Treasury an estimated £120B in foregone revenue. Roads are funded from general taxation, not ringfenced from motoring taxes — but the political case for road investment weakens as motoring tax revenues decline. The fundamental question: will roads be funded by their users (road pricing) or from general taxation? Neither pathway currently adds up.",
+      "source": "OBR Fuel Duties forecast, House of Commons Library, IFS 'A Road Map for Motoring Taxation'"
+    }
+  },
+
+  "spending_integration": {
+    "data_source": "LCC spending data (spending-*.json) filtered by 42 highways department codes identified in budget_mapping.json",
+    "period": "12-month sample from available v4 monthly data",
+    "top_contractors": [
+      { "supplier": "ROAD MAINTENANCE SERVICES LTD", "annual_spend": 4989473, "share_pct": 62, "note": "Dominant maintenance contractor — 62% of identifiable road maintenance spend" },
+      { "supplier": "MONKS CONTRACTORS LTD", "annual_spend": 1678894, "share_pct": 21, "note": "W Monks (Longridge) sub-entity" },
+      { "supplier": "BAMBERS REMEDIAL CONTRACTORS LTD", "annual_spend": 571043, "share_pct": 7, "note": "Remedial/patching specialist" }
+    ],
+    "total_identifiable_highways_spend": 8100000,
+    "budget_departments_count": 42,
+    "concentration_note": "ROAD MAINTENANCE SERVICES LTD holds 62% of identifiable maintenance spend. Top 3 contractors hold 90%. This concentration level warrants scrutiny — is there genuine competition for LCC highways work? Cross-reference with procurement.json contract notices for tender history.",
+    "cross_reference_note": "Roadworks operators in MARIO ArcGIS data (BT, United Utilities, ENW, Cadent) are mostly statutory undertakers, not LCC contractors. The spending data captures LCC's own commissioned maintenance — a different data source from the NRSWA-notified utility works."
   }
 }
