@@ -4,9 +4,10 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 import Accordion from '../components/Accordion.astro';
 import RoadworksMap from '../components/RoadworksMap.astro';
 
-// Traffic + FixMyStreet data
+// Traffic + FixMyStreet + Assets data
 let trafficData: any = { heatmap: [], key_roads: [], fixtures: [], school_terms: { in_term: false }, count_points: [] };
 let fixmystreetData: any = { reports: [], stats: { total: 0, open: 0, by_category: {} } };
+let assetsData: any = {};
 
 try {
   const trafficRaw = await import('../../public/data/traffic.json');
@@ -15,6 +16,10 @@ try {
 try {
   const fmsRaw = await import('../../public/data/fixmystreet.json');
   fixmystreetData = fmsRaw.default || fmsRaw;
+} catch {}
+try {
+  const assetsRaw = await import('../../public/data/highways_assets.json');
+  assetsData = assetsRaw.default || assetsRaw;
 } catch {}
 
 const heatmap = trafficData.heatmap || [];
@@ -59,6 +64,39 @@ const nonDeferrableReasons = [
   { label: 'Bridge/structural safety', count: bridgeWorks, reason: 'S1 Highways Act 1980 duty to maintain \u2014 structural safety obligation' },
   { label: 'Planning obligations', count: planningWorks, reason: 'Tied to s106/s278 planning agreement \u2014 legal obligation to housing developers' },
 ].filter((r: any) => r.count > 0);
+
+// Assets data extraction
+const networkSummary = assetsData.network_summary || {};
+const roadCondition = assetsData.road_condition || {};
+const conditionTrend = roadCondition.trend || [];
+const investmentAnalysis = assetsData.investment_analysis || {};
+const historicInvestment = assetsData.historic_investment || {};
+const annualInvestment = historicInvestment.annual_investment || [];
+const cumulativeAnalysis = historicInvestment.cumulative_analysis || {};
+const nationalContext = historicInvestment.national_context || {};
+const whatItWouldCost = historicInvestment.what_it_would_cost || {};
+const scenarios = whatItWouldCost.scenarios || [];
+const lifecycleModels = assetsData.lifecycle_models || [];
+const budgetTrend = assetsData.budget_trend || {};
+const budgetYears = budgetTrend.years || [];
+const assetCategories = assetsData.asset_categories || [];
+const maintenanceContract = assetsData.maintenance_contract_performance || {};
+const innovationOpps = assetsData.innovation_opportunities || [];
+
+// Roadworks by-district stats (for dynamic hero)
+const byDistrict = trafficData.meta?.by_district || {};
+
+// Congestion junctions with district
+const junctions = trafficData.congestion_model?.junctions || [];
+
+// SVG chart helpers for investment gap
+const invChartW = 720;
+const invChartH = 260;
+const invPad = { top: 20, right: 20, bottom: 50, left: 55 };
+const invPlotW = invChartW - invPad.left - invPad.right;
+const invPlotH = invChartH - invPad.top - invPad.bottom;
+const invMaxY = Math.max(...annualInvestment.map((y: any) => Math.max(y.estimated_need || 0, y.total_capital || 0))) / 1e6 || 120;
+const invBarW = annualInvestment.length > 0 ? Math.min(30, invPlotW / annualInvestment.length * 0.7) : 20;
 
 // Heatmap colour
 function heatColor(level: string): string {
@@ -174,22 +212,36 @@ const schoolBands = [
             congestion analysis. Lancashire County Council is the highways authority responsible
             for all roads except the M65 motorway and unitary areas.
           </p>
-          <div class="hero-stats">
+          <div class="hero-stats" id="hero-stats">
             <div class="hero-stat">
-              <span class="hero-stat-value">&pound;650M+</span>
-              <span class="hero-stat-label">Highways Backlog</span>
+              <span class="hero-stat-value" id="hero-stat-1">&pound;650M+</span>
+              <span class="hero-stat-label" id="hero-label-1">Highways Backlog</span>
             </div>
             <div class="hero-stat">
-              <span class="hero-stat-value">&pound;72M</span>
-              <span class="hero-stat-label">2026/27 Investment</span>
+              <span class="hero-stat-value" id="hero-stat-2">&pound;72M</span>
+              <span class="hero-stat-label" id="hero-label-2">2026/27 Investment</span>
             </div>
             <div class="hero-stat">
-              <span class="hero-stat-value">7,400 km</span>
-              <span class="hero-stat-label">LCC Road Network</span>
+              <span class="hero-stat-value" id="hero-stat-3">7,142 km</span>
+              <span class="hero-stat-label" id="hero-label-3">LCC Road Network</span>
             </div>
             <div class="hero-stat">
-              <span class="hero-stat-value">&pound;55M</span>
-              <span class="hero-stat-label">Levelling Up Programme</span>
+              <span class="hero-stat-value" id="hero-stat-4">{totalWorks.toLocaleString()}</span>
+              <span class="hero-stat-label" id="hero-label-4">Active & Planned Works</span>
+            </div>
+          </div>
+          <!-- Borough stats card (shown when specific district selected) -->
+          <div class="borough-stats-card" id="borough-stats-card" style="display:none">
+            <div class="borough-stats-inner">
+              <span class="borough-stats-title" id="borough-stats-title">Burnley</span>
+              <div class="borough-stats-row">
+                <div class="borough-stat"><span class="borough-stat-value" id="bs-total">0</span><span class="borough-stat-label">Works</span></div>
+                <div class="borough-stat"><span class="borough-stat-value" id="bs-active">0</span><span class="borough-stat-label">Active</span></div>
+                <div class="borough-stat"><span class="borough-stat-value" id="bs-planned">0</span><span class="borough-stat-label">Planned</span></div>
+                <div class="borough-stat"><span class="borough-stat-value" id="bs-high">0</span><span class="borough-stat-label">High Severity</span></div>
+                <div class="borough-stat"><span class="borough-stat-value" id="bs-jci">0</span><span class="borough-stat-label">JCI Junctions</span></div>
+              </div>
+              <p class="borough-stats-note" id="bs-note">LCC manages all roads in this district as the highway authority.</p>
             </div>
           </div>
         </div>
@@ -526,7 +578,7 @@ const schoolBands = [
               {critical.slice(0, 4).map((j: any) => {
                 const jciColor = j.jci_level === 'critical' ? '#dc2626' : '#f97316';
                 return (
-                  <div class="jci-headline-chip" style={`border-color: ${jciColor}`}>
+                  <div class="jci-headline-chip" data-district={j.district || ''} style={`border-color: ${jciColor}`}>
                     <span class="jci-headline-name">{j.name}</span>
                     <span class="jci-headline-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(0)}</span>
                     <span class={`severity-badge severity-${j.jci_level}`}>{j.jci_level}</span>
@@ -541,7 +593,7 @@ const schoolBands = [
             {trafficData.congestion_model.junctions.sort((a: any, b: any) => b.jci - a.jci).map((j: any) => {
               const jciColor = j.jci_level === 'critical' ? '#dc2626' : j.jci_level === 'high' ? '#f97316' : j.jci_level === 'moderate' ? '#eab308' : '#22c55e';
               return (
-                <div class="jci-card" style={`border-left: 3px solid ${jciColor}`}>
+                <div class="jci-card" data-district={j.district || ''} style={`border-left: 3px solid ${jciColor}`}>
                   <div class="jci-top">
                     <span class="jci-name">{j.name}</span>
                     <span class="jci-score" style={`color:${jciColor}`}>{(j.jci || 0).toFixed(1)}</span>
@@ -1015,6 +1067,367 @@ const schoolBands = [
       </ScrollReveal>
     </div>
   </section>
+
+  <!-- Assets & Investment -->
+  {annualInvestment.length > 0 && (
+  <section class="assets-section" id="assets-investment">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <span class="badge badge-teal">Asset Intelligence</span>
+          <h2 class="section-heading">Assets &amp; Investment</h2>
+          <p class="section-sub">Lancashire&rsquo;s &pound;10 billion highway asset base: what it&rsquo;s worth, what&rsquo;s been invested, and what&rsquo;s needed. LCC is the highway authority for all 12 districts.</p>
+        </div>
+
+        <!-- Data quality notice -->
+        <div class="data-quality-notice">
+          <strong>&#9888; Data quality:</strong> Capital programme figures (2025/26, 2026/27) are budgeted allocations, NOT confirmed outturn. Revenue data (2021/22&ndash;2024/25) is confirmed GOV.UK MHCLG data. Historic capital figures compiled from DfT allocations and LCC cabinet reports.
+        </div>
+
+        <Accordion title="Network Asset Valuation" defaultOpen={true}>
+          <!-- Valuation stat cards -->
+          <div class="asset-stat-grid">
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">&pound;{networkSummary.gross_replacement_cost ? (networkSummary.gross_replacement_cost / 1e9).toFixed(0) : '10'}B</span>
+              <span class="asset-stat-label">Gross Replacement Cost</span>
+              <span class="asset-stat-note">CIPFA Transport Infrastructure Code</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">{networkSummary.total_length_km?.toLocaleString() || '7,142'} km</span>
+              <span class="asset-stat-label">Road Network</span>
+              <span class="asset-stat-note">{networkSummary.total_length_miles?.toLocaleString() || '4,437'} miles managed by LCC</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">{networkSummary.structures_count?.toLocaleString() || '2,009'}</span>
+              <span class="asset-stat-label">Bridges &amp; Structures</span>
+              <span class="asset-stat-note">Each requiring periodic inspection</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">{networkSummary.traffic_signals_count?.toLocaleString() || '5,778'}</span>
+              <span class="asset-stat-label">Traffic Signals</span>
+              <span class="asset-stat-note">From OSM Overpass data</span>
+            </div>
+          </div>
+
+          <!-- Asset category breakdown -->
+          {assetCategories.length > 0 && (
+          <div class="asset-category-grid">
+            {assetCategories.map((cat: any) => (
+            <div class="asset-cat-card" style={`border-left: 3px solid ${cat.fill || '#8e8e93'}`}>
+              <div class="asset-cat-name">{cat.category}</div>
+              <div class="asset-cat-value">&pound;{(cat.grc_estimate / 1e9).toFixed(1)}B</div>
+              <div class="asset-cat-pct">{cat.grc_pct}% of GRC</div>
+              <div class="asset-cat-note">{cat.quantity}</div>
+            </div>
+            ))}
+          </div>
+          )}
+        </Accordion>
+
+        <Accordion title="Road Condition" defaultOpen={true}>
+          <!-- Current condition bars -->
+          <div class="condition-bars">
+            <div class="condition-row">
+              <span class="condition-label">A Roads</span>
+              <div class="condition-bar-track">
+                <div class="condition-bar-fill condition-green" style={`width: ${100 - (roadCondition.a_roads?.red_pct || 3.9)}%`}></div>
+                <div class="condition-bar-fill condition-red" style={`width: ${roadCondition.a_roads?.red_pct || 3.9}%`}></div>
+              </div>
+              <span class="condition-pct">{roadCondition.a_roads?.red_pct || 3.9}% red</span>
+            </div>
+            <p class="condition-note">{roadCondition.a_roads?.note || 'Below national average (~5%)'}</p>
+
+            <div class="condition-row">
+              <span class="condition-label">B &amp; C Roads</span>
+              <div class="condition-bar-track">
+                <div class="condition-bar-fill condition-amber" style={`width: ${100 - (roadCondition.bc_roads?.red_pct || 6.5)}%`}></div>
+                <div class="condition-bar-fill condition-red" style={`width: ${roadCondition.bc_roads?.red_pct || 6.5}%`}></div>
+              </div>
+              <span class="condition-pct">{roadCondition.bc_roads?.red_pct || 6.5}% red</span>
+            </div>
+            <p class="condition-note">{roadCondition.bc_roads?.note || 'Deteriorating fastest'}</p>
+
+            <div class="condition-row">
+              <span class="condition-label">Unclassified</span>
+              <div class="condition-bar-track">
+                <div class="condition-bar-fill condition-red" style={`width: ${roadCondition.unclassified?.red_pct || 27.6}%`}></div>
+                <div class="condition-bar-fill condition-amber" style={`width: ${72.4 - (roadCondition.unclassified?.red_pct || 27.6)}%`}></div>
+              </div>
+              <span class="condition-pct">{roadCondition.unclassified?.red_pct || 27.6}% red</span>
+            </div>
+            <p class="condition-note">{roadCondition.unclassified?.note || 'Over 1-in-4 residential roads need structural maintenance'}</p>
+          </div>
+
+          {roadCondition.key_insight && (
+          <div class="key-insight-box">{roadCondition.key_insight}</div>
+          )}
+
+          <!-- Road condition trend chart (SVG) -->
+          {conditionTrend.length > 1 && (
+          <div class="chart-container">
+            <h4 class="chart-title">Road Condition Trend (% Red — Needs Maintenance)</h4>
+            <svg viewBox={`0 0 ${chartW} ${chartH}`} class="svg-chart">
+              <!-- Grid lines -->
+              {[0, 8, 16, 24, 32].map((v) => (
+              <line x1={chartPad.left} y1={chartPad.top + plotH - (v / 32) * plotH} x2={chartW - chartPad.right} y2={chartPad.top + plotH - (v / 32) * plotH} stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 4" />
+              ))}
+              {[0, 8, 16, 24, 32].map((v) => (
+              <text x={chartPad.left - 8} y={chartPad.top + plotH - (v / 32) * plotH + 4} fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="end">{v}%</text>
+              ))}
+              <!-- X labels -->
+              {conditionTrend.filter((t: any) => t.a_red !== null).map((t: any, i: number, arr: any[]) => {
+                const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                return <text x={x} y={chartH - 8} fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="middle">{t.year.replace(/^20/, '')}</text>;
+              })}
+              <!-- A roads line (green) -->
+              <polyline fill="none" stroke="#30d158" stroke-width="2"
+                points={conditionTrend.filter((t: any) => t.a_red !== null).map((t: any, i: number, arr: any[]) => {
+                  const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                  const y = chartPad.top + plotH - (t.a_red / 32) * plotH;
+                  return `${x},${y}`;
+                }).join(' ')} />
+              {conditionTrend.filter((t: any) => t.a_red !== null).map((t: any, i: number, arr: any[]) => {
+                const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                const y = chartPad.top + plotH - (t.a_red / 32) * plotH;
+                return <circle cx={x} cy={y} r="3" fill="#30d158" />;
+              })}
+              <!-- B&C roads line (orange) -->
+              <polyline fill="none" stroke="#ff9f0a" stroke-width="2"
+                points={conditionTrend.filter((t: any) => t.bc_red !== null).map((t: any, i: number, arr: any[]) => {
+                  const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                  const y = chartPad.top + plotH - (t.bc_red / 32) * plotH;
+                  return `${x},${y}`;
+                }).join(' ')} />
+              {conditionTrend.filter((t: any) => t.bc_red !== null).map((t: any, i: number, arr: any[]) => {
+                const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                const y = chartPad.top + plotH - (t.bc_red / 32) * plotH;
+                return <circle cx={x} cy={y} r="3" fill="#ff9f0a" />;
+              })}
+              <!-- Unclassified line (red) -->
+              {conditionTrend.filter((t: any) => t.uc_red !== null).length > 0 && (
+              <polyline fill="none" stroke="#ff453a" stroke-width="2"
+                points={conditionTrend.filter((t: any) => t.uc_red !== null).map((t: any, i: number, arr: any[]) => {
+                  const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                  const y = chartPad.top + plotH - (t.uc_red / 32) * plotH;
+                  return `${x},${y}`;
+                }).join(' ')} />
+              )}
+              {conditionTrend.filter((t: any) => t.uc_red !== null).map((t: any, i: number, arr: any[]) => {
+                const x = chartPad.left + (i / Math.max(arr.length - 1, 1)) * plotW;
+                const y = chartPad.top + plotH - (t.uc_red / 32) * plotH;
+                return <circle cx={x} cy={y} r="3" fill="#ff453a" />;
+              })}
+            </svg>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#30d158"></span> A Roads</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#ff9f0a"></span> B&amp;C Roads</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#ff453a"></span> Unclassified</span>
+            </div>
+          </div>
+          )}
+        </Accordion>
+
+        <Accordion title="True Cost of Getting Roads Right" defaultOpen={true}>
+          <!-- Cost stat cards -->
+          <div class="asset-stat-grid">
+            <div class="asset-stat-card asset-stat-card--backlog">
+              <span class="asset-stat-value">&pound;{investmentAnalysis.lcc_maintenance_backlog ? (investmentAnalysis.lcc_maintenance_backlog / 1e6).toFixed(0) : '650'}M</span>
+              <span class="asset-stat-label">Maintenance Backlog</span>
+              <span class="asset-stat-note">{investmentAnalysis.lcc_backlog_source || 'Cabinet Member statement, March 2026'}</span>
+            </div>
+            <div class="asset-stat-card asset-stat-card--steady">
+              <span class="asset-stat-value">&pound;{investmentAnalysis.practical_steady_state ? (investmentAnalysis.practical_steady_state / 1e6).toFixed(0) : '110'}M<small>/yr</small></span>
+              <span class="asset-stat-label">Practical Steady-State Need</span>
+              <span class="asset-stat-note">Based on 25-year resurfacing cycle + all asset classes</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">&pound;{investmentAnalysis.current_best_annual_capital ? (investmentAnalysis.current_best_annual_capital / 1e6).toFixed(0) : '72'}M</span>
+              <span class="asset-stat-label">2026/27 Capital Programme</span>
+              <span class="asset-stat-note">Budgeted. {investmentAnalysis.capital_as_pct_practical_steady_state || 65}% of practical steady-state</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">&sim;9yr</span>
+              <span class="asset-stat-label">Years to Clear Backlog</span>
+              <span class="asset-stat-note">At current spend, assuming zero new deterioration (impossible)</span>
+            </div>
+          </div>
+
+          <!-- Investment gap key insight -->
+          {investmentAnalysis.key_insight && (
+          <div class="key-insight-box">{investmentAnalysis.key_insight}</div>
+          )}
+
+          <!-- 14-year investment gap summary -->
+          {cumulativeAnalysis.total_invested && (
+          <div class="cumulative-grid">
+            <div class="cumulative-card">
+              <span class="cumulative-value">&pound;{(cumulativeAnalysis.total_invested / 1e6).toFixed(0)}M</span>
+              <span class="cumulative-label">Total Invested (14 yrs)</span>
+            </div>
+            <div class="cumulative-card">
+              <span class="cumulative-value">&pound;{(cumulativeAnalysis.total_needed / 1e6).toFixed(0)}M</span>
+              <span class="cumulative-label">Estimated Need (14 yrs)</span>
+            </div>
+            <div class="cumulative-card cumulative-card--shortfall">
+              <span class="cumulative-value">&pound;{(cumulativeAnalysis.cumulative_shortfall / 1e6).toFixed(0)}M</span>
+              <span class="cumulative-label">Cumulative Shortfall</span>
+            </div>
+            <div class="cumulative-card">
+              <span class="cumulative-value">{cumulativeAnalysis.investment_as_pct_of_need}%</span>
+              <span class="cumulative-label">Of Need Was Met</span>
+            </div>
+          </div>
+          )}
+
+          <!-- Investment gap chart (SVG) -->
+          <div class="chart-container">
+            <h4 class="chart-title">Capital Investment vs Estimated Need (&pound;M/year)</h4>
+            <p class="chart-subtitle">Orange = DfT grant. Blue = LCC contribution. Red line = estimated need.</p>
+            <svg viewBox={`0 0 ${invChartW} ${invChartH}`} class="svg-chart">
+              <!-- Y axis grid -->
+              {[0, 30, 60, 90, 120].map((v) => (
+              <line x1={invPad.left} y1={invPad.top + invPlotH - (v / invMaxY) * invPlotH} x2={invChartW - invPad.right} y2={invPad.top + invPlotH - (v / invMaxY) * invPlotH} stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 4" />
+              ))}
+              {[0, 30, 60, 90, 120].map((v) => (
+              <text x={invPad.left - 6} y={invPad.top + invPlotH - (v / invMaxY) * invPlotH + 4} fill="rgba(255,255,255,0.5)" font-size="10" text-anchor="end">&pound;{v}M</text>
+              ))}
+              <!-- Bars + line -->
+              {annualInvestment.map((y: any, i: number) => {
+                const x = invPad.left + (i / annualInvestment.length) * invPlotW + invPlotW / annualInvestment.length * 0.15;
+                const dftH = ((y.dft_grant || 0) / 1e6 / invMaxY) * invPlotH;
+                const lccH = ((y.lcc_contribution || 0) / 1e6 / invMaxY) * invPlotH;
+                const needY = invPad.top + invPlotH - ((y.estimated_need || 0) / 1e6 / invMaxY) * invPlotH;
+                return (
+                  <g>
+                    <rect x={x} y={invPad.top + invPlotH - dftH} width={invBarW} height={dftH} fill="#ff9f0a" rx="1" />
+                    <rect x={x} y={invPad.top + invPlotH - dftH - lccH} width={invBarW} height={lccH} fill="#0a84ff" rx="1" />
+                    <text x={x + invBarW / 2} y={invChartH - 22} fill="rgba(255,255,255,0.5)" font-size="8" text-anchor="middle" transform={`rotate(-45 ${x + invBarW / 2} ${invChartH - 22})`}>{y.year.replace(/^20/, '')}</text>
+                  </g>
+                );
+              })}
+              <!-- Estimated need line (red) -->
+              <polyline fill="none" stroke="#ff453a" stroke-width="2"
+                points={annualInvestment.map((y: any, i: number) => {
+                  const x = invPad.left + (i / annualInvestment.length) * invPlotW + invPlotW / annualInvestment.length * 0.15 + invBarW / 2;
+                  const yPos = invPad.top + invPlotH - ((y.estimated_need || 0) / 1e6 / invMaxY) * invPlotH;
+                  return `${x},${yPos}`;
+                }).join(' ')} />
+              {annualInvestment.map((y: any, i: number) => {
+                const x = invPad.left + (i / annualInvestment.length) * invPlotW + invPlotW / annualInvestment.length * 0.15 + invBarW / 2;
+                const yPos = invPad.top + invPlotH - ((y.estimated_need || 0) / 1e6 / invMaxY) * invPlotH;
+                return <circle cx={x} cy={yPos} r="2.5" fill="#ff453a" />;
+              })}
+            </svg>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#ff9f0a"></span> DfT Grant</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#0a84ff"></span> LCC Contribution</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#ff453a"></span> Estimated Need</span>
+            </div>
+          </div>
+        </Accordion>
+
+        <Accordion title="What Would It Actually Cost?" defaultOpen={false}>
+          {scenarios.length > 0 && (
+          <div class="scenario-grid">
+            {scenarios.map((s: any) => (
+            <div class={`scenario-card scenario-card--${s.severity}`}>
+              <h4 class="scenario-name">{s.name}</h4>
+              <div class="scenario-stats">
+                <div class="scenario-stat">
+                  <span class="scenario-stat-label">Annual capital</span>
+                  <span class="scenario-stat-value">&pound;{(s.annual_capital / 1e6).toFixed(0)}M</span>
+                </div>
+                <div class="scenario-stat">
+                  <span class="scenario-stat-label">10yr total</span>
+                  <span class="scenario-stat-value">&pound;{(s.total_10yr_cost / 1e6).toFixed(0)}M</span>
+                </div>
+                <div class="scenario-stat">
+                  <span class="scenario-stat-label">Backlog cleared</span>
+                  <span class="scenario-stat-value">{s.years_to_clear_backlog}</span>
+                </div>
+              </div>
+              <p class="scenario-outcome">{s.outcome}</p>
+            </div>
+            ))}
+          </div>
+          )}
+
+          {whatItWouldCost.key_finding && (
+          <div class="key-insight-box">{whatItWouldCost.key_finding}</div>
+          )}
+
+          {whatItWouldCost.lcc_statement && (
+          <div class="lcc-statement">
+            <strong>LCC&rsquo;s own assessment:</strong> {whatItWouldCost.lcc_statement}
+          </div>
+          )}
+        </Accordion>
+
+        <Accordion title="National Context (ALARM Survey 2025)" defaultOpen={false}>
+          {nationalContext.national_backlog && (
+          <div class="asset-stat-grid">
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">&pound;{(nationalContext.national_backlog / 1e9).toFixed(1)}B</span>
+              <span class="asset-stat-label">National Backlog</span>
+              <span class="asset-stat-note">AIA ALARM 2025. Lancashire = ~{nationalContext.lancashire_backlog_pct_of_national}%</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">{nationalContext.resurfacing_cycle_years}yr</span>
+              <span class="asset-stat-label">Resurfacing Cycle</span>
+              <span class="asset-stat-note">At current rates. Should be every 25 years</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">{nationalContext.funding_disparity_ratio}&times;</span>
+              <span class="asset-stat-label">Funding Disparity</span>
+              <span class="asset-stat-note">National Highways &pound;{(nationalContext.national_highways_per_mile / 1000).toFixed(0)}K/mi vs &pound;{(nationalContext.local_authority_per_mile / 1000).toFixed(0)}K/mi local</span>
+            </div>
+            <div class="asset-stat-card">
+              <span class="asset-stat-value">&pound;{(nationalContext.decade_spend_total / 1e9).toFixed(0)}B</span>
+              <span class="asset-stat-label">Decade of Spend</span>
+              <span class="asset-stat-note">{nationalContext.decade_spend_note}</span>
+            </div>
+          </div>
+          )}
+        </Accordion>
+
+        <Accordion title="Lifecycle Economics" defaultOpen={false}>
+          {lifecycleModels.length > 0 && (
+          <div class="table-overflow">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Treatment</th>
+                <th>Lifespan</th>
+                <th>Cost/km</th>
+                <th>Cost/km/yr</th>
+                <th>Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lifecycleModels.map((lm: any) => (
+              <tr>
+                <td><strong>{lm.treatment}</strong><br/><small>{lm.description?.slice(0, 60)}...</small></td>
+                <td>{lm.lifespan_years} years</td>
+                <td>&pound;{lm.cost_per_km?.toLocaleString()}</td>
+                <td style={`color: ${lm.effectiveness === 'best_value' ? '#30d158' : lm.effectiveness === 'most_expensive' ? '#ff453a' : '#ff9f0a'}`}><strong>&pound;{lm.cost_per_km_per_year?.toLocaleString()}</strong></td>
+                <td><small>{lm.suitable_for}</small></td>
+              </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+          )}
+          <p class="chart-subtitle" style="margin-top: 8px">Surface dressing at &pound;3,750/km/yr is 5&times; more cost-effective than full reconstruction at &pound;18,750/km/yr. Every &pound;1 not spent on prevention costs &pound;2.50&ndash;&pound;5 to fix reactively.</p>
+        </Accordion>
+
+        <!-- Sources -->
+        <p class="assets-sources">
+          Sources: LCC Local Highways Maintenance Transparency Report, GOV.UK MHCLG Revenue Outturn, AIA ALARM Survey 2025, DfT Road Condition Statistics, CIPFA Transport Infrastructure Code, DfT Highways Maintenance Block Allocations.
+        </p>
+      </ScrollReveal>
+    </div>
+  </section>
+  )}
 
   <!-- Active TTROs (Burnley-specific) -->
   <section class="ttro-section" data-region-only="burnley">
@@ -3618,6 +4031,433 @@ const schoolBands = [
     display: none !important;
   }
 
+  /* ---- Borough Stats Card ---- */
+  .borough-stats-card {
+    margin-top: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: linear-gradient(135deg, rgba(18,182,207,0.06), rgba(139,92,246,0.04));
+    border: 1px solid rgba(18,182,207,0.15);
+    border-radius: var(--radius-lg);
+    animation: fadeIn 0.3s ease;
+  }
+  .borough-stats-title {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .borough-stats-row {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+  .borough-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
+  .borough-stat-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .borough-stat-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .borough-stats-note {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin-top: 8px;
+    font-style: italic;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Assets & Investment Section ---- */
+  .assets-section {
+    padding: var(--space-lg) 0;
+  }
+  .data-quality-notice {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255,159,10,0.06);
+    border: 1px solid rgba(255,159,10,0.15);
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    color: #ff9f0a;
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+  }
+  .asset-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  .asset-stat-card {
+    padding: var(--space-md);
+    background: rgba(28,28,30,0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+  }
+  .asset-stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .asset-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .asset-stat-note {
+    font-size: 0.625rem;
+    color: var(--text-tertiary);
+  }
+
+  /* Asset category breakdown */
+  .asset-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+  .asset-cat-card {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(28,28,30,0.4);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .asset-cat-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .asset-cat-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .asset-cat-pct {
+    font-size: 0.625rem;
+    color: var(--text-tertiary);
+  }
+  .asset-cat-note {
+    font-size: 0.625rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+
+  /* Condition bars */
+  .condition-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-md);
+  }
+  .condition-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .condition-label {
+    width: 100px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex-shrink: 0;
+  }
+  .condition-bar-track {
+    flex: 1;
+    height: 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+  }
+  .condition-bar-fill {
+    height: 100%;
+    transition: width 0.6s ease;
+  }
+  .condition-green { background: #30d158; }
+  .condition-amber { background: #ff9f0a; }
+  .condition-red { background: #ff453a; }
+  .condition-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    width: 70px;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .condition-note {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin: 0 0 8px 0;
+    padding-left: 108px;
+  }
+
+  /* Key insight box */
+  .key-insight-box {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255,69,58,0.06);
+    border: 1px solid rgba(255,69,58,0.15);
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    color: #ff6b6b;
+    line-height: 1.5;
+    margin: var(--space-sm) 0;
+    font-weight: 500;
+  }
+
+  /* Charts (SVG) */
+  .chart-container {
+    margin: var(--space-md) 0;
+  }
+  .chart-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .chart-subtitle {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-sm);
+  }
+  .svg-chart {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+  }
+  .chart-legend {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: 8px;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Cumulative analysis grid */
+  .cumulative-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin: var(--space-md) 0;
+  }
+  .cumulative-card {
+    padding: var(--space-md);
+    background: rgba(28,28,30,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .cumulative-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ff453a;
+    font-variant-numeric: tabular-nums;
+    display: block;
+  }
+  .cumulative-label {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* Scenario grid */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    margin: var(--space-md) 0;
+  }
+  .scenario-card {
+    padding: var(--space-md);
+    background: rgba(28,28,30,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .scenario-name {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .scenario-desc {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+  .scenario-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: auto;
+  }
+  .scenario-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.6875rem;
+  }
+  .scenario-stat-label {
+    color: var(--text-tertiary);
+  }
+  .scenario-stat-value {
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .scenario-highlight {
+    border-color: rgba(18,182,207,0.25);
+    background: rgba(18,182,207,0.04);
+  }
+
+  /* National context stat cards */
+  .national-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    margin: var(--space-md) 0;
+  }
+
+  /* LCC statement */
+  .lcc-statement {
+    padding: var(--space-md);
+    background: rgba(139,92,246,0.04);
+    border: 1px solid rgba(139,92,246,0.12);
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .lcc-statement strong {
+    color: var(--text-primary);
+    font-style: normal;
+  }
+
+  /* Investment summary */
+  .investment-summary {
+    padding: var(--space-md);
+    background: rgba(255,69,58,0.04);
+    border: 1px solid rgba(255,69,58,0.12);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-md);
+  }
+  .investment-summary h4 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    margin: 0 0 8px;
+  }
+  .investment-summary p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* Lifecycle table */
+  .table-overflow {
+    overflow-x: auto;
+    margin: var(--space-sm) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+  }
+  .data-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .data-table td {
+    padding: 8px 12px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-variant-numeric: tabular-nums;
+  }
+  .data-table tbody tr:hover {
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* Sources link */
+  .assets-sources {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin-top: var(--space-md);
+    line-height: 1.5;
+  }
+  .assets-sources a {
+    color: var(--accent);
+    text-decoration: none;
+    background-image: none;
+  }
+
+  /* ---- Responsive for assets section ---- */
+  @media (max-width: 768px) {
+    .asset-stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .scenario-grid { grid-template-columns: repeat(2, 1fr); }
+    .cumulative-grid { grid-template-columns: 1fr; }
+    .national-stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .condition-label { width: 80px; font-size: 0.75rem; }
+    .condition-note { padding-left: 88px; }
+    .borough-stats-row { gap: var(--space-sm); }
+  }
+
+  @media (max-width: 480px) {
+    .asset-stat-grid { grid-template-columns: 1fr 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .asset-stat-value { font-size: 1.25rem; }
+    .borough-stats-row { flex-wrap: wrap; justify-content: center; }
+  }
+
   @media (max-width: 768px) {
     .region-toggle {
       gap: 4px;
@@ -3634,7 +4474,7 @@ const schoolBands = [
 </style>
 
 <script>
-  // Regional toggle logic
+  // Regional toggle + borough-dynamic content logic
   (function() {
     var currentRegion = 'burnley';
     var DISTRICT_LABELS = {
@@ -3643,6 +4483,130 @@ const schoolBands = [
       south_ribble:'South Ribble', preston:'Preston', west_lancashire:'West Lancashire',
       wyre:'Wyre', fylde:'Fylde', all: 'All Lancashire'
     };
+
+    // Roadworks by-district stats (injected at build time)
+    var BY_DISTRICT = {};
+    var TOTAL_STATS = { total: 0, started: 0, planned: 0 };
+
+    // Load roadworks data dynamically
+    fetch('/data/roadworks.json').then(function(r) { return r.json(); }).then(function(data) {
+      BY_DISTRICT = (data.stats && data.stats.by_district) || {};
+      TOTAL_STATS = { total: data.stats.total || 0, started: data.stats.works_started || 0, planned: data.stats.planned_works || 0 };
+      // Update hero stat 4 with live total
+      var heroStat4 = document.getElementById('hero-stat-4');
+      if (heroStat4) heroStat4.textContent = TOTAL_STATS.total.toLocaleString();
+      // Initial region setup (Burnley default)
+      updateBoroughStats('burnley');
+    }).catch(function() {});
+
+    function updateBoroughStats(region) {
+      var card = document.getElementById('borough-stats-card');
+      if (!card) return;
+      if (region === 'all') {
+        card.style.display = 'none';
+        return;
+      }
+      var stats = BY_DISTRICT[region];
+      if (!stats) { card.style.display = 'none'; return; }
+      card.style.display = 'block';
+      var label = DISTRICT_LABELS[region] || region;
+      var title = document.getElementById('borough-stats-title');
+      if (title) title.textContent = label + ' District';
+      var els = {
+        'bs-total': stats.total || 0,
+        'bs-active': stats.works_started || 0,
+        'bs-planned': stats.planned_works || 0,
+        'bs-high': stats.high || 0
+      };
+      for (var id in els) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = els[id].toLocaleString();
+      }
+      // Count JCI junctions for this district
+      var jciCount = document.querySelectorAll('.jci-card[data-district="' + region + '"]').length;
+      var bsJci = document.getElementById('bs-jci');
+      if (bsJci) bsJci.textContent = jciCount;
+      // Update note
+      var note = document.getElementById('bs-note');
+      if (note) note.textContent = stats.total + ' of ' + TOTAL_STATS.total + ' Lancashire works are in ' + label + '. LCC manages all roads in this district.';
+    }
+
+    function filterJCI(region) {
+      // Filter JCI junction cards by district
+      document.querySelectorAll('.jci-card[data-district]').forEach(function(card) {
+        if (region === 'all' || card.getAttribute('data-district') === region) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      // Filter JCI headline chips
+      document.querySelectorAll('.jci-headline-chip[data-district]').forEach(function(chip) {
+        if (region === 'all' || chip.getAttribute('data-district') === region) {
+          chip.style.display = '';
+        } else {
+          chip.style.display = 'none';
+        }
+      });
+      // Update junction count in heading
+      var jciHeading = document.querySelector('.congestion-section .section-sub');
+      if (jciHeading) {
+        var visibleCount = document.querySelectorAll('.jci-card[data-district]' + (region !== 'all' ? '[data-district="' + region + '"]' : '') ).length;
+        var totalCount = document.querySelectorAll('.jci-card[data-district]').length;
+        if (region === 'all') {
+          jciHeading.textContent = 'Restriction-aware scoring of ' + totalCount + ' key junctions — weighted by actual capacity reduction';
+        } else {
+          jciHeading.textContent = visibleCount + ' of ' + totalCount + ' junctions in ' + (DISTRICT_LABELS[region] || region) + ' — weighted by actual capacity reduction';
+        }
+      }
+      // Update accordion title with filtered count
+      var accTitle = document.querySelector('.congestion-section .accordion-trigger');
+      if (accTitle) {
+        var count = document.querySelectorAll('.jci-card[data-district]' + (region !== 'all' ? '[data-district="' + region + '"]' : '') ).length;
+        accTitle.childNodes[0].textContent = (region === 'all' ? 'All ' + count : count) + ' Junctions — Full Scoring';
+      }
+    }
+
+    function updateHeroStats(region) {
+      if (region === 'all') {
+        // All Lancashire stats
+        var h1 = document.getElementById('hero-stat-1');
+        var h2 = document.getElementById('hero-stat-2');
+        var h3 = document.getElementById('hero-stat-3');
+        var h4 = document.getElementById('hero-stat-4');
+        if (h1) h1.innerHTML = '&pound;650M+';
+        if (h2) h2.innerHTML = '&pound;72M';
+        if (h3) h3.textContent = '7,142 km';
+        if (h4) h4.textContent = TOTAL_STATS.total.toLocaleString();
+        var l1 = document.getElementById('hero-label-1');
+        var l2 = document.getElementById('hero-label-2');
+        var l3 = document.getElementById('hero-label-3');
+        var l4 = document.getElementById('hero-label-4');
+        if (l1) l1.textContent = 'Highways Backlog';
+        if (l2) l2.textContent = '2026/27 Investment';
+        if (l3) l3.textContent = 'LCC Road Network';
+        if (l4) l4.textContent = 'Active & Planned Works';
+      } else {
+        var stats = BY_DISTRICT[region] || {};
+        var label = DISTRICT_LABELS[region] || region;
+        var h1 = document.getElementById('hero-stat-1');
+        var h2 = document.getElementById('hero-stat-2');
+        var h3 = document.getElementById('hero-stat-3');
+        var h4 = document.getElementById('hero-stat-4');
+        if (h1) h1.textContent = (stats.total || 0).toLocaleString();
+        if (h2) h2.textContent = (stats.works_started || 0).toLocaleString();
+        if (h3) h3.textContent = (stats.planned_works || 0).toLocaleString();
+        if (h4) h4.textContent = (stats.high || 0).toLocaleString();
+        var l1 = document.getElementById('hero-label-1');
+        var l2 = document.getElementById('hero-label-2');
+        var l3 = document.getElementById('hero-label-3');
+        var l4 = document.getElementById('hero-label-4');
+        if (l1) l1.textContent = 'Total Works';
+        if (l2) l2.textContent = 'Active';
+        if (l3) l3.textContent = 'Planned';
+        if (l4) l4.textContent = 'High Severity';
+      }
+    }
 
     function setRegion(region) {
       currentRegion = region;
@@ -3671,6 +4635,10 @@ const schoolBands = [
         heroSub.innerHTML = 'Live roadworks across all 12 Lancashire districts, traffic orders, major projects, and ' +
           'congestion analysis. Lancashire County Council is the highways authority responsible for all roads except the M65 motorway and unitary areas.';
       }
+      // Borough-dynamic content
+      updateHeroStats(region);
+      updateBoroughStats(region);
+      filterJCI(region);
     }
 
     // Attach click handlers
@@ -3688,14 +4656,7 @@ const schoolBands = [
     window.addEventListener('regionchange', function(e) {
       var district = e.detail && e.detail.district;
       if (district && district !== currentRegion) {
-        currentRegion = district;
-        document.querySelectorAll('.region-pill').forEach(function(pill) {
-          pill.setAttribute('aria-selected', pill.getAttribute('data-region') === district ? 'true' : 'false');
-        });
-        document.querySelectorAll('[data-region-only="burnley"]').forEach(function(section) {
-          if (district === 'burnley') section.classList.remove('region-hidden');
-          else section.classList.add('region-hidden');
-        });
+        setRegion(district);
       }
     });
   })();
