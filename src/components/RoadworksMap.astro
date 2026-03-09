@@ -197,6 +197,32 @@ const cedBoundaries = cedBoundariesData as any[];
       <span class="rw-map-count-num" id="rw-map-count-num">0</span>
       <span class="rw-map-count-label">works</span>
     </div>
+    <!-- Floating timestamp overlay (top-right) -->
+    <div class="rw-map-timestamp" id="rw-map-timestamp">
+      <div class="rw-ts-row">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="rw-ts-date">Loading...</span>
+      </div>
+      <div class="rw-ts-count" id="rw-ts-count"></div>
+    </div>
+    <!-- Floating legend overlay (bottom-left) -->
+    <div class="rw-map-legend" id="rw-map-legend">
+      <div class="rw-ml-item">
+        <span class="rw-ml-dot rw-ml-pulse" style="background:#dc2626"></span>
+        <span class="rw-ml-label">Road Closures</span>
+        <span class="rw-ml-count" id="legend-closures">0</span>
+      </div>
+      <div class="rw-ml-item">
+        <span class="rw-ml-dot rw-ml-pulse" style="background:#f59e0b"></span>
+        <span class="rw-ml-label">Lane Restrictions</span>
+        <span class="rw-ml-count" id="legend-lanes">0</span>
+      </div>
+      <div class="rw-ml-item">
+        <span class="rw-ml-dot" style="background:#6b7280;opacity:0.5"></span>
+        <span class="rw-ml-label">Minor Works</span>
+        <span class="rw-ml-count" id="legend-minor">0</span>
+      </div>
+    </div>
     <div class="rw-map-overlay" id="rw-map-meta">
       <span id="map-stats-showing">Loading...</span>
       <span id="map-stats-updated"></span>
@@ -566,6 +592,17 @@ const cedBoundaries = cedBoundariesData as any[];
   function updateMeta(data) {
     var el = document.getElementById('map-stats-updated');
     if (el && data.meta) el.textContent = 'Updated ' + fmtDate(data.meta.generated);
+    // Populate floating timestamp overlay
+    var tsDate = document.getElementById('rw-ts-date');
+    var tsCount = document.getElementById('rw-ts-count');
+    if (tsDate && data.meta && data.meta.generated) {
+      try {
+        var d = new Date(data.meta.generated);
+        tsDate.textContent = d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})
+          + ' ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      } catch(e) { tsDate.textContent = fmtDate(data.meta.generated); }
+    }
+    if (tsCount) tsCount.textContent = (data.roadworks || []).length + ' works across Lancashire';
     // Check staleness
     if (data.meta && data.meta.generated) {
       metaGenerated = data.meta.generated;
@@ -1182,15 +1219,22 @@ const cedBoundaries = cedBoundariesData as any[];
     }
 
     var statsEl = document.getElementById('map-stats-showing');
+    var closures = filtered.filter(function(r){return classifyRestriction(r)==='full_closure';}).length;
+    var lanes = filtered.filter(function(r){return classifyRestriction(r)==='lane_restriction';}).length;
+    var minor = filtered.filter(function(r){return classifyRestriction(r)==='minor';}).length;
     if (statsEl) {
-      var closures = filtered.filter(function(r){return classifyRestriction(r)==='full_closure';}).length;
-      var lanes = filtered.filter(function(r){return classifyRestriction(r)==='lane_restriction';}).length;
-      var minor = filtered.filter(function(r){return classifyRestriction(r)==='minor';}).length;
       statsEl.textContent = filtered.length + ' works \u00b7 ' + closures + ' closures \u00b7 ' + lanes + ' lane restrictions \u00b7 ' + minor + ' minor';
     }
     // Update marker count badge
     var countEl = document.getElementById('rw-map-count-num');
     if (countEl) countEl.textContent = filtered.length;
+    // Update floating legend counts
+    var lcEl = document.getElementById('legend-closures');
+    var llEl = document.getElementById('legend-lanes');
+    var lmEl = document.getElementById('legend-minor');
+    if (lcEl) lcEl.textContent = closures;
+    if (llEl) llEl.textContent = lanes;
+    if (lmEl) lmEl.textContent = minor;
   }
 
   // --- List ---
@@ -2086,6 +2130,8 @@ const cedBoundaries = cedBoundariesData as any[];
   .rw-map-wrapper.rw-fullscreen .rw-map { height: 100vh !important; border-radius: 0; }
   .rw-map-wrapper.rw-fullscreen .rw-map-glow { display: none; }
   .rw-map-wrapper.rw-fullscreen::after { display: none; }
+  .rw-map-wrapper.rw-fullscreen .rw-map-legend { bottom: 50px; }
+  .rw-map-wrapper.rw-fullscreen .rw-map-timestamp { top: 16px; right: 16px; }
 
   /* Map toolbar */
   .rw-map-toolbar {
@@ -2197,6 +2243,84 @@ const cedBoundaries = cedBoundariesData as any[];
     font-variant-numeric: tabular-nums;
     pointer-events: none;
     letter-spacing: 0.02em;
+  }
+
+  /* --- Floating timestamp overlay (top-right) --- */
+  .rw-map-timestamp {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    background: rgba(16, 16, 18, 0.88);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+    pointer-events: auto;
+  }
+  .rw-ts-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(235, 235, 245, 0.6);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .rw-ts-count {
+    font-size: 0.6rem;
+    color: rgba(235, 235, 245, 0.3);
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* --- Floating legend overlay (bottom-left) --- */
+  .rw-map-legend {
+    position: absolute;
+    bottom: 40px;
+    left: 12px;
+    z-index: 1000;
+    background: rgba(16, 16, 18, 0.88);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    pointer-events: auto;
+  }
+  .rw-ml-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.6875rem;
+    color: rgba(235, 235, 245, 0.6);
+    white-space: nowrap;
+  }
+  .rw-ml-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px currentColor;
+  }
+  .rw-ml-pulse {
+    animation: legend-pulse 2.2s ease-in-out infinite;
+  }
+  .rw-ml-label {
+    font-weight: 500;
+    flex: 1;
+  }
+  .rw-ml-count {
+    font-weight: 700;
+    color: rgba(235, 235, 245, 0.85);
+    font-variant-numeric: tabular-nums;
+    min-width: 20px;
+    text-align: right;
   }
 
   /* --- Markers — restriction-type aware --- */
@@ -2632,7 +2756,7 @@ const cedBoundaries = cedBoundariesData as any[];
     .rw-stat-card, .rw-chip, :global(.rw-card) { transition: none !important; }
     .rw-map-glow { animation: none !important; }
     :global(.rw-marker-pulse) { animation: none !important; }
-    .rw-pulse-dot, .rw-lg-pulse { animation: none !important; }
+    .rw-pulse-dot, .rw-lg-pulse, .rw-ml-pulse { animation: none !important; }
     :global(.pc-pin) { animation: none !important; }
     :global(.leaflet-popup-content-wrapper) { animation: none !important; }
   }
@@ -2822,6 +2946,12 @@ const cedBoundaries = cedBoundariesData as any[];
     .rw-pagination { flex-direction: column; gap: 8px; text-align: center; }
     .rw-keyboard-hint { display: none; }
     .rw-toggle-hint { display: none !important; }
+    .rw-map-timestamp { padding: 6px 10px; }
+    .rw-ts-row { font-size: 0.625rem; }
+    .rw-ts-count { font-size: 0.55rem; }
+    .rw-map-legend { padding: 6px 10px; gap: 3px; bottom: 34px; }
+    .rw-ml-item { font-size: 0.625rem; gap: 5px; }
+    .rw-ml-dot { width: 7px; height: 7px; }
     /* Works chart responsive */
     .rw-works-canvas { height: 120px; }
     .rw-works-chart-header { flex-direction: column; align-items: flex-start; }
