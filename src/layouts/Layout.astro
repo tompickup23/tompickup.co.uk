@@ -19,6 +19,9 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const isHome = Astro.url.pathname === '/';
+const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
+// MAINTENANCE MODE: Redirect all pages to coming-soon (remove after 16 Mar launch)
+const maintenanceMode = true;
 ---
 
 <!doctype html>
@@ -32,6 +35,11 @@ const isHome = Astro.url.pathname === '/';
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+
+    {/* MAINTENANCE MODE: Redirect all pages to coming-soon */}
+    {maintenanceMode && !isComingSoon && (
+      <meta http-equiv="refresh" content="0;url=/coming-soon" />
+    )}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Coming Soon — Monday 16th March | Tom Pickup" description="Something new is launching Monday 16th March 2026. Lancashire council voting intelligence, document analysis, and political accountability like never before.">
+<Layout title="Coming Soon — Launching Monday 16th March | Tom Pickup" description="tompickup.co.uk is being redesigned. Launching Monday 16th March 2026 with voting intelligence, council document analysis, and political accountability for Lancashire.">
   <section class="coming-soon">
     <div class="container">
       <div class="coming-soon-badge">Coming Soon</div>
-      <h1 class="coming-soon-title">Something big is launching<br /><span class="accent">Monday 16th March</span></h1>
+      <h1 class="coming-soon-title">We&rsquo;re rebuilding<br /><span class="accent">Launching Monday 16th March</span></h1>
       <p class="coming-soon-subtitle">
-        Every council vote. Every councillor&rsquo;s record. Every decision explained in plain English.
+        tompickup.co.uk is getting a major upgrade. Every council vote, every councillor&rsquo;s record, every decision &mdash; explained in plain English.
       </p>
 
       <div class="features-preview">
@@ -24,24 +24,34 @@ import Layout from '../layouts/Layout.astro';
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           </div>
           <h3>Council Documents</h3>
-          <p>AI-analysed council minutes, officer reports, and motions &mdash; 392 decisions from 11 Lancashire councils, summarised for voters.</p>
+          <p>AI-analysed council minutes, officer reports, and motions &mdash; hundreds of decisions from Lancashire councils, summarised for voters.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           </div>
           <h3>Budget Votes Decoded</h3>
-          <p>&ldquo;Budget 2026/27 &mdash; 53 for, 31 against&rdquo; becomes &ldquo;Approved 3.99% council tax rise (Band D &pound;1,456&rarr;&pound;1,514, +&pound;58/yr)&rdquo;.</p>
+          <p>No more meaningless vote counts. See exactly what was approved, how much it costs you, and who voted which way.</p>
         </div>
       </div>
 
       <div class="coming-soon-cta">
-        <a href="/" class="btn-primary">Back to Home</a>
-        <a href="https://aidoge.co.uk" class="btn-secondary" target="_blank" rel="noopener">Visit AI DOGE</a>
+        <a href="https://aidoge.co.uk" class="btn-primary" target="_blank" rel="noopener">Visit AI DOGE in the meantime</a>
+      </div>
+
+      <div class="contact-info">
+        <p>Need to get in touch?</p>
+        <div class="contact-links">
+          <a href="mailto:tom@tompickup.co.uk">tom@tompickup.co.uk</a>
+          <span class="divider">&bull;</span>
+          <a href="https://x.com/tompickup" target="_blank" rel="noopener">@tompickup</a>
+          <span class="divider">&bull;</span>
+          <a href="https://www.facebook.com/tompickupburnley" target="_blank" rel="noopener">Facebook</a>
+        </div>
       </div>
 
       <div class="countdown-note">
-        <p>Powered by <a href="https://aidoge.co.uk" target="_blank" rel="noopener">AI DOGE</a> &mdash; tracking &pound;12.9 billion of Lancashire public spending</p>
+        <p>Tom Pickup &bull; Lancashire County Councillor for Padiham &amp; Burnley West &bull; Reform UK</p>
       </div>
     </div>
   </section>
@@ -49,7 +59,7 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .coming-soon {
-    min-height: 100vh;
+    min-height: calc(100vh - 72px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,9 +100,9 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .coming-soon-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: rgba(245, 245, 247, 0.7);
-    max-width: 600px;
+    max-width: 640px;
     margin: 0 auto 3rem;
     line-height: 1.6;
   }
@@ -143,10 +153,6 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .coming-soon-cta {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
     margin-bottom: 3rem;
   }
 
@@ -168,37 +174,40 @@ import Layout from '../layouts/Layout.astro';
     transform: translateY(-1px);
   }
 
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.85rem 2rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #f5f5f7;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.2s;
+  .contact-info {
+    margin-bottom: 2rem;
   }
 
-  .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-1px);
+  .contact-info p {
+    color: rgba(245, 245, 247, 0.5);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .contact-links a {
+    color: #12B6CF;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .contact-links a:hover {
+    text-decoration: underline;
+  }
+
+  .divider {
+    color: rgba(245, 245, 247, 0.2);
   }
 
   .countdown-note {
-    color: rgba(245, 245, 247, 0.4);
-    font-size: 0.85rem;
-  }
-
-  .countdown-note a {
-    color: #12B6CF;
-    text-decoration: none;
-  }
-
-  .countdown-note a:hover {
-    text-decoration: underline;
+    color: rgba(245, 245, 247, 0.3);
+    font-size: 0.8rem;
   }
 </style>
