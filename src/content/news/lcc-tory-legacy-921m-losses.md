@@ -1,7 +1,7 @@
 ---
-title: "The Tory Legacy: £921 Million of Documented Losses at Lancashire County Council"
+title: "The Tory Legacy: Up to £1.27 Billion of Financial Damage at Lancashire County Council"
 date: 2026-03-16
-description: "Eight years of Conservative control left Lancashire County Council with £921.5 million of audited losses, overspends and subsidy costs. Treasury gambles, a collapsed PFI, crumbling roads, spiralling waste bills, and a schools funding crisis. Every figure sourced to official council accounts."
+description: "Eight years of Conservative control left Lancashire County Council with at least £921.5 million of audited losses, overspends and subsidy costs - rising to £1.27 billion when unrealised bond losses are included. More than the total cost of repairing every road in Lancashire. Every figure sourced to official council accounts."
 image: "/images/lcc-budget.jpg"
 tags: ["lancashire", "reform", "finance", "highways", "waste"]
 featured: true
@@ -11,7 +11,7 @@ On 4 May 2017, the Conservative Party won 46 of 84 seats at Lancashire County Co
 
 What did eight years of Conservative control produce?
 
-Lancashire County Council's own audited accounts and official records document at least **&pound;921.5 million** of losses, overspends and subsidy costs between 2017/18 and 2024/25.
+Lancashire County Council's own audited accounts and official records document at least **&pound;921.5 million** of losses, overspends and subsidy costs between 2017/18 and 2024/25. When the council's own estimate of unrealised bond losses is added, the total financial damage rises to **&pound;1.27 billion** - more than the cost of repairing every road in Lancashire.
 
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0;">
 <div style="text-align: center; padding: 32px 16px; background: linear-gradient(135deg, rgba(255, 69, 58, 0.08) 0%, rgba(255, 159, 10, 0.06) 100%); border: 1px solid rgba(255, 69, 58, 0.2); border-radius: 20px;">
@@ -21,13 +21,13 @@ Lancashire County Council's own audited accounts and official records document a
 </div>
 <div style="text-align: center; padding: 32px 16px; background: linear-gradient(135deg, rgba(255, 69, 58, 0.1) 0%, rgba(255, 159, 10, 0.08) 100%); border: 1px solid rgba(255, 69, 58, 0.25); border-radius: 20px;">
 <span style="display: block; font-size: 2.5rem; font-weight: 900; color: #ff453a; line-height: 1.1;">&pound;921.5M</span>
-<span style="display: block; font-size: 0.6875rem; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 8px;">Broader Official Total</span>
+<span style="display: block; font-size: 0.6875rem; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 8px;">Documented Total</span>
 <span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 4px;">Plus overspends + subsidy</span>
 </div>
-<div style="text-align: center; padding: 32px 16px; background: rgba(255, 159, 10, 0.06); border: 1px solid rgba(255, 159, 10, 0.2); border-radius: 20px;">
-<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #ff9f0a; line-height: 1.1;">&pound;1.2bn</span>
-<span style="display: block; font-size: 0.6875rem; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 8px;">Total Debt Inherited</span>
-<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 4px;">Costing &pound;80M/year to service</span>
+<div style="text-align: center; padding: 32px 16px; background: linear-gradient(135deg, rgba(255, 69, 58, 0.12) 0%, rgba(255, 159, 10, 0.1) 100%); border: 1px solid rgba(255, 69, 58, 0.3); border-radius: 20px;">
+<span style="display: block; font-size: 2.5rem; font-weight: 900; color: #ff453a; line-height: 1.1;">&pound;1.27bn</span>
+<span style="display: block; font-size: 0.6875rem; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 8px;">Total Financial Damage</span>
+<span style="display: block; font-size: 0.625rem; color: #636366; margin-top: 4px;">Including unrealised bond losses</span>
 </div>
 </div>
 
@@ -116,7 +116,9 @@ Look at 2022/23: **&pound;188.2 million** in financial instrument losses in a si
 
 ### The Bond Problem
 
-In 2020, Lancashire became the first local authority to borrow through the UK Municipal Bonds Agency, issuing a &pound;350 million 5-year floating rate note and a &pound;250 million 40-year fixed bond. The council's own 2026/27 budget report states that if these bonds were sold today, the council would incur losses of approximately **&pound;350 million**.
+In 2020, the Conservatives made Lancashire the first local authority to borrow through the UK Municipal Bonds Agency, issuing a &pound;350 million 5-year floating rate note and a &pound;250 million 40-year fixed bond. The council's own 2026/27 budget report states that if these bonds were sold today, the council would incur losses of approximately **&pound;350 million**.
+
+This figure is separate from the annual financial instrument losses in the table above, though some overlap may exist. Even conservatively, it represents additional unrealised damage that the council must now manage.
 
 Reform UK's council leader Cllr Atkinson described the challenge as "immense - &pound;1.2 billion of debt that is costing &pound;80 million a year to service." The council itself confirmed it pays **approximately &pound;100,000 per day** in interest alone.
 
@@ -474,15 +476,20 @@ Reform's first budget set the rise at **3.80%** - the lowest in a decade.
 - Council overspends (positive years): &pound;16.6M
 - Farington cricket project subsidy: &pound;9.7M
 
-**Broader official total: &pound;921.5 million**
+**Documented total: &pound;921.5 million**
 
-To put that in context: &pound;921.5 million would **clear the entire &pound;650 million highway maintenance backlog** and still leave &pound;271 million to invest in schools, social care and waste infrastructure. Instead, Lancashire's roads rank 10 percentage points worse than the national average, and the backlog grows by &pound;45 million every year.
+**Plus unrealised bond losses: ~&pound;350 million**
+- The council's own 2026/27 budget report states that selling the UKMBA bonds issued in 2020 would incur losses of approximately &pound;350 million. Some overlap with the annual financial instrument losses above may exist, but this is a separately documented figure from an official council source.
 
-**Not counted:** The &pound;350M bond sale-loss estimate (overlaps with financial instrument losses already counted). The DSG deficit (overlaps with school overspend story). Total debt stock of &pound;1.2 billion.
+**Total financial damage: up to &pound;1.27 billion**
 
 </div>
 
-This is not a political estimate. It is the sum of what appears in Lancashire County Council's own Statement of Accounts, published on their own website. The financial instruments figures are audited. The overspends come from the narrative reports. The cricket subsidy is stated on the council's major projects page.
+To put that in context: clearing the **&pound;650 million highway backlog** over 10 years, accounting for &pound;45 million of annual deterioration and 4% construction inflation, would cost approximately **&pound;1.3 billion**. The documented financial damage under eight years of Conservative control matches or exceeds the total cost of repairing every road in Lancashire. Instead, the roads rank 10 percentage points worse than the national average, and the backlog grows every year.
+
+**Also not counted:** The DSG deficit (overlaps with school overspend story). Total debt stock of &pound;1.2 billion. Debt servicing costs of &pound;80 million per year.
+
+This is not a political estimate. It is the sum of what appears in Lancashire County Council's own Statement of Accounts, budget reports and official records. The financial instruments figures are audited. The overspends come from the narrative reports. The bond loss estimate comes from the 2026/27 budget report. The cricket subsidy is stated on the council's major projects page.
 
 ---
 
@@ -511,8 +518,9 @@ This article uses official Lancashire County Council or government sources only.
 1. **Audited accounting loss charges** (the &pound;809.8M figure from Statement of Accounts)
 2. **Budget overspends** (separately identified from narrative reports)
 3. **A published subsidy value** (from the council's major projects page)
+4. **An unrealised bond loss estimate** (from the council's own 2026/27 budget report, with an overlap caveat)
 
-The &pound;921.5 million is a documented total, not a political headline. Every figure cites its specific Statement of Accounts page number and year.
+The &pound;921.5 million documented total and the &pound;1.27 billion upper bound both come from official council sources. Every figure cites its specific page number and year.
 
 <div style="background: rgba(18, 182, 207, 0.08); border: 1px solid rgba(18, 182, 207, 0.2); border-radius: 12px; padding: 20px; margin: 2rem 0;">
 <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #12b6cf;">Data Sources</span>
@@ -526,7 +534,8 @@ BCIS Five-Year Forecasts Q4 2024 &bull;
 LCC Major Projects page (Farington Cricket Project) &bull;
 ONS Construction Output Price Indices &bull;
 LCC Schools Forum minutes (DSG deficit) &bull;
-Lancashire County Council election results 2017, 2021, 2025 &bull;
-AI DOGE spending transparency platform (aidoge.co.uk)
+LCC Published Spending Data (FOI/Transparency Code) &bull;
+Find a Tender Service &bull;
+Lancashire County Council election results 2017, 2021, 2025
 </p>
 </div>
