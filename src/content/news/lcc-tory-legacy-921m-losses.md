@@ -219,7 +219,7 @@ Over 14 years, Lancashire invested approximately **&pound;541 million** in highw
 </table>
 </div>
 
-Under the Conservatives, the typical annual highways investment was **&pound;29&ndash;35 million** against a need of **&pound;95&ndash;110 million**. That is a structural funding gap of &pound;60&ndash;70 million every single year.
+Under the Conservatives, the typical annual highways investment was **&pound;29-35 million** against a need of **&pound;95-110 million**. That is a structural funding gap of &pound;60-70 million every single year.
 
 ### Road Condition: Worse Than National Average
 
@@ -252,17 +252,17 @@ The consequences are visible on every residential street:
 <td style="padding: 12px 16px; color: #fff; font-weight: 600;">Unclassified</td>
 <td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 700;">27.6%</td>
 <td style="padding: 12px 16px; text-align: right; color: #8e8e93;">17.0%</td>
-<td style="padding: 12px 16px; text-align: right; color: #ff453a;">5 years at 27&ndash;28%</td>
+<td style="padding: 12px 16px; text-align: right; color: #ff453a;">5 years at 27-28%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-Over a quarter of Lancashire's residential roads are structurally impaired - **10 percentage points worse than the national average**. This is not a spike. It has been chronic for five consecutive years, frozen at 27&ndash;28% because investment never caught up with deterioration.
+Over a quarter of Lancashire's residential roads are structurally impaired - **10 percentage points worse than the national average**. This is not a spike. It has been chronic for five consecutive years, frozen at 27-28% because investment never caught up with deterioration.
 
 Potholes reported in 2024/25: **67,439**. Total defects handled: **115,000** - up 52% in five years.
 
-Construction costs have risen 40&ndash;50% since 2015. Bitumen is up 84%. Red diesel lost its rebate in 2022, adding 5&ndash;6% to every job. Today's &pound;650 million backlog will cost **&pound;791 million** if cleared in 5 years, or **&pound;962 million** if delayed 10 years, at 4% annual construction inflation.
+Construction costs have risen 40-50% since 2015. Bitumen is up 84%. Red diesel lost its rebate in 2022, adding 5-6% to every job. Today's &pound;650 million backlog will cost **&pound;791 million** if cleared in 5 years, or **&pound;962 million** if delayed 10 years, at 4% annual construction inflation.
 
 ---
 
@@ -291,7 +291,7 @@ The Conservatives inherited this mess, but their eight years of management made 
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2021/22</td>
 <td style="padding: 12px 16px; text-align: right; color: #fff; font-weight: 600;">&pound;75.5M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">&mdash;</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">-</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2022/23</td>
@@ -344,17 +344,17 @@ Schools overspends were not one-off events. They recurred year after year:
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2017/18</td>
 <td style="padding: 12px 16px; text-align: right; color: #ff9f0a; font-weight: 600;">&pound;7.7M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">&mdash;</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">-</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2018/19</td>
 <td style="padding: 12px 16px; text-align: right; color: #ff9f0a; font-weight: 600;">&pound;2.3M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">&mdash;</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">-</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2019/20</td>
 <td style="padding: 12px 16px; text-align: right; color: #ff9f0a; font-weight: 600;">&pound;2.4M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">&mdash;</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">-</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #8e8e93;">2022/23</td>
@@ -497,7 +497,7 @@ This is not a political estimate. It is the sum of what appears in Lancashire Co
 
 Reform UK took control in May 2025 with 53 of 84 seats. Ten months in:
 
-- **&pound;72 million highways capital programme** - the highest in LCC's history, up from &pound;29&ndash;35M under the Conservatives
+- **&pound;72 million highways capital programme** - the highest in LCC's history, up from &pound;29-35M under the Conservatives
 - **Managed service model** for road repairs - 42% defect reduction and 50% cost reduction per m&sup2; in the first six months
 - **Open competitive waste tender** for East Lancashire - &pound;60.3 million contract processing waste locally in Burnley instead of trucking it 25 miles to Farington
 - **&pound;15.9 million reserve fund** to manage the bond portfolio

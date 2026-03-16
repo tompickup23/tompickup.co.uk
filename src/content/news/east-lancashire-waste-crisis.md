@@ -68,7 +68,7 @@ Reform's 2026-27 budget starts to reverse this. Food waste reforms are projected
 
 **August 2025: Burnley's own plan, stalled.** Burnley Council approved a waste transfer station at Heasandford to save &pound;1.6 million per year. Called into scrutiny. Implementation delayed.
 
-The bill for all this indecision: **&pound;8&ndash;10 million extra per year** across the four East Lancashire boroughs.
+The bill for all this indecision: **&pound;8-10 million extra per year** across the four East Lancashire boroughs.
 
 ## What Reform Did
 
@@ -141,13 +141,13 @@ Without this contract, each district faced absorbing costs on its own:
 <tbody>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #fff;">Burnley</td>
-<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;1.5&ndash;2.0M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">10&ndash;13%</td>
+<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;1.5-2.0M</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">10-13%</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #fff;">Hyndburn</td>
-<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;2.0&ndash;3.0M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">12&ndash;18%</td>
+<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;2.0-3.0M</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">12-18%</td>
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #fff;">Pendle</td>
@@ -156,12 +156,12 @@ Without this contract, each district faced absorbing costs on its own:
 </tr>
 <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
 <td style="padding: 12px 16px; color: #fff;">Rossendale</td>
-<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;1.0&ndash;1.5M</td>
-<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">8&ndash;12%</td>
+<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 600;">&pound;1.0-1.5M</td>
+<td style="padding: 12px 16px; text-align: right; color: #8e8e93;">8-12%</td>
 </tr>
 <tr style="border-top: 2px solid rgba(18, 182, 207, 0.3);">
 <td style="padding: 12px 16px; color: #fff; font-weight: 700;">Combined</td>
-<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 700;">&pound;8&ndash;10M+/year</td>
+<td style="padding: 12px 16px; text-align: right; color: #ff453a; font-weight: 700;">&pound;8-10M+/year</td>
 <td style="padding: 12px 16px;"></td>
 </tr>
 </tbody>
@@ -201,7 +201,7 @@ While county-level disposal was in crisis, Burnley&rsquo;s own waste collection 
 <td style="padding: 12px 16px; text-align: right; color: #fff; font-weight: 600;">&pound;6.5M</td>
 </tr>
 <tr style="border-top: 2px solid rgba(18, 182, 207, 0.3);">
-<td style="padding: 12px 16px; color: #8e8e93;">2026&ndash;34</td>
+<td style="padding: 12px 16px; color: #8e8e93;">2026-34</td>
 <td style="padding: 12px 16px; color: #fff; font-weight: 600;">FCC Environment</td>
 <td style="padding: 12px 16px; text-align: right; color: #ff9f0a; font-weight: 700;">~&pound;4.7M/yr</td>
 </tr>

@@ -1,7 +1,7 @@
 ---
 title: "Lancashire's Roads: A £650 Million Backlog and the Parties Who Created It"
 date: 2026-03-03
-description: "Lancashire's assessed highways backlog exceeds £650 million — the true figure is likely far higher. Twelve years of Conservative neglect built it. Labour spends billions on the Chagos deal and foreign aid instead of fixing it. Both parties waste more in weeks than it would cost to repair every road in Lancashire. Here's what Reform is doing about it."
+description: "Lancashire's assessed highways backlog exceeds £650 million - the true figure is likely far higher. Twelve years of Conservative neglect built it. Labour spends billions on the Chagos deal and foreign aid instead of fixing it. Both parties waste more in weeks than it would cost to repair every road in Lancashire. Here's what Reform is doing about it."
 image: "/images/lcc-highways.jpg"
 tags: ["lancashire", "highways", "reform", "infrastructure"]
 featured: true
@@ -50,7 +50,7 @@ And that clock has been running for over a decade.
 
 ## Twelve Years of Conservative Decline
 
-The Conservatives controlled Lancashire County Council for twelve of the last sixteen years — from 2009 to 2013 in coalition with the Liberal Democrats, and again from 2017 to 2025. In those twelve years, they made a choice. They could invest in the roads. They didn't. The four-year period of no overall control in between did nothing to reverse the trajectory either.
+The Conservatives controlled Lancashire County Council for twelve of the last sixteen years - from 2009 to 2013 in coalition with the Liberal Democrats, and again from 2017 to 2025. In those twelve years, they made a choice. They could invest in the roads. They didn't. The four-year period of no overall control in between did nothing to reverse the trajectory either.
 
 <div style="margin: 32px 0; padding: 24px; background: rgba(28, 28, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px;">
 <div style="font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #636366; margin-bottom: 20px;">Conservative Highway Capital: The Borrowing Collapse</div>
