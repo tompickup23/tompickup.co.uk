@@ -112,13 +112,13 @@ These are not theoretical. They appear in the council's financial instruments di
 
 <p style="font-size: 0.8125rem; color: #636366; font-style: italic;">Sources: LCC Statement of Accounts 2017/18 to 2024/25. Financial instruments note and other operating income/expenditure note. Page references: 2017/18 p.90/44; 2018/19 p.93/44; 2019/20 p.100/50; 2020/21 p.100/49; 2021/22 p.103/49; 2022/23 p.124/53; 2023/24 p.117/45; 2024/25 p.116/47.</p>
 
-Look at 2022/23: **&pound;188.2 million** in financial instrument losses in a single year. That is more than the entire annual budget for highways, waste, and children's services combined.
+Look at 2022/23: **&pound;188.2 million** in financial instrument losses in a single year. That is more than the combined highways (&pound;62M) and waste (&pound;78M) budgets for 2022/23.
 
 ### The Bond Problem
 
 In 2020, Lancashire became the first local authority to borrow through the UK Municipal Bonds Agency, issuing a &pound;350 million 5-year floating rate note and a &pound;250 million 40-year fixed bond. The council's own 2026/27 budget report states that if these bonds were sold today, the council would incur losses of approximately **&pound;350 million**.
 
-Reform UK's council leader Cllr Atkinson described the challenge as "immense &mdash; &pound;1.2 billion of debt that is costing &pound;80 million a year to service." The council itself confirmed it pays **approximately &pound;100,000 per day** in interest alone.
+Reform UK's council leader Cllr Atkinson described the challenge as "immense - &pound;1.2 billion of debt that is costing &pound;80 million a year to service." The council itself confirmed it pays **approximately &pound;100,000 per day** in interest alone.
 
 The 2026/27 budget earmarks &pound;15.9 million into a reserve fund specifically to manage these bond losses, while the bonds could be generating an additional &pound;10 million per year if currently invested in overnight money markets.
 
@@ -136,7 +136,7 @@ Lancashire manages a &pound;10.2 billion highway network: 7,142km of roads, 5,30
 
 ### Chronic Underinvestment
 
-Over 14 years, Lancashire invested approximately **&pound;541 million** in highway capital &mdash; just 39% of the estimated &pound;1.38 billion needed. The numbers tell the story:
+Over 14 years, Lancashire invested approximately **&pound;541 million** in highway capital - just 39% of the estimated &pound;1.38 billion needed. The numbers tell the story:
 
 <div style="overflow-x: auto; margin: 2rem 0;">
 <table style="width: 100%; border-collapse: collapse; font-size: 0.9375rem;">
@@ -256,9 +256,9 @@ The consequences are visible on every residential street:
 </table>
 </div>
 
-Over a quarter of Lancashire's residential roads are structurally impaired &mdash; **10 percentage points worse than the national average**. This is not a spike. It has been chronic for five consecutive years, frozen at 27&ndash;28% because investment never caught up with deterioration.
+Over a quarter of Lancashire's residential roads are structurally impaired - **10 percentage points worse than the national average**. This is not a spike. It has been chronic for five consecutive years, frozen at 27&ndash;28% because investment never caught up with deterioration.
 
-Potholes reported in 2024/25: **67,439**. Total defects handled: **115,000** &mdash; up 52% in five years.
+Potholes reported in 2024/25: **67,439**. Total defects handled: **115,000** - up 52% in five years.
 
 Construction costs have risen 40&ndash;50% since 2015. Bitumen is up 84%. Red diesel lost its rebate in 2022, adding 5&ndash;6% to every job. Today's &pound;650 million backlog will cost **&pound;791 million** if cleared in 5 years, or **&pound;962 million** if delayed 10 years, at 4% annual construction inflation.
 
@@ -268,7 +268,7 @@ Construction costs have risen 40&ndash;50% since 2015. Bitumen is up 84%. Red di
 
 ### A &pound;2 Billion PFI That Collapsed
 
-In 2007, the previous Labour/Lib Dem administration signed a 25-year PFI contract with Global Renewables Lancashire Limited &mdash; worth &pound;2 billion, the largest PFI contract in the country at the time. Two mechanical biological treatment plants were built at Farington and Thornton at &pound;125 million each.
+In 2007, the previous Labour/Lib Dem administration signed a 25-year PFI contract with Global Renewables Lancashire Limited - worth &pound;2 billion, the largest PFI contract in the country at the time. Two mechanical biological treatment plants were built at Farington and Thornton at &pound;125 million each.
 
 By 2012, revelations emerged that **over 70% of waste destined for treatment was ending up in landfill anyway**. The contract was terminated in July 2014, with LCC acquiring the operating company. The plants were mothballed, 250 jobs were lost, and the &pound;250 million construction cost was largely written off.
 
@@ -317,9 +317,11 @@ The Conservatives inherited this mess, but their eight years of management made 
 
 <p style="font-size: 0.8125rem; color: #636366; font-style: italic;">Source: GOV.UK MHCLG Revenue Outturn data, Environmental &amp; Regulatory Services line.</p>
 
-The waste strategy expired in 2020. **No replacement was published.** A &pound;600 million Energy from Waste procurement was paused. Meanwhile, Lancashire sends **33.8% of waste to landfill** &mdash; six times the national average of 5.6%.
+The waste strategy expired in 2020. **No replacement was published.** A &pound;600 million Energy from Waste procurement was paused. Meanwhile, Lancashire sends **33.8% of waste to landfill** - six times the national average of 5.6%.
 
-SUEZ held the bulk of non-recyclable waste contracts with a concentration index (HHI) of 4,141 &mdash; monopolistic levels. Their Whinney Hill landfill in Altham received **&pound;76.2 million in twenty months** to December 2025, with persistent complaints about smell and vermin.
+SUEZ held the bulk of non-recyclable waste contracts with a concentration index (HHI) of 4,141 - monopolistic levels. Their Whinney Hill landfill in Altham received **&pound;73.6 million across 374 payments** in the 20 months to December 2025. Not one of those 374 payments had a description explaining what it was for. Meanwhile, only 0.1% of the waste budget (&pound;99,500 of &pound;94.3 million) was published on the government's Contracts Finder service.
+
+Landfill tax alone adds over &pound;9 million per year at Lancashire's volume, rising from &pound;103/tonne in 2024 to a projected &pound;120/tonne by 2028. Every year without an alternative strategy costs taxpayers more.
 
 ---
 
@@ -441,7 +443,7 @@ The financial pressure of eight years of losses and overspends was managed throu
 </table>
 </div>
 
-Earmarked reserves fell **27.1%** in four years &mdash; from &pound;396 million to &pound;289 million. Total reserves fell **&pound;74.7 million** (17.9%).
+Earmarked reserves fell **27.1%** in four years - from &pound;396 million to &pound;289 million. Total reserves fell **&pound;74.7 million** (17.9%).
 
 ### Council Tax
 
@@ -455,7 +457,7 @@ LCC's share of Band D council tax increased every year:
 
 **Cumulative: +19.2% (&pound;279 per Band D household) over four years**, while services deteriorated.
 
-Reform's first budget set the rise at **3.80%** &mdash; the lowest in a decade.
+Reform's first budget set the rise at **3.80%** - the lowest in a decade.
 
 ---
 
@@ -474,6 +476,8 @@ Reform's first budget set the rise at **3.80%** &mdash; the lowest in a decade.
 
 **Broader official total: &pound;921.5 million**
 
+To put that in context: &pound;921.5 million would **clear the entire &pound;650 million highway maintenance backlog** and still leave &pound;271 million to invest in schools, social care and waste infrastructure. Instead, Lancashire's roads rank 10 percentage points worse than the national average, and the backlog grows by &pound;45 million every year.
+
 **Not counted:** The &pound;350M bond sale-loss estimate (overlaps with financial instrument losses already counted). The DSG deficit (overlaps with school overspend story). Total debt stock of &pound;1.2 billion.
 
 </div>
@@ -486,9 +490,9 @@ This is not a political estimate. It is the sum of what appears in Lancashire Co
 
 Reform UK took control in May 2025 with 53 of 84 seats. Ten months in:
 
-- **&pound;72 million highways capital programme** &mdash; the highest in LCC's history, up from &pound;29&ndash;35M under the Conservatives
-- **Managed service model** for road repairs &mdash; 42% defect reduction and 50% cost reduction per m&sup2; in the first six months
-- **Open competitive waste tender** for East Lancashire &mdash; &pound;60.3 million contract processing waste locally in Burnley instead of trucking it 25 miles to Farington
+- **&pound;72 million highways capital programme** - the highest in LCC's history, up from &pound;29&ndash;35M under the Conservatives
+- **Managed service model** for road repairs - 42% defect reduction and 50% cost reduction per m&sup2; in the first six months
+- **Open competitive waste tender** for East Lancashire - &pound;60.3 million contract processing waste locally in Burnley instead of trucking it 25 miles to Farington
 - **&pound;15.9 million reserve fund** to manage the bond portfolio
 - **Lowest council tax rise in a decade** (3.80%)
 - **&pound;93 million invested in frontline services** including highways
