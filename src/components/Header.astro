@@ -1,37 +1,17 @@
 ---
 const pathname = Astro.url.pathname;
 
-const wardLinks = [
-  { slug: 'bank-hall', name: 'Bank Hall' },
-  { slug: 'briercliffe', name: 'Briercliffe' },
-  { slug: 'brunshaw', name: 'Brunshaw' },
-  { slug: 'cliviger-with-worsthorne', name: 'Cliviger with Worsthorne' },
-  { slug: 'coalclough-with-deerplay', name: 'Coalclough with Deerplay' },
-  { slug: 'daneshouse-with-stoneyholme', name: 'Daneshouse with Stoneyholme' },
-  { slug: 'gannow', name: 'Gannow' },
-  { slug: 'gawthorpe', name: 'Gawthorpe' },
-  { slug: 'hapton-with-park', name: 'Hapton with Park' },
-  { slug: 'lanehead', name: 'Lanehead' },
-  { slug: 'queensgate', name: 'Queensgate' },
-  { slug: 'rosegrove-with-lowerhouse', name: 'Rosegrove with Lowerhouse' },
-  { slug: 'rosehill-with-burnley-wood', name: 'Rosehill with Burnley Wood' },
-  { slug: 'trinity', name: 'Trinity' },
-  { slug: 'whittlefield-with-ightenhill', name: 'Whittlefield with Ightenhill' },
-];
-
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about/', label: 'About' },
   { href: '/news/', label: 'News' },
+  { href: '/contact/', label: 'Contact' },
 ];
 
 function isActive(href: string): boolean {
   if (href === '/') return pathname === '/';
   return pathname.startsWith(href);
 }
-
-const isCouncilActive = pathname.startsWith('/my-ward') || pathname.startsWith('/clowbridge') || pathname.startsWith('/burnley') || pathname.startsWith('/lancashire');
-const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roadworks');
 ---
 
 <header class="site-header">
@@ -52,97 +32,7 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
     </a>
 
     <nav class="desktop-nav" aria-label="Main navigation">
-      {navLinks.slice(0, 2).map((link) => (
-        <a
-          href={link.href}
-          class:list={['nav-link', { active: isActive(link.href) }]}
-          aria-current={isActive(link.href) ? 'page' : undefined}
-        >
-          {link.label}
-        </a>
-      ))}
-
-      <!-- Dropdown: Your Councils -->
-      <div class="nav-dropdown" data-dropdown="councils">
-        <button
-          class:list={['nav-link', 'dropdown-trigger', { active: isCouncilActive }]}
-          aria-expanded="false"
-          aria-haspopup="true"
-        >
-          Your Councils
-          <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="dropdown-panel" aria-hidden="true">
-          <div class="dropdown-section">
-            <span class="dropdown-label">Borough Council</span>
-            <span class="dropdown-explainer">Housing, planning, bins, parks, council tax collection</span>
-            <a href="/burnley/" class:list={['dropdown-link', 'dropdown-featured', { active: pathname.startsWith('/burnley') }]}>
-              <span>Burnley Borough Council</span>
-              <span class="dropdown-tag">Borough</span>
-            </a>
-          </div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-section">
-            <span class="dropdown-label">County Council</span>
-            <span class="dropdown-explainer">Schools, social care, highways, libraries, fire service</span>
-            <a href="/lancashire/" class:list={['dropdown-link', 'dropdown-featured', { active: pathname.startsWith('/lancashire') }]}>
-              <span>Lancashire County Council</span>
-              <span class="dropdown-tag">County</span>
-            </a>
-            <a href="/my-ward/" class:list={['dropdown-link', { active: pathname === '/my-ward/' }]}>
-              <span>Padiham &amp; Burnley West</span>
-              <span class="dropdown-tag">Tom&rsquo;s Division</span>
-            </a>
-          </div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-section">
-            <span class="dropdown-label">Parish Council</span>
-            <span class="dropdown-explainer">The most local tier &mdash; footpaths, noticeboards, community voice</span>
-            <a href="/clowbridge/" class:list={['dropdown-link', { active: pathname.startsWith('/clowbridge') }]}>
-              <span>Clowbridge with Dunnockshaw</span>
-              <span class="dropdown-tag">Parish</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dropdown: Your Area -->
-      <div class="nav-dropdown" data-dropdown="area">
-        <button
-          class:list={['nav-link', 'dropdown-trigger', { active: isAreaActive }]}
-          aria-expanded="false"
-          aria-haspopup="true"
-        >
-          Your Area
-          <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="dropdown-panel" aria-hidden="true">
-          <div class="dropdown-section">
-            <span class="dropdown-label">Town Overview</span>
-            <a href="/burnley/" class:list={['dropdown-link', 'dropdown-featured', { active: pathname === '/burnley/' }]}>
-              <span>Burnley</span>
-              <span class="dropdown-tag">All 15 Wards</span>
-            </a>
-            <a href="/roadworks/" class:list={['dropdown-link', { active: pathname.startsWith('/roadworks') }]}>
-              <span>Roads &amp; Roadworks</span>
-              <span class="dropdown-tag">Live</span>
-            </a>
-          </div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-section">
-            <span class="dropdown-label">Find Your Ward</span>
-            <div class="dropdown-ward-grid">
-              {wardLinks.map((w) => (
-                <a href={`/wards/${w.slug}/`} class:list={['dropdown-link', { active: pathname === `/wards/${w.slug}/` }]}>
-                  {w.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {navLinks.slice(2).map((link) => (
+      {navLinks.map((link) => (
         <a
           href={link.href}
           class:list={['nav-link', { active: isActive(link.href) }]}
@@ -154,8 +44,6 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
     </nav>
 
     <div class="header-actions">
-      <a href="/contact/" class="btn-primary header-cta">Contact</a>
-
       <button
         class="mobile-toggle"
         aria-label="Open menu"
@@ -171,56 +59,15 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
 
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav aria-label="Mobile navigation">
-      <a href="/" class:list={['mobile-link', { active: pathname === '/' }]}>Home</a>
-      <a href="/about/" class:list={['mobile-link', { active: pathname.startsWith('/about') }]}>About</a>
-
-      <!-- Mobile Council Submenu -->
-      <button class="mobile-link mobile-submenu-trigger" data-mobile-submenu aria-expanded="false">
-        Your Councils
-        <svg class="mobile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </button>
-      <div class="mobile-submenu" data-mobile-submenu-panel>
-        <span class="mobile-section-label">Borough Council</span>
-        <a href="/burnley/" class:list={['mobile-sub-link', { active: pathname.startsWith('/burnley') }]}>
-          Burnley Borough Council <span class="mobile-tag">Borough</span>
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={['mobile-link', { active: isActive(link.href) }]}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+        >
+          {link.label}
         </a>
-        <div class="mobile-sep"></div>
-        <span class="mobile-section-label">County Council</span>
-        <a href="/lancashire/" class:list={['mobile-sub-link', { active: pathname.startsWith('/lancashire') }]}>
-          Lancashire County Council <span class="mobile-tag">County</span>
-        </a>
-        <a href="/my-ward/" class:list={['mobile-sub-link', { active: pathname === '/my-ward/' }]}>
-          Padiham &amp; Burnley West <span class="mobile-tag">Tom&rsquo;s Division</span>
-        </a>
-        <div class="mobile-sep"></div>
-        <span class="mobile-section-label">Parish Council</span>
-        <a href="/clowbridge/" class:list={['mobile-sub-link', { active: pathname.startsWith('/clowbridge') }]}>
-          Clowbridge with Dunnockshaw <span class="mobile-tag">Parish</span>
-        </a>
-      </div>
-
-      <!-- Mobile Area Submenu -->
-      <button class="mobile-link mobile-submenu-trigger" data-mobile-submenu aria-expanded="false">
-        Your Area
-        <svg class="mobile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </button>
-      <div class="mobile-submenu" data-mobile-submenu-panel>
-        <a href="/burnley/" class:list={['mobile-sub-link', { active: pathname === '/burnley/' }]}>
-          Burnley <span class="mobile-tag">Town</span>
-        </a>
-        <a href="/roadworks/" class:list={['mobile-sub-link', { active: pathname.startsWith('/roadworks') }]}>
-          Roads &amp; Roadworks <span class="mobile-tag">Live</span>
-        </a>
-        <div class="mobile-sep"></div>
-        <span class="mobile-section-label">Wards</span>
-        {wardLinks.map((w) => (
-          <a href={`/wards/${w.slug}/`} class:list={['mobile-sub-link', { active: pathname === `/wards/${w.slug}/` }]}>
-            {w.name}
-          </a>
-        ))}
-      </div>
-      <a href="/news/" class:list={['mobile-link', { active: pathname.startsWith('/news') }]}>News</a>
-      <a href="/contact/" class="mobile-link mobile-link-cta">Contact</a>
+      ))}
     </nav>
   </div>
 </header>
@@ -231,7 +78,6 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
     const menu = document.getElementById('mobile-menu') as HTMLElement;
     const header = document.querySelector('.site-header') as HTMLElement;
 
-    // Mobile menu toggle
     if (toggle && menu) {
       toggle.addEventListener('click', () => {
         const isOpen = toggle.getAttribute('aria-expanded') === 'true';
@@ -264,59 +110,6 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
         }
       });
     }
-
-    // Desktop dropdowns (multiple)
-    const dropdowns = document.querySelectorAll('[data-dropdown]');
-    dropdowns.forEach((dropdown) => {
-      const trigger = dropdown.querySelector('.dropdown-trigger') as HTMLButtonElement;
-      const panel = dropdown.querySelector('.dropdown-panel') as HTMLElement;
-      let closeTimeout: ReturnType<typeof setTimeout>;
-
-      const open = () => {
-        clearTimeout(closeTimeout);
-        // Close other dropdowns
-        dropdowns.forEach((other) => {
-          if (other !== dropdown) {
-            const otherTrigger = other.querySelector('.dropdown-trigger') as HTMLButtonElement;
-            const otherPanel = other.querySelector('.dropdown-panel') as HTMLElement;
-            otherTrigger?.setAttribute('aria-expanded', 'false');
-            otherPanel?.setAttribute('aria-hidden', 'true');
-            other.classList.remove('is-open');
-          }
-        });
-        trigger.setAttribute('aria-expanded', 'true');
-        panel.setAttribute('aria-hidden', 'false');
-        dropdown.classList.add('is-open');
-      };
-
-      const close = () => {
-        closeTimeout = setTimeout(() => {
-          trigger.setAttribute('aria-expanded', 'false');
-          panel.setAttribute('aria-hidden', 'true');
-          dropdown.classList.remove('is-open');
-        }, 150);
-      };
-
-      dropdown.addEventListener('mouseenter', open);
-      dropdown.addEventListener('mouseleave', close);
-      trigger.addEventListener('click', () => {
-        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
-        isOpen ? close() : open();
-      });
-    });
-
-    // Mobile submenus (multiple)
-    const subTriggers = document.querySelectorAll('[data-mobile-submenu]');
-    subTriggers.forEach((subTrigger) => {
-      const subPanel = subTrigger.nextElementSibling as HTMLElement;
-      if (subPanel?.hasAttribute('data-mobile-submenu-panel')) {
-        subTrigger.addEventListener('click', () => {
-          const isOpen = subTrigger.getAttribute('aria-expanded') === 'true';
-          subTrigger.setAttribute('aria-expanded', String(!isOpen));
-          subPanel.classList.toggle('is-open', !isOpen);
-        });
-      }
-    });
   }
 
   document.addEventListener('astro:page-load', initHeader);
@@ -411,138 +204,12 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
     background: rgba(255, 255, 255, 0.08);
   }
 
-  /* Dropdown */
-  .nav-dropdown {
-    position: relative;
-  }
-
-  .dropdown-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .dropdown-chevron {
-    transition: transform var(--transition-fast);
-    flex-shrink: 0;
-  }
-
-  .nav-dropdown.is-open .dropdown-chevron {
-    transform: rotate(180deg);
-  }
-
-  .dropdown-panel {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 320px;
-    background: rgba(18, 18, 20, 0.96);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-lg);
-    padding: var(--space-sm);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-50%) translateY(-4px);
-    transition: opacity 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth), visibility 0.2s;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-  }
-
-  .nav-dropdown.is-open .dropdown-panel {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .dropdown-section {
-    padding: var(--space-xs) 0;
-  }
-
-  .dropdown-label {
-    display: block;
-    padding: 4px 12px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .dropdown-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    background-image: none;
-    border-radius: var(--radius-sm);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .dropdown-link:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.06);
-    background-image: none;
-    background-size: 0;
-  }
-
-  .dropdown-link.active {
-    color: var(--accent);
-    background: rgba(18, 182, 207, 0.08);
-  }
-
-  .dropdown-featured {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .dropdown-tag {
-    font-size: 0.625rem;
-    font-weight: 600;
-    color: var(--accent);
-    background: rgba(18, 182, 207, 0.1);
-    padding: 1px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .dropdown-explainer {
-    display: block;
-    padding: 0 12px 4px;
-    font-size: 0.6875rem;
-    color: var(--text-tertiary);
-    line-height: 1.4;
-  }
-
-  .dropdown-sep {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.06);
-    margin: var(--space-xs) 0;
-  }
-
-  .dropdown-ward-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-
   /* Header Actions */
   .header-actions {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
     flex-shrink: 0;
-  }
-
-  .header-cta {
-    padding: 0.4rem 1rem;
-    font-size: 0.8rem;
   }
 
   /* Mobile Toggle */
@@ -640,104 +307,9 @@ const isAreaActive = pathname.startsWith('/wards/') || pathname.startsWith('/roa
     background: rgba(255, 255, 255, 0.08);
   }
 
-  .mobile-link-cta {
-    color: var(--accent);
-    font-weight: 600;
-    margin-top: var(--space-sm);
-    border: 1px solid var(--accent-border) !important;
-    text-align: center;
-    border-radius: var(--radius-md);
-  }
-
-  .mobile-link-cta:hover {
-    background: var(--accent-glow);
-  }
-
-  /* Mobile Submenu */
-  .mobile-submenu-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .mobile-chevron {
-    transition: transform var(--transition-fast);
-    flex-shrink: 0;
-  }
-
-  .mobile-submenu-trigger[aria-expanded="true"] .mobile-chevron {
-    transform: rotate(180deg);
-  }
-
-  .mobile-submenu {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s var(--ease-smooth);
-    padding-left: var(--space-md);
-  }
-
-  .mobile-submenu.is-open {
-    max-height: 800px;
-  }
-
-  .mobile-sub-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.85rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    background-image: none;
-    border-radius: var(--radius-sm);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .mobile-sub-link:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-    background-image: none;
-    background-size: 0;
-  }
-
-  .mobile-sub-link.active {
-    color: var(--accent);
-  }
-
-  .mobile-tag {
-    font-size: 0.625rem;
-    font-weight: 600;
-    color: var(--accent);
-    background: rgba(18, 182, 207, 0.1);
-    padding: 1px 5px;
-    border-radius: 3px;
-    text-transform: uppercase;
-  }
-
-  .mobile-section-label {
-    display: block;
-    padding: 4px 0.85rem 2px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .mobile-sep {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.06);
-    margin: var(--space-xs) 0;
-  }
-
   /* Responsive */
   @media (max-width: 768px) {
     .desktop-nav {
-      display: none;
-    }
-
-    .header-cta {
       display: none;
     }
 

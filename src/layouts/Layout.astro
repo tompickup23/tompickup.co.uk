@@ -20,8 +20,7 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const isHome = Astro.url.pathname === '/';
 const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
-// MAINTENANCE MODE: Redirect all pages to coming-soon (remove after 16 Mar launch)
-const maintenanceMode = true;
+const maintenanceMode = false;
 ---
 
 <!doctype html>
