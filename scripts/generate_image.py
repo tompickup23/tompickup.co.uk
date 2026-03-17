@@ -99,6 +99,12 @@ ARTICLE_PRESETS = {
         'subtext': 'Lancashire County Council, May 2025 - March 2026',
         'color': 'teal',
     },
+    'lancashire-council-tax-breakdown': {
+        'stat': '1.80%',
+        'headline': 'Core Rise: 1.19% Below the Cap',
+        'subtext': 'LCC Budget 2026/27, Reform First Budget',
+        'color': 'green',
+    },
 }
 
 
@@ -847,6 +853,61 @@ ARTICLE_SHAREABLE_PRESETS = {
                     {'value': '113', 'label': 'Days of Asylum Hotels', 'sublabel': '\u00a35.77M per day on hotel bills', 'color': 'red'},
                     {'value': '\u00a313B', 'label': 'UK Foreign Aid', 'sublabel': 'Annual. Backlog is 18 days.', 'color': 'red'},
                 ],
+            },
+        ],
+    },
+    'lancashire-council-tax-breakdown': {
+        'cover': {
+            'photo': 'county-hall-preston.jpg',
+            'title': 'Where Your Council Tax Actually Goes',
+            'tags': ['lancashire', 'reform', 'council-tax'],
+        },
+        'viz_cards': [
+            {
+                'slug': 'bill-breakdown',
+                'type': 'stat_grid',
+                'title': 'Your Council Tax Bill: Who Charges What',
+                'source': 'LCC council tax breakdown, lancashire.gov.uk',
+                'data': [
+                    {'value': '\u00a31,802', 'label': 'County Council (LCC)', 'sublabel': '71% of your total bill', 'color': 'teal'},
+                    {'value': '\u00a3345', 'label': 'District Council', 'sublabel': '14% (varies by borough)', 'color': 'orange'},
+                    {'value': '\u00a3258', 'label': 'Police', 'sublabel': '11% of your total bill', 'color': 'red'},
+                    {'value': '\u00a3109', 'label': 'Fire & Rescue', 'sublabel': '4% of your total bill', 'color': 'amber'},
+                ],
+            },
+            {
+                'slug': 'decade-of-rises',
+                'type': 'table',
+                'title': 'A Decade of Maximum Rises',
+                'source': 'LCC council tax breakdown PDFs, lancashire.gov.uk',
+                'data': {
+                    'headers': ['Year', 'Control', 'Core', 'ASC', 'Total'],
+                    'rows': [
+                        ['2016/17', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2017/18', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2018/19', 'Conservative', '2.99%', '3.00%', '5.99%'],
+                        ['2019/20', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2020/21', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2021/22', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2022/23', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2023/24', 'Conservative', '1.99%', '2.00%', '3.99%'],
+                        ['2024/25', 'Conservative', '2.99%', '2.00%', '4.99%'],
+                        ['2025/26', 'Conservative*', '2.99%', '2.00%', '4.99%'],
+                        ['2026/27', 'Reform UK', '1.80%', '2.00%', '3.80%'],
+                    ],
+                    'highlight_rows': [10],
+                    'col_weights': [0.18, 0.28, 0.18, 0.18, 0.18],
+                },
+            },
+            {
+                'slug': 'reform-choice',
+                'type': 'comparison',
+                'title': 'The Reform Choice: Core Council Tax',
+                'source': 'LCC Budget Book 2026/27',
+                'data': {
+                    'before': {'value': '2.99%', 'label': 'Conservative Core', 'sublabel': 'Maximum allowed. Every year.'},
+                    'after': {'value': '1.80%', 'label': 'Reform Core', 'sublabel': '1.19% below the cap.'},
+                },
             },
         ],
     },

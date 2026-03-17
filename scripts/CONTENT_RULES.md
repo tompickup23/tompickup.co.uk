@@ -34,6 +34,9 @@ Every article MUST be fact-checked before publication. These rules are non-negot
 - **EMPHASIS**: Lead with "lowest in 12 years in our first budget" -- the 4.99% contrast is the punch
 - **WRONG**: "They raised it by 4.99% every year" (most years were 3.99%, the cap varied)
 - **WRONG**: "The legal maximum in seven of their eight years" (it was the max EVERY year, but 4.99% only in the final two)
+- **ASC NUANCE (CRITICAL)**: The 3.80% total has TWO components: 1.80% core (political choice, below 2.99% cap) + 2.00% ASC precept (demand-driven, ring-fenced by law for adult social care). EVERY council in England uses the full ASC precept because of demographic demand. The political choice is the core rate only. Reform went 1.19% below the cap on core. The Conservatives maxed out BOTH components (2.99% + 2.00% = 4.99%)
+- **NEVER** say "lowest of four" when comparing council tax rises -- the rise is lowest in 12 years, but "four authorities" refers to who sets the bill, not a ranking
+- **CORRECT**: "1.80% core rise, 1.19% below the cap" / "First time below the cap in over a decade"
 
 ### Savings & Budget
 - **NEVER claim 100% savings delivery** -- the 2025/26 year has not been formally audited
@@ -218,6 +221,7 @@ TTS engines (Piper, Kokoro) read special characters literally. ALL voiceover_tex
 - **Fractions**: Write "one point two seven billion" NOT "£1.27B"
 - **NEVER include** `/`, `%`, `£`, `&`, `@`, `#` or any special characters in voiceover_text
 - **NEVER include** URLs in their raw form -- always spell out as spoken words
+- **Avoid possessive apostrophes**: Piper TTS mangles contractions and possessives. Write "Reform" not "Reform's", "That is" not "That's", "The Lancashire road" not "Lancashire's road", "The council budget" not "The council's budget"
 - **Test**: Read the voiceover_text aloud. If it sounds unnatural, rewrite it.
 
 ### Script Fact-Check Rules

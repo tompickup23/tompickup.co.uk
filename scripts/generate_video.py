@@ -32,7 +32,7 @@ import tempfile
 import shutil
 import json
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 from reform_brand import (
     COLORS, PARTY_COLORS, PARTY_ABBR,
     load_font as _brand_load_font,
@@ -1337,6 +1337,657 @@ class ComparisonScene(Scene):
         return img
 
 
+class PhotoOverlayScene(Scene):
+    """Full-bleed photo with dark gradient overlay and text on top.
+
+    For showing County Hall, council chamber, etc. with stat text overlaid.
+    Photo is resized to fill 1080x1920 (crop to fill, maintain aspect ratio),
+    darkened with a directional gradient, and overlaid with headline + subtext.
+    Ken Burns zoom adds subtle motion.
+    """
+
+    def __init__(self, name, duration, photo_path, headline, subtext="",
+                 gradient_direction="bottom", zoom_direction="in",
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.photo_path = photo_path
+        self.headline = headline
+        self.subtext = subtext
+        self.gradient_direction = gradient_direction
+        self.zoom_direction = zoom_direction
+        self._photo_loaded = None
+
+    def _load_photo(self):
+        """Load and prep photo once, scaled with Ken Burns margin."""
+        if self._photo_loaded is not None:
+            return self._photo_loaded
+
+        if self.photo_path and os.path.exists(self.photo_path):
+            photo = Image.open(self.photo_path).convert("RGB")
+            # Scale to fill with 15% margin for Ken Burns movement
+            margin = 1.15
+            pw, ph = photo.size
+            scale = max(W * margin / pw, H * margin / ph)
+            photo = photo.resize((int(pw * scale), int(ph * scale)), Image.LANCZOS)
+            self._photo_loaded = photo
+        else:
+            self._photo_loaded = False
+        return self._photo_loaded
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+
+        photo = self._load_photo()
+        if photo:
+            t = frame_idx / total_frames
+
+            # Ken Burns: slow zoom + subtle pan
+            if self.zoom_direction == "in":
+                zoom = 1.0 + 0.08 * t
+            else:
+                zoom = 1.08 - 0.08 * t
+
+            pw, ph = photo.size
+            crop_w = int(W / zoom)
+            crop_h = int(H / zoom)
+            cx = pw // 2
+            cy = ph // 2
+            pan_x = int(20 * math.sin(t * math.pi))
+            pan_y = int(10 * math.cos(t * math.pi))
+
+            left = cx - crop_w // 2 + pan_x
+            top = cy - crop_h // 2 + pan_y
+            left = max(0, min(left, pw - crop_w))
+            top = max(0, min(top, ph - crop_h))
+
+            cropped = photo.crop((left, top, left + crop_w, top + crop_h))
+            cropped = cropped.resize((W, H), Image.LANCZOS)
+
+            # Dark gradient overlay (directional)
+            overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            od = ImageDraw.Draw(overlay)
+            for y in range(H):
+                if self.gradient_direction == "top":
+                    ratio = 1.0 - (y / H)
+                else:  # bottom (default)
+                    ratio = y / H
+                # Gradient from transparent at one end to near-black at the other
+                alpha = int(40 + 180 * (ratio ** 1.5))
+                od.rectangle([(0, y), (W, y + 1)], fill=(6, 12, 22, alpha))
+
+            img = Image.alpha_composite(cropped.convert("RGBA"), overlay).convert("RGB")
+            draw = ImageDraw.Draw(img)
+
+            # Top teal accent bar
+            draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+
+        # Headline (fade in + slide up from bottom)
+        t = frame_idx / total_frames
+        head_t = min(1.0, t / 0.2)
+        head_progress = ease_out_expo(head_t)
+
+        font_headline = load_font(52, bold=True)
+        lines = textwrap.wrap(self.headline, width=18)
+
+        # Position headline in lower third (above marquee bar)
+        head_y = H - MARQUEE_BAR_HEIGHT - 420 + int(40 * (1 - head_progress))
+
+        for line in lines:
+            head_alpha = head_progress
+            # Text shadow (dark outline for readability on photos)
+            shadow_color = tuple(int(6 * head_alpha) for _ in range(3))
+            font_headline_draw = ImageDraw.Draw(img)
+            bbox = font_headline_draw.textbbox((0, 0), line, font=font_headline)
+            tw = bbox[2] - bbox[0]
+            x = (W - tw) // 2
+            # Draw shadow offset
+            for dx, dy in [(-2, -2), (2, -2), (-2, 2), (2, 2), (0, 3)]:
+                draw.text((x + dx, int(head_y) + dy), line,
+                          fill=shadow_color, font=font_headline)
+            # Main text in white
+            head_color = tuple(int(255 * head_alpha) for _ in range(3))
+            draw.text((x, int(head_y)), line, fill=head_color, font=font_headline)
+            head_y += 66
+
+        # Subtext (fade in after headline)
+        if self.subtext:
+            sub_t = max(0, (t - 0.15) / 0.15)
+            sub_t = min(1.0, sub_t)
+            sub_progress = ease_out_cubic(sub_t)
+
+            font_sub = load_font(26)
+            sub_lines = textwrap.wrap(self.subtext, width=30)
+            sub_y = head_y + 20
+
+            for line in sub_lines:
+                sub_color = tuple(int(COLORS['muted'][i] * sub_progress) for i in range(3))
+                text_center_x(draw, line, font_sub, int(sub_y), sub_color)
+                sub_y += 36
+
+        # Caption phrases
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text,
+                                    bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+class PersonQuoteScene(Scene):
+    """Circular headshot photo with quote and attribution.
+
+    For Tom Pickup quotes, leader quotes, etc. Shows a circular headshot
+    with accent-colored border, decorative quote mark, quote text,
+    attribution, and optional role subtitle.
+    """
+
+    def __init__(self, name, duration, photo_path, quote, attribution,
+                 role=None, accent_color=None,
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.photo_path = photo_path
+        self.quote = quote
+        self.attribution = attribution
+        self.role = role
+        self.accent_color = accent_color or COLORS['teal']
+        self._headshot = None
+
+    def _load_headshot(self):
+        """Load headshot and crop to circle once."""
+        if self._headshot is not None:
+            return self._headshot
+
+        diameter = 280
+
+        if self.photo_path and os.path.exists(self.photo_path):
+            photo = Image.open(self.photo_path).convert("RGBA")
+            # Crop to square (centre crop)
+            pw, ph = photo.size
+            side = min(pw, ph)
+            left = (pw - side) // 2
+            top = (ph - side) // 2
+            photo = photo.crop((left, top, left + side, top + side))
+            photo = photo.resize((diameter, diameter), Image.LANCZOS)
+
+            # Create circular mask
+            mask = Image.new("L", (diameter, diameter), 0)
+            mask_draw = ImageDraw.Draw(mask)
+            mask_draw.ellipse((0, 0, diameter - 1, diameter - 1), fill=255)
+            photo.putalpha(mask)
+
+            self._headshot = photo
+        else:
+            self._headshot = False
+        return self._headshot
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+
+        t = frame_idx / total_frames
+        diameter = 280
+        border_width = 4
+        cx = W // 2
+
+        # Subtle glow behind headshot position (always rendered)
+        glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        glow_r = diameter // 2 + 40
+        glow_cx = cx
+        glow_cy = 320
+        pulse = 0.6 + 0.4 * math.sin(frame_idx * 0.06)
+        glow_alpha = int(30 * pulse)
+        gd.ellipse(
+            (glow_cx - glow_r, glow_cy - glow_r,
+             glow_cx + glow_r, glow_cy + glow_r),
+            fill=(*self.accent_color[:3], glow_alpha)
+        )
+        glow = glow.filter(ImageFilter.GaussianBlur(radius=35))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, glow).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
+        # Headshot circle with accent border (fade in)
+        photo_t = min(1.0, t / 0.15)
+        photo_progress = ease_out_expo(photo_t)
+
+        headshot = self._load_headshot()
+        photo_x = cx - diameter // 2
+        photo_y = 320 - diameter // 2
+
+        if photo_progress > 0.01:
+            # Draw accent-colored border ring
+            border_r = diameter // 2 + border_width
+            border_alpha = int(255 * photo_progress)
+            border_overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            bd = ImageDraw.Draw(border_overlay)
+            bd.ellipse(
+                (cx - border_r, 320 - border_r, cx + border_r, 320 + border_r),
+                fill=(*self.accent_color[:3], border_alpha)
+            )
+            # Cut out inner circle for ring effect
+            inner_r = diameter // 2
+            bd.ellipse(
+                (cx - inner_r, 320 - inner_r, cx + inner_r, 320 + inner_r),
+                fill=(0, 0, 0, 0)
+            )
+            img_rgba = img.convert("RGBA")
+            img = Image.alpha_composite(img_rgba, border_overlay).convert("RGB")
+            draw = ImageDraw.Draw(img)
+
+            # Paste headshot
+            if headshot:
+                img_rgba = img.convert("RGBA")
+                img_rgba.paste(headshot, (photo_x, photo_y), headshot)
+                img = img_rgba.convert("RGB")
+                draw = ImageDraw.Draw(img)
+
+        # Decorative opening quote mark (semi-transparent accent color)
+        quote_mark_t = min(1.0, t / 0.12)
+        quote_mark_progress = ease_out_expo(quote_mark_t)
+
+        font_deco = load_font(100, bold=True)
+        deco_alpha = int(80 * quote_mark_progress)
+        # Create overlay for semi-transparent quote mark
+        deco_overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        dd = ImageDraw.Draw(deco_overlay)
+        deco_bbox = dd.textbbox((0, 0), "\u201C", font=font_deco)
+        deco_w = deco_bbox[2] - deco_bbox[0]
+        dd.text(((W - deco_w) // 2, 490), "\u201C",
+                fill=(*self.accent_color[:3], deco_alpha), font=font_deco)
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, deco_overlay).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
+        # Quote text (italic-style, white, centred, line by line fade in)
+        font_quote = load_font(32, bold=True)
+        lines = textwrap.wrap(self.quote, width=26)
+        y = 610
+
+        for idx, line in enumerate(lines):
+            line_start = 0.1 + idx * 0.05
+            line_t = max(0, (t - line_start) / 0.1)
+            line_t = min(1.0, line_t)
+            alpha = ease_out_cubic(line_t)
+            if alpha > 0.01:
+                line_color = tuple(int(COLORS['white'][i] * alpha) for i in range(3))
+                text_center_x(draw, line, font_quote, y, line_color)
+            y += 46
+
+        # Accent line (grows from centre)
+        acc_t = max(0, (t - 0.3) / 0.15)
+        acc_t = min(1.0, acc_t)
+        if acc_t > 0:
+            line_w = int(160 * ease_out_expo(acc_t))
+            draw.rectangle([(cx - line_w // 2, y + 24),
+                            (cx + line_w // 2, y + 27)], fill=self.accent_color)
+
+        # Attribution (accent color, bold)
+        attr_t = max(0, (t - 0.35) / 0.12)
+        attr_t = min(1.0, attr_t)
+        if attr_t > 0:
+            font_attr = load_font(24, bold=True)
+            attr_color = tuple(int(self.accent_color[i] * attr_t) for i in range(3))
+            text_center_x(draw, self.attribution, font_attr, y + 48, attr_color)
+
+        # Role subtitle (muted, below attribution)
+        if self.role:
+            role_t = max(0, (t - 0.4) / 0.12)
+            role_t = min(1.0, role_t)
+            if role_t > 0:
+                font_role = load_font(20)
+                role_color = tuple(int(COLORS['muted'][i] * role_t) for i in range(3))
+                text_center_x(draw, self.role, font_role, y + 82, role_color)
+
+        # Caption phrases
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text,
+                                    bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+class SplitComparisonScene(Scene):
+    """Side-by-side before/after comparison with dramatic visual treatment.
+
+    Split screen vertically with colour-tinted halves, large values,
+    labels, sublabels, and an optional centre divider with text.
+    Left side reveals first, then right side slides in.
+    """
+
+    def __init__(self, name, duration, left_value, left_label,
+                 right_value, right_label,
+                 title="", left_sublabel="", right_sublabel="",
+                 left_color=None, right_color=None, divider_text="",
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.title = title
+        self.left_value = left_value
+        self.left_label = left_label
+        self.left_sublabel = left_sublabel
+        self.left_color = left_color or (255, 69, 58)   # #ff453a red
+        self.right_value = right_value
+        self.right_label = right_label
+        self.right_sublabel = right_sublabel
+        self.right_color = right_color or (48, 209, 88)  # #30d158 green
+        self.divider_text = divider_text
+
+    def render_frame(self, frame_idx, total_frames):
+        img = Image.new("RGB", (W, H), COLORS['bg'])
+        draw = ImageDraw.Draw(img)
+
+        t = frame_idx / total_frames
+        mid_x = W // 2
+        content_top = 300
+        content_bottom = H - MARQUEE_BAR_HEIGHT - 80
+
+        # Title (fade in, centred at top)
+        if self.title:
+            title_t = min(1.0, t / 0.12)
+            title_progress = ease_out_expo(title_t)
+            font_title = load_font(34, bold=True)
+            title_color = tuple(int(COLORS['white'][i] * title_progress) for i in range(3))
+            text_center_x(draw, self.title, font_title, 180, title_color)
+
+            # Accent line under title
+            if title_progress > 0.3:
+                lp = (title_progress - 0.3) / 0.7
+                lw = int(200 * ease_out_expo(lp))
+                draw.rectangle([(mid_x - lw // 2, 228), (mid_x + lw // 2, 231)],
+                               fill=COLORS['teal'])
+
+        # --- LEFT HALF (reveals first) ---
+        left_t = min(1.0, t / 0.3)
+        left_progress = ease_out_expo(left_t)
+
+        # Subtle red-tinted dark background on left
+        left_reveal = int(mid_x * left_progress)
+        if left_reveal > 0:
+            for y in range(content_top, content_bottom):
+                ratio = (y - content_top) / max(content_bottom - content_top, 1)
+                r = int(self.left_color[0] * 0.12 + 10 * ratio)
+                g = int(self.left_color[1] * 0.04 + 4 * ratio)
+                b = int(self.left_color[2] * 0.06 + 6 * ratio)
+                r, g, b = min(255, r), min(255, g), min(255, b)
+                draw.line([(0, y), (left_reveal, y)], fill=(r, g, b))
+
+        # Left value
+        if left_progress > 0.3:
+            val_alpha = min(1.0, (left_progress - 0.3) / 0.3)
+            font_val = load_font(72, bold=True)
+            val_color = tuple(int(self.left_color[i] * val_alpha) for i in range(3))
+
+            # Centre value in left half
+            bbox = draw.textbbox((0, 0), self.left_value, font=font_val)
+            vw = bbox[2] - bbox[0]
+            vx = (mid_x - vw) // 2
+            draw.text((vx, 480), self.left_value, fill=val_color, font=font_val)
+
+            # Left label
+            font_label = load_font(24, bold=True)
+            label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
+            label_lines = textwrap.wrap(self.left_label, width=16)
+            ly = 580
+            for line in label_lines:
+                lbbox = draw.textbbox((0, 0), line, font=font_label)
+                lw = lbbox[2] - lbbox[0]
+                draw.text(((mid_x - lw) // 2, ly), line, fill=label_color, font=font_label)
+                ly += 34
+
+            # Left sublabel
+            if self.left_sublabel:
+                font_sub = load_font(18)
+                sub_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
+                sub_lines = textwrap.wrap(self.left_sublabel, width=20)
+                for line in sub_lines:
+                    sbbox = draw.textbbox((0, 0), line, font=font_sub)
+                    sw = sbbox[2] - sbbox[0]
+                    draw.text(((mid_x - sw) // 2, ly + 10), line,
+                              fill=sub_color, font=font_sub)
+                    ly += 26
+
+        # --- RIGHT HALF (slides in with delay) ---
+        right_t = max(0, (t - 0.2) / 0.35)
+        right_t = min(1.0, right_t)
+        right_progress = ease_out_expo(right_t)
+
+        # Subtle green-tinted dark background on right
+        right_reveal = int(mid_x * right_progress)
+        if right_reveal > 0:
+            for y in range(content_top, content_bottom):
+                ratio = (y - content_top) / max(content_bottom - content_top, 1)
+                r = int(self.right_color[0] * 0.04 + 4 * ratio)
+                g = int(self.right_color[1] * 0.1 + 8 * ratio)
+                b = int(self.right_color[2] * 0.06 + 6 * ratio)
+                r, g, b = min(255, r), min(255, g), min(255, b)
+                draw.line([(W - right_reveal, y), (W, y)], fill=(r, g, b))
+
+        # Right value
+        if right_progress > 0.3:
+            val_alpha = min(1.0, (right_progress - 0.3) / 0.3)
+            font_val = load_font(72, bold=True)
+            val_color = tuple(int(self.right_color[i] * val_alpha) for i in range(3))
+
+            bbox = draw.textbbox((0, 0), self.right_value, font=font_val)
+            vw = bbox[2] - bbox[0]
+            vx = mid_x + (mid_x - vw) // 2
+            draw.text((vx, 480), self.right_value, fill=val_color, font=font_val)
+
+            # Right label
+            font_label = load_font(24, bold=True)
+            label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
+            label_lines = textwrap.wrap(self.right_label, width=16)
+            ly = 580
+            for line in label_lines:
+                lbbox = draw.textbbox((0, 0), line, font=font_label)
+                lw = lbbox[2] - lbbox[0]
+                draw.text((mid_x + (mid_x - lw) // 2, ly), line,
+                          fill=label_color, font=font_label)
+                ly += 34
+
+            # Right sublabel
+            if self.right_sublabel:
+                font_sub = load_font(18)
+                sub_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
+                sub_lines = textwrap.wrap(self.right_sublabel, width=20)
+                for line in sub_lines:
+                    sbbox = draw.textbbox((0, 0), line, font=font_sub)
+                    sw = sbbox[2] - sbbox[0]
+                    draw.text((mid_x + (mid_x - sw) // 2, ly + 10), line,
+                              fill=sub_color, font=font_sub)
+                    ly += 26
+
+        # Centre divider line (vertical, grows from middle)
+        div_t = max(0, (t - 0.15) / 0.2)
+        div_t = min(1.0, div_t)
+        if div_t > 0:
+            div_h = int((content_bottom - content_top - 40) * ease_out_expo(div_t))
+            div_mid_y = (content_top + content_bottom) // 2
+            div_top = div_mid_y - div_h // 2
+            draw.rectangle([(mid_x - 1, div_top), (mid_x + 1, div_top + div_h)],
+                           fill=COLORS['dim'])
+
+            # Divider text (e.g. "VS" or arrow)
+            if self.divider_text and div_t > 0.5:
+                text_alpha = min(1.0, (div_t - 0.5) / 0.3)
+                font_div = load_font(22, bold=True)
+                div_bbox = draw.textbbox((0, 0), self.divider_text, font=font_div)
+                dw = div_bbox[2] - div_bbox[0]
+                dh = div_bbox[3] - div_bbox[1]
+                # Background pill behind divider text
+                pill_pad = 12
+                pill_x = mid_x - dw // 2 - pill_pad
+                pill_y = div_mid_y - dh // 2 - pill_pad // 2
+                draw_rounded_rect(draw,
+                                  (pill_x, pill_y,
+                                   pill_x + dw + pill_pad * 2,
+                                   pill_y + dh + pill_pad),
+                                  (dh + pill_pad) // 2,
+                                  fill=COLORS['bg'])
+                div_color = tuple(int(COLORS['white'][i] * text_alpha) for i in range(3))
+                draw.text((mid_x - dw // 2, div_mid_y - dh // 2),
+                          self.divider_text, fill=div_color, font=font_div)
+
+        # Top teal bar
+        draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+
+        # Caption phrases
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text,
+                                    bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+class PhotoBackgroundStatScene(Scene):
+    """Animated stat counter with blurred, darkened photo background.
+
+    Like StatCountScene but with a blurred, darkened photo background
+    instead of solid dark navy. The blurred photo adds texture and
+    visual interest while keeping the stat text clearly readable.
+    """
+
+    def __init__(self, name, duration, photo_path, target_value, suffix, label,
+                 sublabel="", extra_lines=None, blur_radius=8, darkness=0.4,
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.photo_path = photo_path
+        self.target_value = target_value
+        self.suffix = suffix
+        self.label = label
+        self.sublabel = sublabel
+        self.extra_lines = extra_lines or []
+        self.blur_radius = blur_radius
+        self.darkness = darkness
+        self._bg_loaded = None
+
+    def _load_bg(self):
+        """Load, resize, blur, and darken photo once."""
+        if self._bg_loaded is not None:
+            return self._bg_loaded
+
+        if self.photo_path and os.path.exists(self.photo_path):
+            photo = Image.open(self.photo_path).convert("RGB")
+            # Scale to fill frame (crop to fill, maintain aspect ratio)
+            pw, ph = photo.size
+            scale = max(W / pw, H / ph)
+            photo = photo.resize((int(pw * scale), int(ph * scale)), Image.LANCZOS)
+            # Centre crop to exact dimensions
+            rw, rh = photo.size
+            left = (rw - W) // 2
+            top = (rh - H) // 2
+            photo = photo.crop((left, top, left + W, top + H))
+
+            # Gaussian blur
+            photo = photo.filter(ImageFilter.GaussianBlur(radius=self.blur_radius))
+
+            # Darken to specified brightness
+            enhancer = ImageEnhance.Brightness(photo)
+            photo = enhancer.enhance(self.darkness)
+
+            self._bg_loaded = photo
+        else:
+            self._bg_loaded = False
+        return self._bg_loaded
+
+    def render_frame(self, frame_idx, total_frames):
+        bg = self._load_bg()
+        if bg:
+            img = bg.copy()
+            draw = ImageDraw.Draw(img)
+            # Top teal accent bar
+            draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+        else:
+            img, draw = create_frame_base()
+
+        add_branding(img, draw)
+
+        color = COLORS['teal']
+        t = frame_idx / total_frames
+
+        # Animation progress (count up in first 40% of scene)
+        anim_duration = 0.4
+        anim_t = min(1.0, t / anim_duration)
+        progress = ease_out_expo(anim_t)
+
+        # Value text
+        current = int(self.target_value * progress)
+        display = f"{current}{self.suffix}"
+
+        # Large stat value
+        font_value = load_font(160, bold=True)
+        text_center_x(draw, display, font_value, 480, color)
+
+        # Pulsing glow effect on the number
+        pulse = 0.5 + 0.5 * math.sin(frame_idx * 0.08)
+        glow_alpha = int(25 + 20 * pulse)
+        glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        bbox = draw.textbbox((0, 0), display, font=font_value)
+        tw = bbox[2] - bbox[0]
+        cx = (W - tw) // 2
+        gd.rectangle([(cx - 20, 470), (cx + tw + 20, 670)],
+                     fill=(*color[:3], glow_alpha))
+        glow = glow.filter(ImageFilter.GaussianBlur(radius=30))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, glow).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
+        # Label
+        font_label = load_font(32, bold=True)
+        text_center_x(draw, self.label, font_label, 700, COLORS['white'])
+
+        # Sublabel
+        if self.sublabel:
+            font_sub = load_font(22)
+            text_center_x(draw, self.sublabel, font_sub, 750, COLORS['muted'])
+
+        # Extra text lines (fade in after counter)
+        if self.extra_lines:
+            extra_t = max(0, (t - 0.35) / 0.15)
+            extra_t = min(1.0, extra_t)
+            if extra_t > 0:
+                font_extra = load_font(20)
+                ey = 820
+                for line in self.extra_lines:
+                    wrapped = textwrap.wrap(line, width=42)
+                    for wl in wrapped:
+                        c = tuple(int(COLORS['dim'][i] * ease_out_cubic(extra_t))
+                                  for i in range(3))
+                        text_center_x(draw, wl, font_extra, ey, c)
+                        ey += 30
+                    ey += 6
+
+        # Caption phrases
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text,
+                                    bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
 # ============================================================
 # TTS VOICEOVER (per-scene generation + duration matching)
 # ============================================================
@@ -1817,7 +2468,7 @@ def generate_tory_legacy_video(duration=45, no_voice=False):
         sublabel="Eight years of Conservative control",
         party="Conservative",
         extra_lines=["Every figure from official council accounts."],
-        voiceover_text="One point two seven billion pounds. That's the financial damage left by eight years of Conservative control at Lancashire County Council.",
+        voiceover_text="One point two seven billion pounds. That is the financial damage left by eight years of Conservative control at Lancashire County Council.",
         caption_phrases=[(0.6, "Every figure from official accounts")],
     ))
 
@@ -1926,7 +2577,7 @@ def generate_highways_video(duration=45, no_voice=False):
         sublabel="And the real figure is likely far higher",
         party="Conservative",
         extra_lines=["7,035 km of roads. 1,832 bridges. 163,000 streetlights."],
-        voiceover_text="Six hundred and fifty million pounds. That's the backlog on Lancashire's roads. Twelve years of Conservative neglect built it.",
+        voiceover_text="Six hundred and fifty million pounds. That is the backlog on Lancashire roads. Many years of Conservative neglect built it.",
         caption_phrases=[(0.55, "7,035 km of roads falling apart")],
     ))
 
@@ -1961,7 +2612,7 @@ def generate_highways_video(duration=45, no_voice=False):
             "Repair costs halved.",
             "Average repair size tripled.",
         ],
-        voiceover_text="The old system caught less than five percent of defects. Reform's AI catches them all. Repair costs halved. Average repair size tripled.",
+        voiceover_text="The old system caught less than five percent of defects. Reform AI catches them all. Repair costs halved. Average repair size tripled.",
     ))
 
     scenes.append(CTAScene(
@@ -2099,7 +2750,7 @@ def generate_lgr_contracts_video(duration=45, no_voice=False):
             "The government's timeline",
             "does not account for this.",
         ],
-        voiceover_text="Dorset had eight hundred contracts and took twenty-four months. Lancashire has four times that. The government's timeline is a fantasy.",
+        voiceover_text="Dorset had eight hundred contracts and took twenty-four months. Lancashire has four times that. The government timeline is a fantasy.",
     ))
 
     scenes.append(CTAScene(
@@ -2134,7 +2785,7 @@ def generate_budget_video(duration=45, no_voice=False):
         label="3.80% - Lowest council tax rise in a decade",
         sublabel="Reform's first budget, 2026/27",
         extra_lines=["Balanced. No front-line cuts. £1.33 billion."],
-        voiceover_text="Three point eight percent. The lowest council tax rise in a decade. Reform's first budget.",
+        voiceover_text="Three point eight percent. The lowest council tax rise in a decade. Reform first budget.",
         caption_phrases=[(0.55, "Lowest in a decade")],
     ))
 
@@ -2353,7 +3004,7 @@ def generate_9_months_video(duration=45, no_voice=False):
             "Conservatives hit the maximum every year for a decade",
             "Last two years: 4.99% — the highest of the lot",
         ],
-        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in twelve years. After two years of four point nine nine percent under the Conservatives, the highest rises in the entire decade, we are stopping the rot.",
+        voiceover_text="Reform set the council tax rise at three point eight percent. The lowest in twelve years. After two years of four point nine nine percent under the Conservatives, the highest rises in the entire decade, we are stopping the rot.",
     ))
 
     # Transition
@@ -2436,7 +3087,7 @@ def generate_9_months_video(duration=45, no_voice=False):
             "UK spends \u00a35.77 million per day on asylum hotels",
             "The backlog equals 18 days of foreign aid",
         ],
-        voiceover_text="We inherited a six hundred and fifty million pound highways backlog. The UK spends five point seven seven million pounds every single day on asylum seeker hotels. Lancashire's entire road repair bill could be cleared for a hundred and thirteen days of that spending. A matter of government priorities.",
+        voiceover_text="We inherited a six hundred and fifty million pound highways backlog. The UK spends five point seven seven million pounds every single day on asylum seeker hotels. The entire Lancashire road repair bill could be cleared for a hundred and thirteen days of that spending. A matter of government priorities.",
     ))
 
     # CTA
@@ -2446,6 +3097,133 @@ def generate_9_months_video(duration=45, no_voice=False):
         text="Read the full scorecard",
         url="tompickup.co.uk",
         voiceover_text="Nine months in. The numbers tell the story. Visit tom pickup dot co dot UK for the full breakdown.",
+    ))
+
+    return scenes
+
+
+def generate_council_tax_video(duration=50, no_voice=False):
+    """Where Your Council Tax Actually Goes."""
+    set_marquee_text(
+        "Council Tax Breakdown  \u2022  1.80% Core Rise, 1.19% Below the Cap  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
+    scenes = []
+
+    # HOOK: Photo of County Hall with headline overlay
+    scenes.append(PhotoOverlayScene(
+        name="hook_county_hall",
+        duration=4.5,
+        photo_path=str(Path(__file__).parent.parent / "public" / "images" / "county-hall-preston.jpg"),
+        headline="WHERE YOUR\nCOUNCIL TAX\nACTUALLY GOES",
+        subtext="Four authorities. One bill. One political choice.",
+        voiceover_text="Your council tax bill is set by four different authorities. Each one decides its own share. Here is who charges what, and why Reform chose to charge less.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene("trans_1", 0.5, flash_text="THE BREAKDOWN"))
+
+    # Bill breakdown: LCC 71%
+    scenes.append(StatCountScene(
+        name="lcc_71_pct",
+        duration=5.0,
+        target_value=71,
+        suffix="%",
+        label="Lancashire County Council share",
+        sublabel="Highways, schools, social care, waste, libraries",
+        extra_lines=[
+            "Band D: one thousand eight hundred and two pounds",
+        ],
+        voiceover_text="The county council sets seventy-one percent of your bill. One thousand eight hundred and two pounds at Band D. Highways, schools, social care. Reform controls this share.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene("trans_2", 0.5, flash_text="THE CHOICE"))
+
+    # Split: Conservative vs Reform core rate
+    scenes.append(SplitComparisonScene(
+        name="core_rate_split",
+        duration=5.5,
+        title="Core Council Tax Rate",
+        left_value="2.99%",
+        left_label="Conservative",
+        left_sublabel="Maximum allowed. Every year. For a decade.",
+        right_value="1.80%",
+        right_label="Reform",
+        right_sublabel="1.19% below the cap. First budget.",
+        left_color=(255, 69, 58),    # red
+        right_color=(48, 209, 88),   # green
+        voiceover_text="The Conservatives set the core rate at two point nine nine percent. The maximum every year. Reform set it at one point eight zero. One point one nine percent below the cap.",
+    ))
+
+    # ASC precept explanation
+    scenes.append(StatCountScene(
+        name="asc_precept",
+        duration=5.0,
+        target_value=200,
+        suffix="",
+        is_fraction=True,
+        fraction_text="2.00%",
+        label="Adult social care precept",
+        sublabel="Ring-fenced by law for elderly and vulnerable care",
+        extra_lines=[
+            "Every council in England uses the full ASC precept",
+            "Demand grows 3 to 5 percent per year",
+        ],
+        voiceover_text="The two percent adult social care precept is ring-fenced by law. Lancashire has an aging population. Care costs grow three to five percent every year. Every council in England uses the full ASC precept because the demand requires it.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene("trans_3", 0.5))
+
+    # The total comparison
+    scenes.append(AnimatedBarChartScene(
+        name="total_comparison",
+        duration=5.5,
+        title="Total Council Tax Rise",
+        data=[
+            ("Conservative", "Last 2 years", "Conservative", 100, "4.99%"),
+            ("Reform UK", "First budget", "Reform UK", 76, "3.80%"),
+        ],
+        subtitle="Lowest in 12 years",
+        voiceover_text="The Conservatives hit four point nine nine percent in each of the last two years. Reform total: three point eight zero. Lowest in twelve years.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene("trans_4", 0.5))
+
+    # Person quote from Tom
+    scenes.append(PersonQuoteScene(
+        name="tom_quote",
+        duration=5.5,
+        photo_path=str(Path(__file__).parent.parent / "public" / "images" / "headshot.jpg"),
+        quote="The choice is on the core rate.\nWe went 1.19% below the cap.\nThey maxed it out every year.",
+        attribution="Tom Pickup",
+        role="Lead Member for Finance & Resources",
+        voiceover_text="The choice is on the core rate. We went one point one nine percent below the cap. The Conservatives maxed it out every single year.",
+    ))
+
+    # The household saving
+    scenes.append(StatCountScene(
+        name="household_saving",
+        duration=4.5,
+        target_value=21,
+        suffix="",
+        is_fraction=True,
+        fraction_text="\u00a321",
+        label="Less per household than 4.99% would have been",
+        sublabel="Around ten million pounds aggregate across Lancashire",
+        extra_lines=["The cap is a ceiling, not a target"],
+        voiceover_text="Twenty-one pounds less per household than four point nine nine percent would have been. Around ten million across half a million Lancashire homes. The cap is a ceiling, not a target.",
+    ))
+
+    # CTA
+    scenes.append(CTAScene(
+        name="cta",
+        duration=4.0,
+        text="See the full breakdown",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full council tax breakdown at tom pickup dot co dot UK.",
     ))
 
     return scenes
@@ -2465,6 +3243,7 @@ ARTICLE_GENERATORS = {
     "lcc-budget-reform-first-year": generate_budget_video,
     "reform-technology-lancashire": generate_technology_video,
     "stocks-massey-bequest-2025": generate_stocks_massey_video,
+    "lancashire-council-tax-breakdown": generate_council_tax_video,
 }
 
 
