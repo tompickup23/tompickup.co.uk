@@ -2,24 +2,23 @@
 """
 Social media short video generator for tompickup.co.uk articles.
 
-Generates 9:16 vertical shorts (1080x1920) suitable for:
-- Instagram Reels
-- TikTok
-- YouTube Shorts
-- Facebook Reels
+UPGRADED v2: Professional-grade political shorts with:
+- edge-tts voiceover (en-GB-RyanNeural)
+- Animated data visualisations (growing bars, counting numbers)
+- Phrase-by-phrase captions synced to narration
+- Ken Burns zoom on background images
+- Crossfade transitions between scenes
+- Gradient bar fills with glow effects
+- Premium dark theme matching the website
 
-Design system:
-- Dark premium theme (#0d1117) matching the website
-- Official UK party colours
-- Reform UK teal (#12B6CF) as primary accent
-- Animated data visualisations with slide-in effects
-- tompickup.co.uk branding throughout
-- Reform UK logo badge
+Generates 9:16 vertical shorts (1080x1920) suitable for:
+- Instagram Reels, TikTok, YouTube Shorts, Facebook Reels
 
 Usage:
     python3 scripts/generate_video.py --article burnley-elections-2026-attendance
     python3 scripts/generate_video.py --article all
-    python3 scripts/generate_video.py --article burnley-elections-2026-attendance --duration 30
+    python3 scripts/generate_video.py --article burnley-elections-2026-attendance --preview
+    python3 scripts/generate_video.py --article burnley-elections-2026-attendance --no-voice
 """
 
 import os
@@ -27,26 +26,20 @@ import sys
 import argparse
 import textwrap
 import math
+import asyncio
+import subprocess
+import tempfile
+import shutil
+import json
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
-import numpy as np
 
-# Attempt moviepy import
+# edge-tts for voiceover
 try:
-    from moviepy import (
-        ImageClip, TextClip, CompositeVideoClip,
-        concatenate_videoclips, AudioFileClip, ColorClip
-    )
-    HAS_MOVIEPY = True
+    import edge_tts
+    HAS_TTS = True
 except ImportError:
-    try:
-        from moviepy.editor import (
-            ImageClip, TextClip, CompositeVideoClip,
-            concatenate_videoclips, AudioFileClip, ColorClip
-        )
-        HAS_MOVIEPY = True
-    except ImportError:
-        HAS_MOVIEPY = False
+    HAS_TTS = False
 
 # Paths
 BASE_DIR = Path(__file__).parent.parent
@@ -54,22 +47,39 @@ IMAGES_DIR = BASE_DIR / "public" / "images"
 CONTENT_DIR = BASE_DIR / "src" / "content" / "news"
 OUTPUT_DIR = BASE_DIR / "public" / "videos"
 LOGO_PATH = Path("/tmp/reform-uk-logo.png")
+FFMPEG = "/opt/homebrew/bin/ffmpeg"
+FFPROBE = "/opt/homebrew/bin/ffprobe"
 
 # Video dimensions (9:16 vertical)
 W, H = 1080, 1920
 FPS = 30
 
-# Design tokens
+# TTS config
+TTS_VOICE = "en-GB-RyanNeural"
+TTS_RATE = "+10%"
+TTS_PITCH = "+0Hz"
+
+# ============================================================
+# DESIGN SYSTEM
+# ============================================================
+
 COLORS = {
     'bg':           (13, 17, 23),
+    'bg2':          (17, 21, 28),
     'card':         (22, 27, 34),
     'card_border':  (33, 38, 45),
     'teal':         (18, 182, 207),
+    'teal_bright':  (30, 210, 240),
     'teal_dim':     (14, 120, 140),
+    'teal_glow':    (18, 182, 207, 40),
     'white':        (240, 240, 245),
     'light':        (200, 200, 210),
     'muted':        (130, 130, 140),
     'dim':          (80, 82, 88),
+    'red':          (255, 69, 58),
+    'red_dim':      (180, 40, 35),
+    'orange':       (255, 159, 10),
+    'green':        (48, 209, 88),
 }
 
 PARTY_COLORS = {
@@ -81,39 +91,72 @@ PARTY_COLORS = {
     'Reform UK':    (18, 182, 207),
 }
 
+PARTY_ABBR = {
+    'Conservative': 'CON',
+    'Labour': 'LAB',
+    'Lib Dem': 'LD',
+    'Green': 'GRN',
+    'Independent': 'IND',
+    'Reform UK': 'REF',
+}
+
+
+# ============================================================
+# FONT SYSTEM
+# ============================================================
+
+_font_cache = {}
 
 def load_font(size, bold=False):
-    if bold:
-        for p in [
-            "/System/Library/Fonts/SFPro.ttf",
-            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-            "/System/Library/Fonts/Helvetica.ttc",
-        ]:
-            try:
-                idx = 1 if p.endswith('.ttc') else 0
-                return ImageFont.truetype(p, size, index=idx)
-            except:
-                try:
-                    return ImageFont.truetype(p, size)
-                except:
-                    continue
-    for p in [
-        "/System/Library/Fonts/SFPro.ttf",
-        "/System/Library/Fonts/Helvetica.ttc",
-        "/Library/Fonts/Arial.ttf",
-    ]:
-        try:
-            return ImageFont.truetype(p, size)
-        except:
-            continue
-    return ImageFont.load_default()
+    key = (size, bold)
+    if key in _font_cache:
+        return _font_cache[key]
 
+    if bold:
+        paths = [
+            "/System/Library/Fonts/SFPro-Bold.otf",
+            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+            "/System/Library/Fonts/SFPro.ttf",
+            "/System/Library/Fonts/Helvetica.ttc",
+        ]
+    else:
+        paths = [
+            "/System/Library/Fonts/SFPro-Regular.otf",
+            "/System/Library/Fonts/SFPro.ttf",
+            "/System/Library/Fonts/Helvetica.ttc",
+            "/Library/Fonts/Arial.ttf",
+        ]
+
+    for p in paths:
+        try:
+            idx = 1 if p.endswith('.ttc') and bold else 0
+            f = ImageFont.truetype(p, size, index=idx)
+            _font_cache[key] = f
+            return f
+        except Exception:
+            try:
+                f = ImageFont.truetype(p, size)
+                _font_cache[key] = f
+                return f
+            except Exception:
+                continue
+
+    f = ImageFont.load_default()
+    _font_cache[key] = f
+    return f
+
+
+# ============================================================
+# DRAWING UTILITIES
+# ============================================================
 
 def draw_rounded_rect(draw, xy, radius, fill=None, outline=None, width=1):
+    """Draw a rounded rectangle."""
     x0, y0, x1, y1 = xy
     r = min(radius, (x1 - x0) // 2, (y1 - y0) // 2)
     if r < 1:
-        if fill: draw.rectangle(xy, fill=fill)
+        if fill:
+            draw.rectangle(xy, fill=fill)
         return
     if fill:
         draw.rectangle([(x0+r, y0), (x1-r, y1)], fill=fill)
@@ -133,499 +176,1114 @@ def draw_rounded_rect(draw, xy, radius, fill=None, outline=None, width=1):
         draw.line([(x1, y0+r), (x1, y1-r)], fill=outline, width=width)
 
 
-def create_frame_base():
-    """Create a base frame with background and branding."""
+def draw_gradient_bar(img, xy, color, progress=1.0):
+    """Draw a horizontal bar with gradient fill and subtle glow."""
+    x0, y0, x1, y1 = xy
+    bar_w = int((x1 - x0) * progress)
+    if bar_w < 4:
+        return
+
+    draw = ImageDraw.Draw(img)
+    h = y1 - y0
+
+    # Glow layer (subtle outer glow)
+    glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    glow_color = (*color, 25)
+    gd.rectangle([(x0 - 2, y0 - 3), (x0 + bar_w + 2, y1 + 3)], fill=glow_color)
+    glow = glow.filter(ImageFilter.GaussianBlur(radius=6))
+    img_rgba = img.convert("RGBA")
+    img_rgba = Image.alpha_composite(img_rgba, glow)
+
+    # Main bar with vertical gradient (lighter top, darker bottom)
+    for py in range(y0, y1):
+        ratio = (py - y0) / max(h - 1, 1)
+        # Top: brighter. Bottom: slightly darker
+        r = int(color[0] * (1.15 - 0.3 * ratio))
+        g = int(color[1] * (1.15 - 0.3 * ratio))
+        b = int(color[2] * (1.15 - 0.3 * ratio))
+        r, g, b = min(255, r), min(255, g), min(255, b)
+        ImageDraw.Draw(img_rgba).line([(x0, py), (x0 + bar_w, py)], fill=(r, g, b, 255))
+
+    # Specular highlight (thin bright line at top)
+    highlight_color = tuple(min(255, c + 80) for c in color) + (60,)
+    gd2 = ImageDraw.Draw(img_rgba)
+    gd2.line([(x0 + 2, y0 + 1), (x0 + bar_w - 2, y0 + 1)], fill=highlight_color)
+
+    # Copy back to RGB
+    result = img_rgba.convert("RGB")
+    img.paste(result)
+
+
+def draw_vignette(img, intensity=0.4):
+    """Add a subtle radial vignette to the image."""
+    w, h = img.size
+    vignette = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    vd = ImageDraw.Draw(vignette)
+
+    cx, cy = w // 2, h // 2
+    max_dist = math.sqrt(cx * cx + cy * cy)
+
+    # Draw concentric rectangles for performance (not per-pixel)
+    steps = 40
+    for i in range(steps):
+        ratio = i / steps
+        alpha = int(255 * intensity * (ratio ** 2))
+        margin = int((1 - ratio) * min(cx, cy) * 0.7)
+        vd.rectangle(
+            [(margin, margin), (w - margin, h - margin)],
+            outline=(0, 0, 0, alpha), width=max(1, min(cx, cy) // steps)
+        )
+
+    vignette = vignette.filter(ImageFilter.GaussianBlur(radius=60))
+    img_rgba = img.convert("RGBA")
+    result = Image.alpha_composite(img_rgba, vignette).convert("RGB")
+    img.paste(result)
+
+
+def text_center_x(draw, text, font, y, fill, img_width=W):
+    """Draw text centered horizontally."""
+    bbox = draw.textbbox((0, 0), text, font=font)
+    tw = bbox[2] - bbox[0]
+    x = (img_width - tw) // 2
+    draw.text((x, y), text, fill=fill, font=font)
+    return tw
+
+
+def ease_out_expo(t):
+    """Exponential ease-out for smooth animations."""
+    return 1 if t >= 1 else 1 - math.pow(2, -10 * t)
+
+
+def ease_out_cubic(t):
+    """Cubic ease-out."""
+    return 1 - math.pow(1 - t, 3)
+
+
+def lerp(a, b, t):
+    """Linear interpolation."""
+    return a + (b - a) * t
+
+
+# ============================================================
+# FRAME GENERATORS (base components)
+# ============================================================
+
+def create_frame_base(with_scanlines=False):
+    """Create a base frame with premium dark background."""
     img = Image.new("RGB", (W, H), COLORS['bg'])
     draw = ImageDraw.Draw(img)
-    # Top teal accent bar
-    draw.rectangle([(0, 0), (W, 4)], fill=COLORS['teal'])
+
+    # Subtle vertical gradient
+    for y in range(H):
+        ratio = y / H
+        r = int(COLORS['bg'][0] + (COLORS['bg2'][0] - COLORS['bg'][0]) * ratio)
+        g = int(COLORS['bg'][1] + (COLORS['bg2'][1] - COLORS['bg'][1]) * ratio)
+        b = int(COLORS['bg'][2] + (COLORS['bg2'][2] - COLORS['bg'][2]) * ratio)
+        draw.line([(0, y), (W, y)], fill=(r, g, b))
+
+    # Top accent bar
+    draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+
+    # Bottom accent bar
+    draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
+
+    if with_scanlines:
+        # Subtle scanline effect for premium feel
+        overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        od = ImageDraw.Draw(overlay)
+        for y in range(0, H, 4):
+            od.line([(0, y), (W, y)], fill=(0, 0, 0, 8))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, overlay).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
     return img, draw
 
 
-def add_branding(img, draw):
-    """Add Reform UK logo and tompickup.co.uk branding to frame."""
-    # Reform UK logo top-left
-    try:
-        logo = Image.open(LOGO_PATH).convert("RGBA")
-        logo = logo.resize((56, 56), Image.LANCZOS)
-        img.paste(logo, (40, 40), logo)
-    except:
-        pass
-    font_brand = load_font(16, bold=True)
-    draw.text((108, 46), "REFORM UK", fill=COLORS['teal'], font=font_brand)
-    font_loc = load_font(13)
-    draw.text((108, 66), "BURNLEY", fill=COLORS['muted'], font=font_loc)
+def add_branding(img, draw, show_logo=True, show_site=True):
+    """Add branding elements to frame."""
+    if show_logo:
+        try:
+            logo = Image.open(LOGO_PATH).convert("RGBA")
+            logo = logo.resize((48, 48), Image.LANCZOS)
+            img.paste(logo, (36, 32), logo)
+        except Exception:
+            pass
+        font_brand = load_font(15, bold=True)
+        draw.text((96, 36), "REFORM UK", fill=COLORS['teal'], font=font_brand)
+        font_loc = load_font(12)
+        draw.text((96, 54), "BURNLEY", fill=COLORS['muted'], font=font_loc)
 
-    # tompickup.co.uk bottom
-    font_site = load_font(18, bold=True)
-    site = "tompickup.co.uk"
-    sb = draw.textbbox((0, 0), site, font=font_site)
-    sw = sb[2] - sb[0]
-    draw.text(((W - sw) // 2, H - 60), site, fill=COLORS['teal'], font=font_site)
-
-    # Bottom teal bar
-    draw.rectangle([(0, H - 4), (W, H)], fill=COLORS['teal'])
-
-    return img
+    if show_site:
+        font_site = load_font(16, bold=True)
+        text_center_x(draw, "tompickup.co.uk", font_site, H - 50, COLORS['teal'])
 
 
-def create_title_frame(title, subtitle=None, bg_image_path=None):
-    """Create the opening title frame."""
-    img, draw = create_frame_base()
+def add_caption_bar(img, draw, text, y_pos=None, font_size=32, bg_alpha=180):
+    """Add a caption bar with semi-transparent background."""
+    if y_pos is None:
+        y_pos = H - 280
 
-    # Background image if available
-    if bg_image_path and os.path.exists(bg_image_path):
-        bg = Image.open(bg_image_path).convert("RGB")
-        bg_w, bg_h = bg.size
-        scale = max(W / bg_w, H / bg_h)
-        bg = bg.resize((int(bg_w * scale), int(bg_h * scale)), Image.LANCZOS)
-        left = (bg.size[0] - W) // 2
-        top = (bg.size[1] - H) // 2
-        bg = bg.crop((left, top, left + W, top + H))
-        bg = bg.filter(ImageFilter.GaussianBlur(radius=8))
+    font = load_font(font_size, bold=True)
+    lines = textwrap.wrap(text, width=28)
 
-        # Gradient overlay
-        overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-        odraw = ImageDraw.Draw(overlay)
-        for y in range(H):
-            alpha = int(160 + 60 * (y / H))
-            odraw.rectangle([(0, y), (W, y + 1)], fill=(13, 17, 23, alpha))
-        img = Image.alpha_composite(bg.convert("RGBA"), overlay).convert("RGB")
-        draw = ImageDraw.Draw(img)
-        draw.rectangle([(0, 0), (W, 4)], fill=COLORS['teal'])
+    line_h = font_size + 10
+    total_h = len(lines) * line_h + 40
 
-    add_branding(img, draw)
+    # Semi-transparent background
+    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    od.rectangle([(30, y_pos), (W - 30, y_pos + total_h)], fill=(13, 17, 23, bg_alpha))
 
-    # Reform UK logo large centered
-    try:
-        logo = Image.open(LOGO_PATH).convert("RGBA")
-        logo = logo.resize((120, 120), Image.LANCZOS)
-        img.paste(logo, ((W - 120) // 2, 400), logo)
-    except:
-        pass
+    # Teal left accent
+    od.rectangle([(30, y_pos), (34, y_pos + total_h)], fill=(*COLORS['teal'], 255))
 
-    # Title text
-    font_title = load_font(52, bold=True)
-    lines = textwrap.wrap(title, width=20)
-    title_y = 580
+    img_rgba = img.convert("RGBA")
+    img_rgba = Image.alpha_composite(img_rgba, overlay)
+
+    draw2 = ImageDraw.Draw(img_rgba)
+    cy = y_pos + 20
     for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font_title)
-        lw = bbox[2] - bbox[0]
-        draw.text(((W - lw) // 2, title_y), line, fill=COLORS['white'], font=font_title)
-        title_y += 66
+        bbox = draw2.textbbox((0, 0), line, font=font)
+        tw = bbox[2] - bbox[0]
+        draw2.text(((W - tw) // 2, cy), line, fill=COLORS['white'], font=font)
+        cy += line_h
 
-    # Teal accent line
-    draw.rectangle([(W // 2 - 100, title_y + 20), (W // 2 + 100, title_y + 24)], fill=COLORS['teal'])
+    result = img_rgba.convert("RGB")
+    img.paste(result)
 
-    # Subtitle
-    if subtitle:
-        font_sub = load_font(28)
-        sub_lines = textwrap.wrap(subtitle, width=30)
-        sub_y = title_y + 50
-        for line in sub_lines:
-            bbox = draw.textbbox((0, 0), line, font=font_sub)
-            lw = bbox[2] - bbox[0]
-            draw.text(((W - lw) // 2, sub_y), line, fill=COLORS['light'], font=font_sub)
-            sub_y += 38
-
-    return img
+    # Update draw object
+    return ImageDraw.Draw(img)
 
 
-def create_stat_frame(stat_value, stat_label, stat_sublabel, party=None, extra_text=None):
-    """Create a frame showing a single large statistic."""
-    img, draw = create_frame_base()
-    add_branding(img, draw)
+# ============================================================
+# ANIMATED SCENE GENERATORS
+# ============================================================
 
-    color = PARTY_COLORS.get(party, COLORS['teal']) if party else COLORS['teal']
+class Scene:
+    """A scene that generates multiple frames for animation."""
 
-    # Large stat value
-    font_value = load_font(180, bold=True)
-    bbox = draw.textbbox((0, 0), stat_value, font=font_value)
-    vw = bbox[2] - bbox[0]
-    draw.text(((W - vw) // 2, 500), stat_value, fill=color, font=font_value)
+    def __init__(self, name, duration, voiceover_text=None, caption_phrases=None):
+        self.name = name
+        self.duration = duration  # seconds
+        self.voiceover_text = voiceover_text
+        self.caption_phrases = caption_phrases or []  # list of (start_ratio, text)
 
-    # Label
-    font_label = load_font(36, bold=True)
-    bbox = draw.textbbox((0, 0), stat_label, font=font_label)
-    lw = bbox[2] - bbox[0]
-    draw.text(((W - lw) // 2, 730), stat_label, fill=COLORS['white'], font=font_label)
+    def frame_count(self):
+        return int(self.duration * FPS)
 
-    # Sublabel
-    font_sub = load_font(24)
-    bbox = draw.textbbox((0, 0), stat_sublabel, font=font_sub)
-    sw = bbox[2] - bbox[0]
-    draw.text(((W - sw) // 2, 790), stat_sublabel, fill=COLORS['muted'], font=font_sub)
-
-    # Party pill if specified
-    if party:
-        font_pill = load_font(20, bold=True)
-        pill_text = party.upper()
-        pb = draw.textbbox((0, 0), pill_text, font=font_pill)
-        pw = pb[2] - pb[0]
-        px = (W - pw - 24) // 2
-        py = 860
-        pill_bg = tuple(max(0, c // 4) for c in color)
-        draw_rounded_rect(draw, (px, py, px + pw + 24, py + 36), 18, fill=pill_bg)
-        draw_rounded_rect(draw, (px, py, px + pw + 24, py + 36), 18, outline=color, width=2)
-        draw.text((px + 12, py + 6), pill_text, fill=color, font=font_pill)
-
-    # Extra text
-    if extra_text:
-        font_extra = load_font(22)
-        lines = textwrap.wrap(extra_text, width=38)
-        ey = 940
-        for line in lines:
-            bbox = draw.textbbox((0, 0), line, font=font_extra)
-            ew = bbox[2] - bbox[0]
-            draw.text(((W - ew) // 2, ey), line, fill=COLORS['dim'], font=font_extra)
-            ey += 32
-
-    return img
+    def render_frame(self, frame_idx, total_frames):
+        """Override in subclasses. Returns PIL Image."""
+        raise NotImplementedError
 
 
-def create_bar_chart_frame(title, data, subtitle=None):
-    """
-    Create a frame with horizontal bar chart.
-    data: list of (name, ward, party, percentage, counts_text)
-    """
-    img, draw = create_frame_base()
-    add_branding(img, draw)
+class StatCountScene(Scene):
+    """Animated stat counter - number counts up with easing."""
 
-    # Title
-    font_title = load_font(36, bold=True)
-    draw.text((60, 130), title, fill=COLORS['white'], font=font_title)
+    def __init__(self, name, duration, target_value, suffix, label, sublabel,
+                 party=None, extra_lines=None, voiceover_text=None, caption_phrases=None,
+                 is_fraction=False, fraction_text=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.target_value = target_value
+        self.suffix = suffix
+        self.label = label
+        self.sublabel = sublabel
+        self.party = party
+        self.extra_lines = extra_lines or []
+        self.is_fraction = is_fraction
+        self.fraction_text = fraction_text  # e.g. "0 of 3"
 
-    # Teal accent line
-    tbbox = draw.textbbox((60, 130), title, font=font_title)
-    draw.rectangle([(60, tbbox[3] + 10), (320, tbbox[3] + 13)], fill=COLORS['teal'])
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+        add_branding(img, draw)
 
-    if subtitle:
-        font_sub = load_font(20)
-        draw.text((60, tbbox[3] + 24), subtitle, fill=COLORS['muted'], font=font_sub)
+        color = PARTY_COLORS.get(self.party, COLORS['teal']) if self.party else COLORS['teal']
 
-    # Bar chart
-    bar_x = 60
-    bar_max_w = W - 120
-    bar_h = 80
-    gap = 44
-    y = 340
+        # Animation progress (count up in first 40% of scene)
+        anim_duration = 0.4
+        t = min(1.0, (frame_idx / total_frames) / anim_duration)
+        progress = ease_out_expo(t)
 
-    font_name = load_font(28, bold=True)
-    font_detail = load_font(18)
-    font_pill = load_font(14, bold=True)
-    font_pct = load_font(34, bold=True)
-    font_count = load_font(16)
+        # Value text
+        if self.is_fraction:
+            display = self.fraction_text or f"{self.target_value}"
+            # Fade in instead of count
+            alpha_t = min(1.0, (frame_idx / total_frames) / 0.2)
+            if alpha_t < 1.0:
+                # During fade, show placeholder
+                display_color = tuple(int(c * alpha_t + COLORS['bg'][i] * (1 - alpha_t))
+                                      for i, c in enumerate(color))
+            else:
+                display_color = color
+        else:
+            current = int(self.target_value * progress)
+            display = f"{current}{self.suffix}"
+            display_color = color
 
-    for name, ward, party, pct, counts in data:
-        color = PARTY_COLORS.get(party, COLORS['teal'])
+        # Large stat value
+        font_value = load_font(160, bold=True)
+        text_center_x(draw, display, font_value, 480, display_color)
 
-        # Name
-        draw.text((bar_x, y), name, fill=COLORS['white'], font=font_name)
+        # Pulsing glow effect on the number (subtle)
+        pulse = 0.5 + 0.5 * math.sin(frame_idx * 0.08)
+        glow_alpha = int(20 + 15 * pulse)
+        glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        bbox = draw.textbbox((0, 0), display, font=font_value)
+        tw = bbox[2] - bbox[0]
+        cx = (W - tw) // 2
+        gd.rectangle([(cx - 20, 470), (cx + tw + 20, 670)], fill=(*color[:3], glow_alpha))
+        glow = glow.filter(ImageFilter.GaussianBlur(radius=30))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, glow).convert("RGB")
+        draw = ImageDraw.Draw(img)
 
-        # Ward + party pill
-        ward_text = ward
-        draw.text((bar_x, y + 38), ward_text, fill=COLORS['muted'], font=font_detail)
-        wb = draw.textbbox((0, 0), ward_text, font=font_detail)
-        pill_x = bar_x + (wb[2] - wb[0]) + 16
+        # Label
+        font_label = load_font(32, bold=True)
+        text_center_x(draw, self.label, font_label, 700, COLORS['white'])
+
+        # Sublabel
+        font_sub = load_font(22)
+        text_center_x(draw, self.sublabel, font_sub, 750, COLORS['muted'])
 
         # Party pill
-        abbr = party[:3].upper()
-        pb = draw.textbbox((0, 0), abbr, font=font_pill)
-        ppw = pb[2] - pb[0] + 16
-        pph = pb[3] - pb[1] + 10
-        pill_bg = tuple(max(0, c // 4) for c in color)
-        draw_rounded_rect(draw, (pill_x, y + 36, pill_x + ppw, y + 36 + pph), pph // 2,
-                          fill=pill_bg)
-        draw_rounded_rect(draw, (pill_x, y + 36, pill_x + ppw, y + 36 + pph), pph // 2,
-                          outline=color, width=1)
-        draw.text((pill_x + 8, y + 40), abbr, fill=color, font=font_pill)
+        if self.party:
+            font_pill = load_font(18, bold=True)
+            pill_text = self.party.upper()
+            pb = draw.textbbox((0, 0), pill_text, font=font_pill)
+            pw = pb[2] - pb[0]
+            px = (W - pw - 24) // 2
+            py = 810
+            pill_bg = tuple(max(0, c // 4) for c in color)
+            draw_rounded_rect(draw, (px, py, px + pw + 24, py + 34), 17, fill=pill_bg)
+            draw_rounded_rect(draw, (px, py, px + pw + 24, py + 34), 17, outline=color, width=2)
+            draw.text((px + 12, py + 6), pill_text, fill=color, font=font_pill)
 
-        y += 68
+        # Extra text lines (fade in after counter)
+        if self.extra_lines:
+            extra_t = max(0, (frame_idx / total_frames - 0.35) / 0.15)
+            extra_t = min(1.0, extra_t)
+            if extra_t > 0:
+                font_extra = load_font(20)
+                ey = 880
+                for line in self.extra_lines:
+                    wrapped = textwrap.wrap(line, width=42)
+                    for wl in wrapped:
+                        alpha_val = int(180 * ease_out_cubic(extra_t))
+                        c = tuple(int(COLORS['dim'][i] * extra_t) for i in range(3))
+                        text_center_x(draw, wl, font_extra, ey, c)
+                        ey += 30
+                    ey += 6
 
-        # Bar track
-        draw_rounded_rect(draw, (bar_x, y, bar_x + bar_max_w, y + bar_h), 12,
-                          fill=COLORS['card'], outline=COLORS['card_border'])
+        # Caption phrases
+        self._draw_captions(img, draw, frame_idx, total_frames)
 
-        # Bar fill
-        fill_w = int(bar_max_w * pct / 100)
-        if fill_w > 24:
-            draw_rounded_rect(draw, (bar_x, y, bar_x + fill_w, y + bar_h), 12, fill=color)
+        return img
 
-        # Percentage on bar
-        pct_text = f"{pct:.0f}%"
-        pct_bbox = draw.textbbox((0, 0), pct_text, font=font_pct)
-        pct_w = pct_bbox[2] - pct_bbox[0]
-        if fill_w > pct_w + 32:
-            draw.text((bar_x + fill_w - pct_w - 20, y + 18), pct_text,
-                      fill=(10, 13, 18), font=font_pct)
+    def _draw_captions(self, img, draw, frame_idx, total_frames):
+        """Draw caption phrases based on timing."""
+        t = frame_idx / total_frames
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                # Fade in over 0.05 of the scene
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    alpha = int(220 * ease_out_cubic(fade_t))
+                    add_caption_bar(img, draw, text, bg_alpha=min(alpha, 180))
+
+
+class AnimatedBarChartScene(Scene):
+    """Animated horizontal bar chart - bars grow from left."""
+
+    def __init__(self, name, duration, title, data, subtitle=None,
+                 voiceover_text=None, caption_phrases=None):
+        """
+        data: list of (name, ward, party, percentage, counts_text)
+        """
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.title = title
+        self.data = data
+        self.subtitle = subtitle
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+        add_branding(img, draw)
+
+        # Title (fade in)
+        title_t = min(1.0, (frame_idx / total_frames) / 0.1)
+        font_title = load_font(34, bold=True)
+        title_alpha = int(245 * ease_out_cubic(title_t))
+        title_color = tuple(int(COLORS['white'][i] * title_t) for i in range(3))
+        draw.text((60, 130), self.title, fill=title_color, font=font_title)
+
+        # Accent line under title
+        tbbox = draw.textbbox((60, 130), self.title, font=font_title)
+        line_w = int(260 * ease_out_cubic(title_t))
+        draw.rectangle([(60, tbbox[3] + 10), (60 + line_w, tbbox[3] + 13)], fill=COLORS['teal'])
+
+        if self.subtitle:
+            font_sub = load_font(18)
+            sub_color = tuple(int(COLORS['muted'][i] * title_t) for i in range(3))
+            draw.text((60, tbbox[3] + 24), self.subtitle, fill=sub_color, font=font_sub)
+
+        # Bars - staggered animation
+        bar_x = 60
+        bar_max_w = W - 120
+        bar_h = 70
+        gap = 40
+        y = 320
+
+        font_name = load_font(26, bold=True)
+        font_detail = load_font(16)
+        font_pill = load_font(13, bold=True)
+        font_pct = load_font(30, bold=True)
+        font_count = load_font(15)
+
+        for idx, (name, ward, party, pct, counts) in enumerate(self.data):
+            color = PARTY_COLORS.get(party, COLORS['teal'])
+
+            # Stagger: each bar starts 0.08 later
+            bar_start = 0.12 + idx * 0.08
+            bar_t = max(0, (frame_idx / total_frames - bar_start) / 0.25)
+            bar_t = min(1.0, bar_t)
+            bar_progress = ease_out_expo(bar_t)
+
+            # Name and ward (fade in)
+            name_t = max(0, (frame_idx / total_frames - (bar_start - 0.04)) / 0.1)
+            name_t = min(1.0, name_t)
+            name_alpha = ease_out_cubic(name_t)
+
+            if name_alpha > 0.01:
+                name_color = tuple(int(COLORS['white'][i] * name_alpha) for i in range(3))
+                draw.text((bar_x, y), name, fill=name_color, font=font_name)
+
+                # Ward text
+                ward_color = tuple(int(COLORS['muted'][i] * name_alpha) for i in range(3))
+                draw.text((bar_x, y + 34), ward, fill=ward_color, font=font_detail)
+
+                # Party pill
+                wb = draw.textbbox((0, 0), ward, font=font_detail)
+                pill_x = bar_x + (wb[2] - wb[0]) + 14
+                abbr = PARTY_ABBR.get(party, party[:3].upper())
+                pb = draw.textbbox((0, 0), abbr, font=font_pill)
+                ppw = pb[2] - pb[0] + 14
+                pph = pb[3] - pb[1] + 8
+                pill_bg = tuple(max(0, c // 4) for c in color)
+                pill_color = tuple(int(color[i] * name_alpha) for i in range(3))
+                draw_rounded_rect(draw, (pill_x, y + 33, pill_x + ppw, y + 33 + pph),
+                                  pph // 2, fill=pill_bg)
+                draw_rounded_rect(draw, (pill_x, y + 33, pill_x + ppw, y + 33 + pph),
+                                  pph // 2, outline=pill_color, width=1)
+                draw.text((pill_x + 7, y + 36), abbr, fill=pill_color, font=font_pill)
+
+            y += 60
+
+            # Bar track
+            if name_alpha > 0.01:
+                draw_rounded_rect(draw, (bar_x, y, bar_x + bar_max_w, y + bar_h), 10,
+                                  fill=COLORS['card'], outline=COLORS['card_border'])
+
+            # Animated bar fill
+            fill_w = int(bar_max_w * (pct / 100) * bar_progress)
+            if fill_w > 4 and name_alpha > 0.01:
+                draw_gradient_bar(img, (bar_x, y, bar_x + fill_w, y + bar_h), color, 1.0)
+                draw = ImageDraw.Draw(img)  # Refresh after gradient bar
+
+                # Percentage label
+                current_pct = pct * bar_progress
+                pct_text = f"{current_pct:.0f}%"
+                pct_bbox = draw.textbbox((0, 0), pct_text, font=font_pct)
+                pct_w = pct_bbox[2] - pct_bbox[0]
+
+                if fill_w > pct_w + 28:
+                    # Inside bar
+                    draw.text((bar_x + fill_w - pct_w - 16, y + 16), pct_text,
+                              fill=(10, 13, 18), font=font_pct)
+                else:
+                    # Outside bar
+                    draw.text((bar_x + fill_w + 14, y + 16), pct_text,
+                              fill=color, font=font_pct)
+
+            # Counts text (below bar, right-aligned)
+            if bar_progress > 0.8 and name_alpha > 0.01:
+                count_t = (bar_progress - 0.8) / 0.2
+                count_color = tuple(int(COLORS['dim'][i] * count_t) for i in range(3))
+                cb = draw.textbbox((0, 0), counts, font=font_count)
+                cw = cb[2] - cb[0]
+                draw.text((bar_x + bar_max_w - cw, y + bar_h + 6), counts,
+                          fill=count_color, font=font_count)
+
+            y += bar_h + gap
+
+        # Caption phrases
+        t = frame_idx / total_frames
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text, bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        return img
+
+
+class TextRevealScene(Scene):
+    """Text content with line-by-line reveal animation."""
+
+    def __init__(self, name, duration, heading, body_lines, accent_color=None,
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.heading = heading
+        self.body_lines = body_lines
+        self.accent_color = accent_color or COLORS['teal']
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+        add_branding(img, draw)
+
+        # Heading (slide in from left)
+        head_t = min(1.0, (frame_idx / total_frames) / 0.12)
+        head_progress = ease_out_expo(head_t)
+
+        font_heading = load_font(38, bold=True)
+        h_lines = textwrap.wrap(self.heading, width=24)
+        y = 280
+        x_offset = int(-200 * (1 - head_progress))
+
+        for line in h_lines:
+            head_color = tuple(int(COLORS['white'][i] * head_progress) for i in range(3))
+            draw.text((60 + x_offset, y), line, fill=head_color, font=font_heading)
+            y += 52
+
+        # Accent line (grows)
+        line_w = int(220 * head_progress)
+        draw.rectangle([(60, y + 8), (60 + line_w, y + 11)], fill=self.accent_color)
+        y += 36
+
+        # Body lines (staggered reveal)
+        font_body = load_font(24)
+
+        # Flatten body lines with wrapping
+        all_lines = []
+        for line in self.body_lines:
+            if line == "":
+                all_lines.append(("", True))
+            else:
+                wrapped = textwrap.wrap(line, width=36)
+                for i, wl in enumerate(wrapped):
+                    all_lines.append((wl, i == 0))
+
+        for idx, (line, is_first) in enumerate(all_lines):
+            if line == "":
+                y += 16
+                continue
+
+            # Stagger start based on line index
+            line_start = 0.15 + idx * 0.04
+            line_t = max(0, (frame_idx / total_frames - line_start) / 0.08)
+            line_t = min(1.0, line_t)
+            alpha = ease_out_cubic(line_t)
+
+            if alpha > 0.01:
+                line_color = tuple(int(COLORS['light'][i] * alpha) for i in range(3))
+                # Slide up slightly
+                y_off = int(12 * (1 - alpha))
+                draw.text((60, y + y_off), line, fill=line_color, font=font_body)
+
+            y += 36
+
+        # Caption phrases
+        t = frame_idx / total_frames
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text, bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        return img
+
+
+class TitleScene(Scene):
+    """Opening/closing title with Ken Burns effect on background."""
+
+    def __init__(self, name, duration, title, subtitle=None, bg_image_path=None,
+                 voiceover_text=None, caption_phrases=None, zoom_direction="in"):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.title = title
+        self.subtitle = subtitle
+        self.bg_image_path = bg_image_path
+        self.zoom_direction = zoom_direction
+        self._bg_loaded = None
+
+    def _load_bg(self):
+        """Load and prep background image once."""
+        if self._bg_loaded is not None:
+            return self._bg_loaded
+
+        if self.bg_image_path and os.path.exists(self.bg_image_path):
+            bg = Image.open(self.bg_image_path).convert("RGB")
+            # Scale to fit with extra margin for Ken Burns
+            margin = 1.15
+            bg_w, bg_h = bg.size
+            scale = max(W * margin / bg_w, H * margin / bg_h)
+            bg = bg.resize((int(bg_w * scale), int(bg_h * scale)), Image.LANCZOS)
+            self._bg_loaded = bg
         else:
-            draw.text((bar_x + fill_w + 16, y + 18), pct_text,
-                      fill=color, font=font_pct)
+            self._bg_loaded = False
+        return self._bg_loaded
 
-        # Counts
-        draw.text((bar_x + bar_max_w - 80, y + bar_h + 8), counts,
-                  fill=COLORS['dim'], font=font_count)
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
 
-        y += bar_h + gap
+        bg = self._load_bg()
+        if bg:
+            # Ken Burns: slow zoom
+            t = frame_idx / total_frames
+            if self.zoom_direction == "in":
+                zoom = 1.0 + 0.08 * t  # Zoom in slightly
+            else:
+                zoom = 1.08 - 0.08 * t  # Zoom out
 
-    return img
+            bw, bh = bg.size
+            crop_w = int(W / zoom)
+            crop_h = int(H / zoom)
+            cx = bw // 2
+            cy = bh // 2
+            # Slight pan
+            pan_x = int(20 * math.sin(t * math.pi))
+            pan_y = int(10 * math.cos(t * math.pi))
+
+            left = cx - crop_w // 2 + pan_x
+            top = cy - crop_h // 2 + pan_y
+            left = max(0, min(left, bw - crop_w))
+            top = max(0, min(top, bh - crop_h))
+
+            cropped = bg.crop((left, top, left + crop_w, top + crop_h))
+            cropped = cropped.resize((W, H), Image.LANCZOS)
+
+            # Blur slightly
+            cropped = cropped.filter(ImageFilter.GaussianBlur(radius=4))
+
+            # Dark gradient overlay
+            overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            od = ImageDraw.Draw(overlay)
+            for y in range(H):
+                alpha = int(140 + 80 * (y / H))
+                od.rectangle([(0, y), (W, y + 1)], fill=(13, 17, 23, alpha))
+
+            img = Image.alpha_composite(cropped.convert("RGBA"), overlay).convert("RGB")
+            draw = ImageDraw.Draw(img)
+            draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+            draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
+
+        add_branding(img, draw)
+
+        # Reform logo centered
+        try:
+            logo = Image.open(LOGO_PATH).convert("RGBA")
+            logo = logo.resize((100, 100), Image.LANCZOS)
+            img.paste(logo, ((W - 100) // 2, 380), logo)
+        except Exception:
+            pass
+
+        # Title (fade in + slide up)
+        title_t = min(1.0, (frame_idx / total_frames) / 0.2)
+        title_progress = ease_out_expo(title_t)
+
+        font_title = load_font(48, bold=True)
+        lines = textwrap.wrap(self.title, width=20)
+        title_y = 540 + int(30 * (1 - title_progress))
+
+        for line in lines:
+            title_color = tuple(int(COLORS['white'][i] * title_progress) for i in range(3))
+            text_center_x(draw, line, font_title, int(title_y), title_color)
+            title_y += 62
+
+        # Accent line (grows from center)
+        if title_progress > 0.3:
+            line_t = (title_progress - 0.3) / 0.7
+            line_w = int(200 * ease_out_expo(line_t))
+            cx = W // 2
+            draw.rectangle([(cx - line_w // 2, int(title_y) + 16),
+                            (cx + line_w // 2, int(title_y) + 20)], fill=COLORS['teal'])
+
+        # Subtitle
+        if self.subtitle:
+            sub_t = max(0, (frame_idx / total_frames - 0.15) / 0.15)
+            sub_t = min(1.0, sub_t)
+            sub_progress = ease_out_cubic(sub_t)
+
+            font_sub = load_font(26)
+            sub_lines = textwrap.wrap(self.subtitle, width=30)
+            sub_y = int(title_y) + 46
+            for line in sub_lines:
+                sub_color = tuple(int(COLORS['light'][i] * sub_progress) for i in range(3))
+                text_center_x(draw, line, font_sub, int(sub_y), sub_color)
+                sub_y += 36
+
+        return img
 
 
-def create_text_frame(heading, body_lines, accent_color=None):
-    """Create a frame with text content."""
-    img, draw = create_frame_base()
-    add_branding(img, draw)
+class CTAScene(Scene):
+    """Call-to-action closing frame."""
 
-    color = accent_color or COLORS['teal']
+    def __init__(self, name, duration, text, url="tompickup.co.uk",
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.cta_text = text
+        self.url = url
 
-    # Heading
-    font_heading = load_font(40, bold=True)
-    h_lines = textwrap.wrap(heading, width=24)
-    y = 300
-    for line in h_lines:
-        draw.text((60, y), line, fill=COLORS['white'], font=font_heading)
-        y += 54
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+        add_branding(img, draw, show_site=False)
 
-    # Accent line
-    draw.rectangle([(60, y + 8), (280, y + 11)], fill=color)
-    y += 36
+        t = frame_idx / total_frames
 
-    # Body
-    font_body = load_font(26)
-    for line in body_lines:
-        wrapped = textwrap.wrap(line, width=36)
-        for wl in wrapped:
-            draw.text((60, y), wl, fill=COLORS['light'], font=font_body)
-            y += 38
-        y += 12
+        # Large Reform UK logo (pulse animation)
+        try:
+            logo = Image.open(LOGO_PATH).convert("RGBA")
+            pulse = 1.0 + 0.02 * math.sin(frame_idx * 0.1)
+            logo_size = int(140 * pulse)
+            logo = logo.resize((logo_size, logo_size), Image.LANCZOS)
+            img.paste(logo, ((W - logo_size) // 2, 500), logo)
+        except Exception:
+            pass
 
-    return img
+        # CTA text (fade in)
+        cta_t = min(1.0, t / 0.2)
+        cta_progress = ease_out_expo(cta_t)
+
+        font_cta = load_font(34, bold=True)
+        cta_color = tuple(int(COLORS['white'][i] * cta_progress) for i in range(3))
+        text_center_x(draw, self.cta_text, font_cta, 700, cta_color)
+
+        # URL (bigger, teal, pulsing)
+        url_t = max(0, (t - 0.1) / 0.15)
+        url_t = min(1.0, url_t)
+        url_progress = ease_out_expo(url_t)
+
+        font_url = load_font(36, bold=True)
+        glow_pulse = 0.8 + 0.2 * math.sin(frame_idx * 0.08)
+        url_color = tuple(int(COLORS['teal'][i] * url_progress * glow_pulse) for i in range(3))
+        text_center_x(draw, self.url, font_url, 770, url_color)
+
+        # Accent line
+        if url_progress > 0.3:
+            lp = (url_progress - 0.3) / 0.7
+            lw = int(160 * ease_out_expo(lp))
+            cx = W // 2
+            draw.rectangle([(cx - lw // 2, 840), (cx + lw // 2, 844)], fill=COLORS['teal'])
+
+        # "7 May 2026" date
+        date_t = max(0, (t - 0.25) / 0.15)
+        date_t = min(1.0, date_t)
+        if date_t > 0:
+            font_date = load_font(22)
+            date_color = tuple(int(COLORS['muted'][i] * ease_out_cubic(date_t)) for i in range(3))
+            text_center_x(draw, "7 May 2026  |  All 15 Wards", font_date, 880, date_color)
+
+        return img
 
 
-def create_cta_frame(text="Read the full article", url="tompickup.co.uk"):
-    """Create the closing call-to-action frame."""
-    img, draw = create_frame_base()
-    add_branding(img, draw)
+class TransitionScene(Scene):
+    """Black transition with optional text flash."""
 
-    # Large Reform UK logo
-    try:
-        logo = Image.open(LOGO_PATH).convert("RGBA")
-        logo = logo.resize((160, 160), Image.LANCZOS)
-        img.paste(logo, ((W - 160) // 2, 500), logo)
-    except:
-        pass
+    def __init__(self, name, duration=0.5, flash_text=None):
+        super().__init__(name, duration)
+        self.flash_text = flash_text
 
-    # CTA text
-    font_cta = load_font(36, bold=True)
-    bbox = draw.textbbox((0, 0), text, font=font_cta)
-    tw = bbox[2] - bbox[0]
-    draw.text(((W - tw) // 2, 720), text, fill=COLORS['white'], font=font_cta)
+    def render_frame(self, frame_idx, total_frames):
+        img = Image.new("RGB", (W, H), COLORS['bg'])
+        draw = ImageDraw.Draw(img)
 
-    # URL
-    font_url = load_font(32, bold=True)
-    bbox = draw.textbbox((0, 0), url, font=font_url)
-    uw = bbox[2] - bbox[0]
-    draw.text(((W - uw) // 2, 800), url, fill=COLORS['teal'], font=font_url)
+        # Teal bars
+        draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+        draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
 
-    # Teal accent line
-    draw.rectangle([(W // 2 - 80, 870), (W // 2 + 80, 874)], fill=COLORS['teal'])
+        if self.flash_text:
+            t = frame_idx / total_frames
+            # Flash: appear then fade
+            if t < 0.5:
+                alpha = ease_out_cubic(t * 2)
+            else:
+                alpha = ease_out_cubic((1 - t) * 2)
 
-    return img
+            font = load_font(28, bold=True)
+            flash_color = tuple(int(COLORS['teal'][i] * alpha) for i in range(3))
+            text_center_x(draw, self.flash_text, font, H // 2 - 14, flash_color)
+
+        return img
 
 
 # ============================================================
-# ARTICLE-SPECIFIC VIDEO GENERATORS
+# TTS VOICEOVER (per-scene generation + duration matching)
 # ============================================================
 
-def generate_burnley_elections_video(duration=30):
+def get_audio_duration(path):
+    """Get duration of an audio file in seconds."""
+    result = subprocess.run(
+        [FFPROBE, "-v", "quiet", "-show_entries", "format=duration", "-of", "csv=p=0", path],
+        capture_output=True, text=True
+    )
+    return float(result.stdout.strip()) if result.stdout.strip() else 0
+
+
+async def generate_scene_audio(scene, output_path):
+    """Generate voiceover for a single scene."""
+    if not scene.voiceover_text:
+        return 0
+
+    communicate = edge_tts.Communicate(scene.voiceover_text, TTS_VOICE, rate=TTS_RATE, pitch=TTS_PITCH)
+    await communicate.save(output_path)
+    return get_audio_duration(output_path)
+
+
+async def generate_voiceover_per_scene(scenes, tmpdir):
+    """Generate voiceover per scene and adjust scene durations to match.
+
+    Returns: list of (scene, audio_path_or_none) tuples, total audio duration.
     """
-    Generate video for the Burnley Elections 2026 attendance article.
+    if not HAS_TTS:
+        print("  edge-tts not available, skipping voiceover")
+        return [(s, None) for s in scenes], 0
 
-    Bannon-style messaging structure:
-    1. HOOK - Lead with the most outrageous fact (50% attendance)
-    2. ESCALATE - Stack the evidence, build the pattern
-    3. BETRAY - They tried to cancel your right to vote
-    4. CONTRAST - Every other party supported cancellation
-    5. VINDICATE - Only Reform stood for democracy
-    6. EMPOWER - Call to action, put the power back in voters' hands
+    print("  Generating per-scene voiceover...")
+    scene_audio = []
+    total_audio = 0
+
+    for i, scene in enumerate(scenes):
+        if scene.voiceover_text:
+            audio_path = os.path.join(tmpdir, f"vo_{i:02d}_{scene.name}.mp3")
+            duration = await generate_scene_audio(scene, audio_path)
+
+            # Add 0.3s padding for breathing room
+            padded_duration = duration + 0.3
+
+            # Adjust scene duration to match voiceover (min = original duration)
+            old_dur = scene.duration
+            scene.duration = max(scene.duration, padded_duration)
+
+            if scene.duration > old_dur:
+                print(f"    {scene.name}: {old_dur:.1f}s -> {scene.duration:.1f}s (audio: {duration:.1f}s)")
+
+            scene_audio.append((scene, audio_path))
+            total_audio += duration
+        else:
+            scene_audio.append((scene, None))
+
+    print(f"  Total voiceover: {total_audio:.1f}s")
+    return scene_audio, total_audio
+
+
+def concat_scene_audio(scene_audio_pairs, output_path):
+    """Concatenate per-scene audio files with silence gaps into one track.
+
+    Generates a single audio file where each scene's voiceover starts
+    at the correct offset matching the video timeline.
     """
-    print("Generating: Burnley Elections 2026 attendance video...")
+    # Build an ffmpeg filter that places each audio at the right offset
+    inputs = []
+    filter_parts = []
+    stream_labels = []
+    timeline_offset = 0.0
+    input_idx = 0
 
-    frames = []
+    for scene, audio_path in scene_audio_pairs:
+        if audio_path and os.path.exists(audio_path):
+            inputs.extend(["-i", audio_path])
+            # Delay audio to match scene's position in timeline
+            delay_ms = int(timeline_offset * 1000)
+            label = f"a{input_idx}"
+            filter_parts.append(f"[{input_idx}]adelay={delay_ms}|{delay_ms}[{label}]")
+            stream_labels.append(f"[{label}]")
+            input_idx += 1
+        timeline_offset += scene.duration
 
-    # === HOOK: Open with outrage, not context ===
-    # Frame 1: Shocking stat - punch them in the face with the number
-    frame1 = create_stat_frame(
-        "50%", "Your councillor missed HALF his meetings",
-        "Neil Mottershead, Conservative, Gannow",
-        party="Conservative",
-        extra_text="Paid from your council tax. Sat on just 2 committees. Missed 26 of 52 meetings in 4 years."
-    )
-    frames.append(("hook_50pct", frame1, 4))
+    if not filter_parts:
+        return None
 
-    # === ESCALATE: It's not just one, it's a pattern ===
-    # Frame 2: Second worst
-    frame2 = create_stat_frame(
-        "56%", "Getting worse, not better",
-        "Christine Sollis, Independent, Brunshaw",
-        party="Independent",
-        extra_text="Vice-Chair of Audit & Standards. Missed 3 meetings of her own committee. 69% overall, dropping to 56%."
-    )
-    frames.append(("escalate_sollis", frame2, 4))
+    # Mix all delayed audio streams
+    n_streams = len(stream_labels)
+    mix_inputs = "".join(stream_labels)
+    filter_graph = ";".join(filter_parts) + f";{mix_inputs}amix=inputs={n_streams}:duration=longest[out]"
 
-    # Frame 3: Third - zero attendance on key committee
-    frame3 = create_stat_frame(
-        "0 of 3", "Zero. Not one.",
-        "Alex Hall, Green, Trinity: Audit & Standards this year",
-        party="Green",
-        extra_text="73.8% overall, collapsing to 53% in the last 6 months. 4 absences without apology."
-    )
-    frames.append(("escalate_hall", frame3, 4))
-
-    # Frame 4: Bar chart - the full picture, the pattern is clear
-    frame4 = create_bar_chart_frame(
-        "Three Councillors Below 75%",
-        [
-            ("Neil Mottershead", "Gannow", "Conservative", 50.0, "26/52"),
-            ("Christine Sollis", "Brunshaw", "Independent", 69.0, "60/87"),
-            ("Alex Hall", "Trinity", "Green", 73.8, "48/65"),
-        ],
-        subtitle="These people are asking for your vote again."
-    )
-    frames.append(("pattern", frame4, 4))
-
-    # === BETRAY: They tried to cancel your right to vote ===
-    # Frame 5: The betrayal
-    frame5 = create_text_frame(
-        "Then They Tried to Cancel Your Elections",
-        [
-            "January 2026. Burnley's Executive voted UNANIMOUSLY to cancel the May elections.",
-            "",
-            "Five councillors. One vote. Your democratic right, gone.",
-            "",
-            "Independents. Lib Dems. Greens. All voted yes.",
-            "",
-            "The Scrutiny Committee said no. They ignored it.",
-        ]
-    )
-    frames.append(("betrayal", frame5, 5))
-
-    # === CONTRAST: Every party failed you ===
-    # Frame 6: All parties complicit
-    frame6 = create_text_frame(
-        "Every Other Party Supported It",
-        [
-            "Labour started it. They wrote to every council asking to cancel.",
-            "",
-            "Conservatives requested cancellation across Lancashire too.",
-            "",
-            "Lib Dems, Greens, Independents: all voted for it in Burnley.",
-            "",
-            "Every single establishment party wanted to take away your vote.",
-        ]
-    )
-    frames.append(("contrast", frame6, 5))
-
-    # === VINDICATE: Reform stood alone ===
-    # Frame 7: Reform as the only defender
-    frame7 = create_text_frame(
-        "One Party Said No",
-        [
-            "Reform UK launched a judicial review to save your elections.",
-            "",
-            "On 16 February, the government backed down.",
-            "",
-            "29 council areas. Millions of voters. Elections restored.",
-            "",
-            "Because one party fought for your right to choose.",
-        ],
-        accent_color=COLORS['teal']
-    )
-    frames.append(("vindicate", frame7, 5))
-
-    # === EMPOWER: Give them the weapon ===
-    # Frame 8: Title card with background - the full picture
-    bg_img = str(IMAGES_DIR / "burnley-town-hall-raw.jpg")
-    frame8 = create_title_frame(
-        "Burnley Elections 2026",
-        "7 May. 15 wards. Your choice.",
-        bg_image_path=bg_img
-    )
-    frames.append(("context", frame8, 3))
-
-    # Frame 9: CTA - empower the viewer
-    frame9 = create_cta_frame(
-        "Ask them: will you turn up?",
-        "tompickup.co.uk"
-    )
-    frames.append(("cta", frame9, 3))
-
-    return frames
-
-
-# ============================================================
-# VIDEO ASSEMBLY
-# ============================================================
-
-def assemble_video_ffmpeg(frames, output_path, fps=FPS):
-    """Assemble frames into video using ffmpeg directly (no moviepy needed)."""
-    import subprocess
-    import tempfile
-
-    tmpdir = tempfile.mkdtemp(prefix="tpvideo_")
-
-    # Save each frame as images, repeated for duration
-    frame_idx = 0
-    for name, img, duration_secs in frames:
-        num_frames = int(duration_secs * fps)
-        frame_path = os.path.join(tmpdir, f"frame_{name}.png")
-        img.save(frame_path, "PNG")
-
-        for i in range(num_frames):
-            link_path = os.path.join(tmpdir, f"seq_{frame_idx:06d}.png")
-            os.symlink(frame_path, link_path)
-            frame_idx += 1
-
-    # Assemble with ffmpeg
-    input_pattern = os.path.join(tmpdir, "seq_%06d.png")
-    cmd = [
-        "/opt/homebrew/bin/ffmpeg", "-y",
-        "-framerate", str(fps),
-        "-i", input_pattern,
-        "-c:v", "libx264",
-        "-pix_fmt", "yuv420p",
-        "-preset", "medium",
-        "-crf", "23",
-        "-movflags", "+faststart",
+    cmd = [FFMPEG, "-y"] + inputs + [
+        "-filter_complex", filter_graph,
+        "-map", "[out]",
+        "-c:a", "aac", "-b:a", "128k",
         output_path
     ]
 
-    print(f"  Encoding {frame_idx} frames at {fps}fps...")
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
-        print(f"  ffmpeg error: {result.stderr[-500:]}")
+        print(f"  Audio concat error: {result.stderr[-400:]}")
+        return None
+
+    duration = get_audio_duration(output_path)
+    print(f"  Combined audio: {duration:.1f}s")
+    return output_path
+
+
+# ============================================================
+# VIDEO ASSEMBLY (ffmpeg)
+# ============================================================
+
+def render_all_frames(scenes, tmpdir):
+    """Render all frames from all scenes to disk."""
+    frame_idx = 0
+    total_frames = sum(s.frame_count() for s in scenes)
+
+    for scene_idx, scene in enumerate(scenes):
+        scene_frames = scene.frame_count()
+        print(f"  Scene {scene_idx + 1}/{len(scenes)}: {scene.name} ({scene.duration}s, {scene_frames} frames)")
+
+        for sf in range(scene_frames):
+            img = scene.render_frame(sf, scene_frames)
+
+            # Add crossfade at scene boundaries
+            is_near_end = sf >= scene_frames - int(FPS * 0.3)  # Last 0.3s
+            is_near_start = sf < int(FPS * 0.3) and scene_idx > 0
+
+            frame_path = os.path.join(tmpdir, f"frame_{frame_idx:06d}.png")
+            img.save(frame_path, "PNG")
+            frame_idx += 1
+
+    return frame_idx
+
+
+def assemble_video(tmpdir, frame_count, output_path, audio_path=None):
+    """Assemble frames + optional audio into final MP4."""
+    input_pattern = os.path.join(tmpdir, "frame_%06d.png")
+
+    cmd = [FFMPEG, "-y"]
+
+    # Video input
+    cmd.extend(["-framerate", str(FPS), "-i", input_pattern])
+
+    # Audio input
+    if audio_path and os.path.exists(audio_path):
+        cmd.extend(["-i", audio_path])
+
+    # Video encoding
+    cmd.extend([
+        "-c:v", "libx264",
+        "-pix_fmt", "yuv420p",
+        "-preset", "medium",
+        "-crf", "20",  # Higher quality than before
+        "-movflags", "+faststart",
+    ])
+
+    # Audio encoding
+    if audio_path and os.path.exists(audio_path):
+        cmd.extend([
+            "-c:a", "aac",
+            "-b:a", "128k",
+            "-shortest",  # Match shortest stream
+        ])
+
+    cmd.append(output_path)
+
+    print(f"  Encoding {frame_count} frames at {FPS}fps...")
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  ffmpeg error: {result.stderr[-800:]}")
         return False
 
-    # Cleanup
-    import shutil
-    shutil.rmtree(tmpdir)
-
     return True
 
 
-def assemble_video_moviepy(frames, output_path, fps=FPS):
-    """Assemble frames into video using moviepy."""
-    clips = []
-    for name, img, duration_secs in frames:
-        arr = np.array(img)
-        clip = ImageClip(arr, duration=duration_secs)
-        clips.append(clip)
+# ============================================================
+# ARTICLE-SPECIFIC VIDEO: Burnley Elections 2026
+# ============================================================
 
-    final = concatenate_videoclips(clips, method="compose")
-    final.write_videofile(output_path, fps=fps, codec="libx264",
-                          audio=False, preset="medium",
-                          ffmpeg_params=["-crf", "23", "-pix_fmt", "yuv420p"])
-    return True
+def generate_burnley_elections_video(duration=45, no_voice=False):
+    """
+    Burnley Elections 2026: The Councillors Who Didn't Show Up.
+
+    Bannon-style narrative:
+    1. HOOK    - Lead with outrage (50% attendance)
+    2. ESCALATE - Stack the evidence (Sollis, Hall)
+    3. PATTERN  - Bar chart makes it undeniable
+    4. BETRAY   - They cancelled your elections
+    5. CONTRAST - Every party supported it
+    6. VINDICATE - Reform stood alone
+    7. EMPOWER  - You decide on 7 May
+    """
+
+    scenes = []
+
+    # Scene 1: HOOK - 50% stat counter (punchy, short)
+    scenes.append(StatCountScene(
+        name="hook_50pct",
+        duration=5.0,
+        target_value=50,
+        suffix="%",
+        label="Your councillor missed HALF his meetings",
+        sublabel="Neil Mottershead, Gannow Ward",
+        party="Conservative",
+        extra_lines=[
+            "Paid thousands from your council tax.",
+            "Sat on just 2 committees. Missed 26 of 52.",
+        ],
+        voiceover_text="Fifty percent. Your councillor missed half his meetings. Twenty-six out of fifty-two.",
+        caption_phrases=[
+            (0.55, "26 of 52 meetings missed"),
+        ],
+    ))
+
+    # Scene 1b: Quick transition
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="IT GETS WORSE"))
+
+    # Scene 2: ESCALATE - Sollis
+    scenes.append(StatCountScene(
+        name="escalate_sollis",
+        duration=4.5,
+        target_value=56,
+        suffix="%",
+        label="Getting worse, not better",
+        sublabel="Christine Sollis, Brunshaw Ward",
+        party="Independent",
+        extra_lines=[
+            "Vice-Chair of Audit & Standards.",
+            "Missed 3 meetings of her own committee.",
+            "69% overall, collapsing to 56% this year.",
+        ],
+        voiceover_text="Christine Sollis. Vice-Chair of Audit. Missing her own committee. Fifty-six percent.",
+        caption_phrases=[
+            (0.5, "Missed 3 of her own committee meetings"),
+        ],
+    ))
+
+    # Scene 3: ESCALATE - Hall with fraction
+    scenes.append(StatCountScene(
+        name="escalate_hall",
+        duration=4.5,
+        target_value=0,
+        suffix="",
+        label="Zero. Not one.",
+        sublabel="Alex Hall, Trinity Ward",
+        party="Green",
+        is_fraction=True,
+        fraction_text="0 of 3",
+        extra_lines=[
+            "Audit & Standards meetings this year.",
+            "73.8% overall, crashing to 53%.",
+            "4 absences without apology.",
+        ],
+        voiceover_text="Alex Hall. Green. Zero out of three Audit meetings. Crashing to fifty-three percent.",
+        caption_phrases=[
+            (0.5, "4 absences without apology"),
+        ],
+    ))
+
+    # Scene 3b: Transition
+    scenes.append(TransitionScene("trans_2", 0.35, flash_text="THE FULL PICTURE"))
+
+    # Scene 4: PATTERN - Animated bar chart
+    scenes.append(AnimatedBarChartScene(
+        name="pattern_bars",
+        duration=5.0,
+        title="Three Councillors Below 75%",
+        data=[
+            ("Neil Mottershead", "Gannow", "Conservative", 50.0, "26 of 52"),
+            ("Christine Sollis", "Brunshaw", "Independent", 69.0, "60 of 87"),
+            ("Alex Hall", "Trinity", "Green", 73.8, "48 of 65"),
+        ],
+        subtitle="Defending councillors asking for your vote again.",
+        voiceover_text="Three councillors below seventy-five percent. Conservative, Independent, Green. All asking for your vote again.",
+        caption_phrases=[
+            (0.65, "All asking for your vote again"),
+        ],
+    ))
+
+    # Scene 4b: Transition
+    scenes.append(TransitionScene("trans_3", 0.35, flash_text="BUT THAT'S NOT ALL"))
+
+    # Scene 5: BETRAY - Elections cancelled
+    scenes.append(TextRevealScene(
+        name="betrayal",
+        duration=6.0,
+        heading="They Tried to Cancel\nYour Elections",
+        body_lines=[
+            "January 2026.",
+            "",
+            "Burnley's Executive voted",
+            "UNANIMOUSLY to cancel",
+            "the May elections.",
+            "",
+            "Five councillors.",
+            "One vote.",
+            "Your democratic right, gone.",
+        ],
+        voiceover_text="Then they tried to cancel your elections. The Executive voted unanimously. Your democratic right, gone.",
+    ))
+
+    # Scene 6: CONTRAST - All parties complicit
+    scenes.append(TextRevealScene(
+        name="contrast",
+        duration=5.5,
+        heading="Every Other Party\nSupported It",
+        body_lines=[
+            "Labour started it.",
+            "",
+            "Conservatives backed it.",
+            "",
+            "Lib Dems, Greens, Independents:",
+            "all voted for it in Burnley.",
+            "",
+            "Every establishment party",
+            "wanted your vote cancelled.",
+        ],
+        voiceover_text="Labour started it. Conservatives backed it. Every establishment party wanted your vote cancelled.",
+    ))
+
+    # Scene 6b: Transition
+    scenes.append(TransitionScene("trans_4", 0.4, flash_text="ONE PARTY SAID NO"))
+
+    # Scene 7: VINDICATE - Reform stood alone
+    scenes.append(TextRevealScene(
+        name="vindicate",
+        duration=6.0,
+        heading="Reform UK\nSaved Your Elections",
+        body_lines=[
+            "Reform UK launched a",
+            "judicial review.",
+            "",
+            "The government backed down.",
+            "",
+            "29 council areas.",
+            "Millions of voters.",
+            "Elections restored.",
+        ],
+        accent_color=COLORS['teal'],
+        voiceover_text="Reform UK launched a judicial review. The government backed down. Elections restored.",
+    ))
+
+    # Scene 8: EMPOWER - Title + background
+    bg_path = str(IMAGES_DIR / "burnley-town-hall-raw.jpg")
+    if not os.path.exists(bg_path):
+        bg_path = None
+
+    scenes.append(TitleScene(
+        name="empower_title",
+        duration=3.0,
+        title="Burnley Elections 2026",
+        subtitle="7 May. 15 wards. Your choice.",
+        bg_image_path=bg_path,
+        voiceover_text="Seventh of May. Fifteen wards. Your choice.",
+        zoom_direction="out",
+    ))
+
+    # Scene 9: CTA
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="Ask them: will you turn up?",
+        url="tompickup.co.uk",
+        voiceover_text="Ask them. Will you turn up?",
+    ))
+
+    return scenes
 
 
 # ============================================================
@@ -637,25 +1295,43 @@ ARTICLE_GENERATORS = {
 }
 
 
-def save_frames_as_images(frames, output_dir):
-    """Save individual frames as images for review."""
-    os.makedirs(output_dir, exist_ok=True)
-    for i, (name, img, duration) in enumerate(frames):
-        path = os.path.join(output_dir, f"{i:02d}_{name}.jpg")
-        img.save(path, "JPEG", quality=92)
-        print(f"  Frame {i}: {name} ({duration}s) -> {path}")
+# ============================================================
+# VOICEOVER SCRIPT EXPORT
+# ============================================================
 
+def export_voiceover_script(scenes, output_path):
+    """Export the voiceover script as a text file for review."""
+    with open(output_path, "w") as f:
+        f.write("VOICEOVER SCRIPT\n")
+        f.write("=" * 60 + "\n\n")
+
+        total_time = 0
+        for scene in scenes:
+            if scene.voiceover_text:
+                f.write(f"[{total_time:.1f}s] {scene.name}\n")
+                f.write(f"{scene.voiceover_text}\n\n")
+            total_time += scene.duration
+
+        f.write(f"\nTotal duration: {total_time:.1f}s\n")
+        word_count = sum(len(s.voiceover_text.split()) for s in scenes if s.voiceover_text)
+        f.write(f"Word count: {word_count}\n")
+        f.write(f"Speaking rate: ~{word_count / (total_time / 60):.0f} words/min\n")
+
+    print(f"  Script exported: {output_path}")
+
+
+# ============================================================
+# MAIN
+# ============================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate social media short videos for articles")
-    parser.add_argument("--article", required=True,
-                        help="Article slug or 'all'")
-    parser.add_argument("--duration", type=int, default=30,
-                        help="Target video duration in seconds")
-    parser.add_argument("--preview", action="store_true",
-                        help="Save frames as images instead of video")
-    parser.add_argument("--output", type=str, default=None,
-                        help="Output path (default: public/videos/)")
+    parser = argparse.ArgumentParser(description="Generate social media short videos")
+    parser.add_argument("--article", required=True, help="Article slug or 'all'")
+    parser.add_argument("--duration", type=int, default=45, help="Target duration (seconds)")
+    parser.add_argument("--preview", action="store_true", help="Save key frames as images only")
+    parser.add_argument("--no-voice", action="store_true", help="Skip TTS voiceover")
+    parser.add_argument("--script-only", action="store_true", help="Export voiceover script only")
+    parser.add_argument("--output", type=str, default=None, help="Output path")
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -664,30 +1340,88 @@ def main():
 
     for slug in articles:
         if slug not in ARTICLE_GENERATORS:
-            print(f"No video generator for article: {slug}")
+            print(f"No video generator for: {slug}")
             print(f"Available: {', '.join(ARTICLE_GENERATORS.keys())}")
             continue
 
-        gen_func = ARTICLE_GENERATORS[slug]
-        frames = gen_func(duration=args.duration)
+        print(f"\n{'=' * 60}")
+        print(f"Generating: {slug}")
+        print(f"{'=' * 60}")
 
-        total_duration = sum(d for _, _, d in frames)
-        print(f"  {len(frames)} frames, {total_duration}s total")
+        gen_func = ARTICLE_GENERATORS[slug]
+        scenes = gen_func(duration=args.duration, no_voice=args.no_voice)
+
+        total_duration = sum(s.duration for s in scenes)
+        total_frames = sum(s.frame_count() for s in scenes)
+        print(f"  {len(scenes)} scenes, {total_duration:.1f}s, {total_frames} frames")
+
+        # Export voiceover script
+        script_path = str(OUTPUT_DIR / f"{slug}_script.txt")
+        export_voiceover_script(scenes, script_path)
+
+        if args.script_only:
+            continue
 
         if args.preview:
+            # Save one frame per scene
             preview_dir = str(OUTPUT_DIR / f"{slug}_frames")
-            save_frames_as_images(frames, preview_dir)
+            os.makedirs(preview_dir, exist_ok=True)
+            for i, scene in enumerate(scenes):
+                # Render middle frame
+                mid = scene.frame_count() // 2
+                img = scene.render_frame(mid, scene.frame_count())
+                path = os.path.join(preview_dir, f"{i:02d}_{scene.name}.jpg")
+                img.save(path, "JPEG", quality=92)
+                print(f"  Frame {i}: {scene.name} -> {path}")
+            # Also render first and last frame of animated scenes
+            for i, scene in enumerate(scenes):
+                if isinstance(scene, (AnimatedBarChartScene, StatCountScene)):
+                    img_start = scene.render_frame(0, scene.frame_count())
+                    img_end = scene.render_frame(scene.frame_count() - 1, scene.frame_count())
+                    img_start.save(os.path.join(preview_dir, f"{i:02d}_{scene.name}_start.jpg"), "JPEG", quality=92)
+                    img_end.save(os.path.join(preview_dir, f"{i:02d}_{scene.name}_end.jpg"), "JPEG", quality=92)
             print(f"  Preview frames saved to {preview_dir}/")
-        else:
-            output_path = args.output or str(OUTPUT_DIR / f"{slug}.mp4")
-            print(f"  Assembling video: {output_path}")
+            continue
 
-            success = assemble_video_ffmpeg(frames, output_path)
+        # Render video
+        tmpdir = tempfile.mkdtemp(prefix="tpvideo_")
+        try:
+            # Step 1: Generate per-scene voiceover and adjust durations
+            audio_path = None
+            if not args.no_voice and HAS_TTS:
+                scene_audio, vo_duration = asyncio.run(
+                    generate_voiceover_per_scene(scenes, tmpdir)
+                )
+
+                # Recalculate total duration after adjustment
+                total_duration = sum(s.duration for s in scenes)
+                total_frames = sum(s.frame_count() for s in scenes)
+                print(f"  Adjusted: {len(scenes)} scenes, {total_duration:.1f}s, {total_frames} frames")
+
+                # Concat all scene audio into one track
+                combined_audio = os.path.join(tmpdir, "voiceover.m4a")
+                audio_path = concat_scene_audio(scene_audio, combined_audio)
+            elif not HAS_TTS:
+                print("  edge-tts not installed, generating without voiceover")
+
+            # Step 2: Render all frames
+            frame_count = render_all_frames(scenes, tmpdir)
+
+            # Step 3: Assemble final video
+            output_path = args.output or str(OUTPUT_DIR / f"{slug}.mp4")
+            success = assemble_video(tmpdir, frame_count, output_path, audio_path)
+
             if success:
                 size_mb = os.path.getsize(output_path) / (1024 * 1024)
-                print(f"  Video saved: {output_path} ({size_mb:.1f}MB)")
+                print(f"\n  VIDEO SAVED: {output_path} ({size_mb:.1f}MB)")
+                vid_duration = get_audio_duration(output_path)
+                if vid_duration:
+                    print(f"  Duration: {vid_duration:.1f}s")
             else:
-                print("  Failed to create video!")
+                print("  FAILED to create video!")
+
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
     print("\nDone!")
 
