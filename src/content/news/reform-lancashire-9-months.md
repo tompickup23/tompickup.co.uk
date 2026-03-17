@@ -88,6 +88,13 @@ Band D residents now pay £1,801.75 for the county share of their council tax. S
 
 The difference matters. At Band D, the maximum 4.99% rise would have cost an extra £87 per year. Reform's 3.80% costs £66. That is £21 per household. Multiply by 500,000 households and the aggregate saving is around £10 million.
 
+<div class="article-data-viz">
+<a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" download title="Download this image to share on social media">
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" alt="Council Tax: 10 Years of Maximum Rises — data table showing Conservative rises from 2016 to 2026 vs Reform's 3.80%" loading="lazy" />
+<span class="download-hint">Tap to download for social media</span>
+</a>
+</div>
+
 ---
 
 ## The Overspend: What We Inherited
@@ -97,6 +104,13 @@ When Reform took control, the council faced a **£28.3 million overspend** for 2
 Nine months later, the budget is on track. The savings programme for 2025/26 is hitting **100% of its targets**, compared to 48% under the last full year of Conservative control.
 
 That is not rhetoric. It is the quarterly monitoring report, published on the council's website, measured by the same finance team that served both administrations.
+
+<div class="article-data-viz">
+<a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" download title="Download this image to share on social media">
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" alt="Savings Programme Delivery — Conservative 48% vs Reform 100%" loading="lazy" />
+<span class="download-hint">Tap to download for social media</span>
+</a>
+</div>
 
 <div class="viz-comparison">
 <div class="side before">
@@ -169,6 +183,20 @@ Total documented financial damage: **£921.5 million** over eight years.
 When the estimated unrealised loss on the £600 million UKMBA bond portfolio is included, the total rises to **£1.27 billion**.
 
 These are not Reform UK calculations. They are the council's own audited figures, sourced to specific pages in the Statement of Accounts from 2017/18 to 2024/25.
+
+<div class="article-data-viz">
+<a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-financial-damage.png" download title="Download this image to share on social media">
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-financial-damage.png" alt="Conservative Financial Damage: 8 Years — £416.9M treasury, £254.5M disposal, £138.4M overspends, £111.7M subsidies" loading="lazy" />
+<span class="download-hint">Tap to download for social media</span>
+</a>
+</div>
+
+<div class="article-data-viz">
+<a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-bonds-damage.png" download title="Download this image to share on social media">
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-bonds-damage.png" alt="The Bond Scandal — £600M portfolio, £350M estimated loss, £1.27B total damage" loading="lazy" />
+<span class="download-hint">Tap to download for social media</span>
+</a>
+</div>
 
 ---
 

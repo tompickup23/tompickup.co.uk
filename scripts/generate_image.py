@@ -306,35 +306,56 @@ def create_cover_image(photo_path, title, tags=None, variant='lancashire',
     img = Image.alpha_composite(img.convert('RGBA'), overlay).convert('RGB')
     draw = ImageDraw.Draw(img)
 
-    # Reform UK logo (top-right)
-    logo_scale = min(w / 1200, h / 628) * 0.8
+    # Reform UK logo (top-right) — ensure it doesn't clip at edge
+    logo_scale = min(w / 1200, h / 628) * 0.7
+    logo_margin = 40
     try:
-        draw_reform_logo(img, w - int(280 * logo_scale) - 30, 20,
+        # Measure logo first to position correctly
+        scratch = Image.new('RGBA', (w, 200), (0, 0, 0, 0))
+        _, _, logo_w, logo_h = draw_reform_logo(scratch, 0, 0, scale=logo_scale, variant=variant)
+        draw_reform_logo(img, w - logo_w - logo_margin, logo_margin,
                          scale=logo_scale, variant=variant)
     except Exception:
         pass
 
-    # Tags (above title, bottom area)
-    tag_y = h - 180
+    # Bottom bar: dark solid strip for title + watermark (ensures readability + cropping safety)
+    bar_h = int(h * 0.32)  # bottom 32% is dark bar
+    bar_top = h - bar_h
+    draw.rectangle([(0, bar_top), (w, h)], fill=(10, 22, 40))
+    # Gradient transition zone above the bar (smooth blend)
+    trans_h = int(h * 0.08)
+    for i in range(trans_h):
+        progress = i / trans_h
+        alpha = int(240 * progress)
+        draw.line([(0, bar_top - trans_h + i), (w, bar_top - trans_h + i)],
+                  fill=(10, 22, 40, alpha) if img.mode == 'RGBA' else (10, 22, 40))
+
+    # Tags (in the dark bar area, near top)
+    content_top = bar_top + 12
     if tags:
-        tag_font = load_font('bold', max(14, int(16 * logo_scale)))
+        tag_font = load_font('bold', max(13, int(15 * logo_scale)))
         tag_x = 40
+        tag_h_drawn = 0
         for tag in tags[:4]:
             tag_text = tag.upper()
             tbbox = draw.textbbox((0, 0), tag_text, font=tag_font)
             tw = tbbox[2] - tbbox[0]
             th = tbbox[3] - tbbox[1]
-            # Pill background
-            pill_w = tw + 20
-            pill_h = th + 10
-            draw_rounded_rect(draw, (tag_x, tag_y, tag_x + pill_w, tag_y + pill_h),
+            pill_w = tw + 18
+            pill_h = th + 8
+            draw_rounded_rect(draw, (tag_x, content_top, tag_x + pill_w, content_top + pill_h),
                               pill_h // 2, fill=(12, 60, 72))
-            draw.text((tag_x + 10, tag_y + 5), tag_text, fill=TEAL, font=tag_font)
-            tag_x += pill_w + 8
-        tag_y += pill_h + 12
+            draw.text((tag_x + 9, content_top + 4), tag_text, fill=TEAL, font=tag_font)
+            tag_x += pill_w + 6
+            tag_h_drawn = pill_h
+        content_top += tag_h_drawn + 10
 
-    # Title text (bottom, large, white)
-    title_font_size = max(28, int(42 * min(w / 1200, h / 628)))
+    # Thin teal accent line
+    draw.line([(40, content_top), (180, content_top)], fill=TEAL, width=3)
+    content_top += 12
+
+    # Title text
+    title_font_size = max(24, int(36 * min(w / 1200, h / 628)))
     title_font = load_font('bold', title_font_size)
     # Word-wrap title
     title_lines = []
@@ -352,21 +373,14 @@ def create_cover_image(photo_path, title, tags=None, variant='lancashire',
     if current_line:
         title_lines.append(current_line)
 
-    # Draw title from bottom up
-    line_h = title_font_size + 8
-    title_bottom = h - 30
-    for i, line in enumerate(reversed(title_lines)):
-        y_pos = title_bottom - (i + 1) * line_h
-        draw.text((40, y_pos), line, fill=WHITE, font=title_font)
+    # Draw title lines from top down
+    line_h = title_font_size + 6
+    for i, line in enumerate(title_lines):
+        draw.text((40, content_top + i * line_h), line, fill=WHITE, font=title_font)
 
-    # Thin teal accent line above title
-    accent_y = title_bottom - len(title_lines) * line_h - 12
-    draw.line([(40, accent_y), (200, accent_y)], fill=TEAL, width=3)
-
-    # tompickup.co.uk watermark (bottom-right, subtle)
-    wm_font = load_font('regular', max(12, int(16 * logo_scale)))
-    draw.text((w - 180, h - 30), "tompickup.co.uk", fill=(200, 200, 210, 180),
-              font=wm_font)
+    # Watermark bar at very bottom (Reform UK Lancashire + tompickup.co.uk)
+    draw_watermark_bar(draw, w, h, left_dot_color=TEAL,
+                       location=variant if variant in ('lancashire', 'burnley') else 'lancashire')
 
     if output_path:
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
@@ -449,13 +463,22 @@ def create_data_viz_card(viz_type, data, title=None, source=None,
         cols = min(len(data), 4)
         rows_count = (len(data) + cols - 1) // cols
         card_w = (WIDTH - 120 - (cols - 1) * 20) // cols
-        card_h = min(200, (HEIGHT - y_cursor - 160) // rows_count - 20)
+
+        # Available vertical space for cards (between title and source/watermark)
+        avail_top = y_cursor
+        avail_bottom = HEIGHT - 160  # leave room for source + watermark
+        avail_h = avail_bottom - avail_top
+        card_h = min(280, (avail_h - (rows_count - 1) * 20) // rows_count)
+
+        # Vertically center the card grid in available space
+        total_grid_h = rows_count * card_h + (rows_count - 1) * 20
+        grid_top = avail_top + (avail_h - total_grid_h) // 2
 
         for i, item in enumerate(data):
             row = i // cols
             col = i % cols
             cx = 60 + col * (card_w + 20)
-            cy = y_cursor + row * (card_h + 20)
+            cy = grid_top + row * (card_h + 20)
 
             # Card background
             draw_rounded_rect(draw, (cx, cy, cx + card_w, cy + card_h),
@@ -465,30 +488,69 @@ def create_data_viz_card(viz_type, data, title=None, source=None,
 
             accent = ACCENT_COLORS.get(item.get('color', 'teal'), TEAL)
 
-            # Value
-            val_font_size = min(56, card_h // 3)
+            # Value — auto-size to fit card width with padding
+            max_val_w = card_w - 30  # 15px padding each side
+            val_font_size = min(64, card_h // 3)
             val_font = load_font('black', val_font_size)
             val_text = item['value']
             vbbox = draw.textbbox((0, 0), val_text, font=val_font)
             vw = vbbox[2] - vbbox[0]
-            draw.text((cx + (card_w - vw) // 2, cy + 20), val_text,
-                      fill=accent, font=val_font)
+            # Shrink until it fits
+            while vw > max_val_w and val_font_size > 20:
+                val_font_size -= 2
+                val_font = load_font('black', val_font_size)
+                vbbox = draw.textbbox((0, 0), val_text, font=val_font)
+                vw = vbbox[2] - vbbox[0]
 
-            # Label
-            lbl_font = load_font('bold', 18)
+            # Label font — also auto-size to fit
             lbl_text = item.get('label', '')
+            lbl_font_size = 18
+            lbl_font = load_font('bold', lbl_font_size)
             lbbox = draw.textbbox((0, 0), lbl_text, font=lbl_font)
             lw = lbbox[2] - lbbox[0]
-            draw.text((cx + (card_w - lw) // 2, cy + 20 + val_font_size + 10),
-                      lbl_text, fill=WHITE, font=lbl_font)
+            while lw > max_val_w and lbl_font_size > 12:
+                lbl_font_size -= 1
+                lbl_font = load_font('bold', lbl_font_size)
+                lbbox = draw.textbbox((0, 0), lbl_text, font=lbl_font)
+                lw = lbbox[2] - lbbox[0]
 
             # Sublabel
-            if 'sublabel' in item:
-                sub_font = load_font('regular', 14)
-                sub_text = item['sublabel']
+            sub_text = item.get('sublabel', '')
+            sub_font = load_font('regular', 14)
+            if sub_text:
                 sbbox = draw.textbbox((0, 0), sub_text, font=sub_font)
                 sw = sbbox[2] - sbbox[0]
-                draw.text((cx + (card_w - sw) // 2, cy + 20 + val_font_size + 36),
+                while sw > max_val_w and sub_font.size > 10:
+                    sub_font = load_font('regular', sub_font.size - 1)
+                    sbbox = draw.textbbox((0, 0), sub_text, font=sub_font)
+                    sw = sbbox[2] - sbbox[0]
+
+            # Calculate total content height and center vertically in card
+            val_h = val_font_size
+            lbl_h = lbl_font_size
+            sub_h = 14 if sub_text else 0
+            gap1 = 10  # value to label
+            gap2 = 6   # label to sublabel
+            content_h = val_h + gap1 + lbl_h + (gap2 + sub_h if sub_text else 0)
+            content_top = cy + (card_h - content_h) // 2
+
+            # Draw value
+            vbbox = draw.textbbox((0, 0), val_text, font=val_font)
+            vw = vbbox[2] - vbbox[0]
+            draw.text((cx + (card_w - vw) // 2, content_top), val_text,
+                      fill=accent, font=val_font)
+
+            # Draw label
+            lbbox = draw.textbbox((0, 0), lbl_text, font=lbl_font)
+            lw = lbbox[2] - lbbox[0]
+            draw.text((cx + (card_w - lw) // 2, content_top + val_h + gap1),
+                      lbl_text, fill=WHITE, font=lbl_font)
+
+            # Draw sublabel
+            if sub_text:
+                sbbox = draw.textbbox((0, 0), sub_text, font=sub_font)
+                sw = sbbox[2] - sbbox[0]
+                draw.text((cx + (card_w - sw) // 2, content_top + val_h + gap1 + lbl_h + gap2),
                           sub_text, fill=MID_GRAY, font=sub_font)
 
     elif viz_type == 'table':
@@ -496,48 +558,107 @@ def create_data_viz_card(viz_type, data, title=None, source=None,
         headers = data.get('headers', [])
         rows = data.get('rows', [])
         highlight_rows = data.get('highlight_rows', [])
+        col_weights = data.get('col_weights', None)  # optional proportional widths
 
         n_cols = len(headers)
-        table_w = WIDTH - 120
-        col_w = table_w // n_cols
-        row_h = max(36, min(44, (HEIGHT - y_cursor - 160) // (len(rows) + 1)))
+        table_margin = 60
+        table_w = WIDTH - table_margin * 2
 
-        # Header row
+        # Proportional column widths (auto-calculate from header text if not specified)
+        if col_weights is None:
+            measure_font = load_font('bold', 18)
+            col_weights = []
+            for j, hdr in enumerate(headers):
+                # Measure header width + longest cell in this column
+                hdr_w = draw.textbbox((0, 0), hdr, font=measure_font)[2]
+                max_cell_w = hdr_w
+                for row in rows:
+                    if j < len(row):
+                        cw = draw.textbbox((0, 0), str(row[j]), font=measure_font)[2]
+                        max_cell_w = max(max_cell_w, cw)
+                col_weights.append(max_cell_w + 40)  # padding
+        total_weight = sum(col_weights)
+        col_widths = [int(table_w * w / total_weight) for w in col_weights]
+
+        # Calculate row height to fill available space (between title and footer)
+        avail_bottom = HEIGHT - 160
+        total_rows = len(rows) + 1  # +1 for header
+        row_h = max(36, min(48, (avail_bottom - y_cursor) // total_rows))
+
+        # Vertically center the table
+        total_table_h = total_rows * row_h
+        table_top = y_cursor + ((avail_bottom - y_cursor) - total_table_h) // 2
+
+        # Outer table container with rounded corners
+        table_bottom = table_top + total_table_h
+        draw_rounded_rect(draw, (table_margin, table_top, WIDTH - table_margin, table_bottom),
+                          12, fill=(12, 24, 44))
+        draw_rounded_rect(draw, (table_margin, table_top, WIDTH - table_margin, table_bottom),
+                          12, outline=(28, 48, 72), width=1)
+
+        # Header row background (with rounded top corners)
+        hdr_y = table_top
+        draw_rounded_rect(draw, (table_margin, hdr_y, WIDTH - table_margin, hdr_y + row_h),
+                          12, fill=(16, 36, 60))
+        # Square off bottom corners of header (they're inside the table)
+        draw.rectangle([(table_margin, hdr_y + row_h - 12), (WIDTH - table_margin, hdr_y + row_h)],
+                       fill=(16, 36, 60))
+
+        # Header text
         hdr_font = load_font('bold', 18)
-        hdr_y = y_cursor
-        draw.rectangle([(60, hdr_y), (WIDTH - 60, hdr_y + row_h)],
-                       fill=(16, 36, 60))  # dark navy-teal tint
+        col_x = table_margin
         for j, hdr in enumerate(headers):
-            hx = 60 + j * col_w + col_w // 2
+            hx = col_x + col_widths[j] // 2
             hbbox = draw.textbbox((0, 0), hdr, font=hdr_font)
             hw = hbbox[2] - hbbox[0]
             draw.text((hx - hw // 2, hdr_y + (row_h - 18) // 2), hdr,
                       fill=TEAL, font=hdr_font)
-        y_cursor = hdr_y + row_h
+            col_x += col_widths[j]
+
+        # Thin separator line below header
+        sep_y = hdr_y + row_h
+        draw.line([(table_margin + 20, sep_y), (WIDTH - table_margin - 20, sep_y)],
+                  fill=(28, 48, 72), width=1)
 
         # Data rows
         cell_font = load_font('regular', 16)
         bold_font = load_font('bold', 16)
         for i, row in enumerate(rows):
-            ry = y_cursor + i * row_h
+            ry = table_top + (i + 1) * row_h
             # Alternating background
             if i % 2 == 0:
-                draw.rectangle([(60, ry), (WIDTH - 60, ry + row_h)],
-                               fill=(14, 26, 46))
+                # Check if this is the last row (needs rounded bottom corners)
+                if i == len(rows) - 1:
+                    draw_rounded_rect(draw, (table_margin, ry, WIDTH - table_margin, ry + row_h),
+                                      12, fill=(14, 26, 46))
+                    draw.rectangle([(table_margin, ry), (WIDTH - table_margin, ry + 12)],
+                                   fill=(14, 26, 46))
+                else:
+                    draw.rectangle([(table_margin, ry), (WIDTH - table_margin, ry + row_h)],
+                                   fill=(14, 26, 46))
+
             # Highlight row
             is_highlight = i in highlight_rows
             if is_highlight:
-                draw.rectangle([(60, ry), (WIDTH - 60, ry + row_h)],
-                               fill=(14, 40, 56))  # subtle teal tint
+                if i == len(rows) - 1:
+                    draw_rounded_rect(draw, (table_margin, ry, WIDTH - table_margin, ry + row_h),
+                                      12, fill=(14, 46, 62))
+                    draw.rectangle([(table_margin, ry), (WIDTH - table_margin, ry + 12)],
+                                   fill=(14, 46, 62))
+                else:
+                    draw.rectangle([(table_margin, ry), (WIDTH - table_margin, ry + row_h)],
+                                   fill=(14, 46, 62))
 
+            col_x = table_margin
             for j, cell in enumerate(row):
-                cx_center = 60 + j * col_w + col_w // 2
+                cx_center = col_x + col_widths[j] // 2
                 use_font = bold_font if is_highlight else cell_font
                 color = TEAL if is_highlight else WHITE
                 cbbox = draw.textbbox((0, 0), str(cell), font=use_font)
-                cw = cbbox[2] - cbbox[0]
-                draw.text((cx_center - cw // 2, ry + (row_h - 16) // 2),
+                cw_text = cbbox[2] - cbbox[0]
+                draw.text((cx_center - cw_text // 2, ry + (row_h - 16) // 2),
                           str(cell), fill=color, font=use_font)
+                col_x += col_widths[j]
 
     elif viz_type == 'comparison':
         # data = {'before': {'value': '48%', 'label': '...', 'sublabel': '...'}, 'after': {...}}
@@ -545,53 +666,87 @@ def create_data_viz_card(viz_type, data, title=None, source=None,
         after = data.get('after', {})
 
         panel_w = (WIDTH - 140) // 2
-        panel_h = 300
+        # Use available vertical space for taller panels
+        avail_bottom = HEIGHT - 160
+        panel_h = min(420, avail_bottom - y_cursor - 40)
+
+        # Vertically center panels in available space
+        panel_top = y_cursor + ((avail_bottom - y_cursor) - panel_h) // 2
 
         for i, (side, panel_data) in enumerate([(before, 'before'), (after, 'after')]):
             px = 60 + i * (panel_w + 20)
-            py = y_cursor + 20
+            py = panel_top
 
             # Panel background
             accent = CRIMSON if panel_data == 'before' else GREEN
             draw_rounded_rect(draw, (px, py, px + panel_w, py + panel_h),
                               16, fill=(18, 34, 58))
-            # Subtle accent border (mix accent with navy for dark mode)
+            # Subtle accent border
             border_color = tuple(max(20, c // 4) for c in accent[:3])
             draw_rounded_rect(draw, (px, py, px + panel_w, py + panel_h),
                               16, outline=border_color, width=2)
 
-            # Label at top
-            lbl = "BEFORE" if panel_data == 'before' else "AFTER"
-            lbl_font = load_font('bold', 18)
-            lbbox = draw.textbbox((0, 0), lbl, font=lbl_font)
-            lw = lbbox[2] - lbbox[0]
-            draw.text((px + (panel_w - lw) // 2, py + 20), lbl,
-                      fill=accent, font=lbl_font)
+            # Thin accent line at top of panel
+            draw_accent_line(draw, px + 30, py + 2, px + panel_w - 30, py + 2,
+                             color=accent, width=3)
 
-            # Big value
-            val_font = load_font('black', 72)
+            # Layout content vertically centered within panel
+            lbl = "BEFORE" if panel_data == 'before' else "AFTER"
+            lbl_font = load_font('bold', 20)
             val = side.get('value', '')
+            desc = side.get('label', '')
+            sub = side.get('sublabel', '')
+
+            # Auto-size value to fit panel width
+            val_font_size = 96
+            max_val_w = panel_w - 40
+            val_font = load_font('black', val_font_size)
             vbbox = draw.textbbox((0, 0), val, font=val_font)
             vw = vbbox[2] - vbbox[0]
-            draw.text((px + (panel_w - vw) // 2, py + 60), val,
+            while vw > max_val_w and val_font_size > 36:
+                val_font_size -= 4
+                val_font = load_font('black', val_font_size)
+                vbbox = draw.textbbox((0, 0), val, font=val_font)
+                vw = vbbox[2] - vbbox[0]
+
+            desc_font = load_font('bold', 16)
+            sub_font = load_font('regular', 14)
+
+            # Calculate content block height for vertical centering
+            lbl_h = 20
+            gap1 = 16
+            val_h = val_font_size
+            gap2 = 16
+            desc_h = 16
+            gap3 = 8
+            sub_h = 14 if sub else 0
+            content_h = lbl_h + gap1 + val_h + gap2 + desc_h + (gap3 + sub_h if sub else 0)
+            content_top = py + (panel_h - content_h) // 2
+
+            # Draw label
+            lbbox = draw.textbbox((0, 0), lbl, font=lbl_font)
+            lw = lbbox[2] - lbbox[0]
+            draw.text((px + (panel_w - lw) // 2, content_top), lbl,
+                      fill=accent, font=lbl_font)
+
+            # Draw value
+            vbbox = draw.textbbox((0, 0), val, font=val_font)
+            vw = vbbox[2] - vbbox[0]
+            draw.text((px + (panel_w - vw) // 2, content_top + lbl_h + gap1), val,
                       fill=accent, font=val_font)
 
-            # Description
-            desc_font = load_font('bold', 16)
-            desc = side.get('label', '')
+            # Draw description
             dbbox = draw.textbbox((0, 0), desc, font=desc_font)
             dw = dbbox[2] - dbbox[0]
-            draw.text((px + (panel_w - dw) // 2, py + 160), desc,
-                      fill=WHITE, font=desc_font)
+            draw.text((px + (panel_w - dw) // 2, content_top + lbl_h + gap1 + val_h + gap2),
+                      desc, fill=WHITE, font=desc_font)
 
-            # Sublabel
-            if 'sublabel' in side:
-                sub_font = load_font('regular', 13)
-                sub = side['sublabel']
+            # Draw sublabel
+            if sub:
                 sbbox = draw.textbbox((0, 0), sub, font=sub_font)
                 sw = sbbox[2] - sbbox[0]
-                draw.text((px + (panel_w - sw) // 2, py + 190), sub,
-                          fill=MID_GRAY, font=sub_font)
+                draw.text((px + (panel_w - sw) // 2, content_top + lbl_h + gap1 + val_h + gap2 + desc_h + gap3),
+                          sub, fill=MID_GRAY, font=sub_font)
 
     # Source attribution
     if source:
