@@ -131,6 +131,14 @@ These councillors are paid a basic allowance of several thousand pounds per year
 
 Voters in Gannow, Brunshaw and Trinity should ask their candidates on the doorstep: will you turn up?
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/burnley-elections-cover.jpg">
+<source src="/videos/burnley-elections-2026-attendance.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 65-second video summary with voiceover</p>
+
 <div class="viz-panel viz-panel-bordered">
 
 **Data source:** All attendance figures are from Burnley Borough Council's published records on [ModernGov](https://burnley.moderngov.co.uk/mgUserAttendanceSummary.aspx). "Last 6 months" covers the current municipal year (September 2025 to March 2026). Full-term figures run from 5 May 2022 (or by-election date) to 17 March 2026. Attendance includes all committees the councillor was a member of.

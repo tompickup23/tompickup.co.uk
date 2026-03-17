@@ -382,6 +382,30 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     margin: 2rem 0;
   }
 
+  /* Video embeds */
+  .prose :global(.article-video) {
+    margin: 2rem auto;
+    max-width: 360px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .prose :global(.article-video video) {
+    width: 100%;
+    display: block;
+    border-radius: 16px;
+  }
+
+  .prose :global(.article-video-label) {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted, #8e8e93);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
   .prose :global(hr) {
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
