@@ -4,6 +4,7 @@ date: 2026-03-16
 description: "Eight years of Conservative control left Lancashire County Council with at least £921.5 million of audited losses, overspends and subsidy costs - rising to £1.27 billion when unrealised bond losses are included. More than the total cost of repairing every road in Lancashire. Every figure sourced to official council accounts."
 image: "/images/tory-legacy-cover.jpg"
 tags: ["lancashire", "reform", "finance", "highways", "waste"]
+draft: true
 featured: true
 ---
 

@@ -92,6 +92,12 @@ ARTICLE_PRESETS = {
         'subtext': 'Stocks Massey Bequest Fund, 2025',
         'color': 'teal',
     },
+    'reform-lancashire-9-months': {
+        'stat': '9',
+        'headline': 'Months of Reform: Lancashire by the Numbers',
+        'subtext': 'Lancashire County Council, May 2025 - March 2026',
+        'color': 'teal',
+    },
 }
 
 

@@ -2312,10 +2312,130 @@ def generate_stocks_massey_video(duration=45, no_voice=False):
 
 
 # ============================================================
+# ARTICLE: 9 Months of Reform - Lancashire by the Numbers
+# ============================================================
+
+def generate_9_months_video(duration=45, no_voice=False):
+    """9 Months of Reform: Lancashire by the Numbers."""
+    set_marquee_text(
+        "9 Months of Reform  \u2022  Lancashire County Council  \u2022  "
+        "The Numbers Don't Lie  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
+    scenes = []
+
+    # HOOK: 9 months, 53 seats
+    scenes.append(StatCountScene(
+        name="hook_53_seats",
+        duration=5.0,
+        target_value=53,
+        suffix="",
+        label="Reform UK seats at Lancashire County Council",
+        sublabel="63% majority, won 1 May 2025",
+        extra_lines=["First time a party outside Con/Lab controlled a county council"],
+        voiceover_text="On the first of May twenty twenty-five, Reform UK won fifty-three of eighty-four seats at Lancashire County Council. The first time any party outside the Conservatives or Labour had controlled a county council in England.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_1", duration=1.0))
+
+    # Council tax
+    scenes.append(StatCountScene(
+        name="ct_380",
+        duration=5.0,
+        target_value=380,
+        suffix="",
+        label="Three point eight zero percent council tax rise",
+        sublabel="Lowest in Lancashire in 12 years",
+        is_fraction=True,
+        fraction_text="3.80%",
+        extra_lines=[
+            "Conservatives: 4.99% in 7 of 8 years",
+            "Reform: 2.00% general + 1.80% social care",
+        ],
+        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in Lancashire in twelve years. The Conservatives raised it by the legal maximum in seven of their eight years.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_2", duration=1.0))
+
+    # Savings delivery comparison
+    scenes.append(AnimatedBarChartScene(
+        name="savings_compare",
+        duration=5.0,
+        title="Savings Programme Delivery",
+        data=[
+            ("Conservative", "2024/25", "Conservative", 48, "48%"),
+            ("Reform UK", "2025/26 Q3", "Reform UK", 100, "100%"),
+        ],
+        subtitle="Hitting targets vs missing them",
+        voiceover_text="The Conservative savings programme delivered just forty-eight percent. Under Reform, the savings programme is hitting one hundred percent of its targets.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_3", duration=1.0))
+
+    # Potholes
+    scenes.append(StatCountScene(
+        name="potholes_42",
+        duration=4.5,
+        target_value=42,
+        suffix="%",
+        label="Pothole reduction in 6 months",
+        sublabel="AI sensors on bin lorries, 3-year resurfacing plan",
+        voiceover_text="Reported potholes fell by forty-two percent in the first six months. AI sensors on bin lorries now identify defects before residents report them.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_4", duration=1.0))
+
+    # Care homes
+    scenes.append(StatCountScene(
+        name="care_homes_5",
+        duration=4.5,
+        target_value=5,
+        suffix="",
+        label="Care homes saved from closure",
+        sublabel="1,600 consultation respondents, all five kept open",
+        voiceover_text="The Conservatives planned to close five county care homes. Reform cancelled those closures. All five remain open, after a public consultation with sixteen hundred respondents.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_5", duration=1.0))
+
+    # Financial damage
+    scenes.append(StatCountScene(
+        name="damage_921m",
+        duration=5.0,
+        target_value=921,
+        suffix="M",
+        label="Financial damage left by the Conservatives",
+        sublabel="LCC Statement of Accounts, 2017-2025",
+        extra_lines=[
+            "Treasury losses, overspends, disposal losses",
+            "Rising to \u00a31.27 billion including unrealised bond losses",
+        ],
+        voiceover_text="The Conservatives left nine hundred and twenty-one million pounds of documented financial damage across eight years. Treasury losses. Overspends. Disposal losses. All in the audited accounts.",
+    ))
+
+    # CTA
+    scenes.append(CTAScene(
+        name="cta",
+        duration=4.0,
+        text="Read the full scorecard",
+        url="tompickup.co.uk",
+        voiceover_text="Nine months in. The numbers tell the story. Visit tompickup.co.uk for the full breakdown.",
+    ))
+
+    return scenes
+
+
+# ============================================================
 # ARTICLE REGISTRY
 # ============================================================
 
 ARTICLE_GENERATORS = {
+    "reform-lancashire-9-months": generate_9_months_video,
     "burnley-elections-2026-attendance": generate_burnley_elections_video,
     "lcc-tory-legacy-921m-losses": generate_tory_legacy_video,
     "lancashire-highways-650m-backlog": generate_highways_video,

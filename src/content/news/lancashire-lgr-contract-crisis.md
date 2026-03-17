@@ -4,6 +4,7 @@ date: 2026-03-10
 description: "Lancashire has an estimated 3,200 live contracts worth £3.7 billion across 15 councils. Every single one needs dealing with before Local Government Reorganisation can work. The government's 18-month timeline does not account for any of this."
 image: "/images/lgr-contracts-cover.jpg"
 tags: ["lancashire", "lgr", "reform", "contracts", "transparency"]
+draft: true
 featured: true
 ---
 

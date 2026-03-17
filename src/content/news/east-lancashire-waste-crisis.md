@@ -4,6 +4,7 @@ date: 2026-03-04
 description: "A failed £2 billion PFI, a paused £600 million procurement, and a decade of indecision. How Reform's first open tender saved East Lancashire taxpayers millions."
 image: "/images/waste-crisis-cover.jpg"
 tags: ["lancashire", "waste", "reform", "procurement"]
+draft: true
 featured: true
 ---
 
