@@ -547,6 +547,16 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     color: #ffffff;
   }
 
+  .prose :global(.reform-row td) {
+    color: #12b6cf !important;
+    font-weight: 600;
+    background: rgba(18, 182, 207, 0.06);
+  }
+
+  .prose :global(.reform-row td strong) {
+    color: #12b6cf !important;
+  }
+
   /* Article footer */
   .article-footer {
     margin-top: 3rem;
@@ -1390,8 +1400,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     .prose :global(tbody),
     .prose :global(tr) {
       display: table;
-      width: 100%;
-      table-layout: fixed;
+      min-width: 100%;
+      table-layout: auto;
     }
     .prose :global(th),
     .prose :global(td) {

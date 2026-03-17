@@ -207,7 +207,7 @@ To understand how fixable this is, consider what Westminster chooses to spend el
 
 *Sources: House of Commons Library (ODA), Home Office (asylum accommodation), Full Fact (Chagos NPV), Construction Enquirer (HS2), ALARM Survey 2026 (national backlog).*
 
-Reform is doing what it can within the budget. A three-year **£45 million resurfacing programme** targets the 100 worst roads. AI-equipped sensors on bin lorries scan road surfaces during normal collection rounds, identifying defects before they become complaints.
+Reform is doing what it can within the budget. A three-year **£45 million resurfacing programme** targets the 100 worst roads.
 
 <div class="viz-panel-reform">
 <div class="viz-label teal">Westminster Waste vs Lancashire Roads</div>
@@ -264,7 +264,7 @@ But the trajectory has changed. We reversed the 4.99% rot with the lowest counci
 
 We are just getting started.
 
-The next article in this series will break down exactly where your council tax goes, band by band, line by line.
+The next article in this series breaks down exactly where your council tax goes.
 
 <div class="viz-callout">
 <p style="font-size: 1.125rem; font-weight: 600; color: #f0f0f5; margin: 0 0 8px;">Every figure in this article is sourced to official Lancashire County Council records.</p>

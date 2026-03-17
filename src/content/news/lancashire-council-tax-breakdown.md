@@ -135,19 +135,24 @@ The Conservatives used the full ASC precept AND hit the core cap too. Their tota
 
 For ten consecutive years under Conservative-led administrations, council tax rose every single year. The table below shows the core rate, ASC precept, and the government referendum cap for each year.
 
-| Year | Control | Core Rise | Core Cap | ASC Rise | ASC Cap | Total |
-|------|---------|-----------|----------|----------|---------|-------|
-| 2016/17 | Conservative (NOC) | 1.99% | 2% | 2.00% | 2% | 3.99% |
-| 2017/18 | Conservative (NOC) | 1.99% | 2% | 2.00% | 3% | 3.99% |
-| 2018/19 | Conservative | 2.99% | 3% | 3.00% | 3% | **5.99%** |
-| 2019/20 | Conservative | 1.99% | 3% | 2.00% | 2% | 3.99% |
-| 2020/21 | Conservative | 1.99% | 2% | 2.00% | 2% | 3.99% |
-| 2021/22 | Conservative | 1.99% | 2% | 2.00% | 3% | 3.99% |
-| 2022/23 | Conservative | 1.99% | 2% | 2.00% | 1% | 3.99% |
-| 2023/24 | Conservative | 1.99% | 3% | 2.00% | 2% | 3.99% |
-| 2024/25 | Conservative | 2.99% | 3% | 2.00% | 2% | **4.99%** |
-| 2025/26 | Conservative* | 2.99% | 3% | 2.00% | 2% | **4.99%** |
-| <span style="color: #12b6cf;">**2026/27**</span> | <span style="color: #12b6cf;">**Reform UK**</span> | <span style="color: #12b6cf;">**1.80%**</span> | <span style="color: #12b6cf;">**3%**</span> | <span style="color: #12b6cf;">**2.00%**</span> | <span style="color: #12b6cf;">**2%**</span> | <span style="color: #12b6cf;">**3.80%**</span> |
+<table>
+<thead>
+<tr><th>Year</th><th>Control</th><th>Core Rise</th><th>Core Cap</th><th>ASC Rise</th><th>ASC Cap</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><td>2016/17</td><td>Conservative (NOC)</td><td>1.99%</td><td>2%</td><td>2.00%</td><td>2%</td><td>3.99%</td></tr>
+<tr><td>2017/18</td><td>Conservative (NOC)</td><td>1.99%</td><td>2%</td><td>2.00%</td><td>3%</td><td>3.99%</td></tr>
+<tr><td>2018/19</td><td>Conservative</td><td>2.99%</td><td>3%</td><td>3.00%</td><td>3%</td><td><strong>5.99%</strong></td></tr>
+<tr><td>2019/20</td><td>Conservative</td><td>1.99%</td><td>3%</td><td>2.00%</td><td>2%</td><td>3.99%</td></tr>
+<tr><td>2020/21</td><td>Conservative</td><td>1.99%</td><td>2%</td><td>2.00%</td><td>2%</td><td>3.99%</td></tr>
+<tr><td>2021/22</td><td>Conservative</td><td>1.99%</td><td>2%</td><td>2.00%</td><td>3%</td><td>3.99%</td></tr>
+<tr><td>2022/23</td><td>Conservative</td><td>1.99%</td><td>2%</td><td>2.00%</td><td>1%</td><td>3.99%</td></tr>
+<tr><td>2023/24</td><td>Conservative</td><td>1.99%</td><td>3%</td><td>2.00%</td><td>2%</td><td>3.99%</td></tr>
+<tr><td>2024/25</td><td>Conservative</td><td>2.99%</td><td>3%</td><td>2.00%</td><td>2%</td><td><strong>4.99%</strong></td></tr>
+<tr><td>2025/26</td><td>Conservative*</td><td>2.99%</td><td>3%</td><td>2.00%</td><td>2%</td><td><strong>4.99%</strong></td></tr>
+<tr class="reform-row"><td><strong>2026/27</strong></td><td><strong>Reform UK</strong></td><td><strong>1.80%</strong></td><td><strong>3%</strong></td><td><strong>2.00%</strong></td><td><strong>2%</strong></td><td><strong>3.80%</strong></td></tr>
+</tbody>
+</table>
 
 *2016/17 and 2017/18 budgets were set by Conservative-led No Overall Control administrations. 2025/26 budget was set by the outgoing Conservative administration before the May 2025 election.*
 
