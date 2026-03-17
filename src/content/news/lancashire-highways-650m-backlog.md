@@ -697,6 +697,14 @@ And every repair now comes with a **12-month guarantee**. If it fails within a y
 </div>
 </div>
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/highways-backlog-cover.jpg">
+<source src="/videos/lancashire-highways-650m-backlog.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 19-second video summary with voiceover</p>
+
 <div style="margin: 32px 0 0; padding: 16px 20px; background: rgba(48, 209, 88, 0.04); border: 1px solid rgba(48, 209, 88, 0.15); border-radius: 12px; display: flex; align-items: flex-start; gap: 10px;">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
 <span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: LCC Budget Book 2026/27 (Final Settlement version). GOV.UK MHCLG Revenue Outturn Service Expenditure. DfT Highways Maintenance Block Allocations 2025-2030. DfT Local Transport Grant Allocations 2025-2030. ALARM Survey 2021-2025 (Asphalt Industry Alliance). LCC Highways Maintenance Transparency Report. House of Commons Library CBP-9975. Institute for Fiscal Studies settlement analyses. County Councils Network. District Councils Network. National Audit Office: The Condition and Maintenance of Local Roads in England (July 2024). Local Government Association road maintenance analysis. Home Office: Asylum Support Costs 2023/24. National Audit Office: Asylum Accommodation Contracts. IEA: Robin Hood in Reverse (foreign aid analysis). FCDO: Statistics on International Development. Chagos Islands Treaty financial disclosures. Asylum Statistics UK dispersal data. LCC Budget Reform First Year Analysis (bond portfolio losses).</span>

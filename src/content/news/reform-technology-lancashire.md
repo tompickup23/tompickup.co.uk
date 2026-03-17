@@ -137,6 +137,14 @@ Reform inherited all of this. In ten months, the direction has reversed.
 
 This is what accountable governance looks like. Not press releases. Not promises. Technology applied with purpose, transparency by default, and results you can measure.
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/reform-technology-cover.jpg">
+<source src="/videos/reform-technology-lancashire.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 18-second video summary with voiceover</p>
+
 <div class="viz-sources">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
 <span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: LCC Budget Book 2026/27. LCC Highways Maintenance Transparency Report. LCC Digital Strategy 2025-2029. Dave Dwyer, Cabinet Member for Data, Technology, Customer and Efficiency (LCC Cabinet Reports, 2025-26). Netcall Platform Contract (LCC procurement, 2025). SEND Transport Cost Analysis (LCC, 2025/26). Samlesbury Innovation Hub Business Case. Asphalt Industry Alliance ALARM Survey 2025.</span>

@@ -217,6 +217,14 @@ Twenty years of institutional failure. A &pound;2 billion PFI that collapsed. A 
 
 Reform acted. Open tender. Law followed. Taxpayer benefits.
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/waste-crisis-cover.jpg">
+<source src="/videos/east-lancashire-waste-crisis.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 19-second video summary with voiceover</p>
+
 <div style="background: rgba(18, 182, 207, 0.08); border: 1px solid rgba(18, 182, 207, 0.2); border-radius: 12px; padding: 20px; margin: 2rem 0;">
 <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #12b6cf;">Data Sources</span>
 <p style="font-size: 0.875rem; color: #8e8e93; margin: 8px 0 0; line-height: 1.6;">

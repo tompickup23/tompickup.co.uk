@@ -1287,11 +1287,501 @@ def generate_burnley_elections_video(duration=45, no_voice=False):
 
 
 # ============================================================
+# ARTICLE: Tory Legacy - £1.27 Billion Losses
+# ============================================================
+
+def generate_tory_legacy_video(duration=45, no_voice=False):
+    """The Tory Legacy: Up to £1.27 Billion of Financial Damage at LCC."""
+    scenes = []
+
+    # HOOK: The number
+    scenes.append(StatCountScene(
+        name="hook_1_27bn",
+        duration=5.0,
+        target_value=1270,
+        suffix="M",
+        label="Financial damage at Lancashire County Council",
+        sublabel="Eight years of Conservative control",
+        party="Conservative",
+        extra_lines=["Every figure from official council accounts."],
+        voiceover_text="One point two seven billion pounds. That's the financial damage left by eight years of Conservative control at Lancashire County Council.",
+        caption_phrases=[(0.6, "Every figure from official accounts")],
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="HOW DID THIS HAPPEN?"))
+
+    # ESCALATE: Key loss categories
+    scenes.append(AnimatedBarChartScene(
+        name="loss_breakdown",
+        duration=5.5,
+        title="Where the Money Went",
+        data=[
+            ("Treasury Losses", "Investments", "Conservative", 42, "£416.9M"),
+            ("UKMBA Bond Losses", "Est. sale loss", "Conservative", 35, "£350M"),
+            ("Disposal & Academy", "Asset transfers", "Conservative", 16, "£160M"),
+            ("Overspends", "Annual deficits", "Conservative", 7, "£94.3M"),
+        ],
+        subtitle="Official Statement of Accounts figures",
+        voiceover_text="Treasury investment losses. Bond portfolio write-downs. Asset disposal failures. Annual overspends. All on their watch.",
+        caption_phrases=[(0.65, "Statement of Accounts 2017-2025")],
+    ))
+
+    # BETRAY: Peak year
+    scenes.append(StatCountScene(
+        name="peak_year",
+        duration=4.5,
+        target_value=274,
+        suffix="M",
+        label="Worst single year: 2022/23",
+        sublabel="Two hundred and seventy-four million pounds",
+        party="Conservative",
+        extra_lines=["More than the entire highways backlog fix."],
+        voiceover_text="Their worst year. Two hundred and seventy-four million pounds lost in a single year. More than it costs to fix every road in Lancashire.",
+    ))
+
+    scenes.append(TransitionScene("trans_2", 0.4, flash_text="NOBODY KNEW"))
+
+    # CONTRAST: Hidden from public
+    scenes.append(TextRevealScene(
+        name="hidden",
+        duration=5.0,
+        heading="Hidden in the\nSmall Print",
+        body_lines=[
+            "Buried in Statement of Accounts.",
+            "",
+            "No headlines. No scrutiny.",
+            "",
+            "While they raised your",
+            "council tax every year.",
+            "",
+            "£514 added to Band D bills",
+            "over eight budgets.",
+        ],
+        voiceover_text="All buried in the small print of the Statement of Accounts. No headlines. While they raised your council tax by five hundred and fourteen pounds.",
+    ))
+
+    # VINDICATE: Reform exposed it
+    scenes.append(TextRevealScene(
+        name="vindicate",
+        duration=5.0,
+        heading="Reform Exposed\nthe Full Damage",
+        body_lines=[
+            "Every figure sourced.",
+            "Every page referenced.",
+            "",
+            "Eight years of accounts.",
+            "Line by line.",
+            "",
+            "Now you know what they did",
+            "with your money.",
+        ],
+        accent_color=COLORS['teal'],
+        voiceover_text="Reform went through eight years of accounts, line by line. Every figure sourced. Now you know what they did with your money.",
+    ))
+
+    # CTA
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="Read the full investigation",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full investigation at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: Highways £650M Backlog
+# ============================================================
+
+def generate_highways_video(duration=45, no_voice=False):
+    """Lancashire's Roads: A £650 Million Backlog."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_650m",
+        duration=5.0,
+        target_value=650,
+        suffix="M",
+        label="Lancashire's highways maintenance backlog",
+        sublabel="And the real figure is likely far higher",
+        party="Conservative",
+        extra_lines=["7,035 km of roads. 1,832 bridges. 163,000 streetlights."],
+        voiceover_text="Six hundred and fifty million pounds. That's the backlog on Lancashire's roads. Twelve years of Conservative neglect built it.",
+        caption_phrases=[(0.55, "7,035 km of roads falling apart")],
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="WHAT REFORM DID"))
+
+    # Bar chart: AI results
+    scenes.append(AnimatedBarChartScene(
+        name="ai_results",
+        duration=5.0,
+        title="AI Sensors on Every Road",
+        data=[
+            ("Defects Found", "Before AI", "Conservative", 100, "61,000"),
+            ("Defects Found", "After AI (12 months)", "Reform UK", 57, "35,000"),
+        ],
+        subtitle="42% reduction in outstanding defects",
+        voiceover_text="Reform put AI sensors on bin lorries. Every road scanned every week. Defects down forty-two percent in twelve months.",
+        caption_phrases=[(0.6, "42% fewer defects in 12 months")],
+    ))
+
+    # Contrast
+    scenes.append(TextRevealScene(
+        name="contrast",
+        duration=5.0,
+        heading="Old System vs\nReform's Approach",
+        body_lines=[
+            "Before: Manual inspections.",
+            "Less than 5% of defects caught.",
+            "",
+            "Now: AI scans every road,",
+            "every week.",
+            "",
+            "Repair costs halved.",
+            "Average repair size tripled.",
+        ],
+        voiceover_text="The old system caught less than five percent of defects. Reform's AI catches them all. Repair costs halved. Average repair size tripled.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="See the full highways analysis",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full highways analysis at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: East Lancashire Waste Crisis
+# ============================================================
+
+def generate_waste_crisis_video(duration=45, no_voice=False):
+    """East Lancashire's Waste Crisis: A Decade of Failure."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_2bn",
+        duration=5.0,
+        target_value=2,
+        suffix="BN",
+        label="Failed PFI deal that started it all",
+        sublabel="Global Renewables: collapsed, abandoned",
+        party="Conservative",
+        extra_lines=["Then a £600M procurement was paused. A decade of indecision."],
+        voiceover_text="A two billion pound PFI that collapsed. Then a six hundred million procurement shelved. A decade of waste sitting in landfill.",
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="THE COST OF INDECISION"))
+
+    scenes.append(StatCountScene(
+        name="cost_spiral",
+        duration=4.5,
+        target_value=25,
+        suffix="%",
+        label="Waste costs up 25% in four years",
+        sublabel="£75.5M to £94.3M per year",
+        party="Conservative",
+        extra_lines=["£8-10 million extra per year across East Lancashire."],
+        voiceover_text="While they dithered, waste costs spiralled twenty-five percent in four years. Eight to ten million extra every year.",
+    ))
+
+    scenes.append(TransitionScene("trans_2", 0.35, flash_text="REFORM FIXED IT"))
+
+    scenes.append(TextRevealScene(
+        name="vindicate",
+        duration=5.0,
+        heading="First Open Tender\nin a Generation",
+        body_lines=[
+            "Reform put it out to bid.",
+            "",
+            "Result: £60.3 million contract.",
+            "Local processing in Burnley.",
+            "",
+            "No more trucking waste",
+            "25 miles to Farington.",
+            "",
+            "Projected savings:",
+            "£6.3 million per year.",
+        ],
+        accent_color=COLORS['teal'],
+        voiceover_text="Reform put it out to open tender. Result: sixty million pound contract, local processing in Burnley, six point three million saved per year.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="Read the full waste investigation",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full investigation at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: LGR £3.7 Billion Contract Crisis
+# ============================================================
+
+def generate_lgr_contracts_video(duration=45, no_voice=False):
+    """Lancashire's £3.7 Billion Contract Problem."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_3200",
+        duration=5.0,
+        target_value=3200,
+        suffix="",
+        label="Active contracts across 15 Lancashire councils",
+        sublabel="Worth £3.7 billion in total",
+        extra_lines=["Every one needs dealing with before LGR."],
+        voiceover_text="Three thousand two hundred active contracts. Three point seven billion pounds. Every single one needs dealing with before they reorganise Lancashire.",
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="18 MONTHS. REALLY?"))
+
+    scenes.append(AnimatedBarChartScene(
+        name="mega_contracts",
+        duration=5.5,
+        title="Mega-Contracts Crossing Vesting",
+        data=[
+            ("SEND Schools", "6 years", "Conservative", 92, "£920M"),
+            ("Transition to Adult", "10 years", "Conservative", 66, "£660M"),
+            ("Residential Care", "8 years", "Conservative", 70, "£700M"),
+        ],
+        subtitle="Awarded by outgoing councils, inherited by new ones",
+        voiceover_text="Nine hundred and twenty million. Six hundred and sixty million. Seven hundred million. Mega-contracts awarded by outgoing councils, inherited by new ones who had no say.",
+    ))
+
+    scenes.append(TextRevealScene(
+        name="context",
+        duration=5.0,
+        heading="The Government's\n18-Month Fantasy",
+        body_lines=[
+            "Dorset had 800 contracts.",
+            "Took 24 months.",
+            "",
+            "Lancashire has 3,200.",
+            "Four times the complexity.",
+            "",
+            "The government's timeline",
+            "does not account for this.",
+        ],
+        voiceover_text="Dorset had eight hundred contracts and took twenty-four months. Lancashire has four times that. The government's timeline is a fantasy.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="Read the contract analysis",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full analysis at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: Reform's First Budget
+# ============================================================
+
+def generate_budget_video(duration=45, no_voice=False):
+    """Reform's First Budget: The Numbers Don't Lie."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_380",
+        duration=4.5,
+        target_value=380,
+        suffix="",
+        label="3.80% - Lowest council tax rise in a decade",
+        sublabel="Reform's first budget, 2026/27",
+        extra_lines=["Balanced. No front-line cuts. £1.33 billion."],
+        voiceover_text="Three point eight percent. The lowest council tax rise in a decade. Reform's first budget.",
+        caption_phrases=[(0.55, "Lowest in a decade")],
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="COMPARE THAT"))
+
+    scenes.append(AnimatedBarChartScene(
+        name="ct_comparison",
+        duration=5.5,
+        title="Council Tax Rises: A Decade",
+        data=[
+            ("Labour 17/18", "", "Labour", 80, "3.99%"),
+            ("Conservative avg", "8 budgets", "Conservative", 100, "4.99%"),
+            ("Reform 26/27", "First budget", "Reform UK", 76, "3.80%"),
+        ],
+        subtitle="Band D council tax increase per year",
+        voiceover_text="Labour. Three point nine nine. Conservatives averaged nearly five percent over eight budgets. Reform. Three point eight.",
+        caption_phrases=[(0.7, "+£514 added under Conservatives")],
+    ))
+
+    scenes.append(StatCountScene(
+        name="savings",
+        duration=4.5,
+        target_value=62,
+        suffix="M",
+        label="Savings identified - 5% of net budget",
+        sublabel="No front-line service cuts",
+        extra_lines=["Inherited a £28 million overspend. Fixed it."],
+        voiceover_text="Sixty-two million in savings found. Five percent of the entire budget. No front-line cuts. We inherited a twenty-eight million overspend and fixed it.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="See the budget breakdown",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full budget breakdown at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: Reform Technology Lancashire
+# ============================================================
+
+def generate_technology_video(duration=45, no_voice=False):
+    """How Reform Is Using Technology to Transform Lancashire."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_42pct",
+        duration=4.5,
+        target_value=42,
+        suffix="%",
+        label="Fewer road defects in just 12 months",
+        sublabel="AI sensors deployed on bin lorries",
+        extra_lines=["61,000 down to 35,000 outstanding defects."],
+        voiceover_text="Forty-two percent fewer road defects. In just twelve months. AI sensors on bin lorries scanning every road, every week.",
+        caption_phrases=[(0.55, "61,000 → 35,000 defects")],
+    ))
+
+    scenes.append(TransitionScene("trans_1", 0.35, flash_text="THAT'S JUST THE START"))
+
+    scenes.append(AnimatedBarChartScene(
+        name="tech_wins",
+        duration=5.5,
+        title="Technology Wins",
+        data=[
+            ("Road Defects", "AI detection", "Reform UK", 42, "Down 42%"),
+            ("SEND Transport", "Route optimisation", "Reform UK", 30, "Down 30%"),
+            ("Staff Trained", "Microsoft Copilot", "Reform UK", 70, "1,400"),
+        ],
+        subtitle="Results in Reform's first year",
+        voiceover_text="Road defects down forty-two percent. SEND transport costs down thirty percent. Fourteen hundred staff trained on AI tools.",
+    ))
+
+    scenes.append(TextRevealScene(
+        name="old_system",
+        duration=4.5,
+        heading="What We Inherited",
+        body_lines=[
+            "Paper-based inspections.",
+            "Less than 5% of defects caught.",
+            "",
+            "Legacy IT systems.",
+            "No digital front door.",
+            "",
+            "Twelve years of Conservative",
+            "technological neglect.",
+        ],
+        voiceover_text="We inherited paper-based inspections that caught less than five percent of defects. Legacy IT. No digital front door. Twelve years of neglect.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="See Reform's tech transformation",
+        url="tompickup.co.uk",
+        voiceover_text="Read the full story at tompickup.co.uk",
+    ))
+
+    return scenes
+
+
+# ============================================================
+# ARTICLE: Stocks Massey Bequest
+# ============================================================
+
+def generate_stocks_massey_video(duration=45, no_voice=False):
+    """Stocks Massey Bequest 2025 Awards."""
+    scenes = []
+
+    scenes.append(StatCountScene(
+        name="hook_18k",
+        duration=4.5,
+        target_value=18,
+        suffix="K",
+        label="Awarded to 15 Burnley organisations in 2025",
+        sublabel="Edward Stocks Massey Bequest Fund",
+        extra_lines=["A gift to Burnley since 1909. Still giving."],
+        voiceover_text="Eighteen thousand pounds. Awarded to fifteen Burnley organisations. From a fund established in nineteen oh nine.",
+    ))
+
+    scenes.append(AnimatedBarChartScene(
+        name="awards",
+        duration=5.0,
+        title="2025 Awards Breakdown",
+        data=[
+            ("Towneley Hall", "Restoration", "Reform UK", 36, "£4,000"),
+            ("Mechanics Theatre", "Programme", "Reform UK", 27, "£3,000"),
+            ("Music Centre", "Education", "Reform UK", 18, "£2,000"),
+            ("Libraries", "Activities", "Reform UK", 18, "£2,000"),
+        ],
+        subtitle="Supporting arts, culture and education in Burnley",
+        voiceover_text="Towneley Hall. The Mechanics Theatre. Burnley Music Centre. Public libraries. Arts, culture, and education.",
+    ))
+
+    scenes.append(TextRevealScene(
+        name="apply",
+        duration=4.5,
+        heading="2026 Applications\nOpen Late April",
+        body_lines=[
+            "Does your Burnley",
+            "organisation do good work?",
+            "",
+            "Educational, cultural,",
+            "or community benefit?",
+            "",
+            "Applications open late April.",
+            "Get in touch for details.",
+        ],
+        accent_color=COLORS['teal'],
+        voiceover_text="Applications for twenty twenty-six open late April. If your Burnley organisation does good work, get in touch.",
+    ))
+
+    scenes.append(CTAScene(
+        name="cta",
+        duration=3.5,
+        text="Learn more and apply",
+        url="tompickup.co.uk",
+        voiceover_text="Visit tompickup.co.uk for details.",
+    ))
+
+    return scenes
+
+
+# ============================================================
 # ARTICLE REGISTRY
 # ============================================================
 
 ARTICLE_GENERATORS = {
     "burnley-elections-2026-attendance": generate_burnley_elections_video,
+    "lcc-tory-legacy-921m-losses": generate_tory_legacy_video,
+    "lancashire-highways-650m-backlog": generate_highways_video,
+    "east-lancashire-waste-crisis": generate_waste_crisis_video,
+    "lancashire-lgr-contract-crisis": generate_lgr_contracts_video,
+    "lcc-budget-reform-first-year": generate_budget_video,
+    "reform-technology-lancashire": generate_technology_video,
+    "stocks-massey-bequest-2025": generate_stocks_massey_video,
 }
 
 

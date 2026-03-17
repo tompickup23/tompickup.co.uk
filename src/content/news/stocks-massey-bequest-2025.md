@@ -90,3 +90,11 @@ Contact Burnley Borough Council's Democracy Unit on <strong style="color: #fffff
 **Key dates:** Application window opens late April. Public notice in the Burnley Express. Advisory committee decisions are final, and past awards do not guarantee future funding.
 
 If your organisation does good work in Burnley's arts, education or cultural life, I'd encourage you to apply. [Get in touch](/contact) if you have questions.
+
+<div class="article-video">
+<video controls preload="metadata" poster="/images/stocks-massey-cover.jpg">
+<source src="/videos/stocks-massey-bequest-2025.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 18-second video summary with voiceover</p>

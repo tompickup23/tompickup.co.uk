@@ -522,6 +522,14 @@ This article uses official Lancashire County Council or government sources only.
 
 The &pound;921.5 million documented total and the &pound;1.27 billion upper bound both come from official council sources. Every figure cites its specific page number and year.
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/tory-legacy-cover.jpg">
+<source src="/videos/lcc-tory-legacy-921m-losses.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 30-second video summary with voiceover</p>
+
 <div style="background: rgba(18, 182, 207, 0.08); border: 1px solid rgba(18, 182, 207, 0.2); border-radius: 12px; padding: 20px; margin: 2rem 0;">
 <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #12b6cf;">Data Sources</span>
 <p style="font-size: 0.875rem; color: #8e8e93; margin: 8px 0 0; line-height: 1.6;">

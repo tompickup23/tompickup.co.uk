@@ -197,6 +197,14 @@ And fifth, the timeline needs to reflect reality. Eighteen months is not enough.
 
 The consultation is open until 26 March. If you live in Lancashire, your response matters. The question is not whether reorganisation should happen. It is whether it should happen properly.
 
+<div class="article-video">
+<video controls preload="metadata" poster="/images/lgr-contracts-cover.jpg">
+<source src="/videos/lancashire-lgr-contract-crisis.mp4" type="video/mp4" />
+Your browser does not support the video element.
+</video>
+</div>
+<p class="article-video-label">Watch: 19-second video summary with voiceover</p>
+
 <div class="viz-sources">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
 <span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: LCC Procurement Pipeline Report (March 2026 Cabinet). Contracts Finder (all 15 Lancashire authorities). LCC Published Spending Data (Transparency Code).LGR Critical Path Analysis (10 workstreams, 4 critical path items). DfT 4-year highways maintenance settlement 2026-2030. Dorset Council LGR transition review. Buckinghamshire Council post-vesting IT audit. North Yorkshire Council LGR lessons learned. Northamptonshire LGR costs analysis. TUPE Regulations 2006 (as amended).</span>
