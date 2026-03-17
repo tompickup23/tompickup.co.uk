@@ -26,7 +26,7 @@ featured: true
     </details>
   </div>
 </div>
-<p class="article-video-label">Watch: 72-second video summary with voiceover</p>
+<p class="article-video-label">Watch: 2-minute video summary with voiceover</p>
 
 On 1 May 2025, Reform UK won 53 of 84 seats at Lancashire County Council, the first time any party outside the Conservatives or Labour had controlled a county council in England. Nine months later, the results are in the accounts, in the roads, and in the services that residents actually use.
 
