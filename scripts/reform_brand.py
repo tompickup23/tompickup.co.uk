@@ -634,8 +634,8 @@ def draw_reform_logo(img_or_draw, x, y, scale=1.0, variant='full', color=None,
             'tompickup': 'tompickup.co.uk',
         }[variant]
 
-        # Subtitle font: sized relative to the logo height
-        sub_size = max(8, int(logo_h * 0.42))
+        # Subtitle font: sized relative to the logo height (compact, not oversized)
+        sub_size = max(8, int(logo_h * 0.35))
         sub_font = load_font('regular', sub_size)
 
         # Measure the raw subtitle text width (without extra tracking)
@@ -660,8 +660,8 @@ def draw_reform_logo(img_or_draw, x, y, scale=1.0, variant='full', color=None,
             if i < len(location_text) - 1:
                 loc_w += loc_tracking
 
-        # Gap between logo and subtitle
-        loc_gap = max(3, int(logo_h * 0.25))
+        # Gap between logo and subtitle (tight, not floating)
+        loc_gap = max(2, int(logo_h * 0.12))
         loc_y = int(y) + logo_h + loc_gap
 
         # Center subtitle under the logo
@@ -733,10 +733,13 @@ def draw_watermark_bar(draw, img_width, img_height, text="tompickup.co.uk",
     )
 
     if left_text:
-        # Colored dot indicator
-        dot_y = wm_y + 5
+        # Vertical center line for all bottom-left elements
+        center_y = wm_y + 10
+
+        # Colored dot indicator (vertically centered)
+        dot_r = 6
         draw.ellipse(
-            [60, dot_y, 72, dot_y + 12],
+            [60, center_y - dot_r, 60 + dot_r * 2, center_y + dot_r],
             fill=left_dot_color,
         )
 
@@ -744,8 +747,10 @@ def draw_watermark_bar(draw, img_width, img_height, text="tompickup.co.uk",
         logo_end_x = 82
         try:
             logo_scale = 120.0 / 340.0  # ~0.35 scale => 120x15px
+            logo_h_est = int(43 * logo_scale)  # 43px original height
+            logo_y = center_y - logo_h_est // 2
             _, _, lw, _ = draw_reform_logo(
-                draw, 82, dot_y - 2,
+                draw, 82, logo_y,
                 scale=logo_scale, variant='full', color=MID_GRAY,
             )
             logo_end_x = 82 + lw
@@ -753,7 +758,7 @@ def draw_watermark_bar(draw, img_width, img_height, text="tompickup.co.uk",
             # Fallback to text if logo fails
             label_font = load_font('bold', 20)
             draw.text(
-                (82, dot_y - 4),
+                (82, center_y - 10),
                 left_text,
                 fill=MID_GRAY,
                 font=label_font,
@@ -763,8 +768,10 @@ def draw_watermark_bar(draw, img_width, img_height, text="tompickup.co.uk",
         if location:
             loc_text = location.upper()
             loc_font = load_font('regular', 16)
+            loc_bbox = draw.textbbox((0, 0), loc_text, font=loc_font)
+            loc_h = loc_bbox[3] - loc_bbox[1]
             draw.text(
-                (logo_end_x + 10, dot_y - 1),
+                (logo_end_x + 10, center_y - loc_h // 2),
                 loc_text,
                 fill=MID_GRAY,
                 font=loc_font,

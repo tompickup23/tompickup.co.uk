@@ -317,11 +317,11 @@ def apply_overlays(img, draw, frame_idx, date_text=None):
     try:
         logo_scale = 0.8  # ~272px wide at 0.8x scale
         from reform_brand import draw_reform_logo as _draw_logo
-        _draw_logo(img, W - 310, 20, scale=logo_scale, variant='full')
+        _draw_logo(img, W - 310, 20, scale=0.8, variant='lancashire')
     except Exception:
         # Fallback to text if logo unavailable
         font_brand = load_font(16, bold=True)
-        draw.text((W - 200, 30), "REFORM UK", fill=COLORS['teal'], font=font_brand)
+        draw.text((W - 200, 30), "REFORM UK LANCASHIRE", fill=COLORS['teal'], font=font_brand)
 
     draw = draw_marquee_bar(img, draw, frame_idx)
     return draw
@@ -375,7 +375,7 @@ def add_branding(img, draw, show_logo=True, show_site=False):
         # Official Reform UK logo via reform_brand module
         try:
             from reform_brand import draw_reform_logo as _draw_logo
-            _draw_logo(img, W - 310, 20, scale=0.8, variant='full')
+            _draw_logo(img, W - 310, 20, scale=0.8, variant='lancashire')
         except Exception:
             font_brand = load_font(14, bold=True)
             draw.text((W - 200, 30), "REFORM UK", fill=COLORS['teal'], font=font_brand)
@@ -2350,10 +2350,10 @@ def generate_9_months_video(duration=45, no_voice=False):
         is_fraction=True,
         fraction_text="3.80%",
         extra_lines=[
-            "Conservatives: 4.99% in 7 of 8 years",
-            "Reform: 2.00% general + 1.80% social care",
+            "Conservatives hit the maximum every year for a decade",
+            "Reform: 1.80% general + 2.00% social care",
         ],
-        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in Lancashire in twelve years. The Conservatives raised it by the legal maximum in seven of their eight years.",
+        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in Lancashire in twelve years. The Conservatives raised council tax by the maximum allowed every single year for a decade. They never once came in below the cap.",
     ))
 
     # Transition
@@ -2375,20 +2375,6 @@ def generate_9_months_video(duration=45, no_voice=False):
     # Transition
     scenes.append(TransitionScene(name="trans_3", duration=1.0))
 
-    # Potholes
-    scenes.append(StatCountScene(
-        name="potholes_42",
-        duration=4.5,
-        target_value=42,
-        suffix="%",
-        label="Pothole reduction in 6 months",
-        sublabel="AI sensors on bin lorries, 3-year resurfacing plan",
-        voiceover_text="Reported potholes fell by forty-two percent in the first six months. AI sensors on bin lorries now identify defects before residents report them.",
-    ))
-
-    # Transition
-    scenes.append(TransitionScene(name="trans_4", duration=1.0))
-
     # Care homes
     scenes.append(StatCountScene(
         name="care_homes_5",
@@ -2401,7 +2387,7 @@ def generate_9_months_video(duration=45, no_voice=False):
     ))
 
     # Transition
-    scenes.append(TransitionScene(name="trans_5", duration=1.0))
+    scenes.append(TransitionScene(name="trans_4", duration=1.0))
 
     # Financial damage
     scenes.append(StatCountScene(
@@ -2413,9 +2399,44 @@ def generate_9_months_video(duration=45, no_voice=False):
         sublabel="LCC Statement of Accounts, 2017-2025",
         extra_lines=[
             "Treasury losses, overspends, disposal losses",
-            "Rising to \u00a31.27 billion including unrealised bond losses",
         ],
         voiceover_text="The Conservatives left nine hundred and twenty-one million pounds of documented financial damage across eight years. Treasury losses. Overspends. Disposal losses. All in the audited accounts.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_5", duration=1.0))
+
+    # Bond scandal
+    scenes.append(StatCountScene(
+        name="bonds_600m",
+        duration=5.0,
+        target_value=600,
+        suffix="M",
+        label="UKMBA bond portfolio",
+        sublabel="Estimated \u00a3350 million loss if sold today",
+        extra_lines=[
+            "Bought without proper disclosure",
+            "Total damage rises to \u00a31.27 billion",
+        ],
+        voiceover_text="On top of that, we inherited a six hundred million pound bond portfolio, bought without proper disclosure. If sold today, the estimated loss is three hundred and fifty million. Total financial damage: up to one point two seven billion pounds.",
+    ))
+
+    # Transition
+    scenes.append(TransitionScene(name="trans_6", duration=1.0))
+
+    # Roads — framed as inherited Tory problem, government priorities
+    scenes.append(StatCountScene(
+        name="highways_650m",
+        duration=5.0,
+        target_value=650,
+        suffix="M",
+        label="Highways backlog inherited from Conservatives",
+        sublabel="UK foreign aid: \u00a39.6 billion per year",
+        extra_lines=[
+            "The entire backlog is less than 1 month of foreign aid",
+            "Avoidable. Fixable. A matter of government priorities.",
+        ],
+        voiceover_text="The Conservatives left a six hundred and fifty million pound highways backlog. The entire backlog could be cleared for less than one month of Britain's foreign aid budget. This was avoidable. It's fixable. It's a matter of government priorities.",
     ))
 
     # CTA

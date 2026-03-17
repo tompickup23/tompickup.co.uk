@@ -406,6 +406,56 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     font-style: italic;
   }
 
+  .prose :global(.shareable-assets) {
+    margin: 1rem auto;
+    max-width: 360px;
+  }
+
+  .prose :global(.shareable-assets summary) {
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: #12b6cf;
+    font-weight: 500;
+    text-align: center;
+    padding: 0.5rem;
+    list-style: none;
+  }
+
+  .prose :global(.shareable-assets summary::-webkit-details-marker) {
+    display: none;
+  }
+
+  .prose :global(.shareable-assets summary::before) {
+    content: '\2193  ';
+  }
+
+  .prose :global(.share-grid) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .prose :global(.share-grid a) {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    background: rgba(18, 182, 207, 0.08);
+    border: 1px solid rgba(18, 182, 207, 0.15);
+    border-radius: 8px;
+    color: #12b6cf;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s ease;
+    background-image: none;
+  }
+
+  .prose :global(.share-grid a:hover) {
+    background: rgba(18, 182, 207, 0.16);
+    background-image: none;
+  }
+
   .prose :global(hr) {
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.06);

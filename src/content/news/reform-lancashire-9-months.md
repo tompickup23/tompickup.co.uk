@@ -2,16 +2,29 @@
 title: "9 Months of Reform: Lancashire by the Numbers"
 date: 2026-03-17
 description: "On 1 May 2025, Reform UK took control of Lancashire County Council with 53 of 84 seats. Nine months in, the numbers tell the story. Every metric measured against the Conservative baseline."
-image: "/images/county-hall-preston.jpg"
+image: "/images/share/reform-lancashire-9-months/reform-lancashire-9-months-cover.jpg"
 tags: ["lancashire", "reform", "finance", "highways", "social-care"]
 featured: true
 ---
 
 <div class="article-video">
-  <video controls preload="metadata" poster="/images/county-hall-preston.jpg">
+  <video controls preload="metadata" poster="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-poster.jpg">
     <source src="/videos/reform-lancashire-9-months.mp4" type="video/mp4" />
     Your browser does not support the video element.
   </video>
+  <div class="shareable-assets">
+    <details>
+      <summary>Download shareable images for social media</summary>
+      <div class="share-grid">
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-headline-stats.png" download>Headline Stats</a>
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" download>Council Tax Table</a>
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" download>Savings Comparison</a>
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-financial-damage.png" download>Financial Damage</a>
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-bonds-damage.png" download>Bond Scandal</a>
+        <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-highways-inherited.png" download>Highways Backlog</a>
+      </div>
+    </details>
+  </div>
 </div>
 <p class="article-video-label">Watch: 72-second video summary with voiceover</p>
 
@@ -31,15 +44,15 @@ This is not a political sales pitch. It is a comparison: what we inherited versu
 <span class="label">Council Tax Rise</span>
 <span class="sublabel">Lowest in over a decade</span>
 </div>
-<div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">42%</span>
-<span class="label">Pothole Reduction</span>
-<span class="sublabel">In the first 6 months</span>
-</div>
 <div class="viz-stat green">
 <span class="value xl" style="color: #30d158;">5</span>
 <span class="label">Care Homes Saved</span>
 <span class="sublabel">All five kept open</span>
+</div>
+<div class="viz-stat red">
+<span class="value xl" style="color: #ff453a;">£921M</span>
+<span class="label">Tory Losses Found</span>
+<span class="sublabel">Audited accounts, 2017-2025</span>
 </div>
 </div>
 </div>
@@ -100,27 +113,32 @@ That is not rhetoric. It is the quarterly monitoring report, published on the co
 
 ---
 
-## Roads: The Backlog and What We Have Done About It
+## Roads: The Backlog They Left Behind
 
 The Conservatives left Lancashire with a **£650 million highways maintenance backlog**. That figure comes from the council's own highways condition assessment. It is not a number Reform invented.
 
-In the first six months of Reform control, reported potholes fell by **42%**. The council deployed AI-equipped sensors on bin lorries to identify road defects before residents had to report them. A new three-year £45 million resurfacing programme targets the 100 worst roads in the county.
+To put that in perspective: the UK government spends **£9.6 billion per year** on foreign aid. The entire Lancashire roads backlog could be cleared for less than a month of that budget. The Chagos Islands deal alone cost **£9 billion**. Meanwhile, the county's roads crumbled under a decade of Conservative underinvestment and the highways maintenance backlog grew to a figure that will take years to fix.
 
-The backlog is not fixed. It will take years. But the trend has reversed and the approach is different: proactive rather than reactive, data-driven rather than complaint-driven.
+Reform is doing what it can within the budget. A three-year **£45 million resurfacing programme** targets the 100 worst roads. AI-equipped sensors on bin lorries scan road surfaces during normal collection rounds, identifying defects before they become complaints. Reform's first budget identifies **£5 in savings for every £100 spent**, and that money is being reinvested in frontline services including highways.
+
+But let us be clear: this is a problem the Conservatives created over a decade and that central government could resolve quickly if it chose to prioritise British roads over foreign aid, asylum hotels, and vanity projects. The roads are not where they should be. The blame lies with those who let them deteriorate, not with those who inherited the backlog nine months ago.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-3">
 <div class="viz-stat orange">
 <span class="value lg" style="color: #ff9f0a;">£650M</span>
 <span class="label">Inherited Backlog</span>
-</div>
-<div class="viz-stat green">
-<span class="value lg" style="color: #30d158;">42%</span>
-<span class="label">Pothole Reduction</span>
+<span class="sublabel">Created by a decade of Conservative neglect</span>
 </div>
 <div class="viz-stat teal">
 <span class="value lg" style="color: #12b6cf;">£45M</span>
-<span class="label">3-Year Plan</span>
+<span class="label">Reform 3-Year Plan</span>
+<span class="sublabel">Resurfacing + AI defect detection</span>
+</div>
+<div class="viz-stat red">
+<span class="value lg" style="color: #ff453a;">£9.6B</span>
+<span class="label">UK Foreign Aid</span>
+<span class="sublabel">Annual. The backlog is 1 month of this.</span>
 </div>
 </div>
 </div>
