@@ -8,13 +8,17 @@ interface Props {
   description?: string;
   ogImage?: string;
   article?: boolean;
+  publishedTime?: string;
+  tags?: string[];
 }
 
 const {
   title,
   description = 'Tom Pickup | Lancashire County Councillor for Padiham and Burnley West. Reform UK. Transparency, accountability, and action for Lancashire.',
-  ogImage = '/og-image.jpg',
+  ogImage = '/images/headshot.jpg',
   article = false,
+  publishedTime,
+  tags = [],
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -60,6 +64,23 @@ const maintenanceMode = false;
     <meta property="og:image" content={new URL(ogImage, Astro.site)} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:site_name" content="Tom Pickup" />
+
+    {/* Article-specific OG tags for Google News / Facebook */}
+    {article && publishedTime && (
+      <meta property="article:published_time" content={publishedTime} />
+    )}
+    {article && publishedTime && (
+      <meta property="article:modified_time" content={publishedTime} />
+    )}
+    {article && (
+      <meta property="article:author" content="https://tompickup.co.uk/about/" />
+    )}
+    {article && (
+      <meta property="article:section" content="Politics" />
+    )}
+    {article && tags.map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
