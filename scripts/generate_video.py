@@ -2345,31 +2345,31 @@ def generate_9_months_video(duration=45, no_voice=False):
         duration=5.0,
         target_value=380,
         suffix="",
-        label="Three point eight zero percent council tax rise",
-        sublabel="Lowest in Lancashire in 12 years",
+        label="Three point eight zero percent",
+        sublabel="Lowest rise in 12 years — was 4.99%",
         is_fraction=True,
         fraction_text="3.80%",
         extra_lines=[
             "Conservatives hit the maximum every year for a decade",
-            "Reform: 1.80% general + 2.00% social care",
+            "Last two years: 4.99% — the highest of the lot",
         ],
-        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in Lancashire in twelve years. The Conservatives raised council tax by the maximum allowed every single year for a decade. They never once came in below the cap.",
+        voiceover_text="Reform's first budget set the council tax rise at three point eight percent. The lowest in twelve years. After two years of four point nine nine percent under the Conservatives, the highest rises in the entire decade, we are stopping the rot.",
     ))
 
     # Transition
     scenes.append(TransitionScene(name="trans_2", duration=1.0))
 
-    # Savings delivery comparison
+    # Overspend reduction
     scenes.append(AnimatedBarChartScene(
-        name="savings_compare",
+        name="overspend_reduction",
         duration=5.0,
-        title="Savings Programme Delivery",
+        title="Inherited Overspend",
         data=[
-            ("Conservative", "2024/25", "Conservative", 48, "48%"),
-            ("Reform UK", "2025/26 Q3", "Reform UK", 100, "100%"),
+            ("Inherited", "Conservative", "Conservative", 28, "\u00a328M"),
+            ("Reform Q3", "9 months in", "Reform UK", 6, "\u00a36.2M"),
         ],
-        subtitle="Hitting targets vs missing them",
-        voiceover_text="The Conservative savings programme delivered just forty-eight percent. Under Reform, the savings programme is hitting one hundred percent of its targets.",
+        subtitle="Cleaning up the mess",
+        voiceover_text="We inherited a twenty-eight million pound overspend. The Conservatives had set a budget they could not deliver, hitting just forty-eight percent of their savings targets. Nine months later, we have cut that overspend to six point two million. A seventy-eight percent reduction.",
     ))
 
     # Transition
@@ -2381,9 +2381,9 @@ def generate_9_months_video(duration=45, no_voice=False):
         duration=4.5,
         target_value=5,
         suffix="",
-        label="Care homes saved from closure",
-        sublabel="1,600 consultation respondents, all five kept open",
-        voiceover_text="The Conservatives planned to close five county care homes. Reform cancelled those closures. All five remain open, after a public consultation with sixteen hundred respondents.",
+        label="Care homes kept open",
+        sublabel="1,600 residents responded — Reform listened",
+        voiceover_text="Five care homes faced an uncertain future. Reform consulted sixteen hundred residents, listened, and kept all five open. Against the national trend, where council-run care has collapsed from sixty-four percent of beds to just four percent.",
     ))
 
     # Transition
@@ -2424,19 +2424,19 @@ def generate_9_months_video(duration=45, no_voice=False):
     # Transition
     scenes.append(TransitionScene(name="trans_6", duration=1.0))
 
-    # Roads — framed as inherited Tory problem, government priorities
+    # Roads — framed as inherited problem, government priorities
     scenes.append(StatCountScene(
         name="highways_650m",
         duration=5.0,
         target_value=650,
         suffix="M",
-        label="Highways backlog inherited from Conservatives",
-        sublabel="UK foreign aid: \u00a39.6 billion per year",
+        label="Highways backlog inherited",
+        sublabel="113 days of asylum hotel spending",
         extra_lines=[
-            "The entire backlog is less than 1 month of foreign aid",
-            "Avoidable. Fixable. A matter of government priorities.",
+            "UK spends \u00a35.77 million per day on asylum hotels",
+            "The backlog equals 18 days of foreign aid",
         ],
-        voiceover_text="The Conservatives left a six hundred and fifty million pound highways backlog. The entire backlog could be cleared for less than one month of Britain's foreign aid budget. This was avoidable. It's fixable. It's a matter of government priorities.",
+        voiceover_text="We inherited a six hundred and fifty million pound highways backlog. The UK spends five point seven seven million pounds every single day on asylum seeker hotels. Lancashire's entire road repair bill could be cleared for a hundred and thirteen days of that spending. A matter of government priorities.",
     ))
 
     # CTA
@@ -2445,7 +2445,7 @@ def generate_9_months_video(duration=45, no_voice=False):
         duration=4.0,
         text="Read the full scorecard",
         url="tompickup.co.uk",
-        voiceover_text="Nine months in. The numbers tell the story. Visit tompickup.co.uk for the full breakdown.",
+        voiceover_text="Nine months in. The numbers tell the story. Visit tom pickup dot co dot UK for the full breakdown.",
     ))
 
     return scenes

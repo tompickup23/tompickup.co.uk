@@ -41,13 +41,13 @@ This is not a political sales pitch. It is a comparison: what we inherited versu
 </div>
 <div class="viz-stat green">
 <span class="value xl" style="color: #30d158;">3.80%</span>
-<span class="label">Council Tax Rise</span>
-<span class="sublabel">Lowest in over a decade</span>
+<span class="label">First Budget Rise</span>
+<span class="sublabel">Lowest in 12 years (was 4.99%)</span>
 </div>
 <div class="viz-stat green">
 <span class="value xl" style="color: #30d158;">5</span>
 <span class="label">Care Homes Saved</span>
-<span class="sublabel">All five kept open</span>
+<span class="sublabel">Against the national trend</span>
 </div>
 <div class="viz-stat red">
 <span class="value xl" style="color: #ff453a;">£921M</span>
@@ -59,16 +59,18 @@ This is not a political sales pitch. It is a comparison: what we inherited versu
 
 ---
 
-## The Budget: What You Pay, What You Get
+## The Budget: Stopping the Rot
 
-The Conservatives raised council tax by the maximum allowed every single year for a decade. From 2016/17 to 2025/26, they never once came in below the referendum cap. They treated the limit as a target.
+For ten consecutive years, the Conservatives raised council tax by the maximum allowed. They never once came in below the referendum cap. They treated the legal limit as a target.
 
-Reform's first budget, passed in February 2026, set the council tax increase at **3.80%**. It is the first time in 12 years that Lancashire County Council has not gone for the maximum rise. The breakdown:
+In the last two years alone, they hit **4.99%** — the highest rises in the entire decade.
+
+Reform's first budget, passed in February 2026, set the rise at **3.80%**. The lowest in 12 years. The first time in over a decade that Lancashire County Council has not gone for the maximum.
 
 - **1.80%** for general council services (cap: 2.99%)
 - **2.00%** for the Adult Social Care precept (cap: 2.00%)
 
-Band D residents now pay £1,801.75 for the county share of their council tax. Still too high. But the direction has changed.
+We are not celebrating a rise. We are stopping the rot. Band D residents now pay £1,801.75 for the county share. Still too high. But for the first time in 12 years, the direction has changed.
 
 | Year | Control | Total Rise |
 |------|---------|-----------|
@@ -80,13 +82,13 @@ Band D residents now pay £1,801.75 for the county share of their council tax. S
 | 2021/22 | Conservative | 3.99% |
 | 2022/23 | Conservative | 3.99% |
 | 2023/24 | Conservative | 3.99% |
-| 2024/25 | Conservative | 4.99% |
-| 2025/26 | Conservative* | 4.99% |
+| 2024/25 | Conservative | **4.99%** |
+| 2025/26 | Conservative* | **4.99%** |
 | **2026/27** | **Reform UK** | **3.80%** |
 
 *2025/26 budget was set by the outgoing Conservative administration before the May 2025 election. Source: LCC council tax breakdown PDFs, lancashire.gov.uk.*
 
-The difference matters. At Band D, the maximum 4.99% rise would have cost an extra £87 per year. Reform's 3.80% costs £66. That is £21 per household. Multiply by 500,000 households and the aggregate saving is around £10 million.
+After two years of 4.99%, Reform brought it down to 3.80%. That is £21 less per Band D household. Multiply by 500,000 households and the aggregate saving is around £10 million.
 
 <div class="article-data-viz">
 <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" download title="Download this image to share on social media">
@@ -99,29 +101,27 @@ The difference matters. At Band D, the maximum 4.99% rise would have cost an ext
 
 ## The Overspend: What We Inherited
 
-When Reform took control, the council faced a **£28.3 million overspend** for 2024/25. The Conservatives had set a budget they could not deliver.
+When Reform took control, the council faced a **£28 million projected overspend**. The Conservatives had set a budget they could not deliver. Their savings programme hit just **48%** of its targets in 2024/25 — meaning more than half the planned savings never materialised.
 
-Nine months later, the budget is on track. The savings programme for 2025/26 is hitting **100% of its targets**, compared to 48% under the last full year of Conservative control.
-
-That is not rhetoric. It is the quarterly monitoring report, published on the council's website, measured by the same finance team that served both administrations.
+Nine months later, Reform has reduced that inherited overspend to **£6.2 million** at the Q3 position — a 78% reduction. That is the quarterly monitoring report, published on the council's website, measured by the same finance team that served both administrations.
 
 <div class="article-data-viz">
 <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" download title="Download this image to share on social media">
-<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" alt="Savings Programme Delivery — Conservative 48% vs Reform 100%" loading="lazy" />
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-savings-comparison.png" alt="Overspend Reduction — Conservative £28M vs Reform £6.2M" loading="lazy" />
 <span class="download-hint">Tap to download for social media</span>
 </a>
 </div>
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #ff453a;">48%</span>
-<span class="label">Conservative Savings Delivery</span>
-<span class="sublabel" style="font-size: 0.6875rem; color: #636366; display: block; margin-top: 4px;">2024/25 final outturn</span>
+<span class="value" style="color: #ff453a;">£28M</span>
+<span class="label">Inherited Overspend</span>
+<span class="sublabel" style="font-size: 0.6875rem; color: #636366; display: block; margin-top: 4px;">Conservative 2024/25 position</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #30d158;">100%</span>
-<span class="label">Reform Savings Delivery</span>
-<span class="sublabel" style="font-size: 0.6875rem; color: #636366; display: block; margin-top: 4px;">2025/26 Q3 position</span>
+<span class="value" style="color: #30d158;">£6.2M</span>
+<span class="label">Reform Q3 Position</span>
+<span class="sublabel" style="font-size: 0.6875rem; color: #636366; display: block; margin-top: 4px;">78% reduction in 9 months</span>
 </div>
 </div>
 
@@ -131,28 +131,40 @@ That is not rhetoric. It is the quarterly monitoring report, published on the co
 
 The Conservatives left Lancashire with a **£650 million highways maintenance backlog**. That figure comes from the council's own highways condition assessment. It is not a number Reform invented.
 
-To put that in perspective: the UK government spends **£9.6 billion per year** on foreign aid. The entire Lancashire roads backlog could be cleared for less than a month of that budget. The Chagos Islands deal alone cost **£9 billion**. Meanwhile, the county's roads crumbled under a decade of Conservative underinvestment and the highways maintenance backlog grew to a figure that will take years to fix.
+To understand how fixable this is, consider what Westminster chooses to spend elsewhere:
 
-Reform is doing what it can within the budget. A three-year **£45 million resurfacing programme** targets the 100 worst roads. AI-equipped sensors on bin lorries scan road surfaces during normal collection rounds, identifying defects before they become complaints. Reform's first budget identifies **£5 in savings for every £100 spent**, and that money is being reinvested in frontline services including highways.
+| Comparison | Amount | vs Lancashire Backlog |
+|------------|--------|----------------------|
+| UK foreign aid | **£13 billion per year** | The backlog is **18 days** of aid spending |
+| Asylum seeker hotels | **£5.77 million per day** | The backlog equals **113 days** of hotel bills |
+| Chagos Islands deal | **~£10 billion** (real terms, 99 years) | **15 times** the entire backlog |
+| HS2 spent to date | **£40.5 billion** | The backlog is **1.6%** of what HS2 has consumed |
+| National roads backlog | **£18.6 billion** (ALARM Survey 2026) | Lancashire is 3.5% of the national total |
 
-But let us be clear: this is a problem the Conservatives created over a decade and that central government could resolve quickly if it chose to prioritise British roads over foreign aid, asylum hotels, and vanity projects. The roads are not where they should be. The blame lies with those who let them deteriorate, not with those who inherited the backlog nine months ago.
+*Sources: House of Commons Library (ODA), Home Office (asylum accommodation), Full Fact (Chagos NPV), Construction Enquirer (HS2), ALARM Survey 2026 (national backlog).*
+
+The UK spends £5.77 million every single day housing asylum seekers in hotels. Lancashire's entire road repair bill could be cleared for 113 days of that. HS2 has spent £592 million buying land it no longer needs — almost the exact size of Lancashire's backlog, wasted on unused fields.
+
+Reform is doing what it can within the budget. A three-year **£45 million resurfacing programme** targets the 100 worst roads. AI-equipped sensors on bin lorries scan road surfaces during normal collection rounds, identifying defects before they become complaints.
+
+This is a problem created by many years of underinvestment and one that central government could resolve quickly if it chose to prioritise British roads over foreign aid, asylum hotels, and vanity projects. The blame lies with those who let them deteriorate, not with those who inherited the backlog nine months ago.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-3">
 <div class="viz-stat orange">
 <span class="value lg" style="color: #ff9f0a;">£650M</span>
 <span class="label">Inherited Backlog</span>
-<span class="sublabel">Created by a decade of Conservative neglect</span>
-</div>
-<div class="viz-stat teal">
-<span class="value lg" style="color: #12b6cf;">£45M</span>
-<span class="label">Reform 3-Year Plan</span>
-<span class="sublabel">Resurfacing + AI defect detection</span>
+<span class="sublabel">Many years of underinvestment</span>
 </div>
 <div class="viz-stat red">
-<span class="value lg" style="color: #ff453a;">£9.6B</span>
+<span class="value lg" style="color: #ff453a;">113</span>
+<span class="label">Days of Asylum Hotels</span>
+<span class="sublabel">£5.77M per day on hotel bills</span>
+</div>
+<div class="viz-stat red">
+<span class="value lg" style="color: #ff453a;">£13B</span>
 <span class="label">UK Foreign Aid</span>
-<span class="sublabel">Annual. The backlog is 1 month of this.</span>
+<span class="sublabel">Annual. Backlog is 18 days of this.</span>
 </div>
 </div>
 </div>
@@ -161,9 +173,11 @@ But let us be clear: this is a problem the Conservatives created over a decade a
 
 ## Social Care: What Matters Most
 
-The outgoing Conservative administration announced plans to close five county care homes. Reform cancelled those closures. All five homes remain open.
+Five county care homes faced a £5 million maintenance backlog and an uncertain future. Reform launched an eight-week public consultation. **1,600 residents responded.** The message was clear: these homes serve people who have nowhere else to go.
 
-This was not a populist gesture. The council ran a full public consultation with 1,600 respondents. The consultation showed that the homes served residents who had nowhere else to go. The business case for closure was built on assumptions that did not account for the real cost of placing those residents in private care.
+Reform listened. All five care homes remain open, and the council is investing in their future rather than closing them down.
+
+That decision goes against the national trend. Across England, local authority care home provision has collapsed — from **64% of beds in 1979 to just 4% today** (CMA, 2023). Between 2015 and 2020, **1,578 care homes closed** nationally, displacing nearly 50,000 residents. Councils everywhere are shutting their doors. Lancashire kept them open.
 
 In children's services, Lancashire received a Department for Education improvement notice under the Conservatives. Reform's response: 677 new SEND school places commissioned, the EHCP backlog programme accelerated, and SEND transport costs reduced by competitive tendering.
 
@@ -214,9 +228,9 @@ None of this is expensive or experimental. It is the application of technology t
 
 ## What Comes Next
 
-Nine months is not enough to fix eight years of neglect. The £650 million highways backlog will take a decade. The SEND improvement notice requires sustained investment. The financial instrument losses cannot be recovered.
+Nine months is not enough to undo many years of neglect. The £650 million highways backlog will take a decade. The SEND improvement notice requires sustained investment. The financial instrument losses cannot be recovered.
 
-But the trajectory has changed. The council tax rise is lower. The budget is balanced. The savings programme is delivering. The roads are measurably better. The care homes are open. The technology works.
+But the trajectory has changed. The council tax rise is the lowest in 12 years. The inherited overspend has been cut by 78%. The care homes are open. The technology works.
 
 The next article in this series will break down exactly where your council tax goes, band by band, line by line. Lancashire residents pay some of the highest council tax in the North. They deserve to know what it buys.
 

@@ -788,8 +788,8 @@ ARTICLE_SHAREABLE_PRESETS = {
                 'source': 'Lancashire County Council official records',
                 'data': [
                     {'value': '53', 'label': 'Reform UK Seats', 'sublabel': 'of 84 total (63%)', 'color': 'teal'},
-                    {'value': '3.80%', 'label': 'Council Tax Rise', 'sublabel': 'Lowest in a decade', 'color': 'green'},
-                    {'value': '5', 'label': 'Care Homes Saved', 'sublabel': 'All five kept open', 'color': 'green'},
+                    {'value': '3.80%', 'label': 'First Budget Rise', 'sublabel': 'Lowest in 12 years (was 4.99%)', 'color': 'green'},
+                    {'value': '5', 'label': 'Care Homes Saved', 'sublabel': 'Against the national trend', 'color': 'green'},
                     {'value': '£921M', 'label': 'Tory Losses', 'sublabel': 'Audited 2017-2025', 'color': 'red'},
                 ],
             },
@@ -819,11 +819,11 @@ ARTICLE_SHAREABLE_PRESETS = {
             {
                 'slug': 'savings-comparison',
                 'type': 'comparison',
-                'title': 'Savings Programme Delivery',
+                'title': 'The Inherited Overspend',
                 'source': 'LCC quarterly monitoring reports',
                 'data': {
-                    'before': {'value': '48%', 'label': 'Conservative Delivery', 'sublabel': '2024/25 final outturn'},
-                    'after': {'value': '100%', 'label': 'Reform Delivery', 'sublabel': '2025/26 Q3 position'},
+                    'before': {'value': '\u00a328M', 'label': 'Inherited Overspend', 'sublabel': 'Conservative 2024/25'},
+                    'after': {'value': '\u00a36.2M', 'label': 'Reform Q3 Position', 'sublabel': '78% reduction in 9 months'},
                 },
             },
             {
@@ -853,11 +853,11 @@ ARTICLE_SHAREABLE_PRESETS = {
                 'slug': 'highways-inherited',
                 'type': 'stat_grid',
                 'title': 'The Inherited Highways Backlog',
-                'source': 'LCC Highways Condition Assessment',
+                'source': 'LCC Highways Assessment, Home Office, House of Commons Library',
                 'data': [
-                    {'value': '£650M', 'label': 'Backlog Inherited', 'sublabel': 'From Conservative era', 'color': 'orange'},
-                    {'value': '£45M', 'label': 'Reform 3-Year Plan', 'sublabel': 'Resurfacing programme', 'color': 'teal'},
-                    {'value': '£9.6B', 'label': 'UK Foreign Aid', 'sublabel': 'Annual spend, 2025', 'color': 'red'},
+                    {'value': '£650M', 'label': 'Backlog Inherited', 'sublabel': 'Many years of underinvestment', 'color': 'orange'},
+                    {'value': '113', 'label': 'Days of Asylum Hotels', 'sublabel': '£5.77M per day on hotel bills', 'color': 'red'},
+                    {'value': '£13B', 'label': 'UK Foreign Aid', 'sublabel': 'Annual. Backlog is 18 days.', 'color': 'red'},
                 ],
             },
         ],
