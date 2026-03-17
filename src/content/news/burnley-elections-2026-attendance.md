@@ -13,7 +13,9 @@ On 7 May, voters in all 15 Burnley wards will elect one councillor each. These e
 
 In December 2025, the Labour government wrote to councils undergoing Local Government Reorganisation asking whether they wanted their May 2026 elections postponed. On 13 January 2026, Burnley's Executive met and voted unanimously to request cancellation. The five Executive members who voted for postponement were Cllr Afrasiab Anwar (Independent, Leader), Cllr Margaret Lishman (Lib Dem, Deputy Leader), Cllr Lubna Khan (Independent), Cllr Howard Baker (Lib Dem) and Cllr Jack Launer (Green). This was despite the Scrutiny Committee, which met earlier the same evening, recommending the opposite.
 
-The government then confirmed it would legislate to postpone elections in 29 council areas, including Burnley. In response, Reform UK launched a judicial review. On 16 February 2026, in the face of that legal challenge, the government reversed its position and reinstated all elections.
+Burnley's Executive is controlled by the Co-operative Alliance of Independents, Liberal Democrats and Greens. They were not alone in trying to cancel. Across Lancashire, Conservative-controlled councils also requested postponement. Labour, the Conservatives, the Lib Dems, the Greens and the Independents all either initiated or supported cancelling elections in their areas. Reform UK was the only party that opposed it everywhere.
+
+The government confirmed it would legislate to postpone elections in 29 council areas, including Burnley. Reform UK launched a judicial review. On 16 February 2026, in the face of that legal challenge, the government reversed its position and reinstated all elections.
 
 During the cancellation period, I wrote to all 15 councillors whose seats were due for election, asking whether any would voluntarily resign to trigger by-elections and let residents have their say. I offered to resign my own Lancashire County Council seat too, despite my term not ending. None took up the offer.
 
