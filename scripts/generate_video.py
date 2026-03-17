@@ -433,11 +433,12 @@ def add_caption_bar(img, draw, text, y_pos=None, font_size=32, bg_alpha=180):
 class Scene:
     """A scene that generates multiple frames for animation."""
 
-    def __init__(self, name, duration, voiceover_text=None, caption_phrases=None):
+    def __init__(self, name, duration, voiceover_text=None, caption_phrases=None, voice_model=None):
         self.name = name
         self.duration = duration  # seconds
         self.voiceover_text = voiceover_text
         self.caption_phrases = caption_phrases or []  # list of (start_ratio, text)
+        self.voice_model = voice_model  # override TTS voice for this scene
 
     def frame_count(self):
         return int(self.duration * FPS)
@@ -509,12 +510,12 @@ class StatCountScene(Scene):
         draw = ImageDraw.Draw(img)
 
         # Label
-        font_label = load_font(32, bold=True)
+        font_label = load_font(38, bold=True)
         text_center_x(draw, self.label, font_label, 700, COLORS['white'])
 
         # Sublabel
-        font_sub = load_font(22)
-        text_center_x(draw, self.sublabel, font_sub, 750, COLORS['muted'])
+        font_sub = load_font(28)
+        text_center_x(draw, self.sublabel, font_sub, 756, COLORS['muted'])
 
         # Party pill
         if self.party:
@@ -534,16 +535,16 @@ class StatCountScene(Scene):
             extra_t = max(0, (frame_idx / total_frames - 0.35) / 0.15)
             extra_t = min(1.0, extra_t)
             if extra_t > 0:
-                font_extra = load_font(20)
-                ey = 880
+                font_extra = load_font(26)
+                ey = 890
                 for line in self.extra_lines:
-                    wrapped = textwrap.wrap(line, width=42)
+                    wrapped = textwrap.wrap(line, width=36)
                     for wl in wrapped:
                         alpha_val = int(180 * ease_out_cubic(extra_t))
                         c = tuple(int(COLORS['dim'][i] * extra_t) for i in range(3))
                         text_center_x(draw, wl, font_extra, ey, c)
-                        ey += 30
-                    ey += 6
+                        ey += 36
+                    ey += 8
 
         # Caption phrases
         self._draw_captions(img, draw, frame_idx, total_frames)
@@ -573,14 +574,16 @@ class AnimatedBarChartScene(Scene):
     """Animated horizontal bar chart - bars grow from left."""
 
     def __init__(self, name, duration, title, data, subtitle=None,
-                 voiceover_text=None, caption_phrases=None):
+                 voiceover_text=None, caption_phrases=None, use_display_text=False):
         """
         data: list of (name, ward, party, percentage, counts_text)
+        use_display_text: if True, show counts_text on bar instead of percentage
         """
         super().__init__(name, duration, voiceover_text, caption_phrases)
         self.title = title
         self.data = data
         self.subtitle = subtitle
+        self.use_display_text = use_display_text
 
     def render_frame(self, frame_idx, total_frames):
         img, draw = create_frame_base()
@@ -588,7 +591,7 @@ class AnimatedBarChartScene(Scene):
 
         # Title (fade in)
         title_t = min(1.0, (frame_idx / total_frames) / 0.1)
-        font_title = load_font(34, bold=True)
+        font_title = load_font(46, bold=True)
         title_alpha = int(245 * ease_out_cubic(title_t))
         title_color = tuple(int(COLORS['white'][i] * title_t) for i in range(3))
         draw.text((60, 130), self.title, fill=title_color, font=font_title)
@@ -596,25 +599,25 @@ class AnimatedBarChartScene(Scene):
         # Accent line under title
         tbbox = draw.textbbox((60, 130), self.title, font=font_title)
         line_w = int(260 * ease_out_cubic(title_t))
-        draw.rectangle([(60, tbbox[3] + 10), (60 + line_w, tbbox[3] + 13)], fill=COLORS['teal'])
+        draw.rectangle([(60, tbbox[3] + 10), (60 + line_w, tbbox[3] + 14)], fill=COLORS['teal'])
 
         if self.subtitle:
-            font_sub = load_font(18)
+            font_sub = load_font(26)
             sub_color = tuple(int(COLORS['muted'][i] * title_t) for i in range(3))
             draw.text((60, tbbox[3] + 24), self.subtitle, fill=sub_color, font=font_sub)
 
         # Bars - staggered animation
         bar_x = 60
         bar_max_w = W - 120
-        bar_h = 70
-        gap = 40
-        y = 320
+        bar_h = 80
+        gap = 50
+        y = 340
 
-        font_name = load_font(26, bold=True)
-        font_detail = load_font(16)
-        font_pill = load_font(13, bold=True)
-        font_pct = load_font(30, bold=True)
-        font_count = load_font(15)
+        font_name = load_font(36, bold=True)
+        font_detail = load_font(24)
+        font_pill = load_font(18, bold=True)
+        font_pct = load_font(42, bold=True)
+        font_count = load_font(24)
 
         for idx, (name, ward, party, pct, counts) in enumerate(self.data):
             color = PARTY_COLORS.get(party, COLORS['teal'])
@@ -636,7 +639,7 @@ class AnimatedBarChartScene(Scene):
 
                 # Ward text
                 ward_color = tuple(int(COLORS['muted'][i] * name_alpha) for i in range(3))
-                draw.text((bar_x, y + 34), ward, fill=ward_color, font=font_detail)
+                draw.text((bar_x, y + 44), ward, fill=ward_color, font=font_detail)
 
                 # Party pill
                 wb = draw.textbbox((0, 0), ward, font=font_detail)
@@ -647,13 +650,13 @@ class AnimatedBarChartScene(Scene):
                 pph = pb[3] - pb[1] + 8
                 pill_bg = tuple(max(0, c // 4) for c in color)
                 pill_color = tuple(int(color[i] * name_alpha) for i in range(3))
-                draw_rounded_rect(draw, (pill_x, y + 33, pill_x + ppw, y + 33 + pph),
+                draw_rounded_rect(draw, (pill_x, y + 43, pill_x + ppw, y + 43 + pph),
                                   pph // 2, fill=pill_bg)
-                draw_rounded_rect(draw, (pill_x, y + 33, pill_x + ppw, y + 33 + pph),
+                draw_rounded_rect(draw, (pill_x, y + 43, pill_x + ppw, y + 43 + pph),
                                   pph // 2, outline=pill_color, width=1)
-                draw.text((pill_x + 7, y + 36), abbr, fill=pill_color, font=font_pill)
+                draw.text((pill_x + 7, y + 46), abbr, fill=pill_color, font=font_pill)
 
-            y += 60
+            y += 76
 
             # Bar track
             if name_alpha > 0.01:
@@ -666,9 +669,12 @@ class AnimatedBarChartScene(Scene):
                 draw_gradient_bar(img, (bar_x, y, bar_x + fill_w, y + bar_h), color, 1.0)
                 draw = ImageDraw.Draw(img)  # Refresh after gradient bar
 
-                # Percentage label
-                current_pct = pct * bar_progress
-                pct_text = f"{current_pct:.0f}%"
+                # Bar label (custom display text or percentage)
+                if self.use_display_text:
+                    pct_text = counts
+                else:
+                    current_pct = pct * bar_progress
+                    pct_text = f"{current_pct:.0f}%"
                 pct_bbox = draw.textbbox((0, 0), pct_text, font=font_pct)
                 pct_w = pct_bbox[2] - pct_bbox[0]
 
@@ -1240,31 +1246,31 @@ class ComparisonScene(Scene):
         # "THEN" header
         if left_progress > 0.2:
             then_alpha = min(1.0, (left_progress - 0.2) / 0.3)
-            font_then_h = load_font(36, bold=True)
+            font_then_h = load_font(44, bold=True)
             then_h_color = tuple(int(COLORS['red'][i] * then_alpha) for i in range(3))
             draw.text((60, 200), "THEN", fill=then_h_color, font=font_then_h)
 
             # Conservative pill
-            font_pill = load_font(14, bold=True)
+            font_pill = load_font(20, bold=True)
             pill_color = tuple(int(PARTY_COLORS['Conservative'][i] * then_alpha) for i in range(3))
-            draw.text((60, 248), "CONSERVATIVE ERA", fill=pill_color, font=font_pill)
+            draw.text((60, 256), "CONSERVATIVE ERA", fill=pill_color, font=font_pill)
 
         # Then value
         if left_progress > 0.4:
             val_alpha = min(1.0, (left_progress - 0.4) / 0.25)
-            font_val = load_font(80, bold=True)
+            font_val = load_font(100, bold=True)
             val_color = tuple(int(COLORS['red'][i] * val_alpha) for i in range(3))
             draw.text((60, 380), self.then_value, fill=val_color, font=font_val)
 
-            font_label = load_font(22, bold=True)
+            font_label = load_font(28, bold=True)
             label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
-            lines = textwrap.wrap(self.then_label, width=16)
-            ly = 490
+            lines = textwrap.wrap(self.then_label, width=14)
+            ly = 510
             for line in lines:
                 draw.text((60, ly), line, fill=label_color, font=font_label)
-                ly += 32
+                ly += 38
 
-            font_detail = load_font(16)
+            font_detail = load_font(22)
             detail_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
             draw.text((60, ly + 10), self.then_detail, fill=detail_color, font=font_detail)
 
@@ -1285,30 +1291,30 @@ class ComparisonScene(Scene):
         # "NOW" header
         if right_progress > 0.2:
             now_alpha = min(1.0, (right_progress - 0.2) / 0.3)
-            font_now_h = load_font(36, bold=True)
+            font_now_h = load_font(44, bold=True)
             now_h_color = tuple(int(COLORS['teal'][i] * now_alpha) for i in range(3))
             draw.text((mid_x + 40, 200), "NOW", fill=now_h_color, font=font_now_h)
 
-            font_pill = load_font(14, bold=True)
+            font_pill = load_font(20, bold=True)
             pill_color = tuple(int(COLORS['teal'][i] * now_alpha) for i in range(3))
-            draw.text((mid_x + 40, 248), "REFORM UK", fill=pill_color, font=font_pill)
+            draw.text((mid_x + 40, 256), "REFORM UK", fill=pill_color, font=font_pill)
 
         # Now value
         if right_progress > 0.4:
             val_alpha = min(1.0, (right_progress - 0.4) / 0.25)
-            font_val = load_font(80, bold=True)
+            font_val = load_font(100, bold=True)
             val_color = tuple(int(COLORS['teal'][i] * val_alpha) for i in range(3))
             draw.text((mid_x + 40, 380), self.now_value, fill=val_color, font=font_val)
 
-            font_label = load_font(22, bold=True)
+            font_label = load_font(28, bold=True)
             label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
-            lines = textwrap.wrap(self.now_label, width=16)
-            ly = 490
+            lines = textwrap.wrap(self.now_label, width=14)
+            ly = 510
             for line in lines:
                 draw.text((mid_x + 40, ly), line, fill=label_color, font=font_label)
-                ly += 32
+                ly += 38
 
-            font_detail = load_font(16)
+            font_detail = load_font(22)
             detail_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
             draw.text((mid_x + 40, ly + 10), self.now_detail, fill=detail_color, font=font_detail)
 
@@ -1488,8 +1494,8 @@ class PersonQuoteScene(Scene):
 
     def __init__(self, name, duration, photo_path, quote, attribution,
                  role=None, accent_color=None,
-                 voiceover_text=None, caption_phrases=None):
-        super().__init__(name, duration, voiceover_text, caption_phrases)
+                 voiceover_text=None, caption_phrases=None, voice_model=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases, voice_model=voice_model)
         self.photo_path = photo_path
         self.quote = quote
         self.attribution = attribution
@@ -1604,8 +1610,8 @@ class PersonQuoteScene(Scene):
         draw = ImageDraw.Draw(img)
 
         # Quote text (italic-style, white, centred, line by line fade in)
-        font_quote = load_font(32, bold=True)
-        lines = textwrap.wrap(self.quote, width=26)
+        font_quote = load_font(38, bold=True)
+        lines = textwrap.wrap(self.quote, width=22)
         y = 610
 
         for idx, line in enumerate(lines):
@@ -1616,7 +1622,7 @@ class PersonQuoteScene(Scene):
             if alpha > 0.01:
                 line_color = tuple(int(COLORS['white'][i] * alpha) for i in range(3))
                 text_center_x(draw, line, font_quote, y, line_color)
-            y += 46
+            y += 54
 
         # Accent line (grows from centre)
         acc_t = max(0, (t - 0.3) / 0.15)
@@ -1630,7 +1636,7 @@ class PersonQuoteScene(Scene):
         attr_t = max(0, (t - 0.35) / 0.12)
         attr_t = min(1.0, attr_t)
         if attr_t > 0:
-            font_attr = load_font(24, bold=True)
+            font_attr = load_font(30, bold=True)
             attr_color = tuple(int(self.accent_color[i] * attr_t) for i in range(3))
             text_center_x(draw, self.attribution, font_attr, y + 48, attr_color)
 
@@ -1639,7 +1645,7 @@ class PersonQuoteScene(Scene):
             role_t = max(0, (t - 0.4) / 0.12)
             role_t = min(1.0, role_t)
             if role_t > 0:
-                font_role = load_font(20)
+                font_role = load_font(24)
                 role_color = tuple(int(COLORS['muted'][i] * role_t) for i in range(3))
                 text_center_x(draw, self.role, font_role, y + 82, role_color)
 
@@ -2001,13 +2007,15 @@ def get_audio_duration(path):
     return float(result.stdout.strip()) if result.stdout.strip() else 0
 
 
-def generate_piper_audio(text, output_path):
-    """Generate audio using Piper TTS (Northern English Male voice).
+def generate_piper_audio(text, output_path, model_name=None):
+    """Generate audio using Piper TTS.
 
-    Uses the venv at .venv/ with the piper model at
-    .venv/piper-voices/en_GB-northern_english_male-medium.onnx
+    Uses the venv at .venv/ with piper voice models.
+    Default: en_GB-northern_english_male-medium
     """
-    model_path = str(PIPER_MODEL_DIR / "en_GB-northern_english_male-medium.onnx")
+    if model_name is None:
+        model_name = "en_GB-northern_english_male-medium"
+    model_path = str(PIPER_MODEL_DIR / f"{model_name}.onnx")
     piper_bin = str(PIPER_VENV / "bin" / "python3")
 
     if not os.path.exists(model_path):
@@ -2080,8 +2088,9 @@ def generate_scene_audio(scene, output_path, article_slug=None):
     if engine == "kokoro":
         duration = generate_kokoro_audio(scene.voiceover_text, voice, output_path)
     else:
-        # Default: Piper TTS
-        duration = generate_piper_audio(scene.voiceover_text, output_path)
+        # Default: Piper TTS — use scene-level voice override if set
+        model_name = getattr(scene, 'voice_model', None)
+        duration = generate_piper_audio(scene.voiceover_text, output_path, model_name=model_name)
 
     return duration
 
@@ -3001,7 +3010,7 @@ def generate_9_months_video(duration=45, no_voice=False):
         is_fraction=True,
         fraction_text="3.80%",
         extra_lines=[
-            "Council tax rose every year under the Conservatives",
+            "Rose every year under Labour then Conservatives",
             "Last two years: 4.99% — the highest of the lot",
         ],
         voiceover_text="Reform set the council tax rise at three point eight percent. The lowest in twelve years. After two years of four point nine nine percent under the Conservatives, the highest rises in the entire decade, we are stopping the rot.",
@@ -3016,10 +3025,11 @@ def generate_9_months_video(duration=45, no_voice=False):
         duration=5.0,
         title="Inherited Overspend",
         data=[
-            ("Inherited", "Conservative", "Conservative", 28, "\u00a328M"),
-            ("Reform Q3", "9 months in", "Reform UK", 6, "\u00a36.2M"),
+            ("Inherited", "Conservative budget", "Conservative", 100, "\u00a328M"),
+            ("Reform Q3", "9 months in", "Reform UK", 22, "\u00a36.2M"),
         ],
-        subtitle="Cleaning up the mess",
+        subtitle="78% reduction in 9 months",
+        use_display_text=True,
         voiceover_text="We inherited a twenty-eight million pound overspend. The Conservatives had set a budget they could not deliver, hitting just forty-eight percent of their savings targets. Nine months later, we have cut that overspend to six point two million. A seventy-eight percent reduction.",
     ))
 
@@ -3182,17 +3192,18 @@ def generate_council_tax_video(duration=50, no_voice=False):
         duration=5.5,
         title="Total Council Tax Rise",
         data=[
-            ("Conservative", "Last 2 years", "Conservative", 100, "4.99%"),
-            ("Reform UK", "First budget", "Reform UK", 76, "3.80%"),
+            ("Conservative", "Last 2 years", "Conservative", 83, "4.99%"),
+            ("Reform UK", "First budget", "Reform UK", 63, "3.80%"),
         ],
         subtitle="Lowest in 12 years",
+        use_display_text=True,
         voiceover_text="The Conservatives hit four point nine nine percent in each of the last two years. Reform total: three point eight zero. Lowest in twelve years.",
     ))
 
     # Transition
     scenes.append(TransitionScene("trans_4", 0.5))
 
-    # Person quote from Tom
+    # Person quote from Tom (different voice for the quote)
     scenes.append(PersonQuoteScene(
         name="tom_quote",
         duration=5.5,
@@ -3201,6 +3212,7 @@ def generate_council_tax_video(duration=50, no_voice=False):
         attribution="Tom Pickup",
         role="Lead Member for Finance & Resources",
         voiceover_text="This is a responsible balance between stopping the trend of maximum council tax increases imposed on residents year on year under the Tories, the lowest rise at L C C in twelve years. We have identified five pounds in savings for every one hundred pounds spent, and we are improving services.",
+        voice_model="en_GB-alan-medium",
     ))
 
     # The household saving
@@ -3215,6 +3227,25 @@ def generate_council_tax_video(duration=50, no_voice=False):
         sublabel="Around ten million pounds aggregate across Lancashire",
         extra_lines=["The cap is a ceiling, not a target"],
         voiceover_text="Twenty-one pounds less per household than four point nine nine percent would have been. Around ten million across half a million Lancashire homes. The cap is a ceiling, not a target.",
+    ))
+
+    # What Reform found
+    scenes.append(TransitionScene("trans_5", 0.5, flash_text="WHAT WE FOUND"))
+
+    scenes.append(StatCountScene(
+        name="reform_delivery",
+        duration=5.0,
+        target_value=5,
+        suffix="",
+        is_fraction=True,
+        fraction_text="\u00a35",
+        label="Savings identified for every \u00a3100 spent",
+        sublabel="Plus \u00a3921M of Conservative financial damage exposed",
+        extra_lines=[
+            "\u00a3600M bond portfolio bought without disclosure",
+            "Read the full scorecard in our other article",
+        ],
+        voiceover_text="We have identified five pounds in savings for every one hundred pounds of council spending. And exposed nine hundred and twenty one million pounds of Conservative financial damage, including a six hundred million pound bond portfolio bought without proper disclosure.",
     ))
 
     # CTA
