@@ -2,7 +2,7 @@
 title: "Lancashire's Roads: A £650 Million Backlog and the Parties Who Created It"
 date: 2026-03-03
 description: "Lancashire's assessed highways backlog exceeds £650 million - the true figure is likely far higher. Twelve years of Conservative neglect built it. Labour spends billions on the Chagos deal and foreign aid instead of fixing it. Both parties waste more in weeks than it would cost to repair every road in Lancashire. Here's what Reform is doing about it."
-image: "/images/lcc-highways.jpg"
+image: "/images/highways-backlog-cover.jpg"
 tags: ["lancashire", "highways", "reform", "infrastructure"]
 featured: true
 ---

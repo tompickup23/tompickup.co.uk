@@ -2,7 +2,7 @@
 title: "Burnley Elections 2026: The Councillors Who Didn't Show Up"
 date: 2026-03-17
 description: "15 wards go to the polls on 7 May after the government's failed attempt to cancel elections. Three defending councillors have attendance records below 75% since being elected in 2022."
-image: "/images/council-chamber.jpg"
+image: "/images/burnley-elections-cover.jpg"
 tags: ["burnley", "reform", "lancashire", "transparency"]
 featured: true
 ---
@@ -12,6 +12,8 @@ On 7 May, voters in all 15 Burnley wards will elect one councillor each. These e
 ## The Attempt to Cancel Your Vote
 
 In December 2025, the Labour government wrote to councils undergoing Local Government Reorganisation asking whether they wanted their May 2026 elections postponed. On 13 January 2026, Burnley's Executive met and voted unanimously to request cancellation. The five Executive members who voted for postponement were Cllr Afrasiab Anwar (Independent, Leader), Cllr Margaret Lishman (Lib Dem, Deputy Leader), Cllr Lubna Khan (Independent), Cllr Howard Baker (Lib Dem) and Cllr Jack Launer (Green). This was despite the Scrutiny Committee, which met earlier the same evening, recommending the opposite.
+
+<img src="/images/burnley-exec-vote.jpg" alt="Burnley Executive members who voted to cancel elections" style="width:100%; border-radius:12px; margin: 1.5rem 0;" />
 
 Burnley's Executive is controlled by the Co-operative Alliance of Independents, Liberal Democrats and Greens. They were not alone in trying to cancel. Across Lancashire, Conservative-controlled councils also requested postponement. Labour, the Conservatives, the Lib Dems, the Greens and the Independents all either initiated or supported cancelling elections in their areas. Reform UK was the only party that opposed it everywhere.
 
@@ -69,9 +71,13 @@ Attendance is calculated from [Burnley Borough Council's own records on ModernGo
 
 Musharaf Parvez and Alex Hall were elected at by-elections (November 2025 and October 2023 respectively) so their figures cover a shorter period than the rest.
 
+<img src="/images/burnley-elections-all15.jpg" alt="Burnley Elections 2026: All 15 defending councillors attendance" style="width:100%; border-radius:12px; margin: 1.5rem 0;" />
+
 ## The Three Worst Attendance Records
 
 Three defending councillors have attendance below 75% since being elected. These are the people asking for your vote again.
+
+<img src="/images/burnley-elections-worst3.jpg" alt="Burnley Elections 2026: Worst 3 attendance records" style="width:100%; border-radius:12px; margin: 1.5rem 0;" />
 
 ### Neil Mottershead (Conservative, Gannow) - 50%
 

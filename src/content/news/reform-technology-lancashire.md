@@ -2,7 +2,7 @@
 title: "How Reform Is Using Technology to Transform Lancashire County Council"
 date: 2026-03-04
 description: "From AI-powered road defect detection to a £4.3 million digital customer platform, Reform is driving a technology-led transformation at Lancashire County Council under Cabinet Member Dave Dwyer."
-image: "/images/lcc-technology.jpg"
+image: "/images/reform-technology-cover.jpg"
 tags: ["reform", "lancashire", "technology", "transparency"]
 featured: true
 ---
