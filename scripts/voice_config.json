@@ -1,0 +1,74 @@
+{
+  "voice_engines": {
+    "piper": {
+      "description": "Piper TTS - offline, Northern English male voice",
+      "install": "python3 -m pip install piper-tts pathvalidate",
+      "model_dir": ".venv/piper-voices",
+      "voices": {
+        "northern_male": {
+          "model": "en_GB-northern_english_male-medium",
+          "download_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx",
+          "sample_rate": 22050,
+          "description": "Northern English male - warm, authentic, less robotic"
+        }
+      }
+    },
+    "kokoro": {
+      "description": "Kokoro TTS - neural, high-quality British voices",
+      "install": "/usr/bin/python3 -m pip install kokoro soundfile --user",
+      "python": "/usr/bin/python3",
+      "voices": {
+        "bm_daniel": { "gender": "male", "description": "British male - clear, professional" },
+        "bm_george": { "gender": "male", "description": "British male - deeper, authoritative" },
+        "bm_lewis": { "gender": "male", "description": "British male - warm, measured" },
+        "bm_fable": { "gender": "male", "description": "British male - narrative style" },
+        "bf_alice": { "gender": "female", "description": "British female - warm, clear" },
+        "bf_isabella": { "gender": "female", "description": "British female - professional" },
+        "bf_emma": { "gender": "female", "description": "British female - friendly" },
+        "bf_lily": { "gender": "female", "description": "British female - soft, measured" }
+      }
+    }
+  },
+  "article_voice_assignments": {
+    "burnley-elections-2026-attendance": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - big topic, elections"
+    },
+    "lcc-tory-legacy-921m-losses": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - major financial scandal"
+    },
+    "lancashire-highways-650m-backlog": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - infrastructure crisis"
+    },
+    "east-lancashire-waste-crisis": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - waste management scandal"
+    },
+    "lancashire-lgr-contract-crisis": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - LGR contracts"
+    },
+    "lcc-budget-reform-first-year": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - budget reform"
+    },
+    "reform-technology-lancashire": {
+      "engine": "kokoro",
+      "voice": "bm_daniel",
+      "reason": "Semi-political - technology/innovation"
+    },
+    "stocks-massey-bequest-2025": {
+      "engine": "kokoro",
+      "voice": "bf_alice",
+      "reason": "Community - arts/education bequest, softer tone"
+    }
+  }
+}
