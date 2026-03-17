@@ -787,10 +787,10 @@ ARTICLE_SHAREABLE_PRESETS = {
                 'title': '9 Months of Reform: The Numbers',
                 'source': 'Lancashire County Council official records',
                 'data': [
-                    {'value': '53', 'label': 'Reform UK Seats', 'sublabel': 'of 84 total (63%)', 'color': 'teal'},
-                    {'value': '3.80%', 'label': 'First Budget Rise', 'sublabel': 'Lowest in 12 years (was 4.99%)', 'color': 'green'},
+                    {'value': '53', 'label': 'Reform Seats', 'sublabel': 'of 84 total (63%)', 'color': 'teal'},
+                    {'value': '3.80%', 'label': 'Council Tax Rise', 'sublabel': 'Lowest in 12 years. Was 4.99%.', 'color': 'green'},
                     {'value': '5', 'label': 'Care Homes Saved', 'sublabel': 'Against the national trend', 'color': 'green'},
-                    {'value': '£921M', 'label': 'Tory Losses', 'sublabel': 'Audited 2017-2025', 'color': 'red'},
+                    {'value': '\u00a31.27B', 'label': 'Tory Financial Damage', 'sublabel': 'Losses + bond exposure, 2017-2025', 'color': 'red'},
                 ],
             },
             {
@@ -819,34 +819,22 @@ ARTICLE_SHAREABLE_PRESETS = {
             {
                 'slug': 'savings-comparison',
                 'type': 'comparison',
-                'title': 'The Inherited Overspend',
+                'title': 'Inherited Overspend: Rapid Correction',
                 'source': 'LCC quarterly monitoring reports',
                 'data': {
-                    'before': {'value': '\u00a328M', 'label': 'Inherited Overspend', 'sublabel': 'Conservative 2024/25'},
-                    'after': {'value': '\u00a36.2M', 'label': 'Reform Q3 Position', 'sublabel': '78% reduction in 9 months'},
+                    'before': {'value': '\u00a328M', 'label': 'Inherited Overspend', 'sublabel': 'Tory savings delivery: 48%'},
+                    'after': {'value': '\u00a36.2M', 'label': 'Reform Q3 Position', 'sublabel': '78% cut. \u00a35 savings per \u00a3100 identified.'},
                 },
             },
             {
                 'slug': 'financial-damage',
                 'type': 'stat_grid',
-                'title': 'Conservative Financial Damage: 8 Years',
-                'source': 'LCC Statement of Accounts, 2017/18 to 2024/25',
-                'data': [
-                    {'value': '£416.9M', 'label': 'Treasury Losses', 'color': 'red'},
-                    {'value': '£254.5M', 'label': 'Disposal Losses', 'color': 'red'},
-                    {'value': '£138.4M', 'label': 'Overspends', 'color': 'orange'},
-                    {'value': '£111.7M', 'label': 'Subsidies & Costs', 'color': 'orange'},
-                ],
-            },
-            {
-                'slug': 'bonds-damage',
-                'type': 'stat_grid',
-                'title': 'The Bond Scandal',
+                'title': 'Conservative Financial Damage 2017-2025',
                 'source': 'LCC Statement of Accounts + Treasury reports',
                 'data': [
-                    {'value': '£600M', 'label': 'UKMBA Bond Portfolio', 'sublabel': 'Face value', 'color': 'red'},
-                    {'value': '£350M', 'label': 'Estimated Loss', 'sublabel': 'If sold today', 'color': 'red'},
-                    {'value': '£1.27B', 'label': 'Total Damage', 'sublabel': 'Including unrealised losses', 'color': 'red'},
+                    {'value': '\u00a3921.5M', 'label': 'Audited Losses', 'sublabel': 'Statement of Accounts, 8 years', 'color': 'red'},
+                    {'value': '\u00a3350M', 'label': 'Bond Exposure', 'sublabel': '\u00a3600M portfolio, unreported', 'color': 'red'},
+                    {'value': '\u00a31.27B', 'label': 'Total Damage', 'sublabel': 'Audited losses + bond exposure', 'color': 'red'},
                 ],
             },
             {
@@ -855,9 +843,9 @@ ARTICLE_SHAREABLE_PRESETS = {
                 'title': 'The Inherited Highways Backlog',
                 'source': 'LCC Highways Assessment, Home Office, House of Commons Library',
                 'data': [
-                    {'value': '£650M', 'label': 'Backlog Inherited', 'sublabel': 'Many years of underinvestment', 'color': 'orange'},
-                    {'value': '113', 'label': 'Days of Asylum Hotels', 'sublabel': '£5.77M per day on hotel bills', 'color': 'red'},
-                    {'value': '£13B', 'label': 'UK Foreign Aid', 'sublabel': 'Annual. Backlog is 18 days.', 'color': 'red'},
+                    {'value': '\u00a3650M', 'label': 'Backlog Inherited', 'sublabel': 'Many years of underinvestment', 'color': 'orange'},
+                    {'value': '113', 'label': 'Days of Asylum Hotels', 'sublabel': '\u00a35.77M per day on hotel bills', 'color': 'red'},
+                    {'value': '\u00a313B', 'label': 'UK Foreign Aid', 'sublabel': 'Annual. Backlog is 18 days.', 'color': 'red'},
                 ],
             },
         ],

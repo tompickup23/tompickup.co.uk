@@ -703,11 +703,11 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   /* Section labels */
   .prose :global(.viz-label) {
-    font-size: 0.6875rem;
-    font-weight: 600;
+    font-size: 0.8125rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #636366;
+    color: #8e8e93;
     margin-bottom: 16px;
   }
 
@@ -726,7 +726,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   /* Stat cards — navy-tinted with teal hover glow */
   .prose :global(.viz-stat) {
-    padding: 20px;
+    padding: 24px 20px;
     background: linear-gradient(135deg, rgba(10, 22, 40, 0.6), rgba(18, 34, 58, 0.4));
     border: 1px solid rgba(18, 182, 207, 0.08);
     border-radius: 16px;
@@ -771,26 +771,28 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   .prose :global(.viz-stat .value) {
     display: block;
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 900;
     line-height: 1;
   }
 
-  .prose :global(.viz-stat .value.lg) { font-size: 2.5rem; }
-  .prose :global(.viz-stat .value.xl) { font-size: 3rem; }
+  .prose :global(.viz-stat .value.lg) { font-size: 2.75rem; }
+  .prose :global(.viz-stat .value.xl) { font-size: 3.25rem; }
 
   .prose :global(.viz-stat .label) {
     display: block;
-    font-size: 0.75rem;
-    color: #8e8e93;
-    margin-top: 8px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #b0b0b8;
+    margin-top: 10px;
   }
 
   .prose :global(.viz-stat .sublabel) {
     display: block;
-    font-size: 0.6875rem;
-    color: #636366;
-    margin-top: 4px;
+    font-size: 0.8125rem;
+    color: #8e8e93;
+    margin-top: 6px;
+    line-height: 1.4;
   }
 
   /* Callout — Reform broadcast banner */
@@ -1091,16 +1093,17 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   .prose :global(.viz-comparison .side .value) {
     display: block;
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 900;
     line-height: 1;
   }
 
   .prose :global(.viz-comparison .side .label) {
     display: block;
-    font-size: 0.75rem;
-    color: #8e8e93;
-    margin-top: 8px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #b0b0b8;
+    margin-top: 10px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -1140,9 +1143,11 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .prose :global(.viz-stat .value) { font-size: 1.75rem; }
-    .prose :global(.viz-stat .value.lg) { font-size: 2rem; }
-    .prose :global(.viz-stat .value.xl) { font-size: 2.25rem; }
+    .prose :global(.viz-stat .value) { font-size: 2rem; }
+    .prose :global(.viz-stat .value.lg) { font-size: 2.25rem; }
+    .prose :global(.viz-stat .value.xl) { font-size: 2.5rem; }
+    .prose :global(.viz-stat .label) { font-size: 0.875rem; }
+    .prose :global(.viz-stat .sublabel) { font-size: 0.75rem; }
     .prose :global(.viz-panel) { padding: 20px; }
     .prose :global(.viz-panel-reform) { padding: 20px; }
     .prose :global(.viz-callout) { padding: 24px 16px; }
@@ -1161,7 +1166,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     }
 
     .prose :global(.viz-comparison .side) { padding: 20px; }
-    .prose :global(.viz-comparison .side .value) { font-size: 2rem; }
+    .prose :global(.viz-comparison .side .value) { font-size: 2.25rem; }
+    .prose :global(.viz-comparison .side .label) { font-size: 0.875rem; }
   }
 
   @media (max-width: 640px) {
@@ -1171,9 +1177,11 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       grid-template-columns: 1fr;
     }
 
-    .prose :global(.viz-stat .value) { font-size: 1.5rem; }
-    .prose :global(.viz-stat .value.lg) { font-size: 1.75rem; }
-    .prose :global(.viz-stat .value.xl) { font-size: 2rem; }
+    .prose :global(.viz-stat .value) { font-size: 1.75rem; }
+    .prose :global(.viz-stat .value.lg) { font-size: 2rem; }
+    .prose :global(.viz-stat .value.xl) { font-size: 2.25rem; }
+    .prose :global(.viz-stat .label) { font-size: 0.8125rem; }
+    .prose :global(.viz-stat .sublabel) { font-size: 0.75rem; }
     .prose :global(.viz-panel) { padding: 16px 12px; }
     .prose :global(.viz-panel-reform) { padding: 16px 12px; }
     .prose :global(.viz-callout) { padding: 20px 16px; }
@@ -1200,7 +1208,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
     .prose :global(.viz-comparison .side) { padding: 20px 16px; }
-    .prose :global(.viz-comparison .side .value) { font-size: 1.75rem; }
+    .prose :global(.viz-comparison .side .value) { font-size: 2rem; }
+    .prose :global(.viz-comparison .side .label) { font-size: 0.8125rem; }
   }
 
   /* Mobile responsive — inline visualisation overrides */
