@@ -18,15 +18,21 @@ function isActive(href: string): boolean {
   <div class="header-inner">
     <a href="/" class="brand" aria-label="Tom Pickup - Home">
       <svg class="brand-logo" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="32" height="32" rx="8" fill="url(#logo-gradient)" />
-        <path d="M8 10h16v3H18.5v12h-5V13H8v-3z" fill="#fff" />
-        <path d="M19.5 15h4.5v3h-4.5v4h5v3H14.5V15h5z" fill="rgba(255,255,255,0.5)" />
         <defs>
-          <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#12b6cf" />
-            <stop offset="1" stop-color="#0a8a9e" />
+          <linearGradient id="logo-bg" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0" stop-color="#0d1117"/>
+            <stop offset="1" stop-color="#161b22"/>
+          </linearGradient>
+          <linearGradient id="logo-teal" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0" stop-color="#12b6cf"/>
+            <stop offset="1" stop-color="#0d9fb5"/>
           </linearGradient>
         </defs>
+        <rect width="32" height="32" rx="7" fill="url(#logo-bg)"/>
+        <rect x=".5" y=".5" width="31" height="31" rx="6.5" fill="none" stroke="url(#logo-teal)" stroke-opacity=".3"/>
+        <text x="3" y="24" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="22" fill="#fff">T</text>
+        <text x="16" y="24" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="22" fill="url(#logo-teal)">P</text>
+        <rect x="4" y="28" width="24" height="1.5" rx=".75" fill="url(#logo-teal)"/>
       </svg>
       <span class="brand-text">Tom <span class="brand-accent">Pickup</span></span>
     </a>

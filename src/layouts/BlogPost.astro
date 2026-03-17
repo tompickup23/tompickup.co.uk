@@ -791,17 +791,41 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   }
 
   /* Text color utilities for viz */
-  .prose :global(.text-teal) { color: #12b6cf; }
+  .prose :global(.text-teal) { color: var(--party-reform); }
   .prose :global(.text-green) { color: #30d158; }
   .prose :global(.text-red) { color: #ff453a; }
   .prose :global(.text-orange) { color: #ff9f0a; }
   .prose :global(.text-purple) { color: #bf5af2; }
-  .prose :global(.text-blue) { color: #0087DC; }
-  .prose :global(.text-labour) { color: #E4003B; }
+  .prose :global(.text-blue) { color: var(--party-conservative); }
+  .prose :global(.text-labour) { color: var(--party-labour); }
   .prose :global(.text-muted) { color: #8e8e93; }
   .prose :global(.text-dim) { color: #636366; }
   .prose :global(.text-white) { color: #ffffff; }
   .prose :global(.text-bold) { font-weight: 700; }
+
+  /* Official political party colour classes */
+  .prose :global(.text-party-reform) { color: var(--party-reform); }
+  .prose :global(.text-party-conservative) { color: var(--party-conservative); }
+  .prose :global(.text-party-labour) { color: var(--party-labour); }
+  .prose :global(.text-party-libdem) { color: var(--party-libdem); }
+  .prose :global(.text-party-green) { color: var(--party-green); }
+  .prose :global(.text-party-independent) { color: var(--party-independent); }
+
+  /* Party-themed viz-stat accent borders */
+  .prose :global(.viz-stat.party-conservative) { border-left: 3px solid var(--party-conservative); }
+  .prose :global(.viz-stat.party-labour) { border-left: 3px solid var(--party-labour); }
+  .prose :global(.viz-stat.party-libdem) { border-left: 3px solid var(--party-libdem); }
+  .prose :global(.viz-stat.party-green) { border-left: 3px solid var(--party-green); }
+  .prose :global(.viz-stat.party-independent) { border-left: 3px solid var(--party-independent); }
+  .prose :global(.viz-stat.party-reform) { border-left: 3px solid var(--party-reform); }
+
+  /* Party-themed viz-panel borders */
+  .prose :global(.viz-panel-party-conservative) { border-color: var(--party-conservative); }
+  .prose :global(.viz-panel-party-labour) { border-color: var(--party-labour); }
+  .prose :global(.viz-panel-party-libdem) { border-color: var(--party-libdem); }
+  .prose :global(.viz-panel-party-green) { border-color: var(--party-green); }
+  .prose :global(.viz-panel-party-independent) { border-color: var(--party-independent); }
+  .prose :global(.viz-panel-party-reform) { border-color: var(--party-reform); }
 
   /* Viz-class responsive overrides */
   @media (max-width: 768px) {

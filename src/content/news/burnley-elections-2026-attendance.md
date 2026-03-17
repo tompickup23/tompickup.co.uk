@@ -47,53 +47,27 @@ Every ward in Burnley will be contested. The seats up for election are those won
 
 The current council has no overall control. The Co-operative Alliance (10 Independents, 7 Lib Dems, 5 Greens) runs a minority administration with 22 of 45 seats, one short of a majority. Labour holds 13, Conservatives 8, and Reform UK 2.
 
-## Who Is Defending?
-
-| Ward | Councillor | Party | Since May 2022 Attendance |
-|------|-----------|-------|--------------------------|
-| Bank Hall | Afrasiab Anwar | Independent | 96.6% (85/88) |
-| Briercliffe | Gordon Lishman | Lib Dem | 81.0% (47/58) |
-| Brunshaw | Christine Sollis | Independent | 69.0% (60/87) |
-| Cliviger with Worsthorne | Jack Launer | Green | 80.4% (78/97) |
-| Coalclough with Deerplay | Gordon Birtwistle | Lib Dem | 79.8% (99/124) |
-| Daneshouse with Stoneyholme | Shah Hussain | Independent | 85.6% (77/90) |
-| Gannow | Neil Mottershead | Conservative | 50.0% (26/52) |
-| Gawthorpe | Alun Lewis | Labour | 89.3% (67/75) |
-| Hapton with Park | Jamie McGowan | Conservative | 91.8% (90/98) |
-| Lanehead | Sue Graham | Labour | 93.8% (90/96) |
-| Queensgate | Musharaf Parvez | Independent | 100% (8/8) |
-| Rosegrove with Lowerhouse | Gail Barton | Labour | 91.0% (71/78) |
-| Rosehill with Burnley Wood | Bill Horrocks | Labour | 91.1% (72/79) |
-| Trinity | Alex Hall | Green | 73.8% (48/65) |
-| Whittlefield with Ightenhill | Mike Steel | Conservative | 89.8% (88/98) |
-
-Attendance is calculated from [Burnley Borough Council's own records on ModernGov](https://burnley.moderngov.co.uk/mgUserAttendanceSummary.aspx?DR=05/05/2022+-+17/03/2026), covering all committee and Full Council meetings each councillor was expected to attend between the May 2022 election and 17 March 2026.
-
-Musharaf Parvez and Alex Hall were elected at by-elections (November 2025 and October 2023 respectively) so their figures cover a shorter period than the rest.
-
-<img src="/images/burnley-elections-all15.jpg" alt="Burnley Elections 2026: All 15 defending councillors attendance" style="width:100%; border-radius:12px; margin: 1.5rem 0;" />
-
 ## The Three Worst Attendance Records
 
-Three defending councillors have attendance below 75% since being elected. These are the people asking for your vote again.
+Three defending councillors have attendance below 75% since being elected. These are the people asking for your vote again. Attendance is calculated from [Burnley Borough Council's own records on ModernGov](https://burnley.moderngov.co.uk/mgUserAttendanceSummary.aspx?DR=05/05/2022+-+17/03/2026), covering all committee and Full Council meetings each councillor was expected to attend between the May 2022 election and 17 March 2026.
 
 <img src="/images/burnley-elections-worst3.jpg" alt="Burnley Elections 2026: Worst 3 attendance records" style="width:100%; border-radius:12px; margin: 1.5rem 0;" />
 
-### Neil Mottershead (Conservative, Gannow) - 50%
+### Neil Mottershead (<span class="text-party-conservative">Conservative</span>, Gannow) - 50%
 
-<div class="viz-panel viz-panel-alert">
+<div class="viz-panel viz-panel-alert viz-panel-party-conservative">
 <div class="viz-grid viz-grid-3">
-<div class="viz-stat red">
+<div class="viz-stat party-conservative">
 <span class="value text-red">50.0%</span>
 <span class="label">Attendance since 2022</span>
 <span class="sublabel">26 of 52 meetings attended</span>
 </div>
-<div class="viz-stat orange">
+<div class="viz-stat party-conservative">
 <span class="value text-orange">71%</span>
 <span class="label">Last 6 months</span>
 <span class="sublabel">5 of 7 meetings</span>
 </div>
-<div class="viz-stat teal">
+<div class="viz-stat party-conservative">
 <span class="value" style="color: #8e8e93;">2</span>
 <span class="label">Committees</span>
 <span class="sublabel">Full Council + Licensing only</span>
@@ -103,21 +77,21 @@ Three defending councillors have attendance below 75% since being elected. These
 
 Cllr Mottershead has the worst attendance of any defending councillor by a significant margin. He has missed half of all meetings he was expected to attend over his four-year term. He sits on just two bodies: Full Council and the Licensing Committee. He has no scrutiny, development control or audit responsibilities. In the current municipal year his attendance is 71%, showing a pattern of absence rather than a one-off period.
 
-### Christine Sollis (Independent, Brunshaw) - 69%
+### Christine Sollis (<span class="text-party-independent">Independent</span>, Brunshaw) - 69%
 
-<div class="viz-panel viz-panel-alert">
+<div class="viz-panel viz-panel-alert viz-panel-party-independent">
 <div class="viz-grid viz-grid-3">
-<div class="viz-stat red">
+<div class="viz-stat party-independent">
 <span class="value text-red">69.0%</span>
 <span class="label">Attendance since 2022</span>
 <span class="sublabel">60 of 87 meetings attended</span>
 </div>
-<div class="viz-stat orange">
+<div class="viz-stat party-independent">
 <span class="value text-orange">56%</span>
 <span class="label">Last 6 months</span>
 <span class="sublabel">9 of 16 meetings</span>
 </div>
-<div class="viz-stat teal">
+<div class="viz-stat party-independent">
 <span class="value" style="color: #8e8e93;">Vice-Chair</span>
 <span class="label">Audit &amp; Standards</span>
 <span class="sublabel">Missed 3 meetings of her own committee</span>
@@ -127,21 +101,21 @@ Cllr Mottershead has the worst attendance of any defending councillor by a signi
 
 Cllr Sollis serves as Vice-Chair of the Audit and Standards Committee, a role that comes with a responsibility to attend. In the current year she has missed three Audit and Standards meetings. Her attendance has worsened to 56% in the last six months, meaning she is now missing nearly half of the meetings she is expected to be at. She was elected as Labour in 2022 and subsequently joined the Burnley Independent Group.
 
-### Alex Hall (Green, Trinity) - 73.8%
+### Alex Hall (<span class="text-party-green">Green</span>, Trinity) - 73.8%
 
-<div class="viz-panel viz-panel-alert">
+<div class="viz-panel viz-panel-alert viz-panel-party-green">
 <div class="viz-grid viz-grid-3">
-<div class="viz-stat red">
+<div class="viz-stat party-green">
 <span class="value text-red">73.8%</span>
 <span class="label">Attendance since by-election</span>
 <span class="sublabel">48 of 65 meetings attended</span>
 </div>
-<div class="viz-stat orange">
+<div class="viz-stat party-green">
 <span class="value text-orange">53%</span>
 <span class="label">Last 6 months</span>
 <span class="sublabel">9 of 17 meetings</span>
 </div>
-<div class="viz-stat teal">
+<div class="viz-stat party-green">
 <span class="value" style="color: #8e8e93;">0 of 3</span>
 <span class="label">Audit &amp; Standards</span>
 <span class="sublabel">Has not attended a single one this year</span>

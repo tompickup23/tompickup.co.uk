@@ -1,4 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#09090b"/>
-  <text x="16" y="22" font-family="system-ui" font-weight="800" font-size="18" fill="#12b6cf" text-anchor="middle">TP</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="32" y2="32">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="32" y2="32">
+      <stop offset="0" stop-color="#12b6cf"/>
+      <stop offset="1" stop-color="#0d9fb5"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <rect x=".5" y=".5" width="31" height="31" rx="6.5" fill="none" stroke="url(#acc)" stroke-opacity=".3"/>
+  <!-- T -->
+  <path d="M4.5 7h11.5v3H13v14h-3.5V10H4.5z" fill="#fff"/>
+  <!-- P stem + bowl -->
+  <path d="M17 7h7.5c2 0 3.5 1.5 3.5 3.5v3c0 2-1.5 3.5-3.5 3.5H20.5v8H17zm3.5 3v4h3.5c.5 0 .75-.35.75-.75v-2.5c0-.4-.25-.75-.75-.75z" fill="url(#acc)"/>
 </svg>

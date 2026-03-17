@@ -116,11 +116,11 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
   }
 
   .cbar-reform {
-    color: #12b6cf;
+    color: var(--party-reform);
   }
 
   .cbar-con {
-    color: #ff453a;
+    color: var(--party-conservative);
   }
 
   .cbar-check {
@@ -142,11 +142,11 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
   }
 
   .cbar-fill-reform {
-    background: linear-gradient(90deg, #12b6cf, #64d2ff);
+    background: linear-gradient(90deg, var(--party-reform), #64d2ff);
   }
 
   .cbar-fill-con {
-    background: linear-gradient(90deg, #ff453a, #ff6961);
+    background: linear-gradient(90deg, var(--party-conservative), #4da8e8);
   }
 
   @keyframes barFill {
