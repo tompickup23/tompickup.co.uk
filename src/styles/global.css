@@ -55,6 +55,17 @@
   --party-ukip: #70147A;
   --party-snp: #FDF38E;
   --party-plaid: #005B54;
+
+  /* Reform UK Campaign Branding */
+  --reform-navy: #0A1628;
+  --reform-navy-mid: #0E1E36;
+  --reform-navy-light: #122642;
+  --reform-teal: #12b6cf;
+  --reform-teal-bright: #1ED2F0;
+  --reform-red: #E4003B;
+  --reform-card: rgba(18, 34, 58, 0.6);
+  --reform-card-border: rgba(18, 182, 207, 0.12);
+  --reform-glow: 0 0 20px rgba(18, 182, 207, 0.15);
 }
 
 
@@ -504,6 +515,52 @@ code {
 
 .badge-pulse {
   animation: badgePulse 2s ease-in-out infinite;
+}
+
+.reform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: var(--reform-red);
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
+.reform-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: badgePulse 1.5s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   Reform UK Branded Components
+   ============================================================ */
+.reform-brand {
+  --bg-primary: var(--reform-navy);
+  --bg-secondary: var(--reform-navy-mid);
+  --bg-tertiary: var(--reform-navy-light);
+  --border-color: rgba(18, 182, 207, 0.15);
+  --separator: rgba(18, 182, 207, 0.1);
+}
+
+.reform-brand .card {
+  background: linear-gradient(135deg, var(--reform-card) 0%, rgba(14, 30, 54, 0.5) 100%);
+  border-color: var(--reform-card-border);
+}
+
+.reform-brand .card:hover {
+  border-color: rgba(18, 182, 207, 0.3);
+  box-shadow: var(--shadow-lg), var(--reform-glow);
 }
 
 

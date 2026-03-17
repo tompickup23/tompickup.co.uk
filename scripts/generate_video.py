@@ -2,14 +2,15 @@
 """
 Social media short video generator for tompickup.co.uk articles.
 
-UPGRADED v2: Professional-grade political shorts with:
-- edge-tts voiceover (en-GB-RyanNeural)
+UPGRADED v3: Reform UK press conference branding with:
+- Dual TTS: Piper (Northern English Male) + Kokoro (British neural voices)
+- Reform UK press conference overlay: navy BG, white marquee bar, red DATA badge
 - Animated data visualisations (growing bars, counting numbers)
 - Phrase-by-phrase captions synced to narration
 - Ken Burns zoom on background images
 - Crossfade transitions between scenes
 - Gradient bar fills with glow effects
-- Premium dark theme matching the website
+- New scene types: ReformBrandScene, QuoteCardScene, ComparisonScene
 
 Generates 9:16 vertical shorts (1080x1920) suitable for:
 - Instagram Reels, TikTok, YouTube Shorts, Facebook Reels
@@ -26,27 +27,33 @@ import sys
 import argparse
 import textwrap
 import math
-import asyncio
 import subprocess
 import tempfile
 import shutil
 import json
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from reform_brand import (
+    COLORS, PARTY_COLORS, PARTY_ABBR,
+    load_font as _brand_load_font,
+    draw_reform_logo, draw_watermark_bar, draw_data_badge,
+    draw_marquee_bar as _brand_marquee, draw_rounded_rect as _brand_rounded_rect,
+    create_branded_background, apply_edge_vignette, draw_accent_line,
+)
 
-# edge-tts for voiceover
-try:
-    import edge_tts
-    HAS_TTS = True
-except ImportError:
-    HAS_TTS = False
+# TTS: Piper (Northern English Male) + Kokoro (British neural voices)
+# Both use subprocess calls - no Python imports needed. Config in voice_config.json.
 
 # Paths
 BASE_DIR = Path(__file__).parent.parent
+SCRIPTS_DIR = Path(__file__).parent
 IMAGES_DIR = BASE_DIR / "public" / "images"
 CONTENT_DIR = BASE_DIR / "src" / "content" / "news"
 OUTPUT_DIR = BASE_DIR / "public" / "videos"
 LOGO_PATH = Path("/tmp/reform-uk-logo.png")
+VOICE_CONFIG_PATH = SCRIPTS_DIR / "voice_config.json"
+PIPER_VENV = BASE_DIR / ".venv"
+PIPER_MODEL_DIR = PIPER_VENV / "piper-voices"
 FFMPEG = "/opt/homebrew/bin/ffmpeg"
 FFPROBE = "/opt/homebrew/bin/ffprobe"
 
@@ -54,96 +61,49 @@ FFPROBE = "/opt/homebrew/bin/ffprobe"
 W, H = 1080, 1920
 FPS = 30
 
-# TTS config
-TTS_VOICE = "en-GB-RyanNeural"
-TTS_RATE = "+10%"
-TTS_PITCH = "+0Hz"
+# Voice config (loaded from voice_config.json)
+_voice_config = None
+
+def load_voice_config():
+    """Load voice configuration from voice_config.json."""
+    global _voice_config
+    if _voice_config is not None:
+        return _voice_config
+    try:
+        with open(VOICE_CONFIG_PATH) as f:
+            _voice_config = json.load(f)
+    except Exception as e:
+        print(f"  Warning: Could not load voice_config.json: {e}")
+        _voice_config = {"voice_engines": {}, "article_voice_assignments": {}}
+    return _voice_config
+
+def get_voice_assignment(article_slug):
+    """Get the voice engine and voice name for an article."""
+    config = load_voice_config()
+    assignments = config.get("article_voice_assignments", {})
+    if article_slug in assignments:
+        return assignments[article_slug]
+    # Default: piper northern_male for political content
+    return {"engine": "piper", "voice": "northern_male", "reason": "default"}
 
 # ============================================================
 # DESIGN SYSTEM
 # ============================================================
 
-COLORS = {
-    'bg':           (13, 17, 23),
-    'bg2':          (17, 21, 28),
-    'card':         (22, 27, 34),
-    'card_border':  (33, 38, 45),
-    'teal':         (18, 182, 207),
-    'teal_bright':  (30, 210, 240),
-    'teal_dim':     (14, 120, 140),
-    'teal_glow':    (18, 182, 207, 40),
-    'white':        (240, 240, 245),
-    'light':        (200, 200, 210),
-    'muted':        (130, 130, 140),
-    'dim':          (80, 82, 88),
-    'red':          (255, 69, 58),
-    'red_dim':      (180, 40, 35),
-    'orange':       (255, 159, 10),
-    'green':        (48, 209, 88),
-}
+# COLORS dict -- now imported from reform_brand.py
 
-PARTY_COLORS = {
-    'Conservative': (0, 135, 220),
-    'Labour':       (228, 0, 59),
-    'Lib Dem':      (250, 166, 26),
-    'Green':        (106, 176, 35),
-    'Independent':  (170, 170, 180),
-    'Reform UK':    (18, 182, 207),
-}
+# PARTY_COLORS dict -- now imported from reform_brand.py
 
-PARTY_ABBR = {
-    'Conservative': 'CON',
-    'Labour': 'LAB',
-    'Lib Dem': 'LD',
-    'Green': 'GRN',
-    'Independent': 'IND',
-    'Reform UK': 'REF',
-}
+# PARTY_ABBR dict -- now imported from reform_brand.py
 
 
 # ============================================================
 # FONT SYSTEM
 # ============================================================
 
-_font_cache = {}
-
 def load_font(size, bold=False):
-    key = (size, bold)
-    if key in _font_cache:
-        return _font_cache[key]
-
-    if bold:
-        paths = [
-            "/System/Library/Fonts/SFPro-Bold.otf",
-            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-            "/System/Library/Fonts/SFPro.ttf",
-            "/System/Library/Fonts/Helvetica.ttc",
-        ]
-    else:
-        paths = [
-            "/System/Library/Fonts/SFPro-Regular.otf",
-            "/System/Library/Fonts/SFPro.ttf",
-            "/System/Library/Fonts/Helvetica.ttc",
-            "/Library/Fonts/Arial.ttf",
-        ]
-
-    for p in paths:
-        try:
-            idx = 1 if p.endswith('.ttc') and bold else 0
-            f = ImageFont.truetype(p, size, index=idx)
-            _font_cache[key] = f
-            return f
-        except Exception:
-            try:
-                f = ImageFont.truetype(p, size)
-                _font_cache[key] = f
-                return f
-            except Exception:
-                continue
-
-    f = ImageFont.load_default()
-    _font_cache[key] = f
-    return f
+    """Load font via shared reform_brand system."""
+    return _brand_load_font(size, bold=bold)
 
 
 # ============================================================
@@ -151,29 +111,8 @@ def load_font(size, bold=False):
 # ============================================================
 
 def draw_rounded_rect(draw, xy, radius, fill=None, outline=None, width=1):
-    """Draw a rounded rectangle."""
-    x0, y0, x1, y1 = xy
-    r = min(radius, (x1 - x0) // 2, (y1 - y0) // 2)
-    if r < 1:
-        if fill:
-            draw.rectangle(xy, fill=fill)
-        return
-    if fill:
-        draw.rectangle([(x0+r, y0), (x1-r, y1)], fill=fill)
-        draw.rectangle([(x0, y0+r), (x1, y1-r)], fill=fill)
-        draw.pieslice([(x0, y0), (x0+2*r, y0+2*r)], 180, 270, fill=fill)
-        draw.pieslice([(x1-2*r, y0), (x1, y0+2*r)], 270, 360, fill=fill)
-        draw.pieslice([(x0, y1-2*r), (x0+2*r, y1)], 90, 180, fill=fill)
-        draw.pieslice([(x1-2*r, y1-2*r), (x1, y1)], 0, 90, fill=fill)
-    if outline:
-        draw.arc([(x0, y0), (x0+2*r, y0+2*r)], 180, 270, fill=outline, width=width)
-        draw.arc([(x1-2*r, y0), (x1, y0+2*r)], 270, 360, fill=outline, width=width)
-        draw.arc([(x0, y1-2*r), (x0+2*r, y1)], 90, 180, fill=outline, width=width)
-        draw.arc([(x1-2*r, y1-2*r), (x1, y1)], 0, 90, fill=outline, width=width)
-        draw.line([(x0+r, y0), (x1-r, y0)], fill=outline, width=width)
-        draw.line([(x0+r, y1), (x1-r, y1)], fill=outline, width=width)
-        draw.line([(x0, y0+r), (x0, y1-r)], fill=outline, width=width)
-        draw.line([(x1, y0+r), (x1, y1-r)], fill=outline, width=width)
+    """Draw a rounded rectangle via shared reform_brand system."""
+    return _brand_rounded_rect(draw, xy, radius, fill=fill, outline=outline, width=width)
 
 
 def draw_gradient_bar(img, xy, color, progress=1.0):
@@ -266,15 +205,142 @@ def lerp(a, b, t):
 
 
 # ============================================================
+# REFORM UK PRESS CONFERENCE OVERLAYS
+# ============================================================
+
+# Marquee bar constants
+MARQUEE_BAR_HEIGHT = 60
+MARQUEE_SPEED = 2.0  # pixels per frame
+
+# Default marquee text (can be overridden per-article)
+_article_marquee_text = None
+
+def set_marquee_text(text):
+    """Set custom marquee text for the current article."""
+    global _article_marquee_text
+    _article_marquee_text = text
+
+def get_marquee_text():
+    """Get the current marquee text."""
+    if _article_marquee_text:
+        return _article_marquee_text
+    return "tompickup.co.uk  \u2022  Reform UK  \u2022  Lancashire County Council  \u2022  Coal Clough with Deerplay  \u2022  Vote Reform, 7 May 2026  \u2022  "
+
+
+def draw_marquee_bar(img, draw, frame_idx):
+    """Draw the white marquee bar at the bottom of every frame with scrolling text.
+
+    Mimics the Reform UK press conference lower-third white bar with
+    continuously scrolling text. Text is set per-article via set_marquee_text().
+    """
+    bar_y = H - MARQUEE_BAR_HEIGHT
+    # White bar background
+    draw.rectangle([(0, bar_y), (W, H)], fill=COLORS['marquee_bar'])
+
+    # Thin teal accent line above the bar
+    draw.rectangle([(0, bar_y - 2), (W, bar_y)], fill=COLORS['teal'])
+
+    # Scrolling text
+    font_marquee = load_font(22, bold=True)
+    text = get_marquee_text()
+
+    # Calculate text width
+    bbox = draw.textbbox((0, 0), text, font=font_marquee)
+    text_w = bbox[2] - bbox[0]
+
+    # Scroll offset (moves left continuously, wraps seamlessly)
+    raw_offset = frame_idx * MARQUEE_SPEED
+    offset = -(raw_offset % max(text_w, 1))
+
+    # Draw text multiple times for seamless loop across full width
+    text_y = bar_y + (MARQUEE_BAR_HEIGHT - (bbox[3] - bbox[1])) // 2
+    x = int(offset)
+    while x < W:
+        draw.text((x, text_y), text, fill=COLORS['marquee_text'], font=font_marquee)
+        x += text_w
+
+    return draw
+
+
+def draw_date_badge(img, draw, date_text=None):
+    """Draw a date badge in the top-left corner.
+
+    Shows the article publication date in the Reform broadcast style,
+    replacing the previous red 'LIVE' badge. White text on semi-transparent
+    navy background with teal accent.
+    """
+    import datetime
+    if date_text is None:
+        date_text = datetime.date.today().strftime("%-d %B %Y").upper()
+    else:
+        date_text = date_text.upper()
+
+    font_date = load_font(16, bold=True)
+    bbox = draw.textbbox((0, 0), date_text, font=font_date)
+    text_w = bbox[2] - bbox[0]
+    text_h = bbox[3] - bbox[1]
+
+    pad_x, pad_y = 14, 8
+    badge_w = text_w + pad_x * 2
+    badge_h = text_h + pad_y * 2
+    badge_x, badge_y = 30, 28
+
+    # Semi-transparent navy background with teal border
+    draw_rounded_rect(draw,
+                      (badge_x, badge_y, badge_x + badge_w, badge_y + badge_h),
+                      6,
+                      fill=COLORS['card'])
+    # Teal left accent on the badge
+    draw.rectangle(
+        [(badge_x, badge_y + 3), (badge_x + 3, badge_y + badge_h - 3)],
+        fill=COLORS['teal']
+    )
+
+    # White text
+    draw.text((badge_x + pad_x, badge_y + pad_y), date_text,
+              fill=COLORS['white'], font=font_date)
+
+    return draw
+
+
+def apply_overlays(img, draw, frame_idx, date_text=None):
+    """Apply Reform UK press conference overlays to any frame.
+
+    Call this at the end of every scene's render_frame to add:
+    - Date badge (top-left)
+    - Official Reform UK logo (top-right)
+    - White marquee bar with scrolling text (bottom)
+    """
+    draw = draw_date_badge(img, draw, date_text=date_text)
+
+    # Official Reform UK logo top-right
+    try:
+        logo_scale = 0.8  # ~272px wide at 0.8x scale
+        from reform_brand import draw_reform_logo as _draw_logo
+        _draw_logo(img, W - 310, 20, scale=logo_scale, variant='full')
+    except Exception:
+        # Fallback to text if logo unavailable
+        font_brand = load_font(16, bold=True)
+        draw.text((W - 200, 30), "REFORM UK", fill=COLORS['teal'], font=font_brand)
+
+    draw = draw_marquee_bar(img, draw, frame_idx)
+    return draw
+
+
+# ============================================================
 # FRAME GENERATORS (base components)
 # ============================================================
 
 def create_frame_base(with_scanlines=False):
-    """Create a base frame with premium dark background."""
+    """Create a base frame with Reform UK navy blue background.
+
+    Background is dark navy (#0A1628) with a subtle vertical gradient,
+    matching the Reform UK press conference aesthetic.
+    """
     img = Image.new("RGB", (W, H), COLORS['bg'])
     draw = ImageDraw.Draw(img)
 
-    # Subtle vertical gradient
+    # Subtle vertical gradient (navy to slightly lighter navy)
     for y in range(H):
         ratio = y / H
         r = int(COLORS['bg'][0] + (COLORS['bg2'][0] - COLORS['bg'][0]) * ratio)
@@ -282,14 +348,11 @@ def create_frame_base(with_scanlines=False):
         b = int(COLORS['bg'][2] + (COLORS['bg2'][2] - COLORS['bg'][2]) * ratio)
         draw.line([(0, y), (W, y)], fill=(r, g, b))
 
-    # Top accent bar
+    # Top teal accent bar
     draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
 
-    # Bottom accent bar
-    draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
-
     if with_scanlines:
-        # Subtle scanline effect for premium feel
+        # Subtle scanline effect for broadcast feel
         overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         od = ImageDraw.Draw(overlay)
         for y in range(0, H, 4):
@@ -301,29 +364,35 @@ def create_frame_base(with_scanlines=False):
     return img, draw
 
 
-def add_branding(img, draw, show_logo=True, show_site=True):
-    """Add branding elements to frame."""
+def add_branding(img, draw, show_logo=True, show_site=False):
+    """Add branding elements to frame.
+
+    Uses the official Reform UK logo PNG from reform_brand module.
+    Note: show_site defaults to False because the marquee bar now
+    contains the site URL.
+    """
     if show_logo:
+        # Official Reform UK logo via reform_brand module
         try:
-            logo = Image.open(LOGO_PATH).convert("RGBA")
-            logo = logo.resize((48, 48), Image.LANCZOS)
-            img.paste(logo, (36, 32), logo)
+            from reform_brand import draw_reform_logo as _draw_logo
+            _draw_logo(img, W - 310, 20, scale=0.8, variant='full')
         except Exception:
-            pass
-        font_brand = load_font(15, bold=True)
-        draw.text((96, 36), "REFORM UK", fill=COLORS['teal'], font=font_brand)
-        font_loc = load_font(12)
-        draw.text((96, 54), "BURNLEY", fill=COLORS['muted'], font=font_loc)
+            font_brand = load_font(14, bold=True)
+            draw.text((W - 200, 30), "REFORM UK", fill=COLORS['teal'], font=font_brand)
 
     if show_site:
         font_site = load_font(16, bold=True)
-        text_center_x(draw, "tompickup.co.uk", font_site, H - 50, COLORS['teal'])
+        # Place above the marquee bar
+        text_center_x(draw, "tompickup.co.uk", font_site, H - MARQUEE_BAR_HEIGHT - 40, COLORS['teal'])
 
 
 def add_caption_bar(img, draw, text, y_pos=None, font_size=32, bg_alpha=180):
-    """Add a caption bar with semi-transparent background."""
+    """Add a caption bar with semi-transparent background.
+
+    Positioned above the marquee bar by default.
+    """
     if y_pos is None:
-        y_pos = H - 280
+        y_pos = H - MARQUEE_BAR_HEIGHT - 260
 
     font = load_font(font_size, bold=True)
     lines = textwrap.wrap(text, width=28)
@@ -334,7 +403,7 @@ def add_caption_bar(img, draw, text, y_pos=None, font_size=32, bg_alpha=180):
     # Semi-transparent background
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     od = ImageDraw.Draw(overlay)
-    od.rectangle([(30, y_pos), (W - 30, y_pos + total_h)], fill=(13, 17, 23, bg_alpha))
+    od.rectangle([(30, y_pos), (W - 30, y_pos + total_h)], fill=(10, 22, 40, bg_alpha))
 
     # Teal left accent
     od.rectangle([(30, y_pos), (34, y_pos + total_h)], fill=(*COLORS['teal'], 255))
@@ -479,6 +548,9 @@ class StatCountScene(Scene):
         # Caption phrases
         self._draw_captions(img, draw, frame_idx, total_frames)
 
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
         return img
 
     def _draw_captions(self, img, draw, frame_idx, total_frames):
@@ -491,6 +563,10 @@ class StatCountScene(Scene):
                 if fade_t > 0:
                     alpha = int(220 * ease_out_cubic(fade_t))
                     add_caption_bar(img, draw, text, bg_alpha=min(alpha, 180))
+
+    def _apply_overlays(self, img, draw, frame_idx):
+        """Apply Reform UK press conference overlays."""
+        return apply_overlays(img, draw, frame_idx)
 
 
 class AnimatedBarChartScene(Scene):
@@ -624,6 +700,9 @@ class AnimatedBarChartScene(Scene):
                 if fade_t > 0:
                     add_caption_bar(img, draw, text, bg_alpha=int(180 * ease_out_cubic(fade_t)))
 
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
         return img
 
 
@@ -700,6 +779,9 @@ class TextRevealScene(Scene):
                 if fade_t > 0:
                     add_caption_bar(img, draw, text, bg_alpha=int(180 * ease_out_cubic(fade_t)))
 
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
         return img
 
 
@@ -764,17 +846,16 @@ class TitleScene(Scene):
             # Blur slightly
             cropped = cropped.filter(ImageFilter.GaussianBlur(radius=4))
 
-            # Dark gradient overlay
+            # Dark navy gradient overlay
             overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
             od = ImageDraw.Draw(overlay)
             for y in range(H):
                 alpha = int(140 + 80 * (y / H))
-                od.rectangle([(0, y), (W, y + 1)], fill=(13, 17, 23, alpha))
+                od.rectangle([(0, y), (W, y + 1)], fill=(10, 22, 40, alpha))
 
             img = Image.alpha_composite(cropped.convert("RGBA"), overlay).convert("RGB")
             draw = ImageDraw.Draw(img)
             draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
-            draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
 
         add_branding(img, draw)
 
@@ -820,6 +901,9 @@ class TitleScene(Scene):
                 sub_color = tuple(int(COLORS['light'][i] * sub_progress) for i in range(3))
                 text_center_x(draw, line, font_sub, int(sub_y), sub_color)
                 sub_y += 36
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
 
         return img
 
@@ -882,6 +966,9 @@ class CTAScene(Scene):
             date_color = tuple(int(COLORS['muted'][i] * ease_out_cubic(date_t)) for i in range(3))
             text_center_x(draw, "7 May 2026  |  All 15 Wards", font_date, 880, date_color)
 
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
         return img
 
 
@@ -896,9 +983,8 @@ class TransitionScene(Scene):
         img = Image.new("RGB", (W, H), COLORS['bg'])
         draw = ImageDraw.Draw(img)
 
-        # Teal bars
+        # Top teal bar
         draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
-        draw.rectangle([(0, H - 3), (W, H)], fill=COLORS['teal'])
 
         if self.flash_text:
             t = frame_idx / total_frames
@@ -911,6 +997,342 @@ class TransitionScene(Scene):
             font = load_font(28, bold=True)
             flash_color = tuple(int(COLORS['teal'][i] * alpha) for i in range(3))
             text_center_x(draw, self.flash_text, font, H // 2 - 14, flash_color)
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+# ============================================================
+# NEW SCENE TYPES: Reform UK Campaign
+# ============================================================
+
+class ReformBrandScene(Scene):
+    """Full-screen Reform UK branding card.
+
+    Navy background with "BRITAIN NEEDS REFORM" header,
+    animated stat counter in center, and marquee bar at bottom.
+    """
+
+    def __init__(self, name, duration, stat_value, stat_suffix, stat_label,
+                 header="BRITAIN NEEDS REFORM", voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.stat_value = stat_value
+        self.stat_suffix = stat_suffix
+        self.stat_label = stat_label
+        self.header = header
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+
+        t = frame_idx / total_frames
+
+        # Header: "BRITAIN NEEDS REFORM" - white with teal accent
+        header_t = min(1.0, t / 0.15)
+        header_progress = ease_out_expo(header_t)
+
+        font_header = load_font(44, bold=True)
+        words = self.header.split()
+        # Render each word, last word in teal
+        header_y = 300
+        full_text = self.header
+        bbox = draw.textbbox((0, 0), full_text, font=font_header)
+        text_w = bbox[2] - bbox[0]
+        start_x = (W - text_w) // 2
+
+        # Draw all but last word in white, last word in teal
+        if len(words) > 1:
+            white_part = " ".join(words[:-1]) + " "
+            teal_part = words[-1]
+
+            white_color = tuple(int(COLORS['white'][i] * header_progress) for i in range(3))
+            teal_color = tuple(int(COLORS['teal'][i] * header_progress) for i in range(3))
+
+            draw.text((start_x, header_y), white_part, fill=white_color, font=font_header)
+            wb = draw.textbbox((start_x, header_y), white_part, font=font_header)
+            draw.text((wb[2], header_y), teal_part, fill=teal_color, font=font_header)
+        else:
+            teal_color = tuple(int(COLORS['teal'][i] * header_progress) for i in range(3))
+            text_center_x(draw, full_text, font_header, header_y, teal_color)
+
+        # Accent line under header
+        if header_progress > 0.3:
+            line_t = (header_progress - 0.3) / 0.7
+            line_w = int(300 * ease_out_expo(line_t))
+            cx = W // 2
+            draw.rectangle([(cx - line_w // 2, header_y + 60),
+                            (cx + line_w // 2, header_y + 64)], fill=COLORS['teal'])
+
+        # Animated stat counter in center
+        anim_t = min(1.0, t / 0.45)
+        progress = ease_out_expo(anim_t)
+        current = int(self.stat_value * progress)
+        display = f"{current}{self.stat_suffix}"
+
+        font_value = load_font(180, bold=True)
+        text_center_x(draw, display, font_value, 520, COLORS['teal'])
+
+        # Pulsing glow on stat
+        pulse = 0.5 + 0.5 * math.sin(frame_idx * 0.08)
+        glow_alpha = int(20 + 15 * pulse)
+        glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        bbox = draw.textbbox((0, 0), display, font=font_value)
+        tw = bbox[2] - bbox[0]
+        cx = (W - tw) // 2
+        gd.rectangle([(cx - 30, 510), (cx + tw + 30, 730)],
+                     fill=(*COLORS['teal'][:3], glow_alpha))
+        glow = glow.filter(ImageFilter.GaussianBlur(radius=35))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, glow).convert("RGB")
+        draw = ImageDraw.Draw(img)
+
+        # Stat label
+        font_label = load_font(28, bold=True)
+        text_center_x(draw, self.stat_label, font_label, 760, COLORS['white'])
+
+        # Reform logo centered below
+        try:
+            logo = Image.open(LOGO_PATH).convert("RGBA")
+            logo_t = max(0, (t - 0.3) / 0.15)
+            if logo_t > 0:
+                logo_alpha = min(1.0, logo_t)
+                logo = logo.resize((80, 80), Image.LANCZOS)
+                # Simple paste (no alpha blending for performance)
+                img.paste(logo, ((W - 80) // 2, 860), logo)
+        except Exception:
+            pass
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+class QuoteCardScene(Scene):
+    """Single quote on branded background.
+
+    Navy background with subtle gradient, large quote text centered in white,
+    attribution line in teal, Reform branding elements.
+    """
+
+    def __init__(self, name, duration, quote, attribution, voiceover_text=None,
+                 caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.quote = quote
+        self.attribution = attribution
+
+    def render_frame(self, frame_idx, total_frames):
+        img, draw = create_frame_base()
+
+        t = frame_idx / total_frames
+
+        # Subtle gradient overlay for depth
+        overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        od = ImageDraw.Draw(overlay)
+        # Radial-ish gradient: darker edges
+        for y in range(H):
+            dist = abs(y - H // 2) / (H // 2)
+            alpha = int(30 * dist)
+            od.rectangle([(0, y), (W, y + 1)], fill=(0, 0, 0, alpha))
+        img_rgba = img.convert("RGBA")
+        img = Image.alpha_composite(img_rgba, overlay).convert("RGB")
+        draw = ImageDraw.Draw(img)
+        draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+
+        # Opening quotation mark (decorative)
+        quote_t = min(1.0, t / 0.12)
+        quote_progress = ease_out_expo(quote_t)
+
+        font_deco = load_font(120, bold=True)
+        deco_color = tuple(int(COLORS['teal_dim'][i] * quote_progress) for i in range(3))
+        draw.text((80, 340), "\u201C", fill=deco_color, font=font_deco)
+
+        # Quote text (fade in line by line)
+        font_quote = load_font(36, bold=True)
+        lines = textwrap.wrap(self.quote, width=22)
+        y = 480
+        for idx, line in enumerate(lines):
+            line_start = 0.08 + idx * 0.06
+            line_t = max(0, (t - line_start) / 0.1)
+            line_t = min(1.0, line_t)
+            alpha = ease_out_cubic(line_t)
+            if alpha > 0.01:
+                line_color = tuple(int(COLORS['white'][i] * alpha) for i in range(3))
+                text_center_x(draw, line, font_quote, y, line_color)
+            y += 52
+
+        # Closing quotation mark
+        close_start = 0.08 + len(lines) * 0.06 + 0.05
+        close_t = max(0, (t - close_start) / 0.1)
+        close_t = min(1.0, close_t)
+        if close_t > 0:
+            close_color = tuple(int(COLORS['teal_dim'][i] * close_t) for i in range(3))
+            # Right-aligned closing quote
+            bbox = draw.textbbox((0, 0), "\u201D", font=font_deco)
+            qw = bbox[2] - bbox[0]
+            draw.text((W - 80 - qw, y - 20), "\u201D", fill=close_color, font=font_deco)
+
+        # Accent line
+        acc_t = max(0, (t - 0.3) / 0.15)
+        acc_t = min(1.0, acc_t)
+        if acc_t > 0:
+            line_w = int(180 * ease_out_expo(acc_t))
+            cx = W // 2
+            draw.rectangle([(cx - line_w // 2, y + 40),
+                            (cx + line_w // 2, y + 43)], fill=COLORS['teal'])
+
+        # Attribution (teal, below quote)
+        attr_t = max(0, (t - 0.35) / 0.12)
+        attr_t = min(1.0, attr_t)
+        if attr_t > 0:
+            font_attr = load_font(24, bold=True)
+            attr_color = tuple(int(COLORS['teal'][i] * attr_t) for i in range(3))
+            text_center_x(draw, self.attribution, font_attr, y + 60, attr_color)
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
+
+        return img
+
+
+class ComparisonScene(Scene):
+    """Split-screen 'Then vs Now' comparison.
+
+    Left half: red tinted 'THEN' with Conservative-era stat.
+    Right half: teal tinted 'NOW' with Reform-era stat.
+    Animated reveal left-to-right.
+    """
+
+    def __init__(self, name, duration, then_label, then_value, then_detail,
+                 now_label, now_value, now_detail,
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.then_label = then_label
+        self.then_value = then_value
+        self.then_detail = then_detail
+        self.now_label = now_label
+        self.now_value = now_value
+        self.now_detail = now_detail
+
+    def render_frame(self, frame_idx, total_frames):
+        img = Image.new("RGB", (W, H), COLORS['bg'])
+        draw = ImageDraw.Draw(img)
+
+        t = frame_idx / total_frames
+        mid_x = W // 2
+
+        # --- LEFT HALF: "THEN" (red tinted) ---
+        left_t = min(1.0, t / 0.25)
+        left_progress = ease_out_expo(left_t)
+
+        # Red tint on left half
+        left_reveal = int(mid_x * left_progress)
+        if left_reveal > 0:
+            for y in range(100, H - MARQUEE_BAR_HEIGHT - 10):
+                ratio = y / H
+                r = int(40 + 15 * ratio)
+                g = int(8 + 4 * ratio)
+                b = int(12 + 6 * ratio)
+                draw.line([(0, y), (left_reveal, y)], fill=(r, g, b))
+
+        # "THEN" header
+        if left_progress > 0.2:
+            then_alpha = min(1.0, (left_progress - 0.2) / 0.3)
+            font_then_h = load_font(36, bold=True)
+            then_h_color = tuple(int(COLORS['red'][i] * then_alpha) for i in range(3))
+            draw.text((60, 200), "THEN", fill=then_h_color, font=font_then_h)
+
+            # Conservative pill
+            font_pill = load_font(14, bold=True)
+            pill_color = tuple(int(PARTY_COLORS['Conservative'][i] * then_alpha) for i in range(3))
+            draw.text((60, 248), "CONSERVATIVE ERA", fill=pill_color, font=font_pill)
+
+        # Then value
+        if left_progress > 0.4:
+            val_alpha = min(1.0, (left_progress - 0.4) / 0.25)
+            font_val = load_font(80, bold=True)
+            val_color = tuple(int(COLORS['red'][i] * val_alpha) for i in range(3))
+            draw.text((60, 380), self.then_value, fill=val_color, font=font_val)
+
+            font_label = load_font(22, bold=True)
+            label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
+            lines = textwrap.wrap(self.then_label, width=16)
+            ly = 490
+            for line in lines:
+                draw.text((60, ly), line, fill=label_color, font=font_label)
+                ly += 32
+
+            font_detail = load_font(16)
+            detail_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
+            draw.text((60, ly + 10), self.then_detail, fill=detail_color, font=font_detail)
+
+        # --- RIGHT HALF: "NOW" (teal tinted) ---
+        right_t = max(0, (t - 0.2) / 0.3)
+        right_t = min(1.0, right_t)
+        right_progress = ease_out_expo(right_t)
+
+        right_reveal = int(mid_x * right_progress)
+        if right_reveal > 0:
+            for y in range(100, H - MARQUEE_BAR_HEIGHT - 10):
+                ratio = y / H
+                r = int(8 + 4 * ratio)
+                g = int(28 + 10 * ratio)
+                b = int(45 + 15 * ratio)
+                draw.line([(W - right_reveal, y), (W, y)], fill=(r, g, b))
+
+        # "NOW" header
+        if right_progress > 0.2:
+            now_alpha = min(1.0, (right_progress - 0.2) / 0.3)
+            font_now_h = load_font(36, bold=True)
+            now_h_color = tuple(int(COLORS['teal'][i] * now_alpha) for i in range(3))
+            draw.text((mid_x + 40, 200), "NOW", fill=now_h_color, font=font_now_h)
+
+            font_pill = load_font(14, bold=True)
+            pill_color = tuple(int(COLORS['teal'][i] * now_alpha) for i in range(3))
+            draw.text((mid_x + 40, 248), "REFORM UK", fill=pill_color, font=font_pill)
+
+        # Now value
+        if right_progress > 0.4:
+            val_alpha = min(1.0, (right_progress - 0.4) / 0.25)
+            font_val = load_font(80, bold=True)
+            val_color = tuple(int(COLORS['teal'][i] * val_alpha) for i in range(3))
+            draw.text((mid_x + 40, 380), self.now_value, fill=val_color, font=font_val)
+
+            font_label = load_font(22, bold=True)
+            label_color = tuple(int(COLORS['white'][i] * val_alpha) for i in range(3))
+            lines = textwrap.wrap(self.now_label, width=16)
+            ly = 490
+            for line in lines:
+                draw.text((mid_x + 40, ly), line, fill=label_color, font=font_label)
+                ly += 32
+
+            font_detail = load_font(16)
+            detail_color = tuple(int(COLORS['muted'][i] * val_alpha) for i in range(3))
+            draw.text((mid_x + 40, ly + 10), self.now_detail, fill=detail_color, font=font_detail)
+
+        # Divider line (vertical, grows from center)
+        div_t = max(0, (t - 0.15) / 0.2)
+        div_t = min(1.0, div_t)
+        if div_t > 0:
+            div_h = int(600 * ease_out_expo(div_t))
+            div_top = (H - MARQUEE_BAR_HEIGHT) // 2 - div_h // 2
+            draw.rectangle([(mid_x - 1, div_top), (mid_x + 1, div_top + div_h)],
+                           fill=COLORS['dim'])
+
+        # Top teal bar
+        draw.rectangle([(0, 0), (W, 3)], fill=COLORS['teal'])
+
+        # Caption phrases
+        for start_ratio, text in self.caption_phrases:
+            if t >= start_ratio:
+                fade_t = min(1.0, (t - start_ratio) / 0.05)
+                if fade_t > 0:
+                    add_caption_bar(img, draw, text, bg_alpha=int(180 * ease_out_cubic(fade_t)))
+
+        # Reform UK press conference overlays
+        draw = apply_overlays(img, draw, frame_idx)
 
         return img
 
@@ -928,46 +1350,129 @@ def get_audio_duration(path):
     return float(result.stdout.strip()) if result.stdout.strip() else 0
 
 
-async def generate_scene_audio(scene, output_path):
-    """Generate voiceover for a single scene."""
-    if not scene.voiceover_text:
+def generate_piper_audio(text, output_path):
+    """Generate audio using Piper TTS (Northern English Male voice).
+
+    Uses the venv at .venv/ with the piper model at
+    .venv/piper-voices/en_GB-northern_english_male-medium.onnx
+    """
+    model_path = str(PIPER_MODEL_DIR / "en_GB-northern_english_male-medium.onnx")
+    piper_bin = str(PIPER_VENV / "bin" / "python3")
+
+    if not os.path.exists(model_path):
+        print(f"    Warning: Piper model not found at {model_path}")
+        print(f"    Run: bash scripts/setup_voices.sh")
         return 0
 
-    communicate = edge_tts.Communicate(scene.voiceover_text, TTS_VOICE, rate=TTS_RATE, pitch=TTS_PITCH)
-    await communicate.save(output_path)
+    # Escape text for shell (replace quotes)
+    safe_text = text.replace('"', '\\"').replace("'", "\\'")
+
+    cmd = f'echo "{safe_text}" | {piper_bin} -m piper --model {model_path} --output_file {output_path}'
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
+
+    if result.returncode != 0:
+        print(f"    Piper TTS error: {result.stderr[:200]}")
+        return 0
+
     return get_audio_duration(output_path)
 
 
-async def generate_voiceover_per_scene(scenes, tmpdir):
+def generate_kokoro_audio(text, voice, output_path):
+    """Generate audio using Kokoro TTS (British neural voices).
+
+    Uses system Python /usr/bin/python3 with kokoro and soundfile packages.
+    Available voices: bm_daniel, bm_george, bm_lewis, bm_fable,
+                      bf_alice, bf_isabella, bf_emma, bf_lily
+    """
+    # Escape text for Python string (replace quotes and backslashes)
+    safe_text = text.replace("\\", "\\\\").replace('"', '\\"').replace("'", "\\'")
+
+    script = f'''
+import soundfile as sf
+from kokoro import KPipeline
+import warnings
+warnings.filterwarnings("ignore")
+pipe = KPipeline(lang_code="b")
+generator = pipe("{safe_text}", voice="{voice}", speed=1.0)
+for gs, ps, audio in generator:
+    sf.write("{output_path}", audio, 24000)
+    break
+'''
+    result = subprocess.run(
+        ["/usr/bin/python3", "-c", script],
+        capture_output=True, text=True, timeout=60
+    )
+
+    if result.returncode != 0:
+        print(f"    Kokoro TTS error: {result.stderr[:200]}")
+        return 0
+
+    return get_audio_duration(output_path)
+
+
+def generate_scene_audio(scene, output_path, article_slug=None):
+    """Generate voiceover for a single scene using the configured voice engine.
+
+    Reads voice_config.json to determine which engine (Piper or Kokoro)
+    and which voice to use for this article.
+    """
+    if not scene.voiceover_text:
+        return 0
+
+    assignment = get_voice_assignment(article_slug) if article_slug else {
+        "engine": "piper", "voice": "northern_male"
+    }
+
+    engine = assignment.get("engine", "piper")
+    voice = assignment.get("voice", "northern_male")
+
+    if engine == "kokoro":
+        duration = generate_kokoro_audio(scene.voiceover_text, voice, output_path)
+    else:
+        # Default: Piper TTS
+        duration = generate_piper_audio(scene.voiceover_text, output_path)
+
+    return duration
+
+
+def generate_voiceover_per_scene(scenes, tmpdir, article_slug=None):
     """Generate voiceover per scene and adjust scene durations to match.
 
+    Uses Piper or Kokoro TTS based on voice_config.json assignments.
     Returns: list of (scene, audio_path_or_none) tuples, total audio duration.
     """
-    if not HAS_TTS:
-        print("  edge-tts not available, skipping voiceover")
-        return [(s, None) for s in scenes], 0
+    assignment = get_voice_assignment(article_slug) if article_slug else {
+        "engine": "piper", "voice": "northern_male"
+    }
+    engine = assignment.get("engine", "piper")
+    voice = assignment.get("voice", "northern_male")
+    print(f"  Voice: {engine}/{voice} ({assignment.get('reason', 'default')})")
 
-    print("  Generating per-scene voiceover...")
     scene_audio = []
     total_audio = 0
 
     for i, scene in enumerate(scenes):
         if scene.voiceover_text:
-            audio_path = os.path.join(tmpdir, f"vo_{i:02d}_{scene.name}.mp3")
-            duration = await generate_scene_audio(scene, audio_path)
+            ext = "wav" if engine == "piper" else "wav"
+            audio_path = os.path.join(tmpdir, f"vo_{i:02d}_{scene.name}.{ext}")
+            duration = generate_scene_audio(scene, audio_path, article_slug)
 
-            # Add 0.3s padding for breathing room
-            padded_duration = duration + 0.3
+            if duration > 0:
+                # Add 0.3s padding for breathing room
+                padded_duration = duration + 0.3
 
-            # Adjust scene duration to match voiceover (min = original duration)
-            old_dur = scene.duration
-            scene.duration = max(scene.duration, padded_duration)
+                # Adjust scene duration to match voiceover (min = original duration)
+                old_dur = scene.duration
+                scene.duration = max(scene.duration, padded_duration)
 
-            if scene.duration > old_dur:
-                print(f"    {scene.name}: {old_dur:.1f}s -> {scene.duration:.1f}s (audio: {duration:.1f}s)")
+                if scene.duration > old_dur:
+                    print(f"    {scene.name}: {old_dur:.1f}s -> {scene.duration:.1f}s (audio: {duration:.1f}s)")
 
-            scene_audio.append((scene, audio_path))
-            total_audio += duration
+                scene_audio.append((scene, audio_path))
+                total_audio += duration
+            else:
+                print(f"    {scene.name}: TTS failed, using silence")
+                scene_audio.append((scene, None))
         else:
             scene_audio.append((scene, None))
 
@@ -1109,6 +1614,10 @@ def generate_burnley_elections_video(duration=45, no_voice=False):
     6. VINDICATE - Reform stood alone
     7. EMPOWER  - You decide on 7 May
     """
+    set_marquee_text(
+        "Burnley Council Attendance Records  \u2022  Who Shows Up For You?  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK  \u2022  Vote 7 May 2026  \u2022  "
+    )
 
     scenes = []
 
@@ -1292,6 +1801,10 @@ def generate_burnley_elections_video(duration=45, no_voice=False):
 
 def generate_tory_legacy_video(duration=45, no_voice=False):
     """The Tory Legacy: Up to £1.27 Billion of Financial Damage at LCC."""
+    set_marquee_text(
+        "LCC Statement of Accounts 2017-2025  \u2022  \u00a3921M Lost Under the Conservatives  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     # HOOK: The number
@@ -1397,6 +1910,11 @@ def generate_tory_legacy_video(duration=45, no_voice=False):
 
 def generate_highways_video(duration=45, no_voice=False):
     """Lancashire's Roads: A £650 Million Backlog."""
+    set_marquee_text(
+        "Lancashire Highways  \u2022  \u00a3650M Maintenance Backlog  \u2022  "
+        "42%% Pothole Reduction Under Reform  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1463,6 +1981,11 @@ def generate_highways_video(duration=45, no_voice=False):
 
 def generate_waste_crisis_video(duration=45, no_voice=False):
     """East Lancashire's Waste Crisis: A Decade of Failure."""
+    set_marquee_text(
+        "East Lancashire Waste Crisis  \u2022  \u00a360.3M Open Tender  \u2022  "
+        "First Competitive Bid in a Generation  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1530,6 +2053,10 @@ def generate_waste_crisis_video(duration=45, no_voice=False):
 
 def generate_lgr_contracts_video(duration=45, no_voice=False):
     """Lancashire's £3.7 Billion Contract Problem."""
+    set_marquee_text(
+        "Local Government Reorganisation  \u2022  3,200 Live Contracts at Risk  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1592,6 +2119,11 @@ def generate_lgr_contracts_video(duration=45, no_voice=False):
 
 def generate_budget_video(duration=45, no_voice=False):
     """Reform's First Budget: The Numbers Don't Lie."""
+    set_marquee_text(
+        "Reform's First LCC Budget  \u2022  3.80%% Council Tax Rise  \u2022  "
+        "Lowest in Lancashire in 12 Years  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1650,6 +2182,11 @@ def generate_budget_video(duration=45, no_voice=False):
 
 def generate_technology_video(duration=45, no_voice=False):
     """How Reform Is Using Technology to Transform Lancashire."""
+    set_marquee_text(
+        "AI-Powered Digital Transformation  \u2022  \u00a34.3M Netcall Platform  \u2022  "
+        "1,400 Officers Using AI  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK Lancashire  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1713,6 +2250,11 @@ def generate_technology_video(duration=45, no_voice=False):
 
 def generate_stocks_massey_video(duration=45, no_voice=False):
     """Stocks Massey Bequest 2025 Awards."""
+    set_marquee_text(
+        "Stocks Massey Bequest 2025  \u2022  \u00a320K+ Awarded to Burnley Organisations  \u2022  "
+        "Investing in Culture and Community  \u2022  "
+        "tompickup.co.uk  \u2022  Reform UK  \u2022  "
+    )
     scenes = []
 
     scenes.append(StatCountScene(
@@ -1878,9 +2420,9 @@ def main():
         try:
             # Step 1: Generate per-scene voiceover and adjust durations
             audio_path = None
-            if not args.no_voice and HAS_TTS:
-                scene_audio, vo_duration = asyncio.run(
-                    generate_voiceover_per_scene(scenes, tmpdir)
+            if not args.no_voice:
+                scene_audio, vo_duration = generate_voiceover_per_scene(
+                    scenes, tmpdir, article_slug=slug
                 )
 
                 # Recalculate total duration after adjustment
@@ -1891,8 +2433,6 @@ def main():
                 # Concat all scene audio into one track
                 combined_audio = os.path.join(tmpdir, "voiceover.m4a")
                 audio_path = concat_scene_audio(scene_audio, combined_audio)
-            elif not HAS_TTS:
-                print("  edge-tts not installed, generating without voiceover")
 
             # Step 2: Render all frames
             frame_count = render_all_frames(scenes, tmpdir)
