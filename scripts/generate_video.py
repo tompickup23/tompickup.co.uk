@@ -3001,7 +3001,7 @@ def generate_9_months_video(duration=45, no_voice=False):
         is_fraction=True,
         fraction_text="3.80%",
         extra_lines=[
-            "Conservatives hit the maximum every year for a decade",
+            "Council tax rose every year under the Conservatives",
             "Last two years: 4.99% — the highest of the lot",
         ],
         voiceover_text="Reform set the council tax rise at three point eight percent. The lowest in twelve years. After two years of four point nine nine percent under the Conservatives, the highest rises in the entire decade, we are stopping the rot.",
@@ -3147,13 +3147,13 @@ def generate_council_tax_video(duration=50, no_voice=False):
         title="Core Council Tax Rate",
         left_value="2.99%",
         left_label="Conservative",
-        left_sublabel="Maximum allowed. Every year. For a decade.",
+        left_sublabel="Hit the cap. Last two years: 4.99%.",
         right_value="1.80%",
         right_label="Reform",
         right_sublabel="1.19% below the cap. First budget.",
         left_color=(255, 69, 58),    # red
         right_color=(48, 209, 88),   # green
-        voiceover_text="The Conservatives set the core rate at two point nine nine percent. The maximum every year. Reform set it at one point eight zero. One point one nine percent below the cap.",
+        voiceover_text="The Conservatives set the core rate at two point nine nine percent, hitting the cap in the last two years. Reform set it at one point eight zero. One point one nine percent below the cap.",
     ))
 
     # ASC precept explanation
@@ -3197,10 +3197,10 @@ def generate_council_tax_video(duration=50, no_voice=False):
         name="tom_quote",
         duration=5.5,
         photo_path=str(Path(__file__).parent.parent / "public" / "images" / "headshot.jpg"),
-        quote="The choice is on the core rate.\nWe went 1.19% below the cap.\nThey maxed it out every year.",
+        quote="Stopping the trend of maximum\ntax increases imposed on residents\nyear on year under the Tory's.\n£5 savings for every £100 spent.",
         attribution="Tom Pickup",
         role="Lead Member for Finance & Resources",
-        voiceover_text="The choice is on the core rate. We went one point one nine percent below the cap. The Conservatives maxed it out every single year.",
+        voiceover_text="This is a responsible balance between stopping the trend of maximum council tax increases imposed on residents year on year under the Tories, the lowest rise at L C C in twelve years. We have identified five pounds in savings for every one hundred pounds spent, and we are improving services.",
     ))
 
     # The household saving

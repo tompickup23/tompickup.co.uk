@@ -60,19 +60,19 @@ This is not a political sales pitch. It is a comparison: what we inherited versu
 
 ## The Budget: Stopping the Rot
 
-For ten consecutive years, the Conservatives raised council tax by the maximum allowed. They never once came in below the referendum cap. In the last two years, they hit **4.99%**, the highest rises in the entire decade.
+For ten consecutive years under Conservative-led administrations, council tax rose every single year. In the last two years, they hit **4.99%**, the highest rises in the entire decade.
 
-Reform's first budget, passed in February 2026, set the rise at **3.80%**. The lowest in 12 years. The first time in over a decade that Lancashire has not gone for the maximum.
+Reform's first budget, passed in February 2026, set the rise at **3.80%**. The lowest in 12 years.
 
 - **1.80%** for general council services (cap: 2.99%)
 - **2.00%** for the Adult Social Care precept (cap: 2.00%)
 
-We are not celebrating a rise. We are stopping the rot. Band D residents now pay £1,801.75 for the county share. Still too high. But for the first time in 12 years, the direction has changed.
+We are not celebrating a rise. We are stopping the rot. Band D residents now pay £1,801.75 for the county share. Still too high. But the lowest rise in 12 years. The direction has changed.
 
 | Year | Control | Total Rise |
 |------|---------|-----------|
-| 2016/17 | Conservative | 3.99% |
-| 2017/18 | Conservative | 3.99% |
+| 2016/17 | Conservative (NOC) | 3.99% |
+| 2017/18 | Conservative (NOC) | 3.99% |
 | 2018/19 | Conservative | **5.99%** |
 | 2019/20 | Conservative | 3.99% |
 | 2020/21 | Conservative | 3.99% |
@@ -83,13 +83,13 @@ We are not celebrating a rise. We are stopping the rot. Band D residents now pay
 | 2025/26 | Conservative* | **4.99%** |
 | **2026/27** | **Reform UK** | **3.80%** |
 
-*2025/26 budget was set by the outgoing Conservative administration before the May 2025 election. Source: LCC council tax breakdown PDFs, lancashire.gov.uk.*
+*2016/17 and 2017/18 budgets were set by Conservative-led No Overall Control administrations. 2025/26 budget was set by the outgoing Conservative administration before the May 2025 election. Source: LCC council tax breakdown PDFs, lancashire.gov.uk.*
 
 After two years of 4.99%, Reform brought it down to 3.80%. That is £21 less per Band D household. Multiply by 500,000 households and the aggregate saving is around £10 million.
 
 <div class="article-data-viz">
 <a href="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" download title="Download this image to share on social media">
-<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" alt="Council Tax: 10 Years of Maximum Rises, data table showing Conservative rises from 2016 to 2026 vs Reform 3.80%" loading="lazy" />
+<img src="/images/share/reform-lancashire-9-months/reform-lancashire-9-months-council-tax-table.png" alt="Council Tax: A Decade of Rises under the Conservatives vs Reform 3.80%" loading="lazy" />
 <span class="download-hint">Tap to download for social media</span>
 </a>
 </div>
