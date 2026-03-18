@@ -28,11 +28,10 @@ jobs:
         run: npm run build
 
       - name: Deploy to tompickup23.github.io
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.DEPLOY_TOKEN }}
-          external_repository: tompickup23/tompickup23.github.io
-          publish_branch: main
-          publish_dir: ./dist
-          force_orphan: true
-          commit_message: "deploy: ${{ github.event.head_commit.message }}"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          npx gh-pages -d dist \
+            --repo https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git \
+            --no-history \
+            --user "tompickup.co.uk Deploy <deploy@tompickup.co.uk>"
