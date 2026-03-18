@@ -61,7 +61,7 @@ Chairman Cllr Alf Clempson, who served 24 years in the Scots Guards and is the f
 Census 2021 data shows 53,567 people who previously served in the UK armed forces now live in Lancashire, making up 4.3% of the population aged 16 and over. Over a third of them, some 16,841 people, are concentrated in Lancaster, Wyre and Blackpool. The Veterans UK site at Norcross in Thornton Cleveleys is one of the county's largest employers supporting ex-service personnel.
 
 | Area | Veterans |
-|---|---|
+|:---|---:|
 | Lancaster, Wyre, Blackpool | 16,841 |
 | Rest of Lancashire | 36,726 |
 | **Total** | **53,567** |
