@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieNotice from '../components/CookieNotice.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -133,6 +134,7 @@ const maintenanceMode = false;
     </main>
 
     <Footer />
+    <CookieNotice />
 
     <!-- Scroll reveal observer -->
     <script>

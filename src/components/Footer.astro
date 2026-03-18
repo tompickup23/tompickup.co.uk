@@ -78,10 +78,21 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Legal -->
+    <!-- Legal links -->
+    <div class="footer-legal-links">
+      <a href="/privacy/">Privacy Policy</a>
+      <span class="footer-dot" aria-hidden="true">&middot;</span>
+      <a href="/cookies/">Cookie Policy</a>
+      <span class="footer-dot" aria-hidden="true">&middot;</span>
+      <a href="/about/#accessibility">Accessibility</a>
+    </div>
+
+    <!-- Electoral imprint (Elections Act 2022) -->
     <div class="footer-legal">
-      <p class="footer-legal-text">
-        Published and promoted by Tom Pickup. Not an official council website.
+      <p class="footer-imprint">
+        Promoted by Victoria Fletcher on behalf of Tom Pickup, both at
+        Millbank Tower, 21-24 Millbank, London, SW1P 4QP.
+        Not an official council website.
       </p>
       <p class="footer-copyright">
         &copy; {currentYear} Tom Pickup. All rights reserved.
@@ -192,10 +203,35 @@ const currentYear = new Date().getFullYear();
     transform: translateY(-2px);
   }
 
-  /* Legal */
-  .footer-legal {
+  /* Legal links */
+  .footer-legal-links {
     border-top: 1px solid var(--separator);
     padding-top: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-md);
+  }
+
+  .footer-legal-links a {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    transition: color var(--transition-fast);
+  }
+
+  .footer-legal-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .footer-dot {
+    color: var(--text-tertiary);
+    opacity: 0.4;
+    font-size: 0.75rem;
+  }
+
+  /* Legal / imprint */
+  .footer-legal {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -203,7 +239,7 @@ const currentYear = new Date().getFullYear();
     flex-wrap: wrap;
   }
 
-  .footer-legal-text {
+  .footer-imprint {
     font-size: 0.8125rem;
     color: var(--text-tertiary);
     max-width: none;
@@ -224,6 +260,10 @@ const currentYear = new Date().getFullYear();
 
     .footer-inner {
       padding: var(--space-xl) var(--space-md) var(--space-lg);
+    }
+
+    .footer-legal-links {
+      justify-content: center;
     }
 
     .footer-legal {

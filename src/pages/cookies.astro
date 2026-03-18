@@ -1,0 +1,229 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Cookie Policy | Tom Pickup"
+  description="Cookie policy for tompickup.co.uk. Information about what cookies this website uses."
+>
+  <section class="legal-page">
+    <div class="container-narrow">
+      <h1>Cookie Policy</h1>
+      <p class="legal-updated">Last updated: 18 March 2026</p>
+
+      <div class="legal-content">
+        <h2>What Are Cookies</h2>
+        <p>
+          Cookies are small text files stored on your device by websites you visit. They are
+          widely used to make websites work, remember your preferences, and provide information
+          to site owners.
+        </p>
+
+        <h2>Cookies This Website Uses</h2>
+        <p>
+          This website is a static site hosted on GitHub Pages. It uses very few cookies:
+        </p>
+
+        <div class="cookie-table-wrap">
+          <table class="cookie-table">
+            <thead>
+              <tr>
+                <th>Cookie</th>
+                <th>Purpose</th>
+                <th>Type</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>cookie_notice</code></td>
+                <td>Remembers that you have seen the cookie notice</td>
+                <td>Strictly necessary</td>
+                <td>1 year</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Third-Party Cookies</h2>
+        <p>
+          <strong>Google Fonts:</strong> This website loads fonts from Google's servers
+          (<code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>). Google
+          may set cookies or use other tracking technologies when serving font files. See
+          Google's
+          <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer">cookie policy</a>.
+        </p>
+        <p>
+          <strong>GitHub Pages:</strong> The hosting provider (GitHub/Microsoft) may set
+          cookies for operational purposes. See GitHub's
+          <a href="https://docs.github.com/en/site-policy/privacy-policies/github-cookies" target="_blank" rel="noopener noreferrer">cookie information</a>.
+        </p>
+
+        <h2>What This Website Does Not Use</h2>
+        <ul>
+          <li>No analytics cookies (no Google Analytics, no Cloudflare Analytics)</li>
+          <li>No advertising or marketing cookies</li>
+          <li>No social media tracking cookies or pixels</li>
+          <li>No session or authentication cookies</li>
+        </ul>
+
+        <h2>Managing Cookies</h2>
+        <p>
+          You can control and delete cookies through your browser settings. Most browsers
+          allow you to refuse cookies or delete existing ones. Note that blocking all cookies
+          may affect the functionality of some websites.
+        </p>
+        <ul>
+          <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Chrome</a></li>
+          <li><a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox" target="_blank" rel="noopener noreferrer">Firefox</a></li>
+          <li><a href="https://support.apple.com/en-gb/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Safari</a></li>
+          <li><a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+        </ul>
+
+        <h2>Your Rights</h2>
+        <p>
+          Under the Privacy and Electronic Communications Regulations (PECR) and UK GDPR,
+          you have the right to control what cookies are placed on your device. For more
+          information about your data rights, see the <a href="/privacy/">Privacy Policy</a>.
+        </p>
+
+        <h2>Changes to This Policy</h2>
+        <p>
+          This policy may be updated if the website begins using additional cookies or
+          third-party services. The date at the top of this page shows when it was last
+          revised.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 7rem 0 var(--space-2xl);
+  }
+
+  .legal-page h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-updated {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .legal-content h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--separator);
+  }
+
+  .legal-content h2:first-child {
+    margin-top: 0;
+  }
+
+  .legal-content p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-content ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .legal-content a {
+    color: var(--accent);
+  }
+
+  .legal-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .legal-content code {
+    font-size: 0.8125rem;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* Cookie table */
+  .cookie-table-wrap {
+    overflow-x: auto;
+    margin-bottom: var(--space-md);
+  }
+
+  .cookie-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .cookie-table th,
+  .cookie-table td {
+    text-align: left;
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--separator);
+  }
+
+  .cookie-table th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  .cookie-table td {
+    color: var(--text-secondary);
+  }
+
+  .cookie-table td code {
+    font-size: 0.8125rem;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 6rem 0 var(--space-xl);
+    }
+  }
+</style>

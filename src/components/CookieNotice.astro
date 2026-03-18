@@ -1,0 +1,104 @@
+---
+// Lightweight cookie notice — no tracking cookies are set by this site,
+// but PECR requires informing users about any cookies (including third-party).
+// Dismissal is stored in localStorage (not a cookie) to avoid circularity.
+---
+
+<div class="cookie-notice" id="cookie-notice" role="alert" aria-live="polite" hidden>
+  <div class="cookie-notice-inner">
+    <p>
+      This website uses minimal cookies for basic functionality. No analytics or tracking.
+      <a href="/cookies/">Learn more</a>
+    </p>
+    <button class="cookie-notice-btn" id="cookie-accept" type="button">
+      Got it
+    </button>
+  </div>
+</div>
+
+<script>
+  const notice = document.getElementById('cookie-notice');
+  const btn = document.getElementById('cookie-accept');
+  if (notice && btn) {
+    if (!localStorage.getItem('cookie_notice')) {
+      notice.hidden = false;
+    }
+    btn.addEventListener('click', () => {
+      localStorage.setItem('cookie_notice', '1');
+      notice.hidden = true;
+    });
+  }
+</script>
+
+<style>
+  .cookie-notice {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(28, 28, 30, 0.95);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .cookie-notice-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+  }
+
+  .cookie-notice p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+    max-width: none;
+  }
+
+  .cookie-notice a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .cookie-notice-btn {
+    flex-shrink: 0;
+    padding: 6px 20px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #000;
+    background: var(--accent);
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .cookie-notice-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 600px) {
+    .cookie-notice {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .cookie-notice-inner {
+      flex-direction: column;
+      gap: var(--space-sm);
+      text-align: center;
+    }
+
+    .cookie-notice-btn {
+      width: 100%;
+      padding: 8px 20px;
+    }
+  }
+</style>
