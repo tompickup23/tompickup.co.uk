@@ -42,6 +42,8 @@ jobs:
           cp -r $GITHUB_WORKSPACE/dist/* /tmp/deploy-target/
           # Ensure CNAME exists for custom domain
           echo 'tompickup.co.uk' > /tmp/deploy-target/CNAME
+          # Disable Jekyll processing (required for _astro/ directory)
+          touch /tmp/deploy-target/.nojekyll
           # Commit and push
           cd /tmp/deploy-target
           git config user.name "tompickup.co.uk Deploy"
