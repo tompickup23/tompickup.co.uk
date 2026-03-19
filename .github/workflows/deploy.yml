@@ -37,7 +37,7 @@ jobs:
           git init
           git config user.name "tompickup.co.uk Deploy"
           git config user.email "deploy@tompickup.co.uk"
+          git config --unset-all http.https://github.com/.extraheader || true
           git add -A
           git commit -m "deploy: ${{ github.event.head_commit.message }}"
-          git remote add origin "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git"
-          git push --force origin HEAD:main
+          git push --force "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git" HEAD:main
