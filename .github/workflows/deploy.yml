@@ -33,16 +33,18 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
-          # Clear ALL credential helpers set by actions/checkout
-          git config --global --unset-all credential.helper || true
-          git config --global --unset-all http.https://github.com/.extraheader || true
-          git config --system --unset-all credential.helper 2>/dev/null || true
-
-          cd dist
-          git init
+          # Clone target repo with PAT auth, replace contents, push
+          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git" /tmp/deploy-target
+          # Remove old files but keep .git
+          find /tmp/deploy-target -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+          # Copy new build
+          cp -r dist/* /tmp/deploy-target/
+          # Commit and push
+          cd /tmp/deploy-target
           git config user.name "tompickup.co.uk Deploy"
           git config user.email "deploy@tompickup.co.uk"
-          git config credential.helper '!f() { echo "password=${DEPLOY_TOKEN}"; }; f'
           git add -A
-          git commit -m "deploy: ${{ github.event.head_commit.message }}"
-          git push --force "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git" HEAD:main
+          git diff --cached --quiet && echo "No changes to deploy" || {
+            git commit -m "deploy: ${{ github.event.head_commit.message }}"
+            git push origin main
+          }
