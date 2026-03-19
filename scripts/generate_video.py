@@ -2007,6 +2007,153 @@ def get_audio_duration(path):
     return float(result.stdout.strip()) if result.stdout.strip() else 0
 
 
+class CouncilClipScene(Scene):
+    """Embed actual council chamber video footage with Reform branding.
+
+    Extracts frames from an MP4 clip, letterboxes into 9:16, and overlays:
+    - Semi-transparent gradient top/bottom
+    - Caption text (the transcript quote)
+    - Speaker badge
+    - SOURCE tag ("Full Council, 17 July 2025")
+    - Reform marquee bar at bottom
+
+    For embedding real meeting footage into article videos.
+    Clips are pre-extracted by the meeting transcription pipeline.
+    """
+
+    def __init__(self, name, duration, clip_path, caption="", speaker="",
+                 source_label="Full Council", trim_start=0, trim_end=None,
+                 voiceover_text=None, caption_phrases=None):
+        super().__init__(name, duration, voiceover_text, caption_phrases)
+        self.clip_path = clip_path
+        self.caption = caption
+        self.speaker = speaker
+        self.source_label = source_label
+        self.trim_start = trim_start  # Seconds into clip to start
+        self.trim_end = trim_end      # Seconds into clip to end
+        self._frames = None
+
+    def _extract_frames(self):
+        """Extract frames from the MP4 clip into PIL Images."""
+        if self._frames is not None:
+            return self._frames
+
+        import tempfile
+        tmpdir = tempfile.mkdtemp(prefix="clip_frames_")
+        target_frames = self.frame_count()
+
+        # Build ffmpeg command to extract frames
+        cmd = [FFMPEG, "-y"]
+        if self.trim_start > 0:
+            cmd.extend(["-ss", str(self.trim_start)])
+        cmd.extend(["-i", self.clip_path])
+        if self.trim_end:
+            cmd.extend(["-t", str(self.trim_end - self.trim_start)])
+
+        # Scale video to fit width, maintaining aspect ratio
+        # Council videos are usually 16:9 landscape — letterbox into 9:16 portrait
+        cmd.extend([
+            "-vf", f"scale={W}:-2,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=0a0a0f",
+            "-r", str(FPS),
+            "-frames:v", str(target_frames),
+            os.path.join(tmpdir, "frame_%04d.png"),
+        ])
+        subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+
+        # Load frames
+        self._frames = []
+        for i in range(1, target_frames + 1):
+            path = os.path.join(tmpdir, f"frame_{i:04d}.png")
+            if os.path.exists(path):
+                self._frames.append(Image.open(path).convert("RGB"))
+            elif self._frames:
+                self._frames.append(self._frames[-1].copy())  # Repeat last frame
+
+        # Pad if not enough frames
+        while len(self._frames) < target_frames:
+            if self._frames:
+                self._frames.append(self._frames[-1].copy())
+            else:
+                self._frames.append(Image.new("RGB", (W, H), (10, 10, 15)))
+
+        # Cleanup temp dir
+        import shutil
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+        return self._frames
+
+    def render_frame(self, frame_idx, total_frames):
+        frames = self._extract_frames()
+        img = frames[min(frame_idx, len(frames) - 1)].copy()
+        draw = ImageDraw.Draw(img)
+
+        # Top gradient overlay (for source label)
+        for y in range(200):
+            alpha = int(180 * (1 - y / 200))
+            draw.rectangle([0, y, W, y + 1], fill=(10, 10, 15, alpha))
+
+        # Bottom gradient overlay (for caption)
+        for y in range(H - 400, H):
+            alpha = int(200 * ((y - (H - 400)) / 400))
+            draw.rectangle([0, y, W, y + 1], fill=(10, 10, 15, alpha))
+
+        # Load fonts
+        try:
+            font_source = _brand_load_font(16)
+            font_speaker = _brand_load_font(22, bold=True)
+            font_caption = _brand_load_font(26)
+        except Exception:
+            font_source = ImageFont.load_default()
+            font_speaker = font_source
+            font_caption = font_source
+
+        # Source label (top left)
+        if self.source_label:
+            draw.text((40, 40), self.source_label.upper(), fill=(142, 142, 147), font=font_source)
+
+        # "COUNCIL CHAMBER" badge (top right)
+        badge_text = "COUNCIL CHAMBER"
+        badge_w = draw.textlength(badge_text, font=font_source) + 20
+        x_badge = W - badge_w - 40
+        draw.rounded_rectangle([x_badge, 35, x_badge + badge_w, 62], radius=4, fill=(18, 182, 207, 40))
+        draw.text((x_badge + 10, 38), badge_text, fill=(18, 182, 207), font=font_source)
+
+        # Speaker badge (bottom area)
+        y_text = H - 300
+        if self.speaker:
+            draw.text((40, y_text), self.speaker, fill=(191, 90, 242), font=font_speaker)
+            y_text += 35
+
+        # Caption (wrapped)
+        if self.caption:
+            # Wrap text
+            max_chars = 35
+            words = self.caption.split()
+            lines = []
+            current = ""
+            for word in words:
+                if len(current) + len(word) + 1 > max_chars:
+                    lines.append(current)
+                    current = word
+                else:
+                    current = f"{current} {word}" if current else word
+            if current:
+                lines.append(current)
+
+            for line in lines[:5]:  # Max 5 lines
+                draw.text((40, y_text), f"\u201c{line}\u201d" if line == lines[0] else line,
+                          fill=(229, 229, 234), font=font_caption)
+                y_text += 34
+
+        # Draw marquee bar at very bottom
+        try:
+            draw_watermark_bar(draw, W, H)
+        except Exception:
+            pass
+
+        return img
+
+
 def generate_piper_audio(text, output_path, model_name=None):
     """Generate audio using Piper TTS.
 
@@ -3183,6 +3330,18 @@ def generate_council_tax_video(duration=50, no_voice=False):
         voiceover_text="The two percent adult social care precept is ring-fenced by law. Lancashire has an aging population. Care costs grow three to five percent every year. Every council in England uses the full ASC precept because the demand requires it.",
     ))
 
+    # Council chamber clip: Conservative failure
+    scenes.append(CouncilClipScene(
+        name="chamber_con_failure",
+        duration=5.0,
+        clip_path=str(Path(__file__).parent.parent / "public" / "videos" / "clips" / "conservative-heads-in-sand.mp4"),
+        caption="The Conservative leadership had their heads in the sand",
+        speaker="",
+        source_label="Full Council, 17 July 2025",
+        trim_start=2, trim_end=7,
+        voiceover_text=None,  # Let the chamber audio play
+    ))
+
     # Transition
     scenes.append(TransitionScene("trans_3", 0.5))
 
@@ -3229,6 +3388,18 @@ def generate_council_tax_video(duration=50, no_voice=False):
         voiceover_text="Twenty-one pounds less per household than four point nine nine percent would have been. Around ten million across half a million Lancashire homes. The cap is a ceiling, not a target.",
     ))
 
+    # Council chamber clip: Reform mandate
+    scenes.append(CouncilClipScene(
+        name="chamber_reform_mandate",
+        duration=5.0,
+        clip_path=str(Path(__file__).parent.parent / "public" / "videos" / "clips" / "reform-mandate-waste.mp4"),
+        caption="A massive political mandate to root out waste",
+        speaker="Cllr Brown",
+        source_label="Full Council, 17 July 2025",
+        trim_start=1, trim_end=6,
+        voiceover_text=None,
+    ))
+
     # What Reform found
     scenes.append(TransitionScene("trans_5", 0.5, flash_text="WHAT WE FOUND"))
 
@@ -3246,6 +3417,18 @@ def generate_council_tax_video(duration=50, no_voice=False):
             "Read the full scorecard in our other article",
         ],
         voiceover_text="We have identified five pounds in savings for every one hundred pounds of council spending. And exposed nine hundred and twenty one million pounds of Conservative financial damage, including a six hundred million pound bond portfolio bought without proper disclosure.",
+    ))
+
+    # Council chamber clip: Never again
+    scenes.append(CouncilClipScene(
+        name="chamber_never_again",
+        duration=4.5,
+        clip_path=str(Path(__file__).parent.parent / "public" / "videos" / "clips" / "reform-never-again.mp4"),
+        caption="Reform will never allow this type of investment activity again",
+        speaker="",
+        source_label="Full Council, 17 July 2025",
+        trim_start=0, trim_end=5,
+        voiceover_text=None,
     ))
 
     # CTA
