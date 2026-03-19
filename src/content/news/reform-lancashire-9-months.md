@@ -1,6 +1,6 @@
 ---
 title: "9 Months of Reform: Lancashire by the Numbers"
-date: 2026-03-17
+date: 2026-03-18T13:00:00
 description: "On 1 May 2025, Reform UK took control of Lancashire County Council with 53 of 84 seats. Nine months in, the numbers tell the story. Every metric measured against the Conservative baseline."
 image: "/images/share/reform-lancashire-9-months/reform-lancashire-9-months-cover.jpg"
 tags: ["lancashire", "reform", "finance", "highways", "social-care"]

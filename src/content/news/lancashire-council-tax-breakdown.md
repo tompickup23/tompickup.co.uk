@@ -1,6 +1,6 @@
 ---
 title: "Where Your Council Tax Actually Goes"
-date: 2026-03-18
+date: 2026-03-18T12:00:00
 description: "Your council tax bill is set by four different authorities. Here is who charges what, why Reform chose to go 1.19% below the cap, and what a decade of council tax rises under the Conservatives cost you."
 image: "/images/share/lancashire-council-tax-breakdown/lancashire-council-tax-breakdown-cover.jpg"
 tags: ["lancashire", "reform", "council-tax", "budget"]
@@ -9,7 +9,7 @@ featured: true
 
 <div class="article-video">
   <video controls preload="metadata" poster="/images/share/lancashire-council-tax-breakdown/lancashire-council-tax-breakdown-poster.jpg">
-    <source src="/videos/lancashire-council-tax-breakdown.mp4" type="video/mp4" />
+    <source src="/videos/lancashire-council-tax-breakdown-v2.mp4" type="video/mp4" />
     Your browser does not support the video element.
   </video>
   <div class="shareable-assets">
