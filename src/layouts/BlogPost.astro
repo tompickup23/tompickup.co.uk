@@ -792,6 +792,16 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   .prose :global(.viz-grid-3) { grid-template-columns: repeat(3, 1fr); }
   .prose :global(.viz-grid-4) { grid-template-columns: repeat(4, 1fr); }
 
+  /* Prevent stat value text from breaking grid on narrower containers */
+  .prose :global(.viz-stat .value) { overflow-wrap: break-word; word-break: break-word; }
+
+  /* Tables — balanced column widths, right-align numeric columns */
+  .prose :global(table) { width: 100%; table-layout: auto; }
+  .prose :global(th:last-child),
+  .prose :global(td:last-child) { text-align: right; }
+  .prose :global(th:first-child),
+  .prose :global(td:first-child) { text-align: left; width: auto; }
+
   /* Stat cards — navy-tinted with teal hover glow */
   .prose :global(.viz-stat) {
     padding: 24px 20px;
@@ -1338,6 +1348,13 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   }
 
   /* Viz-class responsive overrides */
+  @media (max-width: 960px) {
+    .prose :global(.viz-grid-4) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .prose :global(.viz-grid-4 .viz-stat .value.xl) { font-size: 2.5rem; }
+  }
+
   @media (max-width: 768px) {
     .prose :global(.viz-grid-3),
     .prose :global(.viz-grid-4) {
