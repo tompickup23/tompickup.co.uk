@@ -2162,6 +2162,12 @@ def generate_piper_audio(text, output_path, model_name=None):
     """
     if model_name is None:
         model_name = "en_GB-northern_english_male-medium"
+    # Check blacklist
+    config = load_voice_config()
+    blacklisted = config.get("blacklisted_voices", {})
+    if model_name in blacklisted:
+        print(f"    Warning: Voice '{model_name}' is blacklisted ({blacklisted[model_name]}). Using default.")
+        model_name = "en_GB-northern_english_male-medium"
     model_path = str(PIPER_MODEL_DIR / f"{model_name}.onnx")
     piper_bin = str(PIPER_VENV / "bin" / "python3")
 

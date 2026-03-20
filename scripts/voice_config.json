@@ -29,6 +29,9 @@
       }
     }
   },
+  "blacklisted_voices": {
+    "en_GB-alan-medium": "Terrible quality - robotic, unnatural pronunciation"
+  },
   "article_voice_assignments": {
     "reform-lancashire-9-months": {
       "engine": "piper",
@@ -74,6 +77,11 @@
       "engine": "kokoro",
       "voice": "bf_alice",
       "reason": "Community - arts/education bequest, softer tone"
+    },
+    "lancashire-armed-forces-covenant": {
+      "engine": "piper",
+      "voice": "northern_male",
+      "reason": "Political - military/veterans, warm tone"
     }
   }
 }
