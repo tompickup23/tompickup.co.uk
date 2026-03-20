@@ -2280,6 +2280,31 @@ def generate_voiceover_per_scene(scenes, tmpdir, article_slug=None):
             else:
                 print(f"    {scene.name}: TTS failed, using silence")
                 scene_audio.append((scene, None))
+        elif isinstance(scene, CouncilClipScene) and hasattr(scene, 'clip_path') and os.path.exists(scene.clip_path):
+            # Extract audio from the council chamber clip itself
+            clip_audio_path = os.path.join(tmpdir, f"clip_audio_{i:02d}_{scene.name}.wav")
+            extract_cmd = [FFMPEG, "-y"]
+            if scene.trim_start > 0:
+                extract_cmd.extend(["-ss", str(scene.trim_start)])
+            extract_cmd.extend(["-i", scene.clip_path])
+            if scene.trim_end:
+                extract_cmd.extend(["-t", str(scene.trim_end - scene.trim_start)])
+            extract_cmd.extend([
+                "-vn",  # No video
+                "-acodec", "pcm_s16le",
+                "-ar", "44100",
+                "-ac", "1",
+                clip_audio_path,
+            ])
+            result = subprocess.run(extract_cmd, capture_output=True, text=True)
+            if result.returncode == 0 and os.path.exists(clip_audio_path):
+                clip_dur = get_audio_duration(clip_audio_path)
+                print(f"    {scene.name}: chamber audio extracted ({clip_dur:.1f}s)")
+                scene_audio.append((scene, clip_audio_path))
+                total_audio += clip_dur
+            else:
+                print(f"    {scene.name}: failed to extract chamber audio")
+                scene_audio.append((scene, None))
         else:
             scene_audio.append((scene, None))
 

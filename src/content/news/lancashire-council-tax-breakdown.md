@@ -9,7 +9,7 @@ featured: true
 
 <div class="article-video">
   <video controls preload="metadata" poster="/images/share/lancashire-council-tax-breakdown/lancashire-council-tax-breakdown-poster.jpg">
-    <source src="/videos/lancashire-council-tax-breakdown-v2.mp4" type="video/mp4" />
+    <source src="/videos/lancashire-council-tax-breakdown-v3.mp4" type="video/mp4" />
     Your browser does not support the video element.
   </video>
   <div class="shareable-assets">
@@ -23,7 +23,7 @@ featured: true
     </details>
   </div>
 </div>
-<p class="article-video-label">Watch: video summary with voiceover</p>
+<p class="article-video-label">Watch: video summary with council chamber footage</p>
 
 Your council tax bill is not set by one authority. It is set by four. Each one decides its own share, within its own cap, for its own services. Understanding who charges what is the first step to understanding who is responsible for what.
 
