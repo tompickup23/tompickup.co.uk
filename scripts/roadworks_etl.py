@@ -12,6 +12,10 @@ API: https://services-eu1.arcgis.com/9MmxkLJT84uEwsJx/arcgis/rest/services/Road_
 Scope: All Lancashire (12 districts)
 Output: burnley-council/data/lancashire_cc/roadworks.json (consumed by tompickup.co.uk + AI DOGE)
 
+Features:
+  - Archive: Completed/removed works saved to roadworks_archive.json
+  - Analytics: Operator league tables, district volume, severity trends, duration analysis
+
 Usage:
     python3 roadworks_etl.py                  # Default output path
     python3 roadworks_etl.py /path/out.json   # Custom output path
@@ -25,7 +29,8 @@ import sys
 import os
 import time
 import argparse
-from datetime import datetime, timezone
+import statistics
+from datetime import datetime, timezone, timedelta
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
@@ -221,6 +226,310 @@ def compute_stats(records: list) -> dict:
     }
 
 
+def archive_completed_works(output_path: str, new_records: list) -> int:
+    """Diff new data against previous snapshot. Archive any works that disappeared."""
+    archive_path = output_path.replace("roadworks.json", "roadworks_archive.json")
+    now = datetime.now(timezone.utc).isoformat()
+
+    # Load previous snapshot
+    old_records = {}
+    if os.path.exists(output_path):
+        try:
+            with open(output_path) as f:
+                old_data = json.load(f)
+            for r in old_data.get("roadworks", []):
+                key = r.get("reference") or f"{r['road']}|{r['operator']}|{r.get('start_date','')}"
+                old_records[key] = r
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    if not old_records:
+        return 0
+
+    # Build set of new record keys
+    new_keys = set()
+    for r in new_records:
+        key = r.get("reference") or f"{r['road']}|{r['operator']}|{r.get('start_date','')}"
+        new_keys.add(key)
+
+    # Find disappeared records (were in old, not in new)
+    disappeared = []
+    for key, r in old_records.items():
+        if key not in new_keys:
+            # Calculate actual duration
+            actual_days = None
+            if r.get("start_date"):
+                try:
+                    start = datetime.fromisoformat(r["start_date"])
+                    actual_days = (datetime.now(timezone.utc) - start).days
+                except (ValueError, TypeError):
+                    pass
+            r["completed_date"] = now
+            r["actual_duration_days"] = actual_days
+            r["archived_reason"] = "removed_from_mario"
+            disappeared.append(r)
+
+    if not disappeared:
+        return 0
+
+    # Load existing archive
+    archive = {"meta": {}, "archived_works": []}
+    if os.path.exists(archive_path):
+        try:
+            with open(archive_path) as f:
+                archive = json.load(f)
+        except (json.JSONDecodeError, KeyError):
+            archive = {"meta": {}, "archived_works": []}
+
+    # Deduplicate — don't re-add if already archived
+    existing_keys = set()
+    for r in archive.get("archived_works", []):
+        key = r.get("reference") or f"{r['road']}|{r['operator']}|{r.get('start_date','')}"
+        existing_keys.add(key)
+
+    new_archived = []
+    for r in disappeared:
+        key = r.get("reference") or f"{r['road']}|{r['operator']}|{r.get('start_date','')}"
+        if key not in existing_keys:
+            new_archived.append(r)
+
+    if not new_archived:
+        return 0
+
+    archive["archived_works"].extend(new_archived)
+    archive["meta"] = {
+        "archive_started": archive.get("meta", {}).get("archive_started", now[:10]),
+        "last_updated": now,
+        "total_archived": len(archive["archived_works"]),
+    }
+
+    with open(archive_path, "w") as f:
+        json.dump(archive, f, indent=2)
+
+    print(f"  Archived {len(new_archived)} completed/removed works → {archive_path}")
+    return len(new_archived)
+
+
+def compute_analytics(records: list, output_path: str) -> dict:
+    """Compute rich analytics from live data + archive. Output to roadworks_analytics.json."""
+    archive_path = output_path.replace("roadworks.json", "roadworks_archive.json")
+    analytics_path = output_path.replace("roadworks.json", "roadworks_analytics.json")
+    now = datetime.now(timezone.utc)
+
+    # Load archive
+    archived = []
+    if os.path.exists(archive_path):
+        try:
+            with open(archive_path) as f:
+                archived = json.load(f).get("archived_works", [])
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    all_works = records + archived
+
+    # --- Operator League Tables ---
+    ops = {}
+    for r in all_works:
+        op = r.get("operator") or "Unknown"
+        if op not in ops:
+            ops[op] = {"operator": op, "active_works": 0, "completed_works": 0,
+                       "durations": [], "overruns": 0, "total_with_dates": 0,
+                       "high_severity": 0, "districts": set()}
+        is_archived = "completed_date" in r
+        if is_archived:
+            ops[op]["completed_works"] += 1
+        else:
+            ops[op]["active_works"] += 1
+
+        if r.get("severity") == "high":
+            ops[op]["high_severity"] += 1
+        if r.get("district"):
+            ops[op]["districts"].add(r["district"])
+
+        # Duration analysis
+        if r.get("start_date") and r.get("end_date"):
+            try:
+                start = datetime.fromisoformat(r["start_date"])
+                end = datetime.fromisoformat(r["end_date"])
+                planned_days = (end - start).days
+                if planned_days > 0:
+                    ops[op]["durations"].append(planned_days)
+                    ops[op]["total_with_dates"] += 1
+                    # Overrun: archived and actual > planned
+                    if is_archived and r.get("actual_duration_days"):
+                        if r["actual_duration_days"] > planned_days:
+                            ops[op]["overruns"] += 1
+            except (ValueError, TypeError):
+                pass
+
+    operator_league = []
+    for op, data in ops.items():
+        total = data["active_works"] + data["completed_works"]
+        avg_dur = statistics.mean(data["durations"]) if data["durations"] else None
+        overrun_pct = (data["overruns"] / data["completed_works"] * 100) if data["completed_works"] > 0 else None
+        high_pct = (data["high_severity"] / total * 100) if total > 0 else 0
+        operator_league.append({
+            "operator": op,
+            "active_works": data["active_works"],
+            "completed_works": data["completed_works"],
+            "total_works": total,
+            "avg_duration_days": round(avg_dur, 1) if avg_dur else None,
+            "overrun_pct": round(overrun_pct, 1) if overrun_pct is not None else None,
+            "high_severity_pct": round(high_pct, 1),
+            "districts_active_in": len(data["districts"]),
+        })
+    operator_league.sort(key=lambda x: -x["total_works"])
+
+    # --- District Work Volume ---
+    district_volume = {}
+    for r in records:
+        d = r.get("district") or "unknown"
+        if d not in district_volume:
+            district_volume[d] = {"active": 0, "completed_30d": 0, "completed_90d": 0}
+        district_volume[d]["active"] += 1
+
+    for r in archived:
+        d = r.get("district") or "unknown"
+        if d not in district_volume:
+            district_volume[d] = {"active": 0, "completed_30d": 0, "completed_90d": 0}
+        if r.get("completed_date"):
+            try:
+                completed = datetime.fromisoformat(r["completed_date"])
+                days_ago = (now - completed).days
+                if days_ago <= 30:
+                    district_volume[d]["completed_30d"] += 1
+                if days_ago <= 90:
+                    district_volume[d]["completed_90d"] += 1
+            except (ValueError, TypeError):
+                pass
+
+    # Trend: compare 30d completion rate vs 90d
+    for d, vol in district_volume.items():
+        rate_30 = vol["completed_30d"]
+        rate_90 = vol["completed_90d"] / 3 if vol["completed_90d"] > 0 else 0
+        if rate_30 > rate_90 * 1.2:
+            vol["trend"] = "increasing"
+        elif rate_30 < rate_90 * 0.8:
+            vol["trend"] = "decreasing"
+        else:
+            vol["trend"] = "stable"
+
+    # --- Severity Trends ---
+    severity_current = {"high": 0, "medium": 0, "low": 0, "unknown": 0}
+    for r in records:
+        sev = r.get("severity", "unknown")
+        severity_current[sev] = severity_current.get(sev, 0) + 1
+
+    severity_30d = {"high": 0, "medium": 0, "low": 0, "unknown": 0}
+    for r in archived:
+        if r.get("completed_date"):
+            try:
+                completed = datetime.fromisoformat(r["completed_date"])
+                if (now - completed).days <= 30:
+                    sev = r.get("severity", "unknown")
+                    severity_30d[sev] = severity_30d.get(sev, 0) + 1
+            except (ValueError, TypeError):
+                pass
+
+    # --- Duration Analysis ---
+    durations_by_cat = {}
+    all_durations = []
+    for r in all_works:
+        if r.get("start_date") and r.get("end_date"):
+            try:
+                start = datetime.fromisoformat(r["start_date"])
+                end = datetime.fromisoformat(r["end_date"])
+                planned = (end - start).days
+                if 0 < planned < 3650:  # Sanity: < 10 years
+                    cat = r.get("category", "Unknown")
+                    if cat not in durations_by_cat:
+                        durations_by_cat[cat] = []
+                    durations_by_cat[cat].append(planned)
+                    all_durations.append(planned)
+            except (ValueError, TypeError):
+                pass
+
+    duration_by_category = {}
+    for cat, durs in durations_by_cat.items():
+        duration_by_category[cat] = {
+            "count": len(durs),
+            "avg": round(statistics.mean(durs), 1),
+            "median": round(statistics.median(durs)),
+            "max": max(durs),
+        }
+
+    # Longest running active works
+    longest_running = []
+    for r in records:
+        if r.get("start_date"):
+            try:
+                start = datetime.fromisoformat(r["start_date"])
+                days = (now - start).days
+                if days > 90:
+                    longest_running.append({
+                        "road": r["road"], "district": r.get("district", ""),
+                        "days": days, "operator": r.get("operator", ""),
+                        "start_date": r["start_date"],
+                        "category": r.get("category", ""),
+                    })
+            except (ValueError, TypeError):
+                pass
+    longest_running.sort(key=lambda x: -x["days"])
+    longest_running = longest_running[:20]
+
+    # Overdue works (past end_date but still active)
+    overdue = []
+    for r in records:
+        if r.get("end_date"):
+            try:
+                end = datetime.fromisoformat(r["end_date"])
+                if end < now:
+                    days_overdue = (now - end).days
+                    overdue.append({
+                        "road": r["road"], "district": r.get("district", ""),
+                        "operator": r.get("operator", ""),
+                        "planned_end": r["end_date"][:10],
+                        "days_overdue": days_overdue,
+                        "category": r.get("category", ""),
+                    })
+            except (ValueError, TypeError):
+                pass
+    overdue.sort(key=lambda x: -x["days_overdue"])
+    overdue = overdue[:30]
+
+    analytics = {
+        "meta": {
+            "generated": now.isoformat(),
+            "live_works": len(records),
+            "archived_works": len(archived),
+            "total_analysed": len(all_works),
+        },
+        "operator_league": operator_league,
+        "district_volume": dict(sorted(district_volume.items(),
+                                       key=lambda x: -x[1]["active"])),
+        "severity_trends": {
+            "current": severity_current,
+            "completed_30d": severity_30d,
+        },
+        "duration_analysis": {
+            "overall_avg": round(statistics.mean(all_durations), 1) if all_durations else None,
+            "overall_median": round(statistics.median(all_durations)) if all_durations else None,
+            "by_category": duration_by_category,
+            "longest_running": longest_running,
+            "overdue_works": overdue,
+            "overdue_count": len(overdue),
+        },
+    }
+
+    with open(analytics_path, "w") as f:
+        json.dump(analytics, f, indent=2)
+
+    size_kb = os.path.getsize(analytics_path) / 1024
+    print(f"  Analytics: {analytics_path} ({size_kb:.1f} KB)")
+    print(f"    Operators: {len(operator_league)}, Overdue: {len(overdue)}, Longest: {longest_running[0]['days']}d" if longest_running else "    No long-running works")
+    return analytics
+
+
 def main():
     parser = argparse.ArgumentParser(description="Lancashire Roadworks ETL — Central LCC System")
     parser.add_argument("output", nargs="?", default=None,
@@ -303,8 +612,14 @@ def main():
     # Sort: severity (high first), then district, then road name
     records.sort(key=lambda r: (SEVERITY_ORDER.get(r["severity"], 9), r["district"], r["road"]))
 
+    # Archive completed works (diff against previous snapshot)
+    archived_count = archive_completed_works(output_path, records)
+
     # Compute stats
     stats = compute_stats(records)
+
+    # Compute analytics (operator league, district volume, severity, duration)
+    analytics = compute_analytics(records, output_path)
 
     # Build output
     output = {

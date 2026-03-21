@@ -71,6 +71,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/roadworks.json public/data/fixmystreet.json public/data/lcc_highways.json public/data/traffic.json
+          git add public/data/roadworks.json public/data/roadworks_archive.json public/data/roadworks_analytics.json public/data/fixmystreet.json public/data/lcc_highways.json public/data/traffic.json
           git commit -m "data: refresh all feeds $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
           git push
