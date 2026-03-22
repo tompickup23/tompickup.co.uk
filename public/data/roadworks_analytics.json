@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-03-22T06:46:35.170788+00:00",
+    "generated": "2026-03-22T18:32:45.804439+00:00",
     "live_works": 1370,
     "archived_works": 66,
     "total_analysed": 1436
@@ -452,7 +452,7 @@
       {
         "road": "Church Lane",
         "district": "preston",
-        "days": 275,
+        "days": 276,
         "operator": "Lancashire County Council",
         "start_date": "2025-06-19T09:00:00+00:00",
         "category": "Major"
@@ -460,7 +460,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 254,
+        "days": 255,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -468,7 +468,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 198,
+        "days": 199,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -476,7 +476,7 @@
       {
         "road": "Scotland Road",
         "district": "pendle",
-        "days": 159,
+        "days": 160,
         "operator": "Lancashire County Council",
         "start_date": "2025-10-13T07:30:00+00:00",
         "category": "Major"
@@ -500,7 +500,7 @@
       {
         "road": "Broad Street",
         "district": "pendle",
-        "days": 131,
+        "days": 132,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-10T07:00:00+00:00",
         "category": "Major"
@@ -508,7 +508,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 113,
+        "days": 114,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -516,7 +516,7 @@
       {
         "road": "Stocks Lane",
         "district": "wyre",
-        "days": 101,
+        "days": 102,
         "operator": "Cadent",
         "start_date": "2025-12-10T13:37:00+00:00",
         "category": "Immediate - Emergency"
@@ -524,13 +524,21 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 93,
+        "days": 94,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
       }
     ],
     "overdue_works": [
+      {
+        "road": "Burnley Road",
+        "district": "rossendale",
+        "operator": "BT",
+        "planned_end": "2026-03-21",
+        "days_overdue": 1,
+        "category": "Minor"
+      },
       {
         "road": "Ulnes Walton Lane",
         "district": "chorley",
@@ -548,12 +556,12 @@
         "category": "Minor"
       },
       {
-        "road": "Burnley Road",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-21",
+        "road": "Station Road",
+        "district": "south_ribble",
+        "operator": "Network Rail Infrastructure Ltd",
+        "planned_end": "2026-03-22",
         "days_overdue": 0,
-        "category": "Minor"
+        "category": "Major"
       },
       {
         "road": "Blackburn Road",
@@ -570,8 +578,16 @@
         "planned_end": "2026-03-21",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Bury Road",
+        "district": "rossendale",
+        "operator": "Hutchison 3G Ltd",
+        "planned_end": "2026-03-22",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 5
+    "overdue_count": 7
   }
 }
