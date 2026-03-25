@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-03-25T06:58:44.818267+00:00",
+    "generated": "2026-03-25T18:53:02.297542+00:00",
     "live_works": 1426,
     "archived_works": 437,
     "total_analysed": 1863
@@ -472,7 +472,7 @@
       {
         "road": "Church Lane",
         "district": "preston",
-        "days": 278,
+        "days": 279,
         "operator": "Lancashire County Council",
         "start_date": "2025-06-19T09:00:00+00:00",
         "category": "Major"
@@ -480,7 +480,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 257,
+        "days": 258,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -488,7 +488,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 201,
+        "days": 202,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -496,7 +496,7 @@
       {
         "road": "Scotland Road",
         "district": "pendle",
-        "days": 162,
+        "days": 163,
         "operator": "Lancashire County Council",
         "start_date": "2025-10-13T07:30:00+00:00",
         "category": "Major"
@@ -520,7 +520,7 @@
       {
         "road": "Broad Street",
         "district": "pendle",
-        "days": 134,
+        "days": 135,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-10T07:00:00+00:00",
         "category": "Major"
@@ -528,7 +528,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 116,
+        "days": 117,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -536,7 +536,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 96,
+        "days": 97,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -552,13 +552,29 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 91,
+        "days": 92,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
       }
     ],
     "overdue_works": [
+      {
+        "road": "Lowerhouse Lane",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Preston Road",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
       {
         "road": "Bay Horse Road",
         "district": "lancaster",
@@ -584,12 +600,52 @@
         "category": "Minor"
       },
       {
+        "road": "Black Bull Lane",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Cumeragh Lane",
         "district": "preston",
         "operator": "United Utilities Water",
         "planned_end": "2026-03-24",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Blackburn Road",
+        "district": "rossendale",
+        "operator": "BT",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Burnley Road East",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Market Street",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Leyland Road",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Bescar Brow Lane",
@@ -600,10 +656,26 @@
         "category": "Minor"
       },
       {
+        "road": "Birches Brow",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Grimshaw Road",
         "district": "west_lancashire",
         "operator": "Lancashire County Council",
         "planned_end": "2026-03-24",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Houghtons Road",
+        "district": "west_lancashire",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-03-25",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -620,6 +692,14 @@
         "district": "wyre",
         "operator": "United Utilities Water",
         "planned_end": "2026-03-24",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Clevelands Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-03-25",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -656,6 +736,30 @@
         "category": "Minor"
       },
       {
+        "road": "Waterbarn Street",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Rivington Lane",
+        "district": "chorley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Carlton Road",
+        "district": "fylde",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Denford Avenue",
         "district": "fylde",
         "operator": "BT",
@@ -664,138 +768,34 @@
         "category": "Minor"
       },
       {
-        "road": "Skipton New Road",
-        "district": "pendle",
-        "operator": "Cadent",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Chapman Road",
-        "district": "preston",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Bleakholt Road",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Tong End",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Alexander Close",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Ormskirk Road",
-        "district": "west_lancashire",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Longfield Avenue",
-        "district": "chorley",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Maypark",
-        "district": "chorley",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Waterford Close",
-        "district": "chorley",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Back St Davids Road North",
+        "road": "Pershore Road",
         "district": "fylde",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Cannon Street",
-        "district": "pendle",
         "operator": "United Utilities Water",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Ribbleton Place",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
+        "planned_end": "2026-03-25",
         "days_overdue": 0,
         "category": "Minor"
       },
       {
-        "road": "Alderwood Grove",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Bury Road",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Grane Road",
-        "district": "rossendale",
+        "road": "Blackburn Road",
+        "district": "hyndburn",
         "operator": "United Utilities Water",
-        "planned_end": "2026-03-24",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Market Street",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
+        "planned_end": "2026-03-25",
         "days_overdue": 0,
         "category": "Minor"
       },
       {
-        "road": "Inskip",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-03-24",
+        "road": "Lonsdale Street",
+        "district": "hyndburn",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-03-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Read Street",
+        "district": "hyndburn",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-25",
         "days_overdue": 0,
         "category": "Minor"
       }
