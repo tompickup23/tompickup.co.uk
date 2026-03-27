@@ -1,0 +1,520 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ComparisonBar from '../components/ComparisonBar.astro';
+import TrustCertificate from '../components/TrustCertificate.astro';
+import NewsCard from '../components/NewsCard.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('news', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<Layout title="Tom Pickup | Lancashire County Councillor for Padiham & Burnley West">
+  <!-- Section 1: Hero -->
+  <Hero />
+
+  <!-- Section 2: What We've Delivered -->
+  <section class="achievements-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">What We&rsquo;ve Delivered</h2>
+          <p class="section-subtitle">Reform took control of Lancashire County Council in May 2025. Here&rsquo;s what&rsquo;s changed.</p>
+        </div>
+
+        <div class="achievements-grid stagger-children">
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #30d158; background: rgba(48, 209, 88, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <div class="achievement-stat" style="color: #30d158;">3.80%</div>
+            <h3 class="achievement-title">Lowest Council Tax Rise in 12 Years</h3>
+            <p class="achievement-desc">The Conservatives raised council tax to the legal maximum in 7 of 8 years, including a record 5.99%. Reform&rsquo;s first budget ended that streak.</p>
+            <span class="achievement-before">Was: 4.99% - 5.99%</span>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #12b6cf; background: rgba(18, 182, 207, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c-1-2-3.5-3-6-3-3.3 0-6 2.7-6 6 0 1.5.5 2.8 1.3 3.8"></path><path d="M4 17h12"></path><path d="M4 13h8"></path><path d="M10 7v14"></path></svg>
+            </div>
+            <div class="achievement-stat" style="color: #12b6cf;">&pound;28M &rarr; &pound;6M</div>
+            <h3 class="achievement-title">Overspend Nearly Eliminated</h3>
+            <p class="achievement-desc">We inherited a &pound;28 million budget overspend. Through targeted efficiency, not front-line cuts, it&rsquo;s been reduced by 78%.</p>
+            <span class="achievement-before">Inherited: &pound;28M overspend</span>
+          </div>
+
+          <div class="achievement-card">
+            <div class="achievement-icon" style="color: #bf5af2; background: rgba(191, 90, 242, 0.08);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </div>
+            <div class="achievement-stat" style="color: #bf5af2;">&pound;350M</div>
+            <h3 class="achievement-title">Bond Losses Exposed</h3>
+            <p class="achievement-desc">&pound;519M invested in VeLTIP bonds now worth an estimated &pound;169M. The previous administration failed to transparently report these paper losses.</p>
+            <span class="achievement-before">Was: Concealed from councillors</span>
+          </div>
+        </div>
+
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 3: Reform vs Conservative -->
+  <section class="comparison-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="comparison-card">
+          <div class="comparison-header">
+            <span class="badge badge-teal">Reform UK vs Conservative</span>
+            <h2 class="comparison-title">The Numbers Speak</h2>
+            <p class="comparison-subtitle">Lancashire County Council: first year in office</p>
+          </div>
+
+          <div class="comparison-bars">
+            <ComparisonBar
+              title="Council Tax Rise"
+              reformValue="3.80%"
+              reformPercent={63}
+              conValue="4.99%"
+              conPercent={83}
+              lowerIsBetter={true}
+              annotation="Reform delivered the lowest council tax rise in 12 years"
+            />
+            <ComparisonBar
+              title="Savings Delivery Rate"
+              reformValue="90%+"
+              reformPercent={90}
+              conValue="48%"
+              conPercent={48}
+              annotation="Conservative savings delivery collapsed over 8 years"
+            />
+            <ComparisonBar
+              title="Overspend"
+              reformValue="&pound;6.1M"
+              reformPercent={22}
+              conValue="&pound;28M"
+              conPercent={100}
+              lowerIsBetter={true}
+              annotation="78% reduction in inherited overspend without front-line cuts"
+            />
+          </div>
+
+          <div class="comparison-trust">
+            <TrustCertificate />
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 4: Latest News -->
+  <section class="news-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="section-header">
+          <h2 class="section-heading">Latest News</h2>
+        </div>
+
+        {posts.length > 0 ? (
+          <div class="news-grid stagger-children">
+            {posts.map((post) => (
+              <NewsCard
+                title={post.data.title}
+                date={post.data.date.toISOString()}
+                description={post.data.description}
+                tags={post.data.tags}
+                slug={post.id}
+                image={post.data.image}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="empty-state text-secondary">No posts yet. Check back soon.</p>
+        )}
+
+        <div class="news-more">
+          <a href="/news/" class="btn-secondary">
+            View all news
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 7: Email Signup -->
+  <section class="signup-section">
+    <div class="container">
+      <ScrollReveal>
+        <EmailSignup variant="inline" />
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 8: Contact CTA -->
+  <section class="contact-cta-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="contact-cta-card">
+          <div class="contact-cta-lines"></div>
+          <div class="contact-cta-inner">
+            <h2>Have a Question or Concern?</h2>
+            <p>
+              I'm here to help. Whether it's a local issue, a question about council decisions, or
+              you just want to say hello, get in touch.
+            </p>
+            <div class="contact-cta-actions">
+              <a href="/contact/" class="cta-btn-white">Contact Me</a>
+              <a href="/contact/#surgery" class="cta-btn-ghost">View Surgery Dates</a>
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Section Spacing ---- */
+  .achievements-section,
+  .news-section,
+  .comparison-section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .signup-section {
+    padding: 0 0 var(--space-xl);
+  }
+
+  .contact-cta-section {
+    padding: var(--space-xl) 0 var(--space-2xl);
+  }
+
+  /* ---- Section Headers ---- */
+  .section-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+    margin-top: var(--space-sm);
+    max-width: 520px;
+  }
+
+  /* ---- Achievement Cards ---- */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  .achievement-card {
+    padding: var(--space-lg);
+    background: rgba(28, 28, 30, 0.5);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+  }
+
+  .achievement-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .achievement-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    transition: transform var(--transition-fast);
+  }
+
+  .achievement-card:hover .achievement-icon {
+    transform: scale(1.05);
+  }
+
+  .achievement-stat {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .achievement-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+  }
+
+  .achievement-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--space-md);
+  }
+
+  .achievement-before {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    padding: 3px 10px;
+    background: rgba(255, 69, 58, 0.06);
+    border: 1px solid rgba(255, 69, 58, 0.1);
+    border-radius: 9999px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ---- Comparison Section ---- */
+  .comparison-card {
+    background: rgba(28, 28, 30, 0.6);
+    backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .comparison-card:hover {
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--accent);
+  }
+
+  .comparison-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: var(--space-md) 0 var(--space-xs);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .comparison-subtitle {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    max-width: none;
+  }
+
+  .comparison-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .comparison-trust {
+    /* full width */
+  }
+
+  /* ---- News Grid ---- */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .news-more {
+    text-align: center;
+    margin-top: var(--space-xl);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  /* ---- Contact CTA ---- */
+  .contact-cta-card {
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(18, 182, 207, 0.4) 0%, transparent 50%),
+      linear-gradient(135deg, #0a2a3a 0%, #12b6cf 100%);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+  }
+
+  .contact-cta-lines {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 40px,
+        rgba(255, 255, 255, 0.03) 40px,
+        rgba(255, 255, 255, 0.03) 41px
+      );
+    pointer-events: none;
+  }
+
+  .contact-cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .contact-cta-inner h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #ffffff;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-cta-inner p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    margin: 0 auto var(--space-xl);
+    max-width: 480px;
+  }
+
+  .contact-cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .cta-btn-white {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 0.7rem 1.75rem;
+    background: #ffffff;
+    color: #0a2a3a;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    background-image: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+  }
+
+  .cta-btn-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background-image: none;
+    background-size: 0;
+  }
+
+  .cta-btn-white:active {
+    transform: scale(0.97) translateY(0);
+  }
+
+  .cta-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 0.7rem 1.75rem;
+    background: transparent;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    background-image: none;
+    transition: transform var(--transition-fast), background-color var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .cta-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    background-image: none;
+    background-size: 0;
+  }
+
+  .cta-btn-ghost:active {
+    transform: scale(0.97) translateY(0);
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .achievements-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .comparison-card {
+      padding: var(--space-lg);
+    }
+
+    .contact-cta-card {
+      padding: var(--space-xl) var(--space-lg);
+    }
+
+    .contact-cta-actions {
+      flex-direction: column;
+    }
+
+    .cta-btn-white,
+    .cta-btn-ghost {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .achievements-section,
+    .news-section,
+    .comparison-section {
+      padding: var(--space-xl) 0;
+    }
+
+    .contact-cta-card {
+      padding: var(--space-xl) var(--space-md);
+      border-radius: var(--radius-lg);
+    }
+
+    .comparison-card {
+      padding: var(--space-md);
+    }
+
+    .achievement-stat {
+      font-size: 1.5rem;
+    }
+
+  @media (prefers-reduced-motion: reduce) {
+    .achievement-card {
+      transition: none;
+    }
+  }
+</style>
