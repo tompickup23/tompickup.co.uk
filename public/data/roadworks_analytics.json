@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-03-29T06:59:35.433539+00:00",
+    "generated": "2026-03-29T18:37:38.609411+00:00",
     "live_works": 1326,
     "archived_works": 1075,
     "total_analysed": 2401
@@ -472,7 +472,7 @@
       {
         "road": "Church Lane",
         "district": "preston",
-        "days": 282,
+        "days": 283,
         "operator": "Lancashire County Council",
         "start_date": "2025-06-19T09:00:00+00:00",
         "category": "Major"
@@ -480,7 +480,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 261,
+        "days": 262,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -488,7 +488,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 205,
+        "days": 206,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -496,7 +496,7 @@
       {
         "road": "Scotland Road",
         "district": "pendle",
-        "days": 166,
+        "days": 167,
         "operator": "Lancashire County Council",
         "start_date": "2025-10-13T07:30:00+00:00",
         "category": "Major"
@@ -520,7 +520,7 @@
       {
         "road": "Broad Street",
         "district": "pendle",
-        "days": 138,
+        "days": 139,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-10T07:00:00+00:00",
         "category": "Major"
@@ -528,7 +528,7 @@
       {
         "road": "Nightfield Lane",
         "district": "ribble_valley",
-        "days": 124,
+        "days": 125,
         "operator": "United Utilities Water",
         "start_date": "2025-11-24T08:00:00+00:00",
         "category": "Major"
@@ -536,7 +536,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 120,
+        "days": 121,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -544,7 +544,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 100,
+        "days": 101,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -560,7 +560,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 95,
+        "days": 96,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -576,12 +576,44 @@
         "category": "Major"
       },
       {
+        "road": "South Road",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-03-29",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Essex Street",
+        "district": "pendle",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-03-29",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "M65 Junction 12 To Junction 13 On Slip",
         "district": "pendle",
         "operator": "Lancashire County Council",
         "planned_end": "2026-03-29",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Sagar Street",
+        "district": "pendle",
+        "operator": "Independent Distribution Connection Spec",
+        "planned_end": "2026-03-29",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "St Georges Road",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-03-29",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Ormskirk Road",
@@ -600,6 +632,6 @@
         "category": "Minor"
       }
     ],
-    "overdue_count": 4
+    "overdue_count": 8
   }
 }
