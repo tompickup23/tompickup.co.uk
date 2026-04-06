@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-04-05T18:39:10.648167+00:00",
+    "generated": "2026-04-06T07:25:28.831828+00:00",
     "live_works": 1391,
     "archived_works": 1918,
     "total_analysed": 3309
@@ -474,7 +474,7 @@
       {
         "road": "Garden Street",
         "district": "fylde",
-        "days": 972,
+        "days": 973,
         "operator": "Lancashire County Council",
         "start_date": "2023-08-07T00:00:00+00:00",
         "category": "Major"
@@ -514,7 +514,7 @@
       {
         "road": "Lancaster Road",
         "district": "lancaster",
-        "days": 167,
+        "days": 168,
         "operator": "Lancashire County Council",
         "start_date": "2025-10-20T00:00:00+00:00",
         "category": "Major"
@@ -522,7 +522,7 @@
       {
         "road": "The Sands",
         "district": "ribble_valley",
-        "days": 153,
+        "days": 154,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-03T00:00:00+00:00",
         "category": "Standard"
@@ -530,7 +530,7 @@
       {
         "road": "Broad Street",
         "district": "pendle",
-        "days": 146,
+        "days": 147,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-10T07:00:00+00:00",
         "category": "Major"
@@ -554,7 +554,7 @@
       {
         "road": "Commons Lane",
         "district": "ribble_valley",
-        "days": 104,
+        "days": 105,
         "operator": "United Utilities Water",
         "start_date": "2025-12-22T00:00:00+00:00",
         "category": "Major"
@@ -562,7 +562,7 @@
       {
         "road": "Nightfield Lane",
         "district": "ribble_valley",
-        "days": 104,
+        "days": 105,
         "operator": "United Utilities Water",
         "start_date": "2025-12-22T00:00:00+00:00",
         "category": "Major"
@@ -578,9 +578,25 @@
       {
         "road": "Long Lane",
         "district": "chorley",
-        "days": 94,
+        "days": 95,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-01T00:00:00+00:00",
+        "category": "Major"
+      },
+      {
+        "road": "Euxton Lane",
+        "district": "chorley",
+        "days": 91,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T00:00:00+00:00",
+        "category": "Major"
+      },
+      {
+        "road": "Colne Road",
+        "district": "burnley",
+        "days": 91,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T00:00:00+00:00",
         "category": "Major"
       }
     ],
@@ -594,6 +610,30 @@
         "category": "Minor"
       },
       {
+        "road": "Malvern Avenue",
+        "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-04-05",
+        "days_overdue": 1,
+        "category": "Minor"
+      },
+      {
+        "road": "Rear 2 To 12 Altham Street",
+        "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-04-05",
+        "days_overdue": 1,
+        "category": "Minor"
+      },
+      {
+        "road": "Woodfield Avenue",
+        "district": "hyndburn",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-04-04",
+        "days_overdue": 1,
+        "category": "Immediate - Urgent"
+      },
+      {
         "road": "Highfield Road",
         "district": "lancaster",
         "operator": "BT",
@@ -602,35 +642,11 @@
         "category": "Minor"
       },
       {
-        "road": "Malvern Avenue",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-04-05",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Rear 2 To 12 Altham Street",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-04-05",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Woodfield Avenue",
-        "district": "hyndburn",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-04-04",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
         "road": "Elderwood Avenue",
         "district": "wyre",
         "operator": "United Utilities Water",
         "planned_end": "2026-04-04",
-        "days_overdue": 0,
+        "days_overdue": 1,
         "category": "Immediate - Urgent"
       },
       {
@@ -638,7 +654,7 @@
         "district": "hyndburn",
         "operator": "United Utilities Water",
         "planned_end": "2026-04-04",
-        "days_overdue": 0,
+        "days_overdue": 1,
         "category": "Immediate - Urgent"
       },
       {
@@ -646,7 +662,7 @@
         "district": "south_ribble",
         "operator": "BT",
         "planned_end": "2026-04-05",
-        "days_overdue": 0,
+        "days_overdue": 1,
         "category": "Minor"
       },
       {
@@ -654,10 +670,50 @@
         "district": "south_ribble",
         "operator": "BT",
         "planned_end": "2026-04-05",
+        "days_overdue": 1,
+        "category": "Minor"
+      },
+      {
+        "road": "Comet Road",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-04-05",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Fairways Avenue",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-04-06",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Hoylake Close",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-04-06",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Lightfoot Lane",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-04-06",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Lyndale Avenue",
+        "district": "south_ribble",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-04-05",
+        "days_overdue": 0,
+        "category": "Immediate - Urgent"
       }
     ],
-    "overdue_count": 9
+    "overdue_count": 14
   }
 }
