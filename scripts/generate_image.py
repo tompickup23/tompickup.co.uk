@@ -261,6 +261,510 @@ def create_stat_card(stat, headline, subtext, accent_color=TEAL, output_path=Non
     return img
 
 
+# ============================================================
+# V2 — UKE-aligned aesthetic (Sora + Manrope, dark gradient,
+# brand-tile header, single-line footer). FB-optimal 1080x1350.
+# ============================================================
+
+# Premium font search paths — Sora ExtraBold + Manrope Bold/SemiBold/Regular.
+# Mirrors the UKE / UKD / News Burnley font stack so the aesthetic is consistent
+# across every Tom Pickup property. Falls back to reform_brand load_font() if
+# no premium TTF is present (e.g. on vps-main).
+_PREMIUM_FONT_SEARCH = [
+    Path("/Users/tompickup/ukelections/data/fonts"),
+    Path("/Users/tompickup/ukelections/src/assets/fonts"),
+    Path("/Users/tompickup/newsburnley/src/assets/fonts"),
+    Path("/Users/tompickup/ukdemographics/src/assets/fonts"),
+    Path("/Users/tompickup/newslancashire/src/assets/fonts"),
+    Path(__file__).parent / "assets" / "fonts",
+]
+
+_PREMIUM_FONT_FILES = {
+    "sora_extrabold":   "Sora-ExtraBold.ttf",
+    "manrope_bold":     "Manrope-Bold.ttf",
+    "manrope_semibold": "Manrope-SemiBold.ttf",
+    "manrope_regular":  "Manrope-Regular.ttf",
+}
+
+_premium_font_cache = {}
+
+
+def _load_premium_font(family, size):
+    key = (family, size)
+    if key in _premium_font_cache:
+        return _premium_font_cache[key]
+    filename = _PREMIUM_FONT_FILES.get(family)
+    if filename:
+        for base in _PREMIUM_FONT_SEARCH:
+            path = base / filename
+            if path.exists():
+                try:
+                    font = ImageFont.truetype(str(path), size)
+                    _premium_font_cache[key] = font
+                    return font
+                except Exception:
+                    pass
+    # Fallback to reform_brand fonts
+    fallback = {
+        "sora_extrabold":   "black",
+        "manrope_bold":     "bold",
+        "manrope_semibold": "bold",
+        "manrope_regular":  "regular",
+    }.get(family, "regular")
+    font = load_font(fallback, size)
+    _premium_font_cache[key] = font
+    return font
+
+
+# v2 design constants (UKE OG card palette, locked 20 May 2026)
+V2_BG_TOP = (4, 7, 13)         # #04070d
+V2_BG_BOTTOM = (11, 18, 32)    # #0b1220
+V2_MUTED = (148, 163, 184)     # #94a3b8 -- tagline / source
+V2_BODY = (220, 226, 236)      # softer than pure white for context lines
+V2_LINE = (40, 55, 80)         # faint structural divider
+
+# Reform UK gold (sampled from petedurnell conference-gold asset)
+REFORM_GOLD = (212, 180, 99)   # #D4B463
+REFORM_GOLD_BRIGHT = (228, 198, 118)
+ACCENT_COLORS_V2 = dict(ACCENT_COLORS)
+ACCENT_COLORS_V2.update({"gold": REFORM_GOLD, "gold_bright": REFORM_GOLD_BRIGHT})
+
+# Logo asset library — high-res Reform UK PNGs from petedurnell.com.
+# Files live alongside this script under assets/.
+V2_LOGO_ASSETS = {
+    "default":          ("reform_uk_logo.png",                "wordmark"),  # thin embedded wordmark
+    "conference-gold":  ("reform_logo_conference_gold.png",   "wordmark"),  # 3000x1000 wordmark, gold
+    "conference-white": ("reform_logo_conference_white.png",  "wordmark"),  # 3000x1000 wordmark, white
+    "full-colour":      ("reform_logo_full_colour.png",       "badge"),     # 3750x3750 teal badge
+    "white-badge":      ("reform_logo_white_v2.png",          "badge"),     # 3750x3750 white badge
+}
+
+# LANCASHIRE / BURNLEY subtitle colour — picked so the wordmark + subtitle read
+# as a single coherent block (subtitle matches the logo's natural colour).
+LOGO_NATURAL_SUBTITLE_COLOR = {
+    "default":          LIGHT_GRAY,
+    "conference-gold":  REFORM_GOLD,
+    "conference-white": WHITE,
+    "full-colour":      WHITE,
+    "white-badge":      WHITE,
+}
+
+_v2_logo_cache = {}
+
+
+def _load_v2_logo(asset_name):
+    if asset_name in _v2_logo_cache:
+        return _v2_logo_cache[asset_name]
+    filename, _ = V2_LOGO_ASSETS.get(asset_name, V2_LOGO_ASSETS["default"])
+    path = Path(__file__).parent / "assets" / filename
+    if not path.exists():
+        path = Path(__file__).parent / "assets" / "reform_uk_logo.png"
+    _v2_logo_cache[asset_name] = Image.open(path).convert("RGBA")
+    return _v2_logo_cache[asset_name]
+
+
+def _v2_logo_shape(asset_name):
+    return V2_LOGO_ASSETS.get(asset_name, V2_LOGO_ASSETS["default"])[1]
+
+
+def _draw_v2_logo(target_img, x, y, asset_name="conference-gold",
+                  target_width=320, variant="lancashire", tint=None,
+                  subtitle_color=None, subtitle=True):
+    """Draw a Reform UK logo at a target width, with optional location subtitle.
+
+    Crops to the alpha bounding box first so the subtitle sits flush against
+    the actual visible logo content, not the transparent canvas padding (the
+    conference wordmarks ship with ~33% bottom padding).
+
+    Returns (x, y, w, h) bounding box of the full logo + subtitle block.
+    """
+    logo = _load_v2_logo(asset_name).copy()
+
+    # Crop to non-transparent content bounding box. Removes the transparent
+    # padding present in the conference-gold/conference-white PNGs (~33%)
+    # so subtitle gap calculations are based on the visible logo bottom.
+    bbox = logo.getbbox()
+    if bbox is not None and bbox != (0, 0, logo.width, logo.height):
+        logo = logo.crop(bbox)
+
+    # Optional re-tint (only useful on the white-on-transparent assets).
+    if tint is not None:
+        r, g, b = tint[:3]
+        tinted = Image.new("RGBA", logo.size, (r, g, b, 255))
+        _, _, _, alpha = logo.split()
+        tinted.putalpha(alpha)
+        logo = tinted
+
+    aspect = logo.height / logo.width
+    new_w = int(target_width)
+    new_h = int(new_w * aspect)
+    logo = logo.resize((new_w, new_h), Image.LANCZOS)
+
+    if target_img.mode == "RGB":
+        rgba = target_img.convert("RGBA")
+        rgba.paste(logo, (int(x), int(y)), logo)
+        target_img.paste(rgba.convert("RGB"))
+    elif target_img.mode == "RGBA":
+        target_img.paste(logo, (int(x), int(y)), logo)
+
+    total_h = new_h
+
+    # Letter-spaced location subtitle, centered horizontally under the logo,
+    # tighter typography to read as a proper word block — NOT stretched edge-to-edge.
+    if subtitle and variant in ("lancashire", "burnley"):
+        sub_text = "LANCASHIRE" if variant == "lancashire" else "BURNLEY & PADIHAM"
+
+        # Size: 22% of logo height (vs 16% before) — more legible.
+        sub_size = max(13, int(new_h * 0.22))
+        sub_font = _load_premium_font("manrope_semibold", sub_size)
+        tmp = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+        raw_widths = [tmp.textbbox((0, 0), c, font=sub_font)[2] for c in sub_text]
+        raw_w = sum(raw_widths)
+        n_gaps = max(1, len(sub_text) - 1)
+
+        # Tracking spans ~85% of logo width (tighter than 100% edge-to-edge).
+        target_sub_w = int(new_w * 0.85)
+        track = max(0, (target_sub_w - raw_w) // n_gaps) if raw_w < target_sub_w else 0
+        final_sub_w = raw_w + track * n_gaps
+
+        # Default subtitle colour matches the logo's natural colour when nothing
+        # is supplied. Callers can override via subtitle_color.
+        if subtitle_color is None:
+            subtitle_color = tint if tint is not None else LIGHT_GRAY
+
+        # Gap: 5% of logo height (vs 10%) — sits closer to the wordmark.
+        sub_y = int(y) + new_h + max(4, int(new_h * 0.05))
+
+        # Centered horizontally under the logo.
+        sub_x = int(x) + (new_w - final_sub_w) // 2
+
+        draw = ImageDraw.Draw(target_img)
+        cx = sub_x
+        for i, ch in enumerate(sub_text):
+            draw.text((cx, sub_y), ch, fill=subtitle_color, font=sub_font)
+            cx += raw_widths[i] + (track if i < len(sub_text) - 1 else 0)
+        asc, desc = sub_font.getmetrics()
+        total_h = (sub_y - int(y)) + asc + desc
+
+    return (int(x), int(y), new_w, total_h)
+
+
+FB_PORTRAIT = (1080, 1350)     # Meta's documented optimal in-feed photo (4:5)
+FB_SQUARE = (1080, 1080)       # cross-platform compatibility fallback
+
+
+def _v2_background(width, height):
+    """UKE-style vertical dark gradient (top deep, bottom slate)."""
+    img = Image.new("RGB", (width, height), V2_BG_TOP)
+    draw = ImageDraw.Draw(img)
+    span = max(1, height - 1)
+    for y in range(height):
+        t = y / span
+        r = int(V2_BG_TOP[0] + (V2_BG_BOTTOM[0] - V2_BG_TOP[0]) * t)
+        g = int(V2_BG_TOP[1] + (V2_BG_BOTTOM[1] - V2_BG_TOP[1]) * t)
+        b = int(V2_BG_TOP[2] + (V2_BG_BOTTOM[2] - V2_BG_TOP[2]) * t)
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+    return img
+
+
+def _draw_centered_tracked(draw, text, font, fill, y, width, track=0):
+    """Draw letter-spaced text horizontally centered. Returns (x0, y, x1, y+h)."""
+    char_widths = []
+    total = 0
+    for ch in text:
+        b = draw.textbbox((0, 0), ch, font=font)
+        cw = b[2] - b[0]
+        char_widths.append(cw)
+        total += cw
+    total += track * max(0, len(text) - 1)
+    x0 = (width - total) // 2
+    x = x0
+    for i, ch in enumerate(text):
+        draw.text((x, y), ch, fill=fill, font=font)
+        x += char_widths[i] + (track if i < len(text) - 1 else 0)
+    ascent, descent = font.getmetrics()
+    return (x0, y, x0 + total, y + ascent + descent)
+
+
+def _shrink_to_fit(draw, text, family, max_size, min_size, max_width, step=8):
+    """Dynamic-size a font so `text` fits within `max_width`."""
+    size = max_size
+    while size > min_size:
+        font = _load_premium_font(family, size)
+        b = draw.textbbox((0, 0), text, font=font)
+        if (b[2] - b[0]) <= max_width:
+            return font, size
+        size -= step
+    return _load_premium_font(family, min_size), min_size
+
+
+def create_stat_card_v2(
+    stat,
+    headline,
+    secondary_stat=None,
+    secondary_text=None,
+    context=None,
+    source=None,
+    tag="CABINET DECISION",
+    accent_color=None,
+    size=FB_PORTRAIT,
+    output_path=None,
+    variant="lancashire",
+    logo_asset="conference-gold",
+    logo_target_width=340,
+    logo_tint=None,
+    label_color=None,
+    logo_subtitle=True,
+):
+    """Generate a UKE-aligned Reform UK stat card.
+
+    Defaults to 1080x1350 (Meta's documented optimal in-feed photo, 4:5
+    portrait). Pass `size=FB_SQUARE` for 1080x1080 cross-platform.
+
+    Args:
+        stat: Hero stat string, e.g. "£5M".
+        headline: Eyebrow drawn UPPER above the hero stat.
+        secondary_stat: Optional second stat below the hero.
+        secondary_text: Optional UPPER eyebrow above the secondary stat.
+        context: One- or two-line context line below the stats.
+        source: Source attribution drawn in the footer (right side).
+        tag: Top-right pill label (e.g. "STATEMENT", "ANALYSIS", "DATA").
+        accent_color: Brand colour (default TEAL — Reform UK Lancashire).
+        size: (width, height). Default FB_PORTRAIT (1080x1350).
+        output_path: File to save PNG.
+        variant: Reform logo variant ('lancashire' or 'burnley').
+
+    Returns:
+        PIL Image (RGB).
+    """
+    if accent_color is None:
+        accent_color = TEAL
+
+    width, height = size
+    img = _v2_background(width, height)
+    draw = ImageDraw.Draw(img)
+
+    pad = 70
+
+    # --- 2px brand top border ---
+    draw.rectangle([(0, 0), (width, 2)], fill=accent_color)
+
+    # --- HEADER: Reform UK logo (left) + tag pill (right) ---
+    header_y = 60
+    # Subtitle colour: match the logo's natural colour by default, or the tint
+    # if the caller is re-tinting a white logo. Lets gold logo → gold subtitle,
+    # white logo → white subtitle, without having to specify per render.
+    subtitle_color = LOGO_NATURAL_SUBTITLE_COLOR.get(logo_asset, LIGHT_GRAY)
+    if logo_tint is not None:
+        subtitle_color = logo_tint
+    logo_box = _draw_v2_logo(
+        img, pad, header_y,
+        asset_name=logo_asset,
+        target_width=logo_target_width,
+        variant=variant,
+        tint=logo_tint,
+        subtitle_color=subtitle_color,
+        subtitle=logo_subtitle,
+    )
+    draw = ImageDraw.Draw(img)  # re-bind after logo composite
+    header_block_bottom = logo_box[1] + logo_box[3]
+
+    if tag:
+        tag_font = _load_premium_font("manrope_semibold", 14)
+        track = 2
+        char_widths = []
+        for ch in tag:
+            b = draw.textbbox((0, 0), ch, font=tag_font)
+            char_widths.append(b[2] - b[0])
+        tag_text_w = sum(char_widths) + track * max(0, len(tag) - 1)
+        asc, desc = tag_font.getmetrics()
+        tag_text_h = asc + desc
+        tag_pad_x, tag_pad_y = 18, 9
+        pill_w = tag_text_w + tag_pad_x * 2
+        pill_h = tag_text_h + tag_pad_y
+        pill_x = width - pad - pill_w
+        pill_y = header_y + 8
+        draw_rounded_rect(
+            draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h),
+            radius=pill_h // 2, fill=(20, 38, 60),
+            outline=accent_color, width=2,
+        )
+        cx = pill_x + tag_pad_x
+        for i, ch in enumerate(tag):
+            draw.text((cx, pill_y + tag_pad_y // 2 - 1), ch, fill=accent_color, font=tag_font)
+            cx += char_widths[i] + (track if i < len(tag) - 1 else 0)
+
+    # --- BODY layout ---
+    body_top = max(240, header_block_bottom + 60)
+    body_bot = height - 130
+    avail_h = body_bot - body_top
+    max_w = width - 2 * pad
+
+    # Label that sits BELOW the hero stat (renamed from "eyebrow", same style).
+    label_font = _load_premium_font("manrope_semibold", 26)
+    e_asc, e_desc = label_font.getmetrics()
+    label_h = e_asc + e_desc
+    if label_color is None:
+        label_color = V2_BODY
+
+    # Typography scales with aspect: tighter for square/short cards so the
+    # 2-line context survives the overflow guard.
+    short_card = height < 1200
+    hero_max = 220 if short_card else 260
+    sec_max = 110 if short_card else 140
+
+    stat_font, _ = _shrink_to_fit(draw, stat, "sora_extrabold", hero_max, 110, max_w, step=8)
+    s_asc, s_desc = stat_font.getmetrics()
+    stat_h = s_asc + s_desc
+
+    sec_eyebrow_font = _load_premium_font("manrope_semibold", 22)
+    se_asc, se_desc = sec_eyebrow_font.getmetrics()
+    sec_eyebrow_h = se_asc + se_desc
+
+    sec_stat_font = None
+    sec_stat_h = 0
+    if secondary_stat:
+        sec_stat_font, _ = _shrink_to_fit(draw, secondary_stat, "sora_extrabold", sec_max, 64, max_w, step=6)
+        ss_asc, ss_desc = sec_stat_font.getmetrics()
+        sec_stat_h = ss_asc + ss_desc
+
+    context_font = _load_premium_font("manrope_regular", 26)
+    c_asc, c_desc = context_font.getmetrics()
+    context_line_h = c_asc + c_desc + 6
+    context_lines = []
+    if context:
+        # Respect explicit newlines first; word-wrap within each segment.
+        for segment in context.split("\n"):
+            seg = segment.strip()
+            if not seg:
+                continue
+            cur = ""
+            for w in seg.split():
+                test = (cur + " " + w).strip()
+                if draw.textbbox((0, 0), test, font=context_font)[2] > max_w:
+                    if cur:
+                        context_lines.append(cur)
+                    cur = w
+                else:
+                    cur = test
+            if cur:
+                context_lines.append(cur)
+        context_lines = context_lines[:2]
+    context_h = len(context_lines) * context_line_h
+
+    gap_stat_label = 22
+    gap_label_rule = 40
+    rule_thick = 3
+    gap_rule_seceyebrow = 36
+    gap_seceyebrow_secstat = 10
+    gap_secstat_context = 56
+
+    def _measure_total(gaps):
+        gsl, glr, grs, gss, gsc = gaps
+        t = stat_h + gsl + label_h
+        if secondary_stat:
+            t += glr + rule_thick + grs
+            if secondary_text:
+                t += sec_eyebrow_h + gss
+            t += sec_stat_h
+        if context_lines:
+            t += gsc + context_h
+        return t
+
+    total = _measure_total((gap_stat_label, gap_label_rule, gap_rule_seceyebrow,
+                            gap_seceyebrow_secstat, gap_secstat_context))
+
+    # Overflow guard: compress vertical gaps first, then drop context as last resort.
+    if total > avail_h:
+        gap_stat_label = max(12, gap_stat_label // 2)
+        gap_label_rule = max(18, gap_label_rule // 2)
+        gap_rule_seceyebrow = max(18, gap_rule_seceyebrow // 2)
+        gap_secstat_context = max(20, gap_secstat_context // 2)
+        total = _measure_total((gap_stat_label, gap_label_rule, gap_rule_seceyebrow,
+                                gap_seceyebrow_secstat, gap_secstat_context))
+    if total > avail_h and context_lines:
+        context_lines = []
+        context_h = 0
+        total = _measure_total((gap_stat_label, gap_label_rule, gap_rule_seceyebrow,
+                                gap_seceyebrow_secstat, gap_secstat_context))
+
+    cursor = body_top + max(0, (avail_h - total) // 2)
+
+    # Hero stat (drawn FIRST, with soft additive glow)
+    stat_bbox = draw.textbbox((0, 0), stat, font=stat_font)
+    stat_w = stat_bbox[2] - stat_bbox[0]
+    stat_x = (width - stat_w) // 2
+    glow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    gdraw = ImageDraw.Draw(glow)
+    for d in range(14, 0, -2):
+        gdraw.text((stat_x, cursor + d), stat, fill=(*accent_color[:3], 8), font=stat_font)
+        gdraw.text((stat_x, cursor - d), stat, fill=(*accent_color[:3], 8), font=stat_font)
+    img_rgba = Image.alpha_composite(img.convert("RGBA"), glow)
+    img = img_rgba.convert("RGB")
+    draw = ImageDraw.Draw(img)
+    draw.text((stat_x, cursor), stat, fill=accent_color, font=stat_font)
+    cursor += stat_h + gap_stat_label
+
+    # Label (drawn BELOW hero stat — UPPER, letter-spaced)
+    _draw_centered_tracked(draw, headline.upper(), label_font, label_color,
+                           cursor, width, track=4)
+    cursor += label_h
+
+    # Secondary block
+    if secondary_stat:
+        cursor += gap_label_rule
+        rule_w = 150
+        draw.rectangle(
+            [((width - rule_w) // 2, cursor), ((width + rule_w) // 2, cursor + rule_thick)],
+            fill=accent_color,
+        )
+        cursor += rule_thick + gap_rule_seceyebrow
+        if secondary_text:
+            _draw_centered_tracked(draw, secondary_text.upper(), sec_eyebrow_font, V2_MUTED,
+                                   cursor, width, track=3)
+            cursor += sec_eyebrow_h + gap_seceyebrow_secstat
+        sb = draw.textbbox((0, 0), secondary_stat, font=sec_stat_font)
+        sw = sb[2] - sb[0]
+        draw.text(((width - sw) // 2, cursor), secondary_stat, fill=accent_color, font=sec_stat_font)
+        cursor += sec_stat_h
+
+    # Context
+    if context_lines:
+        cursor += gap_secstat_context
+        for line in context_lines:
+            cb = draw.textbbox((0, 0), line, font=context_font)
+            cw = cb[2] - cb[0]
+            draw.text(((width - cw) // 2, cursor), line, fill=V2_BODY, font=context_font)
+            cursor += context_line_h
+
+    # --- FOOTER: faint divider + single-line attribution ---
+    foot_y = height - 70
+    draw.line([(pad, foot_y - 30), (width - pad, foot_y - 30)], fill=V2_LINE, width=1)
+
+    foot_font = _load_premium_font("manrope_semibold", 18)
+    brand_text = "REFORM UK · LANCASHIRE" if variant == "lancashire" else "REFORM UK · BURNLEY & PADIHAM"
+    draw.text((pad, foot_y - 8), brand_text, fill=accent_color, font=foot_font)
+
+    foot_source = source or "tompickup.co.uk"
+    src_bbox = draw.textbbox((0, 0), foot_source, font=foot_font)
+    src_w = src_bbox[2] - src_bbox[0]
+    draw.text((width - pad - src_w, foot_y - 8), foot_source, fill=V2_MUTED, font=foot_font)
+
+    # --- 2px brand bottom border ---
+    draw.rectangle([(0, height - 2), (width, height)], fill=accent_color)
+
+    # --- Subtle edge vignette for depth (premium magazine feel) ---
+    img = apply_edge_vignette(img, top=40, bottom=40, left=30, right=30, intensity=22)
+
+    if output_path:
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        img.save(output_path, "PNG", quality=95)
+        file_size = os.path.getsize(output_path)
+        print(f"v2 stat card: {output_path} ({file_size:,} bytes, {width}x{height})")
+
+    return img
+
+
 def create_cover_image(photo_path, title, tags=None, variant='lancashire',
                        output_path=None, size=(1200, 628)):
     """Generate a branded article cover image with photo + Reform overlay + title.
@@ -1019,6 +1523,18 @@ Examples:
     parser.add_argument('--output-dir', default='/tmp/stat-cards', help='Output directory for --all mode')
     parser.add_argument('--assets', help='Generate all shareable assets for an article slug')
     parser.add_argument('--assets-dir', help='Output directory for --assets mode')
+    parser.add_argument('--v2', action='store_true', help='Use v2 UKE-aligned aesthetic (default FB 4:5 portrait, 1080x1350)')
+    parser.add_argument('--secondary', help='v2 only — secondary stat below the hero (e.g. "£77M")')
+    parser.add_argument('--secondary-text', help='v2 only — UPPER eyebrow above the secondary stat')
+    parser.add_argument('--context', help='v2 only — one- or two-line context below the stats')
+    parser.add_argument('--source', help='v2 only — source attribution shown in the footer (right side)')
+    parser.add_argument('--tag', default='CABINET DECISION', help='v2 only — top-right pill label (default: CABINET DECISION)')
+    parser.add_argument('--size', help='v2 only — output size WxH (default 1080x1350 FB portrait; try 1080x1080 for square)')
+    parser.add_argument('--variant', default='lancashire', choices=['lancashire', 'burnley'], help='Reform logo variant (default: lancashire)')
+    parser.add_argument('--logo', default='conference-gold', choices=list(V2_LOGO_ASSETS.keys()), help='v2 only — Reform UK logo asset (default: conference-gold)')
+    parser.add_argument('--logo-width', type=int, default=340, help='v2 only — logo target width in pixels (default: 340)')
+    parser.add_argument('--logo-tint', help='v2 only — re-tint a white logo to this colour name (e.g. gold, teal, white)')
+    parser.add_argument('--no-subtitle', action='store_true', help='v2 only — suppress the LANCASHIRE / BURNLEY subtitle under the logo (use when the logo already conveys location, e.g. the badge)')
 
     args = parser.parse_args()
 
@@ -1060,7 +1576,38 @@ Examples:
         parser.error("Provide --stat and --headline, or --article, or --all")
         return
 
-    accent = ACCENT_COLORS.get(color, TEAL)
+    accent = ACCENT_COLORS_V2.get(color, TEAL) if args.v2 else ACCENT_COLORS.get(color, TEAL)
+
+    if args.v2:
+        size = FB_PORTRAIT
+        if args.size:
+            try:
+                w_str, h_str = args.size.lower().split('x')
+                size = (int(w_str), int(h_str))
+            except Exception:
+                print(f"WARN: invalid --size '{args.size}', using {size}")
+        logo_tint = None
+        if args.logo_tint:
+            logo_tint = ACCENT_COLORS_V2.get(args.logo_tint.lower())
+        create_stat_card_v2(
+            stat=stat,
+            headline=headline,
+            secondary_stat=args.secondary,
+            secondary_text=args.secondary_text,
+            context=args.context,
+            source=args.source,
+            tag=args.tag,
+            accent_color=accent,
+            size=size,
+            output_path=args.output,
+            variant=args.variant,
+            logo_asset=args.logo,
+            logo_target_width=args.logo_width,
+            logo_tint=logo_tint,
+            logo_subtitle=not args.no_subtitle,
+        )
+        return
+
     create_stat_card(
         stat=stat,
         headline=headline,
