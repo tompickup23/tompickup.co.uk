@@ -5,3 +5,12 @@ dist/
 *.log
 .venv/
 __pycache__/
+
+# secrets — never commit (repo is public)
+.env
+.env.*
+!.env.example
+secrets/
+secrets/**
+**/social.json
+!**/social.example.json
