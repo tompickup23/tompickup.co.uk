@@ -6,9 +6,8 @@ export async function GET(context: APIContext) {
   const posts = await getCollection('news', ({ data }) => !data.draft);
 
   return rss({
-    title: 'Tom Pickup - Lancashire County Councillor',
-    description:
-      'News, analysis and updates from Tom Pickup, Lancashire County Councillor for Padiham and Burnley West. Reform UK. Council finance, highways, social care and local government transparency.',
+    title: 'Tom Pickup',
+    description: 'News and updates from Tom Pickup.',
     site: context.site!,
     items: posts
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())

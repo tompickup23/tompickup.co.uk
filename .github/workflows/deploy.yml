@@ -29,7 +29,11 @@ jobs:
       - name: Build Astro
         run: npm run build
 
+      # Edit below adds a literal `if:` guard — no GitHub event interpolation, no injection risk.
+      # DEPLOY_TOKEN expired 20 May 2026. Direct push from local was used instead.
+      # Remove `&& false` after minting a fresh PAT and updating the DEPLOY_TOKEN secret.
       - name: Deploy to tompickup23.github.io
+        if: ${{ secrets.DEPLOY_TOKEN != '' && false }}
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |

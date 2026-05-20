@@ -1,13 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
-import ComparisonBar from '../components/ComparisonBar.astro';
-import TrustCertificate from '../components/TrustCertificate.astro';
 ---
 
 <Layout
   title="About | Tom Pickup"
-  description="About Tom Pickup, Lancashire County Councillor for Padiham and Burnley West. Lead Member for Finance and Resources. Parish Councillor. Reform UK."
+  description="About Tom Pickup."
 >
   <!-- Section 1: Page Header + Bio -->
   <section class="page-header-section">
@@ -16,49 +14,17 @@ import TrustCertificate from '../components/TrustCertificate.astro';
         <div class="bio-photo-wrap">
           <div class="bio-photo-glow"></div>
           <div class="bio-photo">
-            <img src="/images/headshot.jpg" alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West" loading="eager" />
-          </div>
-          <div class="bio-badges">
-            <span class="bio-badge bio-badge-accent">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              Elected May 2025
-            </span>
-            <span class="bio-badge bio-badge-reform">Reform UK</span>
+            <img src="/images/headshot.jpg" alt="Tom Pickup" loading="eager" />
           </div>
         </div>
 
         <div class="bio-text">
           <h1>Tom <span class="gradient-text">Pickup</span></h1>
-          <p class="bio-role">Lancashire County Councillor for <strong>Padiham &amp; Burnley West</strong></p>
-
-          <div class="bio-roles">
-            <div class="bio-role-chip">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-              Lead Member for Finance &amp; Resources
-            </div>
-            <div class="bio-role-chip">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              Parish Councillor &middot; Clowbridge with Dunnockshaw
-            </div>
-            <div class="bio-role-chip">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-              Chairman &middot; Stocks Massey Bequest Fund
-            </div>
-          </div>
 
           <div class="bio-body">
             <p>
-              I grew up in this area. I watched council tax go up year after year while the roads
-              fell apart and nobody at County Hall could explain where the money was going. I stopped
-              waiting for someone else to fix it.
-            </p>
-            <p>
-              In May 2025, Lancashire voted for change. Reform won 53 of 84 seats, the largest
-              majority any party has held at County Hall. As Lead Member for Finance and Resources,
-              we inherited a &pound;28 million overspend, &pound;350 million in concealed bond
-              losses, and a savings programme delivering at just 48%. In our first budget, we
-              delivered the lowest council tax rise in over a decade, balanced the books, and
-              kept all five county care homes open against the national trend.
+              I grew up in this area. I care about transparency, accountability, and getting
+              value out of public money.
             </p>
             <p>
               I dig into the numbers and I ask the questions that need asking. The people paying
@@ -70,227 +36,7 @@ import TrustCertificate from '../components/TrustCertificate.astro';
     </div>
   </section>
 
-  <!-- Section 2: Key Stats -->
-  <section class="stats-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="stats-grid stagger-children">
-          <div class="stat-card">
-            <span class="stat-value" style="color: #30d158;">3.80%</span>
-            <span class="stat-label">Lowest CT Rise in 12 Years</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" style="color: #12b6cf;">&pound;28M&rarr;&pound;6.2M</span>
-            <span class="stat-label">Inherited Overspend Corrected</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" style="color: #ff9f0a;">&pound;1.33B</span>
-            <span class="stat-label">Budget Oversight</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" style="color: #bf5af2;">&pound;12B</span>
-            <span class="stat-label">Pension Fund Committee</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" style="color: #ff453a;">&pound;350M</span>
-            <span class="stat-label">Bond Losses Uncovered</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" style="color: #30d158;">&pound;18K</span>
-            <span class="stat-label">Awarded to Burnley Arts</span>
-          </div>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
-  <!-- Section 3: Roles & Committees -->
-  <section class="committees-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="section-header">
-          <h2 class="section-heading">Roles &amp; Committees</h2>
-        </div>
-
-        <div class="committees-grid stagger-children">
-          <div class="committee-card committee-card-cabinet">
-            <div class="committee-tier">Cabinet</div>
-            <h3>Lead Member for Finance &amp; Resources</h3>
-            <p>Cabinet member with lead responsibility for the council's annual budget, financial strategy, council tax, and treasury management. Working with the Director of Finance and the wider finance team to balance the books and get value from every pound spent.</p>
-          </div>
-
-          <div class="committee-card">
-            <div class="committee-tier">Committees</div>
-            <h3>Committee Memberships</h3>
-            <ul class="committee-list">
-              <li><strong>Lancashire County Combined Authority</strong> Audit &amp; Risk Committee, Overview &amp; Scrutiny Committee</li>
-              <li><strong>Lancashire Pension Fund Committee</strong></li>
-              <li><strong>Company Member Cabinet Committee</strong></li>
-              <li><strong>Full Council and Cabinet</strong></li>
-            </ul>
-          </div>
-
-          <div class="committee-card">
-            <div class="committee-tier">Parish</div>
-            <h3>Clowbridge with Dunnockshaw Parish Council</h3>
-            <p>Parish councillor for this rural hillside community, working on local planning, environment, and village matters.</p>
-          </div>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
-  <!-- Section 4: Timeline -->
-  <section class="timeline-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="section-header">
-          <h2 class="section-heading">Key Milestones</h2>
-        </div>
-
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">May 2025</span>
-              <h3>Elected to Lancashire County Council</h3>
-              <p>
-                Won Padiham and Burnley West for Reform UK as part of a landslide: 53 of 84
-                seats, the largest majority any party has held at County Hall.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">May 2025</span>
-              <h3>Appointed to Cabinet</h3>
-              <p>
-                Appointed Lead Member for Finance and Resources, taking on oversight of the
-                council's &pound;986 million net revenue budget and financial strategy.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">Summer 2025</span>
-              <h3>Five Care Homes Saved</h3>
-              <p>
-                Launched an eight-week public consultation on the future of five county care
-                homes. 1,600 residents responded. We listened, and kept all five open. Nationally,
-                council-run care home beds have fallen from 64% to just 4% since 1979.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">Autumn 2025</span>
-              <h3>&pound;350M Bond Losses Uncovered</h3>
-              <p>
-                Reform's financial scrutiny of the Statement of Accounts revealed that &pound;519
-                million invested in VeLTIP bonds had fallen to just &pound;169 million. The
-                previous administration never transparently reported these losses to councillors
-                or the public.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">February 2026</span>
-              <h3>First Reform Budget</h3>
-              <p>
-                Balanced a &pound;1.33 billion budget with the lowest council tax rise in over
-                a decade at 3.80%, down from 4.99% in each of the last two Conservative budgets.
-                The inherited &pound;28 million overspend corrected without cutting front-line
-                services. We are stopping the rot.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-card card">
-              <span class="timeline-date">Ongoing</span>
-              <h3>Open Door</h3>
-              <p>
-                Regular surgeries and always available to residents. Your concerns drive my
-                work at County Hall.
-              </p>
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
-  <!-- Section 5: Reform at LCC -->
-  <section class="reform-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="section-header">
-          <h2 class="section-heading">Reform at Lancashire County Council</h2>
-        </div>
-
-        <div class="reform-content">
-          <p>
-            When the Conservatives left County Hall, they left behind a mess: a &pound;28 million
-            overspend, savings delivery that had collapsed to just 48%, council tax raised to the
-            legal maximum in each of their final two budgets, and &pound;350 million in bond losses
-            they never transparently reported.
-          </p>
-          <p>
-            In less than a year, Reform has delivered the lowest council tax rise in over a decade,
-            corrected the inherited overspend, saved all five county care homes, and stopped
-            councillors collecting salaries for pension fund directorships. We identified &pound;5
-            in every &pound;100 of council spending as potential savings. The 2026/27 budget is
-            balanced at &pound;1.33 billion, without cutting front-line services.
-          </p>
-
-          <div class="reform-comparisons">
-            <ComparisonBar
-              title="Council Tax Rise"
-              reformValue="3.80%"
-              reformPercent={63}
-              conValue="4.99%"
-              conPercent={83}
-              lowerIsBetter={true}
-              annotation="Lowest rise in over a decade, stopping the rot"
-            />
-            <ComparisonBar
-              title="Inherited Overspend"
-              reformValue="&pound;6.2M"
-              reformPercent={22}
-              conValue="&pound;28M"
-              conPercent={100}
-              lowerIsBetter={true}
-              annotation="78% reduction in our first 9 months"
-            />
-          </div>
-
-          <p>
-            Lancashire voted for change. Change is being delivered.
-          </p>
-
-          <div class="reform-trust">
-            <TrustCertificate />
-          </div>
-
-          <div class="reform-links">
-            <a href="/contact/" class="btn-primary">Get in Touch</a>
-          </div>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
-  <!-- Section 6: Accessibility Statement -->
+  <!-- Section 2: Accessibility Statement -->
   <section class="accessibility-section" id="accessibility">
     <div class="container-narrow">
       <ScrollReveal>
@@ -364,37 +110,6 @@ import TrustCertificate from '../components/TrustCertificate.astro';
     display: block;
   }
 
-  .bio-badges {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: var(--space-md);
-    align-items: center;
-  }
-
-  .bio-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  .bio-badge-accent {
-    background: rgba(48, 209, 88, 0.1);
-    border: 1px solid rgba(48, 209, 88, 0.2);
-    color: #30d158;
-  }
-
-  .bio-badge-reform {
-    background: rgba(18, 182, 207, 0.1);
-    border: 1px solid rgba(18, 182, 207, 0.2);
-    color: #12b6cf;
-  }
-
   /* Bio text */
   .bio-text h1 {
     font-size: clamp(2.25rem, 5vw, 3.25rem);
@@ -402,42 +117,7 @@ import TrustCertificate from '../components/TrustCertificate.astro';
     line-height: 1.05;
     letter-spacing: -0.04em;
     color: #fff;
-    margin: 0 0 0.5rem;
-  }
-
-  .bio-role {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin: 0 0 1.25rem;
-  }
-
-  .bio-role strong {
-    color: var(--text-primary);
-  }
-
-  .bio-roles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: var(--space-xl);
-  }
-
-  .bio-role-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: var(--radius-md);
-    background: rgba(28, 28, 30, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  .bio-role-chip svg {
-    flex-shrink: 0;
-    color: var(--accent);
+    margin: 0 0 var(--space-lg);
   }
 
   .bio-body p {
@@ -449,279 +129,6 @@ import TrustCertificate from '../components/TrustCertificate.astro';
 
   .bio-body p:last-child {
     margin-bottom: 0;
-  }
-
-  /* ---- Stats Section ---- */
-  .stats-section {
-    padding: 0 0 var(--space-2xl);
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: var(--space-md);
-  }
-
-  .stat-card {
-    text-align: center;
-    padding: var(--space-lg) var(--space-md);
-    background: rgba(28, 28, 30, 0.5);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--transition-normal), transform var(--transition-normal);
-  }
-
-  .stat-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    transform: translateY(-2px);
-  }
-
-  .stat-value {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.1;
-    margin-bottom: 6px;
-  }
-
-  .stat-label {
-    display: block;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    line-height: 1.3;
-  }
-
-  /* ---- Committees ---- */
-  .committees-section {
-    padding: 0 0 var(--space-2xl);
-  }
-
-  .committees-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  .committee-card {
-    padding: var(--space-lg);
-    background: rgba(28, 28, 30, 0.5);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
-  }
-
-  .committee-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
-
-  .committee-card-cabinet {
-    border-left: 3px solid var(--accent);
-  }
-
-  .committee-tier {
-    display: inline-block;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    padding: 3px 10px;
-    background: rgba(18, 182, 207, 0.08);
-    border-radius: 9999px;
-    margin-bottom: var(--space-sm);
-  }
-
-  .committee-card h3 {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-sm);
-    line-height: 1.3;
-  }
-
-  .committee-card p {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  .committee-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .committee-list li {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    padding-left: 16px;
-    position: relative;
-  }
-
-  .committee-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 7px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.6;
-  }
-
-  .committee-list li strong {
-    color: var(--text-primary);
-    font-weight: 600;
-    display: block;
-    font-size: 0.8125rem;
-  }
-
-  /* ---- Timeline ---- */
-  .timeline-section {
-    padding: 0 0 var(--space-2xl);
-  }
-
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-    max-width: 700px;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 11px;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(
-      to bottom,
-      var(--accent) 0%,
-      var(--accent-border) 30%,
-      var(--border-color) 100%
-    );
-    border-radius: 1px;
-  }
-
-  .timeline-item {
-    position: relative;
-    padding-bottom: var(--space-lg);
-  }
-
-  .timeline-item:last-child {
-    padding-bottom: 0;
-  }
-
-  .timeline-dot {
-    position: absolute;
-    left: -32px;
-    top: var(--space-lg);
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--bg-primary);
-    border: 2px solid var(--accent);
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .timeline-dot::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-
-  .timeline-card {
-    margin-left: var(--space-md);
-  }
-
-  .timeline-date {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: var(--space-xs);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .timeline-card h3 {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    margin-bottom: var(--space-sm);
-    color: var(--text-primary);
-  }
-
-  .timeline-card p {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    line-height: 1.65;
-    margin: 0;
-  }
-
-  .timeline-item:nth-child(1) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.1s forwards; }
-  .timeline-item:nth-child(2) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.2s forwards; }
-  .timeline-item:nth-child(3) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.3s forwards; }
-  .timeline-item:nth-child(4) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.4s forwards; }
-  .timeline-item:nth-child(5) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.5s forwards; }
-  .timeline-item:nth-child(6) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.6s forwards; }
-
-  /* ---- Reform Section ---- */
-  .reform-section {
-    padding: 0 0 var(--space-2xl);
-  }
-
-  .reform-content {
-    max-width: 720px;
-  }
-
-  .reform-content > p {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    line-height: 1.75;
-    margin-bottom: var(--space-md);
-  }
-
-  .reform-comparisons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-    margin: var(--space-lg) 0;
-    max-width: none;
-  }
-
-  .reform-trust {
-    margin: var(--space-lg) 0;
-    max-width: none;
-  }
-
-  .reform-links {
-    display: flex;
-    gap: var(--space-md);
-    flex-wrap: wrap;
-    margin-top: var(--space-lg);
   }
 
   /* ---- Accessibility ---- */
@@ -750,29 +157,7 @@ import TrustCertificate from '../components/TrustCertificate.astro';
     margin-bottom: 0;
   }
 
-  /* ---- Section Headers ---- */
-  .section-header {
-    margin-bottom: var(--space-xl);
-  }
-
-  .section-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.0625rem;
-    margin-top: var(--space-sm);
-    max-width: 520px;
-  }
-
   /* ---- Responsive ---- */
-  @media (max-width: 1024px) {
-    .stats-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .committees-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
   @media (max-width: 768px) {
     .page-header-section {
       padding: 6rem 0 var(--space-lg);
@@ -798,51 +183,8 @@ import TrustCertificate from '../components/TrustCertificate.astro';
       height: 240px;
     }
 
-    .bio-roles {
-      justify-content: center;
-    }
-
     .bio-body p {
       text-align: left;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .committees-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .timeline {
-      padding-left: 28px;
-    }
-
-    .timeline::before {
-      left: 9px;
-    }
-
-    .timeline-dot {
-      left: -28px;
-      width: 20px;
-      height: 20px;
-    }
-
-    .timeline-dot::after {
-      width: 6px;
-      height: 6px;
-    }
-
-    .timeline-card {
-      margin-left: var(--space-sm);
-    }
-
-    .reform-comparisons {
-      grid-template-columns: 1fr;
-    }
-
-    .reform-links {
-      flex-direction: column;
     }
   }
 
@@ -856,27 +198,9 @@ import TrustCertificate from '../components/TrustCertificate.astro';
       width: 200px;
       height: 200px;
     }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .stat-value {
-      font-size: 1.25rem;
-    }
-
-    .reform-links a {
-      width: 100%;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .timeline-item {
-      opacity: 1 !important;
-      animation: none !important;
-    }
-
     .bio-photo-glow {
       display: none;
     }

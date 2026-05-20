@@ -15,7 +15,7 @@ interface Props {
 
 const {
   title,
-  description = 'Tom Pickup | Lancashire County Councillor for Padiham and Burnley West. Reform UK. Transparency, accountability, and action for Lancashire.',
+  description = 'Tom Pickup.',
   ogImage = '/images/headshot.jpg',
   article = false,
   publishedTime,
@@ -76,9 +76,6 @@ const maintenanceMode = false;
     {article && (
       <meta property="article:author" content="https://tompickup.co.uk/about/" />
     )}
-    {article && (
-      <meta property="article:section" content="Politics" />
-    )}
     {article && tags.map((tag) => (
       <meta property="article:tag" content={tag} />
     ))}
@@ -97,30 +94,12 @@ const maintenanceMode = false;
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: 'Tom Pickup',
-        jobTitle: 'Lancashire County Councillor',
-        description: 'Lancashire County Councillor for Padiham and Burnley West. Reform UK.',
         url: Astro.site,
         sameAs: [
           'https://x.com/tompickup',
           'https://www.facebook.com/tompickupburnley',
           'https://www.instagram.com/tompickupburnley',
         ],
-        memberOf: {
-          '@type': 'Organization',
-          name: 'Lancashire County Council',
-          url: 'https://www.lancashire.gov.uk',
-        },
-        affiliation: {
-          '@type': 'PoliticalParty',
-          name: 'Reform UK',
-          url: 'https://www.reformparty.uk',
-        },
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Padiham',
-          addressRegion: 'Lancashire',
-          addressCountry: 'GB',
-        },
       })} />
     )}
   </head>

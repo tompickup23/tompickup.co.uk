@@ -60,7 +60,6 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       '@type': 'Person',
       name: 'Tom Pickup',
       url: 'https://tompickup.co.uk/about/',
-      jobTitle: 'Lancashire County Councillor',
     },
     publisher: {
       '@type': 'Person',
@@ -71,10 +70,6 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     wordCount: wordCount,
     keywords: frontmatter.tags.join(', '),
     inLanguage: 'en-GB',
-    about: {
-      '@type': 'GovernmentOrganization',
-      name: 'Lancashire County Council',
-    },
   })} />
 
   <!-- BreadcrumbList structured data -->
@@ -174,8 +169,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
       <div class="action-box">
         <h3>What you can do</h3>
         <ul class="action-list">
-          <li><a href="/about/">See what Reform has achieved at LCC</a></li>
-          <li><a href="/contact/">Report an issue in your area</a></li>
+          <li><a href="/contact/">Get in touch</a></li>
           <li><a href="/news/">Read the latest news</a></li>
         </ul>
       </div>

@@ -1,10 +1,10 @@
 ---
-draft: true
 title: "Stocks Massey awards over £20,000+ across Burnley: 2026 Applications Open Soon"
 image: "/images/stocks-massey-cover.jpg"
 date: 2026-03-01
 description: "The Edward Stocks Massey Bequest Fund has distributed £18,000 to 15 Burnley organisations in 2025. Applications for 2026 open late April."
 tags: ["charity", "burnley", "community"]
+draft: true
 featured: true
 ---
 
