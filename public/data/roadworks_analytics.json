@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-05-25T09:58:32.215956+00:00",
+    "generated": "2026-05-25T19:24:35.933422+00:00",
     "live_works": 1371,
     "archived_works": 7216,
     "total_analysed": 8587
@@ -574,7 +574,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1031,
+        "days": 1032,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -646,7 +646,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 157,
+        "days": 158,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -692,6 +692,14 @@
         "category": "Major"
       },
       {
+        "road": "Blackgate Lane",
+        "district": "west_lancashire",
+        "days": 140,
+        "operator": "United Utilities Water",
+        "start_date": "2026-01-05T12:15:00+00:00",
+        "category": "Major"
+      },
+      {
         "road": "Colne Road",
         "district": "burnley",
         "days": 140,
@@ -705,14 +713,6 @@
         "days": 139,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-06T07:00:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Blackgate Lane",
-        "district": "west_lancashire",
-        "days": 139,
-        "operator": "United Utilities Water",
-        "start_date": "2026-01-05T12:15:00+00:00",
         "category": "Major"
       },
       {
@@ -732,7 +732,192 @@
         "category": "Major"
       }
     ],
-    "overdue_works": [],
-    "overdue_count": 0
+    "overdue_works": [
+      {
+        "road": "Accrington Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Gannow Lane",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Burdock Walk",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Campion Way",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Cinderbarrow Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Cinderbarrow Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Crewgarth Road",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Mallow Walk",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Ousby Avenue",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Rose Acre Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Sedge Court",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Westgate Avenue",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Yarrow Walk",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Back Lane",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Knotts Lane",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Park Avenue",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Southfield Lane",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Bolton By Bowland Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Mellishaw Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Oxcliffe Road",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Bury Road",
+        "district": "rossendale",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Regent Street",
+        "district": "rossendale",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Whalley Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-05-25",
+        "days_overdue": 0,
+        "category": "Minor"
+      }
+    ],
+    "overdue_count": 23
   }
 }
