@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-05-31T08:40:52.996857+00:00",
+    "generated": "2026-05-31T19:11:34.981025+00:00",
     "live_works": 1498,
     "archived_works": 7363,
     "total_analysed": 8861
@@ -574,7 +574,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1037,
+        "days": 1038,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -590,7 +590,7 @@
       {
         "road": "Church Lane",
         "district": "preston",
-        "days": 345,
+        "days": 346,
         "operator": "Lancashire County Council",
         "start_date": "2025-06-19T09:00:00+00:00",
         "category": "Major"
@@ -598,7 +598,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 324,
+        "days": 325,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -606,7 +606,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 268,
+        "days": 269,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -638,7 +638,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 183,
+        "days": 184,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -646,7 +646,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 163,
+        "days": 164,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -654,7 +654,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 158,
+        "days": 159,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -692,6 +692,14 @@
         "category": "Major"
       },
       {
+        "road": "Blackgate Lane",
+        "district": "west_lancashire",
+        "days": 146,
+        "operator": "United Utilities Water",
+        "start_date": "2026-01-05T12:15:00+00:00",
+        "category": "Major"
+      },
+      {
         "road": "Colne Road",
         "district": "burnley",
         "days": 146,
@@ -705,14 +713,6 @@
         "days": 145,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-06T07:00:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Blackgate Lane",
-        "district": "west_lancashire",
-        "days": 145,
-        "operator": "United Utilities Water",
-        "start_date": "2026-01-05T12:15:00+00:00",
         "category": "Major"
       },
       {
@@ -758,6 +758,14 @@
         "category": "Minor"
       },
       {
+        "road": "Bowerham Road",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Minor"
+      },
+      {
         "road": "Marine Road Central",
         "district": "lancaster",
         "operator": "Lancashire County Council",
@@ -774,12 +782,28 @@
         "category": "Standard"
       },
       {
+        "road": "Cross Lane",
+        "district": "pendle",
+        "operator": "Northern Powergrid",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Major"
+      },
+      {
         "road": "Bartle Lane",
         "district": "preston",
         "operator": "Lancashire County Council",
         "planned_end": "2026-05-26",
         "days_overdue": 4,
         "category": "Major"
+      },
+      {
+        "road": "Watery Lane",
+        "district": "preston",
+        "operator": "Virgin Media",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Minor"
       },
       {
         "road": "Simonstone Road",
@@ -804,6 +828,14 @@
         "planned_end": "2026-05-27",
         "days_overdue": 4,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Shore Road",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Minor"
       },
       {
         "road": "Blackpool Road",
@@ -910,7 +942,23 @@
         "category": "Minor"
       },
       {
+        "road": "Woodlands Avenue",
+        "district": "preston",
+        "operator": "Virgin Media",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Minor"
+      },
+      {
         "road": "Dawson Avenue",
+        "district": "ribble_valley",
+        "operator": "BT",
+        "planned_end": "2026-05-27",
+        "days_overdue": 4,
+        "category": "Minor"
+      },
+      {
+        "road": "Harewood Avenue",
         "district": "ribble_valley",
         "operator": "BT",
         "planned_end": "2026-05-27",
@@ -924,54 +972,6 @@
         "planned_end": "2026-05-26",
         "days_overdue": 4,
         "category": "Minor"
-      },
-      {
-        "road": "Whalley Clitheroe Bypass",
-        "district": "ribble_valley",
-        "operator": "Network Rail Infrastructure Ltd",
-        "planned_end": "2026-05-27",
-        "days_overdue": 4,
-        "category": "Minor"
-      },
-      {
-        "road": "Birchwood",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-05-27",
-        "days_overdue": 4,
-        "category": "Minor"
-      },
-      {
-        "road": "Daybrook",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-05-27",
-        "days_overdue": 4,
-        "category": "Minor"
-      },
-      {
-        "road": "Foxfold",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-05-27",
-        "days_overdue": 4,
-        "category": "Minor"
-      },
-      {
-        "road": "Allonby Avenue",
-        "district": "wyre",
-        "operator": "BT",
-        "planned_end": "2026-05-27",
-        "days_overdue": 4,
-        "category": "Minor"
-      },
-      {
-        "road": "Rossendale Avenue South",
-        "district": "wyre",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-05-26",
-        "days_overdue": 4,
-        "category": "Immediate - Urgent"
       }
     ],
     "overdue_count": 30
