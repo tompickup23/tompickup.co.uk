@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-08T10:46:14.510562+00:00",
+    "generated": "2026-06-08T20:09:46.858666+00:00",
     "live_works": 1431,
     "archived_works": 8691,
     "total_analysed": 10122
@@ -594,7 +594,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1045,
+        "days": 1046,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -754,6 +754,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Rosehill Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "St Annes Road West",
         "district": "fylde",
         "operator": "Lancashire County Council",
@@ -770,12 +778,44 @@
         "category": "Major"
       },
       {
+        "road": "Halton Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Slyne Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Long Ing Lane",
+        "district": "pendle",
+        "operator": "Yorkshire Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Noggarth Road",
         "district": "pendle",
         "operator": "BT",
         "planned_end": "2026-06-08",
         "days_overdue": 0,
         "category": "Major"
+      },
+      {
+        "road": "Whalley Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Standard"
       },
       {
         "road": "Burnley Road East",
@@ -786,12 +826,52 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Golden Hill Lane",
+        "district": "south_ribble",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Briars Lane",
+        "district": "west_lancashire",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Park Lane",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Hawthorne Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Barleyfield",
         "district": "chorley",
         "operator": "BT",
         "planned_end": "2026-06-08",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Sevenoaks",
+        "district": "chorley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Standard"
       },
       {
         "road": "Napier Close",
@@ -802,7 +882,39 @@
         "category": "Minor"
       },
       {
+        "road": "Black Abbey Street",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Quernmore Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Burnley Road",
+        "district": "pendle",
+        "operator": "BT",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Catherine Street",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-06-08",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Oban Crescent",
         "district": "preston",
         "operator": "BT",
         "planned_end": "2026-06-08",
@@ -858,136 +970,24 @@
         "category": "Minor"
       },
       {
-        "road": "Beech Road",
-        "district": "lancaster",
-        "operator": "BT",
+        "road": "Singleton Road",
+        "district": "fylde",
+        "operator": "Cadent",
         "planned_end": "2026-06-08",
         "days_overdue": 0,
         "category": "Minor"
       },
       {
-        "road": "Canterbury Close",
-        "district": "lancaster",
-        "operator": "BT",
+        "road": "St Davids Road South",
+        "district": "fylde",
+        "operator": "Sapphire",
         "planned_end": "2026-06-08",
         "days_overdue": 0,
-        "category": "Minor"
+        "category": "Standard"
       },
       {
-        "road": "Church Brow",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Church Brow",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Footpath Between Meadowfield Court And Waltham Court",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Hampsfell Drive",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "High Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Quarry Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Waltham Court",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lincoln Way",
-        "district": "ribble_valley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-07",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Thorn Street",
-        "district": "ribble_valley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-07",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Alderwood Grove",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Elmridge",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Gillibrands Road",
-        "district": "west_lancashire",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-07",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Gillibrands Road",
-        "district": "west_lancashire",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-07",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Teversham",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-08",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "The Winsters",
-        "district": "west_lancashire",
+        "road": "Thornbank",
+        "district": "fylde",
         "operator": "BT",
         "planned_end": "2026-06-08",
         "days_overdue": 0,
