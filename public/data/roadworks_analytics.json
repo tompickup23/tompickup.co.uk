@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-10T09:52:43.067702+00:00",
+    "generated": "2026-06-10T20:25:39.512480+00:00",
     "live_works": 1575,
     "archived_works": 8963,
     "total_analysed": 10538
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1047,
+        "days": 1048,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -612,7 +612,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 524,
+        "days": 525,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -668,7 +668,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 173,
+        "days": 174,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,12 +764,44 @@
     ],
     "overdue_works": [
       {
+        "road": "Queen Victoria Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Rosehill Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Aberdeen Road",
         "district": "lancaster",
         "operator": "Electricity North West Limited",
         "planned_end": "2026-06-09",
         "days_overdue": 0,
         "category": "Major"
+      },
+      {
+        "road": "Netherfield Road",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Primet Hill",
+        "district": "pendle",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Wycoller Road",
@@ -820,6 +852,14 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "New Cut Lane",
+        "district": "west_lancashire",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Bramley Avenue",
         "district": "burnley",
         "operator": "United Utilities Water",
@@ -834,6 +874,94 @@
         "planned_end": "2026-06-10",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Moorland Gate",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Chain Lane",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Chain Lane",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Chain Lane",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Commercial Street",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Bay Horse Drive",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Drayton Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Gaisgill Avenue",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Kingsway",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Redruth Drive",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Roeburn Drive",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "St Wilfrids Park",
@@ -871,134 +999,6 @@
         "road": "Hawthorne Place",
         "district": "ribble_valley",
         "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Mayfield Road",
-        "district": "ribble_valley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Severn Street",
-        "district": "ribble_valley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Manchester Road",
-        "district": "rossendale",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Farington Road",
-        "district": "south_ribble",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Abbeydale",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Georges Lane",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Meadow Lane",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Gubberford Lane",
-        "district": "wyre",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Brantfell Drive",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Greengate Close",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lower Mead Drive",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Micklehurst Crescent",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Wilkie Avenue",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Crofts Close",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-09",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Forgewood Drive",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Fulwood Drive",
-        "district": "lancaster",
-        "operator": "BT",
         "planned_end": "2026-06-09",
         "days_overdue": 0,
         "category": "Minor"
