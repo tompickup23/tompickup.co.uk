@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-11T10:19:54.731202+00:00",
+    "generated": "2026-06-11T20:16:05.717953+00:00",
     "live_works": 1588,
     "archived_works": 9109,
     "total_analysed": 10697
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1048,
+        "days": 1049,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -772,10 +772,58 @@
         "category": "Minor"
       },
       {
+        "road": "Bolton Road",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Crag Bank Lane",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Leeds Road",
         "district": "pendle",
         "operator": "Cadent",
         "planned_end": "2026-06-10",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Dilworth Lane",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Inglewhite Road",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Lower Lane",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Whittingham Road",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-11",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -839,6 +887,14 @@
         "road": "Hartwood Green",
         "district": "chorley",
         "operator": "BT",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Montcliffe Road",
+        "district": "chorley",
+        "operator": "Virgin Media",
         "planned_end": "2026-06-11",
         "days_overdue": 0,
         "category": "Minor"
@@ -916,6 +972,22 @@
         "category": "Minor"
       },
       {
+        "road": "Blaguegate Lane",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Dingle Close",
+        "district": "west_lancashire",
+        "operator": "Nexfibre",
+        "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Moss Lane",
         "district": "west_lancashire",
         "operator": "Lancashire County Council",
@@ -930,78 +1002,6 @@
         "planned_end": "2026-06-10",
         "days_overdue": 0,
         "category": "Major"
-      },
-      {
-        "road": "Woodplumpton Road",
-        "district": "burnley",
-        "operator": "T-Mobile (UK) Limited",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brookhouse Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Fell View",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Hall Drive",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Leslie Avenue",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Marine Road East",
-        "district": "lancaster",
-        "operator": "Vodafone Group",
-        "planned_end": "2026-06-10",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Oak Drive",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Schoolhouse Lane",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Schoolhouse Lane",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
       }
     ],
     "overdue_count": 30
