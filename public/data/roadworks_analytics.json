@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-12T10:05:05.896105+00:00",
+    "generated": "2026-06-12T20:04:57.176332+00:00",
     "live_works": 1583,
     "archived_works": 9276,
     "total_analysed": 10859
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1049,
+        "days": 1050,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -668,7 +668,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 175,
+        "days": 176,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,6 +764,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Eastern Avenue",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-12",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Buckholes Lane",
         "district": "chorley",
         "operator": "United Utilities Water",
@@ -812,6 +820,14 @@
         "category": "Minor"
       },
       {
+        "road": "Chapel Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-12",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Wycoller Road",
         "district": "pendle",
         "operator": "Lancashire County Council",
@@ -824,6 +840,22 @@
         "district": "preston",
         "operator": "Lancashire County Council",
         "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Rosemary Lane",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-12",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Newton Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-12",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
       },
@@ -868,6 +900,14 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Liverpool Road",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-12",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Black Moss Lane",
         "district": "west_lancashire",
         "operator": "United Utilities Water",
@@ -888,6 +928,14 @@
         "district": "west_lancashire",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-11",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Moss Road",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-06-12",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -924,6 +972,14 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Bolton Road",
+        "district": "chorley",
+        "operator": "National Highways",
+        "planned_end": "2026-06-12",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Woodside",
         "district": "chorley",
         "operator": "BT",
@@ -946,62 +1002,6 @@
         "planned_end": "2026-06-11",
         "days_overdue": 0,
         "category": "Minor"
-      },
-      {
-        "road": "St Davids Road North",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-12",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "St Davids Road North",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-12",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lodges Grove",
-        "district": "lancaster",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Harewood Avenue",
-        "district": "ribble_valley",
-        "operator": "BT",
-        "planned_end": "2026-06-12",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "David Street",
-        "district": "rossendale",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Blaydike Moss",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Fir Trees Avenue",
-        "district": "south_ribble",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-11",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
       }
     ],
     "overdue_count": 30
