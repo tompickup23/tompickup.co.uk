@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-14T09:28:09.694949+00:00",
+    "generated": "2026-06-14T19:21:22.908906+00:00",
     "live_works": 1481,
     "archived_works": 9511,
     "total_analysed": 10992
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1051,
+        "days": 1052,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -612,7 +612,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 528,
+        "days": 529,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -668,7 +668,7 @@
       {
         "road": "Easington Road",
         "district": "ribble_valley",
-        "days": 177,
+        "days": 178,
         "operator": "Lancashire County Council",
         "start_date": "2025-12-18T10:15:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,6 +764,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Bentley Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-13",
+        "days_overdue": 1,
+        "category": "Major"
+      },
+      {
         "road": "Ormerod Street",
         "district": "burnley",
         "operator": "Lancashire County Council",
@@ -786,6 +794,22 @@
         "planned_end": "2026-06-14",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Arnside Crescent",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-14",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Thornton Grove",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-14",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Station Road",
@@ -820,14 +844,22 @@
         "category": "Minor"
       },
       {
-        "road": "Bentley Street",
-        "district": "pendle",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-06-13",
+        "road": "Eastgate",
+        "district": "lancaster",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-14",
         "days_overdue": 0,
-        "category": "Major"
+        "category": "Minor"
+      },
+      {
+        "road": "Middlegate",
+        "district": "lancaster",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-14",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 8
+    "overdue_count": 12
   }
 }
