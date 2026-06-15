@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-15T11:56:54.222666+00:00",
+    "generated": "2026-06-15T20:51:23.256721+00:00",
     "live_works": 1481,
     "archived_works": 9511,
     "total_analysed": 10992
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1052,
+        "days": 1053,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,6 +764,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Bentley Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-13",
+        "days_overdue": 2,
+        "category": "Major"
+      },
+      {
         "road": "Ormerod Street",
         "district": "burnley",
         "operator": "Lancashire County Council",
@@ -786,6 +794,22 @@
         "planned_end": "2026-06-14",
         "days_overdue": 1,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Arnside Crescent",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-14",
+        "days_overdue": 1,
+        "category": "Major"
+      },
+      {
+        "road": "Thornton Grove",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-14",
+        "days_overdue": 1,
+        "category": "Major"
       },
       {
         "road": "Station Road",
@@ -820,12 +844,28 @@
         "category": "Minor"
       },
       {
-        "road": "Bentley Street",
-        "district": "pendle",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-06-13",
+        "road": "Eastgate",
+        "district": "lancaster",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-14",
         "days_overdue": 1,
-        "category": "Major"
+        "category": "Minor"
+      },
+      {
+        "road": "Middlegate",
+        "district": "lancaster",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-14",
+        "days_overdue": 1,
+        "category": "Minor"
+      },
+      {
+        "road": "Ormerod Street",
+        "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Shady Lane",
@@ -844,18 +884,10 @@
         "category": "Minor"
       },
       {
-        "road": "Arnside Crescent",
+        "road": "Rochester Avenue",
         "district": "lancaster",
         "operator": "Lancashire County Council",
-        "planned_end": "2026-06-14",
-        "days_overdue": 0,
-        "category": "Major"
-      },
-      {
-        "road": "Thornton Grove",
-        "district": "lancaster",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-06-14",
+        "planned_end": "2026-06-15",
         "days_overdue": 0,
         "category": "Major"
       },
@@ -868,9 +900,73 @@
         "category": "Standard"
       },
       {
+        "road": "Longridge Road",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Burnley Road",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Preston New Road",
+        "district": "south_ribble",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Preston New Road",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Finsley Gate",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Balmoral",
+        "district": "chorley",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Higher Meadow",
         "district": "chorley",
         "operator": "BT",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "School Lane",
+        "district": "fylde",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Station Road",
+        "district": "fylde",
+        "operator": "United Utilities Water",
         "planned_end": "2026-06-15",
         "days_overdue": 0,
         "category": "Minor"
@@ -884,110 +980,30 @@
         "category": "Minor"
       },
       {
+        "road": "Colwyn Avenue",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "Brown Street West",
+        "district": "pendle",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-15",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Arthur Street",
         "district": "preston",
         "operator": "Electricity North West Limited",
         "planned_end": "2026-06-14",
         "days_overdue": 0,
         "category": "Minor"
-      },
-      {
-        "road": "Severn Hill",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Shalgrove Field",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brierfield",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Middle Hey",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Larkhill",
-        "district": "west_lancashire",
-        "operator": "Cadent",
-        "planned_end": "2026-06-14",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Clougha Avenue",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Eastgate",
-        "district": "lancaster",
-        "operator": "Virgin Media",
-        "planned_end": "2026-06-14",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Middlegate",
-        "district": "lancaster",
-        "operator": "Virgin Media",
-        "planned_end": "2026-06-14",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Schoolhouse Lane",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Alderwood Grove",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Inskip",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Yewdale",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-15",
-        "days_overdue": 0,
-        "category": "Minor"
       }
     ],
-    "overdue_count": 28
+    "overdue_count": 30
   }
 }
