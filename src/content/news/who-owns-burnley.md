@@ -3,6 +3,7 @@ title: "Who Owns Burnley? Inside the Buy-to-Let Boom"
 date: 2026-06-17
 description: "I went through ten years of public records for my home town. More and more of Burnley is being bought up by landlords and companies, not by families looking for a home. Here is what the numbers show, in plain English, and what I want done about it."
 image: "/images/burnley-town-hall-raw.jpg"
+ogImage: "/images/share/who-owns-burnley.png"
 tags: ["burnley", "housing", "data", "transparency"]
 featured: true
 draft: false
@@ -192,6 +193,13 @@ Three things follow from the numbers:
 I grew up here. A town where you can no longer afford to buy the house you grew up in is a town with a problem, and the first step to fixing a problem is being honest about its size. The records are public. I just put them in one place.
 
 ---
+
+<div class="article-data-viz">
+<a href="/images/share/who-owns-burnley.png" download>
+<img src="/images/share/who-owns-burnley.png" alt="Shareable card: 27.4% of Burnley home sales are now buy-to-let, the highest rate in Lancashire" />
+<span class="download-hint">Download this card to share</span>
+</a>
+</div>
 
 ## Where these numbers come from
 

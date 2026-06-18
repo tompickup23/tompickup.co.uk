@@ -3,6 +3,7 @@ title: "The Names Behind the Doors: Burnley's Biggest Property Owners"
 date: 2026-06-18
 description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The single biggest owner is not a landlord renting out homes. It is a fund that owns the freehold under more than a thousand of them."
 image: "/images/county-hall-preston.jpg"
+ogImage: "/images/share/who-owns-burnley-the-names.png"
 tags: ["burnley", "housing", "data", "transparency"]
 featured: false
 draft: false
@@ -126,6 +127,13 @@ The Land Registry already holds all of this. It should not take one councillor w
 The records are public. I am just putting them where people can see them.
 
 ---
+
+<div class="article-data-viz">
+<a href="/images/share/who-owns-burnley-the-names.png" download>
+<img src="/images/share/who-owns-burnley-the-names.png" alt="Shareable card: 1,204 Burnley freeholds owned by a single ground-rent fund" />
+<span class="download-hint">Download this card to share</span>
+</a>
+</div>
 
 ## Where these numbers come from
 

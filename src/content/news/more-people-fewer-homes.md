@@ -3,6 +3,7 @@ title: "More People, Fewer Homes to Buy: Burnley's Housing Squeeze"
 date: 2026-06-18
 description: "Over the same decade, Burnley's population grew almost entirely through migration, and home ownership fell while the cheap housing was bought up. Here are the two trends, tracked side by side and honestly, with what they do and do not tell us."
 image: "/images/burnley-town-hall-raw.jpg"
+ogImage: "/images/share/more-people-fewer-homes.png"
 tags: ["burnley", "housing", "immigration", "data"]
 featured: false
 draft: false
@@ -56,19 +57,33 @@ A separate measure tells the same story. Each year, people arriving to work or c
 
 <div class="viz-panel">
 <div class="viz-label teal">New National Insurance numbers issued to overseas nationals in Burnley, by year</div>
-<div style="display:flex; align-items:flex-end; gap:5px; height:150px; margin-top:12px;">
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:18%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'14</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:23%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'15</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:54%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'16</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:91%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'17</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:80%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'18</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:82%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'19</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:33%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'20</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:76%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'21</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:80%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'22</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:100%; background:#12b6cf; border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#12b6cf; margin-top:4px;">'23</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:62%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'24</span></div>
-<div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;"><div style="width:80%; height:44%; background:rgba(255,255,255,0.18); border-radius:3px 3px 0 0;"></div><span style="font-size:0.6rem; color:#8e8e93; margin-top:4px;">'25</span></div>
+<div style="display:flex; align-items:flex-end; gap:7px; height:175px; margin-top:14px;">
+<div style="flex:1; height:18%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:23%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:54%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:91%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:80%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:82%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:33%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:76%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:80%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:100%; background:linear-gradient(180deg, #16c5e0, #0c8499); border-radius:4px 4px 0 0; box-shadow:0 0 16px rgba(18,182,207,0.5);"></div>
+<div style="flex:1; height:62%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div style="flex:1; height:44%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+</div>
+<div style="display:flex; gap:7px; margin-top:8px;">
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'14</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'15</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'16</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'17</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'18</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'19</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'20</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'21</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'22</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#12b6cf; font-weight:700;">'23</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'24</div>
+<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'25</div>
 </div>
 </div>
 
@@ -118,6 +133,13 @@ What is fair to say is this: a town with very little spare housing is absorbing 
 I grew up here. I want it to stay a place where local people can afford to put down roots. That means being straight about every pressure on its housing, and then doing something about the ones we can actually control.
 
 ---
+
+<div class="article-data-viz">
+<a href="/images/share/more-people-fewer-homes.png" download>
+<img src="/images/share/more-people-fewer-homes.png" alt="Shareable card: 12.7% of Burnley was born outside the UK by 2021, nearly double a decade earlier" />
+<span class="download-hint">Download this card to share</span>
+</a>
+</div>
 
 ## Where these numbers come from
 

@@ -10,6 +10,7 @@ interface Props {
     tags: string[];
     featured?: boolean;
     image?: string;
+    ogImage?: string;
   };
 }
 
@@ -39,7 +40,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   title={`${frontmatter.title} | Tom Pickup`}
   description={frontmatter.description}
   article={true}
-  ogImage={frontmatter.image || '/images/headshot.jpg'}
+  ogImage={frontmatter.ogImage || frontmatter.image || '/images/headshot.jpg'}
   publishedTime={frontmatter.date.toISOString()}
   tags={frontmatter.tags}
 >
@@ -55,7 +56,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     description: frontmatter.description,
     datePublished: frontmatter.date.toISOString(),
     dateModified: frontmatter.date.toISOString(),
-    image: frontmatter.image ? [new URL(frontmatter.image, Astro.site).href] : [],
+    image: (frontmatter.ogImage || frontmatter.image) ? [new URL((frontmatter.ogImage || frontmatter.image)!, Astro.site).href] : [],
     author: {
       '@type': 'Person',
       name: 'Tom Pickup',
