@@ -10,6 +10,13 @@ draft: false
 
 Two things happened to Burnley over the same ten years. The town got bigger, almost entirely because of people arriving from abroad. And it got harder to buy a home here, while more and more of the cheap housing was bought up to rent out.
 
+<div class="viz-info">
+<strong>Part three of three on who owns Burnley, and why it is getting harder to live here.</strong>
+<br>1. <a href="/news/who-owns-burnley/">Inside the buy-to-let boom</a>: how the housing market changed.
+<br>2. <a href="/news/who-owns-burnley-the-names/">The names behind the doors</a>: the companies that own the property.
+<br>3. More people, fewer homes (you are here): migration, demand and the squeeze.
+</div>
+
 People argue about whether those two things are connected. Rather than argue, I went and got the official numbers for both and put them next to each other. Here they are, tracked honestly, including what they do not prove. Everything below is for the Borough of Burnley, the council area, the same boundary as my other articles, not the parliamentary constituency.
 
 <div class="viz-panel-reform">

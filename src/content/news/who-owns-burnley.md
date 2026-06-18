@@ -10,6 +10,13 @@ draft: false
 
 When a house is sold in England, the sale goes onto a public record. So does every company, and the people behind it. Nobody usually puts all of that together for one town. So I did, for Burnley.
 
+<div class="viz-info">
+<strong>Part one of three on who owns Burnley, and why it is getting harder to live here.</strong>
+<br>1. Inside the buy-to-let boom (you are here): how the housing market changed.
+<br>2. <a href="/news/who-owns-burnley-the-names/">The names behind the doors</a>: the companies that own the property.
+<br>3. <a href="/news/more-people-fewer-homes/">More people, fewer homes</a>: migration, demand and the squeeze.
+</div>
+
 I went through every house sale here from 2015 to 2025, all 21,720 of them. I looked at the 5,775 companies registered to a Burnley postcode, and the council's own research into shared housing. You do not need to be an expert to see what it shows, and I am going to keep it simple.
 
 One thing up front. When I say Burnley, I mean the borough: the council area that covers the town plus Padiham, Worsthorne, Cliviger, Hapton, Briercliffe and the villages around it, not the parliamentary seat. Exactly which boundary each figure uses is set out at the bottom.

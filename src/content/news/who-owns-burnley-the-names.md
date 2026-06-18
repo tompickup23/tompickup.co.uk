@@ -1,5 +1,5 @@
 ---
-title: "Who Owns Burnley? The Names Behind the Doors"
+title: "The Names Behind the Doors: Burnley's Biggest Property Owners"
 date: 2026-06-18
 description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The single biggest owner is not a landlord renting out homes. It is a fund that owns the freehold under more than a thousand of them."
 image: "/images/county-hall-preston.jpg"
@@ -9,6 +9,13 @@ draft: false
 ---
 
 In my last piece I said the obvious next question was a simple one: who actually owns Burnley? I promised to find out. Here is the answer, taken straight from HM Land Registry's record of company property ownership.
+
+<div class="viz-info">
+<strong>Part two of three on who owns Burnley, and why it is getting harder to live here.</strong>
+<br>1. <a href="/news/who-owns-burnley/">Inside the buy-to-let boom</a>: how the housing market changed.
+<br>2. The names behind the doors (you are here): the companies that own the property.
+<br>3. <a href="/news/more-people-fewer-homes/">More people, fewer homes</a>: migration, demand and the squeeze.
+</div>
 
 In the Borough of Burnley, **12,123 property titles are held by companies**, spread across **2,783 different companies**. The ten biggest hold about **four in every ten** of them. So a town of 94,000 people has a lot of its property concentrated in a small number of corporate hands.
 
