@@ -10,7 +10,9 @@ draft: false
 
 When a house is sold in England, the sale goes onto a public record. So does every company, and the people behind it. Nobody usually puts all of that together for one town. So I did, for Burnley.
 
-I went through every house sale here from 2015 to 2025. That is 21,720 sales. I looked at all 5,775 companies registered in the town, and the council's own research into shared housing. You do not need to be an expert to see what it shows, and I am going to keep it simple.
+I went through every house sale here from 2015 to 2025, all 21,720 of them. I looked at the 5,775 companies registered to a Burnley postcode, and the council's own research into shared housing. You do not need to be an expert to see what it shows, and I am going to keep it simple.
+
+One thing up front. When I say Burnley, I mean the borough: the council area that covers the town plus Padiham, Worsthorne, Cliviger, Hapton, Briercliffe and the villages around it, not the parliamentary seat. Exactly which boundary each figure uses is set out at the bottom.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -107,9 +109,9 @@ Oddly, the classic move, a cheap house under £50,000 snapped up to rent out, ha
 
 It is not just individual landlords any more. More and more, Burnley homes are bought by companies set up specifically to own property.
 
-A decade ago, about **14** of these property companies were started in Burnley each year. Lately it has been around **92** a year, with more than **500** active right now. In the town centre, it went from **1** a year to **36**.
+A decade ago, about **14** of these property companies were registered to a Burnley postcode each year. Lately it has been around **92** a year, with more than **500** active right now. In the town centre, the BB11 postcode, it went from **1** a year to **36**.
 
-Here is the simplest way to picture the change. In 2015, there was one new property company for every **115** house sales in the town. By 2025, there was one for every **19**.
+Here is the simplest way to picture the change. In 2015, there was roughly one new property company for every **115** house sales in the borough. By 2025, there was one for every **19**. (Companies are counted by postcode and sales by borough, so treat this as an illustration of the trend rather than an exact ratio. More on that at the bottom.)
 
 <div class="viz-info">
 <strong>So who are these companies?</strong> That is a fair question, and the answer is public too. The Land Registry keeps a record of every property a company owns. Joining that up to name the owners, street by street, is the next piece I am working on.
@@ -188,8 +190,10 @@ I grew up here. A town where you can no longer afford to buy the house you grew 
 
 You do not need this part to follow the story above. It is here so anyone who wants to check the working can. Everything in this article comes from public records that anyone can look up.
 
-- **House sales and prices** come from HM Land Registry's record of every property sold in England. I used every Burnley sale from 2015 to 2025, which is 21,720 of them.
-- **Companies** come from Companies House, the official register of every UK company. I used all 5,775 companies registered in Burnley, as listed in May 2026.
+**A quick word on geography.** When I say Burnley I mean the Borough of Burnley, the council area, not the parliamentary constituency and not only the town centre. It covers the town plus Padiham, Worsthorne, Cliviger, Hapton, Briercliffe and the villages around them. The house sales, prices, street examples, wards, shared-housing figures and the Lancashire comparison all use that borough boundary. The company figures are the one exception. They cover every company whose registered office sits in a Burnley postcode, BB10, BB11 or BB12, which match the borough closely but are drawn by postcode rather than the council line. So where I set companies against sales, like the rough one-property-company-for-every-19-sales figure, read it as an illustration of the trend, not an exact like-for-like.
+
+- **House sales and prices** come from HM Land Registry's record of every property sold in England, filtered to the Burnley district (the borough). I used every Burnley sale from 2015 to 2025, which is 21,720 of them.
+- **Companies** come from Companies House, the official register of every UK company. I used all 5,775 companies whose registered office is in a Burnley postcode (BB10, BB11 or BB12), as listed in May 2026.
 - **Shared houses** come from the council's own evidence base: a 2023 study by the Building Research Establishment, an independent housing research body, prepared to support Burnley's Article 4 decision.
 - **The Lancashire comparison** uses the same Land Registry measure applied to each district, so it is a fair like-for-like.
 
