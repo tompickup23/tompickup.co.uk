@@ -12,6 +12,8 @@ interface Props {
     image?: string;
     ogImage?: string;
     imageCredit?: string;
+    category?: string;
+    subcategory?: string;
   };
 }
 
@@ -95,6 +97,10 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
         </svg>
         Back to News
       </a>
+
+      {(frontmatter.category || frontmatter.subcategory) && (
+        <p class="article-category">{[frontmatter.category, frontmatter.subcategory].filter(Boolean).join(' › ')}</p>
+      )}
 
       <h1 class="article-title">{frontmatter.title}</h1>
 
@@ -275,6 +281,15 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     display: block;
     max-height: 400px;
     object-fit: cover;
+  }
+
+  .article-category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent, #12b6cf);
+    margin: 1.25rem 0 0;
   }
 
   .article-title {

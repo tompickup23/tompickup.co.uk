@@ -11,6 +11,8 @@ const news = defineCollection({
     image: z.string().optional(),
     ogImage: z.string().optional(),
     imageCredit: z.string().optional(),
+    category: z.string().optional(),
+    subcategory: z.string().optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),

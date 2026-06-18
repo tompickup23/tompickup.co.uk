@@ -1,10 +1,12 @@
 ---
 title: "Who Owns Burnley? Inside the Buy-to-Let Boom"
-date: 2026-06-17
+date: 2026-06-19T12:00:00
 description: "I went through ten years of public records for my home town. More and more of Burnley is being bought up by landlords and companies, not by families looking for a home. Here is what the numbers show, in plain English, and what I want done about it."
 image: "/images/burnley-panorama.jpg"
 ogImage: "/images/share/who-owns-burnley.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
+category: "Burnley"
+subcategory: "Housing"
 tags: ["burnley", "housing", "data", "transparency"]
 featured: true
 draft: false
