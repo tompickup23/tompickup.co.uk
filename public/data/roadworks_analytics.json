@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-18T10:15:43.994309+00:00",
+    "generated": "2026-06-18T20:21:25.268445+00:00",
     "live_works": 1513,
     "archived_works": 10017,
     "total_analysed": 11530
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1055,
+        "days": 1056,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -788,6 +788,14 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Oxcliffe Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Colne Road",
         "district": "pendle",
         "operator": "Electricity North West Limited",
@@ -802,6 +810,22 @@
         "planned_end": "2026-06-17",
         "days_overdue": 0,
         "category": "Standard"
+      },
+      {
+        "road": "Tabley Lane",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "Clitheroe Road",
+        "district": "ribble_valley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Clitheroe Road",
@@ -892,12 +916,76 @@
         "category": "Standard"
       },
       {
+        "road": "Bay Gateway",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Borwick Lane",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Fairfield Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Heysham Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Moneyclose Lane",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "St Michaels Lane",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "St Peters Road",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Brookfield Drive",
         "district": "preston",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-18",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Hardcastle Road",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-18",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
       },
       {
         "road": "Wilbraham Street",
@@ -908,98 +996,10 @@
         "category": "Standard"
       },
       {
-        "road": "Denbigh Close",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Stanley Road",
-        "district": "south_ribble",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Wingates",
-        "district": "south_ribble",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Lowick Drive",
-        "district": "wyre",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Howorth Road",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Stanbury Drive",
-        "district": "burnley",
-        "operator": "Cadent",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Major"
-      },
-      {
-        "road": "Bolton Road",
-        "district": "chorley",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Regent Street",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Anson Road",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Aldingham Court",
-        "district": "lancaster",
-        "operator": "BT",
+        "road": "Back Whalley Road Nos 52 To 72",
+        "district": "ribble_valley",
+        "operator": "IX Wireless Limited",
         "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brantwood Drive",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-17",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brock Street",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-17",
         "days_overdue": 0,
         "category": "Minor"
       }
