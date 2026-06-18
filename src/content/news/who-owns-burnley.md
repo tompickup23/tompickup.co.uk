@@ -159,9 +159,9 @@ The council's own research, carried out by an independent housing body in 2023, 
 <div class="subtext" style="color: #8e8e93; margin-top: 8px;">More than half of Burnley's estimated shared rented houses are not on any official list.</div>
 </div>
 
-There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. The other six have no such protection, and **141** known shared houses sit inside them.
+There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. The other six have no such protection, and an estimated **141** shared houses sit inside them.
 
-| Ward with no protection | Known shared houses |
+| Ward with no protection | Estimated shared houses |
 |---|---|
 | Lanehead | 44 |
 | Hapton with Park | 32 |

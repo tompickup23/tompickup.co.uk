@@ -98,7 +98,7 @@ Not every big owner is an investor. Two of the largest are the councils themselv
 </div>
 </div>
 
-The town's main housing association, **Calico Homes**, owns around **559** titles, and **Accent Housing** another **183**. That is genuine social housing, not investment, and it should be counted as such. Utilities own chunks too: **Electricity North West** holds 257 titles, **National Highways** 176.
+The town's main housing association, **Calico Homes**, owns around **564** titles, and **Accent Housing** another **183**. That is genuine social housing, not investment, and it should be counted as such. Utilities own chunks too: **Electricity North West** holds 261 titles, **National Highways** 176.
 
 ---
 

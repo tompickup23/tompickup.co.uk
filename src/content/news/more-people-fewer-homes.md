@@ -83,7 +83,7 @@ The cheap end of Burnley's housing market is now being competed for from several
 
 - **Investors** buying terraces to rent out, and funds buying the freeholds underneath them.
 - **A growing population**, most of it arriving from abroad, that needs somewhere to live and, at first, mostly rents.
-- **The asylum dispersal system.** The Home Office, through private contractors, houses asylum seekers by renting the same cheap properties local families and local landlords are after. Home Office figures show the number housed in Burnley rising sharply, from 178 in March 2022 to 464 in March 2025.
+- **The asylum dispersal system.** The Home Office, through private contractors, houses asylum seekers by renting the same cheap properties local families and local landlords are after. Home Office figures show **464** asylum seekers supported in Burnley, around **4.9 for every thousand residents**, a high concentration for a town this size, housed in the same private rented stock local people are competing for.
 
 The UK Demographics projection model, looking at Burnley's mix, reaches a blunt conclusion of its own: high foreign-born population growth "will drive additional housing demand, particularly in the private rented sector." More demand, the same squeezed supply.
 
@@ -105,7 +105,7 @@ What is fair to say is this: a town with very little spare housing is absorbing 
 
 - **Build, and build the right homes.** The single biggest lever is supply: more homes people can actually afford to buy, so ownership stops sliding.
 - **Protect the existing stock.** Extend the HMO controls to all 15 wards, and stop the steady conversion of family homes into rentals, as I argued in the first article.
-- **Be honest about dispersal.** It is reasonable to ask whether a town with this little spare housing should carry a rising share of national asylum accommodation, and to expect Whitehall to fund and plan for the housing pressure it creates.
+- **Be honest about dispersal.** It is reasonable to ask whether a town with this little spare housing should carry this large a share of national asylum accommodation, and to expect Whitehall to fund and plan for the housing pressure it creates.
 - **Put the numbers in front of people.** Population, housing and ownership data for Burnley should be published together and kept up to date, so the debate is about facts, not feelings.
 
 I grew up here. I want it to stay a place where local people can afford to put down roots. That means being straight about every pressure on its housing, and then doing something about the ones we can actually control.
