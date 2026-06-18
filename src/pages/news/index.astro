@@ -4,7 +4,7 @@ import NewsCard from '../../components/NewsCard.astro';
 import ScrollReveal from '../../components/ScrollReveal.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('news', ({ data }) => !data.draft && data.date <= new Date()))
+const posts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const featured = posts.find((p) => p.data.featured) || posts[0];

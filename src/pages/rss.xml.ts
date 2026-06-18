@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection('news', ({ data }) => !data.draft && data.date <= new Date());
+  const posts = await getCollection('news', ({ data }) => !data.draft);
 
   return rss({
     title: 'Tom Pickup',
