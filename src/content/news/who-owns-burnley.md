@@ -114,7 +114,7 @@ A decade ago, about **14** of these property companies were registered to a Burn
 Here is the simplest way to picture the change. In 2015, there was roughly one new property company for every **115** house sales in the borough. By 2025, there was one for every **19**. (Companies are counted by postcode and sales by borough, so treat this as an illustration of the trend rather than an exact ratio. More on that at the bottom.)
 
 <div class="viz-info">
-<strong>So who are these companies?</strong> That is a fair question, and the answer is public too. The Land Registry keeps a record of every property a company owns. Joining that up to name the owners, street by street, is the next piece I am working on.
+<strong>So who are these companies?</strong> That is a fair question, and the answer is public too. The Land Registry keeps a record of every property a company owns. I have now done exactly that: [The Names Behind the Doors](/news/who-owns-burnley-the-names/) names the biggest company owners of Burnley property.
 </div>
 
 ---
@@ -180,7 +180,7 @@ Three things follow from the numbers:
 
 - **Protect all 15 wards, not 9.** There is no good reason six wards, with 141 known shared houses between them, are left out of the protection the other nine already have. I back extending it, and my colleague Cllr Liam Thomson has been pressing the same case.
 - **Find the missing 516.** More than half the town's estimated shared houses are on no register. A house the council cannot see is a house it cannot check for safety, overcrowding or basic standards.
-- **Name the owners.** The ownership records are public. People are entitled to know who owns the streets they live on. That is the next thing I will publish.
+- **Name the owners.** The ownership records are public. People are entitled to know who owns the streets they live on. I have now published the first cut: [The Names Behind the Doors](/news/who-owns-burnley-the-names/).
 
 I grew up here. A town where you can no longer afford to buy the house you grew up in is a town with a problem, and the first step to fixing a problem is being honest about its size. The records are public. I just put them in one place.
 
