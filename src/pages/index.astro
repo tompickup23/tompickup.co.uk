@@ -8,7 +8,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('news', ({ data }) => !data.draft))
+const posts = (await getCollection('news', ({ data }) => !data.draft && data.date <= new Date()))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 ---
