@@ -10,7 +10,7 @@ draft: false
 
 Two things happened to Burnley over the same ten years. The town got bigger, almost entirely because of people arriving from abroad. And it got harder to buy a home here, while more and more of the cheap housing was bought up to rent out.
 
-People argue about whether those two things are connected. Rather than argue, I went and got the official numbers for both and put them next to each other. Here they are, tracked honestly, including what they do not prove.
+People argue about whether those two things are connected. Rather than argue, I went and got the official numbers for both and put them next to each other. Here they are, tracked honestly, including what they do not prove. Everything below is for the Borough of Burnley, the council area, the same boundary as my other articles, not the parliamentary constituency.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -115,6 +115,8 @@ I grew up here. I want it to stay a place where local people can afford to put d
 ## Where these numbers come from
 
 You do not need this part to follow the story. It is here so the working can be checked. All of it is official, public data.
+
+Every figure is for the **Borough of Burnley** (local authority area E07000117), the same boundary used across this series, so the population numbers line up with the housing numbers in the other articles. The underlying data also exists at parliamentary-constituency and ward level; I have deliberately stuck to the borough so everything compares like with like.
 
 - **Population and country of birth:** ONS Census 2011 and 2021, for the Borough of Burnley, via the UK Demographics dataset.
 - **New National Insurance numbers issued to overseas nationals:** DWP, by local authority, 2002 to 2025. This is a flow measure (new registrations each year, issued once per person), not a running total, and it undercounts anyone who never registers.

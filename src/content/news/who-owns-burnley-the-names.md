@@ -124,7 +124,7 @@ The records are public. I am just putting them where people can see them.
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-Every figure comes from **HM Land Registry's Commercial and Corporate Ownership Data (CCOD)**, the official record of property in England and Wales owned by UK companies, downloaded for **June 2026**. I filtered it to the **Burnley district**, the borough council area, the same boundary used in the first article, and counted titles by registered owner.
+Every figure comes from **HM Land Registry's Commercial and Corporate Ownership Data (CCOD)**, the official record of property in England and Wales owned by UK companies, downloaded for **June 2026**. I filtered it to the **Burnley district**, the borough council area (not the parliamentary constituency), the same boundary used across this series, and counted titles by registered owner.
 
 Two important definitions:
 - **A title is not the same as a house.** One freehold title can cover the ground under many leasehold homes, and a few titles are land or commercial rather than housing. So Wallace Estates "holds 1,204 titles," which is not the same as "owns 1,204 houses." I have stuck to titles throughout.
