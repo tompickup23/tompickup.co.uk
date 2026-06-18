@@ -2,8 +2,9 @@
 title: "More People, Fewer Homes to Buy: Burnley's Housing Squeeze"
 date: 2026-06-18
 description: "Over the same decade, Burnley's population grew almost entirely through migration, and home ownership fell while the cheap housing was bought up. Here are the two trends, tracked side by side and honestly, with what they do and do not tell us."
-image: "/images/burnley-town-hall-raw.jpg"
+image: "/images/padiham-burnley.jpg"
 ogImage: "/images/share/more-people-fewer-homes.png"
+imageCredit: "Photo: Steve Daniels / Geograph (CC BY-SA 2.0)"
 tags: ["burnley", "housing", "immigration", "data"]
 featured: false
 draft: false
