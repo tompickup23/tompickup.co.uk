@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-19T10:20:43.712872+00:00",
+    "generated": "2026-06-19T19:44:42.614288+00:00",
     "live_works": 1465,
     "archived_works": 10201,
     "total_analysed": 11666
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1056,
+        "days": 1057,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,12 +764,36 @@
     ],
     "overdue_works": [
       {
+        "road": "Barrowford Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Rosehill Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Chorley Road",
         "district": "chorley",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-18",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Meadow Lane",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
       },
       {
         "road": "Northgate Drive",
@@ -788,12 +812,52 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Shawcliffe Lane",
+        "district": "hyndburn",
+        "operator": "BT",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Docker Lane",
         "district": "lancaster",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-18",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Gage Street",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Torrisholme Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Back 28 To 48 Commercial Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Barrowford Road",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Knotts Lane",
@@ -818,6 +882,14 @@
         "planned_end": "2026-06-18",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Rimington Lane",
+        "district": "ribble_valley",
+        "operator": "BT",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
       },
       {
         "road": "Stubbins Lane",
@@ -860,8 +932,32 @@
         "category": "Minor"
       },
       {
+        "road": "Garstang Road East",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Garstang Road East",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Moor Lane",
         "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Cherry Tree Grove",
+        "district": "chorley",
         "operator": "BT",
         "planned_end": "2026-06-19",
         "days_overdue": 0,
@@ -876,9 +972,25 @@
         "category": "Minor"
       },
       {
+        "road": "Ullswater Road",
+        "district": "lancaster",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Cow Hill",
         "district": "preston",
         "operator": "BT",
+        "planned_end": "2026-06-19",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "James Towers Way",
+        "district": "preston",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-06-19",
         "days_overdue": 0,
         "category": "Minor"
@@ -890,118 +1002,6 @@
         "planned_end": "2026-06-19",
         "days_overdue": 0,
         "category": "Standard"
-      },
-      {
-        "road": "Victoria Road",
-        "district": "south_ribble",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Banksbarn",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Garswood Close",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Back Lane",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Wrennalls Lane",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Ribble Avenue",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Aldingham Court",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Birkdale Close",
-        "district": "lancaster",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Littledale Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Melling Court",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Station Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Rear 256 - 268 Barkerhouse Road",
-        "district": "pendle",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Arkwright Road",
-        "district": "preston",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Ashwood Road",
-        "district": "preston",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-18",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
       }
     ],
     "overdue_count": 30
