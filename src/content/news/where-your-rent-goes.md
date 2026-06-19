@@ -2,9 +2,9 @@
 title: "Where Your Rent Goes in Burnley"
 date: 2026-06-19T16:00:00
 description: "Rents in Burnley are rising, most renters now pay a private landlord, and a large slice of the money is public. Meanwhile the help with rent is frozen and the shortfall lands on the poorest tenants. Here is where the money actually goes, in plain English."
-image: "/images/burnley-townscape.jpg"
+image: "/images/burnley-canal.jpg"
 ogImage: "/images/share/where-your-rent-goes.png"
-imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
+imageCredit: "Photo: Michael Garlick / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "rent", "data"]

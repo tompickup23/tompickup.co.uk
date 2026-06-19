@@ -2,9 +2,9 @@
 title: "Ten Thousand People in Burnley Are on PIP. Here Is Why."
 date: 2026-06-19T14:00:00
 description: "More than ten thousand people in Burnley now claim PIP, the disability benefit. That is the 47th highest of 543 seats in England. The reason is not the one you are usually given, and it matters for what comes next."
-image: "/images/burnley-aerial.jpg"
+image: "/images/burnley-singing-ringing-tree.jpg"
 ogImage: "/images/share/pip-burnley.png"
-imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
+imageCredit: "Photo: Bill Boaden / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Benefits"
 tags: ["burnley", "benefits", "welfare", "data"]
