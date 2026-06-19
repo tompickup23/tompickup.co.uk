@@ -155,6 +155,18 @@ CARDS = [
     dict(out="more-people-fewer-homes.png", eyebrow="Burnley housing  ·  3 / 3", stat="12.7%",
          label="of Burnley was born outside the UK by 2021, nearly double a decade earlier, as home ownership falls.",
          source="ONS Census 2021"),
+    dict(out="shared-houses.png", eyebrow="Burnley  ·  Housing", stat="916",
+         label="shared houses in Burnley, by the council's own estimate. The official statistics record just 65.",
+         source="Burnley Council / ONS, 2023"),
+    dict(out="pip-burnley.png", eyebrow="Burnley  ·  Benefits", stat="10,323",
+         label="people in Burnley claim PIP, the 47th highest of 543 seats in England.",
+         source="DWP, January 2026"),
+    dict(out="empty-homes.png", eyebrow="Burnley  ·  Housing", stat="638",
+         label="homes in Burnley stand empty long-term, while 2,657 households wait for a home.",
+         source="Burnley Council / MHCLG, 2024"),
+    dict(out="where-your-rent-goes.png", eyebrow="Burnley  ·  Housing", stat="£622",
+         label="the average private rent in Burnley, up 3.2% in a year, while housing support stays frozen.",
+         source="ONS, May 2026"),
 ]
 
 if __name__ == "__main__":

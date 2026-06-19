@@ -170,16 +170,16 @@ The council's own research, carried out by an independent housing body in 2023, 
 <div class="subtext" style="color: #8e8e93; margin-top: 8px;">More than half of Burnley's estimated shared rented houses are not on any official list.</div>
 </div>
 
-There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. The other six have no such protection, and an estimated **141** shared houses sit inside them.
+There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. Those nine hold the bulk of the problem, an estimated 862 of the 916 shared houses, while the other six have no such protection. They hold an estimated **54** shared houses today, but they are where the next wave of conversions will go once the inner wards are locked down.
 
 | Ward with no protection | Estimated shared houses |
 |---|---|
-| Lanehead | 44 |
-| Hapton with Park | 32 |
-| Briercliffe | 22 |
-| Whittlefield with Ightenhill | 17 |
-| Cliviger with Worsthorne | 14 |
-| Coal Clough with Deerplay | 12 |
+| Hapton with Park | 15 |
+| Briercliffe | 12 |
+| Cliviger with Worsthorne | 8 |
+| Lanehead | 7 |
+| Coalclough with Deerplay | 6 |
+| Whittlefield with Ightenhill | 6 |
 
 ---
 
@@ -189,7 +189,7 @@ None of this is against the law. It is what happens when the cheapest houses in 
 
 Three things follow from the numbers:
 
-- **Protect all 15 wards, not 9.** There is no good reason six wards, with 141 known shared houses between them, are left out of the protection the other nine already have. I back extending it, and my colleague Cllr Liam Thomson has been pressing the same case.
+- **Protect all 15 wards, not 9.** There is no good reason six wards are left out of the protection the other nine already have, especially when they are where the next conversions are likely to land. I back extending it, and my colleague Cllr Liam Thomson has been pressing the same case.
 - **Find the missing 516.** More than half the town's estimated shared houses are on no register. A house the council cannot see is a house it cannot check for safety, overcrowding or basic standards.
 - **Name the owners.** The ownership records are public. People are entitled to know who owns the streets they live on. I have now published the first cut: [The Names Behind the Doors](/news/who-owns-burnley-the-names/).
 
