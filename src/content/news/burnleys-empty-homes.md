@@ -15,7 +15,7 @@ draft: false
 A town can be short of homes and full of empty ones at the same time. Burnley is. While families sit on the housing waiting list and rough sleeping climbs, hundreds of perfectly real houses stand empty, some of them for years. Here are the numbers, and what can be done.
 
 <div class="viz-info">
-This sits alongside my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a> and the <a href="/news/the-shared-houses-burnley-cannot-see/">shared houses the council cannot see</a>. The same cheap terraces that get bought up to rent out are the ones most likely to end up empty when an absent owner loses interest.
+This sits alongside my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, the <a href="/news/the-shared-houses-burnley-cannot-see/">shared houses the council cannot see</a> and <a href="/news/where-your-rent-goes/">where the rent goes</a>. The same cheap terraces that get bought up to rent out are the ones most likely to end up empty when an absent owner loses interest.
 </div>
 
 <div class="viz-panel-reform">

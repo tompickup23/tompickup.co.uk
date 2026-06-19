@@ -15,7 +15,7 @@ draft: false
 When you pay rent in Burnley, where does the money actually end up? More and more of it goes to a company rather than a person. A surprising amount of it is public money. And the part the state pays has been frozen while rents keep climbing, so the gap lands on the people who can least afford it. Here is how it works.
 
 <div class="viz-info">
-This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, <a href="/news/who-owns-burnley-the-names/">the companies behind the doors</a> and the <a href="/news/burnleys-empty-homes/">town's empty homes</a>. This one is about the rent itself: who pays it, who receives it, and who is squeezed in the middle.
+This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, <a href="/news/who-owns-burnley-the-names/">the companies behind the doors</a>, the <a href="/news/burnleys-empty-homes/">town's empty homes</a> and its <a href="/news/the-shared-houses-burnley-cannot-see/">shared houses</a>. This one is about the rent itself: who pays it, who receives it, and who is squeezed in the middle.
 </div>
 
 <div class="viz-panel-reform">

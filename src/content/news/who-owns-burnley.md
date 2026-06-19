@@ -181,6 +181,8 @@ There is a tool that helps. It is called an Article 4 Direction, and in plain te
 | Coalclough with Deerplay | 6 |
 | Whittlefield with Ightenhill | 6 |
 
+I have since looked at Burnley's shared houses in detail, including the gap between the official count and the real one, in [The Shared Houses Burnley Cannot See](/news/the-shared-houses-burnley-cannot-see/).
+
 ---
 
 ## What I want done

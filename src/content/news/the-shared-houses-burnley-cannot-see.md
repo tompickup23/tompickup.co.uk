@@ -15,7 +15,7 @@ draft: false
 Ask the official statistics how many shared houses there are in Burnley and you get one answer. Ask the council's own researchers and you get an answer fourteen times bigger. That gap is not a rounding error. It is a measure of how little anyone really knows about the bottom of the town's housing market.
 
 <div class="viz-info">
-This follows my three articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>. A shared house, or HMO, is a single home let out room by room to several people who are not one household. It is the cheapest rung on the housing ladder, and the least watched.
+This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, the <a href="/news/burnleys-empty-homes/">town's empty homes</a> and <a href="/news/where-your-rent-goes/">where the rent goes</a>. A shared house, or HMO, is a single home let out room by room to several people who are not one household. It is the cheapest rung on the housing ladder, and the least watched.
 </div>
 
 <div class="viz-panel-reform">

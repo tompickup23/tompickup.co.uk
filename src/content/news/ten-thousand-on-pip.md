@@ -88,7 +88,7 @@ This is the part the national debate skips. When ministers talk about the PIP bi
 
 For a lot of people here, PIP is the difference between coping and not. It often goes on the basics that illness makes dearer: heating a home you are stuck in all day, running equipment, paying for transport to hospital, eating a diet your condition requires.
 
-The wider picture in Burnley is bleak. Nearly **30%** of working-age residents are on Universal Credit. **One household in six** is in fuel poverty. Set that against rising rents and bills, and PIP is not pocket money. It is what keeps a lot of disabled and seriously ill people in Burnley afloat.
+The wider picture in Burnley is bleak. Nearly **30%** of working-age residents are on Universal Credit. **One household in six** is in fuel poverty. Set that against <a href="/news/where-your-rent-goes/">rising rents</a> and bills, and PIP is not pocket money. It is what keeps a lot of disabled and seriously ill people in Burnley afloat.
 
 ---
 
