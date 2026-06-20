@@ -2,8 +2,9 @@
 title: "Motability: One in Five New Cars, and 4,540 in Burnley"
 date: 2026-06-19T17:00:00
 description: "The Motability scheme now puts almost one in five new cars on Britain's roads, sits on £3.9 billion of reserves, and is about to be taxed by the government for the first time. Here is what it is, what it costs, and how many people in Burnley and across Lancashire qualify."
-image: "/images/lcc-highways.jpg"
+image: "/images/motability-cars.jpg"
 ogImage: "/images/share/motability-burnley.png"
+imageCredit: "Photo: Bob Harvey / geograph.org.uk (CC BY-SA 2.0)"
 category: "Lancashire"
 subcategory: "Benefits"
 tags: ["lancashire", "burnley", "welfare", "motability", "data"]
