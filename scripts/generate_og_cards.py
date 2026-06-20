@@ -173,6 +173,9 @@ CARDS = [
     dict(out="pip-fraud.png", eyebrow="UK  ·  Benefits", stat="£410m",
          label="lost to PIP fraud in 2025/26, up from £100m a year earlier. Universal Credit fraud was £5.4bn.",
          source="DWP, FYE 2026"),
+    dict(out="the-burnley-trap.png", eyebrow="Burnley  ·  Health", stat="76.5",
+         label="a Burnley man's life expectancy, over three years below England, the end of a chain that starts with deprivation.",
+         source="ONS / OHID, 2025"),
 ]
 
 if __name__ == "__main__":
