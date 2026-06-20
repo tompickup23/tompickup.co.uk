@@ -20,8 +20,8 @@ export async function GET(context: APIContext) {
         author: 'Tom Pickup',
       })),
     customData: `<language>en-gb</language>
-<managingEditor>tom@tompickup.co.uk (Tom Pickup)</managingEditor>
-<webMaster>tom@tompickup.co.uk (Tom Pickup)</webMaster>
+<managingEditor>tom.pickup@lancashire.gov.uk (Tom Pickup)</managingEditor>
+<webMaster>tom.pickup@lancashire.gov.uk (Tom Pickup)</webMaster>
 <copyright>Copyright ${new Date().getFullYear()} Tom Pickup</copyright>
 <image>
   <url>https://tompickup.co.uk/images/headshot.jpg</url>

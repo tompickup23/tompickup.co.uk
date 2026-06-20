@@ -167,6 +167,12 @@ CARDS = [
     dict(out="where-your-rent-goes.png", eyebrow="Burnley  ·  Housing", stat="£622",
          label="the average private rent in Burnley, up 3.2% in a year, while housing support stays frozen.",
          source="ONS, May 2026"),
+    dict(out="motability-burnley.png", eyebrow="Lancashire  ·  Benefits", stat="4,540",
+         label="people in Burnley qualify for a Motability car, half of all local PIP claimants.",
+         source="DWP, April 2026"),
+    dict(out="pip-fraud.png", eyebrow="UK  ·  Benefits", stat="£410m",
+         label="lost to PIP fraud in 2025/26, up from £100m a year earlier. Universal Credit fraud was £5.4bn.",
+         source="DWP, FYE 2026"),
 ]
 
 if __name__ == "__main__":

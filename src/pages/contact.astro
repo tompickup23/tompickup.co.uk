@@ -111,7 +111,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 </svg>
               </div>
               <h3>Email</h3>
-              <a href="mailto:tom@tompickup.co.uk" class="info-card-link">tom@tompickup.co.uk</a>
+              <a href="mailto:tom.pickup@lancashire.gov.uk" class="info-card-link">tom.pickup@lancashire.gov.uk</a>
               <p class="info-card-note">I aim to respond within 48 hours</p>
             </div>
 
@@ -438,7 +438,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
       const subject = (form.querySelector('#subject') as HTMLSelectElement)?.value || 'General Enquiry';
       const message = (form.querySelector('#message') as HTMLTextAreaElement)?.value || '';
       const body = `From: ${name} (${email})\n\n${message}`;
-      const mailto = `mailto:tom@tompickup.co.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const mailto = `mailto:tom.pickup@lancashire.gov.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.location.href = mailto;
     });
   }
