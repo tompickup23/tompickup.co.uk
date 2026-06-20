@@ -176,6 +176,9 @@ CARDS = [
     dict(out="the-burnley-trap.png", eyebrow="Burnley  ·  Health", stat="76.5",
          label="a Burnley man's life expectancy, over three years below England, the end of a chain that starts with deprivation.",
          source="ONS / OHID, 2025"),
+    dict(out="disability-work-trap.png", eyebrow="Lancashire  ·  Benefits", stat="37%",
+         label="of disabled people want to work but are held back by the fear of losing their benefits.",
+         source="DWP survey, 2026"),
 ]
 
 if __name__ == "__main__":
