@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-22T11:46:41.372073+00:00",
+    "generated": "2026-06-22T20:40:57.398911+00:00",
     "live_works": 1355,
     "archived_works": 10435,
     "total_analysed": 11790
@@ -604,7 +604,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1059,
+        "days": 1060,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -764,6 +764,70 @@
     ],
     "overdue_works": [
       {
+        "road": "Accrington Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Gannow Lane",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Queen Victoria Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Borwick Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Borwick Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Hutton Roof Road",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Whitebeck Lane",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Colne Road",
+        "district": "pendle",
+        "operator": "Northern Powergrid",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Lightfoot Lane",
         "district": "preston",
         "operator": "BT",
@@ -788,6 +852,14 @@
         "category": "Standard"
       },
       {
+        "road": "Worston Road",
+        "district": "ribble_valley",
+        "operator": "BT",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Ashley Road",
         "district": "west_lancashire",
         "operator": "Cadent",
@@ -800,6 +872,14 @@
         "district": "west_lancashire",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-21",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Victoria Road",
+        "district": "burnley",
+        "operator": "Virgin Media",
+        "planned_end": "2026-06-22",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -860,9 +940,33 @@
         "category": "Minor"
       },
       {
+        "road": "Branch Road",
+        "district": "ribble_valley",
+        "operator": "BT",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Abbey Street",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Rakehead Lane",
         "district": "rossendale",
         "operator": "BT",
+        "planned_end": "2026-06-22",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Central Avenue",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-06-22",
         "days_overdue": 0,
         "category": "Minor"
@@ -876,87 +980,23 @@
         "category": "Minor"
       },
       {
-        "road": "Rear 8 To 16 Cotton Street",
-        "district": "hyndburn",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-21",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Sycamore Grove",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Wyndham Place",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-21",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Cross Street West",
-        "district": "pendle",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Footway Linking Arkholme Drive Seven Sands And Hambleton Close",
+        "road": "John Horrocks Way",
         "district": "south_ribble",
-        "operator": "BT",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-06-22",
         "days_overdue": 0,
         "category": "Minor"
       },
       {
-        "road": "Eskbank",
-        "district": "west_lancashire",
-        "operator": "BT",
+        "road": "Longton Bypass",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-06-22",
         "days_overdue": 0,
-        "category": "Minor"
+        "category": "Major"
       },
       {
-        "road": "Evenwood",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Fir Tree Lane",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Harsnips",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Tongbarn",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-06-22",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Waverley",
+        "road": "Liverpool Road",
         "district": "west_lancashire",
         "operator": "BT",
         "planned_end": "2026-06-22",
@@ -964,6 +1004,6 @@
         "category": "Minor"
       }
     ],
-    "overdue_count": 25
+    "overdue_count": 30
   }
 }
