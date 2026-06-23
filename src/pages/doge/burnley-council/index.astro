@@ -1,0 +1,40 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/doge.css';
+---
+
+<Layout
+  title="Burnley Borough Council | DOGE | Tom Pickup"
+  description="Burnley Borough Council spending data, made searchable. Every payment the council publishes, opened up for residents to scrutinise."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/doge/">DOGE</a>
+      <span class="sep">/</span>
+      <span class="here">Burnley Borough Council</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Burnley Borough Council</span>
+      <h1 class="doge-title">Burnley Borough Council</h1>
+      <p class="doge-sub">
+        The borough council's published spending, made usable. Pick a dataset below. Everything here is built
+        straight from the council's own published files, with the source linked on every page.
+      </p>
+    </header>
+
+    <div class="doge-grid">
+      <a href="/doge/burnley-council/spending/" class="doge-card">
+        <span class="doge-card-kicker">Dataset</span>
+        <div class="doge-card-title">Spending over £500</div>
+        <div class="doge-card-desc">Every payment of £500 or more the council makes to suppliers and third parties, searchable by year.</div>
+        <span class="doge-card-go">Open →</span>
+      </a>
+      <div class="doge-card disabled">
+        <span class="doge-card-kicker">Coming soon</span>
+        <div class="doge-card-title">Contracts &amp; purchase cards</div>
+        <div class="doge-card-desc">Contracts over £5,000 and purchase-card transactions, the council's other two published feeds.</div>
+      </div>
+    </div>
+  </div>
+</Layout>

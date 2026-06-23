@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/doge.css';
+---
+
+<Layout
+  title="DOGE: Public Spending, Opened Up | Tom Pickup"
+  description="Council spending data, taken from the figures councils are required to publish but bury in unusable spreadsheets, and turned into something you can search and hold to account."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <span class="here">DOGE</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Department of Government Efficiency</span>
+      <h1 class="doge-title">DOGE: public spending, opened up</h1>
+      <p class="doge-sub">
+        Councils are required by law to publish what they spend. In practice they bury it in raw spreadsheets
+        almost nobody can read. DOGE is where I take that published data and turn it into something you can
+        actually search, sort and hold to account, with every figure traceable back to the council's own source.
+        More councils, years and datasets will be added here over time.
+      </p>
+    </header>
+
+    <div class="doge-grid">
+      <a href="/doge/burnley-council/" class="doge-card">
+        <span class="doge-card-kicker">Borough Council</span>
+        <div class="doge-card-title">Burnley Borough Council</div>
+        <div class="doge-card-desc">Spending over £500. 2025/26: £38.06m across 4,489 payments to 843 suppliers, all searchable.</div>
+        <span class="doge-card-go">Open →</span>
+      </a>
+      <div class="doge-card disabled">
+        <span class="doge-card-kicker">Coming soon</span>
+        <div class="doge-card-title">More councils &amp; datasets</div>
+        <div class="doge-card-desc">Lancashire County Council, earlier years, contracts and more are on the way.</div>
+      </div>
+    </div>
+  </div>
+</Layout>

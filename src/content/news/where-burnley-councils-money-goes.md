@@ -14,7 +14,7 @@ draft: false
 
 Every year Burnley Borough Council spends tens of millions of pounds of public money, and every year it publishes where most of it went. The catch is the form. The data comes out as four raw spreadsheets a year, buried on a page almost nobody visits, in a layout you cannot search, sort or add up without knowing your way around it. Technically it is published. In practice it is invisible.
 
-So I took all four quarters of the council's official 2025/26 spending data, every single payment of £500 or more, and put it in one place you can actually use. Below is the whole year: **£38.06 million** across **4,489 payments** to **843 different suppliers**, with a search box so you can look up any company, any service, or any month yourself. Every figure on this page comes straight from the council's own published files, and the working is set out at the bottom so it can be checked to the penny.
+So I took all four quarters of the council's official 2025/26 spending data, every single payment of £500 or more, and built a tool to make sense of it. This article is the story those numbers tell: **£38.06 million** across **4,489 payments** to **843 different suppliers**. If you would rather skip the analysis and dig through the raw record yourself, every payment is searchable in my **[DOGE spending explorer](/doge/burnley-council/spending/2025-26/)**. Everything, here and there, comes straight from the council's own published files, and the working is set out at the bottom so it can be checked to the penny.
 
 <div class="viz-info">
 This is not a leak or a scoop. It is the council's own data, which it is legally required to publish, simply made usable. The point of transparency is not that the numbers exist somewhere. It is that residents can actually see them.
@@ -30,7 +30,7 @@ This is not a leak or a scoop. It is the council's own data, which it is legally
 <div class="viz-stat orange">
 <span class="value xl" style="color: #ff9f0a;">4,489</span>
 <span class="label">Separate payments</span>
-<span class="sublabel">Every one listed and searchable below</span>
+<span class="sublabel">Every one searchable in the DOGE explorer</span>
 </div>
 <div class="viz-stat purple">
 <span class="value xl" style="color: #bf5af2;">843</span>
@@ -136,116 +136,15 @@ Transparency is not only about totals. It is about being able to point at a sing
 
 None of these is wrong. The point is that until now you could not find any of them without trawling four spreadsheets by hand. Now you can.
 
-## Search every payment
+## Search every payment yourself
 
-This is the whole year, all 4,489 payments of £500 or more. Type a supplier, a service or a category into the box to filter it, and the running total at the top updates to match. Sort by size or by date, or narrow it to a single quarter or to capital or revenue spending. This is your money; look at wherever you like.
+The figures above are the headlines. The complete record, every one of the 4,489 payments, lives in my DOGE spending explorer: filter by supplier, service or month, sort by size or date, and watch the running total move as you go.
 
-<div class="bsp-wrap">
-<div class="bsp-controls">
-<input type="search" id="bsp-search" class="bsp-search" placeholder="Search supplier, service or category..." aria-label="Search council payments" />
-<select id="bsp-q" class="bsp-sel" aria-label="Filter by quarter">
-<option value="all">All quarters</option>
-<option value="1">Q1 (Apr-Jun)</option>
-<option value="2">Q2 (Jul-Sep)</option>
-<option value="3">Q3 (Oct-Dec)</option>
-<option value="4">Q4 (Jan-Mar)</option>
-</select>
-<select id="bsp-cr" class="bsp-sel" aria-label="Filter by capital or revenue">
-<option value="all">Capital + revenue</option>
-<option value="C">Capital only</option>
-<option value="R">Revenue only</option>
-</select>
-<select id="bsp-sort" class="bsp-sel" aria-label="Sort order">
-<option value="amount_desc">Largest first</option>
-<option value="amount_asc">Smallest first</option>
-<option value="date_desc">Newest first</option>
-<option value="date_asc">Oldest first</option>
-<option value="sup">Supplier A-Z</option>
-</select>
+<div class="viz-cta">
+<div class="viz-cta-title">Burnley Council spending, 2025/26</div>
+<p class="viz-cta-sub">All 4,489 payments. Searchable, sortable, filterable.</p>
+<a href="/doge/burnley-council/spending/2025-26/" class="viz-cta-btn">Open the DOGE spending explorer &rarr;</a>
 </div>
-<p id="bsp-summary" class="bsp-summary">Loading the spending data...</p>
-<div class="bsp-tablewrap">
-<table class="bsp-table">
-<thead><tr><th>Date</th><th>Payment</th><th class="num">Amount</th></tr></thead>
-<tbody id="bsp-body"></tbody>
-</table>
-</div>
-<div class="bsp-more"><button id="bsp-more" class="bsp-morebtn" type="button">Show more</button></div>
-</div>
-
-<script>
-(function () {
-  var PAGE = 50, shown = PAGE, DATA = null, filtered = [];
-  var CR = { C: 'Capital', R: 'Revenue', T: 'Treasury' };
-  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function gbp(n) { return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-  function gbp0(n) { return '£' + Math.round(n).toLocaleString('en-GB'); }
-  function fmtDate(iso) { var p = iso.split('-'); return p[2] + ' ' + (MON[(+p[1]) - 1] || '?') + ' ' + p[0].slice(2); }
-  function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
-  function $(id) { return document.getElementById(id); }
-
-  function apply() {
-    if (!DATA) return;
-    var q = ($('bsp-search').value || '').toLowerCase().trim();
-    var qq = $('bsp-q').value, cr = $('bsp-cr').value, sort = $('bsp-sort').value;
-    filtered = DATA.txns.filter(function (r) {
-      if (qq !== 'all' && String(r[5]) !== qq) return false;
-      if (cr !== 'all' && r[4] !== cr) return false;
-      if (q) { var hay = (r[1] + ' ' + r[2] + ' ' + r[3]).toLowerCase(); if (hay.indexOf(q) < 0) return false; }
-      return true;
-    });
-    if (sort === 'amount_desc') filtered.sort(function (a, b) { return b[6] - a[6]; });
-    else if (sort === 'amount_asc') filtered.sort(function (a, b) { return a[6] - b[6]; });
-    else if (sort === 'date_desc') filtered.sort(function (a, b) { return a[0] < b[0] ? 1 : (a[0] > b[0] ? -1 : 0); });
-    else if (sort === 'date_asc') filtered.sort(function (a, b) { return a[0] > b[0] ? 1 : (a[0] < b[0] ? -1 : 0); });
-    else if (sort === 'sup') filtered.sort(function (a, b) { return a[1].localeCompare(b[1]); });
-    shown = PAGE;
-    render();
-  }
-
-  function render() {
-    var body = $('bsp-body');
-    while (body.firstChild) body.removeChild(body.firstChild);
-    var tot = 0; for (var i = 0; i < filtered.length; i++) tot += filtered[i][6];
-    var rows = filtered.slice(0, shown);
-    for (var j = 0; j < rows.length; j++) {
-      var r = rows[j];
-      var tr = el('tr');
-      var d = el('td', 'bsp-date'); d.textContent = fmtDate(r[0]); tr.appendChild(d);
-      var p = el('td');
-      var sup = el('div', 'bsp-sup'); sup.textContent = r[1]; p.appendChild(sup);
-      var meta = el('div', 'bsp-rowmeta');
-      meta.appendChild(document.createTextNode(r[2] + (r[3] ? ' · ' + r[3] : '') + ' · '));
-      var crs = el('span', r[4] === 'C' ? 'bsp-cap' : (r[4] === 'R' ? 'bsp-rev' : ''));
-      crs.textContent = CR[r[4]] || r[4]; meta.appendChild(crs);
-      p.appendChild(meta); tr.appendChild(p);
-      var a = el('td', 'num bsp-amt'); a.textContent = gbp(r[6]); tr.appendChild(a);
-      body.appendChild(tr);
-    }
-    var s = $('bsp-summary');
-    while (s.firstChild) s.removeChild(s.firstChild);
-    s.appendChild(document.createTextNode('Showing ' + rows.length.toLocaleString('en-GB') + ' of '));
-    var b1 = el('b'); b1.textContent = filtered.length.toLocaleString('en-GB'); s.appendChild(b1);
-    s.appendChild(document.createTextNode(' payments · matching total '));
-    var b2 = el('b'); b2.textContent = gbp0(tot); s.appendChild(b2);
-    var mb = $('bsp-more'); mb.disabled = shown >= filtered.length;
-    mb.textContent = shown >= filtered.length ? 'All shown' : 'Show more';
-  }
-
-  function boot() {
-    if (!$('bsp-body')) return;
-    fetch('/data/burnley-spending-2025-26.json').then(function (r) { return r.json(); }).then(function (d) {
-      DATA = d;
-      ['bsp-search', 'bsp-q', 'bsp-cr', 'bsp-sort'].forEach(function (id) {
-        var n = $(id); if (n) n.addEventListener(id === 'bsp-search' ? 'input' : 'change', apply);
-      });
-      var mb = $('bsp-more'); if (mb) mb.addEventListener('click', function () { shown += PAGE; render(); });
-      apply();
-    }).catch(function () { var s = $('bsp-summary'); if (s) s.textContent = 'The spending data could not be loaded.'; });
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
-})();
-</script>
 
 ## What I want done
 
@@ -267,3 +166,8 @@ You do not need this part to follow the story. It is here so the working can be 
 - **An independent check.** I cross-checked the first three quarters of my totals against the separately-built AI DOGE council spending dataset, which processes the same source by a completely different pipeline. The two agree to the penny (£27,917,686.85 for April to December), which is the strongest confirmation that the figures here are read faithfully from the source.
 
 One honest note. The council changed some of its internal service codes part-way through the year, so a few service names appear in both an old and a new form in the table. That is the council's own labelling, left exactly as published. The totals, suppliers and categories are unaffected.
+
+
+<div class="viz-info" style="margin-top:2rem;">
+<strong>A note on the figures.</strong> Everything here is reproduced from Burnley Borough Council's own published data for general information and transparency. It is not the official record and may contain errors or omissions, so always verify against the council's source files (linked above) before relying on any figure. No liability is accepted for any use of this page, and naming a supplier is not an allegation of any wrongdoing; it simply reflects a payment recorded in the council's published data.
+</div>

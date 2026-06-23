@@ -1,0 +1,42 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import '../../../../styles/doge.css';
+---
+
+<Layout
+  title="Burnley Council Spending Over £500 | DOGE | Tom Pickup"
+  description="Burnley Borough Council's published spending over £500, by financial year, made searchable. Every payment traceable to the council's own source data."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/doge/">DOGE</a>
+      <span class="sep">/</span>
+      <a href="/doge/burnley-council/">Burnley Borough Council</a>
+      <span class="sep">/</span>
+      <span class="here">Spending</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Spending over £500</span>
+      <h1 class="doge-title">Spending over £500</h1>
+      <p class="doge-sub">
+        Every payment of £500 or more that Burnley Borough Council makes to suppliers and third parties, the
+        data it is required to publish under the transparency code. Choose a financial year to search the lot.
+      </p>
+    </header>
+
+    <div class="doge-grid">
+      <a href="/doge/burnley-council/spending/2025-26/" class="doge-card">
+        <span class="doge-card-kicker">Financial year</span>
+        <div class="doge-card-title">2025/26</div>
+        <div class="doge-card-desc">£38.06m across 4,489 payments to 843 suppliers. April 2025 to March 2026. Searchable, sortable, filterable.</div>
+        <span class="doge-card-go">Open →</span>
+      </a>
+      <div class="doge-card disabled">
+        <span class="doge-card-kicker">Coming soon</span>
+        <div class="doge-card-title">Earlier years</div>
+        <div class="doge-card-desc">2024/25 and before, back through the published record, are being added.</div>
+      </div>
+    </div>
+  </div>
+</Layout>
