@@ -1,7 +1,7 @@
 ---
 title: "Where Your Rent Goes in Burnley"
 date: 2026-06-19T16:00:00
-description: "Rents in Burnley are rising, most renters now pay a private landlord, and a large slice of the money is public. Meanwhile the help with rent is frozen and the shortfall lands on the poorest tenants. Here is where the money actually goes, in plain English."
+description: "Rents in Burnley are rising, most renters now hand the money to a private landlord, and a large slice of it is public money flowing straight from the taxpayer into landlords' pockets. Meanwhile the help with rent is frozen, and the shortfall is dumped on the poorest tenants. Here is where the money actually goes."
 image: "/images/burnley-canal.jpg"
 ogImage: "/images/share/where-your-rent-goes.png"
 imageCredit: "Photo: Michael Garlick / geograph.org.uk (CC BY-SA 2.0)"
@@ -12,7 +12,7 @@ featured: false
 draft: false
 ---
 
-When you pay rent in Burnley, where does the money actually end up? More and more of it goes to a company rather than a person. A surprising amount of it is public money. And the part the state pays has been frozen while rents keep climbing, so the gap lands on the people who can least afford it. Here is how it works.
+When you pay rent in Burnley, where does the money actually end up? More and more of it goes to a company rather than a person. A surprising amount of it is public money, taken from the taxpayer and passed straight to private landlords. And the part the state pays has been frozen while rents keep climbing, so the gap is left on the people who can least afford it. Here is how it works, and who profits.
 
 <div class="viz-info">
 This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, <a href="/news/who-owns-burnley-the-names/">the companies behind the doors</a>, the <a href="/news/burnleys-empty-homes/">town's empty homes</a> and its <a href="/news/the-shared-houses-burnley-cannot-see/">shared houses</a>. This one is about the rent itself: who pays it, who receives it, and who is squeezed in the middle.
@@ -49,7 +49,7 @@ This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</
 
 The average private rent in Burnley is now about **£622 a month**, and it rose **3.2% in the last year**. Rents here have climbed steadily, year after year, in one of the cheapest towns in the country.
 
-About **one household in four** here rents privately, **9,696** of them, and the large majority, **8,621**, rent from a private landlord or letting agency rather than a housing association or the council. So when rents go up, it is private landlords who collect the increase, and a growing share of the town that pays it. The private rented sector in Burnley grew by **25%** in the decade to 2021, faster than any other type of housing.
+About **one household in four** here rents privately, **9,696** of them, and the large majority, **8,621**, rent from a private landlord or letting agency rather than a housing association or the council. So when rents go up, it is private landlords who collect the increase, and a growing share of the town that pays it. The private rented sector in Burnley grew faster than any other type of housing in the decade to 2021.
 
 ---
 
@@ -89,7 +89,7 @@ On a two-bedroom home in the Burnley area, that gap is now about **£126 a month
 - **Make public money buy decent housing.** Where the taxpayer is funding the rent, the home should be fit. Burnley's new selective licensing, which I support, should be used to hold landlords to a real standard, not just to collect a fee.
 - **Keep the money in the town.** Backing leasehold and ground-rent reform, and naming who owns what, helps stop rent and fees leaking out of Burnley to distant funds, as my earlier articles showed they do.
 
-Rent is the biggest bill most households here pay, and for the taxpayer it is one of the biggest housing costs going. It is worth being honest about where it ends up: increasingly with companies and funds based nowhere near Burnley, while the people who actually live here, and the public purse, carry the cost.
+Rent is the biggest bill most households here pay, and for the taxpayer it is one of the biggest housing costs going. Be honest about where it ends up: increasingly in the hands of companies and funds based nowhere near Burnley, propped up by public money, while the people who actually live here and the taxpayer carry the cost. That is not a market working. It is a town being quietly milked.
 
 ---
 
@@ -107,7 +107,7 @@ You do not need this part to follow the story. It is here so the working can be 
 Figures are for the **Borough of Burnley** (local authority E07000117), except the Local Housing Allowance, which is set for the **West Pennine Broad Rental Market Area** that covers Burnley.
 
 - **Average private rent (£622 a month, up 3.2%)** is from the ONS Price Index of Private Rents, May 2026, for Burnley local authority. It is a modelled average across all property sizes.
-- **Renting households (9,696 private renters, 8,621 from a private landlord or agency; about one in four)** are from ONS Census 2021. The 25% growth in private renting is the change between the 2011 and 2021 censuses.
+- **Renting households (9,696 private renters, 8,621 from a private landlord or agency; about one in four)** are from ONS Census 2021. Private renting grew faster than any other tenure between the 2011 and 2021 censuses.
 - **Universal Credit (18,581 people, nearly 30% of those aged 16 to 65)** is from DWP, February 2026, via Lancashire County Council's Lancashire Insight. The 2023 split showing more Universal Credit housing support going to private than social renters is from Burnley Borough Council's Private Rented Sector Forum, January 2024.
 - **Local Housing Allowance (£103.56 a week for a two-bedroom home)** is the West Pennine area rate for 2025/26, set by the Valuation Office Agency (gov.uk Local Housing Allowance tables). Rates were reset to the 30th percentile of local rents in April 2024 and then frozen in cash terms for 2025/26 and 2026/27.
 - **The shortfall (about £126 a month on a two-bed)** is the Institute for Fiscal Studies' estimate of the gap between the frozen Local Housing Allowance and the 30th-percentile two-bedroom rent in the West Pennine area, November 2025. The Resolution Foundation puts the national two-bedroom gap on a similar upward path.

@@ -1,7 +1,7 @@
 ---
-title: "Motability: One in Five New Cars, and 4,540 in Burnley"
+title: "Nearly One in Five New Cars in Britain Now Runs on Benefits"
 date: 2026-06-19T17:00:00
-description: "The Motability scheme now puts almost one in five new cars on Britain's roads, sits on £3.9 billion of reserves, and is about to be taxed by the government for the first time. Here is what it is, what it costs, and how many people in Burnley and across Lancashire qualify."
+description: "The Motability scheme puts almost one in five new cars on Britain's roads, runs on benefit money plus a stack of tax breaks, sits on £3.9 billion of reserves and pays its boss £924,000. Here is what it costs, and how many people in Burnley qualify."
 image: "/images/motability-cars.jpg"
 ogImage: "/images/share/motability-burnley.png"
 imageCredit: "Photo: Bob Harvey / geograph.org.uk (CC BY-SA 2.0)"
@@ -12,7 +12,7 @@ featured: false
 draft: false
 ---
 
-There is a car scheme most people have heard of and almost nobody understands the size of. It now puts **nearly one in five new cars** on Britain's roads, it runs on benefit money plus a stack of tax breaks, and from this July the government is finally taxing it. So I pulled the official figures, including how many people here qualify.
+There is a car scheme most people have heard of and almost nobody grasps the size of. It now puts **nearly one in five new cars** on Britain's roads, it runs on benefit money topped up with a stack of tax breaks the rest of us do not get, and only after years of unchecked growth is the government finally taxing it. So I pulled the official figures, including how many people here qualify.
 
 <div class="viz-info">
 A word up front: this is <strong>not</strong> an attack on disabled people. Motability is a genuine lifeline for many, and most who use it could not get to work, hospital or the shops without it. The questions worth asking are about the <strong>scheme's finances and the taxpayer's bill</strong>, not the people who rely on it.
@@ -65,7 +65,7 @@ It is hard to argue a scheme this large should be entirely outside the tax syste
 
 Here is the part that should bother anyone who cares about value for money. Motability Operations, the company that runs the scheme, is sitting on **£3.9 billion of reserves**. A committee of MPs called that "totally out of whack" and "hoarded." Its chief executive was paid a **£924,000** package last year. A previous boss took £1.7 million plus a bonus a committee chair called "obscene."
 
-Faced with the scrutiny, the scheme has quietly **pulled premium brands** like BMW and Mercedes and shifted towards UK-built cars. That climbdown tells you the critics had a point. This is a near-monopoly, funded by the taxpayer, that grew fat and only trimmed back when Parliament started asking questions.
+Faced with the scrutiny, the scheme has quietly **pulled premium brands** like BMW and Mercedes and shifted towards UK-built cars. That climbdown tells you everything: this is a near-monopoly, funded by the taxpayer, that grew fat on a rising benefits bill and only trimmed back when Parliament finally started asking questions. Left alone, it would not have.
 
 ---
 
@@ -132,7 +132,7 @@ None of this is shrinking. The scheme grew because PIP grew, and the official fo
 - **Rein in the operator.** A £3.9 billion reserve and a near-£1 million chief executive, on public money, is not value for money. The reserves should come down to customers' benefit, as the company has now been forced to promise.
 - **Fix the front door.** The scheme is only as sound as the benefit behind it. The honest answer to its growth is a PIP assessment that reflects people's actual, current condition, so support goes to those who need it and the bill stays defensible.
 
-The scheme matters and the need is real. So is the taxpayer's stake in £3 billion of benefits and a billion in tax breaks. Both things are true, and a town like Burnley, with 4,540 people relying on it, has every reason to want it run well.
+The scheme matters and the genuine need is real. So is the taxpayer's stake: over £3 billion of benefits a year, a billion in tax breaks, and a company sitting on £3.9 billion while its boss takes nearly a million. Protect the people who need it, and stop letting the operator and an unchecked benefits bill treat the public purse as bottomless. A town like Burnley, with 4,540 people relying on it, has every reason to want it run straight.
 
 ---
 

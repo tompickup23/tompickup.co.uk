@@ -765,6 +765,207 @@ def create_stat_card_v2(
     return img
 
 
+def create_triple_stat_card_v2(
+    stats,
+    eyebrow=None,
+    source=None,
+    tag="LAST WEEK",
+    accent_color=None,
+    size=FB_PORTRAIT,
+    output_path=None,
+    variant="lancashire",
+    logo_asset="conference-gold",
+    logo_target_width=340,
+    logo_tint=None,
+    logo_subtitle=True,
+):
+    """Generate a UKE-aligned Reform UK card with three equal-weight stats.
+
+    Used for weekly delivery reports where the three numbers should read as
+    comparable, not as hero + secondary + footnote.
+
+    Args:
+        stats: list of exactly 3 (value, label) tuples.
+        eyebrow: optional centered uppercase eyebrow above the stats
+            (e.g. "WEEKLY HIGHWAYS DELIVERY").
+        tag: top-right pill (default "LAST WEEK").
+        source: footer attribution (right side).
+    """
+    if accent_color is None:
+        accent_color = TEAL
+    if not stats or len(stats) != 3:
+        raise ValueError("triple-stat card requires exactly 3 (value, label) pairs")
+
+    width, height = size
+    img = _v2_background(width, height)
+    draw = ImageDraw.Draw(img)
+    pad = 70
+
+    draw.rectangle([(0, 0), (width, 2)], fill=accent_color)
+
+    # --- HEADER ---
+    header_y = 60
+    subtitle_color = LOGO_NATURAL_SUBTITLE_COLOR.get(logo_asset, LIGHT_GRAY)
+    if logo_tint is not None:
+        subtitle_color = logo_tint
+    logo_box = _draw_v2_logo(
+        img, pad, header_y,
+        asset_name=logo_asset,
+        target_width=logo_target_width,
+        variant=variant,
+        tint=logo_tint,
+        subtitle_color=subtitle_color,
+        subtitle=logo_subtitle,
+    )
+    draw = ImageDraw.Draw(img)
+    header_block_bottom = logo_box[1] + logo_box[3]
+
+    if tag:
+        tag_font = _load_premium_font("manrope_semibold", 16)
+        track = 3
+        char_widths = []
+        for ch in tag:
+            b = draw.textbbox((0, 0), ch, font=tag_font)
+            char_widths.append(b[2] - b[0])
+        tag_text_w = sum(char_widths) + track * max(0, len(tag) - 1)
+        asc, desc = tag_font.getmetrics()
+        tag_text_h = asc + desc
+        tag_pad_x, tag_pad_y = 22, 11
+        pill_w = tag_text_w + tag_pad_x * 2
+        pill_h = tag_text_h + tag_pad_y
+        pill_x = width - pad - pill_w
+        pill_y = header_y + 6
+        draw_rounded_rect(
+            draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h),
+            radius=pill_h // 2, fill=(20, 38, 60),
+            outline=accent_color, width=2,
+        )
+        cx = pill_x + tag_pad_x
+        for i, ch in enumerate(tag):
+            draw.text((cx, pill_y + tag_pad_y // 2 - 1), ch, fill=accent_color, font=tag_font)
+            cx += char_widths[i] + (track if i < len(tag) - 1 else 0)
+
+    # --- BODY ---
+    body_top = max(240, header_block_bottom + 60)
+    body_bot = height - 130
+    avail_h = body_bot - body_top
+    max_w = width - 2 * pad
+
+    eyebrow_font = _load_premium_font("manrope_semibold", 26)
+    eb_asc, eb_desc = eyebrow_font.getmetrics()
+    eyebrow_h = (eb_asc + eb_desc) if eyebrow else 0
+
+    short_card = height < 1200
+    # Three stats in one frame need much smaller numerals than a single hero —
+    # cap top end so a 5-char value like "1,668" doesn't dominate the layout.
+    stat_max = 130 if short_card else 160
+    stat_min = 70
+    label_font = _load_premium_font("manrope_semibold", 24)
+    l_asc, l_desc = label_font.getmetrics()
+    label_h = l_asc + l_desc
+
+    # Force UNIFORM stat sizing — pick the smallest size that fits the longest
+    # value at max_w, then use that for all three. Gives true equal-weight read.
+    per_stat = [_shrink_to_fit(draw, v, "sora_extrabold", stat_max, stat_min, max_w, step=4)[0]
+                for v, _ in stats]
+    chosen_size = min(f.size for f in per_stat)
+    stat_font = _load_premium_font("sora_extrabold", chosen_size)
+    a, d = stat_font.getmetrics()
+    stat_h_uniform = a + d
+    stat_fonts = [stat_font] * 3
+    stat_hs = [stat_h_uniform] * 3
+
+    rule_thick = 3
+    rule_w = 100
+    gap_eyebrow_stat = 50
+    gap_value_label = 16
+    gap_label_rule = 36
+    gap_rule_value = 36
+
+    def _measure_total(g_eb, g_vl, g_lr, g_rv):
+        t = (eyebrow_h + g_eb) if eyebrow else 0
+        for i in range(3):
+            t += stat_hs[i] + g_vl + label_h
+            if i < 2:
+                t += g_lr + rule_thick + g_rv
+        return t
+
+    total = _measure_total(gap_eyebrow_stat, gap_value_label, gap_label_rule, gap_rule_value)
+    if total > avail_h:
+        gap_eyebrow_stat = max(24, gap_eyebrow_stat // 2)
+        gap_label_rule = max(18, gap_label_rule // 2)
+        gap_rule_value = max(18, gap_rule_value // 2)
+        gap_value_label = max(10, gap_value_label // 2)
+        total = _measure_total(gap_eyebrow_stat, gap_value_label, gap_label_rule, gap_rule_value)
+
+    # If still overflowing, shrink the stat font in steps until it fits.
+    while total > avail_h and chosen_size > stat_min:
+        chosen_size -= 6
+        stat_font = _load_premium_font("sora_extrabold", chosen_size)
+        a, d = stat_font.getmetrics()
+        stat_h_uniform = a + d
+        stat_fonts = [stat_font] * 3
+        stat_hs = [stat_h_uniform] * 3
+        total = _measure_total(gap_eyebrow_stat, gap_value_label, gap_label_rule, gap_rule_value)
+
+    cursor = body_top + max(0, (avail_h - total) // 2)
+
+    if eyebrow:
+        _draw_centered_tracked(draw, eyebrow.upper(), eyebrow_font, V2_MUTED,
+                               cursor, width, track=4)
+        cursor += eyebrow_h + gap_eyebrow_stat
+
+    for i, (value, label) in enumerate(stats):
+        stat_font = stat_fonts[i]
+        bbox = draw.textbbox((0, 0), value, font=stat_font)
+        vw = bbox[2] - bbox[0]
+        vx = (width - vw) // 2
+
+        glow = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+        gdraw = ImageDraw.Draw(glow)
+        for off in range(10, 0, -2):
+            gdraw.text((vx, cursor + off), value, fill=(*accent_color[:3], 7), font=stat_font)
+            gdraw.text((vx, cursor - off), value, fill=(*accent_color[:3], 7), font=stat_font)
+        img = Image.alpha_composite(img.convert("RGBA"), glow).convert("RGB")
+        draw = ImageDraw.Draw(img)
+        draw.text((vx, cursor), value, fill=accent_color, font=stat_font)
+        cursor += stat_hs[i] + gap_value_label
+
+        _draw_centered_tracked(draw, label.upper(), label_font, V2_BODY,
+                               cursor, width, track=3)
+        cursor += label_h
+
+        if i < len(stats) - 1:
+            cursor += gap_label_rule
+            draw.rectangle(
+                [((width - rule_w) // 2, cursor), ((width + rule_w) // 2, cursor + rule_thick)],
+                fill=accent_color,
+            )
+            cursor += rule_thick + gap_rule_value
+
+    # --- FOOTER ---
+    foot_y = height - 70
+    draw.line([(pad, foot_y - 30), (width - pad, foot_y - 30)], fill=V2_LINE, width=1)
+    foot_font = _load_premium_font("manrope_semibold", 18)
+    brand_text = "REFORM UK · LANCASHIRE" if variant == "lancashire" else "REFORM UK · BURNLEY & PADIHAM"
+    draw.text((pad, foot_y - 8), brand_text, fill=accent_color, font=foot_font)
+    foot_source = source or "tompickup.co.uk"
+    src_bbox = draw.textbbox((0, 0), foot_source, font=foot_font)
+    src_w = src_bbox[2] - src_bbox[0]
+    draw.text((width - pad - src_w, foot_y - 8), foot_source, fill=V2_MUTED, font=foot_font)
+
+    draw.rectangle([(0, height - 2), (width, height)], fill=accent_color)
+    img = apply_edge_vignette(img, top=40, bottom=40, left=30, right=30, intensity=22)
+
+    if output_path:
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        img.save(output_path, "PNG", quality=95)
+        file_size = os.path.getsize(output_path)
+        print(f"v2 triple-stat card: {output_path} ({file_size:,} bytes, {width}x{height})")
+
+    return img
+
+
 def create_cover_image(photo_path, title, tags=None, variant='lancashire',
                        output_path=None, size=(1200, 628)):
     """Generate a branded article cover image with photo + Reform overlay + title.
@@ -1535,6 +1736,10 @@ Examples:
     parser.add_argument('--logo-width', type=int, default=340, help='v2 only — logo target width in pixels (default: 340)')
     parser.add_argument('--logo-tint', help='v2 only — re-tint a white logo to this colour name (e.g. gold, teal, white)')
     parser.add_argument('--no-subtitle', action='store_true', help='v2 only — suppress the LANCASHIRE / BURNLEY subtitle under the logo (use when the logo already conveys location, e.g. the badge)')
+    parser.add_argument('--triple', action='store_true', help='v2 only — render three equal-weight stats (uses --stat/--headline, --secondary/--secondary-text, --tertiary/--tertiary-text)')
+    parser.add_argument('--tertiary', help='v2 triple mode — third stat value')
+    parser.add_argument('--tertiary-text', help='v2 triple mode — UPPER eyebrow for the third stat')
+    parser.add_argument('--eyebrow', help='v2 triple mode — centered uppercase eyebrow above the three stats (e.g. "WEEKLY HIGHWAYS DELIVERY")')
 
     args = parser.parse_args()
 
@@ -1589,6 +1794,33 @@ Examples:
         logo_tint = None
         if args.logo_tint:
             logo_tint = ACCENT_COLORS_V2.get(args.logo_tint.lower())
+        if args.triple:
+            missing = [n for n, v in [
+                ("--stat", args.stat), ("--headline", args.headline),
+                ("--secondary", args.secondary), ("--secondary-text", args.secondary_text),
+                ("--tertiary", args.tertiary), ("--tertiary-text", args.tertiary_text),
+            ] if not v]
+            if missing:
+                parser.error(f"--triple needs all 6 stat/label fields; missing: {', '.join(missing)}")
+            create_triple_stat_card_v2(
+                stats=[
+                    (args.stat, args.headline),
+                    (args.secondary, args.secondary_text),
+                    (args.tertiary, args.tertiary_text),
+                ],
+                eyebrow=args.eyebrow,
+                source=args.source,
+                tag=args.tag if args.tag != 'CABINET DECISION' else 'LAST WEEK',
+                accent_color=accent,
+                size=size,
+                output_path=args.output,
+                variant=args.variant,
+                logo_asset=args.logo,
+                logo_target_width=args.logo_width,
+                logo_tint=logo_tint,
+                logo_subtitle=not args.no_subtitle,
+            )
+            return
         create_stat_card_v2(
             stat=stat,
             headline=headline,

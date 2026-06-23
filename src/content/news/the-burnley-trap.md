@@ -1,7 +1,7 @@
 ---
 title: "Sick Sooner, Out of Work, Gone Earlier: The Burnley Trap"
 date: 2026-06-20T10:00:00
-description: "Burnley is the 4th most deprived town in England. Its people fall ill younger, are pushed out of work by that illness, and die sooner than almost anywhere in the country. The official figures show it is not three problems. It is one chain."
+description: "Burnley is the 4th most deprived town in England. Its people fall ill younger, are pushed out of work by that illness, and die sooner than almost anywhere in the country. This is not bad luck. It is what decades of managed decline did to a town the country chose to forget."
 image: "/images/burnley-rooftops.jpg"
 ogImage: "/images/share/the-burnley-trap.png"
 imageCredit: "Photo: Ian Greig / geograph.org.uk (CC BY-SA 2.0)"
@@ -119,7 +119,7 @@ The mistake everyone makes is treating these as separate problems: a benefits pr
 - **Fund the front end, or pay at the back.** As Cabinet Member for Adult Social Care, I see where this chain ends: in care demand made decades earlier by a town that got sick young. You either invest upstream in health and prevention, or you pay far more downstream in care and lost lives.
 - **Stop blaming the people in the trap.** The data is plain. Burnley's benefits bill tracks its ill-health, not idleness or fraud. A town does not choose to die three years early. It was let down, over decades, and the people who pay are its own.
 
-I represent part of this town. I am not interested in pretending the welfare numbers are something they are not. They are the visible end of an invisible failure: deprivation that makes people ill, illness that takes their work, and the early grave at the end of it. Name the chain honestly, and you can start to break it.
+I represent part of this town. I am not interested in pretending the welfare numbers are something they are not. They are the visible end of an invisible failure: deprivation that makes people ill, illness that takes their work, and the early grave at the end of it. This did not happen by accident or overnight. It is what managed decline looks like when you measure it in years of life, and it was done to Burnley by an establishment that wrote the place off and moved on. Name the chain honestly, name who let it happen, and you can start to break it.
 
 ---
 

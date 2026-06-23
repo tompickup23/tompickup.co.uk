@@ -12,7 +12,9 @@ featured: false
 draft: false
 ---
 
-The lazy line on the welfare bill is that disabled people do not want to work. The government's own research says the opposite: **37% of disabled people out of work say they want a job but are held back by the fear of losing their benefits.** Among people with a learning disability, **86% want paid work and only 5% have it.** The will is there. What stops them is a wall of rules, and once you lay them out, the benefits bill looks less like a choice and more like the only exit the system leaves open.
+I am writing this for a friend. He is disabled. He wants exactly what most people in this town want: a proper job, a home of his own, and to lean on the state as little as he possibly can. He could make a start tomorrow. At every turn, the system that is meant to help him pushes him back.
+
+That is the part the welfare debate keeps getting backwards. The bill is not high because disabled people will not work. Look at who the system writes off: among people with a learning disability, **86% want to work, and barely one in twenty has a job.** The want is there. What is missing is a system that lets them act on it, and almost every rule in the way was written in Westminster and left for the rest of us to live with. This is not a story about scroungers. It is a story about a state that takes people who want to stand on their own feet and quietly trains them to depend on it.
 
 <div class="viz-info">
 To be plain: nothing here is an argument against supporting disabled people, and nothing here is about blame or fraud. It is about a set of rules, most of them set in Westminster, that trap people who want to be independent. Naming them is the first step to fixing them.
@@ -21,9 +23,9 @@ To be plain: nothing here is an argument against supporting disabled people, and
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">37%</span>
-<span class="label">Want to work but fear losing benefits</span>
-<span class="sublabel">DWP's own survey of disabled claimants</span>
+<span class="value xl" style="color: #12b6cf;">86%</span>
+<span class="label">With a learning disability want to work</span>
+<span class="sublabel">Barely one in twenty actually has a job</span>
 </div>
 <div class="viz-stat orange">
 <span class="value xl" style="color: #ff9f0a;">£16,000</span>
@@ -103,6 +105,8 @@ Save, and lose support. Work, and risk your award. Get the support, after the jo
 - **Fix the accessible-vehicle squeeze locally.** This one is partly ours to act on. Grow the wheelchair-accessible fleet, design school-transport contracts so vehicles are free outside the school run, and expand independent travel training so young people learn to travel on their own. That is better for disabled children, for taxpayers, and for disabled adults trying to get to work.
 
 I am the Cabinet Member for Adult Social Care, so I see where this ends: people who could be working and independent, kept dependent by a system that was supposed to help them. Most of these rules were made in Westminster and we inherited them. But "we inherited it" is not a reason to leave it. It is the reason to say, plainly, that it is broken, and to start pulling it apart.
+
+My friend does not want sympathy, and he does not want a handout. He wants a job, a home of his own, and to be left to get on with his life like anyone else. The least his country can do is stop standing in his way.
 
 ---
 

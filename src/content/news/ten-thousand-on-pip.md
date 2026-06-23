@@ -1,7 +1,7 @@
 ---
-title: "Ten Thousand People in Burnley Are on PIP. Here Is Why."
+title: "Ten Thousand People in Burnley Are on PIP. This Is the Bill for Managed Decline."
 date: 2026-06-19T14:00:00
-description: "More than ten thousand people in Burnley now claim PIP, the disability benefit. That is the 47th highest of 543 seats in England. The reason is not the one you are usually given, and it matters for what comes next."
+description: "More than ten thousand people in Burnley claim the disability benefit PIP, the 47th highest of 543 seats in England. It is not because the town is idle. It is the bill for decades of managed decline by an establishment that let the work go and looked away."
 image: "/images/burnley-singing-ringing-tree.jpg"
 ogImage: "/images/share/pip-burnley.png"
 imageCredit: "Photo: Bill Boaden / geograph.org.uk (CC BY-SA 2.0)"
@@ -14,7 +14,7 @@ draft: false
 
 There is a number that gets thrown around a lot in the welfare debate, usually with a sneer attached. So I went and got the real figure for my home town, and the real reason behind it.
 
-More than **ten thousand people in Burnley** now claim Personal Independence Payment, the main disability benefit. Out of 543 parliamentary seats in England, only 46 have more. That is not a story about people who will not work. It is a story about a poor, unwell, post-industrial town, and it is worth telling honestly.
+More than **ten thousand people in Burnley** now claim Personal Independence Payment, the main disability benefit. Out of 543 parliamentary seats in England, only 46 have more. That is not a story about people who will not work. It is the bill for what was done to this town: the mills closed, the work was never replaced, and a string of governments in London managed the decline and looked away. Burnley is paying for their choices in its health.
 
 <div class="viz-info">
 A quick word on geography. PIP is published by parliamentary constituency, so these figures are for the <strong>Burnley constituency</strong>, which is the town plus part of Padiham and a slice of Pendle. That is slightly different from the Borough of Burnley I use in my <a href="/news/who-owns-burnley/">housing articles</a>. I flag below where it matters.
@@ -59,7 +59,7 @@ So a high PIP count does not mean a town full of people dodging work. It means a
 
 The reason is not a mystery. It is the same reason that runs through everything else about this town.
 
-Burnley is the **4th most deprived district in England** on the 2025 deprivation index, behind only Blackpool, Knowsley and Kingston upon Hull. Forty per cent of its neighbourhoods are in the most deprived tenth of the entire country. Deprivation and ill-health travel together: people in poorer places get sick younger, stay sick longer and live fewer years in good health. That is not a Burnley failing. It is the long tail of what happened to mill towns when the mills closed.
+Burnley is the **4th most deprived district in England** on the 2025 deprivation index. Forty per cent of its neighbourhoods are in the most deprived tenth of the entire country. Deprivation and ill-health travel together: people in poorer places get sick younger, stay sick longer and live fewer years in good health. That is not a Burnley failing. It is the long tail of what happened to mill towns when the mills closed.
 
 <div class="viz-panel">
 <div class="viz-label teal">PIP claims, Burnley against the typical English seat</div>
@@ -80,7 +80,7 @@ Burnley is the **4th most deprived district in England** on the 2025 deprivation
 <div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Nearby Blackpool South, on 13,974, is among the very highest in the country.</div>
 </div>
 
-This is the part the national debate skips. When ministers talk about the PIP bill rising, they talk about it as if the numbers fell from the sky. They did not. They are highest in exactly the places that were hit hardest by deindustrialisation and never properly recovered. Burnley is one of them.
+This is the part the national debate skips. When ministers talk about the PIP bill rising, they talk as if the numbers fell from the sky. They did not. They are highest in exactly the places Westminster hollowed out and never rebuilt: the mill towns, the coalfields, the post-industrial North. The same establishment that let the work go now tuts at the benefits bill it created. Burnley is one of those places, and it is owed better than a sneer.
 
 ---
 
@@ -88,7 +88,7 @@ This is the part the national debate skips. When ministers talk about the PIP bi
 
 For a lot of people here, PIP is the difference between coping and not. It often goes on the basics that illness makes dearer: heating a home you are stuck in all day, running equipment, paying for transport to hospital, eating a diet your condition requires.
 
-The wider picture in Burnley is bleak. Nearly **30%** of working-age residents are on Universal Credit. **One household in six** is in fuel poverty. Set that against <a href="/news/where-your-rent-goes/">rising rents</a> and bills, and PIP is not pocket money. It is what keeps a lot of disabled and seriously ill people in Burnley afloat.
+The wider picture in Burnley is bleak. Nearly **30%** of working-age residents are on Universal Credit. **About one household in six**, 16.2%, is in fuel poverty, among the highest rates in Lancashire. Set that against <a href="/news/where-your-rent-goes/">rising rents</a> and bills, and PIP is not pocket money. It is what keeps a lot of disabled and seriously ill people in Burnley afloat.
 
 ---
 
@@ -126,7 +126,7 @@ I am the Cabinet Member for Adult Social Care at Lancashire County Council. The 
 - **Tackle the root, not just the bill.** The lasting way to bring this number down is better health, real prevention and decent jobs in towns like this one, not a tighter form.
 - **Test national changes against towns like Burnley.** Any change from the Timms review should be modelled on the places with the most claimants before it becomes law, not justified by a national average that hides them.
 
-The honest version of this story is less satisfying than the sneer, but it is the true one. Ten thousand of my neighbours are on PIP because this is one of the most deprived, least healthy towns in the country. The answer to that is to make it healthier and richer, not to make being ill here a little bit cheaper for the Treasury.
+The honest version of this story is less satisfying than the sneer, but it is the true one. Ten thousand of my neighbours are on PIP because this is one of the most deprived, least healthy towns in the country, and it did not get that way by accident. The answer is to rebuild it, with real jobs, real health and real investment, not to balance Westminster's books on the backs of sick people in a town it abandoned.
 
 ---
 
@@ -145,7 +145,7 @@ You do not need this part to follow the story. It is here so the working can be 
 - **The rank and the comparison** are worked out across all 543 English constituencies in the same dataset: Burnley is 47th highest, against an average of 6,688 and a median of 6,212. That is where "54% above the typical seat" and "top 9%" come from.
 - **The national figures** are from DWP PIP statistics: nearly 4 million people across England and Wales received PIP by April 2026, roughly double the 2.05 million in January 2019.
 - **Deprivation** is from the English Indices of Deprivation 2025, on which Burnley is the 4th most deprived district in England, with 40% of its neighbourhoods in the most deprived tenth nationally.
-- **Universal Credit (about 30% of working age) and fuel poverty (16.2%)** are from DWP and government fuel poverty statistics, for the Borough of Burnley.
+- **Universal Credit (about 30% of working age) and fuel poverty (16.2%, 2023, the latest available)** are from DWP and government fuel poverty statistics, for the Borough of Burnley.
 - **The reform timeline** is from the Universal Credit and Personal Independence Payment Act 2025 and the announced terms of the Timms review of the PIP assessment.
 
 Two honest caveats. First, the geography: the PIP figure is for the parliamentary constituency, while the deprivation, Universal Credit and fuel poverty figures are for the borough. They cover almost the same place but are not identical, and I have labelled each. Second, a high PIP caseload reflects both genuine need and the fact that more eligible people are claiming what they are entitled to. Neither of those is something to apologise for.

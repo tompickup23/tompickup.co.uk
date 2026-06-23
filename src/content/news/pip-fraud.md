@@ -1,7 +1,7 @@
 ---
-title: "PIP Fraud Just Jumped to £410 Million. Here Is the Honest Version."
+title: "PIP Fraud Quadrupled to £410 Million. The Real Leak Is £5.4 Billion."
 date: 2026-06-19T18:00:00
-description: "New official figures show fraud in the disability benefit PIP quadrupled in a year, from £100 million to £410 million. That is a real problem worth fixing. It is also not where most benefit fraud actually happens, and the honest numbers matter."
+description: "Fraud in the disability benefit PIP quadrupled in a year. That is bad enough. But the same official figures show 6.8 billion pounds lost to benefit fraud across the board, most of it nowhere near PIP, in a system that writes the cheques and barely checks again."
 image: "/images/data-dashboard.jpg"
 ogImage: "/images/share/pip-fraud.png"
 category: "UK"
@@ -11,7 +11,7 @@ featured: false
 draft: false
 ---
 
-The government published its annual benefit fraud figures last month, and one number jumped out: fraud in PIP, the main disability benefit, has gone from £100 million to **£410 million** in a single year. That is worth taking seriously. It is also worth telling honestly, because the same figures show where benefit fraud really is, and it is not mainly here.
+The government published its annual benefit fraud figures last month, and one number jumped out: fraud in PIP, the main disability benefit, has gone from £100 million to **£410 million** in a single year. Take that seriously. Then look at the rest of the page, because the same figures show **£6.8 billion** lost to benefit fraud in twelve months, paid out by a state that writes the cheques and then barely checks who is still entitled. That is the real scandal, and it is not mainly in PIP.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -75,7 +75,7 @@ If you only read the headline, you would think PIP is where the welfare money le
 <div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Universal Credit fraud alone was £5.4 billion. PIP was £410 million.</div>
 </div>
 
-Universal Credit fraud ran at **6.8%, some £5.4 billion**, nearly five times the PIP rate and thirteen times the cash. The State Pension, the single biggest benefit, had a fraud rate of effectively **zero**. So when someone tells you "the disabled are milking the system," the government's own audit says the opposite: **PIP is one of the cleaner benefits, and the vast majority of claims are genuine.**
+Universal Credit fraud ran at **6.8%, some £5.4 billion**, nearly five times the PIP rate and thirteen times the cash. The State Pension, the single biggest benefit, had a fraud rate of effectively **zero**. So the next time a minister talks tough about disabled claimants, remember the government's own audit says the opposite: **PIP is one of the cleaner benefits, the genuine disabled are not the leak, and £5.4 billion is walking out of a different door while Westminster looks the other way.**
 
 That matters, and not just for fairness. Get this wrong and you punish hundreds of thousands of genuinely disabled and ill people to chase a problem that is real but small. Burnley alone has more than **10,000 PIP claimants**. At a 1.4% fraud rate, the overwhelming majority are exactly who the benefit is for.
 
@@ -83,7 +83,7 @@ That matters, and not just for fairness. Get this wrong and you punish hundreds 
 
 ## Why it still needs fixing
 
-None of that means you wave it through. £410 million is £410 million, and a fraud rate that quadruples in a year is a warning light. The cause is clear and so is the cure: a benefit handed out and then barely reviewed will drift out of date. The same week these figures landed, the government's PIP reforms were still parked pending a review, so the front door stays exactly as it was.
+None of that means you wave it through. £410 million is £410 million, and a fraud rate that quadruples in a year is a flashing red light. The cause is clear and so is the cure: a benefit handed out and then barely reviewed will drift out of date. Yet the same week these figures landed, the government had its PIP reforms parked pending a review, the enforcement effort pointed at the wrong target, and the front door left exactly as it was. That is not compassion. It is negligence with your money.
 
 And the bigger prize is obvious from the chart. If you are serious about benefit fraud, the **£5.4 billion in Universal Credit** is where the money is, not the £410 million in PIP.
 
@@ -96,7 +96,7 @@ And the bigger prize is obvious from the chart. If you are serious about benefit
 - **Defend the genuine majority.** A 1.4% fraud rate means 98.6% of PIP is going to people who need it. Any reform has to start from that fact, not bury it.
 - **Tell the truth about the numbers.** A welfare system only keeps public support if it is both compassionate and policed, and if the people running it are straight about where the problems actually are.
 
-The honest version is less satisfying than the headline, but it is the one that holds up. PIP fraud rose, and that should be fixed at the source. The disabled people of Burnley are not the welfare problem, and the data says so plainly.
+Here is the version that holds up. PIP fraud rose, and it should be gripped at the source. But the £6.8 billion bleeding out of the wider system, most of it nowhere near PIP, is what a serious government would chase first. The disabled people of Burnley are not the welfare problem. A Westminster machine that hands out billions and never checks is. The data says so plainly.
 
 ---
 

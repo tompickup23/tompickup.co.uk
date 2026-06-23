@@ -1,7 +1,7 @@
 ---
 title: "The Names Behind the Doors: Burnley's Biggest Property Owners"
 date: 2026-06-19T11:00:00
-description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The single biggest owner is not a landlord renting out homes. It is a fund that owns the freehold under more than a thousand of them."
+description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The single biggest owner is not a local landlord. It is a faraway fund that owns the ground under more than a thousand Burnley homes and charges the people living in them for the privilege."
 image: "/images/burnley-townscape.jpg"
 ogImage: "/images/share/who-owns-burnley-the-names.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
@@ -88,7 +88,7 @@ Here is what that means in plain terms. When you buy a leasehold home, you own t
 </div>
 </div>
 
-None of this is illegal, and ground rents on older houses are often small. But it is the same model that has caused misery on newer leasehold estates across the country, where ground rents balloon and homeowners are charged hundreds of pounds for routine permissions. It is worth Burnley people knowing that the land under a good chunk of the town is owned by funds whose only interest in it is the income it produces.
+None of this is illegal, and ground rents on older houses are often small. But it is the same model that has caused misery on newer leasehold estates across the country, where ground rents balloon and homeowners are charged hundreds of pounds for routine permissions. Burnley people should know the plain truth of it: the ground under a good chunk of their town is owned by distant funds that never set foot here, and whose only interest in the place is the rent they can squeeze out of it.
 
 ---
 
@@ -127,7 +127,7 @@ The Land Registry already holds all of this. It should not take one councillor w
 - **Back leasehold reform.** Nobody should buy a house and find a faraway fund owns the ground beneath it and can charge them to live there. Reforming ground rents and freehold ownership is squarely in Burnley's interest.
 - **Keep naming the owners.** This is the company picture. The slice still missing is overseas-registered owners, which sits behind a separate Land Registry licence I am working on adding. When I have it, I will publish that too.
 
-The records are public. I am just putting them where people can see them.
+The records are public. The establishment is content to leave them buried. I am just putting them where the people who actually live here can see them.
 
 ---
 

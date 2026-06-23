@@ -1,7 +1,7 @@
 ---
 title: "638 Empty Homes, 2,657 Families Waiting"
 date: 2026-06-19T15:00:00
-description: "Burnley has hundreds of homes standing empty long-term while thousands of families wait for somewhere to live and rough sleeping climbs. Here are the two numbers side by side, and what a council can actually do about it."
+description: "Burnley has hundreds of homes standing empty long-term while thousands of families wait for somewhere to live and people sleep rough. Two numbers that should shame a wealthy country into action. Here they are side by side, and what should be done."
 image: "/images/burnley-crown-point.jpg"
 ogImage: "/images/share/empty-homes.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
@@ -12,7 +12,7 @@ featured: false
 draft: false
 ---
 
-A town can be short of homes and full of empty ones at the same time. Burnley is. While families sit on the housing waiting list and rough sleeping climbs, hundreds of perfectly real houses stand empty, some of them for years. Here are the numbers, and what can be done.
+A town can be short of homes and full of empty ones at the same time. Burnley is. While families sit on the housing waiting list and people sleep rough on its streets, hundreds of perfectly good houses stand empty, some for years. In one of the richest countries on earth, that is a disgrace, not a detail. Here are the numbers, and what should be done.
 
 <div class="viz-info">
 This sits alongside my articles on <a href="/news/who-owns-burnley/">who owns Burnley</a>, the <a href="/news/the-shared-houses-burnley-cannot-see/">shared houses the council cannot see</a> and <a href="/news/where-your-rent-goes/">where the rent goes</a>. The same cheap terraces that get bought up to rent out are the ones most likely to end up empty when an absent owner loses interest.
@@ -36,9 +36,9 @@ This sits alongside my articles on <a href="/news/who-owns-burnley/">who owns Bu
 <span class="sublabel">Down from 2,384 in 2016</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">+500%</span>
-<span class="label">Rise in rough sleeping</span>
-<span class="sublabel">From 1 person to 6 in a year</span>
+<span class="value xl" style="color: #ff453a;">7</span>
+<span class="label">People sleeping rough</span>
+<span class="sublabel">Up from 4 the year before (autumn 2024)</span>
 </div>
 </div>
 </div>
@@ -62,7 +62,7 @@ The contrast is the whole story.
 </div>
 </div>
 
-Behind those numbers are real pressures. In the nine months to January 2026 the council took **2,058 homelessness enquiries**, a rate of around 2,470 a year. **33 households** were living in temporary accommodation on one January snapshot. And rough sleeping, though still small in number, went from **1 person to 6** in a single year, with the council reporting that its emergency beds were full over winter.
+Behind those numbers are real pressures. In the nine months to January 2026 the council took **2,058 homelessness enquiries**, a rate of around 2,470 a year. **33 households** were living in temporary accommodation on one January snapshot. And rough sleeping, though still small in number, rose from **4 people to 7** in a year, on the autumn 2024 street count, with the council reporting that its emergency beds were full over winter.
 
 The queue for an affordable home has been climbing for years, even as homes sit empty.
 
@@ -129,7 +129,7 @@ The penalty has to come with the patient work of actually getting homes lived in
 - **Go after the worst cases.** A handful of derelict, abandoned houses do disproportionate damage to a street. Where owners will not act, the council should use the Empty Dwelling Management Order and compulsory purchase powers it already has.
 - **Publish the picture.** Empty homes, the waiting list and homelessness should be reported together and openly, so residents can see whether the gap is closing.
 
-It is hard to look a family in temporary accommodation in the eye and explain why, a few streets away, a sound house has stood empty for two years. The town does not need to accept that. The homes are there. The job is to get them lived in.
+It is hard to look a family in temporary accommodation in the eye and explain why, a few streets away, a sound house has stood empty for two years while someone sits on it. The town should not accept that, and neither should the country. The homes are there. The will to get them lived in is what is missing.
 
 ---
 
@@ -148,7 +148,7 @@ Everything is for the **Borough of Burnley** (local authority E07000117), the co
 
 - **Empty homes (638 long-term, 1,750 total)** are from Burnley Borough Council's Annual Monitoring Report 2023-24, which uses the government's Council Taxbase 2024 (snapshot October 2024). "Long-term" means empty and unfurnished for at least six months. Long-term empties rose from 557 in 2023 to 638 in 2024, even as total empties fell from 2,384 in 2016 to 1,750.
 - **The housing waiting list (2,657 households, 2024)** is from MHCLG Live Table 600, households on local authority housing waiting lists. It had risen from 1,669 in 2022, and eased slightly to 2,543 in 2025.
-- **Homelessness and rough sleeping** (2,058 enquiries to January 2026, 33 households in temporary accommodation, rough sleeping up from 1 to 6) come from Burnley Borough Council's strategic update to Full Council in January 2026 and the MHCLG autumn rough sleeping snapshot.
+- **Homelessness and rough sleeping** (2,058 enquiries to January 2026, 33 households in temporary accommodation, rough sleeping up from 4 to 7) come from Burnley Borough Council's strategic update to Full Council in January 2026 and the MHCLG rough sleeping snapshot, which counted 7 people sleeping rough in Burnley in autumn 2024, up from 4 the year before.
 - **The national figures** (more than 500,000 empty homes in England, over 260,000 of them long-term) are from the government's Council Taxbase 2024 release and Action on Empty Homes' analysis of it.
 - **Single-person households (39.8%)** are from the MHCLG Council Taxbase 2024 (single-person 25% discount as a share of chargeable dwellings).
 - **The council tax premium and empty homes powers** come from the Levelling-up and Regeneration Act 2023, Burnley's own Empty Homes Premium Policy, and existing housing legislation.

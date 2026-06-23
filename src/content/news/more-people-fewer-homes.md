@@ -1,7 +1,7 @@
 ---
-title: "More People, Fewer Homes to Buy: Burnley's Housing Squeeze"
+title: "More People, Fewer Homes: The Squeeze Nobody in Burnley Voted For"
 date: 2026-06-19T10:00:00
-description: "Over the same decade, Burnley's population grew almost entirely through migration, and home ownership fell while the cheap housing was bought up. Here are the two trends, tracked side by side and honestly, with what they do and do not tell us."
+description: "In ten years Burnley's population grew almost entirely through immigration, home ownership fell, and the cheap housing was bought up to rent out. Whitehall set the numbers, sent the bill, and never asked the town. Here are the figures in full."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/more-people-fewer-homes.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
@@ -12,7 +12,7 @@ featured: false
 draft: false
 ---
 
-Two things happened to Burnley over the same ten years. The town got bigger, almost entirely because of people arriving from abroad. And it got harder to buy a home here, while more and more of the cheap housing was bought up to rent out.
+Two things happened to Burnley over the same ten years. The town got bigger, almost entirely because of people arriving from abroad. And it got harder for local people to buy a home here, while the cheap housing was snapped up to rent out. Nobody in Burnley was asked about either. Both were decided in Westminster and Whitehall, and the town is left to live with the result.
 
 <div class="viz-info">
 <strong>Part three of three on who owns Burnley, and why it is getting harder to live here.</strong>
@@ -21,7 +21,7 @@ Two things happened to Burnley over the same ten years. The town got bigger, alm
 <br>3. More people, fewer homes (you are here): migration, demand and the squeeze.
 </div>
 
-People argue about whether those two things are connected. Rather than argue, I went and got the official numbers for both and put them next to each other. Here they are, tracked honestly, including what they do not prove. Everything below is for the Borough of Burnley, the council area, the same boundary as my other articles, not the parliamentary constituency.
+The people who run the country would rather you did not put those two things in the same sentence. So instead of arguing, I went and got the official numbers for both and laid them side by side. Here they are in full, including what they do not prove. I am not going to insult you by pretending the figures say something other than what they say. Everything below is for the Borough of Burnley, the council area, the same boundary as my other articles, not the parliamentary constituency.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -107,8 +107,8 @@ Today about **one in four Burnley households rents privately**, and the official
 The cheap end of Burnley's housing market is now being competed for from several directions at once:
 
 - **Investors** buying terraces to rent out, and funds buying the freeholds underneath them.
-- **A growing population**, most of it arriving from abroad, that needs somewhere to live and, at first, mostly rents.
-- **The asylum dispersal system.** The Home Office, through private contractors, houses asylum seekers by renting the same cheap properties local families and local landlords are after. Home Office figures show **464** asylum seekers supported in Burnley, around **4.9 for every thousand residents**, a high concentration for a town this size, housed in the same private rented stock local people are competing for.
+- **A population growing fast, almost all of it from abroad**, that needs somewhere to live and, at first, rents.
+- **The asylum dispersal system.** The Home Office, through private contractors on guaranteed money, rents the same cheap terraces that local families and local landlords are chasing and hands them to asylum seekers. Home Office figures show **464** asylum seekers supported in Burnley, about **4.9 for every thousand residents**: nearly double the rate across the North West as a whole, and many times the rate in the wealthy South. Every one of those houses is a house a Burnley family cannot rent or buy.
 
 The UK Demographics projection model, looking at Burnley's mix, reaches a blunt conclusion of its own: high foreign-born population growth "will drive additional housing demand, particularly in the private rented sector." More demand, the same squeezed supply.
 
@@ -120,9 +120,9 @@ Two lines rising together is not proof that one caused the other, and I am not g
 
 House prices rose right across the country, for reasons that have nothing to do with Burnley: cheap borrowing, investors chasing returns, and decades of not building enough homes. People who move here, from abroad or from down the road, need a roof like everyone else, and they rent at first because renting is what is available.
 
-**The problem is not that people came. The problem is that the town did not build for them, the cheap homes got bought up as investments, and the people already here got priced out.** That is a failure of housing supply and of national policy. It is not the fault of the families looking for somewhere to live.
+**This is not about the families who came; most want the same decent life as anyone. It is about a government that waved through record numbers, sent the housing pressure and the bill to towns like Burnley, and never once asked us.** That is a failure of national policy, and a deliberate one. Blaming the family looking for a roof is a mistake. Letting Westminster off the hook is a bigger one.
 
-What is fair to say is this: a town with very little spare housing is absorbing rising demand from several directions at once, including decisions made in Whitehall and paid for nationally, and the people who feel it hardest are Burnley's own first-time buyers and renters.
+What is fair to say, and what every resident here already knows, is this: a town with almost no spare housing is being made to absorb demand from every direction at once, including decisions taken in Whitehall and imposed on us, and the people who pay for it are Burnley's own first-time buyers and renters.
 
 ---
 
@@ -130,7 +130,7 @@ What is fair to say is this: a town with very little spare housing is absorbing 
 
 - **Build, and build the right homes.** The single biggest lever is supply: more homes people can actually afford to buy, so ownership stops sliding.
 - **Protect the existing stock.** Extend the HMO controls to all 15 wards, and stop the steady conversion of family homes into rentals, as I argued in the first article.
-- **Be honest about dispersal.** It is reasonable to ask whether a town with this little spare housing should carry this large a share of national asylum accommodation, and to expect Whitehall to fund and plan for the housing pressure it creates.
+- **Stop dumping asylum housing on towns with no room.** A borough with some of the scarcest, cheapest housing in England should not be made to carry a heavy share of the nation's asylum accommodation, competing with its own families for the same terraces. Control the numbers coming in, and stop sending the pressure to the places least able to absorb it.
 - **Put the numbers in front of people.** Population, housing and ownership data for Burnley should be published together and kept up to date, so the debate is about facts, not feelings.
 
 I grew up here. I want it to stay a place where local people can afford to put down roots. That means being straight about every pressure on its housing, and then doing something about the ones we can actually control.
@@ -153,7 +153,7 @@ Every figure is for the **Borough of Burnley** (local authority area E07000117),
 - **Population and country of birth:** ONS Census 2011 and 2021, for the Borough of Burnley, via the UK Demographics dataset.
 - **New National Insurance numbers issued to overseas nationals:** DWP, by local authority, 2002 to 2025. This is a flow measure (new registrations each year, issued once per person), not a running total, and it undercounts anyone who never registers.
 - **Tenure (who owns and who rents):** ONS Census 2021. The forward projection of falling home ownership is from the UK Demographics model (Census 2021 tenure by ethnicity combined with population projections), and is an estimate, not a certainty.
-- **Asylum accommodation:** Home Office figures for asylum seekers in receipt of support, by local authority.
+- **Asylum accommodation:** Home Office figures for asylum seekers in receipt of support, by local authority (end of 2024). The regional comparison (the North West, and the lower rate in the South) is from the House of Commons Library asylum statistics briefing, which calculates supported asylum seekers per 10,000 population by region: the North West sat at over 26 per 10,000, against Burnley's 49.
 - **House prices and investment-buying:** HM Land Registry, as set out in the earlier articles.
 
 Two honest limits. First, these are different measures on slightly different timescales, lined up to show direction, not to prove cause. Second, "born outside the UK" and "arrived recently" are not the same thing: many non-UK-born residents have lived in Burnley for decades. The figures describe a town that is changing and under housing pressure. They do not, on their own, assign blame, and neither do I.

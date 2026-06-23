@@ -1,7 +1,7 @@
 ---
-title: "Who Owns Burnley? Inside the Buy-to-Let Boom"
+title: "Who Owns Burnley? Increasingly, Not the People Who Live Here"
 date: 2026-06-19T12:00:00
-description: "I went through ten years of public records for my home town. More and more of Burnley is being bought up by landlords and companies, not by families looking for a home. Here is what the numbers show, in plain English, and what I want done about it."
+description: "I went through ten years of public records for my home town. More and more of Burnley is being bought up by landlords, companies and faraway funds, while local families are priced out of owning a home in the place they grew up. Here is what the numbers show, and what I want done about it."
 image: "/images/burnley-panorama.jpg"
 ogImage: "/images/share/who-owns-burnley.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
@@ -21,7 +21,7 @@ When a house is sold in England, the sale goes onto a public record. So does eve
 <br>3. <a href="/news/more-people-fewer-homes/">More people, fewer homes</a>: migration, demand and the squeeze.
 </div>
 
-I went through every house sale here from 2015 to 2025, all 21,720 of them. I looked at the 5,775 companies registered to a Burnley postcode, and the council's own research into shared housing. You do not need to be an expert to see what it shows, and I am going to keep it simple.
+I went through every house sale here from 2015 to 2025, all 21,720 of them. I looked at the 5,775 companies registered to a Burnley postcode, and the council's own research into shared housing. You do not need to be an expert to see what it shows, and I am going to keep it simple. Burnley is being quietly bought out from under the people who live here, and most of them have no idea it is happening.
 
 One thing up front. When I say Burnley, I mean the borough: the council area that covers the town plus Padiham, Worsthorne, Cliviger, Hapton, Briercliffe and the villages around it, not the parliamentary seat. Exactly which boundary each figure uses is set out at the bottom.
 
@@ -170,16 +170,16 @@ The council's own research, carried out by an independent housing body in 2023, 
 <div class="subtext" style="color: #8e8e93; margin-top: 8px;">More than half of Burnley's estimated shared rented houses are not on any official list.</div>
 </div>
 
-There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. Those nine hold the bulk of the problem, an estimated 862 of the 916 shared houses, while the other six have no such protection. They hold an estimated **54** shared houses today, but they are where the next wave of conversions will go once the inner wards are locked down.
+There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. Those nine hold the bulk of the problem, an estimated 775 of the 916 shared houses, while the other six have no such protection. They hold an estimated **141** between them, and they are where the next wave of conversions will go once the inner wards are locked down.
 
 | Ward with no protection | Estimated shared houses |
 |---|---|
-| Hapton with Park | 15 |
-| Briercliffe | 12 |
-| Cliviger with Worsthorne | 8 |
-| Lanehead | 7 |
-| Coalclough with Deerplay | 6 |
-| Whittlefield with Ightenhill | 6 |
+| Lanehead | 44 |
+| Hapton with Park | 32 |
+| Briercliffe | 22 |
+| Whittlefield with Ightenhill | 17 |
+| Cliviger with Worsthorne | 14 |
+| Coal Clough with Deerplay | 12 |
 
 I have since looked at Burnley's shared houses in detail, including the gap between the official count and the real one, in [The Shared Houses Burnley Cannot See](/news/the-shared-houses-burnley-cannot-see/).
 
@@ -187,7 +187,7 @@ I have since looked at Burnley's shared houses in detail, including the gap betw
 
 ## What I want done
 
-None of this is against the law. It is what happens when the cheapest houses in Lancashire meet investors looking for a return. But a town has a right to know what is happening to its own streets, and a council has a duty to keep up.
+None of this is against the law. It is what happens when the cheapest houses in Lancashire meet investors looking for a return, and a system that leaves the door wide open. But a town has a right to know what is being done to its own streets, and a council has a duty to keep up. For too long, nobody did.
 
 Three things follow from the numbers:
 
@@ -195,7 +195,7 @@ Three things follow from the numbers:
 - **Find the missing 516.** More than half the town's estimated shared houses are on no register. A house the council cannot see is a house it cannot check for safety, overcrowding or basic standards.
 - **Name the owners.** The ownership records are public. People are entitled to know who owns the streets they live on. I have now published the first cut: [The Names Behind the Doors](/news/who-owns-burnley-the-names/).
 
-I grew up here. A town where you can no longer afford to buy the house you grew up in is a town with a problem, and the first step to fixing a problem is being honest about its size. The records are public. I just put them in one place.
+I grew up here. A town where local people can no longer afford to buy the house they grew up in, because investors and faraway funds got there first, is a town being taken from the people who built it. The first step to stopping that is being honest about its size. The records are public. I just put them in one place, where the people of Burnley can finally see what is happening to their own town.
 
 ---
 
