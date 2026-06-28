@@ -194,6 +194,9 @@ CARDS = [
     dict(out="burnley-spending-2025-26.png", eyebrow="Burnley  ·  Transparency", stat="£38m",
          label="every payment Burnley Council made over £500 last year, all 4,489 of them, now searchable in one place.",
          source="Burnley Council, 2025/26"),
+    dict(out="temporary-accommodation.png", eyebrow="Burnley  ·  DOGE", stat="1 in 9",
+         label="Burnley homelessness cases now come from people leaving Home Office asylum accommodation, up from 1 in 60 two years ago.",
+         source="MHCLG / Burnley Council"),
 ]
 
 if __name__ == "__main__":
