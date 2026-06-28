@@ -1,7 +1,7 @@
 ---
-title: "Burnley Doesn't Pay for Asylum Hotels. It Pays for What Comes Next."
+title: "The Asylum System Is Dumping Its Bill on Burnley"
 date: 2026-06-23T16:00:00
-description: "I went through every penny Burnley Council spends housing homeless people, then the official homelessness figures. The council does not pay for asylum-seeker accommodation, the Home Office does. But when those decisions are made, the cost lands on Burnley anyway, and in one year the asylum share of local homelessness jumped from 1 in 60 to 1 in 9."
+description: "I went through every penny Burnley Council spends on temporary accommodation, then the official homelessness figures. A national asylum policy written in Westminster keeps arriving here as a homelessness bill, and in a single year the asylum share of Burnley's homelessness jumped from 1 in 60 to 1 in 9, in a town that can least afford it."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/temporary-accommodation.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
@@ -12,9 +12,9 @@ featured: false
 draft: false
 ---
 
-There is a thing everyone thinks they know: that the council spends a fortune putting asylum seekers up in hotels. So I went and checked. I pulled every payment Burnley Borough Council has made on temporary accommodation over five years, then cross-checked it against the official government homelessness figures. What I found is more interesting than the rumour, and in some ways worse.
+I went through every penny Burnley Borough Council has spent on temporary accommodation over five years, then set it against the official government homelessness figures, to put a number on something nobody around here had: what the asylum system is really costing this town.
 
-The council does **not** pay for asylum-seeker accommodation. Not a penny of it. That is run by the Home Office through a private contractor, Serco, and it does not touch the council's budget. But the decisions Whitehall makes about asylum land on Burnley all the same, just one step later, and the bill arrives dressed as homelessness. In the space of a single year, the share of local homelessness caused by people leaving asylum accommodation went from **1 in 60 to 1 in 9**.
+The cost is not where most people look for it. Asylum accommodation itself is run and paid for by the Home Office, through a contractor called Serco, and it does not touch the council's budget. But Burnley is one of the towns the system leans on hardest, because its housing is cheap, and nobody stays in that accommodation forever. The moment the Home Office grants someone status, a 28-day clock starts, and when it runs out the place they turn up is the council's homelessness desk. That is how a policy written in Westminster keeps arriving in Burnley as a homelessness bill, and in the space of a single year the share of local homelessness caused by people leaving asylum accommodation jumped from **1 in 60 to 1 in 9**.
 
 <div class="viz-info">
 This is a DOGE investigation: built from the council's own published spending and the Ministry of Housing's official statutory homelessness data. Every number is sourced at the bottom. It is hard on the system that created the cost, not on the people caught in it.
@@ -33,9 +33,9 @@ This is a DOGE investigation: built from the council's own published spending an
 <span class="sublabel">Up from 1 in 60 two years earlier</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">£0</span>
-<span class="label">What the council pays for asylum-seeker housing</span>
-<span class="sublabel">That is the Home Office, via Serco</span>
+<span class="value xl" style="color: #bf5af2;">4th</span>
+<span class="label">Most deprived district in England</span>
+<span class="sublabel">And still used as the asylum overflow</span>
 </div>
 <div class="viz-stat orange">
 <span class="value xl" style="color: #ff9f0a;">£34k → £288k</span>
@@ -64,15 +64,9 @@ Temporary accommodation is the housing a council provides when someone becomes h
 
 Split it by type and it is roughly **£1.0m on hotels and inns, £1.2m on supported-housing charities, and £0.2m on leased private homes**. The hotels are the emergency end: when someone presents as homeless at 5pm with nowhere to go, a B&B is often the only option that night. The council's own figures show how that cost has grown. In 2019/20 it housed 78 applicants in hotels for **£34,037**. By 2024/25 the hotel bill had reached roughly **£288,000** a year. Something changed.
 
-## What it is *not*: the asylum-hotel myth
+## The surge in the figures
 
-Here is the part that gets repeated and is simply wrong. The big "asylum hotels" you read about in the national press are **Home Office** contracts, run by **Serco** in the North West. Burnley is a dispersal area, so there are a lot of asylum seekers housed in the town's cheap private-rented stock, but **the council does not pay for any of it**. Across five years of council spending, the only payment to Serco at all is a single £4,450 item from the Covid period. The council is not renting hotels for asylum seekers. That bill belongs to Whitehall.
-
-So if you want to be angry about the cost of the asylum system, be angry at the right address. It is not the Town Hall.
-
-## What it *is*: the surge hiding in the figures
-
-Now the part that is real, and that nobody talks about. When the Home Office grants someone refugee status, they have just **28 days** to leave their Serco accommodation. After that they are on their own, and the place they turn up is the council's homelessness desk, because a refugee with leave to remain is owed exactly the same duty as anyone else. At that moment the cost steps quietly off the Home Office's books and onto Burnley's.
+A refugee granted leave to remain is owed exactly the same homelessness duty as any other resident. So when the 28-day clock runs out and people present to the council with nowhere to go, the cost lands here. This is the part of the asylum story nobody talks about, because by the time it reaches the council it does not look like asylum any more. It looks like homelessness.
 
 The official Ministry of Housing data records why each household became homeless, and one of the reasons is "required to leave Home Office asylum accommodation". Here is what happened in Burnley.
 
