@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-28T08:46:46.908551+00:00",
+    "generated": "2026-06-28T19:13:42.951074+00:00",
     "live_works": 1378,
     "archived_works": 11171,
     "total_analysed": 12549
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1065,
+        "days": 1066,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 542,
+        "days": 543,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -630,7 +630,7 @@
       {
         "road": "Church Lane",
         "district": "preston",
-        "days": 373,
+        "days": 374,
         "operator": "Lancashire County Council",
         "start_date": "2025-06-19T09:00:00+00:00",
         "category": "Major"
@@ -638,7 +638,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 352,
+        "days": 353,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -646,7 +646,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 296,
+        "days": 297,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -670,7 +670,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 211,
+        "days": 212,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -678,7 +678,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 186,
+        "days": 187,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -798,6 +798,14 @@
         "category": "Major"
       },
       {
+        "road": "Derwentwater Place",
+        "district": "preston",
+        "operator": "T-Mobile (UK) Limited",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Alder Lane",
         "district": "west_lancashire",
         "operator": "United Utilities Water",
@@ -822,6 +830,22 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Clifton Drive",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Clifton Drive South",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Moorfield Drive",
         "district": "fylde",
         "operator": "BT",
@@ -830,14 +854,38 @@
         "category": "Minor"
       },
       {
+        "road": "Longridge Road",
+        "district": "preston",
+        "operator": "BT",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Meadow Street",
+        "district": "preston",
+        "operator": "Blackburn with Darwen Borough Council",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Westleigh Road",
         "district": "preston",
         "operator": "Lancashire County Council",
         "planned_end": "2026-06-27",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Greetby Hill",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-06-28",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 8
+    "overdue_count": 14
   }
 }
