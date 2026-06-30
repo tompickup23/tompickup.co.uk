@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-06-30T09:27:58.077835+00:00",
+    "generated": "2026-06-30T19:50:02.154604+00:00",
     "live_works": 1471,
     "archived_works": 11305,
     "total_analysed": 12776
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1067,
+        "days": 1068,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 544,
+        "days": 545,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -758,7 +758,7 @@
       {
         "road": "Shore Road",
         "district": "west_lancashire",
-        "days": 108,
+        "days": 109,
         "operator": "United Utilities Water",
         "start_date": "2026-03-13T13:30:00+00:00",
         "category": "Major"
@@ -798,6 +798,14 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Blackpool Road",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Bluebell Way",
         "district": "preston",
         "operator": "BT",
@@ -806,12 +814,44 @@
         "category": "Major"
       },
       {
+        "road": "Moor Lane",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "West Strand",
+        "district": "preston",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Church Lane",
         "district": "ribble_valley",
         "operator": "BT",
         "planned_end": "2026-06-29",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Whalley Clitheroe Bypass",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Whins Lane",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
       },
       {
         "road": "Liverpool Road",
@@ -828,6 +868,22 @@
         "planned_end": "2026-06-30",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Fleetwood Road South",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Windermere Avenue",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Bolton Road",
@@ -886,6 +942,14 @@
         "category": "Minor"
       },
       {
+        "road": "Irwell Street",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Corncroft",
         "district": "south_ribble",
         "operator": "BT",
@@ -910,9 +974,33 @@
         "category": "Minor"
       },
       {
+        "road": "Mellor Road",
+        "district": "south_ribble",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Moss Side Way",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Skip Lane",
         "district": "south_ribble",
         "operator": "BT",
+        "planned_end": "2026-06-30",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Western Drive",
+        "district": "south_ribble",
+        "operator": "United Utilities Water",
         "planned_end": "2026-06-30",
         "days_overdue": 0,
         "category": "Minor"
@@ -922,94 +1010,6 @@
         "district": "wyre",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Rear 30 To 68 Manchester Road",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-06-30",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Greenwood",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Holden Street",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Hurst Green",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Lewis Close",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Spendmore Lane",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Astley Crescent",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Alexandra Road",
-        "district": "lancaster",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Bank Road",
-        "district": "lancaster",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Leighton Court",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-29",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Leslie Avenue",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-06-30",
         "days_overdue": 0,
         "category": "Minor"
       }
