@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-07-01T09:39:22.095247+00:00",
+    "generated": "2026-07-01T19:48:36.797884+00:00",
     "live_works": 1430,
     "archived_works": 11472,
     "total_analysed": 12902
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1068,
+        "days": 1069,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 545,
+        "days": 546,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -758,7 +758,7 @@
       {
         "road": "Shore Road",
         "district": "west_lancashire",
-        "days": 109,
+        "days": 110,
         "operator": "United Utilities Water",
         "start_date": "2026-03-13T13:30:00+00:00",
         "category": "Major"
@@ -773,6 +773,14 @@
       }
     ],
     "overdue_works": [
+      {
+        "road": "Burnley Road",
+        "district": "burnley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
       {
         "road": "Moseley Road",
         "district": "burnley",
@@ -822,6 +830,14 @@
         "category": "Minor"
       },
       {
+        "road": "Clitheroe Road",
+        "district": "ribble_valley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Market Place",
         "district": "ribble_valley",
         "operator": "United Utilities Water",
@@ -838,6 +854,14 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Whalley Clitheroe Bypass",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Square Lane",
         "district": "west_lancashire",
         "operator": "Lancashire County Council",
@@ -846,7 +870,47 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Lambs Road",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Poulton Road",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Skippool Road",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Church Street",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Millwood Glade",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Rufford Road",
         "district": "chorley",
         "operator": "BT",
         "planned_end": "2026-07-01",
@@ -902,6 +966,14 @@
         "category": "Standard"
       },
       {
+        "road": "Skipton Road",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Adelaide Street",
         "district": "preston",
         "operator": "T-Mobile (UK) Limited",
@@ -938,78 +1010,6 @@
         "district": "preston",
         "operator": "United Utilities Water",
         "planned_end": "2026-06-30",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Blackthorn Drive",
-        "district": "ribble_valley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-30",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Brooklands Avenue",
-        "district": "rossendale",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Burnley Road",
-        "district": "rossendale",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Burnley Road",
-        "district": "rossendale",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Valley Road",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Burnley Road",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lancaster Drive",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-07-01",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Preston Road",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-06-30",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Winchester Avenue",
-        "district": "chorley",
-        "operator": "BT",
-        "planned_end": "2026-07-01",
         "days_overdue": 0,
         "category": "Minor"
       }
