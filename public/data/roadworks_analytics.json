@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-07-03T08:56:56.077548+00:00",
+    "generated": "2026-07-03T19:14:57.142902+00:00",
     "live_works": 1508,
     "archived_works": 11768,
     "total_analysed": 13276
@@ -490,75 +490,75 @@
   "district_volume": {
     "west_lancashire": {
       "active": 200,
-      "completed_30d": 661,
+      "completed_30d": 637,
       "completed_90d": 1671,
       "trend": "stable"
     },
     "preston": {
       "active": 161,
-      "completed_30d": 458,
+      "completed_30d": 444,
       "completed_90d": 1122,
-      "trend": "increasing"
+      "trend": "stable"
     },
     "south_ribble": {
       "active": 158,
-      "completed_30d": 437,
+      "completed_30d": 423,
       "completed_90d": 1057,
       "trend": "increasing"
     },
     "lancaster": {
       "active": 155,
-      "completed_30d": 500,
+      "completed_30d": 491,
       "completed_90d": 1087,
       "trend": "increasing"
     },
     "chorley": {
       "active": 136,
-      "completed_30d": 343,
+      "completed_30d": 328,
       "completed_90d": 916,
       "trend": "stable"
     },
     "burnley": {
       "active": 130,
-      "completed_30d": 232,
+      "completed_30d": 227,
       "completed_90d": 687,
       "trend": "stable"
     },
     "wyre": {
       "active": 129,
-      "completed_30d": 261,
+      "completed_30d": 252,
       "completed_90d": 671,
       "trend": "stable"
     },
     "pendle": {
       "active": 104,
-      "completed_30d": 233,
+      "completed_30d": 226,
       "completed_90d": 587,
       "trend": "stable"
     },
     "hyndburn": {
       "active": 102,
-      "completed_30d": 162,
+      "completed_30d": 156,
       "completed_90d": 582,
       "trend": "stable"
     },
     "rossendale": {
       "active": 90,
-      "completed_30d": 210,
+      "completed_30d": 202,
       "completed_90d": 513,
-      "trend": "increasing"
+      "trend": "stable"
     },
     "ribble_valley": {
       "active": 80,
-      "completed_30d": 201,
+      "completed_30d": 197,
       "completed_90d": 499,
-      "trend": "increasing"
+      "trend": "stable"
     },
     "fylde": {
       "active": 63,
-      "completed_30d": 227,
+      "completed_30d": 221,
       "completed_90d": 556,
-      "trend": "increasing"
+      "trend": "stable"
     }
   },
   "severity_trends": {
@@ -569,9 +569,9 @@
       "unknown": 0
     },
     "completed_30d": {
-      "high": 720,
-      "medium": 919,
-      "low": 2286,
+      "high": 698,
+      "medium": 893,
+      "low": 2213,
       "unknown": 0
     }
   },
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1070,
+        "days": 1071,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 547,
+        "days": 548,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -630,7 +630,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 357,
+        "days": 358,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -638,7 +638,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 301,
+        "days": 302,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -654,7 +654,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 216,
+        "days": 217,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -662,7 +662,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 191,
+        "days": 192,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -758,7 +758,7 @@
       {
         "road": "Shore Road",
         "district": "west_lancashire",
-        "days": 111,
+        "days": 112,
         "operator": "United Utilities Water",
         "start_date": "2026-03-13T13:30:00+00:00",
         "category": "Major"
@@ -773,6 +773,14 @@
       }
     ],
     "overdue_works": [
+      {
+        "road": "Barrowford Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
       {
         "road": "Eastern Avenue",
         "district": "burnley",
@@ -838,6 +846,14 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Keerside",
+        "district": "lancaster",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Immediate - Emergency"
+      },
+      {
         "road": "Lancaster Road",
         "district": "lancaster",
         "operator": "United Utilities Water",
@@ -878,6 +894,30 @@
         "category": "Immediate - Emergency"
       },
       {
+        "road": "Whalley Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Bocholt Way",
+        "district": "rossendale",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Haslingden Road",
+        "district": "rossendale",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Market Street",
         "district": "rossendale",
         "operator": "Electricity North West Limited",
@@ -896,6 +936,14 @@
       {
         "road": "Wigan Road",
         "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Wigan Road",
+        "district": "south_ribble",
         "operator": "Sapphire",
         "planned_end": "2026-07-03",
         "days_overdue": 0,
@@ -905,6 +953,22 @@
         "road": "Worden Lane",
         "district": "south_ribble",
         "operator": "BT",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "Cavalry Way",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-07-03",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Park Road",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-07-03",
         "days_overdue": 0,
         "category": "Standard"
@@ -948,70 +1012,6 @@
         "planned_end": "2026-07-02",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Brookhouse Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-03",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Chester Close",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-03",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Coniston Road",
-        "district": "lancaster",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-02",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Edward Street",
-        "district": "lancaster",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-07-02",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Fairways Avenue",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-07-03",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Forest Way",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-07-03",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Garstang Road",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-07-03",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Hastings Road",
-        "district": "preston",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-02",
-        "days_overdue": 0,
-        "category": "Minor"
       }
     ],
     "overdue_count": 30
