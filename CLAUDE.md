@@ -32,3 +32,7 @@ python app.py                    # Run locally
 
 ## Related Projects
 Links to all 13 tompickup23 GitHub repos — this is the portfolio hub.
+
+## Cross-repo lessons (5 Jul 2026)
+
+Article method, fact-check protocol, factual anchors, imagery rules, and the manual deploy flow live in the clawd repo: `/Users/tompickup/clawd/docs/lessons/editorial-method.md`. The publish procedure is also encoded as the `/publish-tompickup` skill in clawd. Read before publishing, and append new lessons there, not here.
