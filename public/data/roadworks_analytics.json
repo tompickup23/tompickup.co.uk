@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-07-13T09:18:39.596047+00:00",
+    "generated": "2026-07-13T19:18:55.577124+00:00",
     "live_works": 1518,
     "archived_works": 12739,
     "total_analysed": 14257
@@ -490,73 +490,73 @@
   "district_volume": {
     "west_lancashire": {
       "active": 236,
-      "completed_30d": 587,
+      "completed_30d": 558,
       "completed_90d": 1778,
       "trend": "stable"
     },
     "preston": {
       "active": 173,
-      "completed_30d": 443,
+      "completed_30d": 413,
       "completed_90d": 1236,
       "trend": "stable"
     },
     "lancaster": {
       "active": 166,
-      "completed_30d": 428,
+      "completed_30d": 409,
       "completed_90d": 1183,
       "trend": "stable"
     },
     "south_ribble": {
       "active": 162,
-      "completed_30d": 424,
+      "completed_30d": 406,
       "completed_90d": 1161,
       "trend": "stable"
     },
     "burnley": {
       "active": 130,
-      "completed_30d": 203,
+      "completed_30d": 192,
       "completed_90d": 730,
-      "trend": "stable"
+      "trend": "decreasing"
     },
     "chorley": {
       "active": 111,
-      "completed_30d": 336,
+      "completed_30d": 320,
       "completed_90d": 997,
       "trend": "stable"
     },
     "wyre": {
       "active": 111,
-      "completed_30d": 234,
+      "completed_30d": 230,
       "completed_90d": 723,
       "trend": "stable"
     },
     "hyndburn": {
       "active": 106,
-      "completed_30d": 153,
+      "completed_30d": 149,
       "completed_90d": 635,
       "trend": "decreasing"
     },
     "pendle": {
       "active": 100,
-      "completed_30d": 201,
+      "completed_30d": 186,
       "completed_90d": 638,
       "trend": "stable"
     },
     "fylde": {
       "active": 80,
-      "completed_30d": 232,
+      "completed_30d": 228,
       "completed_90d": 621,
       "trend": "stable"
     },
     "rossendale": {
       "active": 74,
-      "completed_30d": 212,
+      "completed_30d": 209,
       "completed_90d": 575,
       "trend": "stable"
     },
     "ribble_valley": {
       "active": 69,
-      "completed_30d": 177,
+      "completed_30d": 163,
       "completed_90d": 544,
       "trend": "stable"
     }
@@ -569,9 +569,9 @@
       "unknown": 0
     },
     "completed_30d": {
-      "high": 698,
-      "medium": 824,
-      "low": 2108,
+      "high": 667,
+      "medium": 782,
+      "low": 2014,
       "unknown": 0
     }
   },
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1080,
+        "days": 1081,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 557,
+        "days": 558,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -774,6 +774,62 @@
     ],
     "overdue_works": [
       {
+        "road": "Briercliffe Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Garden Street",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Moor Lane",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Oxford Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Rossendale Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Scott Street",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Station Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Hermitage Street",
         "district": "hyndburn",
         "operator": "Electricity North West Limited",
@@ -822,6 +878,46 @@
         "category": "Minor"
       },
       {
+        "road": "Central Avenue North",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Smallwood Hey Road",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "West Drive",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Branch Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Kings Drive",
+        "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Woodlands Close",
         "district": "fylde",
         "operator": "BT",
@@ -833,6 +929,14 @@
         "road": "Glebe Street",
         "district": "hyndburn",
         "operator": "BT",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Meadow Street",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
         "planned_end": "2026-07-13",
         "days_overdue": 0,
         "category": "Minor"
@@ -860,6 +964,14 @@
         "planned_end": "2026-07-13",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Ventnor Road",
+        "district": "rossendale",
+        "operator": "Nexfibre",
+        "planned_end": "2026-07-13",
+        "days_overdue": 0,
+        "category": "Standard"
       },
       {
         "road": "Lever House Lane",
@@ -894,121 +1006,9 @@
         "category": "Minor"
       },
       {
-        "road": "Dick Lane",
-        "district": "chorley",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Arncliffe Avenue",
-        "district": "hyndburn",
+        "road": "Beach Road",
+        "district": "wyre",
         "operator": "United Utilities Water",
-        "planned_end": "2026-07-12",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Rear 8 To 18 Segar Street",
-        "district": "hyndburn",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Back Crescent Street",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brookhouse Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Denny Beck Lane",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "High Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Quernmore Road",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Victoria Street",
-        "district": "lancaster",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Rear 2 To 20 Fountain Street",
-        "district": "pendle",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-07-12",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Fir Tree Lane",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Firbeck",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lindens",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Southport Road",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-13",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Willow Hey",
-        "district": "west_lancashire",
-        "operator": "BT",
         "planned_end": "2026-07-13",
         "days_overdue": 0,
         "category": "Minor"
