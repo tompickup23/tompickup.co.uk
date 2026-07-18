@@ -1,0 +1,30 @@
+{
+ "$meta": {
+  "sources": [
+   "https://lgpsboard.org/wp-content/uploads/2026/04/Lancashire-CPF-Scheme-Funding-Report.pdf",
+   "https://council.lancashire.gov.uk/documents/s265025/Lancashire%20County%20Pension%20Fund%20Annual%20Report%20Year%20Ending%2031%20March%202025.pdf",
+   "https://www.lgcplus.com/lgps/pension-contribution-cuts-to-save-councils-millions-18-03-2026/",
+   "https://www.cumbriapensionfund.org/about-the-scheme/about-the-pension-fund",
+   "https://pensions.northamptonshire.gov.uk/"
+  ],
+  "primary": "Mercer, Report on the Actuarial Valuation as at 31 March 2025 (signed valuation report)",
+  "compiled": "2026-07-18"
+ },
+ "fund": "Lancashire County Pension Fund (LGPS), administered by Lancashire County Council; day-to-day administration by Local Pensions Partnership",
+ "assets_bn": 11.974,
+ "valuationDate": "2025-03-31",
+ "fundingLevelPct": 134,
+ "surplus_m": 3036,
+ "fundingLevel2022Pct": 115,
+ "members": { "active": 58861, "deferred": 84340, "pensioners": 61757, "total": 204958 },
+ "allFifteenCouncilsInFund": true,
+ "allFifteenNote": "Rates & Adjustments Certificate lists all 15 Lancashire councils as Major Authorities in the single fund — including Blackpool and Blackburn with Darwen, which stayed in the county fund on becoming unitary in 1998",
+ "lccContribution": { "ratePct2526": 16.3, "ratePct2627": 9.3, "cash2526_m": 87, "cash2627_m": 52,
+   "note": "£35m whole-council cash reduction following the 2025 valuation surplus; LCC's budget papers assumed ~£21.2m net revenue benefit (reconciliation of the two is inference, not verified)", "confidence": "medium-high" },
+ "nextValuation": "2028-03-31 — the day before vesting day; projected surplus ~£3,370m (~137%)",
+ "lgrPrecedent": {
+  "cumbria": "Fund NOT split at the 2023 county split — Westmorland & Furness became administering authority for the single Cumbria Pension Fund, Cumberland an employer",
+  "northamptonshire": "Same pattern in 2021 — West Northamptonshire took on the single fund as administering authority, North Northamptonshire an employer",
+  "implication": "Precedent points to LCPF remaining one fund with one successor unitary designated administering authority (a structural-change-order decision) — contextual inference, not a published decision for Lancashire"
+ }
+}
