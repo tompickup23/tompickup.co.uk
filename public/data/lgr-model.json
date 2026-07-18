@@ -900,6 +900,303 @@
    "lccPosition": "Lancashire County Council's leader opposed the decision, citing affordability, delivery and the scale of change"
   }
  },
+ "costsVsSavings": {
+  "$meta": {
+   "note": "Cost-vs-savings scenario assumptions. Every parameter is traceable: savings run-rate from the proposers' business case (via lancashire.thelead.uk); realisation rates and cost envelope from the precedents evidence base (precedents.json); equal-pay exposure from Reform UK's published Lancashire LGR analysis (own modelled estimate, Mar 2026); government offsets from government.json. Outputs are MODELLED SCENARIOS, not forecasts.",
+   "years": [
+    "2026/27",
+    "2027/28",
+    "2028/29",
+    "2029/30",
+    "2030/31",
+    "2031/32",
+    "2032/33",
+    "2033/34",
+    "2034/35",
+    "2035/36",
+    "2036/37",
+    "2037/38"
+   ],
+   "costProfile": {
+    "note": "Transition spend profile: 10% pre-SCO year, 30% shadow year, 40% vesting year, 20% year after",
+    "weights": [
+     0.1,
+     0.3,
+     0.4,
+     0.2,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "governmentOffset_m": 4.6,
+   "offsetNote": "4 x >=\u00a3900k transition funding + 4 x \u00a3150k leadership top-ups + Lancashire's ~\u00a30.4m share of proposal-development funding"
+  },
+  "fullRunRate_m": 81.9,
+  "runRateNote": "Proposers' claimed recurring annual benefit from 2032/33 (their business case; not independently verified)",
+  "scenarios": [
+   {
+    "key": "proposers",
+    "label": "Proposers' case",
+    "basis": "Savings as claimed (\u00a381.9m/yr by 2032/33, linear ramp from vesting); transition at the centre of the \u00a350-100m precedent envelope",
+    "transitionCost_m": 75,
+    "realisationPct": 100,
+    "annualRunRate_m": 81.9,
+    "equalPay_m": 0,
+    "payback": "2030/31",
+    "tenYearNet_m": 584.8,
+    "series": [
+     {
+      "year": "2026/27",
+      "savings_m": 0.0,
+      "costs_m": 2.9,
+      "cumNet_m": -2.9
+     },
+     {
+      "year": "2027/28",
+      "savings_m": 0.0,
+      "costs_m": 22.5,
+      "cumNet_m": -25.4
+     },
+     {
+      "year": "2028/29",
+      "savings_m": 16.4,
+      "costs_m": 30.0,
+      "cumNet_m": -39.0
+     },
+     {
+      "year": "2029/30",
+      "savings_m": 32.8,
+      "costs_m": 15.0,
+      "cumNet_m": -21.3
+     },
+     {
+      "year": "2030/31",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 27.9
+     },
+     {
+      "year": "2031/32",
+      "savings_m": 65.5,
+      "costs_m": 0,
+      "cumNet_m": 93.4
+     },
+     {
+      "year": "2032/33",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 175.3
+     },
+     {
+      "year": "2033/34",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 257.2
+     },
+     {
+      "year": "2034/35",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 339.1
+     },
+     {
+      "year": "2035/36",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 421.0
+     },
+     {
+      "year": "2036/37",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 502.9
+     },
+     {
+      "year": "2037/38",
+      "savings_m": 81.9,
+      "costs_m": 0,
+      "cumNet_m": 584.8
+     }
+    ]
+   },
+   {
+    "key": "precedent",
+    "label": "Precedent-adjusted",
+    "basis": "60% realisation of the claimed run-rate \u2014 reflecting Somerset (~38% of projection in year one), North Yorkshire (back-loaded) and Northamptonshire (partial); Buckinghamshire's over-delivery is the outlier. Transition cost above centre, reflecting the county-split premium",
+    "transitionCost_m": 85,
+    "realisationPct": 60,
+    "annualRunRate_m": 49.1,
+    "equalPay_m": 0,
+    "payback": "2031/32",
+    "tenYearNet_m": 337.3,
+    "series": [
+     {
+      "year": "2026/27",
+      "savings_m": 0.0,
+      "costs_m": 3.9,
+      "cumNet_m": -3.9
+     },
+     {
+      "year": "2027/28",
+      "savings_m": 0.0,
+      "costs_m": 25.5,
+      "cumNet_m": -29.4
+     },
+     {
+      "year": "2028/29",
+      "savings_m": 12.3,
+      "costs_m": 34.0,
+      "cumNet_m": -51.1
+     },
+     {
+      "year": "2029/30",
+      "savings_m": 24.6,
+      "costs_m": 17.0,
+      "cumNet_m": -43.5
+     },
+     {
+      "year": "2030/31",
+      "savings_m": 36.9,
+      "costs_m": 0,
+      "cumNet_m": -6.7
+     },
+     {
+      "year": "2031/32",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 42.5
+     },
+     {
+      "year": "2032/33",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 91.6
+     },
+     {
+      "year": "2033/34",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 140.7
+     },
+     {
+      "year": "2034/35",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 189.9
+     },
+     {
+      "year": "2035/36",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 239.0
+     },
+     {
+      "year": "2036/37",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 288.1
+     },
+     {
+      "year": "2037/38",
+      "savings_m": 49.1,
+      "costs_m": 0,
+      "cumNet_m": 337.3
+     }
+    ]
+   },
+   {
+    "key": "downside",
+    "label": "Downside",
+    "basis": "Cumbria pattern: savings deferred and largely absorbed by disaggregation; transition at the top of the envelope; the \u00a385.5m modelled equal-pay exposure crystallises post-vesting (as an actual claim did in Cumbria, five months after vesting day)",
+    "transitionCost_m": 100,
+    "realisationPct": 30,
+    "annualRunRate_m": 24.6,
+    "equalPay_m": 85.5,
+    "payback": "2036/37",
+    "tenYearNet_m": 27.9,
+    "series": [
+     {
+      "year": "2026/27",
+      "savings_m": 0.0,
+      "costs_m": 5.4,
+      "cumNet_m": -5.4
+     },
+     {
+      "year": "2027/28",
+      "savings_m": 0.0,
+      "costs_m": 30.0,
+      "cumNet_m": -35.4
+     },
+     {
+      "year": "2028/29",
+      "savings_m": 6.1,
+      "costs_m": 40.0,
+      "cumNet_m": -69.3
+     },
+     {
+      "year": "2029/30",
+      "savings_m": 12.3,
+      "costs_m": 105.5,
+      "cumNet_m": -162.5
+     },
+     {
+      "year": "2030/31",
+      "savings_m": 18.4,
+      "costs_m": 0,
+      "cumNet_m": -144.0
+     },
+     {
+      "year": "2031/32",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": -119.5
+     },
+     {
+      "year": "2032/33",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": -94.9
+     },
+     {
+      "year": "2033/34",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": -70.3
+     },
+     {
+      "year": "2034/35",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": -45.8
+     },
+     {
+      "year": "2035/36",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": -21.2
+     },
+     {
+      "year": "2036/37",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": 3.4
+     },
+     {
+      "year": "2037/38",
+      "savings_m": 24.6,
+      "costs_m": 0,
+      "cumNet_m": 27.9
+     }
+    ]
+   }
+  ]
+ },
  "authorities": {
   "Lancaster": {
    "ons": "E07000121",

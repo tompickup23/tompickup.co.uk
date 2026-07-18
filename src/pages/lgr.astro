@@ -704,6 +704,48 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </div>
     </section>
 
+    <!-- Costs vs savings -->
+    <section class="doge-section" id="costs-savings">
+      <h2 class="doge-h2">Costs vs savings: three scenarios</h2>
+      <p class="doge-note">
+        Nobody can honestly give one number for what this reorganisation nets. What can be done is to model the
+        claimed savings against the precedent record, transparently. All three scenarios start from the proposers'
+        claimed run-rate (£{model.costsVsSavings.fullRunRate_m}m a year by 2032/33), apply a realisation rate and a
+        transition cost drawn from the six completed reorganisations above, and net off the government's
+        ~£{model.costsVsSavings.$meta.governmentOffset_m}m support. Cumulative position runs to 2037/38 — a decade
+        after vesting.
+      </p>
+      <div class="lgr-prec-grid">
+        {model.costsVsSavings.scenarios.map((s) => (
+          <div class="lgr-prec-card">
+            <div class="lgr-prec-name">{s.label}</div>
+            <div class="lgr-prec-row"><span>Savings realised</span><b>£{s.annualRunRate_m}m/yr ({s.realisationPct}%)</b></div>
+            <div class="lgr-prec-row"><span>Transition cost</span><b>£{s.transitionCost_m}m</b></div>
+            <div class="lgr-prec-row"><span>Equal-pay crystallised</span><b>{s.equalPay_m ? `£${s.equalPay_m}m` : '—'}</b></div>
+            <div class="lgr-prec-row"><span>Payback year</span><b>{s.payback}</b></div>
+            <div class="lgr-prec-row"><span>Net position by 2037/38</span><b>{s.tenYearNet_m > 0 ? '+' : ''}£{fmt(s.tenYearNet_m)}m</b></div>
+            <p class="lgr-prec-note">{s.basis}</p>
+          </div>
+        ))}
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The spread is the finding: on the same decision, the decade-end net position ranges from
+        <strong>+£{fmt(model.costsVsSavings.scenarios[0].tenYearNet_m)}m</strong> to
+        <strong>+£{fmt(model.costsVsSavings.scenarios[2].tenYearNet_m)}m</strong> — a twenty-fold difference —
+        and payback moves from {model.costsVsSavings.scenarios[0].payback} to {model.costsVsSavings.scenarios[2].payback}.
+        Which scenario Lancashire gets is decided by execution: whether pay harmonisation is done before vesting
+        (North Yorkshire) or left to drift (Somerset), and whether the county split is managed better than Cumbria's
+        and Northamptonshire's. For comparison, Reform UK's earlier analysis put the enhanced status quo at ~£552m
+        over ten years with no transition risk at all.
+      </p>
+      <p class="doge-note" style="font-size:0.78rem;">
+        Method: deterministic scenario model, all assumptions in the open data feed. The £81.9m run-rate is the
+        bidding councils' own claim, not verified; the £85.5m equal-pay figure is Reform UK's published modelled
+        exposure; realisation rates and cost envelope come from the precedents evidence base. These are scenarios,
+        not forecasts, and none includes balance-sheet disaggregation costs, which remain unquantifiable.
+      </p>
+    </section>
+
     <!-- Gaps -->
     <section class="doge-section">
       <h2 class="doge-h2">What isn't confirmed yet</h2>

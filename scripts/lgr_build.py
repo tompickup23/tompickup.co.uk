@@ -29,6 +29,7 @@ precedents = json.loads((DATA / "precedents.json").read_text())
 cca = json.loads((DATA / "cca.json").read_text())
 pensions = json.loads((DATA / "pensions.json").read_text())
 government = json.loads((DATA / "government.json").read_text())
+scen_in = json.loads((DATA / "scenarios.json").read_text())
 
 A = auth["authorities"]
 LCC_BUDGET = county["netBudget2627_m"]
@@ -139,6 +140,40 @@ model = {
     "pensions": pensions,
     "government": government,
 }
+
+# ---- Costs vs savings scenarios ----
+years = scen_in["$meta"]["years"]
+weights = scen_in["$meta"]["costProfile"]["weights"]
+offset = scen_in["$meta"]["governmentOffset_m"]
+run_rate = scen_in["fullRunRate_m"]
+scen_out = []
+for s in scen_in["scenarios"]:
+    rate = run_rate * s["realisation"]
+    series = []
+    cum = 0.0
+    payback = None
+    for i, y in enumerate(years):
+        save = rate * s["ramp"][i]
+        cost = s["transitionCost_m"] * weights[i]
+        if s.get("equalPay_m") and i == s.get("equalPayYear"):
+            cost += s["equalPay_m"]
+        if i == 0:
+            cost -= offset  # government support nets off early spend
+        net = save - cost
+        cum += net
+        if payback is None and cum > 0:
+            payback = y
+        series.append({"year": y, "savings_m": round(save, 1), "costs_m": round(cost, 1), "cumNet_m": round(cum, 1)})
+    scen_out.append({
+        "key": s["key"], "label": s["label"], "basis": s["basis"],
+        "transitionCost_m": s["transitionCost_m"], "realisationPct": round(s["realisation"] * 100),
+        "annualRunRate_m": round(rate, 1), "equalPay_m": s.get("equalPay_m", 0),
+        "payback": payback or "beyond 2037/38",
+        "tenYearNet_m": round(cum, 1),
+        "series": series,
+    })
+model["costsVsSavings"] = {"$meta": scen_in["$meta"], "fullRunRate_m": run_rate,
+                           "runRateNote": scen_in["runRateNote"], "scenarios": scen_out}
 
 (DATA / "model.json").write_text(json.dumps(model, indent=1))
 
