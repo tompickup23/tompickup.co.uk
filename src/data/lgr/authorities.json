@@ -5,7 +5,8 @@
   "budgetNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement) \u2014 see basis per entry.",
   "bandDNote": "Council's own Band D element only (excl. police \u00a3292.40, fire \u00a394.73, parish precepts). District residents also pay the LCC county precept.",
   "metricsNote": "Population and place indicators: ONS Census 2021 and official statistics via the ukdemographics data platform (extracted 2026-07).",
-  "compiled": "2026-07-18"
+  "compiled": "2026-07-18",
+  "balanceNote": "Usable revenue reserves at 31 Mar 2025 (earmarked + unallocated GF, excl. schools/DSG/HRA) from MHCLG Revenue Outturn Summary 2024-25; external borrowing from MHCLG Borrowing & Investment live table Q4 2025-26. Authority-reported; Blackburn with Darwen return uncertified."
  },
  "authorities": {
   "Lancaster": {
@@ -32,7 +33,11 @@
     "ealPct": 10.0,
     "pupils": 19353,
     "hmoPer1k": 6.63
-   }
+   },
+   "reserves_m": 28.7,
+   "debt_m": 56.9,
+   "debt_m_2026": 55.9,
+   "balanceNote": "part HRA-related"
   },
   "Preston": {
    "ons": "E07000123",
@@ -59,7 +64,10 @@
     "ealPct": 31.5,
     "pupils": 22418,
     "hmoPer1k": 3.54
-   }
+   },
+   "reserves_m": 42.8,
+   "debt_m": 12.4,
+   "debt_m_2026": 12.3
   },
   "Ribble Valley": {
    "ons": "E07000124",
@@ -85,7 +93,11 @@
     "ealPct": 4.8,
     "pupils": 12312,
     "hmoPer1k": 0.31
-   }
+   },
+   "reserves_m": 20.7,
+   "debt_m": 0.0,
+   "debt_m_2026": 0.0,
+   "balanceNote": "debt-free"
   },
   "Fylde": {
    "ons": "E07000119",
@@ -111,7 +123,11 @@
     "ealPct": 5.9,
     "pupils": 10000,
     "hmoPer1k": 0.44
-   }
+   },
+   "reserves_m": 15.8,
+   "debt_m": 0.0,
+   "debt_m_2026": 0.0,
+   "balanceNote": "debt-free"
   },
   "Wyre": {
    "ons": "E07000128",
@@ -137,7 +153,11 @@
     "ealPct": 2.3,
     "pupils": 14833,
     "hmoPer1k": 0.4
-   }
+   },
+   "reserves_m": 40.3,
+   "debt_m": 0.0,
+   "debt_m_2026": 0.0,
+   "balanceNote": "debt-free"
   },
   "Hyndburn": {
    "ons": "E07000120",
@@ -163,7 +183,10 @@
     "ealPct": 19.7,
     "pupils": 12774,
     "hmoPer1k": 0.35
-   }
+   },
+   "reserves_m": 18.1,
+   "debt_m": 9.5,
+   "debt_m_2026": 9.5
   },
   "Rossendale": {
    "ons": "E07000125",
@@ -189,7 +212,10 @@
     "ealPct": 5.5,
     "pupils": 12101,
     "hmoPer1k": 0.24
-   }
+   },
+   "reserves_m": 12.2,
+   "debt_m": 3.3,
+   "debt_m_2026": 3.0
   },
   "Pendle": {
    "ons": "E07000122",
@@ -215,7 +241,10 @@
     "ealPct": 37.6,
     "pupils": 15219,
     "hmoPer1k": 0.31
-   }
+   },
+   "reserves_m": 13.5,
+   "debt_m": 18.4,
+   "debt_m_2026": 16.9
   },
   "Burnley": {
    "ons": "E07000117",
@@ -241,7 +270,10 @@
     "ealPct": 24.7,
     "pupils": 15913,
     "hmoPer1k": 0.69
-   }
+   },
+   "reserves_m": 26.7,
+   "debt_m": 59.5,
+   "debt_m_2026": 62.9
   },
   "Chorley": {
    "ons": "E07000118",
@@ -267,7 +299,11 @@
     "ealPct": 5.8,
     "pupils": 18133,
     "hmoPer1k": 0.2
-   }
+   },
+   "reserves_m": 11.6,
+   "debt_m": 86.8,
+   "debt_m_2026": 83.0,
+   "balanceNote": "investment-asset borrowing"
   },
   "South Ribble": {
    "ons": "E07000126",
@@ -293,7 +329,11 @@
     "ealPct": 6.4,
     "pupils": 17245,
     "hmoPer1k": 0.22
-   }
+   },
+   "reserves_m": 19.9,
+   "debt_m": 0.0,
+   "debt_m_2026": 0.0,
+   "balanceNote": "no external borrowing per MHCLG returns"
   },
   "West Lancashire": {
    "ons": "E07000127",
@@ -319,7 +359,11 @@
     "ealPct": 7.1,
     "pupils": 16756,
     "hmoPer1k": 3.38
-   }
+   },
+   "reserves_m": 3.5,
+   "debt_m": 88.2,
+   "debt_m_2026": 98.2,
+   "balanceNote": "includes HRA housing debt; HRA reserves \u00a36.7m excluded"
   },
   "Blackpool": {
    "ons": "E06000009",
@@ -345,7 +389,11 @@
     "ealPct": 11.4,
     "pupils": 19901,
     "hmoPer1k": 0.69
-   }
+   },
+   "reserves_m": 34.7,
+   "debt_m": 570.4,
+   "debt_m_2026": 606.8,
+   "balanceNote": "heaviest debt of any merging council, rising"
   },
   "Blackburn with Darwen": {
    "ons": "E06000008",
@@ -371,7 +419,11 @@
     "ealPct": 39.3,
     "pupils": 30584,
     "hmoPer1k": 0.19
-   }
+   },
+   "reserves_m": 81.8,
+   "debt_m": 116.5,
+   "debt_m_2026": 108.3,
+   "balanceNote": "RS return uncertified"
   }
  }
 }

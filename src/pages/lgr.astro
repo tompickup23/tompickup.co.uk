@@ -509,12 +509,20 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section">
       <h2 class="doge-h2">How this compares to what was proposed</h2>
       <p class="doge-note">
-        The government's four-unitary decision matches none of the options that were formally submitted and
-        costed during the process. Reform UK at County Hall submitted a <strong>two-unitary</strong> model as the
-        best-value option; Burnley and Pendle championed a <strong>five-unitary</strong> model; three-unitary
-        variants were also modelled. A four-unitary configuration was the government's own choice — which means the
-        transition costs, savings and council-tax harmonisation impact for <em>these specific boundaries</em> have
-        not yet been publicly modelled (see gaps below).
+        The approved configuration was the proposal submitted by <strong>six councils</strong> — Chorley, Lancaster,
+        Preston, Ribble Valley, South Ribble and West Lancashire. Reform UK at County Hall submitted a
+        <strong>two-unitary</strong> model as the best-value option; Burnley and Pendle championed a
+        <strong>five-unitary</strong> model; the government chose the six-council four-unitary plan, citing
+        Lancashire's "diverse urban, rural and coastal communities" and alignment with economic areas, transport
+        links and future devolution. Lancashire County Council's leader opposed the decision on affordability and
+        deliverability grounds.
+      </p>
+      <p class="doge-note">
+        The proposers' business case claims cumulative net savings of <strong>£194.9m</strong>, with recurring
+        annual benefits of <strong>£81.9m from 2032/33</strong> — the bidding councils' own estimate, not an
+        independent or government-verified figure. Set that against the precedent record below: projected LGR
+        savings were delivered in full only where the new council inherited a sound balance sheet, and county
+        splits systematically under-delivered in their early years.
       </p>
     </section>
 
@@ -578,6 +586,61 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         CCA (the Adult Skills Fund is new devolved money, not a carve-out from council budgets; the transport
         settlement flows alongside, not out of, them). Until a published split exists, the model deliberately does
         not net anything off — flagged in the gaps below.
+      </p>
+    </section>
+
+    <!-- Balance sheet & pensions -->
+    <section class="doge-section" id="balance-sheet">
+      <h2 class="doge-h2">The balance sheet they inherit</h2>
+      <p class="doge-note">
+        Reorganisation transfers balance sheets, not just services. From certified MHCLG returns (reserves at
+        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions —
+        <strong>before</strong> Lancashire County Council's own £345.0m reserves and
+        £{fmt(Math.round(C.debt_m_2026))}m borrowing, whose split across the four successors is undetermined:
+      </p>
+      <div class="lgr-prec-grid">
+        {MODEL.map((u) => (
+          <div class="lgr-prec-card" style={`border-left:3px solid ${u.accent}`}>
+            <div class="lgr-prec-name">{u.name}</div>
+            <div class="lgr-prec-row"><span>Constituents' usable reserves</span><b>£{u.constituentReserves_m}m</b></div>
+            <div class="lgr-prec-row"><span>Constituents' external debt</span><b>£{u.constituentDebt_m}m</b></div>
+          </div>
+        ))}
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The standout risk sits in the new West Lancashire: <strong>Blackpool brings £606.8m of external debt against
+        £34.7m of reserves</strong> — by far the weakest balance sheet of any merging council, and it lands in the
+        smallest unitary. By contrast Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. West Lancashire
+        district's figures include council-housing (HRA) debt, which transfers with the housing stock.
+      </p>
+      <div class="doge-panel">
+        <div class="lgr-mx-build-h">Pensions: unusually, a strength</div>
+        <p class="doge-note" style="margin:0.4rem 0 0;">
+          All 15 councils are employers in the single <strong>Lancashire County Pension Fund</strong> — £12.0bn of
+          assets, <strong>134% funded with a £3.0bn surplus</strong> at the March 2025 valuation (204,958 members).
+          Precedent says reorganisation does not split the fund: in both Cumbria and Northamptonshire one successor
+          unitary became administering authority and the rest joined as employers. Which of the four inherits
+          stewardship of £12bn is a live structural-changes-order question. The next valuation falls on
+          <strong>31 March 2028 — the day before vesting day</strong>. The surplus is already flowing back:
+          LCC's employer contribution falls from 16.3% to 9.3% (£87m → £52m) in 2026/27.
+        </p>
+      </div>
+    </section>
+
+    <!-- Process from here -->
+    <section class="doge-section" id="process">
+      <h2 class="doge-h2">The process from here — and who pays</h2>
+      <p class="doge-note">
+        The decision is implemented by a <strong>Structural Changes Order</strong> under the Local Government and
+        Public Involvement in Health Act 2007, expected later in 2026 — it must be approved by
+        <strong>both Houses of Parliament</strong> (draft affirmative procedure) before shadow arrangements begin.
+        The government's stated position on cost is that <strong>reorganisation is paid for by the councils in the
+        area</strong>, with flexibility over capital receipts and borrowing. Central support so far: a share of £7.6m
+        proposal-development funding (£135,000 per area + 20p per resident), and transition funding of
+        <strong>at least £900,000 per new unitary</strong> plus up to £150,000 each for children's, adult social
+        care and public-health leadership continuity — set against the £50m–£100m precedent-based transition
+        envelope above. Lancashire was one of <strong>14 areas decided on 16 July 2026</strong>, a wave replacing
+        134 councils with 38 unitaries.
       </p>
     </section>
 

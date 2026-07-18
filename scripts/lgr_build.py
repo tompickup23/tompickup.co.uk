@@ -27,6 +27,8 @@ county = json.loads((DATA / "county.json").read_text())
 decision = json.loads((DATA / "decision.json").read_text())
 precedents = json.loads((DATA / "precedents.json").read_text())
 cca = json.loads((DATA / "cca.json").read_text())
+pensions = json.loads((DATA / "pensions.json").read_text())
+government = json.loads((DATA / "government.json").read_text())
 
 A = auth["authorities"]
 LCC_BUDGET = county["netBudget2627_m"]
@@ -72,6 +74,11 @@ for uname, u in decision["unitaries"].items():
     combined = round(app_pop + own_total, 1)
     combined_need = round(app_need + own_total, 1)
 
+    # Balance sheet brought by the constituent councils (LCC's excluded — its
+    # county-wide reserves/debt split across successors is undetermined).
+    reserves = round(sum(A[n].get("reserves_m", 0) for n in members), 1)
+    debt = round(sum(A[n].get("debt_m_2026", A[n].get("debt_m", 0)) for n in members), 1)
+
     # Band D council-element bill per constituent: district own + county precept;
     # existing unitaries pay their own all-in element (no county precept).
     bills = []
@@ -94,6 +101,7 @@ for uname, u in decision["unitaries"].items():
         "metrics": {k: wavg(members, k) for k in WEIGHTED_METRICS},
         "countyApportioned": {"population": app_pop, "needs": app_need},
         "perCapitaCounty": round(app_pop * 1e6 / served) if served else None,
+        "constituentReserves_m": reserves, "constituentDebt_m": debt,
         "owns": owns, "ownTotal": own_total,
         "combined": {"population": combined, "needs": combined_need},
         "combinedPerCapita": round(combined * 1e6 / pop),
@@ -128,6 +136,8 @@ model = {
     "unitaries": unitaries,
     "precedents": precedents,
     "cca": cca,
+    "pensions": pensions,
+    "government": government,
 }
 
 (DATA / "model.json").write_text(json.dumps(model, indent=1))
