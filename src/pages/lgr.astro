@@ -49,6 +49,19 @@ const RESERVES = [
   { year: '2024/25', total: 345.040, months: 4.2, rating: 'Low' },
 ];
 const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
+
+// Population per new unitary — summed from constituent authorities.
+// Source: ONS Census 2021, per-authority totals from the ukdemographics
+// data platform (economic-profile dataset, updated 28 Apr 2026).
+const POP = [
+  { name: 'East Lancashire', pop: 498255, accent: '#ff9f0a' },
+  { name: 'North Lancashire', pop: 352338, accent: '#12b6cf' },
+  { name: 'South Lancashire', pop: 346197, accent: '#bf5af2' },
+  { name: 'West Lancashire', pop: 334360, accent: '#30d158' },
+];
+const POP_TOTAL = POP.reduce((a, p) => a + p.pop, 0);
+const POP_MAX = Math.max(...POP.map((p) => p.pop));
+const fmt = (n: number) => n.toLocaleString('en-GB');
 ---
 
 <Layout
@@ -111,6 +124,37 @@ const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
           </div>
         ))}
       </div>
+    </section>
+
+    <!-- Scale of the new councils -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The scale of the four new councils</h2>
+      <p class="doge-note">
+        Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
+        the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
+        ~500,000 population the government has used as a working guideline</strong> for new unitaries — East
+        Lancashire comes closest at {fmt(498255)}, while the other three sit between 334,000 and 353,000.
+      </p>
+      <div class="doge-panel">
+        <div class="doge-bars">
+          {POP.map((u) => (
+            <div class="dg-row">
+              <div class="dg-top">
+                <span class="dg-name">{u.name}</span>
+                <span class="dg-val">{fmt(u.pop)}</span>
+              </div>
+              <div class="dg-track">
+                <div class="dg-fill" style={`width:${(u.pop / POP_MAX * 100).toFixed(1)}%;background:linear-gradient(90deg, ${u.accent}aa, ${u.accent})`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        For scale, Lancashire County Council's £1,329.312m net budget works out at roughly <strong>£868 per
+        resident</strong> across the 1.53 million people it serves — spending on county services (adult social
+        care, children's services, highways) that will pass to the four new unitaries.
+      </p>
     </section>
 
     <!-- Where Burnley lands -->
@@ -230,7 +274,8 @@ const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
         lancashirelgr.co.uk. Lancashire County Council finances: the council's own 2026/27 budget report (Full
         Council, 26 February 2026) and GOV.UK / MHCLG Revenue Outturn returns, compiled and verified in the AI DOGE
         Lancashire data pack (aidoge.co.uk). Reserves, resilience, contracts and property figures are drawn from
-        published transparency data; verify against the primary source before any formal use.
+        published transparency data. Population per unitary is summed from ONS Census 2021 per-authority totals.
+        Verify against the primary source before any formal use.
       </p>
     </section>
   </div>
