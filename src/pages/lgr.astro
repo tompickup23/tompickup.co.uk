@@ -62,6 +62,27 @@ const POP = [
 const POP_TOTAL = POP.reduce((a, p) => a + p.pop, 0);
 const POP_MAX = Math.max(...POP.map((p) => p.pop));
 const fmt = (n: number) => n.toLocaleString('en-GB');
+
+// LCC 2026/27 net budget by directorate (spend-by-service). Verified against
+// the council's own budget papers via the AI DOGE handover facts.
+const SPEND = [
+  { name: 'Adults, Health & Wellbeing', m: 558.501 },
+  { name: "Education & Children's Services", m: 265.726 },
+  { name: 'Place (Highways, Environment, Growth)', m: 261.898 },
+  { name: 'Corporate, central & financing', m: 243.187 },
+];
+const SPEND_MAX = Math.max(...SPEND.map((s) => s.m));
+
+// Largest external suppliers by processed spend (AI DOGE spending corpus).
+// Excludes lawfully redacted payments to individuals (Care Act / GDPR).
+const SUPPLIERS = [
+  { name: 'NHS Lancashire & South Cumbria ICB', m: 219.7 },
+  { name: 'SUEZ Recycling & Recovery UK', m: 79.6 },
+  { name: 'Lancashire Renewables Ltd', m: 77.7 },
+  { name: 'Lancashire Schools SPC Phase 1', m: 48.8 },
+  { name: 'Guardian Homecare', m: 45.0 },
+];
+const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
 ---
 
 <Layout
@@ -236,6 +257,59 @@ const fmt = (n: number) => n.toLocaleString('en-GB');
       </p>
     </section>
 
+    <!-- The operation being merged -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The operation being merged</h2>
+      <p class="doge-note">
+        The county's £1,329.312m net budget is dominated by three service blocks — all of which pass to the new
+        unitaries. Adult social care alone is 42% of it. These are the operations that must be split across, or
+        merged into, the four successor councils (2026/27 net budget by directorate, from the council's own papers).
+      </p>
+      <div class="doge-panel">
+        <div class="doge-bars">
+          {SPEND.map((s) => (
+            <div class="dg-row">
+              <div class="dg-top">
+                <span class="dg-name">{s.name}</span>
+                <span class="dg-val">£{s.m.toFixed(1)}m</span>
+              </div>
+              <div class="dg-track">
+                <div class="dg-fill" style={`width:${(s.m / SPEND_MAX * 100).toFixed(1)}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="doge-section">
+        <h3 class="doge-h2" style="font-size:1.05rem;">The biggest supplier relationships that transfer</h3>
+        <p class="doge-note">
+          Largest external suppliers by processed spend — the contracts and relationships the successor councils
+          inherit. Many are long, multi-year arrangements (waste, PFI schools, homecare frameworks) that cannot
+          simply be unwound on vesting day. Lawfully redacted payments to individuals (care packages) are excluded.
+        </p>
+        <div class="doge-panel">
+          <div class="doge-bars">
+            {SUPPLIERS.map((s) => (
+              <div class="dg-row">
+                <div class="dg-top">
+                  <span class="dg-name">{s.name}</span>
+                  <span class="dg-val">£{s.m.toFixed(1)}m</span>
+                </div>
+                <div class="dg-track">
+                  <div class="dg-fill amber" style={`width:${(s.m / SUP_MAX * 100).toFixed(1)}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p class="doge-note" style="margin-top:0.9rem;">
+          Across the county there are <strong>1,214 live contract award notices worth £3.96bn</strong>. Every one
+          is a commitment the new East, North, West or South Lancashire authority inherits on 1 April 2028.
+        </p>
+      </div>
+    </section>
+
     <!-- Compared to what was proposed -->
     <section class="doge-section">
       <h2 class="doge-h2">How this compares to what was proposed</h2>
@@ -246,6 +320,42 @@ const fmt = (n: number) => n.toLocaleString('en-GB');
         variants were also modelled. A four-unitary configuration was the government's own choice — which means the
         transition costs, savings and council-tax harmonisation impact for <em>these specific boundaries</em> have
         not yet been publicly modelled (see gaps below).
+      </p>
+    </section>
+
+    <!-- Politics -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The politics of reorganisation</h2>
+      <p class="doge-note">
+        The county leading this change is <strong>Reform UK-controlled</strong>: at Lancashire County Council,
+        Reform holds <strong>53 of 84 seats</strong> (a majority of 22), the administration that inherited the
+        reorganisation process and now has to deliver it. The current lower-tier councils are under mixed control —
+        mostly Labour-led or in no overall control, with Reform UK the largest party in Burnley. Every one of them
+        is abolished on vesting day.
+      </p>
+      <div class="doge-panel">
+        <div class="lgr-timeline">
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">16 Jul 2026</span>
+            <span class="lgr-tl-text">Government confirms the four-unitary decision.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">May 2027</span>
+            <span class="lgr-tl-text">All-out elections to the four new <strong>shadow authorities</strong> — the first time voters choose who runs North, West, East and South Lancashire.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">2027&ndash;28</span>
+            <span class="lgr-tl-text">Shadow councils prepare the handover while the existing 15 keep running services.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">1 Apr 2028</span>
+            <span class="lgr-tl-text">Vesting day: the four unitaries take over; the county and all districts cease to exist.</span>
+          </div>
+        </div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem; font-size:0.8rem;">
+        County composition is verified against the council's own member index. Lower-tier control is a May 2026
+        snapshot from the elections data platform and is indicative at status level, not a seat-by-seat count.
       </p>
     </section>
 
@@ -275,7 +385,9 @@ const fmt = (n: number) => n.toLocaleString('en-GB');
         Council, 26 February 2026) and GOV.UK / MHCLG Revenue Outturn returns, compiled and verified in the AI DOGE
         Lancashire data pack (aidoge.co.uk). Reserves, resilience, contracts and property figures are drawn from
         published transparency data. Population per unitary is summed from ONS Census 2021 per-authority totals.
-        Verify against the primary source before any formal use.
+        Spend by directorate and largest suppliers are from the AI DOGE Lancashire pack. Lower-tier political
+        control is a May 2026 snapshot from the elections data platform (indicative at status level). Verify
+        against the primary source before any formal use.
       </p>
     </section>
   </div>
@@ -315,7 +427,17 @@ const fmt = (n: number) => n.toLocaleString('en-GB');
   .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
   .lgr-gaps strong { color: #e9edf2; }
 
+  .lgr-timeline { display: grid; gap: 0; }
+  .lgr-tl-item {
+    display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: baseline;
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .lgr-tl-item:last-child { border-bottom: none; }
+  .lgr-tl-date { font-size: 0.8rem; font-weight: 700; color: #12b6cf; font-variant-numeric: tabular-nums; }
+  .lgr-tl-text { font-size: 0.88rem; color: #c3ccd6; line-height: 1.5; }
+
   @media (max-width: 640px) {
     .doge-statband { grid-template-columns: repeat(2, 1fr); }
+    .lgr-tl-item { grid-template-columns: 84px 1fr; gap: 10px; }
   }
 </style>
