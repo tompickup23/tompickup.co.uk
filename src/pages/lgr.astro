@@ -83,6 +83,109 @@ const SUPPLIERS = [
   { name: 'Guardian Homecare', m: 45.0 },
 ];
 const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
+
+// ============================================================
+// FOUR-UNITARY MODEL
+// Verified inputs: population and place indicators per constituent
+// authority (ONS Census 2021 + official statistics, via the
+// ukdemographics platform); LCC net budget £1,329.312m (council papers).
+// Modelled outputs: county-service spend apportioned to each unitary by
+// its share of LCC-served population; combined budget = apportioned
+// county spend + each constituent council's own net revenue budget.
+// Blackpool and Blackburn with Darwen are ALREADY unitary, so their full
+// net budget is added and no county spend is apportioned to them.
+// ============================================================
+const LCC_BUDGET = 1329.312;
+const LCC_SERVED_POP = 1235370;
+const LCC_PER_CAPITA = Math.round((LCC_BUDGET * 1e6) / LCC_SERVED_POP);
+
+// Own net revenue budget per constituent council (£m, 2026/27 adopted
+// unless noted). d = district, u = existing unitary. Sourced individually
+// from each council's own budget papers / AI DOGE (West Lancashire).
+const OWN_BUDGET: Record<string, { m: number | null; type: 'd' | 'u' }> = {
+  'Lancaster': { m: 27.833, type: 'd' },
+  'Preston': { m: 34.529, type: 'd' },
+  'Ribble Valley': { m: 8.923, type: 'd' },
+  'Fylde': { m: 13.06, type: 'd' },
+  'Wyre': { m: 19.07, type: 'd' },
+  'Blackpool': { m: 229.63, type: 'u' },
+  'Blackburn with Darwen': { m: null, type: 'u' },
+  'Hyndburn': { m: null, type: 'd' },
+  'Rossendale': { m: null, type: 'd' },
+  'Pendle': { m: null, type: 'd' },
+  'Burnley': { m: null, type: 'd' },
+  'Chorley': { m: 17.102, type: 'd' },
+  'South Ribble': { m: 17.478, type: 'd' },
+  'West Lancashire': { m: 19.538, type: 'd' },
+};
+
+const BASELINE: Record<string, number> = {
+  healthDemandScore: 32.9, noQuals: 17.3, empRate: 51.3, socialRentPct: 11.2,
+  crimeRate: 81.6, fsmPct: 28.4, ealPct: 16.3, hmoPer1k: 1.5,
+};
+
+// need: 'high' = a higher value signals greater service need/disadvantage;
+// 'low' = higher is better; 'neutral' = contextual.
+const METRICS = [
+  { key: 'healthDemandScore', label: 'Adult social-care demand', suffix: '', need: 'high', help: 'Composite health-need score' },
+  { key: 'empRate', label: 'Employment rate', suffix: '%', need: 'low', help: 'Share of adults in work' },
+  { key: 'noQuals', label: 'No qualifications', suffix: '%', need: 'high', help: 'Adults with no formal qualifications' },
+  { key: 'fsmPct', label: 'Free school meals', suffix: '%', need: 'high', help: 'Pupils eligible for FSM' },
+  { key: 'crimeRate', label: 'Crime rate', suffix: '/1k', need: 'high', help: 'Recorded crimes per 1,000 people' },
+  { key: 'socialRentPct', label: 'Social renting', suffix: '%', need: 'neutral', help: 'Households in social housing' },
+  { key: 'ealPct', label: 'English as additional language', suffix: '%', need: 'neutral', help: 'Pupils with EAL' },
+  { key: 'hmoPer1k', label: 'HMOs per 1,000', suffix: '', need: 'neutral', help: 'Houses in multiple occupation' },
+];
+
+const UNITS = [
+  { name: 'East Lancashire', accent: '#ff9f0a', pop: 498255, lccServedPop: 343514, countyApportioned: 369.6, chargeableDwellings: 214732,
+    councils: ['Blackburn with Darwen', 'Hyndburn', 'Rossendale', 'Pendle', 'Burnley'],
+    metrics: { healthDemandScore: 36.8, empRate: 44.6, noQuals: 17.9, socialRentPct: 11.8, crimeRate: 86.3, fsmPct: 31.7, ealPct: 28.2, hmoPer1k: 0.3 } },
+  { name: 'South Lancashire', accent: '#bf5af2', pop: 346197, lccServedPop: 346197, countyApportioned: 372.5, chargeableDwellings: 154156,
+    councils: ['Chorley', 'South Ribble', 'West Lancashire'],
+    metrics: { healthDemandScore: 28.4, empRate: 59.1, noQuals: 16.1, socialRentPct: 12.5, crimeRate: 57.0, fsmPct: 22.1, ealPct: 6.4, hmoPer1k: 1.3 } },
+  { name: 'North Lancashire', accent: '#12b6cf', pop: 352338, lccServedPop: 352338, countyApportioned: 379.1, chargeableDwellings: 159352,
+    councils: ['Lancaster', 'Preston', 'Ribble Valley'],
+    metrics: { healthDemandScore: 31.6, empRate: 51.2, noQuals: 14.7, socialRentPct: 11.5, crimeRate: 80.9, fsmPct: 25.3, ealPct: 18.1, hmoPer1k: 4.2 } },
+  { name: 'West Lancashire', accent: '#30d158', pop: 334360, lccServedPop: 193321, countyApportioned: 208.0, chargeableDwellings: 166166,
+    councils: ['Fylde', 'Wyre', 'Blackpool'],
+    metrics: { healthDemandScore: 33.4, empRate: 53.2, noQuals: 20.4, socialRentPct: 8.8, crimeRate: 101.0, fsmPct: 33.3, ealPct: 7.0, hmoPer1k: 0.5 } },
+];
+
+// Compute combined-budget layer per unitary (null-safe until all budgets in).
+const MODEL = UNITS.map((u) => {
+  const owns = u.councils.map((c) => ({ c, ...OWN_BUDGET[c] }));
+  const haveAll = owns.every((o) => o.m !== null);
+  const ownTotal = owns.reduce((a, o) => a + (o.m || 0), 0);
+  const combined = haveAll ? Math.round((u.countyApportioned + ownTotal) * 10) / 10 : null;
+  return {
+    ...u,
+    perCapitaCounty: Math.round((u.countyApportioned * 1e6) / u.lccServedPop),
+    owns, ownTotal: Math.round(ownTotal * 10) / 10, haveAll,
+    combined,
+    combinedPerCapita: combined ? Math.round((combined * 1e6) / u.pop) : null,
+  };
+});
+// Per-metric max across unitaries (for bar scaling), padded 15%.
+const METRIC_MAX: Record<string, number> = {};
+for (const m of METRICS) {
+  METRIC_MAX[m.key] = Math.max(...UNITS.map((u) => (u.metrics as any)[m.key]), BASELINE[m.key]) * 1.15;
+}
+// Delta vs county baseline, with a plain-English direction for colouring.
+function deltaInfo(key: string, val: number, need: string) {
+  const base = BASELINE[key];
+  const diff = Math.round((val - base) * 10) / 10;
+  let tone: 'high' | 'low' | 'flat' = 'flat';
+  if (Math.abs(diff) >= 0.1) {
+    const above = diff > 0;
+    if (need === 'neutral') tone = 'flat';
+    else if (need === 'high') tone = above ? 'high' : 'low';
+    else tone = above ? 'low' : 'high'; // need 'low' inverts
+  }
+  return { diff, tone };
+}
+const MODEL_JSON = JSON.stringify(MODEL);
+const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA });
 ---
 
 <Layout
@@ -172,9 +275,118 @@ const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
         </div>
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
-        For scale, Lancashire County Council's £1,329.312m net budget works out at roughly <strong>£868 per
-        resident</strong> across the 1.53 million people it serves — spending on county services (adult social
-        care, children's services, highways) that will pass to the four new unitaries.
+        For scale, Lancashire County Council's £1,329.312m net budget works out at roughly <strong>£1,076 per
+        resident</strong> across the 1.24 million people in the county area it serves (Blackpool and Blackburn with
+        Darwen are already unitary) — spending on county services (adult social care, children's services,
+        highways) that will pass to the new unitaries.
+      </p>
+    </section>
+
+    <!-- ===== INTERACTIVE MODEL EXPLORER ===== -->
+    <section class="doge-section" id="model">
+      <span class="doge-eyebrow"><span class="dot"></span> Interactive model</span>
+      <h2 class="doge-h2">Explore the four-unitary model</h2>
+      <p class="doge-note">
+        Pick a proposed council to see what it would actually be — who it merges, how many people it serves, the
+        money it would run, and the depth of need it would have to meet. Money figures combine the
+        <strong>verified</strong> budgets of every body that merges with a <strong>modelled</strong> split of the
+        county's £1,329.312m across each area by population. Full method below.
+      </p>
+
+      <div class="lgr-mx" data-model={MODEL_JSON} data-meta={META_JSON}>
+        <div class="lgr-mx-tabs" role="tablist">
+          {MODEL.map((u, i) => (
+            <button class={`lgr-mx-tab${i === 0 ? ' active' : ''}`} data-i={i} role="tab" style={`--accent:${u.accent}`}>
+              <span class="lgr-mx-tabname">{u.name.replace(' Lancashire', '')}</span>
+              <span class="lgr-mx-tabpop">{fmt(u.pop)}</span>
+            </button>
+          ))}
+        </div>
+
+        {MODEL.map((u, i) => (
+          <div class={`lgr-mx-panel${i === 0 ? ' active' : ''}`} data-i={i} style={`--accent:${u.accent}`}>
+            <div class="lgr-mx-head">
+              <div>
+                <h3 class="lgr-mx-title">{u.name}</h3>
+                <div class="lgr-mx-chips">
+                  {u.councils.map((c) => <span class="lgr-mx-chip">{c}{OWN_BUDGET[c].type === 'u' ? ' ·unitary' : ''}</span>)}
+                </div>
+              </div>
+              <div class="lgr-mx-viab">
+                <span class="lgr-mx-viab-v">{fmt(u.pop)}</span>
+                <span class="lgr-mx-viab-l">residents · {fmt(500000 - u.pop)} below the 500k guideline</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-money">
+              <div class="lgr-mx-stat big">
+                <span class="lgr-mx-stat-v">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+                <span class="lgr-mx-stat-l">Estimated combined net budget{u.combined ? '' : ' (gathering district figures)'}</span>
+              </div>
+              <div class="lgr-mx-stat">
+                <span class="lgr-mx-stat-v">£{u.countyApportioned}m</span>
+                <span class="lgr-mx-stat-l">County services apportioned in ({fmt(u.perCapitaCounty)}/head)</span>
+              </div>
+              <div class="lgr-mx-stat">
+                <span class="lgr-mx-stat-v">{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</span>
+                <span class="lgr-mx-stat-l">Total spend per resident</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-build">
+              <div class="lgr-mx-build-h">How the combined budget is built</div>
+              <div class="lgr-mx-brow">
+                <span class="lgr-mx-bname">County services (LCC, apportioned by population)</span>
+                <span class="lgr-mx-bval">£{u.countyApportioned}m</span>
+              </div>
+              {u.owns.map((o) => (
+                <div class="lgr-mx-brow">
+                  <span class="lgr-mx-bname">{o.c}{o.type === 'u' ? ' (existing unitary — full budget)' : ' (district)'}</span>
+                  <span class="lgr-mx-bval">{o.m !== null ? `£${o.m}m` : 'gathering…'}</span>
+                </div>
+              ))}
+              <div class="lgr-mx-brow total">
+                <span class="lgr-mx-bname">Estimated combined net budget</span>
+                <span class="lgr-mx-bval">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-needs-h">The need it would have to meet <span>vs Lancashire average</span></div>
+            <div class="lgr-mx-needs">
+              {METRICS.map((m) => {
+                const val = (u.metrics as any)[m.key];
+                const { diff, tone } = deltaInfo(m.key, val, m.need);
+                const w = Math.min(100, (val / METRIC_MAX[m.key]) * 100);
+                const bw = Math.min(100, (BASELINE[m.key] / METRIC_MAX[m.key]) * 100);
+                return (
+                  <div class="lgr-mx-metric">
+                    <div class="lgr-mx-mtop">
+                      <span class="lgr-mx-mname">{m.label}</span>
+                      <span class="lgr-mx-mval">{val}{m.suffix}
+                        <span class={`lgr-mx-delta ${tone}`}>{diff > 0 ? '+' : ''}{diff}{m.suffix} vs {BASELINE[m.key]}{m.suffix}</span>
+                      </span>
+                    </div>
+                    <div class="lgr-mx-track">
+                      <div class={`lgr-mx-fill ${tone}`} style={`width:${w.toFixed(1)}%`}></div>
+                      <div class="lgr-mx-base" style={`left:${bw.toFixed(1)}%`} title="Lancashire average"></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="doge-note" style="margin-top:1rem; font-size:0.8rem;">
+        <strong>Method.</strong> Population and place indicators are verified per constituent authority (ONS Census
+        2021 and official statistics). County-service spend is Lancashire County Council's £1,329.312m net budget
+        split across each area in proportion to the population it serves — a first-order, population-based
+        apportionment, not a service-by-service costing. Blackpool and Blackburn with Darwen are already unitary, so
+        their full net budgets are added and no county spend is apportioned to them. "Combined net budget" sums the
+        apportioned county spend and every constituent council's own latest net revenue budget; because councils
+        report on slightly different bases, treat it as an indicative scale, not an audited total. Transition costs,
+        equal-pay exposure and council-tax harmonisation are not included here (see below).
       </p>
     </section>
 
@@ -393,6 +605,24 @@ const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
   </div>
 </Layout>
 
+<script>
+  function initModelExplorer() {
+    const mx = document.querySelector('.lgr-mx');
+    if (!mx) return;
+    const tabs = Array.from(mx.querySelectorAll('.lgr-mx-tab'));
+    const panels = Array.from(mx.querySelectorAll('.lgr-mx-panel'));
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const i = tab.getAttribute('data-i');
+        tabs.forEach((t) => t.classList.toggle('active', t === tab));
+        panels.forEach((p) => p.classList.toggle('active', p.getAttribute('data-i') === i));
+      });
+    });
+  }
+  initModelExplorer();
+  document.addEventListener('astro:page-load', initModelExplorer);
+</script>
+
 <style>
   .lgr-unitaries {
     display: grid;
@@ -426,6 +656,87 @@ const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
   .lgr-gaps { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; }
   .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
   .lgr-gaps strong { color: #e9edf2; }
+
+  /* ---- Interactive model explorer ---- */
+  .lgr-mx { margin-top: 1.2rem; }
+  .lgr-mx-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.1rem; }
+  .lgr-mx-tab {
+    display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
+    background: rgba(14, 18, 28, 0.55); border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px; padding: 0.7rem 0.85rem; cursor: pointer; text-align: left;
+    font-family: inherit; transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+  .lgr-mx-tab:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+  .lgr-mx-tab.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, rgba(14,18,28,0.55)); }
+  .lgr-mx-tab.active::before { content: ''; }
+  .lgr-mx-tabname { font-size: 0.9rem; font-weight: 700; color: #f4f7fb; }
+  .lgr-mx-tabpop { font-size: 0.72rem; color: #99a2ad; font-variant-numeric: tabular-nums; }
+  .lgr-mx-tab.active .lgr-mx-tabname { color: var(--accent); }
+
+  .lgr-mx-panel { display: none; }
+  .lgr-mx-panel.active { display: block; animation: lgrfade 0.25s ease; }
+  @keyframes lgrfade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .lgr-mx-head {
+    display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: flex-start;
+    padding: 1rem 1.2rem; border-radius: 14px 14px 0 0;
+    background: color-mix(in srgb, var(--accent) 10%, rgba(14,18,28,0.6));
+    border: 1px solid rgba(255, 255, 255, 0.07); border-bottom: none;
+  }
+  .lgr-mx-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem; color: #fff; }
+  .lgr-mx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lgr-mx-chip {
+    font-size: 0.72rem; color: #d6dee8; background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 999px; padding: 3px 9px;
+  }
+  .lgr-mx-viab { text-align: right; }
+  .lgr-mx-viab-v { display: block; font-size: 1.5rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .lgr-mx-viab-l { font-size: 0.7rem; color: #99a2ad; }
+
+  .lgr-mx-money {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    border-left: 1px solid rgba(255,255,255,0.07); border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  .lgr-mx-stat { background: rgba(10, 14, 22, 0.92); padding: 0.9rem 1.2rem; }
+  .lgr-mx-stat.big { background: color-mix(in srgb, var(--accent) 8%, rgba(10,14,22,0.92)); }
+  .lgr-mx-stat-v { display: block; font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .lgr-mx-stat.big .lgr-mx-stat-v { color: var(--accent); }
+  .lgr-mx-stat-l { font-size: 0.72rem; color: #99a2ad; margin-top: 3px; line-height: 1.35; }
+
+  .lgr-mx-build { padding: 1rem 1.2rem; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.07); border-top: none; }
+  .lgr-mx-build-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8e8e93; font-weight: 700; margin-bottom: 0.6rem; }
+  .lgr-mx-brow { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .lgr-mx-brow.total { border-bottom: none; border-top: 1px solid rgba(255,255,255,0.12); margin-top: 4px; padding-top: 8px; font-weight: 700; }
+  .lgr-mx-bname { color: #c3ccd6; }
+  .lgr-mx-brow.total .lgr-mx-bname { color: #f4f7fb; }
+  .lgr-mx-bval { color: var(--accent); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .lgr-mx-needs-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #f4f7fb; margin: 1.3rem 0 0.7rem; }
+  .lgr-mx-needs-h span { font-size: 0.72rem; font-weight: 500; color: #8e8e93; }
+  .lgr-mx-needs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.4rem; }
+  .lgr-mx-metric { }
+  .lgr-mx-mtop { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8rem; }
+  .lgr-mx-mname { color: #d6dee8; }
+  .lgr-mx-mval { color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lgr-mx-delta { font-weight: 500; font-size: 0.68rem; margin-left: 6px; }
+  .lgr-mx-delta.high { color: #ff9f0a; }
+  .lgr-mx-delta.low { color: #30d158; }
+  .lgr-mx-delta.flat { color: #8e8e93; }
+  .lgr-mx-track { position: relative; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+  .lgr-mx-fill { height: 100%; border-radius: 4px; background: #6b7280; }
+  .lgr-mx-fill.high { background: linear-gradient(90deg, #d97a06, #ff9f0a); }
+  .lgr-mx-fill.low { background: linear-gradient(90deg, #1f9d4d, #30d158); }
+  .lgr-mx-fill.flat { background: linear-gradient(90deg, #4b5563, #6b7280); }
+  .lgr-mx-base { position: absolute; top: -2px; width: 2px; height: 11px; background: #e9edf2; opacity: 0.65; }
+
+  @media (max-width: 640px) {
+    .lgr-mx-tabs { grid-template-columns: repeat(2, 1fr); }
+    .lgr-mx-money { grid-template-columns: 1fr; }
+    .lgr-mx-needs { grid-template-columns: 1fr; }
+    .lgr-mx-head { flex-direction: column; }
+    .lgr-mx-viab { text-align: left; }
+  }
 
   .lgr-timeline { display: grid; gap: 0; }
   .lgr-tl-item {
