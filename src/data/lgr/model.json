@@ -1,0 +1,708 @@
+{
+ "$meta": {
+  "generated": "by scripts/lgr_build.py from the canonical dataset in src/data/lgr/",
+  "authoritiesNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement) \u2014 see basis per entry.",
+  "bandDNote": "Council's own Band D element only (excl. police \u00a3292.40, fire \u00a394.73, parish precepts). District residents also pay the LCC county precept.",
+  "metricsNote": "Population and place indicators: ONS Census 2021 and official statistics via the ukdemographics data platform (extracted 2026-07)."
+ },
+ "decision": {
+  "$meta": {
+   "sources": [
+    "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire",
+    "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
+   ],
+   "verified": "two independent official sources, identical groupings"
+  },
+  "announced": "2026-07-16",
+  "decidedBy": "Secretary of State for Housing, Communities and Local Government",
+  "shadowElections": "2027-05",
+  "vestingDay": "2028-04-01",
+  "monthsDecisionToVesting": 20.5,
+  "subjectTo": "Parliamentary approval"
+ },
+ "county": {
+  "$meta": {
+   "source": "LCC Budget Report 2026/27 (Full Council, 26 Feb 2026) and GOV.UK/MHCLG Revenue Outturn returns, via the AI DOGE Lancashire data pack (aidoge.co.uk)",
+   "compiled": "2026-07-18"
+  },
+  "name": "Lancashire County Council",
+  "netBudget2627_m": 1329.312,
+  "councilTaxRequirement_m": 717.078,
+  "taxBase": 397989.95,
+  "bandD_county": 1801.75,
+  "bandD_county_general": 1492.42,
+  "bandD_county_asc": 309.33,
+  "bandD_police": 292.4,
+  "bandD_fire": 94.73,
+  "composition": "84 seats: Reform UK 53, Progressive Lancashire Group 11, Conservative 8, Labour 5, Liberal Democrats 5, Our West Lancashire 2 (member index, 30 Jun 2026)",
+  "mtfs": {
+   "gap2829_m": 17.32,
+   "grossShortfall2627Closed_m": 72.298,
+   "settlementGain_m": 28.0,
+   "extraReservesPlanned_m": 58.4
+  },
+  "reserves": [
+   {
+    "year": "2021/22",
+    "total_m": 419.788,
+    "monthsCover": 6.9,
+    "rating": "Adequate"
+   },
+   {
+    "year": "2022/23",
+    "total_m": 387.408,
+    "monthsCover": 5.3,
+    "rating": "Low"
+   },
+   {
+    "year": "2023/24",
+    "total_m": 366.175,
+    "monthsCover": 4.8,
+    "rating": "Low"
+   },
+   {
+    "year": "2024/25",
+    "total_m": 345.04,
+    "monthsCover": 4.2,
+    "rating": "Low"
+   }
+  ],
+  "resilience": {
+   "riskScore": 50,
+   "riskBand": "elevated",
+   "s114Proximity": false,
+   "grantDependencyPct": 29.99,
+   "ctaxPctNetRevenue": 65.14
+  },
+  "estate": {
+   "propertyAssets": 1219,
+   "contractNotices": 1214,
+   "contractValue_bn": 3.961,
+   "paymentsCorpus_bn": 4.14,
+   "paymentLines": 855890
+  },
+  "directorates": [
+   {
+    "name": "Adults, Health & Wellbeing",
+    "m": 558.501
+   },
+   {
+    "name": "Education & Children's Services",
+    "m": 265.726
+   },
+   {
+    "name": "Place (Highways, Environment, Growth)",
+    "m": 261.898
+   },
+   {
+    "name": "Corporate, central & financing",
+    "m": 243.187
+   }
+  ],
+  "topSuppliers": [
+   {
+    "name": "NHS Lancashire & South Cumbria ICB",
+    "m": 219.7
+   },
+   {
+    "name": "SUEZ Recycling & Recovery UK",
+    "m": 79.6
+   },
+   {
+    "name": "Lancashire Renewables Ltd",
+    "m": 77.7
+   },
+   {
+    "name": "Lancashire Schools SPC Phase 1",
+    "m": 48.8
+   },
+   {
+    "name": "Guardian Homecare",
+    "m": 45.0
+   }
+  ]
+ },
+ "baseline": {
+  "healthDemandScore": 32.9,
+  "noQuals": 17.3,
+  "empRate": 51.3,
+  "socialRentPct": 11.2,
+  "crimeRate": 81.6,
+  "fsmPct": 28.4,
+  "ealPct": 16.3,
+  "hmoPer1k": 1.5
+ },
+ "lcc": {
+  "budget_m": 1329.312,
+  "servedPop": 1235370,
+  "perCapita": 1076
+ },
+ "totalPop": 1531150,
+ "unitaries": [
+  {
+   "name": "North Lancashire",
+   "accent": "#12b6cf",
+   "home": false,
+   "note": null,
+   "councils": [
+    "Lancaster",
+    "Preston",
+    "Ribble Valley"
+   ],
+   "population": 352338,
+   "lccServedPop": 352338,
+   "chargeableDwellings": 159352,
+   "metrics": {
+    "healthDemandScore": 31.6,
+    "noQuals": 14.7,
+    "empRate": 51.2,
+    "socialRentPct": 11.5,
+    "crimeRate": 80.9,
+    "fsmPct": 25.3,
+    "ealPct": 18.1,
+    "hmoPer1k": 4.2
+   },
+   "countyApportioned": {
+    "population": 379.1,
+    "needs": 376.1
+   },
+   "perCapitaCounty": 1076,
+   "owns": [
+    {
+     "council": "Lancaster",
+     "type": "district",
+     "m": 27.833,
+     "basis": "General Fund Revenue Budget",
+     "confidence": "high",
+     "source": "https://committeeadmin.lancaster.gov.uk/documents/g8505/Public%20reports%20pack%2025th-Feb-2026%2018.00%20Council.pdf"
+    },
+    {
+     "council": "Preston",
+     "type": "district",
+     "m": 34.529,
+     "basis": "Total Net Requirement (Summary Revenue Account)",
+     "confidence": "high",
+     "source": "https://www.preston.gov.uk/media/24815/Control-Budget-2026-27/pdf/Control_Book_2026-27_Final.pdf"
+    },
+    {
+     "council": "Ribble Valley",
+     "type": "district",
+     "m": 8.923,
+     "basis": "Net budget / Borough Requirement",
+     "confidence": "high",
+     "source": "https://ribblevalley.moderngov.co.uk/documents/s10872/REVENUE%20BUDGET%20202627%20AND%20CAPITAL%20PROGRAMME%20202627%20202930%20AND%20SETTING%20THE%20COUNCIL%20TAX%20FOR%20EACH%20.pdf"
+    }
+   ],
+   "ownTotal": 71.3,
+   "combined": {
+    "population": 450.4,
+    "needs": 447.4
+   },
+   "combinedPerCapita": 1278,
+   "bandD": {
+    "bills": [
+     {
+      "council": "Lancaster",
+      "ownElement": 272.2,
+      "councilBill": 2073.95,
+      "confidence": "medium"
+     },
+     {
+      "council": "Preston",
+      "ownElement": 375.34,
+      "councilBill": 2177.09,
+      "confidence": "medium"
+     },
+     {
+      "council": "Ribble Valley",
+      "ownElement": 170.69,
+      "councilBill": 1972.44,
+      "confidence": "medium"
+     }
+    ],
+    "dwellingWeightedAvg": 2098.53,
+    "lowest": {
+     "council": "Ribble Valley",
+     "bill": 1972.44
+    },
+    "highest": {
+     "council": "Preston",
+     "bill": 2177.09
+    },
+    "spread": 204.65
+   }
+  },
+  {
+   "name": "West Lancashire",
+   "accent": "#30d158",
+   "home": false,
+   "note": "Does not include the current West Lancashire district, which joins South Lancashire",
+   "councils": [
+    "Fylde",
+    "Wyre",
+    "Blackpool"
+   ],
+   "population": 334360,
+   "lccServedPop": 193321,
+   "chargeableDwellings": 166166,
+   "metrics": {
+    "healthDemandScore": 33.4,
+    "noQuals": 20.4,
+    "empRate": 53.2,
+    "socialRentPct": 8.8,
+    "crimeRate": 101.0,
+    "fsmPct": 33.3,
+    "ealPct": 7.0,
+    "hmoPer1k": 0.5
+   },
+   "countyApportioned": {
+    "population": 208.0,
+    "needs": 210.3
+   },
+   "perCapitaCounty": 1076,
+   "owns": [
+    {
+     "council": "Fylde",
+     "type": "district",
+     "m": 13.056,
+     "basis": "Budget requirement (MTFS agreed budget)",
+     "confidence": "high",
+     "source": "https://new.fylde.gov.uk/wp-content/uploads/2026/02/Draft-Budget-2026-27-Summary.pdf"
+    },
+    {
+     "council": "Wyre",
+     "type": "district",
+     "m": 19.067,
+     "basis": "Net expenditure before other government grants",
+     "confidence": "high",
+     "source": "https://wyre.moderngov.co.uk/documents/s31299/Revenue%20Budget%20Council%20Tax%20and%20Capital%20Programme.pdf"
+    },
+    {
+     "council": "Blackpool",
+     "type": "unitary",
+     "m": 229.63,
+     "basis": "General Fund net expenditure (cash limit)",
+     "confidence": "high",
+     "source": "https://www.blackpool.gov.uk/Your-Council/Transparency-and-open-data/Documents/Budget-Book/Municipal-Budget-Year-Ending-31st-March-2027.pdf"
+    }
+   ],
+   "ownTotal": 261.8,
+   "combined": {
+    "population": 469.8,
+    "needs": 472.1
+   },
+   "combinedPerCapita": 1405,
+   "bandD": {
+    "bills": [
+     {
+      "council": "Fylde",
+      "ownElement": 239.11,
+      "councilBill": 2040.86,
+      "confidence": "medium"
+     },
+     {
+      "council": "Wyre",
+      "ownElement": 240.05,
+      "councilBill": 2041.8,
+      "confidence": "high"
+     },
+     {
+      "council": "Blackpool",
+      "ownElement": 2126.09,
+      "councilBill": 2126.09,
+      "confidence": "high"
+     }
+    ],
+    "dwellingWeightedAvg": 2077.64,
+    "lowest": {
+     "council": "Fylde",
+     "bill": 2040.86
+    },
+    "highest": {
+     "council": "Blackpool",
+     "bill": 2126.09
+    },
+    "spread": 85.23
+   }
+  },
+  {
+   "name": "East Lancashire",
+   "accent": "#ff9f0a",
+   "home": true,
+   "note": null,
+   "councils": [
+    "Blackburn with Darwen",
+    "Hyndburn",
+    "Rossendale",
+    "Pendle",
+    "Burnley"
+   ],
+   "population": 498255,
+   "lccServedPop": 343514,
+   "chargeableDwellings": 214732,
+   "metrics": {
+    "healthDemandScore": 36.8,
+    "noQuals": 17.9,
+    "empRate": 44.6,
+    "socialRentPct": 11.8,
+    "crimeRate": 86.3,
+    "fsmPct": 31.7,
+    "ealPct": 28.2,
+    "hmoPer1k": 0.3
+   },
+   "countyApportioned": {
+    "population": 369.6,
+    "needs": 410.8
+   },
+   "perCapitaCounty": 1076,
+   "owns": [
+    {
+     "council": "Blackburn with Darwen",
+     "type": "unitary",
+     "m": 230.283,
+     "basis": "Net Revenue Expenditure",
+     "confidence": "high",
+     "source": "https://blackburn.moderngov.co.uk/documents/s32529/Revenue%20Budget%202026-27%20Medium%20Term%20Financial%20Strategy%202026-29.pdf"
+    },
+    {
+     "council": "Hyndburn",
+     "type": "district",
+     "m": 17.608,
+     "basis": "Net revenue expenditure",
+     "confidence": "high",
+     "source": "https://democracy.hyndburnbc.gov.uk/documents/s23577/a%20General%20Fund%20Revenue%20Budget%20202627.pdf"
+    },
+    {
+     "council": "Rossendale",
+     "type": "district",
+     "m": 14.601,
+     "basis": "Total General Fund (original budget)",
+     "confidence": "high",
+     "source": "https://www.rossendale.gov.uk/download/meetings/id/12224/C1.%202026.27%20Council%20Budget%20and%20Medium-Term%20Financial%20Strategy"
+    },
+    {
+     "council": "Pendle",
+     "type": "district",
+     "m": 18.444,
+     "basis": "Budget Requirement (net expenditure \u00a318.944m)",
+     "confidence": "high",
+     "source": "https://www.pendle.gov.uk/download/meetings/id/31576/item_10_b_-_general_fund_revenue_budget_202627"
+    },
+    {
+     "council": "Burnley",
+     "type": "district",
+     "m": 22.429,
+     "basis": "Net Budget Requirement (council tax resolution)",
+     "confidence": "high",
+     "source": "https://burnley.moderngov.co.uk/documents/g4108/Printed%20minutes%2003rd-Mar-2026%2018.30%20Full%20Council.pdf"
+    }
+   ],
+   "ownTotal": 303.4,
+   "combined": {
+    "population": 673.0,
+    "needs": 714.2
+   },
+   "combinedPerCapita": 1351,
+   "bandD": {
+    "bills": [
+     {
+      "council": "Blackburn with Darwen",
+      "ownElement": 2062.96,
+      "councilBill": 2062.96,
+      "confidence": "high"
+     },
+     {
+      "council": "Hyndburn",
+      "ownElement": 276.46,
+      "councilBill": 2078.21,
+      "confidence": "high"
+     },
+     {
+      "council": "Rossendale",
+      "ownElement": 327.16,
+      "councilBill": 2128.91,
+      "confidence": "high"
+     },
+     {
+      "council": "Pendle",
+      "ownElement": 316.71,
+      "councilBill": 2118.46,
+      "confidence": "high"
+     },
+     {
+      "council": "Burnley",
+      "ownElement": 351.44,
+      "councilBill": 2153.19,
+      "confidence": "high"
+     }
+    ],
+    "dwellingWeightedAvg": 2103.69,
+    "lowest": {
+     "council": "Blackburn with Darwen",
+     "bill": 2062.96
+    },
+    "highest": {
+     "council": "Burnley",
+     "bill": 2153.19
+    },
+    "spread": 90.23
+   }
+  },
+  {
+   "name": "South Lancashire",
+   "accent": "#bf5af2",
+   "home": false,
+   "note": null,
+   "councils": [
+    "Chorley",
+    "South Ribble",
+    "West Lancashire"
+   ],
+   "population": 346197,
+   "lccServedPop": 346197,
+   "chargeableDwellings": 154156,
+   "metrics": {
+    "healthDemandScore": 28.4,
+    "noQuals": 16.1,
+    "empRate": 59.1,
+    "socialRentPct": 12.5,
+    "crimeRate": 57.0,
+    "fsmPct": 22.1,
+    "ealPct": 6.4,
+    "hmoPer1k": 1.3
+   },
+   "countyApportioned": {
+    "population": 372.5,
+    "needs": 332.1
+   },
+   "perCapitaCounty": 1076,
+   "owns": [
+    {
+     "council": "Chorley",
+     "type": "district",
+     "m": 17.102,
+     "basis": "Total Expenditure (net budget requirement)",
+     "confidence": "high",
+     "source": "https://chorley.moderngov.co.uk/documents/s194092/"
+    },
+    {
+     "council": "South Ribble",
+     "type": "district",
+     "m": 17.478,
+     "basis": "Total Expenditure (net budget requirement)",
+     "confidence": "high",
+     "source": "https://southribble.moderngov.co.uk/documents/s55374/"
+    },
+    {
+     "council": "West Lancashire",
+     "type": "district",
+     "m": 19.538,
+     "basis": "Net budget requirement",
+     "confidence": "high",
+     "source": "https://westlancs.moderngov.co.uk/documents/s51819/GRA%20Revenue%20Budget%20Report%20and%20MTFS%20Update%2026-29%20Council%20v2.pdf"
+    }
+   ],
+   "ownTotal": 54.1,
+   "combined": {
+    "population": 426.6,
+    "needs": 386.2
+   },
+   "combinedPerCapita": 1232,
+   "bandD": {
+    "bills": [
+     {
+      "council": "Chorley",
+      "ownElement": 192.85,
+      "councilBill": 1994.6,
+      "confidence": "medium"
+     },
+     {
+      "council": "South Ribble",
+      "ownElement": 241.28,
+      "councilBill": 2043.03,
+      "confidence": "high"
+     },
+     {
+      "council": "West Lancashire",
+      "ownElement": 245.71,
+      "councilBill": 2047.46,
+      "confidence": "high"
+     }
+    ],
+    "dwellingWeightedAvg": 2028.13,
+    "lowest": {
+     "council": "Chorley",
+     "bill": 1994.6
+    },
+    "highest": {
+     "council": "West Lancashire",
+     "bill": 2047.46
+    },
+    "spread": 52.86
+   }
+  }
+ ],
+ "precedents": {
+  "$meta": {
+   "note": "Completed English LGRs 2019-2023, from official sources (MHCLG decision documents, council business cases, KPMG/CIPFA closure and assurance reviews, Hansard, audited accounts). Confidence per figure as flagged; 'not published' means no consolidated official figure exists.",
+   "compiled": "2026-07-18"
+  },
+  "cases": [
+   {
+    "name": "Dorset & BCP",
+    "vested": "2019-04-01",
+    "decision": "2018-02-26",
+    "months": 13.1,
+    "predecessors": 9,
+    "unitaries": 2,
+    "population": 779900,
+    "transition": {
+     "budgeted_m": 25.0,
+     "actual_m": null,
+     "note": "No consolidated actual published; BCP later needed a \u00a376m capitalisation request and a DLUHC assurance review"
+    },
+    "savings": {
+     "projected": "\u2265\u00a3108m over 6 years",
+     "realised": "Dorset reports \u00a396m convergence+transformation; BCP needed ~\u00a341m invested for \u00a335m net"
+    },
+    "notable": "Divergent fortunes: rural Dorset stabilised, urban BCP hit financial distress",
+    "confidence": "high (budget/projection), medium (realised)"
+   },
+   {
+    "name": "Buckinghamshire",
+    "vested": "2020-04-01",
+    "decision": "2018-11-01",
+    "months": 17.0,
+    "predecessors": 5,
+    "unitaries": 1,
+    "population": 553300,
+    "transition": {
+     "budgeted_m": 22.2,
+     "actual_m": 19.5,
+     "note": "Under budget; \u00a32.7m underspend rolled into transformation"
+    },
+    "savings": {
+     "projected": "\u00a318m/yr (2016 business case)",
+     "realised": "\u00a375.4m over first 4 years \u2014 ~4x the business case"
+    },
+    "notable": "The benchmark success case, delivered despite vesting nine days after Covid lockdown",
+    "confidence": "high"
+   },
+   {
+    "name": "West & North Northamptonshire",
+    "vested": "2021-04-01",
+    "decision": "2019-05-14",
+    "months": 22.6,
+    "predecessors": 8,
+    "unitaries": 2,
+    "population": 745610,
+    "transition": {
+     "budgeted_m": 29.9,
+     "actual_m": null,
+     "note": "Later joint estimate \u00a343.5m; no consolidated actual \u2014 \u00a3953m county balance-sheet split disputed for ~4 years"
+    },
+    "savings": {
+     "projected": "\u00a312.1m/yr (PwC)",
+     "realised": "WNC ~\u00a334m and NNC \u00a317m+ transformation savings reported over three years"
+    },
+    "notable": "Intervention-driven (county s114); the disaggregation dispute is the direct warning for splitting a county",
+    "confidence": "high (budgeted/projected), medium (realised)"
+   },
+   {
+    "name": "Cumbria (Cumberland + W&F)",
+    "vested": "2023-04-01",
+    "decision": "2021-07-21",
+    "months": 20.3,
+    "predecessors": 7,
+    "unitaries": 2,
+    "population": 499800,
+    "transition": {
+     "budgeted_m": 18.9,
+     "actual_m": 18.5,
+     "note": "Implementation within budget \u2014 but efficiencies deferred; W&F needed ~\u00a326m Exceptional Financial Support in year one"
+    },
+    "savings": {
+     "projected": "~\u00a312m/yr net recurring",
+     "realised": "Not realised in the LGR phase (KPMG closure report); disaggregation costs swamped early savings"
+    },
+    "notable": "The 'split a county' precedent: on-budget build, year-one financial support for both new councils",
+    "confidence": "high"
+   },
+   {
+    "name": "North Yorkshire",
+    "vested": "2023-04-01",
+    "decision": "2021-07-21",
+    "months": 20.3,
+    "predecessors": 8,
+    "unitaries": 1,
+    "population": 615000,
+    "transition": {
+     "budgeted_m": 38.0,
+     "actual_m": null,
+     "note": "Self-funded from county reserves; ~\u00a36m spent by mid-2023, no consolidated outturn published"
+    },
+    "savings": {
+     "projected": "\u00a330\u201370m/yr business case",
+     "realised": "\u00a33.1m in year one; savings back-loaded, ~\u00a330m year-one shortfall"
+    },
+    "notable": "Completed pay/job evaluation BEFORE vesting \u2014 the only case to avoid legacy terms-and-conditions drift",
+    "confidence": "medium"
+   },
+   {
+    "name": "Somerset",
+    "vested": "2023-04-01",
+    "decision": "2021-07-21",
+    "months": 20.3,
+    "predecessors": 5,
+    "unitaries": 1,
+    "population": 571600,
+    "transition": {
+     "budgeted_m": 16.5,
+     "actual_m": null,
+     "note": "Districts incurred extra costs on top; no consolidated actual"
+    },
+    "savings": {
+     "projected": "\u00a318.5m/yr at full run rate",
+     "realised": "Only ~\u00a37m by early 2024 \u2014 too slow to offset care pressure"
+    },
+    "notable": "Financial emergency declared 8 months after vesting; \u00a377.9m capitalisation support incl. \u00a340m to downsize; still on legacy T&Cs ~2 years on",
+    "confidence": "high (budget/projection), medium (realised)"
+   }
+  ],
+  "lancashire": {
+   "months": 20.5,
+   "predecessors": 15,
+   "unitaries": 4,
+   "population": 1531150,
+   "perResidentEnvelope": {
+    "low_gbp": 22,
+    "high_gbp": 62,
+    "basis": "Budgeted transition cost per resident across the six precedents (Somerset \u00a329 to N. Yorks \u00a362)"
+   },
+   "impliedTransition_m": {
+    "low": 50,
+    "high": 100,
+    "basis": "Precedent per-resident envelope applied to 1.53m residents; before disaggregation risk, which hit hardest in the county-split cases"
+   },
+   "keyRisk": "15\u21924 is the most complex disaggregation attempted in this era \u2014 closest in kind to Cumbria and Northamptonshire, the two cases where splitting the county drove overruns and multi-year disputes"
+  },
+  "equalPay": {
+   "birmingham": {
+    "liability": "\u00a3650m\u2013\u00a3760m announced June 2023, accruing \u00a35\u201314m/month, on top of ~\u00a31.1bn already paid; s114 notice 5 Sep 2023",
+    "confidence": "high"
+   },
+   "cumbriaClaim": {
+    "fact": "Aug 2023 \u2014 five months after vesting \u2014 Cumberland and Westmorland & Furness both received an equal pay claim covering 400+ former Cumbria CC employees (CIPFA external assurance review)",
+    "confidence": "high"
+   },
+   "somerset": {
+    "fact": "Workforce still on several legacy terms-and-conditions sets ~2 years after vesting (CIPFA); ~\u00a33m pay & grading programme, ~1,600 role profiles inherited, equal-pay risk cited as rising with delay",
+    "confidence": "high"
+   },
+   "northYorkshire": {
+    "fact": "~3,000 staff TUPE-transferred at vesting; single job-evaluated pay structure completed pre-vesting across all 8 councils",
+    "confidence": "high"
+   }
+  }
+ }
+}
