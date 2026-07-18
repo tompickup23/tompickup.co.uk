@@ -488,8 +488,19 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           </div>
         </div>
         <p class="doge-note" style="margin-top:0.9rem;">
-          Across the county there are <strong>1,214 live contract award notices worth £3.96bn</strong>. Every one
-          is a commitment the new East, North, West or South Lancashire authority inherits on 1 April 2028.
+          Of the county's <strong>1,214 contract award notices (£3.96bn)</strong>,
+          <strong>{C.contractsBeyondVesting.straddleVesting} contracts worth
+          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong> —
+          they transfer to the successor councils mid-term. The longest-running include a £204.3m public-health
+          nursing contract to 2032, county-wide energy supply to September 2028, waste-recovery services to 2030 and
+          an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
+          starts inside a decade of its predecessors' procurement decisions.
+        </p>
+        <p class="doge-note" style="font-size:0.78rem;">
+          Mapping caveats, stated plainly: this register covers <strong>county council contracts only</strong> —
+          the twelve districts' and two unitaries' own contracts are not yet mapped; {C.contractsBeyondVesting.noEndDate} notices
+          carry no end date, so the £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m straddling figure is a floor;
+          and Contracts Finder values are self-reported at award, not final spend.
         </p>
       </div>
     </section>

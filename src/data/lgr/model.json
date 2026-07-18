@@ -120,7 +120,66 @@
     "name": "Guardian Homecare",
     "m": 45.0
    }
-  ]
+  ],
+  "contractsBeyondVesting": {
+   "$note": "Analysis of the AI DOGE contracts register (Contracts Finder/Find a Tender award notices, buyer = Lancashire County Council). Caveats: county contracts only (district contracts not included); 197 notices carry no end date so the straddling total is a floor; Contracts Finder data is supplier/buyer self-reported.",
+   "noticesParsed": 1214,
+   "liveToday": 276,
+   "liveValue_m": 1754.4,
+   "straddleVesting": 142,
+   "straddleValue_m": 1031.3,
+   "noEndDate": 197,
+   "topStraddling": [
+    {
+     "value_m": 204.3,
+     "title": "0-19 years (up to 25 years with SEND) Public Health Nursing ",
+     "supplier": "Wirral Community Health and Care NHS Fou",
+     "ends": "2032-03-31"
+    },
+    {
+     "value_m": 110.8,
+     "title": "Supply of HH, NHH, UMS Electricity to Lancashire County Coun",
+     "supplier": "Npower Commercial Gas Limited",
+     "ends": "2028-09-30"
+    },
+    {
+     "value_m": 64.0,
+     "title": "IT Reseller Agreement for IT Software, Support and Associate",
+     "supplier": "Softcat Plc",
+     "ends": "2029-11-30"
+    },
+    {
+     "value_m": 63.4,
+     "title": "LPS CORP - Provision of Treated Residual Waste Recovery Serv",
+     "supplier": "Lot 1 - Envirofuel (SRF) Limited",
+     "ends": "2030-03-31"
+    },
+    {
+     "value_m": 60.0,
+     "title": "Supply of Natural Gas to Lancashire County Council and Schoo",
+     "supplier": "TotalEnergies Gas & Power Ltd",
+     "ends": "2028-09-30"
+    },
+    {
+     "value_m": 60.0,
+     "title": "Agency Staff Neutral Vendor Managed Service and Workforce So",
+     "supplier": "Comensura Ltd",
+     "ends": "2029-03-01"
+    },
+    {
+     "value_m": 50.3,
+     "title": "LPS CORP - The Supply and Delivery of Food and Drink Product",
+     "supplier": "Dunsters Farm Ltd",
+     "ends": "2029-08-31"
+    },
+    {
+     "value_m": 38.9,
+     "title": "LPS CAS - Surfacing & Potholes Managed Service - LCC43824",
+     "supplier": "Multevo Limited",
+     "ends": "2029-05-18"
+    }
+   ]
+  }
  },
  "baseline": {
   "healthDemandScore": 32.9,
