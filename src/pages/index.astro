@@ -11,6 +11,14 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
+
+// The four new unitaries (from the LGR model) for the homepage showcase.
+const LGR_UNITS = [
+  { name: 'East Lancashire', accent: '#ff9f0a', pop: '498,255', councils: 5, home: true },
+  { name: 'North Lancashire', accent: '#12b6cf', pop: '352,338', councils: 3 },
+  { name: 'South Lancashire', accent: '#bf5af2', pop: '346,197', councils: 3 },
+  { name: 'West Lancashire', accent: '#30d158', pop: '334,360', councils: 3 },
+];
 ---
 
 <Layout title="Tom Pickup | Lancashire County Councillor for Padiham & Burnley West">
@@ -110,30 +118,42 @@ const posts = (await getCollection('news', ({ data }) => !data.draft))
     </div>
   </section>
 
-  <!-- Section 3b: LGR decision teaser -->
+  <!-- Section 3b: LGR model showcase -->
   <section class="lgr-teaser-section">
     <div class="container">
       <ScrollReveal>
-        <a href="/lgr/" class="lgr-teaser">
-          <div class="lgr-teaser-body">
-            <span class="lgr-teaser-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
-            <h2 class="lgr-teaser-title">Lancashire is being redrawn</h2>
-            <p class="lgr-teaser-copy">
-              On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary
-              authorities from April 2028. See the new map, where Padiham &amp; Burnley West land, and the county's
-              finances going into it &mdash; every figure sourced.
-            </p>
-            <span class="lgr-teaser-go">
-              Read the breakdown
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </span>
+        <div class="lgr-show">
+          <div class="lgr-show-head">
+            <div>
+              <span class="lgr-teaser-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
+              <h2 class="lgr-teaser-title">Lancashire is being redrawn</h2>
+              <p class="lgr-teaser-copy">
+                On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary
+                authorities from April 2028. I've built an interactive model of what each one would be &mdash; who it
+                merges, the budget it would run, and the need it would have to meet. Every figure sourced.
+              </p>
+            </div>
+            <div class="lgr-teaser-stats">
+              <div class="lgr-teaser-stat"><span class="v">15&rarr;4</span><span class="l">Councils replaced</span></div>
+              <div class="lgr-teaser-stat"><span class="v">2028</span><span class="l">Go-live</span></div>
+            </div>
           </div>
-          <div class="lgr-teaser-stats">
-            <div class="lgr-teaser-stat"><span class="v">4</span><span class="l">New unitaries</span></div>
-            <div class="lgr-teaser-stat"><span class="v">15&rarr;4</span><span class="l">Councils replaced</span></div>
-            <div class="lgr-teaser-stat"><span class="v">2028</span><span class="l">Go-live</span></div>
+
+          <div class="lgr-show-grid">
+            {LGR_UNITS.map((u) => (
+              <a href="/lgr/#model" class="lgr-show-card" style={`--accent:${u.accent}`}>
+                <span class="lgr-show-name">{u.name}</span>
+                <span class="lgr-show-pop">{u.pop}</span>
+                <span class="lgr-show-meta">{u.councils} councils merged{u.home ? ' · incl. Burnley' : ''}</span>
+              </a>
+            ))}
           </div>
-        </a>
+
+          <a href="/lgr/" class="lgr-show-cta">
+            Explore the interactive model
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
       </ScrollReveal>
     </div>
   </section>

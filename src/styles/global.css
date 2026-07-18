@@ -1085,3 +1085,33 @@ legend {
   .lgr-teaser { grid-template-columns: 1fr; }
   .lgr-teaser-stats { padding-left: 0; border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.1rem; justify-content: space-between; }
 }
+
+/* LGR model showcase (homepage) */
+.lgr-show {
+  background: linear-gradient(135deg, rgba(18, 182, 207, 0.06), rgba(14, 18, 28, 0.6));
+  border: 1px solid rgba(18, 182, 207, 0.18);
+  border-radius: var(--radius-lg, 16px);
+  padding: 1.9rem 2rem;
+}
+.lgr-show-head { display: grid; grid-template-columns: 1fr auto; gap: var(--space-lg); align-items: start; margin-bottom: 1.4rem; }
+.lgr-show-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
+.lgr-show-card {
+  display: flex; flex-direction: column; gap: 3px; text-decoration: none;
+  background: rgba(10, 14, 22, 0.6); border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid var(--accent); border-radius: 12px; padding: 0.9rem 1rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.lgr-show-card:hover { transform: translateY(-3px); background: rgba(10, 14, 22, 0.85); box-shadow: 0 14px 34px rgba(0,0,0,0.3); }
+.lgr-show-name { font-size: 0.9rem; font-weight: 700; color: #f4f7fb; }
+.lgr-show-pop { font-size: 1.5rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.lgr-show-meta { font-size: 0.72rem; color: #99a2ad; }
+.lgr-show-cta {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 1.3rem;
+  font-size: 0.9rem; font-weight: 700; color: #12b6cf; text-decoration: none;
+}
+.lgr-show-cta:hover { gap: 11px; }
+
+@media (max-width: 820px) {
+  .lgr-show-head { grid-template-columns: 1fr; }
+  .lgr-show-grid { grid-template-columns: repeat(2, 1fr); }
+}

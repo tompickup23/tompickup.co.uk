@@ -109,11 +109,11 @@ const OWN_BUDGET: Record<string, { m: number | null; type: 'd' | 'u' }> = {
   'Fylde': { m: 13.06, type: 'd' },
   'Wyre': { m: 19.07, type: 'd' },
   'Blackpool': { m: 229.63, type: 'u' },
-  'Blackburn with Darwen': { m: null, type: 'u' },
-  'Hyndburn': { m: null, type: 'd' },
-  'Rossendale': { m: null, type: 'd' },
-  'Pendle': { m: null, type: 'd' },
-  'Burnley': { m: null, type: 'd' },
+  'Blackburn with Darwen': { m: 230.283, type: 'u' },
+  'Hyndburn': { m: 17.608, type: 'd' },
+  'Rossendale': { m: 14.601, type: 'd' },
+  'Pendle': { m: 18.444, type: 'd' },
+  'Burnley': { m: 22.429, type: 'd' },
   'Chorley': { m: 17.102, type: 'd' },
   'South Ribble': { m: 17.478, type: 'd' },
   'West Lancashire': { m: 19.538, type: 'd' },
@@ -293,7 +293,28 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         county's £1,329.312m across each area by population. Full method below.
       </p>
 
+      <div class="lgr-cmp-wrap">
+        <table class="lgr-cmp">
+          <thead>
+            <tr>
+              <th class="lgr-cmp-rowh">At a glance</th>
+              {MODEL.map((u) => <th style={`--accent:${u.accent}`}><span class="lgr-cmp-uni">{u.name.replace(' Lancashire', '')}</span></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="lgr-cmp-rowh">Population</td>{MODEL.map((u) => <td>{fmt(u.pop)}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Combined net budget</td>{MODEL.map((u) => <td>{u.combined ? `£${fmt(u.combined)}m` : '—'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Spend per resident</td>{MODEL.map((u) => <td>{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Councils merged</td>{MODEL.map((u) => <td>{u.councils.length}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Social-care demand</td>{MODEL.map((u) => <td>{u.metrics.healthDemandScore}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Employment rate</td>{MODEL.map((u) => <td>{u.metrics.empRate}%</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Free school meals</td>{MODEL.map((u) => <td>{u.metrics.fsmPct}%</td>)}</tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="lgr-mx" data-model={MODEL_JSON} data-meta={META_JSON}>
+        <p class="lgr-mx-hint">Select a council for the full breakdown ↓</p>
         <div class="lgr-mx-tabs" role="tablist">
           {MODEL.map((u, i) => (
             <button class={`lgr-mx-tab${i === 0 ? ' active' : ''}`} data-i={i} role="tab" style={`--accent:${u.accent}`}>
@@ -656,6 +677,17 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   .lgr-gaps { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; }
   .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
   .lgr-gaps strong { color: #e9edf2; }
+
+  /* ---- Compare-all table ---- */
+  .lgr-cmp-wrap { overflow-x: auto; margin-top: 1.2rem; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; }
+  .lgr-cmp { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 520px; background: rgba(14, 18, 28, 0.55); }
+  .lgr-cmp th, .lgr-cmp td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-variant-numeric: tabular-nums; color: #e9edf2; }
+  .lgr-cmp thead th { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+  .lgr-cmp-uni { font-weight: 800; color: var(--accent); }
+  .lgr-cmp .lgr-cmp-rowh { text-align: left; color: #99a2ad; font-weight: 500; }
+  .lgr-cmp tbody tr:last-child td { border-bottom: none; }
+  .lgr-cmp tbody tr:nth-child(2) td { color: #fff; font-weight: 700; }
+  .lgr-mx-hint { font-size: 0.8rem; color: #8e8e93; margin: 1rem 0 0.6rem; text-align: center; }
 
   /* ---- Interactive model explorer ---- */
   .lgr-mx { margin-top: 1.2rem; }
