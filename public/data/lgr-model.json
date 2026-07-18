@@ -707,6 +707,47 @@
    }
   }
  },
+ "cca": {
+  "$meta": {
+   "sources": [
+    "https://en.wikipedia.org/wiki/Lancashire_Combined_County_Authority",
+    "https://www.lancashire.gov.uk/council/organisation-and-partnerships/lancashire-combined-authority/",
+    "https://lancashire-cca.gov.uk/",
+    "https://www.publicsectorexecutive.com/articles/lancashire-combined-county-authority-marks-first-anniversary",
+    "https://lancashire.thelead.uk/p/lancashire-combined-county-authority-devolution-adult-education-provider-changes"
+   ],
+   "compiled": "2026-07-18"
+  },
+  "name": "Lancashire Combined County Authority (LCCA)",
+  "established": "Formally launched 5 February 2025 (Lancashire Combined County Authority Regulations 2025; shadow authority first met 27 November 2024)",
+  "mayoral": false,
+  "mayoralNote": "Non-mayoral, led by a chair; government has said Lancashire will get a mayor within ~18 months, alongside reorganisation",
+  "constituents": [
+   "Lancashire County Council",
+   "Blackpool Council",
+   "Blackburn with Darwen Borough Council"
+  ],
+  "functions": [
+   {
+    "name": "Local Transport Authority role",
+    "detail": "LCCA becomes the LTA for all three constituent councils from 1 April, with a \u00a3640m transport funding settlement over four years",
+    "value_m": 640,
+    "period": "4 years"
+   },
+   {
+    "name": "Adult Skills Fund",
+    "detail": "\u00a340.8m adult education/skills budget administered by the LCCA from August 2026 (previously central government)",
+    "value_m": 40.8,
+    "period": "per year"
+   },
+   {
+    "name": "Proposed",
+    "detail": "Housing, wider education and skills, and environmental functions proposed under the devolution deal"
+   }
+  ],
+  "infancyNote": "The CCA is in its infancy: strategy and funding are lifting to CCA level, but delivery capacity still sits with LCC and the two existing unitaries. No published disaggregation shows what part of any council's net budget transfers to the CCA.",
+  "postLgrNote": "After vesting day the CCA's constituent members will be drawn from the successor unitaries; Lancashire's end-state is four unitary councils plus one (likely mayoral) combined authority \u2014 five bodies, not four."
+ },
  "authorities": {
   "Lancaster": {
    "ons": "E07000121",

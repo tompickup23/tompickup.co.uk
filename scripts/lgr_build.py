@@ -26,6 +26,7 @@ auth = json.loads((DATA / "authorities.json").read_text())
 county = json.loads((DATA / "county.json").read_text())
 decision = json.loads((DATA / "decision.json").read_text())
 precedents = json.loads((DATA / "precedents.json").read_text())
+cca = json.loads((DATA / "cca.json").read_text())
 
 A = auth["authorities"]
 LCC_BUDGET = county["netBudget2627_m"]
@@ -126,6 +127,7 @@ model = {
     "totalPop": sum(A[n]["population"] for n in all_names),
     "unitaries": unitaries,
     "precedents": precedents,
+    "cca": cca,
 }
 
 (DATA / "model.json").write_text(json.dumps(model, indent=1))
