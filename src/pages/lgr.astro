@@ -1,0 +1,276 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/doge.css';
+
+// ============================================================
+// Local Government Reorganisation (LGR) — Lancashire.
+// Every figure on this page is traceable to a published source:
+//  - The decision + council groupings: MHCLG / Lancashire County
+//    Council news release, 16 July 2026, and lancashirelgr.co.uk.
+//  - Lancashire County Council finances: the council's own 2026/27
+//    budget papers (Full Council, 26 Feb 2026) and GOV.UK / MHCLG
+//    Revenue Outturn returns, as compiled and verified in the AI DOGE
+//    Lancashire data pack (aidoge.co.uk).
+// Figures the AI DOGE pack does not yet hold (per-district budgets for
+// most boroughs, combined per-unitary budgets, four-unitary transition
+// costs) are shown as gaps rather than estimated. Do not invent them.
+// ============================================================
+
+const UNITARIES = [
+  {
+    name: 'North Lancashire',
+    councils: ['Lancaster', 'Preston', 'Ribble Valley'],
+    accent: '#12b6cf',
+  },
+  {
+    name: 'West Lancashire',
+    councils: ['Fylde', 'Wyre', 'Blackpool'],
+    accent: '#30d158',
+    note: 'The new West Lancashire unitary does not include the current West Lancashire district — that borough joins South Lancashire.',
+  },
+  {
+    name: 'East Lancashire',
+    councils: ['Blackburn with Darwen', 'Hyndburn', 'Rossendale', 'Pendle', 'Burnley'],
+    accent: '#ff9f0a',
+    home: true,
+  },
+  {
+    name: 'South Lancashire',
+    councils: ['Chorley', 'South Ribble', 'West Lancashire'],
+    accent: '#bf5af2',
+  },
+];
+
+// LCC reserves trajectory (GOV.UK / MHCLG Revenue Outturn returns).
+const RESERVES = [
+  { year: '2021/22', total: 419.788, months: 6.9, rating: 'Adequate' },
+  { year: '2022/23', total: 387.408, months: 5.3, rating: 'Low' },
+  { year: '2023/24', total: 366.175, months: 4.8, rating: 'Low' },
+  { year: '2024/25', total: 345.040, months: 4.2, rating: 'Low' },
+];
+const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
+---
+
+<Layout
+  title="Lancashire is being redrawn: the LGR decision | Tom Pickup"
+  description="On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary authorities from April 2028. The decision, the new map, and the county's finances going into it — every figure sourced."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Local Government Reorganisation</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
+      <h1 class="doge-title">Lancashire is being redrawn</h1>
+      <p class="doge-sub">
+        On 16 July 2026 the government announced its decision: Lancashire's 15 councils will be abolished and
+        replaced by <strong>four new unitary authorities</strong> from April 2028. It is the biggest change to
+        local government here in more than 50 years. This is what was decided, the new map, and the financial
+        state of the county going into it — with every figure traceable to a published source.
+      </p>
+    </header>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal">4</div><div class="l">New unitary councils</div></div>
+      <div class="doge-stat"><div class="v">15 &rarr; 4</div><div class="l">Councils replaced</div></div>
+      <div class="doge-stat"><div class="v">May 2027</div><div class="l">Shadow council elections</div></div>
+      <div class="doge-stat"><div class="v">1 Apr 2028</div><div class="l">Vesting day (go-live)</div></div>
+    </div>
+
+    <!-- The decision -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The decision</h2>
+      <p class="doge-note">
+        The Secretary of State for Housing, Communities and Local Government announced on
+        <strong>16 July 2026</strong> that Lancashire's current structure — one county council, twelve district
+        councils and two unitary authorities (Blackpool and Blackburn with Darwen) — will be reorganised into
+        four unitary councils. Elections to shadow authorities are due in <strong>May 2027</strong>, with the new
+        councils taking over all local services on <strong>1 April 2028</strong>. The change is subject to
+        Parliamentary approval. Until vesting day, all 15 existing councils continue to run services as now.
+      </p>
+    </section>
+
+    <!-- The new map -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The four new unitary councils</h2>
+      <p class="doge-note">Each new unitary is built from existing districts and boroughs, as set out in the government's decision.</p>
+      <div class="lgr-unitaries">
+        {UNITARIES.map((u) => (
+          <div class="lgr-uni" style={`--accent:${u.accent}`}>
+            <div class="lgr-uni-head">
+              <span class="lgr-uni-name">{u.name}</span>
+              {u.home && <span class="lgr-uni-tag">Padiham &amp; Burnley West</span>}
+            </div>
+            <ul class="lgr-uni-list">
+              {u.councils.map((c) => <li>{c}</li>)}
+            </ul>
+            {u.note && <p class="lgr-uni-note">{u.note}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Where Burnley lands -->
+    <section class="doge-section">
+      <h2 class="doge-h2">Where Padiham &amp; Burnley West land</h2>
+      <p class="doge-note">
+        The division I represent falls inside the new <strong>East Lancashire</strong> unitary — the largest of
+        the four by number of constituent councils, pulling together Blackburn with Darwen, Hyndburn, Rossendale,
+        Pendle and Burnley. From April 2028 a single East Lancashire authority would run everything from adult
+        social care and highways (today county responsibilities) to bins and planning (today borough
+        responsibilities) across the whole of east Lancashire.
+      </p>
+    </section>
+
+    <!-- The county's finances -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The county's finances going into vesting</h2>
+      <p class="doge-note">
+        Lancashire County Council is by far the largest body being folded into the new unitaries. These are its
+        headline figures, verified against the council's own 2026/27 budget papers (adopted by Full Council on
+        26 February 2026) and GOV.UK / MHCLG returns.
+      </p>
+      <div class="doge-statband">
+        <div class="doge-stat"><div class="v teal">£1,329.3m</div><div class="l">General Fund net budget, 2026/27</div></div>
+        <div class="doge-stat"><div class="v">£717.1m</div><div class="l">Council tax requirement, 2026/27</div></div>
+        <div class="doge-stat"><div class="v">£17.3m</div><div class="l">Forecast budget gap, 2028/29 (vesting year)</div></div>
+        <div class="doge-stat"><div class="v">Score 50</div><div class="l">AI DOGE financial-resilience risk band: elevated</div></div>
+      </div>
+
+      <div class="doge-section">
+        <h3 class="doge-h2" style="font-size:1.05rem;">Reserves have fallen four years running</h3>
+        <p class="doge-note">
+          Total usable reserves and the months of net spending they would cover, from the council's MHCLG Revenue
+          Outturn returns. The adequacy rating fell from "Adequate" to "Low" over the period.
+        </p>
+        <div class="doge-panel">
+          <div class="doge-bars">
+            {RESERVES.map((r) => (
+              <div class="dg-row">
+                <div class="dg-top">
+                  <span class="dg-name">{r.year} · {r.months} months cover · {r.rating}</span>
+                  <span class="dg-val">£{r.total.toFixed(1)}m</span>
+                </div>
+                <div class="dg-track">
+                  <div class={`dg-fill${r.rating === 'Low' ? ' amber' : ''}`} style={`width:${(r.total / RES_MAX * 100).toFixed(1)}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <p class="doge-note" style="margin-top:1rem;">
+        The Medium Term Financial Strategy closes a £72.298m gross shortfall for 2026/27 and balances 2026/27 and
+        2027/28, but still shows a <strong>£17.320m gap in 2028/29</strong> — the very year the new unitaries take
+        over. The February 2026 Final Settlement delivered a £28m gain, and the council is building £58.4m of extra
+        reserves over three years. The section 151 officer judges reserves adequate; no section 114 warning is in
+        prospect. Grant dependency stands at 30% of net revenue, with council tax funding 65%.
+      </p>
+    </section>
+
+    <!-- What transfers -->
+    <section class="doge-section">
+      <h2 class="doge-h2">What transfers to the new councils</h2>
+      <p class="doge-note">
+        Reorganisation moves every asset, contract and payment obligation of the abolished councils to their
+        successors. For Lancashire County Council alone, the AI DOGE data pack records:
+      </p>
+      <div class="doge-statband">
+        <div class="doge-stat"><div class="v teal">1,219</div><div class="l">Property &amp; land assets in the county estate register</div></div>
+        <div class="doge-stat"><div class="v">1,214</div><div class="l">Live contract award notices</div></div>
+        <div class="doge-stat"><div class="v">£3.96bn</div><div class="l">Total value of those awards</div></div>
+        <div class="doge-stat"><div class="v">£4.14bn</div><div class="l">Published payments, 2024/25&ndash;2026/27 (855,890 lines)</div></div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The property register is compiled from the council's own Local Authority Land List with title, address and
+        ownership enrichment — the successor East, North, West and South Lancashire authorities will each inherit
+        the assets that sit within their new boundaries.
+      </p>
+    </section>
+
+    <!-- Compared to what was proposed -->
+    <section class="doge-section">
+      <h2 class="doge-h2">How this compares to what was proposed</h2>
+      <p class="doge-note">
+        The government's four-unitary decision matches none of the options that were formally submitted and
+        costed during the process. Reform UK at County Hall submitted a <strong>two-unitary</strong> model as the
+        best-value option; Burnley and Pendle championed a <strong>five-unitary</strong> model; three-unitary
+        variants were also modelled. A four-unitary configuration was the government's own choice — which means the
+        transition costs, savings and council-tax harmonisation impact for <em>these specific boundaries</em> have
+        not yet been publicly modelled (see gaps below).
+      </p>
+    </section>
+
+    <!-- Gaps -->
+    <section class="doge-section">
+      <h2 class="doge-h2">What isn't confirmed yet</h2>
+      <p class="doge-note">
+        In keeping with the rule that every published figure must be traceable, these items are not yet verified
+        against a published source and are deliberately left open rather than estimated:
+      </p>
+      <div class="doge-panel">
+        <ul class="lgr-gaps">
+          <li><strong>Per-district budgets</strong> for most boroughs. Verified so far: Lancashire County Council (£1,329.3m net, 2026/27) and West Lancashire district (£19.5m net, 2026/27). Burnley's published spend over £500 was £38.06m in 2025/26. The remaining districts' net budgets are still to be gathered.</li>
+          <li><strong>Combined budget per new unitary</strong> — cannot be totalled reliably until every constituent council's figure is verified.</li>
+          <li><strong>Transition cost and savings</strong> for the four-unitary boundaries — no published costing exists for this specific configuration.</li>
+          <li><strong>Council-tax harmonisation</strong> — the household impact of merging different borough tax levels within each new unitary has not been published.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Sources -->
+    <section class="doge-section">
+      <h2 class="doge-h2">Sources</h2>
+      <p class="doge-note" style="font-size:0.8rem;">
+        Decision and council groupings: Lancashire County Council / MHCLG news release, 16 July 2026, and
+        lancashirelgr.co.uk. Lancashire County Council finances: the council's own 2026/27 budget report (Full
+        Council, 26 February 2026) and GOV.UK / MHCLG Revenue Outturn returns, compiled and verified in the AI DOGE
+        Lancashire data pack (aidoge.co.uk). Reserves, resilience, contracts and property figures are drawn from
+        published transparency data; verify against the primary source before any formal use.
+      </p>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .lgr-unitaries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.2rem;
+  }
+  .lgr-uni {
+    background: rgba(14, 18, 28, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent, #12b6cf);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+  }
+  .lgr-uni-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0.7rem; }
+  .lgr-uni-name { font-size: 1.05rem; font-weight: 700; color: #f4f7fb; letter-spacing: -0.01em; }
+  .lgr-uni-tag {
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
+    color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 999px; padding: 2px 8px;
+  }
+  .lgr-uni-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+  .lgr-uni-list li {
+    font-size: 0.88rem; color: #d6dee8; padding-left: 14px; position: relative;
+  }
+  .lgr-uni-list li::before {
+    content: ''; position: absolute; left: 0; top: 0.5em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  }
+  .lgr-uni-note { font-size: 0.72rem; color: #99a2ad; line-height: 1.5; margin: 0.7rem 0 0; }
+  .lgr-gaps { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; }
+  .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
+  .lgr-gaps strong { color: #e9edf2; }
+
+  @media (max-width: 640px) {
+    .doge-statband { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
