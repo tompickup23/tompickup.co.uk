@@ -1,0 +1,31 @@
+{
+ "$meta": {
+  "note": "Cost-vs-savings scenario assumptions. Every parameter is traceable: savings run-rate from the proposers' business case (via lancashire.thelead.uk); realisation rates and cost envelope from the precedents evidence base (precedents.json); equal-pay exposure from Reform UK's published Lancashire LGR analysis (own modelled estimate, Mar 2026); government offsets from government.json. Outputs are MODELLED SCENARIOS, not forecasts.",
+  "years": ["2026/27","2027/28","2028/29","2029/30","2030/31","2031/32","2032/33","2033/34","2034/35","2035/36","2036/37","2037/38"],
+  "costProfile": { "note": "Transition spend profile: 10% pre-SCO year, 30% shadow year, 40% vesting year, 20% year after", "weights": [0.1,0.3,0.4,0.2,0,0,0,0,0,0,0,0] },
+  "governmentOffset_m": 4.6,
+  "offsetNote": "4 x >=£900k transition funding + 4 x £150k leadership top-ups + Lancashire's ~£0.4m share of proposal-development funding"
+ },
+ "fullRunRate_m": 81.9,
+ "runRateNote": "Proposers' claimed recurring annual benefit from 2032/33 (their business case; not independently verified)",
+ "scenarios": [
+  { "key": "proposers", "label": "Proposers' case",
+    "transitionCost_m": 75,
+    "realisation": 1.0,
+    "ramp": [0,0,0.2,0.4,0.6,0.8,1,1,1,1,1,1],
+    "equalPay_m": 0,
+    "basis": "Savings as claimed (£81.9m/yr by 2032/33, linear ramp from vesting); transition at the centre of the £50-100m precedent envelope" },
+  { "key": "precedent", "label": "Precedent-adjusted",
+    "transitionCost_m": 85,
+    "realisation": 0.6,
+    "ramp": [0,0,0.25,0.5,0.75,1,1,1,1,1,1,1],
+    "equalPay_m": 0,
+    "basis": "60% realisation of the claimed run-rate — reflecting Somerset (~38% of projection in year one), North Yorkshire (back-loaded) and Northamptonshire (partial); Buckinghamshire's over-delivery is the outlier. Transition cost above centre, reflecting the county-split premium" },
+  { "key": "downside", "label": "Downside",
+    "transitionCost_m": 100,
+    "realisation": 0.3,
+    "ramp": [0,0,0.25,0.5,0.75,1,1,1,1,1,1,1],
+    "equalPay_m": 85.5, "equalPayYear": 3,
+    "basis": "Cumbria pattern: savings deferred and largely absorbed by disaggregation; transition at the top of the envelope; the £85.5m modelled equal-pay exposure crystallises post-vesting (as an actual claim did in Cumbria, five months after vesting day)" }
+ ]
+}

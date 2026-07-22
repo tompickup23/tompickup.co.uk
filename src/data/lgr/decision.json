@@ -1,0 +1,22 @@
+{
+ "$meta": {
+  "sources": [
+   "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire",
+   "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
+  ],
+  "verified": "two independent official sources, identical groupings"
+ },
+ "announced": "2026-07-16",
+ "decidedBy": "Secretary of State for Housing, Communities and Local Government",
+ "shadowElections": "2027-05",
+ "vestingDay": "2028-04-01",
+ "monthsDecisionToVesting": 20.5,
+ "subjectTo": "Parliamentary approval",
+ "unitaries": {
+  "North Lancashire": { "accent": "#12b6cf", "councils": ["Lancaster", "Preston", "Ribble Valley"] },
+  "West Lancashire":  { "accent": "#30d158", "councils": ["Fylde", "Wyre", "Blackpool"],
+    "note": "Does not include the current West Lancashire district, which joins South Lancashire" },
+  "East Lancashire":  { "accent": "#ff9f0a", "councils": ["Blackburn with Darwen", "Hyndburn", "Rossendale", "Pendle", "Burnley"], "home": true },
+  "South Lancashire": { "accent": "#bf5af2", "councils": ["Chorley", "South Ribble", "West Lancashire"] }
+ }
+}

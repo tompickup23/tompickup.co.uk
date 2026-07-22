@@ -1,0 +1,957 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/doge.css';
+
+// ============================================================
+// Local Government Reorganisation (LGR) — Lancashire.
+// ALL data comes from the canonical dataset in src/data/lgr/
+// (authorities.json, county.json, decision.json — every figure
+// individually sourced), assembled by scripts/lgr_build.py into
+// model.json. The same model is published at /data/lgr-model.json.
+// Never hand-edit figures here: change the canonical dataset and
+// re-run the build script.
+// ============================================================
+import model from '../data/lgr/model.json';
+
+const C = model.county;
+const DEC = model.decision;
+
+// Map cards, in decision order (North, West, East, South).
+const UNITARIES = model.unitaries
+  .slice()
+  .sort((a, b) => ['North', 'West', 'East', 'South'].findIndex((p) => a.name.startsWith(p))
+                - ['North', 'West', 'East', 'South'].findIndex((p) => b.name.startsWith(p)));
+
+const RESERVES = C.reserves.map((r) => ({ year: r.year, total: r.total_m, months: r.monthsCover, rating: r.rating }));
+const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
+
+// Population chart, largest first.
+const POP = model.unitaries.slice().sort((a, b) => b.population - a.population)
+  .map((u) => ({ name: u.name, pop: u.population, accent: u.accent }));
+const POP_TOTAL = model.totalPop;
+const POP_MAX = Math.max(...POP.map((p) => p.pop));
+const fmt = (n: number) => n.toLocaleString('en-GB');
+
+// LCC 2026/27 net budget by directorate (spend-by-service). Verified against
+// the council's own budget papers via the AI DOGE handover facts.
+const SPEND = C.directorates.map((d) => ({ name: d.name, m: d.m }));
+const SPEND_MAX = Math.max(...SPEND.map((s) => s.m));
+
+// Largest external suppliers by processed spend (AI DOGE spending corpus).
+// Excludes lawfully redacted payments to individuals (Care Act / GDPR).
+const SUPPLIERS = C.topSuppliers.map((s) => ({ name: s.name, m: s.m }));
+const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
+
+// ============================================================
+// FOUR-UNITARY MODEL — all figures from model.json (see header note).
+// ============================================================
+const LCC_BUDGET = model.lcc.budget_m;
+const LCC_PER_CAPITA = model.lcc.perCapita;
+
+// Type lookup for the constituent-council chips.
+const OWN_BUDGET: Record<string, { type: 'd' | 'u' }> = {};
+for (const u of model.unitaries)
+  for (const o of u.owns) OWN_BUDGET[o.council] = { type: o.type === 'unitary' ? 'u' : 'd' };
+
+const BASELINE: Record<string, number> = model.baseline;
+
+// need: 'high' = a higher value signals greater service need/disadvantage;
+// 'low' = higher is better; 'neutral' = contextual.
+const METRICS = [
+  { key: 'healthDemandScore', label: 'Adult social-care demand', suffix: '', need: 'high', help: 'Composite health-need score' },
+  { key: 'empRate', label: 'Employment rate', suffix: '%', need: 'low', help: 'Share of adults in work' },
+  { key: 'noQuals', label: 'No qualifications', suffix: '%', need: 'high', help: 'Adults with no formal qualifications' },
+  { key: 'fsmPct', label: 'Free school meals', suffix: '%', need: 'high', help: 'Pupils eligible for FSM' },
+  { key: 'crimeRate', label: 'Crime rate', suffix: '/1k', need: 'high', help: 'Recorded crimes per 1,000 people' },
+  { key: 'socialRentPct', label: 'Social renting', suffix: '%', need: 'neutral', help: 'Households in social housing' },
+  { key: 'ealPct', label: 'English as additional language', suffix: '%', need: 'neutral', help: 'Pupils with EAL' },
+  { key: 'hmoPer1k', label: 'HMOs per 1,000', suffix: '', need: 'neutral', help: 'Houses in multiple occupation' },
+];
+
+// Explorer order: East first (home unitary), then South, North, West.
+const EXPLORER_ORDER = ['East', 'South', 'North', 'West'];
+const MODEL = model.unitaries
+  .slice()
+  .sort((a, b) => EXPLORER_ORDER.findIndex((p) => a.name.startsWith(p))
+                - EXPLORER_ORDER.findIndex((p) => b.name.startsWith(p)))
+  .map((u) => ({
+    name: u.name, accent: u.accent, councils: u.councils, metrics: u.metrics,
+    pop: u.population, lccServedPop: u.lccServedPop,
+    countyApportioned: u.countyApportioned.population,
+    countyApportionedNeeds: u.countyApportioned.needs,
+    perCapitaCounty: u.perCapitaCounty,
+    owns: u.owns.map((o) => ({ c: o.council, m: o.m, type: o.type === 'unitary' ? 'u' : 'd' })),
+    ownTotal: u.ownTotal,
+    combined: u.combined.population,
+    combinedNeeds: u.combined.needs,
+    combinedPerCapita: u.combinedPerCapita,
+    bandD: u.bandD,
+  }));
+const UNITS = MODEL;
+// Per-metric max across unitaries (for bar scaling), padded 15%.
+const METRIC_MAX: Record<string, number> = {};
+for (const m of METRICS) {
+  METRIC_MAX[m.key] = Math.max(...UNITS.map((u) => (u.metrics as any)[m.key]), BASELINE[m.key]) * 1.15;
+}
+// Delta vs county baseline, with a plain-English direction for colouring.
+function deltaInfo(key: string, val: number, need: string) {
+  const base = BASELINE[key];
+  const diff = Math.round((val - base) * 10) / 10;
+  let tone: 'high' | 'low' | 'flat' = 'flat';
+  if (Math.abs(diff) >= 0.1) {
+    const above = diff > 0;
+    if (need === 'neutral') tone = 'flat';
+    else if (need === 'high') tone = above ? 'high' : 'low';
+    else tone = above ? 'low' : 'high'; // need 'low' inverts
+  }
+  return { diff, tone };
+}
+const MODEL_JSON = JSON.stringify(MODEL);
+const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA });
+---
+
+<Layout
+  title="Lancashire is being redrawn: the LGR decision | Tom Pickup"
+  description="On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary authorities from April 2028. The decision, the new map, and the county's finances going into it — every figure sourced."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Local Government Reorganisation</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
+      <h1 class="doge-title">Lancashire is being redrawn</h1>
+      <p class="doge-sub">
+        On 16 July 2026 the government announced its decision: Lancashire's 15 councils will be abolished and
+        replaced by <strong>four new unitary authorities</strong> from April 2028. It is the biggest change to
+        local government here in more than 50 years. This is what was decided, the new map, and the financial
+        state of the county going into it — with every figure traceable to a published source.
+      </p>
+    </header>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal">4</div><div class="l">New unitary councils</div></div>
+      <div class="doge-stat"><div class="v">15 &rarr; 4</div><div class="l">Councils replaced</div></div>
+      <div class="doge-stat"><div class="v">May 2027</div><div class="l">Shadow council elections</div></div>
+      <div class="doge-stat"><div class="v">1 Apr 2028</div><div class="l">Vesting day (go-live)</div></div>
+    </div>
+
+    <!-- The decision -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The decision</h2>
+      <p class="doge-note">
+        The Secretary of State for Housing, Communities and Local Government announced on
+        <strong>16 July 2026</strong> that Lancashire's current structure — one county council, twelve district
+        councils and two unitary authorities (Blackpool and Blackburn with Darwen) — will be reorganised into
+        four unitary councils. Elections to shadow authorities are due in <strong>May 2027</strong>, with the new
+        councils taking over all local services on <strong>1 April 2028</strong>. The change is subject to
+        Parliamentary approval. Until vesting day, all 15 existing councils continue to run services as now.
+      </p>
+    </section>
+
+    <!-- The new map -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The four new unitary councils</h2>
+      <p class="doge-note">Each new unitary is built from existing districts and boroughs, as set out in the government's decision.</p>
+      <div class="lgr-unitaries">
+        {UNITARIES.map((u) => (
+          <div class="lgr-uni" style={`--accent:${u.accent}`}>
+            <div class="lgr-uni-head">
+              <span class="lgr-uni-name">{u.name}</span>
+              {u.home && <span class="lgr-uni-tag">Padiham &amp; Burnley West</span>}
+            </div>
+            <ul class="lgr-uni-list">
+              {u.councils.map((c) => <li>{c}</li>)}
+            </ul>
+            {u.note && <p class="lgr-uni-note">{u.note}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Scale of the new councils -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The scale of the four new councils</h2>
+      <p class="doge-note">
+        Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
+        the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
+        ~500,000 population the government has used as a working guideline</strong> for new unitaries — East
+        Lancashire comes closest at {fmt(498255)}, while the other three sit between 334,000 and 353,000.
+      </p>
+      <div class="doge-panel">
+        <div class="doge-bars">
+          {POP.map((u) => (
+            <div class="dg-row">
+              <div class="dg-top">
+                <span class="dg-name">{u.name}</span>
+                <span class="dg-val">{fmt(u.pop)}</span>
+              </div>
+              <div class="dg-track">
+                <div class="dg-fill" style={`width:${(u.pop / POP_MAX * 100).toFixed(1)}%;background:linear-gradient(90deg, ${u.accent}aa, ${u.accent})`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        For scale, Lancashire County Council's £1,329.312m net budget works out at roughly <strong>£1,076 per
+        resident</strong> across the 1.24 million people in the county area it serves (Blackpool and Blackburn with
+        Darwen are already unitary) — spending on county services (adult social care, children's services,
+        highways) that will pass to the new unitaries.
+      </p>
+    </section>
+
+    <!-- ===== INTERACTIVE MODEL EXPLORER ===== -->
+    <section class="doge-section" id="model">
+      <span class="doge-eyebrow"><span class="dot"></span> Interactive model</span>
+      <h2 class="doge-h2">Explore the four-unitary model</h2>
+      <p class="doge-note">
+        Pick a proposed council to see what it would actually be — who it merges, how many people it serves, the
+        money it would run, and the depth of need it would have to meet. Money figures combine the
+        <strong>verified</strong> budgets of every body that merges with a <strong>modelled</strong> split of the
+        county's £1,329.312m across each area by population. Full method below.
+      </p>
+
+      <div class="lgr-cmp-wrap">
+        <table class="lgr-cmp">
+          <thead>
+            <tr>
+              <th class="lgr-cmp-rowh">At a glance</th>
+              {MODEL.map((u) => <th style={`--accent:${u.accent}`}><span class="lgr-cmp-uni">{u.name.replace(' Lancashire', '')}</span></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="lgr-cmp-rowh">Population</td>{MODEL.map((u) => <td>{fmt(u.pop)}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Combined net budget</td>{MODEL.map((u) => <td>{u.combined ? `£${fmt(u.combined)}m` : '—'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Spend per resident</td>{MODEL.map((u) => <td>{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Councils merged</td>{MODEL.map((u) => <td>{u.councils.length}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Social-care demand</td>{MODEL.map((u) => <td>{u.metrics.healthDemandScore}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Employment rate</td>{MODEL.map((u) => <td>{u.metrics.empRate}%</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Free school meals</td>{MODEL.map((u) => <td>{u.metrics.fsmPct}%</td>)}</tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lgr-mx" data-model={MODEL_JSON} data-meta={META_JSON}>
+        <p class="lgr-mx-hint">Select a council for the full breakdown ↓</p>
+        <div class="lgr-mx-tabs" role="tablist">
+          {MODEL.map((u, i) => (
+            <button class={`lgr-mx-tab${i === 0 ? ' active' : ''}`} data-i={i} role="tab" style={`--accent:${u.accent}`}>
+              <span class="lgr-mx-tabname">{u.name.replace(' Lancashire', '')}</span>
+              <span class="lgr-mx-tabpop">{fmt(u.pop)}</span>
+            </button>
+          ))}
+        </div>
+
+        {MODEL.map((u, i) => (
+          <div class={`lgr-mx-panel${i === 0 ? ' active' : ''}`} data-i={i} style={`--accent:${u.accent}`}>
+            <div class="lgr-mx-head">
+              <div>
+                <h3 class="lgr-mx-title">{u.name}</h3>
+                <div class="lgr-mx-chips">
+                  {u.councils.map((c) => <span class="lgr-mx-chip">{c}{OWN_BUDGET[c].type === 'u' ? ' ·unitary' : ''}</span>)}
+                </div>
+              </div>
+              <div class="lgr-mx-viab">
+                <span class="lgr-mx-viab-v">{fmt(u.pop)}</span>
+                <span class="lgr-mx-viab-l">residents · {fmt(500000 - u.pop)} below the 500k guideline</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-money">
+              <div class="lgr-mx-stat big">
+                <span class="lgr-mx-stat-v">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+                <span class="lgr-mx-stat-l">Estimated combined net budget{u.combined ? '' : ' (gathering district figures)'}</span>
+              </div>
+              <div class="lgr-mx-stat">
+                <span class="lgr-mx-stat-v">£{u.countyApportioned}m</span>
+                <span class="lgr-mx-stat-l">County services apportioned in ({fmt(u.perCapitaCounty)}/head)</span>
+              </div>
+              <div class="lgr-mx-stat">
+                <span class="lgr-mx-stat-v">{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</span>
+                <span class="lgr-mx-stat-l">Total spend per resident</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-build">
+              <div class="lgr-mx-build-h">How the combined budget is built</div>
+              <div class="lgr-mx-brow">
+                <span class="lgr-mx-bname">County services (LCC, apportioned by population)</span>
+                <span class="lgr-mx-bval">£{u.countyApportioned}m</span>
+              </div>
+              {u.owns.map((o) => (
+                <div class="lgr-mx-brow">
+                  <span class="lgr-mx-bname">{o.c}{o.type === 'u' ? ' (existing unitary — full budget)' : ' (district)'}</span>
+                  <span class="lgr-mx-bval">{o.m !== null ? `£${o.m}m` : 'gathering…'}</span>
+                </div>
+              ))}
+              <div class="lgr-mx-brow total">
+                <span class="lgr-mx-bname">Estimated combined net budget</span>
+                <span class="lgr-mx-bval">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+              </div>
+              <div class="lgr-mx-brow alt">
+                <span class="lgr-mx-bname">…if county spend were split by social-care need instead of population</span>
+                <span class="lgr-mx-bval">£{fmt(u.combinedNeeds)}m</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-build">
+              <div class="lgr-mx-build-h">The council-tax gap it must close</div>
+              <p class="lgr-mx-bnote">
+                What a Band D household currently pays for council services (own council + county precept where
+                applicable; police, fire and parish excluded) differs across the merging councils. A single new
+                council must eventually harmonise these:
+              </p>
+              <div class="lgr-mx-brow">
+                <span class="lgr-mx-bname">Lowest today — {u.bandD.lowest.council}</span>
+                <span class="lgr-mx-bval">£{u.bandD.lowest.bill.toFixed(2)}</span>
+              </div>
+              <div class="lgr-mx-brow">
+                <span class="lgr-mx-bname">Highest today — {u.bandD.highest.council}</span>
+                <span class="lgr-mx-bval">£{u.bandD.highest.bill.toFixed(2)}</span>
+              </div>
+              <div class="lgr-mx-brow total">
+                <span class="lgr-mx-bname">Gap to harmonise (per Band D household, per year)</span>
+                <span class="lgr-mx-bval">£{u.bandD.spread.toFixed(2)}</span>
+              </div>
+              <div class="lgr-mx-brow alt">
+                <span class="lgr-mx-bname">Dwelling-weighted average across the new council</span>
+                <span class="lgr-mx-bval">£{u.bandD.dwellingWeightedAvg.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div class="lgr-mx-needs-h">The need it would have to meet <span>vs Lancashire average</span></div>
+            <div class="lgr-mx-needs">
+              {METRICS.map((m) => {
+                const val = (u.metrics as any)[m.key];
+                const { diff, tone } = deltaInfo(m.key, val, m.need);
+                const w = Math.min(100, (val / METRIC_MAX[m.key]) * 100);
+                const bw = Math.min(100, (BASELINE[m.key] / METRIC_MAX[m.key]) * 100);
+                return (
+                  <div class="lgr-mx-metric">
+                    <div class="lgr-mx-mtop">
+                      <span class="lgr-mx-mname">{m.label}</span>
+                      <span class="lgr-mx-mval">{val}{m.suffix}
+                        <span class={`lgr-mx-delta ${tone}`}>{diff > 0 ? '+' : ''}{diff}{m.suffix} vs {BASELINE[m.key]}{m.suffix}</span>
+                      </span>
+                    </div>
+                    <div class="lgr-mx-track">
+                      <div class={`lgr-mx-fill ${tone}`} style={`width:${w.toFixed(1)}%`}></div>
+                      <div class="lgr-mx-base" style={`left:${bw.toFixed(1)}%`} title="Lancashire average"></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="doge-note" style="margin-top:1rem; font-size:0.8rem;">
+        <strong>Method.</strong> Population and place indicators are verified per constituent authority (ONS Census
+        2021 and official statistics). County-service spend is Lancashire County Council's £1,329.312m net budget
+        split across each area in proportion to the population it serves — a first-order, population-based
+        apportionment, not a service-by-service costing. Blackpool and Blackburn with Darwen are already unitary, so
+        their full net budgets are added and no county spend is apportioned to them. "Combined net budget" sums the
+        apportioned county spend and every constituent council's own latest net revenue budget; because councils
+        report on slightly different bases, treat it as an indicative scale, not an audited total. Transition costs,
+        equal-pay exposure and council-tax harmonisation are not included here (see below).
+      </p>
+    </section>
+
+    <!-- Where Burnley lands -->
+    <section class="doge-section">
+      <h2 class="doge-h2">Where Padiham &amp; Burnley West land</h2>
+      <p class="doge-note">
+        The division I represent falls inside the new <strong>East Lancashire</strong> unitary — the largest of
+        the four by number of constituent councils, pulling together Blackburn with Darwen, Hyndburn, Rossendale,
+        Pendle and Burnley. From April 2028 a single East Lancashire authority would run everything from adult
+        social care and highways (today county responsibilities) to bins and planning (today borough
+        responsibilities) across the whole of east Lancashire.
+      </p>
+    </section>
+
+    <!-- The county's finances -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The county's finances going into vesting</h2>
+      <p class="doge-note">
+        Lancashire County Council is by far the largest body being folded into the new unitaries. These are its
+        headline figures, verified against the council's own 2026/27 budget papers (adopted by Full Council on
+        26 February 2026) and GOV.UK / MHCLG returns.
+      </p>
+      <div class="doge-statband">
+        <div class="doge-stat"><div class="v teal">£1,329.3m</div><div class="l">General Fund net budget, 2026/27</div></div>
+        <div class="doge-stat"><div class="v">£717.1m</div><div class="l">Council tax requirement, 2026/27</div></div>
+        <div class="doge-stat"><div class="v">£17.3m</div><div class="l">Forecast budget gap, 2028/29 (vesting year)</div></div>
+        <div class="doge-stat"><div class="v">Score 50</div><div class="l">AI DOGE financial-resilience risk band: elevated</div></div>
+      </div>
+
+      <div class="doge-section">
+        <h3 class="doge-h2" style="font-size:1.05rem;">Reserves have fallen four years running</h3>
+        <p class="doge-note">
+          Total usable reserves and the months of net spending they would cover, from the council's MHCLG Revenue
+          Outturn returns. The adequacy rating fell from "Adequate" to "Low" over the period.
+        </p>
+        <div class="doge-panel">
+          <div class="doge-bars">
+            {RESERVES.map((r) => (
+              <div class="dg-row">
+                <div class="dg-top">
+                  <span class="dg-name">{r.year} · {r.months} months cover · {r.rating}</span>
+                  <span class="dg-val">£{r.total.toFixed(1)}m</span>
+                </div>
+                <div class="dg-track">
+                  <div class={`dg-fill${r.rating === 'Low' ? ' amber' : ''}`} style={`width:${(r.total / RES_MAX * 100).toFixed(1)}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <p class="doge-note" style="margin-top:1rem;">
+        The Medium Term Financial Strategy closes a £72.298m gross shortfall for 2026/27 and balances 2026/27 and
+        2027/28, but still shows a <strong>£17.320m gap in 2028/29</strong> — the very year the new unitaries take
+        over. The February 2026 Final Settlement delivered a £28m gain, and the council is building £58.4m of extra
+        reserves over three years. The section 151 officer judges reserves adequate; no section 114 warning is in
+        prospect. Grant dependency stands at 30% of net revenue, with council tax funding 65%.
+      </p>
+    </section>
+
+    <!-- What transfers -->
+    <section class="doge-section">
+      <h2 class="doge-h2">What transfers to the new councils</h2>
+      <p class="doge-note">
+        Reorganisation moves every asset, contract and payment obligation of the abolished councils to their
+        successors. For Lancashire County Council alone, the AI DOGE data pack records:
+      </p>
+      <div class="doge-statband">
+        <div class="doge-stat"><div class="v teal">1,219</div><div class="l">Property &amp; land assets in the county estate register</div></div>
+        <div class="doge-stat"><div class="v">1,214</div><div class="l">Live contract award notices</div></div>
+        <div class="doge-stat"><div class="v">£3.96bn</div><div class="l">Total value of those awards</div></div>
+        <div class="doge-stat"><div class="v">£4.14bn</div><div class="l">Published payments, 2024/25&ndash;2026/27 (855,890 lines)</div></div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The property register is compiled from the council's own Local Authority Land List with title, address and
+        ownership enrichment — the successor East, North, West and South Lancashire authorities will each inherit
+        the assets that sit within their new boundaries.
+      </p>
+    </section>
+
+    <!-- The operation being merged -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The operation being merged</h2>
+      <p class="doge-note">
+        The county's £1,329.312m net budget is dominated by three service blocks — all of which pass to the new
+        unitaries. Adult social care alone is 42% of it. These are the operations that must be split across, or
+        merged into, the four successor councils (2026/27 net budget by directorate, from the council's own papers).
+      </p>
+      <div class="doge-panel">
+        <div class="doge-bars">
+          {SPEND.map((s) => (
+            <div class="dg-row">
+              <div class="dg-top">
+                <span class="dg-name">{s.name}</span>
+                <span class="dg-val">£{s.m.toFixed(1)}m</span>
+              </div>
+              <div class="dg-track">
+                <div class="dg-fill" style={`width:${(s.m / SPEND_MAX * 100).toFixed(1)}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="doge-section">
+        <h3 class="doge-h2" style="font-size:1.05rem;">The biggest supplier relationships that transfer</h3>
+        <p class="doge-note">
+          Largest external suppliers by processed spend — the contracts and relationships the successor councils
+          inherit. Many are long, multi-year arrangements (waste, PFI schools, homecare frameworks) that cannot
+          simply be unwound on vesting day. Lawfully redacted payments to individuals (care packages) are excluded.
+        </p>
+        <div class="doge-panel">
+          <div class="doge-bars">
+            {SUPPLIERS.map((s) => (
+              <div class="dg-row">
+                <div class="dg-top">
+                  <span class="dg-name">{s.name}</span>
+                  <span class="dg-val">£{s.m.toFixed(1)}m</span>
+                </div>
+                <div class="dg-track">
+                  <div class="dg-fill amber" style={`width:${(s.m / SUP_MAX * 100).toFixed(1)}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p class="doge-note" style="margin-top:0.9rem;">
+          Of the county's <strong>1,214 contract award notices (£3.96bn)</strong>,
+          <strong>{C.contractsBeyondVesting.straddleVesting} contracts worth
+          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong> —
+          they transfer to the successor councils mid-term. The longest-running include a £204.3m public-health
+          nursing contract to 2032, county-wide energy supply to September 2028, waste-recovery services to 2030 and
+          an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
+          starts inside a decade of its predecessors' procurement decisions.
+        </p>
+        <p class="doge-note" style="font-size:0.78rem;">
+          Mapping caveats, stated plainly: this register covers <strong>county council contracts only</strong> —
+          the twelve districts' and two unitaries' own contracts are not yet mapped; {C.contractsBeyondVesting.noEndDate} notices
+          carry no end date, so the £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m straddling figure is a floor;
+          and Contracts Finder values are self-reported at award, not final spend.
+        </p>
+      </div>
+    </section>
+
+    <!-- Compared to what was proposed -->
+    <section class="doge-section">
+      <h2 class="doge-h2">How this compares to what was proposed</h2>
+      <p class="doge-note">
+        The approved configuration was the proposal submitted by <strong>six councils</strong> — Chorley, Lancaster,
+        Preston, Ribble Valley, South Ribble and West Lancashire. Reform UK at County Hall submitted a
+        <strong>two-unitary</strong> model as the best-value option; Burnley and Pendle championed a
+        <strong>five-unitary</strong> model; the government chose the six-council four-unitary plan, citing
+        Lancashire's "diverse urban, rural and coastal communities" and alignment with economic areas, transport
+        links and future devolution. Lancashire County Council's leader opposed the decision on affordability and
+        deliverability grounds.
+      </p>
+      <p class="doge-note">
+        The proposers' business case claims cumulative net savings of <strong>£194.9m</strong>, with recurring
+        annual benefits of <strong>£81.9m from 2032/33</strong> — the bidding councils' own estimate, not an
+        independent or government-verified figure. Set that against the precedent record below: projected LGR
+        savings were delivered in full only where the new council inherited a sound balance sheet, and county
+        splits systematically under-delivered in their early years.
+      </p>
+    </section>
+
+    <!-- Politics -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The politics of reorganisation</h2>
+      <p class="doge-note">
+        The county leading this change is <strong>Reform UK-controlled</strong>: at Lancashire County Council,
+        Reform holds <strong>53 of 84 seats</strong> (a majority of 22), the administration that inherited the
+        reorganisation process and now has to deliver it. The current lower-tier councils are under mixed control —
+        mostly Labour-led or in no overall control, with Reform UK the largest party in Burnley. Every one of them
+        is abolished on vesting day.
+      </p>
+      <div class="doge-panel">
+        <div class="lgr-timeline">
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">16 Jul 2026</span>
+            <span class="lgr-tl-text">Government confirms the four-unitary decision.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">May 2027</span>
+            <span class="lgr-tl-text">All-out elections to the four new <strong>shadow authorities</strong> — the first time voters choose who runs North, West, East and South Lancashire.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">2027&ndash;28</span>
+            <span class="lgr-tl-text">Shadow councils prepare the handover while the existing 15 keep running services.</span>
+          </div>
+          <div class="lgr-tl-item">
+            <span class="lgr-tl-date">1 Apr 2028</span>
+            <span class="lgr-tl-text">Vesting day: the four unitaries take over; the county and all districts cease to exist.</span>
+          </div>
+        </div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem; font-size:0.8rem;">
+        County composition is verified against the council's own member index. Lower-tier control is a May 2026
+        snapshot from the elections data platform and is indicative at status level, not a seat-by-seat count.
+      </p>
+    </section>
+
+    <!-- The Combined Authority layer -->
+    <section class="doge-section" id="cca">
+      <h2 class="doge-h2">The layer above: the Combined Authority</h2>
+      <p class="doge-note">
+        Reorganisation is not the whole picture. Lancashire's end-state is <strong>five bodies, not four</strong>:
+        the four new unitaries plus the <strong>Lancashire Combined County Authority</strong>, formally launched on
+        5 February 2025 with Lancashire County Council, Blackpool and Blackburn with Darwen as constituent members —
+        and a mayor promised alongside reorganisation. Strategic functions are already lifting to CCA level:
+      </p>
+      <div class="doge-statband" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="doge-stat"><div class="v teal">£640m</div><div class="l">Four-year transport settlement — the CCA becomes Lancashire's Local Transport Authority from 1 April</div></div>
+        <div class="doge-stat"><div class="v teal">£40.8m</div><div class="l">Adult Skills Fund administered by the CCA from August 2026 (previously central government)</div></div>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The CCA is in its infancy: strategy and funding move up, but <strong>delivery still sits with the county
+        and the two existing unitaries</strong> — and after vesting day, with the four successors, whose members
+        will make up the CCA. Housing and environmental functions are proposed to follow under the devolution deal.
+      </p>
+      <p class="doge-note" style="font-size:0.8rem;">
+        <strong>What this means for the model:</strong> the combined budgets above describe today's council-run
+        services. No published disaggregation yet shows what part of any council's net budget will transfer to the
+        CCA (the Adult Skills Fund is new devolved money, not a carve-out from council budgets; the transport
+        settlement flows alongside, not out of, them). Until a published split exists, the model deliberately does
+        not net anything off — flagged in the gaps below.
+      </p>
+    </section>
+
+    <!-- Balance sheet & pensions -->
+    <section class="doge-section" id="balance-sheet">
+      <h2 class="doge-h2">The balance sheet they inherit</h2>
+      <p class="doge-note">
+        Reorganisation transfers balance sheets, not just services. From certified MHCLG returns (reserves at
+        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions —
+        <strong>before</strong> Lancashire County Council's own £345.0m reserves and
+        £{fmt(Math.round(C.debt_m_2026))}m borrowing, whose split across the four successors is undetermined:
+      </p>
+      <div class="lgr-prec-grid">
+        {MODEL.map((u) => (
+          <div class="lgr-prec-card" style={`border-left:3px solid ${u.accent}`}>
+            <div class="lgr-prec-name">{u.name}</div>
+            <div class="lgr-prec-row"><span>Constituents' usable reserves</span><b>£{u.constituentReserves_m}m</b></div>
+            <div class="lgr-prec-row"><span>Constituents' external debt</span><b>£{u.constituentDebt_m}m</b></div>
+          </div>
+        ))}
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The standout risk sits in the new West Lancashire: <strong>Blackpool brings £606.8m of external debt against
+        £34.7m of reserves</strong> — by far the weakest balance sheet of any merging council, and it lands in the
+        smallest unitary. By contrast Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. West Lancashire
+        district's figures include council-housing (HRA) debt, which transfers with the housing stock.
+      </p>
+      <div class="doge-panel">
+        <div class="lgr-mx-build-h">Pensions: unusually, a strength</div>
+        <p class="doge-note" style="margin:0.4rem 0 0;">
+          All 15 councils are employers in the single <strong>Lancashire County Pension Fund</strong> — £12.0bn of
+          assets, <strong>134% funded with a £3.0bn surplus</strong> at the March 2025 valuation (204,958 members).
+          Precedent says reorganisation does not split the fund: in both Cumbria and Northamptonshire one successor
+          unitary became administering authority and the rest joined as employers. Which of the four inherits
+          stewardship of £12bn is a live structural-changes-order question. The next valuation falls on
+          <strong>31 March 2028 — the day before vesting day</strong>. The surplus is already flowing back:
+          LCC's employer contribution falls from 16.3% to 9.3% (£87m → £52m) in 2026/27.
+        </p>
+      </div>
+    </section>
+
+    <!-- Process from here -->
+    <section class="doge-section" id="process">
+      <h2 class="doge-h2">The process from here — and who pays</h2>
+      <p class="doge-note">
+        The decision is implemented by a <strong>Structural Changes Order</strong> under the Local Government and
+        Public Involvement in Health Act 2007, expected later in 2026 — it must be approved by
+        <strong>both Houses of Parliament</strong> (draft affirmative procedure) before shadow arrangements begin.
+        The government's stated position on cost is that <strong>reorganisation is paid for by the councils in the
+        area</strong>, with flexibility over capital receipts and borrowing. Central support so far: a share of £7.6m
+        proposal-development funding (£135,000 per area + 20p per resident), and transition funding of
+        <strong>at least £900,000 per new unitary</strong> plus up to £150,000 each for children's, adult social
+        care and public-health leadership continuity — set against the £50m–£100m precedent-based transition
+        envelope above. Lancashire was one of <strong>14 areas decided on 16 July 2026</strong>, a wave replacing
+        134 councils with 38 unitaries.
+      </p>
+    </section>
+
+    <!-- Precedents -->
+    <section class="doge-section" id="precedents">
+      <h2 class="doge-h2">What previous reorganisations actually cost</h2>
+      <p class="doge-note">
+        Six English reorganisations have completed since 2019. Their record — from official business cases, closure
+        reports and assurance reviews — is the best available benchmark for what Lancashire is about to attempt.
+        Lancashire's <strong>{model.precedents.lancashire.months} months</strong> from decision to vesting day sits
+        almost exactly on the 2023 cohort's 20.3-month track:
+      </p>
+      <div class="doge-panel">
+        <div class="doge-bars">
+          {model.precedents.cases.map((c) => (
+            <div class="dg-row">
+              <div class="dg-top">
+                <span class="dg-name">{c.name} · {c.predecessors}→{c.unitaries} councils</span>
+                <span class="dg-val">{c.months} months</span>
+              </div>
+              <div class="dg-track"><div class="dg-fill" style={`width:${(c.months / 24 * 100).toFixed(1)}%`}></div></div>
+            </div>
+          ))}
+          <div class="dg-row">
+            <div class="dg-top">
+              <span class="dg-name"><strong>Lancashire · 15→4 councils</strong></span>
+              <span class="dg-val">{model.precedents.lancashire.months} months</span>
+            </div>
+            <div class="dg-track"><div class="dg-fill amber" style={`width:${(model.precedents.lancashire.months / 24 * 100).toFixed(1)}%`}></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lgr-prec-grid">
+        {model.precedents.cases.map((c) => (
+          <div class="lgr-prec-card">
+            <div class="lgr-prec-name">{c.name}</div>
+            <div class="lgr-prec-row"><span>Transition budgeted</span><b>£{c.transition.budgeted_m}m</b></div>
+            <div class="lgr-prec-row"><span>Transition actual</span><b>{c.transition.actual_m ? `£${c.transition.actual_m}m` : 'not published'}</b></div>
+            <div class="lgr-prec-row"><span>Savings projected</span><b>{c.savings.projected}</b></div>
+            <div class="lgr-prec-row"><span>Savings realised</span><b>{c.savings.realised}</b></div>
+            <p class="lgr-prec-note">{c.notable}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="doge-panel" style="margin-top:1.1rem;">
+        <div class="lgr-mx-build-h">What the precedents imply for Lancashire</div>
+        <p class="doge-note" style="margin:0.4rem 0 0.6rem;">
+          Budgeted transition costs ran at <strong>£{model.precedents.lancashire.perResidentEnvelope.low_gbp}–£{model.precedents.lancashire.perResidentEnvelope.high_gbp}
+          per resident</strong> across the six cases. Applied to Lancashire's {fmt(model.precedents.lancashire.population)} residents, that implies a transition envelope of roughly
+          <strong>£{model.precedents.lancashire.impliedTransition_m.low}m–£{model.precedents.lancashire.impliedTransition_m.high}m</strong> — before disaggregation risk.
+          {model.precedents.lancashire.keyRisk}. No official costing for the four-unitary configuration has been published; this envelope is a precedent-based read-across, not a forecast.
+        </p>
+        <p class="doge-note" style="margin:0; font-size:0.82rem;">
+          <strong>The workforce warning from 2023:</strong> {model.precedents.equalPay.cumbriaClaim.fact}. In Somerset,
+          staff were {model.precedents.equalPay.somerset.fact.split('(')[0].toLowerCase().replace('workforce still', 'still')} — while
+          North Yorkshire avoided the trap by completing a single job-evaluated pay structure <em>before</em> vesting.
+          Birmingham shows the downside when harmonisation goes wrong: {model.precedents.equalPay.birmingham.liability}.
+        </p>
+      </div>
+    </section>
+
+    <!-- Costs vs savings -->
+    <section class="doge-section" id="costs-savings">
+      <h2 class="doge-h2">Costs vs savings: three scenarios</h2>
+      <p class="doge-note">
+        Nobody can honestly give one number for what this reorganisation nets. What can be done is to model the
+        claimed savings against the precedent record, transparently. All three scenarios start from the proposers'
+        claimed run-rate (£{model.costsVsSavings.fullRunRate_m}m a year by 2032/33), apply a realisation rate and a
+        transition cost drawn from the six completed reorganisations above, and net off the government's
+        ~£{model.costsVsSavings.$meta.governmentOffset_m}m support. Cumulative position runs to 2037/38 — a decade
+        after vesting.
+      </p>
+      <div class="lgr-prec-grid">
+        {model.costsVsSavings.scenarios.map((s) => (
+          <div class="lgr-prec-card">
+            <div class="lgr-prec-name">{s.label}</div>
+            <div class="lgr-prec-row"><span>Savings realised</span><b>£{s.annualRunRate_m}m/yr ({s.realisationPct}%)</b></div>
+            <div class="lgr-prec-row"><span>Transition cost</span><b>£{s.transitionCost_m}m</b></div>
+            <div class="lgr-prec-row"><span>Equal-pay crystallised</span><b>{s.equalPay_m ? `£${s.equalPay_m}m` : '—'}</b></div>
+            <div class="lgr-prec-row"><span>Payback year</span><b>{s.payback}</b></div>
+            <div class="lgr-prec-row"><span>Net position by 2037/38</span><b>{s.tenYearNet_m > 0 ? '+' : ''}£{fmt(s.tenYearNet_m)}m</b></div>
+            <p class="lgr-prec-note">{s.basis}</p>
+          </div>
+        ))}
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        The spread is the finding: on the same decision, the decade-end net position ranges from
+        <strong>+£{fmt(model.costsVsSavings.scenarios[0].tenYearNet_m)}m</strong> to
+        <strong>+£{fmt(model.costsVsSavings.scenarios[2].tenYearNet_m)}m</strong> — a twenty-fold difference —
+        and payback moves from {model.costsVsSavings.scenarios[0].payback} to {model.costsVsSavings.scenarios[2].payback}.
+        Which scenario Lancashire gets is decided by execution: whether pay harmonisation is done before vesting
+        (North Yorkshire) or left to drift (Somerset), and whether the county split is managed better than Cumbria's
+        and Northamptonshire's. For comparison, Reform UK's earlier analysis put the enhanced status quo at ~£552m
+        over ten years with no transition risk at all.
+      </p>
+      <p class="doge-note" style="font-size:0.78rem;">
+        Method: deterministic scenario model, all assumptions in the open data feed. The £81.9m run-rate is the
+        bidding councils' own claim, not verified; the £85.5m equal-pay figure is Reform UK's published modelled
+        exposure; realisation rates and cost envelope come from the precedents evidence base. These are scenarios,
+        not forecasts, and none includes balance-sheet disaggregation costs, which remain unquantifiable.
+      </p>
+    </section>
+
+    <!-- Gaps -->
+    <section class="doge-section">
+      <h2 class="doge-h2">What isn't confirmed yet</h2>
+      <p class="doge-note">
+        In keeping with the rule that every published figure must be traceable, these items are not yet verified
+        against a published source and are deliberately left open rather than estimated:
+      </p>
+      <div class="doge-panel">
+        <ul class="lgr-gaps">
+          <li><strong>Official transition costing</strong> for the four-unitary configuration — none has been published. The £50m–£100m envelope above is a precedent read-across, not a government figure.</li>
+          <li><strong>How council tax will actually be harmonised</strong> — the gaps per unitary are quantified above, but the harmonisation path (level, speed, direction) is a decision for the shadow councils and government; no scheme has been published.</li>
+          <li><strong>Balance-sheet disaggregation</strong> — how LCC's assets, debt (including the bond portfolio), reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>
+          <li><strong>A few Band D figures</strong> (Lancaster, Preston, Ribble Valley, Fylde, Chorley) are sourced from budget papers but await confirmation against the formal council-tax resolution — marked medium-confidence in the data feed.</li>
+          <li><strong>The Combined Authority split</strong> — which functions (and what money) end up at CCA rather than unitary level is still being settled; the model's combined budgets will need a CCA carve-out once a published disaggregation exists.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Sources -->
+    <section class="doge-section">
+      <h2 class="doge-h2">Sources</h2>
+      <p class="doge-note" style="font-size:0.8rem;">
+        Decision and council groupings: Lancashire County Council / MHCLG news release, 16 July 2026, and
+        lancashirelgr.co.uk. Lancashire County Council finances: the council's own 2026/27 budget report (Full
+        Council, 26 February 2026) and GOV.UK / MHCLG Revenue Outturn returns, compiled and verified in the AI DOGE
+        Lancashire data pack (aidoge.co.uk). Reserves, resilience, contracts and property figures are drawn from
+        published transparency data. Population per unitary is summed from ONS Census 2021 per-authority totals.
+        Spend by directorate and largest suppliers are from the AI DOGE Lancashire pack. Each constituent council's
+        net budget and Band D figure is sourced from its own 2026/27 budget papers or council-tax resolution.
+        Precedent figures come from MHCLG decision documents, council business cases, KPMG/CIPFA closure and
+        assurance reviews, Hansard and audited accounts. Lower-tier political control is a May 2026 snapshot from
+        the elections data platform (indicative at status level). Verify against the primary source before any
+        formal use. <strong>The full model — every input, its source and its confidence rating — is published as
+        open data at <a href="/data/lgr-model.json">/data/lgr-model.json</a>.</strong>
+      </p>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  function initModelExplorer() {
+    const mx = document.querySelector('.lgr-mx');
+    if (!mx) return;
+    const tabs = Array.from(mx.querySelectorAll('.lgr-mx-tab'));
+    const panels = Array.from(mx.querySelectorAll('.lgr-mx-panel'));
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const i = tab.getAttribute('data-i');
+        tabs.forEach((t) => t.classList.toggle('active', t === tab));
+        panels.forEach((p) => p.classList.toggle('active', p.getAttribute('data-i') === i));
+      });
+    });
+  }
+  initModelExplorer();
+  document.addEventListener('astro:page-load', initModelExplorer);
+</script>
+
+<style>
+  .lgr-unitaries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.1rem;
+    margin-top: 1.2rem;
+  }
+  .lgr-uni {
+    background: rgba(14, 18, 28, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--accent, #12b6cf);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+  }
+  .lgr-uni-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0.7rem; }
+  .lgr-uni-name { font-size: 1.05rem; font-weight: 700; color: #f4f7fb; letter-spacing: -0.01em; }
+  .lgr-uni-tag {
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
+    color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 999px; padding: 2px 8px;
+  }
+  .lgr-uni-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+  .lgr-uni-list li {
+    font-size: 0.88rem; color: #d6dee8; padding-left: 14px; position: relative;
+  }
+  .lgr-uni-list li::before {
+    content: ''; position: absolute; left: 0; top: 0.5em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  }
+  .lgr-uni-note { font-size: 0.72rem; color: #99a2ad; line-height: 1.5; margin: 0.7rem 0 0; }
+  .lgr-gaps { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; }
+  .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
+  .lgr-gaps strong { color: #e9edf2; }
+
+  /* ---- Compare-all table ---- */
+  .lgr-cmp-wrap { overflow-x: auto; margin-top: 1.2rem; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; }
+  .lgr-cmp { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 520px; background: rgba(14, 18, 28, 0.55); }
+  .lgr-cmp th, .lgr-cmp td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-variant-numeric: tabular-nums; color: #e9edf2; }
+  .lgr-cmp thead th { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+  .lgr-cmp-uni { font-weight: 800; color: var(--accent); }
+  .lgr-cmp .lgr-cmp-rowh { text-align: left; color: #99a2ad; font-weight: 500; }
+  .lgr-cmp tbody tr:last-child td { border-bottom: none; }
+  .lgr-cmp tbody tr:nth-child(2) td { color: #fff; font-weight: 700; }
+  .lgr-mx-hint { font-size: 0.8rem; color: #8e8e93; margin: 1rem 0 0.6rem; text-align: center; }
+
+  /* ---- Interactive model explorer ---- */
+  .lgr-mx { margin-top: 1.2rem; }
+  .lgr-mx-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.1rem; }
+  .lgr-mx-tab {
+    display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
+    background: rgba(14, 18, 28, 0.55); border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px; padding: 0.7rem 0.85rem; cursor: pointer; text-align: left;
+    font-family: inherit; transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+  .lgr-mx-tab:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+  .lgr-mx-tab.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, rgba(14,18,28,0.55)); }
+  .lgr-mx-tab.active::before { content: ''; }
+  .lgr-mx-tabname { font-size: 0.9rem; font-weight: 700; color: #f4f7fb; }
+  .lgr-mx-tabpop { font-size: 0.72rem; color: #99a2ad; font-variant-numeric: tabular-nums; }
+  .lgr-mx-tab.active .lgr-mx-tabname { color: var(--accent); }
+
+  .lgr-mx-panel { display: none; }
+  .lgr-mx-panel.active { display: block; animation: lgrfade 0.25s ease; }
+  @keyframes lgrfade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .lgr-mx-head {
+    display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: flex-start;
+    padding: 1rem 1.2rem; border-radius: 14px 14px 0 0;
+    background: color-mix(in srgb, var(--accent) 10%, rgba(14,18,28,0.6));
+    border: 1px solid rgba(255, 255, 255, 0.07); border-bottom: none;
+  }
+  .lgr-mx-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem; color: #fff; }
+  .lgr-mx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lgr-mx-chip {
+    font-size: 0.72rem; color: #d6dee8; background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 999px; padding: 3px 9px;
+  }
+  .lgr-mx-viab { text-align: right; }
+  .lgr-mx-viab-v { display: block; font-size: 1.5rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .lgr-mx-viab-l { font-size: 0.7rem; color: #99a2ad; }
+
+  .lgr-mx-money {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    border-left: 1px solid rgba(255,255,255,0.07); border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  .lgr-mx-stat { background: rgba(10, 14, 22, 0.92); padding: 0.9rem 1.2rem; }
+  .lgr-mx-stat.big { background: color-mix(in srgb, var(--accent) 8%, rgba(10,14,22,0.92)); }
+  .lgr-mx-stat-v { display: block; font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .lgr-mx-stat.big .lgr-mx-stat-v { color: var(--accent); }
+  .lgr-mx-stat-l { font-size: 0.72rem; color: #99a2ad; margin-top: 3px; line-height: 1.35; }
+
+  .lgr-mx-build { padding: 1rem 1.2rem; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.07); border-top: none; }
+  .lgr-mx-build-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8e8e93; font-weight: 700; margin-bottom: 0.6rem; }
+  .lgr-mx-brow { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .lgr-mx-brow.total { border-bottom: none; border-top: 1px solid rgba(255,255,255,0.12); margin-top: 4px; padding-top: 8px; font-weight: 700; }
+  .lgr-mx-bname { color: #c3ccd6; }
+  .lgr-mx-brow.total .lgr-mx-bname { color: #f4f7fb; }
+  .lgr-mx-bval { color: var(--accent); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .lgr-mx-needs-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #f4f7fb; margin: 1.3rem 0 0.7rem; }
+  .lgr-mx-needs-h span { font-size: 0.72rem; font-weight: 500; color: #8e8e93; }
+  .lgr-mx-needs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.4rem; }
+  .lgr-mx-metric { }
+  .lgr-mx-mtop { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8rem; }
+  .lgr-mx-mname { color: #d6dee8; }
+  .lgr-mx-mval { color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lgr-mx-delta { font-weight: 500; font-size: 0.68rem; margin-left: 6px; }
+  .lgr-mx-delta.high { color: #ff9f0a; }
+  .lgr-mx-delta.low { color: #30d158; }
+  .lgr-mx-delta.flat { color: #8e8e93; }
+  .lgr-mx-track { position: relative; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+  .lgr-mx-fill { height: 100%; border-radius: 4px; background: #6b7280; }
+  .lgr-mx-fill.high { background: linear-gradient(90deg, #d97a06, #ff9f0a); }
+  .lgr-mx-fill.low { background: linear-gradient(90deg, #1f9d4d, #30d158); }
+  .lgr-mx-fill.flat { background: linear-gradient(90deg, #4b5563, #6b7280); }
+  .lgr-mx-base { position: absolute; top: -2px; width: 2px; height: 11px; background: #e9edf2; opacity: 0.65; }
+
+  @media (max-width: 640px) {
+    .lgr-mx-tabs { grid-template-columns: repeat(2, 1fr); }
+    .lgr-mx-money { grid-template-columns: 1fr; }
+    .lgr-mx-needs { grid-template-columns: 1fr; }
+    .lgr-mx-head { flex-direction: column; }
+    .lgr-mx-viab { text-align: left; }
+  }
+
+  /* Build-table variants + precedent cards */
+  .lgr-mx-brow.alt { border-top: 1px dashed rgba(255,255,255,0.1); margin-top: 2px; padding-top: 7px; }
+  .lgr-mx-brow.alt .lgr-mx-bname, .lgr-mx-brow.alt .lgr-mx-bval { color: #8e8e93; font-weight: 500; font-size: 0.78rem; }
+  .lgr-mx-bnote { font-size: 0.78rem; color: #99a2ad; line-height: 1.5; margin: 0 0 0.6rem; }
+  .lgr-prec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; margin-top: 1.1rem; }
+  .lgr-prec-card { background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0.95rem 1.05rem; }
+  .lgr-prec-name { font-size: 0.95rem; font-weight: 700; color: #f4f7fb; margin-bottom: 0.55rem; }
+  .lgr-prec-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; padding: 3px 0; }
+  .lgr-prec-row span { color: #8e8e93; white-space: nowrap; }
+  .lgr-prec-row b { color: #d6dee8; font-weight: 600; text-align: right; }
+  .lgr-prec-note { font-size: 0.74rem; color: #99a2ad; line-height: 1.45; margin: 0.55rem 0 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.55rem; }
+
+  .lgr-timeline { display: grid; gap: 0; }
+  .lgr-tl-item {
+    display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: baseline;
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .lgr-tl-item:last-child { border-bottom: none; }
+  .lgr-tl-date { font-size: 0.8rem; font-weight: 700; color: #12b6cf; font-variant-numeric: tabular-nums; }
+  .lgr-tl-text { font-size: 0.88rem; color: #c3ccd6; line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    .doge-statband { grid-template-columns: repeat(2, 1fr); }
+    .lgr-tl-item { grid-template-columns: 84px 1fr; gap: 10px; }
+  }
+</style>

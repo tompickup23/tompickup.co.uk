@@ -1,0 +1,164 @@
+{
+ "$meta": {
+  "source": "LCC Budget Report 2026/27 (Full Council, 26 Feb 2026) and GOV.UK/MHCLG Revenue Outturn returns, via the AI DOGE Lancashire data pack (aidoge.co.uk)",
+  "compiled": "2026-07-18"
+ },
+ "name": "Lancashire County Council",
+ "netBudget2627_m": 1329.312,
+ "councilTaxRequirement_m": 717.078,
+ "taxBase": 397989.95,
+ "bandD_county": 1801.75,
+ "bandD_county_general": 1492.42,
+ "bandD_county_asc": 309.33,
+ "bandD_police": 292.4,
+ "bandD_fire": 94.73,
+ "composition": "84 seats: Reform UK 53, Progressive Lancashire Group 11, Conservative 8, Labour 5, Liberal Democrats 5, Our West Lancashire 2 (member index, 30 Jun 2026)",
+ "mtfs": {
+  "gap2829_m": 17.32,
+  "grossShortfall2627Closed_m": 72.298,
+  "settlementGain_m": 28.0,
+  "extraReservesPlanned_m": 58.4
+ },
+ "reserves": [
+  {
+   "year": "2021/22",
+   "total_m": 419.788,
+   "monthsCover": 6.9,
+   "rating": "Adequate"
+  },
+  {
+   "year": "2022/23",
+   "total_m": 387.408,
+   "monthsCover": 5.3,
+   "rating": "Low"
+  },
+  {
+   "year": "2023/24",
+   "total_m": 366.175,
+   "monthsCover": 4.8,
+   "rating": "Low"
+  },
+  {
+   "year": "2024/25",
+   "total_m": 345.04,
+   "monthsCover": 4.2,
+   "rating": "Low"
+  }
+ ],
+ "resilience": {
+  "riskScore": 50,
+  "riskBand": "elevated",
+  "s114Proximity": false,
+  "grantDependencyPct": 29.99,
+  "ctaxPctNetRevenue": 65.14
+ },
+ "estate": {
+  "propertyAssets": 1219,
+  "contractNotices": 1214,
+  "contractValue_bn": 3.961,
+  "paymentsCorpus_bn": 4.14,
+  "paymentLines": 855890
+ },
+ "directorates": [
+  {
+   "name": "Adults, Health & Wellbeing",
+   "m": 558.501
+  },
+  {
+   "name": "Education & Children's Services",
+   "m": 265.726
+  },
+  {
+   "name": "Place (Highways, Environment, Growth)",
+   "m": 261.898
+  },
+  {
+   "name": "Corporate, central & financing",
+   "m": 243.187
+  }
+ ],
+ "topSuppliers": [
+  {
+   "name": "NHS Lancashire & South Cumbria ICB",
+   "m": 219.7
+  },
+  {
+   "name": "SUEZ Recycling & Recovery UK",
+   "m": 79.6
+  },
+  {
+   "name": "Lancashire Renewables Ltd",
+   "m": 77.7
+  },
+  {
+   "name": "Lancashire Schools SPC Phase 1",
+   "m": 48.8
+  },
+  {
+   "name": "Guardian Homecare",
+   "m": 45.0
+  }
+ ],
+ "contractsBeyondVesting": {
+  "$note": "Analysis of the AI DOGE contracts register (Contracts Finder/Find a Tender award notices, buyer = Lancashire County Council). Caveats: county contracts only (district contracts not included); 197 notices carry no end date so the straddling total is a floor; Contracts Finder data is supplier/buyer self-reported.",
+  "noticesParsed": 1214,
+  "liveToday": 276,
+  "liveValue_m": 1754.4,
+  "straddleVesting": 142,
+  "straddleValue_m": 1031.3,
+  "noEndDate": 197,
+  "topStraddling": [
+   {
+    "value_m": 204.3,
+    "title": "0-19 years (up to 25 years with SEND) Public Health Nursing ",
+    "supplier": "Wirral Community Health and Care NHS Fou",
+    "ends": "2032-03-31"
+   },
+   {
+    "value_m": 110.8,
+    "title": "Supply of HH, NHH, UMS Electricity to Lancashire County Coun",
+    "supplier": "Npower Commercial Gas Limited",
+    "ends": "2028-09-30"
+   },
+   {
+    "value_m": 64.0,
+    "title": "IT Reseller Agreement for IT Software, Support and Associate",
+    "supplier": "Softcat Plc",
+    "ends": "2029-11-30"
+   },
+   {
+    "value_m": 63.4,
+    "title": "LPS CORP - Provision of Treated Residual Waste Recovery Serv",
+    "supplier": "Lot 1 - Envirofuel (SRF) Limited",
+    "ends": "2030-03-31"
+   },
+   {
+    "value_m": 60.0,
+    "title": "Supply of Natural Gas to Lancashire County Council and Schoo",
+    "supplier": "TotalEnergies Gas & Power Ltd",
+    "ends": "2028-09-30"
+   },
+   {
+    "value_m": 60.0,
+    "title": "Agency Staff Neutral Vendor Managed Service and Workforce So",
+    "supplier": "Comensura Ltd",
+    "ends": "2029-03-01"
+   },
+   {
+    "value_m": 50.3,
+    "title": "LPS CORP - The Supply and Delivery of Food and Drink Product",
+    "supplier": "Dunsters Farm Ltd",
+    "ends": "2029-08-31"
+   },
+   {
+    "value_m": 38.9,
+    "title": "LPS CAS - Surfacing & Potholes Managed Service - LCC43824",
+    "supplier": "Multevo Limited",
+    "ends": "2029-05-18"
+   }
+  ]
+ },
+ "debt_m": 1052.1,
+ "debt_m_2026": 953.3,
+ "debtNote": "External borrowing 31 Mar 2025 (31 Mar 2026 provisional: \u00a3953.3m), MHCLG Borrowing & Investment live table. Reserves figure of \u00a3345.0m verified exactly against the MHCLG RS return (\u00a3359.2m including public health)."
+}
