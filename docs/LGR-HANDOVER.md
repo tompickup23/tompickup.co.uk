@@ -25,3 +25,10 @@
 
 ## Data sources used
 AI DOGE Drive pack (DOGE folder / Cross-council / Lancashire), ukdemographics + ukelections repos (cloned at /workspace/ in the old session — re-clone if needed), MHCLG returns, each council's own budget papers (URLs in authorities.json).
+
+## Session close-out (19 Jul 2026)
+- PR #1 SQUASH-MERGED to main (d972040). Site NOT yet live: tompickup.co.uk/lgr returns 404.
+- Deploy blocked on either (a) user-approving add_repo for tompickup23.github.io so a session can push dist/ directly, or (b) user minting DEPLOY_TOKEN (fine-grained PAT, tompickup23.github.io, Contents RW), updating the repo secret, deleting `if: false` in .github/workflows/deploy.yml, and running the workflow. Route (b) is the durable fix.
+- After first deploy: optionally purge Cloudflare cache.
+- Social cards produced this session (scratchpad only, NOT committed — regenerate or commit next time): 4 two-panel council cards (money/people incl. MHCLG arrears + collection rates 2025-26), Lancashire map from ONS boundaries, contracts-timeline card, generators in session scratchpad as *.html + python inline. Council-tax arrears source: MHCLG QRC4 2025-26 Tables 6a/9a (Preston £47.9m arrears/90.67%; Blackpool £33.4m/90.0%; per-unitary E £77.0m, N £72.6m, W £55.5m, S £45.7m). Born-abroad % from Census country-of-birth (NOT nationality). Hyndburn & Fylde c-tax requirements not published.
+- Next: commit card generators to scripts/social_cards/, add arrears to authorities.json + ETL, boundary map on /lgr/, confirm 5 medium-confidence Band D figures, per-district contracts pull.
