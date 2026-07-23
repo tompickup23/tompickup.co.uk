@@ -503,12 +503,13 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         </p>
         <p style="margin-top:1.1rem;">
           <a href="/lgr/contracts/" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:0.9rem;text-decoration:none;background:rgba(18,182,207,0.12);border:1px solid rgba(18,182,207,0.4);color:#12b6cf;">
-            Search every council's contracts, by term and end date &rarr;
+            Search every public body's contracts, by term and end date &rarr;
           </a>
         </p>
         <p class="doge-note" style="font-size:0.78rem;">
           Mapping caveats, stated plainly: the figures in this section are the <strong>county council's</strong>
-          own award notices. The searchable explorer linked above now covers all fourteen councils;
+          own award notices. The searchable explorer linked above now covers all fourteen councils plus the
+          police, fire and ambulance services, the NHS and the other public bodies on the property map;
           {C.contractsBeyondVesting.noEndDate} notices
           carry no end date, so the £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m straddling figure is a floor;
           and Contracts Finder values are self-reported at award, not final spend.
@@ -542,7 +543,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <h2 class="doge-h2">The politics of reorganisation</h2>
       <p class="doge-note">
         The county leading this change is <strong>Reform UK-controlled</strong>: at Lancashire County Council,
-        Reform holds <strong>53 of 84 seats</strong> (a majority of 22), the administration that inherited the
+        Reform holds <strong>52 of 84 seats</strong> (a majority of 20), the administration that inherited the
         reorganisation process and now has to deliver it. The current lower-tier councils are under mixed control,
         mostly Labour-led or in no overall control, with Reform UK the largest party in Burnley. Every one of them
         is abolished on vesting day.

@@ -5,8 +5,8 @@ import '../../../styles/lgr.css';
 ---
 
 <Layout
-  title="Public contracts: what Lancashire's councils are buying | Tom Pickup"
-  description="A searchable record of contracts awarded by Lancashire's county, borough and city councils, drawn from the government's Contracts Finder service, with contract length front and centre: who is paid, how much, for what, and for how long."
+  title="Public contracts: what Lancashire's public sector is buying | Tom Pickup"
+  description="A searchable record of contracts awarded by Lancashire's councils, police, fire and ambulance services, NHS and other public bodies, drawn from the government's Contracts Finder service, with contract length front and centre: who is paid, how much, for what, and for how long."
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
@@ -17,9 +17,9 @@ import '../../../styles/lgr.css';
 
     <header class="doge-head">
       <span class="doge-eyebrow"><span class="dot"></span> Public contracts &amp; procurement</span>
-      <h1 class="doge-title">What Lancashire is buying</h1>
+      <h1 class="doge-title">What Lancashire's public sector is buying</h1>
       <p class="doge-sub">
-        Councils spend a large part of their money through contracts with outside suppliers. By law those
+        The public sector spends a large part of its money through contracts with outside suppliers. By law those
         contracts are published. Here I bring the Lancashire ones together from the government's own procurement
         service into one searchable record, so you can see who is paid, how much, for what, and crucially for
         how long.
@@ -29,26 +29,42 @@ import '../../../styles/lgr.css';
     <div class="lgr-prose" style="margin-top:0.5rem;">
       <p>
         The data comes from <strong>Contracts Finder</strong>, where public bodies must publish contracts and
-        awards above roughly £25,000, covering the county council and all thirteen borough and city councils.
-        It is a record of <strong>contracts awarded</strong> since 2015, not of every pound spent: day-to-day
-        payments below the threshold, wages and grants are not here. The part that matters most for
-        reorganisation is <strong>contract length</strong>: a long contract signed now is inherited by whichever
-        new unitary takes over on 1 April 2028, whether it wants it or not. So this page leads on term, and on
-        how many contracts are still running on handover day.
+        awards above roughly £25,000. It starts with the bodies being reorganised: the <strong>county council
+        and all thirteen borough and city councils</strong>. But councils are not the only public purse in
+        Lancashire, and they are not the only landowner: the same <a href="/lgr/property/">property map</a> that
+        shows the council estate also shows the police, fire and ambulance services, the NHS, national agencies
+        and the colleges and universities. So this page now carries their contracts too.
+      </p>
+      <p>
+        The distinction matters. <strong>Only the councils are abolished by reorganisation</strong>, so only
+        their contracts pass to whichever new unitary takes over on <strong>1 April 2028</strong>, whether it
+        wants them or not. The police, fire, NHS and the rest are <strong>not</strong> reorganised; they keep
+        their own contracts. So the handover figures below count the <strong>council</strong> contracts, while
+        the wider bodies are shown as the public-sector landscape around them. Use the filter to move between
+        them. As with any of this, the part that matters most for reorganisation is <strong>contract
+        length</strong>, so the table leads on term and end date.
       </p>
     </div>
 
     <div class="doge-statband" id="lc-stats">
-      <div class="doge-stat"><div class="v teal" id="lc-count">…</div><div class="l">Contracts awarded</div></div>
+      <div class="doge-stat"><div class="v teal" id="lc-count">…</div><div class="l">Contracts on record (all public bodies)</div></div>
       <div class="doge-stat"><div class="v" id="lc-value">…</div><div class="l">Value awarded (excluding framework ceilings)</div></div>
-      <div class="doge-stat"><div class="v" id="lc-vesting">…</div><div class="l">Still running on handover day (1 Apr 2028)</div></div>
+      <div class="doge-stat"><div class="v" id="lc-vesting">…</div><div class="l">Council contracts still running on handover day (1 Apr 2028)</div></div>
       <div class="doge-stat"><div class="v" id="lc-longest">…</div><div class="l">Longest term awarded</div></div>
     </div>
 
     <div class="bsp-wrap">
       <div class="bsp-controls">
         <input class="bsp-search" id="lc-search" type="search" placeholder="Search supplier, buyer or what was bought…" aria-label="Search contracts" />
-        <select class="bsp-sel" id="lc-buyer" aria-label="Buyer"><option value="">All public bodies</option></select>
+        <select class="bsp-sel" id="lc-group" aria-label="Type of body">
+          <option value="">All public bodies</option>
+          <option value="council">Councils (reorganised)</option>
+          <option value="emergency">Police, fire &amp; ambulance</option>
+          <option value="nhs">NHS</option>
+          <option value="gov">National agencies</option>
+          <option value="education">Colleges &amp; universities</option>
+        </select>
+        <select class="bsp-sel" id="lc-buyer" aria-label="Buyer"><option value="">Any buyer</option></select>
         <select class="bsp-sel" id="lc-scope" aria-label="Scope">
           <option value="">All contracts</option>
           <option value="vesting">Running past handover (2028)</option>
@@ -81,6 +97,13 @@ import '../../../styles/lgr.css';
       Government Licence. This is a record of awarded contracts and framework agreements, which are commitments
       to spend, not confirmed payments, and it excludes spending below the publication thresholds. Figures are
       as published by each buyer; where a value was not published, none is shown.
+      <strong>On coverage:</strong> the council record is comprehensive on Contracts Finder. The other bodies are
+      matched by name, and their coverage is uneven: the <strong>NHS trusts and colleges publish most of their
+      tenders elsewhere</strong> (Find a Tender and the NHS Atamis portal), so what is shown here is a floor, not
+      their full procurement. National agencies such as National Highways and the Environment Agency have a large
+      Lancashire estate but procure nationally, so only contracts with a clear Lancashire link are included, and
+      there are few. Only the <strong>councils</strong> are abolished by reorganisation, so the "still running on
+      handover day" figure counts council contracts alone.
       <strong>On contract length:</strong> the term shown is the published contract period. Contracts Finder has
       no structured field for extension options, so where a contract says "three years with the option of two
       more", it is flagged <span class="lc-ext">+opt</span>, and where the wording is precise enough the maximum
@@ -99,6 +122,7 @@ import '../../../styles/lgr.css';
     var all = [], view = [], shown = 0, PAGE = 60;
 
     var searchEl = document.getElementById('lc-search');
+    var groupEl = document.getElementById('lc-group');
     var buyerEl = document.getElementById('lc-buyer');
     var scopeEl = document.getElementById('lc-scope');
     var sortEl = document.getElementById('lc-sort');
@@ -146,6 +170,7 @@ import '../../../styles/lgr.css';
     }
     function apply(){
       view = all.filter(function(c){
+        if (groupEl.value && c.gc !== groupEl.value) return false;
         if (buyerEl.value && c.buyer !== buyerEl.value) return false;
         if (scopeEl.value === 'vesting' && !pastVesting(c)) return false;
         if (scopeEl.value === '5yr' && !(c.months >= 60)) return false;
@@ -176,19 +201,35 @@ import '../../../styles/lgr.css';
       moreBtn.style.display = shown < view.length ? '' : 'none';
       moreBtn.textContent = 'Show more (' + (view.length - shown).toLocaleString() + ' left)';
     }
+    // Rebuild the buyer dropdown to the buyers present in the selected group.
+    function populateBuyers(){
+      var g = groupEl.value;
+      var bs = {};
+      all.forEach(function(c){ if (!g || c.gc === g) bs[c.buyer] = true; });
+      var cur = buyerEl.value;
+      while (buyerEl.options.length > 1) buyerEl.remove(1);
+      var keep = false;
+      Object.keys(bs).sort().forEach(function(b){
+        var o = document.createElement('option'); o.value = b; o.textContent = b; buyerEl.appendChild(o);
+        if (b === cur) keep = true;
+      });
+      buyerEl.value = keep ? cur : '';
+    }
     moreBtn.addEventListener('click', renderMore);
+    groupEl.addEventListener('change', function(){ populateBuyers(); apply(); });
     [buyerEl, scopeEl, sortEl].forEach(function(s){ s.addEventListener('change', apply); });
     var t; searchEl.addEventListener('input', function(){ clearTimeout(t); t = setTimeout(function(){ query = searchEl.value.toLowerCase().trim(); apply(); }, 180); });
 
     fetch('/data/lgr-contracts.json').then(function(r){ return r.json(); }).then(function(d){
       all = d.contracts || [];
       var m = d.meta || {};
+      var council = m.council || {};
       document.getElementById('lc-count').textContent = (m.total || all.length).toLocaleString();
       document.getElementById('lc-value').textContent = m.sum ? '£' + (m.sum/1e6).toFixed(0) + 'm' : '…';
-      document.getElementById('lc-vesting').textContent = (m.running_past_vesting_2028 != null) ? m.running_past_vesting_2028.toLocaleString() : '…';
+      // Handover figure is COUNCILS ONLY: only their contracts transfer to the unitaries.
+      document.getElementById('lc-vesting').textContent = (council.running_past_vesting_2028 != null) ? council.running_past_vesting_2028.toLocaleString() : '…';
       document.getElementById('lc-longest').textContent = m.max_term_months ? (Math.round(m.max_term_months/12*10)/10) + ' yrs' : '…';
-      var bs = {}; all.forEach(function(c){ bs[c.buyer] = true; });
-      Object.keys(bs).sort().forEach(function(b){ var o = document.createElement('option'); o.value = b; o.textContent = b; buyerEl.appendChild(o); });
+      populateBuyers();
       apply();
     }).catch(function(){ summary.textContent = 'The contracts data could not be loaded.'; });
   })();
