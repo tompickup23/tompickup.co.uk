@@ -39,6 +39,13 @@
   font-family: inherit; background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(18, 182, 207, 0.18); color: #fff;
 }
 .lp-search::placeholder { color: #636366; }
+.lp-check {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none;
+  padding: 9px 12px; border-radius: 10px; font-size: 0.82rem; color: #aab2bd;
+  background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(18, 182, 207, 0.18);
+}
+.lp-check input { accent-color: #12b6cf; }
+.lp-check:hover { color: #d6dee8; }
 
 /* owner-type toggle chips */
 .lp-chips { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }

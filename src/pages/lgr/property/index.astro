@@ -38,9 +38,11 @@ import '../../../styles/lgr.css';
         hold across that area today.
       </p>
       <p>
-        Not everything moves. <strong>Fire, police, the NHS and academy schools are separate bodies.</strong>
-        They keep what they own; reorganising the councils does not touch them. That is why this map lets you
-        turn each type of owner on and off, so you can see what actually transfers and what stays put.
+        Not everything moves. <strong>Only county and district council property passes to the new unitaries.</strong>
+        Town and parish councils carry on as they are, and the fire and ambulance services, the police, the NHS,
+        academy schools and national bodies are all separate: reorganising the councils does not touch what they
+        own. This map lets you turn each type of owner on and off, and filter to just what transfers in 2028, so
+        you can see what each new council actually inherits and what stays put.
       </p>
 
       <h2>What other reorganisations have taught us</h2>
@@ -110,6 +112,12 @@ import '../../../styles/lgr.css';
             <option value="F">Freehold</option>
             <option value="L">Leasehold</option>
           </select>
+          <select class="lp-sel" id="lp-xfer" aria-label="Reorganisation">
+            <option value="">Transfers &amp; stays</option>
+            <option value="1">Only what transfers in 2028</option>
+            <option value="0">Only what stays</option>
+          </select>
+          <label class="lp-check"><input type="checkbox" id="lp-precise" /> Precisely located only</label>
           <input class="lp-search" id="lp-search" type="search" placeholder="Search name, place or type…" aria-label="Search assets" />
         </div>
       </div>
@@ -118,7 +126,9 @@ import '../../../styles/lgr.css';
 
       <p id="lp-stat" class="lp-stat">Loading property data…</p>
       <div class="lp-legend" id="lp-legend" aria-hidden="true">
-        <span><i style="background:#12b6cf"></i> The four future unitaries are named in each marker's popup.</span>
+        <span><i style="background:#12b6cf"></i> Solid marker = located by postcode.</span>
+        <span><i style="background:#94a3b8;opacity:.4"></i> Faded / dashed = council land parcel placed approximately by locality.</span>
+        <span>Only <b style="color:#12b6cf">county</b> and <b style="color:#ff9f0a">district</b> council property passes to the new unitaries; everything else stays put.</span>
       </div>
       <p class="lp-hint" id="lp-cov"></p>
     </div>
@@ -145,13 +155,15 @@ import '../../../styles/lgr.css';
   <script is:inline>
   (function () {
     var OWNERS = {
-      county:    { c: '#12b6cf', label: 'County council' },
-      district:  { c: '#ff9f0a', label: 'District / borough' },
-      education: { c: '#a78bfa', label: 'Schools' },
-      fire:      { c: '#ff5c5c', label: 'Fire' },
-      ambulance: { c: '#34d399', label: 'Ambulance' },
-      nhs:       { c: '#f472b6', label: 'NHS' },
-      housing:   { c: '#60a5fa', label: 'Council housing' }
+      county:    { c: '#12b6cf', label: 'County council',        xfer: true },
+      district:  { c: '#ff9f0a', label: 'District / borough',    xfer: true },
+      parish:    { c: '#facc15', label: 'Town / parish council', xfer: false },
+      education: { c: '#a78bfa', label: 'Schools',               xfer: false },
+      nhs:       { c: '#f472b6', label: 'NHS',                   xfer: false },
+      police:    { c: '#38bdf8', label: 'Police',                xfer: false },
+      fire:      { c: '#ff5c5c', label: 'Fire',                  xfer: false },
+      ambulance: { c: '#34d399', label: 'Ambulance',             xfer: false },
+      gov:       { c: '#94a3b8', label: 'Government & agencies',  xfer: false }
     };
     var UNAME = { N: 'North Lancashire', E: 'East Lancashire', S: 'South Lancashire', W: 'West Lancashire / Fylde Coast' };
     var tries = 0;
@@ -196,25 +208,29 @@ import '../../../styles/lgr.css';
       var active = {};   // owner -> bool
 
       function markerFor(f){
-        var o = OWNERS[f.o] || { c: '#9aa3ae' };
-        var land = f.land === 1;
+        var o = OWNERS[f.o] || { c: '#9aa3ae', label: f.o };
+        var approx = f.pr === 'loc';
         var m = L.circleMarker([f.lat, f.lng], {
-          radius: land ? 5 : 6,
-          color: o.c, weight: land ? 1 : 1.4,
-          fillColor: o.c, fillOpacity: land ? 0.32 : 0.82,
-          opacity: land ? 0.6 : 1, dashArray: land ? '2,3' : null
+          radius: approx ? 5 : 6,
+          color: o.c, weight: approx ? 1 : 1.4,
+          fillColor: o.c, fillOpacity: approx ? 0.30 : 0.85,
+          opacity: approx ? 0.55 : 1, dashArray: approx ? '2,3' : null
         });
-        var owner = (OWNERS[f.o] && OWNERS[f.o].label) || f.o;
+        var xfer = o.xfer
+          ? '<tr><td>In 2028</td><td>Passes to ' + esc(UNAME[f.u] || '') + '</td></tr>'
+          : '<tr><td>In 2028</td><td>Stays with ' + esc(f.b || o.label) + ' (not reorganised)</td></tr>';
+        var loc = approx ? 'approximate, by locality' : 'located by postcode';
         m.bindPopup(
-          '<div class="lp-pop"><span class="lp-pop-owner" style="color:' + o.c + '">' + esc(owner) + '</span>' +
+          '<div class="lp-pop"><span class="lp-pop-owner" style="color:' + o.c + '">' + esc(o.label) + '</span>' +
           '<div class="lp-pop-name">' + esc(f.n || '(unnamed asset)') + '</div>' +
           (f.b ? '<div class="lp-pop-sub">' + esc(f.b) + '</div>' : '') +
           '<table class="lp-pop-tbl">' +
-          (f.m ? '<tr><td>Type</td><td>' + esc(f.m) + '</td></tr>' : '') +
+          (f.m ? '<tr><td>' + (f.o === 'education' ? 'Type' : 'Title') + '</td><td>' + esc(f.m) + '</td></tr>' : '') +
           '<tr><td>District today</td><td>' + esc(f.d) + '</td></tr>' +
-          '<tr><td>Future council</td><td>' + esc(UNAME[f.u] || '') + '</td></tr>' +
+          xfer +
           (f.t ? '<tr><td>Tenure</td><td>' + (f.t === 'F' ? 'Freehold' : 'Leasehold') + '</td></tr>' : '') +
           (f.land === 1 ? '<tr><td>Kind</td><td>Land only</td></tr>' : '') +
+          '<tr><td>Location</td><td>' + loc + '</td></tr>' +
           '</table></div>'
         );
         return m;
@@ -227,6 +243,11 @@ import '../../../styles/lgr.css';
         if (kSel.value === 'land' && f.land !== 1) return false;
         if (kSel.value === 'build' && f.land === 1) return false;
         if (tSel.value && f.t !== tSel.value) return false;
+        if (xSel.value !== '') {
+          var x = (OWNERS[f.o] && OWNERS[f.o].xfer) ? '1' : '0';
+          if (x !== xSel.value) return false;
+        }
+        if (preciseEl.checked && f.pr !== 'pc') return false;
         if (query) {
           var hay = ((f.n||'') + ' ' + (f.b||'') + ' ' + (f.d||'') + ' ' + (f.m||'')).toLowerCase();
           if (hay.indexOf(query) < 0) return false;
@@ -238,6 +259,8 @@ import '../../../styles/lgr.css';
       var dSel = document.getElementById('lp-district');
       var kSel = document.getElementById('lp-kind');
       var tSel = document.getElementById('lp-tenure');
+      var xSel = document.getElementById('lp-xfer');
+      var preciseEl = document.getElementById('lp-precise');
       var searchEl = document.getElementById('lp-search');
       var statEl = document.getElementById('lp-stat');
       var query = '';
@@ -318,7 +341,7 @@ import '../../../styles/lgr.css';
         Object.keys(districts).sort().forEach(function(dn){
           var op = document.createElement('option'); op.value = dn; op.textContent = dn; dSel.appendChild(op);
         });
-        [uSel, dSel, kSel, tSel].forEach(function(s){ s.addEventListener('change', apply); });
+        [uSel, dSel, kSel, tSel, xSel, preciseEl].forEach(function(s){ s.addEventListener('change', apply); });
         var t; searchEl.addEventListener('input', function(){
           clearTimeout(t); t = setTimeout(function(){ query = searchEl.value.toLowerCase().trim(); apply(); }, 180);
         });
