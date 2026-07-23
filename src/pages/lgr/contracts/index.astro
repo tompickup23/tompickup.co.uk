@@ -53,6 +53,7 @@ import '../../../styles/lgr.css';
           <option value="">All contracts</option>
           <option value="vesting">Running past handover (2028)</option>
           <option value="5yr">5 years or longer</option>
+          <option value="ext">With an extension option</option>
           <option value="framework">Frameworks only</option>
         </select>
         <select class="bsp-sel" id="lc-sort" aria-label="Sort">
@@ -80,12 +81,13 @@ import '../../../styles/lgr.css';
       Government Licence. This is a record of awarded contracts and framework agreements, which are commitments
       to spend, not confirmed payments, and it excludes spending below the publication thresholds. Figures are
       as published by each buyer; where a value was not published, none is shown.
-      <strong>On contract length:</strong> the term shown is the published contract period. Contracts Finder
-      does not record extension options, so a contract advertised as, say, "three years with the option of two
-      more" may appear here as three. Terms are therefore a <em>floor</em>: extensions only make a contract run
-      longer, so the count still running on handover day is a conservative minimum. Frameworks are flagged
-      because actual spend under them commonly outlives the stated term. Inclusion here is not a suggestion of
-      any wrongdoing.
+      <strong>On contract length:</strong> the term shown is the published contract period. Contracts Finder has
+      no structured field for extension options, so where a contract says "three years with the option of two
+      more", it is flagged <span class="lc-ext">+opt</span>, and where the wording is precise enough the maximum
+      is shown as "<span class="lc-ext">up to 5y</span>". Elsewhere the term is a <em>floor</em>: extensions only
+      make a contract run longer, so the count still running on handover day is a conservative minimum.
+      Frameworks are flagged because actual spend under them commonly outlives the stated term. Inclusion here
+      is not a suggestion of any wrongdoing.
     </div>
   </div>
 
@@ -123,7 +125,19 @@ import '../../../styles/lgr.css';
       var td2 = document.createElement('td'); td2.className = 'bsp-sup'; td2.style.fontWeight = '500';
       td2.textContent = c.supplier || '';
       var td3 = document.createElement('td'); td3.className = 'num bsp-amt'; td3.textContent = money(c.value) || '';
-      var td4 = document.createElement('td'); td4.className = 'num bsp-date'; td4.textContent = term(c) || '';
+      var td4 = document.createElement('td'); td4.className = 'num bsp-date';
+      td4.appendChild(document.createTextNode(term(c) || ''));
+      if (c.maxmo && c.maxmo > (c.months || 0)) {
+        var mx = document.createElement('span'); mx.className = 'lc-ext';
+        mx.textContent = ' up to ' + (Math.round(c.maxmo / 12 * 10) / 10) + 'y';
+        mx.title = 'Published term plus a stated extension option';
+        td4.appendChild(mx);
+      } else if (c.ext) {
+        var eo = document.createElement('span'); eo.className = 'lc-ext';
+        eo.textContent = ' +opt';
+        eo.title = 'Notice mentions an option to extend or renew';
+        td4.appendChild(eo);
+      }
       var td5 = document.createElement('td'); td5.className = 'num bsp-date';
       td5.textContent = c.end || '';
       if (pastVesting(c)) td5.classList.add('lc-past');
@@ -135,6 +149,7 @@ import '../../../styles/lgr.css';
         if (buyerEl.value && c.buyer !== buyerEl.value) return false;
         if (scopeEl.value === 'vesting' && !pastVesting(c)) return false;
         if (scopeEl.value === '5yr' && !(c.months >= 60)) return false;
+        if (scopeEl.value === 'ext' && !c.ext) return false;
         if (scopeEl.value === 'framework' && !c.framework) return false;
         if (query){
           var hay = ((c.title||'') + ' ' + (c.desc||'') + ' ' + (c.buyer||'') + ' ' + (c.supplier||'')).toLowerCase();

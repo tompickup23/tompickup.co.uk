@@ -95,6 +95,24 @@ def jitter(title, lat, lng):
     R = 0.011 * math.sqrt(rad)       # up to ~1.2km, denser near centre
     return round(lat + R * math.cos(ang), 6), round(lng + R * math.sin(ang) * 1.5, 6)
 
+def jitter_small(title, lat, lng):
+    # ~40-90m so multiple parcels on the same street do not perfectly overlap
+    h = int(hashlib.md5(title.encode()).hexdigest(), 16)
+    ang = (h % 3600) / 3600 * 2 * math.pi
+    R = 0.0008 * (((h >> 12) % 1000) / 1000)
+    return round(lat + R * math.cos(ang), 6), round(lng + R * math.sin(ang) * 1.5, 6)
+
+# street cache (#1): (street|town lower) -> [lat,lng]
+STREET_RE = re.compile(r"([A-Z][A-Za-z'&.\-]+(?:\s+[A-Z][A-Za-z'&.\-]+){0,3}\s+"
+    r"(?:Street|Road|Lane|Avenue|Drive|Close|Way|Grove|Place|Terrace|Court|Crescent|Walk|"
+    r"Gardens|Square|Row|Hill|Brow|Fold|Green|Gate|Bank|Rise|View|Mount|Parade|Fields?|Meadow|"
+    r"Croft|Wood|Moor|Head|Side|Bridge|Nook|Vale|Park|Barn|Field))\b")
+street_ll = {}
+if os.path.exists(os.path.join(SCRATCH, "street_cache.json")):
+    for k, v in json.load(open(os.path.join(SCRATCH, "street_cache.json"))).items():
+        if v: street_ll[k] = (v[0], v[1])
+print("street combos located:", len(street_ll))
+
 def is_land(addr):
     a = addr.lower().strip()
     return 1 if a.startswith(("land","plot","site","garden","amenity","open space","car park","parking")) else 0
@@ -116,7 +134,11 @@ for r in rows:
         lat, lng = pc_ll[pc]; tier = "pc"
     elif not pc and o in KEEP_LOC:
         l = locality(r["address"])
-        if l and l.upper() in loc_ll:
+        m = STREET_RE.search(r["address"])
+        skey = (m.group(1).strip() + "|" + l.strip()).lower() if (m and l) else None
+        if skey and skey in street_ll:                       # #1 street-level (precise)
+            lat, lng = jitter_small(r["title"], *street_ll[skey]); tier = "st"
+        elif l and l.upper() in loc_ll:                      # locality (approximate)
             lat, lng = jitter(r["title"], *loc_ll[l.upper()]); tier = "loc"
     if tier is None: continue
     seen.add(r["title"])
