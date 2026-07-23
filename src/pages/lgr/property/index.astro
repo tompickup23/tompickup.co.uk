@@ -136,7 +136,7 @@ import '../../../styles/lgr.css';
 
       <p id="lp-stat" class="lp-stat">Loading property data…</p>
       <div class="lp-legend" id="lp-legend" aria-hidden="true">
-        <span><i style="background:#12b6cf"></i> Solid marker = located by postcode.</span>
+        <span><i style="background:#12b6cf"></i> Solid marker = located by postcode or street.</span>
         <span><i style="background:#94a3b8;opacity:.4"></i> Faded / dashed = council land parcel placed approximately by locality.</span>
         <span>Only <b style="color:#12b6cf">county</b> and <b style="color:#ff9f0a">district</b> council property passes to the new unitaries; everything else stays put.</span>
       </div>
@@ -229,7 +229,7 @@ import '../../../styles/lgr.css';
         var xfer = o.xfer
           ? '<tr><td>In 2028</td><td>Passes to ' + esc(UNAME[f.u] || '') + '</td></tr>'
           : '<tr><td>In 2028</td><td>Stays with ' + esc(f.b || o.label) + ' (not reorganised)</td></tr>';
-        var loc = approx ? 'approximate, by locality' : 'located by postcode';
+        var loc = f.pr === 'loc' ? 'approximate, by locality' : (f.pr === 'st' ? 'located by street' : 'located by postcode');
         m.bindPopup(
           '<div class="lp-pop"><span class="lp-pop-owner" style="color:' + o.c + '">' + esc(o.label) + '</span>' +
           '<div class="lp-pop-name">' + esc(f.n || '(unnamed asset)') + '</div>' +
@@ -257,7 +257,7 @@ import '../../../styles/lgr.css';
           var x = (OWNERS[f.o] && OWNERS[f.o].xfer) ? '1' : '0';
           if (x !== xSel.value) return false;
         }
-        if (preciseEl.checked && f.pr !== 'pc') return false;
+        if (preciseEl.checked && f.pr === 'loc') return false;
         if (query) {
           var hay = ((f.n||'') + ' ' + (f.b||'') + ' ' + (f.d||'') + ' ' + (f.m||'')).toLowerCase();
           if (hay.indexOf(query) < 0) return false;
