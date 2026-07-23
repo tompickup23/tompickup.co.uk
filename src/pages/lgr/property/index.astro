@@ -1,0 +1,335 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/doge.css';
+import '../../../styles/lgr.css';
+---
+
+<Layout
+  title="Who owns Lancashire? Public property and land, mapped | Tom Pickup"
+  description="An interactive, filterable map of publicly owned property and land across all fourteen Lancashire councils, plus schools, fire and ambulance, sortable by today's borough and by the future unitary that will inherit it under reorganisation."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lgr/">LGR</a>
+      <span class="sep">›</span>
+      <span class="here">Property &amp; land</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Property &amp; land under reorganisation</span>
+      <h1 class="doge-title">Who owns Lancashire?</h1>
+      <p class="doge-sub">
+        When the councils are abolished in 2028, everything they own has to go somewhere. Every school,
+        depot, library, park, office, car park and scrap of roadside land passes to one of four new
+        authorities. This map lets you see that estate, filtered by who owns it today and by the unitary
+        that will inherit it.
+      </p>
+    </header>
+
+    <div class="lgr-prose">
+      <h2>How property moves in reorganisation</h2>
+      <p>
+        When a council is abolished, it does not sell up and hand over the cash. Its land, buildings, rights
+        and debts pass automatically to the new authority that replaces it, by operation of law, with no need
+        to sell or re-register each site one by one. That machinery sits under the Local Government and Public
+        Involvement in Health Act 2007 and the transfer regulations made with it. So the four new Lancashire
+        councils inherit the combined estate of the old ones. <strong>East Lancashire</strong>, for example,
+        will take on what the county council, Blackburn with Darwen, Burnley, Hyndburn, Pendle and Rossendale
+        hold across that area today.
+      </p>
+      <p>
+        Not everything moves. <strong>Fire, police, the NHS and academy schools are separate bodies.</strong>
+        They keep what they own; reorganising the councils does not touch them. That is why this map lets you
+        turn each type of owner on and off, so you can see what actually transfers and what stays put.
+      </p>
+
+      <h2>What other reorganisations have taught us</h2>
+      <ul class="lgr-points">
+        <li>
+          <b>Selling before the lights go out.</b>
+          An outgoing council could sell assets or run down its reserves in its final months and leave the new
+          authority short. Government guards against this: under section 24 of the 2007 Act it can order that
+          any outgoing council must get written consent before selling land above a set value, signing large
+          contracts, or drawing down reserves. This power has been used in every recent reorganisation, from
+          Cumbria to Surrey, and Lancashire will be no different.
+        </li>
+        <li>
+          <b>Dividing a county four ways is harder than merging into one.</b>
+          Assets, debt and the local government pension fund all have to be shared out between the successors.
+          When Cumbria split in two in 2023 the pension arrangements were left dangerously late, and that has
+          become the standing warning to every county since. Lancashire's split is into four, larger and more
+          complex, so getting this right matters more here than almost anywhere.
+        </li>
+        <li>
+          <b>Out-of-date registers.</b>
+          Councils are required to publish what they own, but the lists are often years old and incomplete. If
+          a council cannot say clearly what it holds, residents cannot hold it to account and the new authority
+          inherits the confusion. A map like this only works because the public data does, so where it is thin,
+          that is part of the story.
+        </li>
+      </ul>
+      <p>
+        One thing to be clear about: the recent council bankruptcies you may have read about, Woking, Thurrock
+        and Croydon, were caused by risky commercial property gambles, not by reorganisation. They are a
+        separate warning about how public money and public assets can be lost. Reorganisation, done properly,
+        is a chance to get a proper grip on what Lancashire owns. This map is a start.
+      </p>
+    </div>
+
+    <!-- ===================== MAP ===================== -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
+
+    <h2 class="doge-h2" style="margin-top:2.6rem;">The map</h2>
+    <p class="doge-note" style="max-width:720px;">
+      Everything starts grouped into clusters so the whole county is readable at a glance. Zoom in, or narrow
+      with the filters, and the individual sites appear. Each colour is a different kind of public owner.
+      Click any marker for what it is, who holds it, and which new council inherits it.
+    </p>
+
+    <div class="lp-wrap">
+      <div class="lp-controls">
+        <div class="lp-chips" id="lp-chips"><!-- owner-type chips injected --></div>
+        <div class="lp-filter-row">
+          <select class="lp-sel" id="lp-unitary" aria-label="Future unitary">
+            <option value="">All future unitaries</option>
+            <option value="N">North Lancashire</option>
+            <option value="E">East Lancashire</option>
+            <option value="S">South Lancashire</option>
+            <option value="W">West Lancashire / Fylde Coast</option>
+          </select>
+          <select class="lp-sel" id="lp-district" aria-label="Current district"><option value="">All districts (today)</option></select>
+          <select class="lp-sel" id="lp-kind" aria-label="Land or building">
+            <option value="">Land &amp; buildings</option>
+            <option value="land">Land only</option>
+            <option value="build">Buildings</option>
+          </select>
+          <select class="lp-sel" id="lp-tenure" aria-label="Tenure">
+            <option value="">Any tenure</option>
+            <option value="F">Freehold</option>
+            <option value="L">Leasehold</option>
+          </select>
+          <input class="lp-search" id="lp-search" type="search" placeholder="Search name, place or type…" aria-label="Search assets" />
+        </div>
+      </div>
+
+      <div id="lp-map" class="lp-map">Loading the map…</div>
+
+      <p id="lp-stat" class="lp-stat">Loading property data…</p>
+      <div class="lp-legend" id="lp-legend" aria-hidden="true">
+        <span><i style="background:#12b6cf"></i> The four future unitaries are named in each marker's popup.</span>
+      </div>
+      <p class="lp-hint" id="lp-cov"></p>
+    </div>
+
+    <div class="lp-list-head">
+      <h2 class="doge-h2" style="margin:0;">The list</h2>
+      <span class="lp-list-count" id="lp-list-count"></span>
+    </div>
+    <div class="lp-list" id="lp-list"></div>
+
+    <div class="doge-disclaimer">
+      <strong>Sources and limits.</strong> The county council estate comes from Lancashire County Council's
+      own Local Authority Land List; schools from the Department for Education's Get Information About Schools
+      register (open, state-funded establishments); fire and ambulance stations from the services' own
+      published lists. District-council titles from HM Land Registry, the wider NHS estate and retained
+      council housing are being added in later releases, so this is a first, growing picture rather than a
+      complete asset register. Locations are placed from published coordinates or postcodes and are indicative.
+      Inclusion here is not a suggestion that any site is for sale or being disposed of.
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" is:inline></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin="" is:inline></script>
+  <script is:inline>
+  (function () {
+    var OWNERS = {
+      county:    { c: '#12b6cf', label: 'County council' },
+      district:  { c: '#ff9f0a', label: 'District / borough' },
+      education: { c: '#a78bfa', label: 'Schools' },
+      fire:      { c: '#ff5c5c', label: 'Fire' },
+      ambulance: { c: '#34d399', label: 'Ambulance' },
+      nhs:       { c: '#f472b6', label: 'NHS' },
+      housing:   { c: '#60a5fa', label: 'Council housing' }
+    };
+    var UNAME = { N: 'North Lancashire', E: 'East Lancashire', S: 'South Lancashire', W: 'West Lancashire / Fylde Coast' };
+    var tries = 0;
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+    function boot() {
+      if (!(window.L && window.L.markerClusterGroup)) { if (tries++ < 150) return setTimeout(boot, 100); return; }
+      var el = document.getElementById('lp-map');
+      if (!el || el._init) return; el._init = true; el.textContent = '';
+      el.style.display = 'block';
+
+      var map = L.map('lp-map', { scrollWheelZoom: false, minZoom: 8 }).setView([53.82, -2.62], 10);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }).addTo(map);
+      map.on('click', function(){ map.scrollWheelZoom.enable(); });
+      function fix(){ map.invalidateSize(); }
+      map.whenReady(function(){ setTimeout(fix, 250); });
+      if (window.ResizeObserver) { new ResizeObserver(fix).observe(el); }
+      // recalc size + re-fit the first time the map scrolls into view (it inits off-screen)
+      if (window.IntersectionObserver) {
+        var io = new IntersectionObserver(function(entries){
+          if (entries[0].isIntersecting) { setTimeout(fix, 60); }
+        }, { threshold: 0.01 });
+        io.observe(el);
+      }
+
+      var cluster = L.markerClusterGroup({
+        chunkedLoading: true, maxClusterRadius: 55, spiderfyOnMaxZoom: true,
+        iconCreateFunction: function(cl){
+          var n = cl.getChildCount();
+          var size = n < 25 ? 34 : n < 150 ? 42 : n < 800 ? 52 : 62;
+          return L.divIcon({
+            html: '<div class="lp-cluster" style="width:' + size + 'px;height:' + size + 'px;line-height:' + (size - 4) + 'px;background:#12b6cf;">' + n + '</div>',
+            className: 'lp-cluster-wrap', iconSize: L.point(size, size)
+          });
+        }
+      }).addTo(map);
+
+      var all = [];      // { f, marker }
+      var active = {};   // owner -> bool
+
+      function markerFor(f){
+        var o = OWNERS[f.o] || { c: '#9aa3ae' };
+        var land = f.land === 1;
+        var m = L.circleMarker([f.lat, f.lng], {
+          radius: land ? 5 : 6,
+          color: o.c, weight: land ? 1 : 1.4,
+          fillColor: o.c, fillOpacity: land ? 0.32 : 0.82,
+          opacity: land ? 0.6 : 1, dashArray: land ? '2,3' : null
+        });
+        var owner = (OWNERS[f.o] && OWNERS[f.o].label) || f.o;
+        m.bindPopup(
+          '<div class="lp-pop"><span class="lp-pop-owner" style="color:' + o.c + '">' + esc(owner) + '</span>' +
+          '<div class="lp-pop-name">' + esc(f.n || '(unnamed asset)') + '</div>' +
+          (f.b ? '<div class="lp-pop-sub">' + esc(f.b) + '</div>' : '') +
+          '<table class="lp-pop-tbl">' +
+          (f.m ? '<tr><td>Type</td><td>' + esc(f.m) + '</td></tr>' : '') +
+          '<tr><td>District today</td><td>' + esc(f.d) + '</td></tr>' +
+          '<tr><td>Future council</td><td>' + esc(UNAME[f.u] || '') + '</td></tr>' +
+          (f.t ? '<tr><td>Tenure</td><td>' + (f.t === 'F' ? 'Freehold' : 'Leasehold') + '</td></tr>' : '') +
+          (f.land === 1 ? '<tr><td>Kind</td><td>Land only</td></tr>' : '') +
+          '</table></div>'
+        );
+        return m;
+      }
+
+      function passes(f){
+        if (!active[f.o]) return false;
+        if (uSel.value && f.u !== uSel.value) return false;
+        if (dSel.value && f.d !== dSel.value) return false;
+        if (kSel.value === 'land' && f.land !== 1) return false;
+        if (kSel.value === 'build' && f.land === 1) return false;
+        if (tSel.value && f.t !== tSel.value) return false;
+        if (query) {
+          var hay = ((f.n||'') + ' ' + (f.b||'') + ' ' + (f.d||'') + ' ' + (f.m||'')).toLowerCase();
+          if (hay.indexOf(query) < 0) return false;
+        }
+        return true;
+      }
+
+      var uSel = document.getElementById('lp-unitary');
+      var dSel = document.getElementById('lp-district');
+      var kSel = document.getElementById('lp-kind');
+      var tSel = document.getElementById('lp-tenure');
+      var searchEl = document.getElementById('lp-search');
+      var statEl = document.getElementById('lp-stat');
+      var query = '';
+
+      function apply(){
+        var shown = all.filter(function(x){ return passes(x.f); });
+        cluster.clearLayers();
+        cluster.addLayers(shown.map(function(x){ return x.marker; }));
+        // stat line, counted by owner (DOM-built, no innerHTML)
+        var by = {};
+        shown.forEach(function(x){ by[x.f.o] = (by[x.f.o]||0) + 1; });
+        statEl.textContent = '';
+        statEl.appendChild(document.createTextNode('Showing '));
+        var b0 = document.createElement('b'); b0.textContent = shown.length.toLocaleString(); statEl.appendChild(b0);
+        statEl.appendChild(document.createTextNode(' of ' + all.length.toLocaleString() + ' public sites'));
+        Object.keys(OWNERS).filter(function(o){ return by[o]; }).forEach(function(o){
+          statEl.appendChild(document.createTextNode('  ·  '));
+          var b = document.createElement('b'); b.textContent = by[o].toLocaleString(); statEl.appendChild(b);
+          statEl.appendChild(document.createTextNode(' ' + OWNERS[o].label.toLowerCase()));
+        });
+        statEl.appendChild(document.createTextNode('.'));
+        buildList(shown);
+      }
+
+      function buildList(shown){
+        var list = document.getElementById('lp-list');
+        var cnt = document.getElementById('lp-list-count');
+        list.textContent = '';
+        var CAP = 400;
+        for (var i = 0; i < shown.length && i < CAP; i++){
+          var f = shown[i].f, o = OWNERS[f.o] || { c: '#9aa3ae' };
+          var row = document.createElement('div'); row.className = 'lp-row';
+          var dot = document.createElement('span'); dot.className = 'lp-dot'; dot.style.background = o.c;
+          var main = document.createElement('div'); main.className = 'lp-row-main';
+          var nm = document.createElement('div'); nm.className = 'lp-row-name'; nm.textContent = f.n || '(unnamed asset)';
+          var meta = document.createElement('div'); meta.className = 'lp-row-meta';
+          meta.textContent = (o.label || f.o) + ' · ' + f.d + ' · ' + (UNAME[f.u] || '') +
+            (f.m ? ' · ' + f.m : '') + (f.t ? ' · ' + (f.t === 'F' ? 'freehold' : 'leasehold') : '');
+          main.appendChild(nm); main.appendChild(meta);
+          row.appendChild(dot); row.appendChild(main); list.appendChild(row);
+        }
+        cnt.textContent = shown.length.toLocaleString() + ' site' + (shown.length === 1 ? '' : 's') +
+          (shown.length > CAP ? ' (showing first ' + CAP + ', narrow with the filters)' : '');
+      }
+
+      // owner chips
+      function buildChips(counts){
+        var wrap = document.getElementById('lp-chips');
+        wrap.textContent = '';
+        Object.keys(OWNERS).forEach(function(o){
+          if (!counts[o]) return;
+          active[o] = true;
+          var lab = document.createElement('label'); lab.className = 'lp-chip on';
+          var inp = document.createElement('input'); inp.type = 'checkbox'; inp.checked = true;
+          var sw = document.createElement('span'); sw.className = 'lp-swatch'; sw.style.background = OWNERS[o].c;
+          var tx = document.createElement('span'); tx.textContent = OWNERS[o].label;
+          var ct = document.createElement('span'); ct.className = 'lp-ct'; ct.textContent = counts[o].toLocaleString();
+          lab.appendChild(inp); lab.appendChild(sw); lab.appendChild(tx); lab.appendChild(ct);
+          inp.addEventListener('change', function(){
+            active[o] = inp.checked;
+            lab.className = 'lp-chip ' + (inp.checked ? 'on' : 'off');
+            apply();
+          });
+          wrap.appendChild(lab);
+        });
+      }
+
+      fetch('/data/lgr-public-property.json').then(function(r){ return r.json(); }).then(function(d){
+        var counts = {}, districts = {};
+        d.features.forEach(function(f){
+          if (typeof f.lat !== 'number') return;
+          counts[f.o] = (counts[f.o]||0) + 1;
+          districts[f.d] = true;
+          all.push({ f: f, marker: markerFor(f) });
+        });
+        buildChips(counts);
+        // populate district dropdown
+        Object.keys(districts).sort().forEach(function(dn){
+          var op = document.createElement('option'); op.value = dn; op.textContent = dn; dSel.appendChild(op);
+        });
+        [uSel, dSel, kSel, tSel].forEach(function(s){ s.addEventListener('change', apply); });
+        var t; searchEl.addEventListener('input', function(){
+          clearTimeout(t); t = setTimeout(function(){ query = searchEl.value.toLowerCase().trim(); apply(); }, 180);
+        });
+        apply();
+        var cov = document.getElementById('lp-cov');
+        if (cov && d.meta && d.meta.coverage_note) cov.textContent = d.meta.coverage_note;
+      }).catch(function(){
+        statEl.textContent = 'The map data could not be loaded.';
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  })();
+  </script>
+</Layout>

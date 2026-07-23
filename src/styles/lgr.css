@@ -1,0 +1,107 @@
+/* ============================================================
+   LGR section property map styles. Imported per page so global
+   (the map builds markers, clusters and list rows via the Leaflet
+   API / createElement, which Astro scoped styles never reach).
+   Owner colours: county #12b6cf · district #ff9f0a · education #a78bfa
+   · fire #ff5c5c · ambulance #34d399 · nhs #f472b6 · housing #60a5fa
+   ============================================================ */
+
+/* ---- intro prose ---- */
+.lgr-prose { max-width: 720px; }
+.lgr-prose p { font-size: 1rem; color: #c2c9d2; line-height: 1.72; margin: 0 0 1.05rem; }
+.lgr-prose h2 {
+  font-size: 1.35rem; font-weight: 700; color: #f4f7fb; letter-spacing: -0.01em;
+  margin: 2.2rem 0 0.9rem;
+}
+.lgr-prose strong { color: #eef2f7; font-weight: 700; }
+.lgr-prose a { color: #12b6cf; }
+.lgr-points { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.9rem; }
+.lgr-points li {
+  padding: 1rem 1.2rem; border-radius: 13px; background: rgba(14, 18, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.95rem; color: #b6bec8; line-height: 1.65;
+}
+.lgr-points li b { color: #f4f7fb; display: block; margin-bottom: 3px; font-size: 0.99rem; }
+
+/* ---- map shell ---- */
+.lp-wrap { margin: 1.4rem 0 0.5rem; }
+.lp-controls {
+  display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center;
+  padding: 0 2px 14px;
+}
+.lp-filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; width: 100%; }
+.lp-sel {
+  padding: 9px 12px; border-radius: 10px; font-size: 0.82rem; font-family: inherit; cursor: pointer;
+  background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(18, 182, 207, 0.18); color: #d6dee8;
+}
+.lp-sel:focus, .lp-search:focus { outline: none; border-color: rgba(18, 182, 207, 0.5); }
+.lp-search {
+  flex: 1 1 200px; min-width: 160px; padding: 9px 14px; border-radius: 10px; font-size: 0.88rem;
+  font-family: inherit; background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(18, 182, 207, 0.18); color: #fff;
+}
+.lp-search::placeholder { color: #636366; }
+
+/* owner-type toggle chips */
+.lp-chips { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+.lp-chip {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none;
+  padding: 6px 12px 6px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: #aab2bd;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+.lp-chip input { display: none; }
+.lp-chip .lp-swatch { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(0,0,0,0.35); }
+.lp-chip.off { opacity: 0.4; }
+.lp-chip.on { color: #f4f7fb; background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.22); }
+.lp-chip:hover { border-color: rgba(255, 255, 255, 0.3); }
+.lp-chip .lp-ct { font-weight: 700; font-variant-numeric: tabular-nums; opacity: 0.75; font-size: 0.72rem; }
+
+.lp-map {
+  height: 560px; width: 100%; border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08); background: #0a0f18;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  display: flex; align-items: center; justify-content: center; color: #636366; font-size: 0.9rem;
+}
+@media (max-width: 640px) { .lp-map { height: 460px; } }
+
+.lp-stat {
+  font-size: 0.85rem; color: #aab2bd; line-height: 1.55; margin: 12px 2px 0;
+}
+.lp-stat b { color: #12b6cf; font-weight: 700; font-variant-numeric: tabular-nums; }
+.lp-hint { font-size: 0.76rem; color: #7d8590; margin: 6px 2px 0; }
+
+/* clusters + markers */
+.lp-cluster-wrap { background: transparent; }
+.lp-cluster {
+  border-radius: 50%; text-align: center; color: #05121a; font-weight: 800;
+  font-variant-numeric: tabular-nums; border: 2px solid rgba(255,255,255,0.85);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.5); font-size: 0.8rem;
+}
+
+/* leaflet popup theming */
+.leaflet-popup-content-wrapper { background: #0e1420; color: #d6dee8; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 12px 40px rgba(0,0,0,0.55); }
+.leaflet-popup-tip { background: #0e1420; border: 1px solid rgba(255,255,255,0.1); }
+.leaflet-popup-content { margin: 12px 14px; font-family: inherit; }
+.lp-pop-owner { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 800; }
+.lp-pop-name { font-size: 0.98rem; font-weight: 700; color: #f4f7fb; margin: 4px 0 2px; line-height: 1.3; }
+.lp-pop-sub { font-size: 0.8rem; color: #9aa3ae; margin-bottom: 6px; line-height: 1.4; }
+.lp-pop-tbl { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.lp-pop-tbl td { padding: 2px 0; vertical-align: top; }
+.lp-pop-tbl td:first-child { color: #7d8590; padding-right: 12px; white-space: nowrap; }
+.lp-pop-tbl td:last-child { color: #d6dee8; text-align: right; }
+.lp-pop-src { font-size: 0.68rem; color: #6b7480; margin-top: 7px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px; }
+
+/* legend for future-unitary areas */
+.lp-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 2px 0; font-size: 0.76rem; color: #99a2ad; }
+.lp-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.lp-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* searchable list */
+.lp-list-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 2.2rem 0 0.6rem; flex-wrap: wrap; }
+.lp-list-count { font-size: 0.8rem; color: #8e8e93; }
+.lp-list { border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden; background: rgba(10,22,40,0.35); }
+.lp-row { display: flex; gap: 11px; align-items: flex-start; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.lp-row:last-child { border-bottom: none; }
+.lp-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(0,0,0,0.3); }
+.lp-row-main { min-width: 0; }
+.lp-row-name { color: #e9edf2; font-weight: 600; font-size: 0.88rem; line-height: 1.3; }
+.lp-row-meta { color: #8e8e93; font-size: 0.73rem; margin-top: 2px; line-height: 1.4; }
