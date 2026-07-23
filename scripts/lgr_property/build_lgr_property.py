@@ -108,6 +108,35 @@ add_ccod()
 add_schools()
 add_emergency()
 
+# --- #4: per-unitary inheritance summary (from the full classified council set,
+#         so totals are honest even for parcels the map could not geocode) -----
+def is_land_addr(a):
+    a = (a or "").lower().strip()
+    return a.startswith(("land","plot","site","garden","amenity","open space","car park","parking"))
+def build_inheritance():
+    p = os.path.join(SCRATCH, "ccod_public.csv")
+    if not os.path.exists(p): return None
+    inh = {u: {"name": UNITARY_NAMES[u], "titles": 0, "county": 0, "district": 0,
+               "land": 0, "buildings": 0, "councils": Counter()} for u in "NESW"}
+    for row in csv.DictReader(open(p)):
+        if row["owner"] not in ("county", "district"): continue
+        d = canon_district(row["district"])
+        if not d: continue
+        u = UNITARY[d]
+        b = inh[u]
+        b["titles"] += 1
+        b[row["owner"]] += 1
+        if is_land_addr(row["address"]): b["land"] += 1
+        else: b["buildings"] += 1
+        b["councils"][row["body"]] += 1
+    out = {}
+    for u, b in inh.items():
+        out[u] = {"name": b["name"], "titles": b["titles"], "county": b["county"],
+                  "district": b["district"], "land": b["land"], "buildings": b["buildings"],
+                  "councils": [{"n": n, "c": c} for n, c in b["councils"].most_common()]}
+    return out
+inheritance = build_inheritance()
+
 meta = {
     "generated": "2026-07-23",
     "title": "Publicly owned property and land across the Lancashire-14",
@@ -126,7 +155,8 @@ meta = {
         "fire": "Lancashire Fire and Rescue Service station list",
         "ambulance": "North West Ambulance Service",
     },
-    "coverage_note": "Council, NHS, police and government titles come from HM Land Registry (CCOD). Addressed sites are placed precisely by postcode; council land parcels without a postcode are placed approximately by locality and shown faded. Schools, fire and ambulance stations are placed precisely.",
+    "coverage_note": "Council, NHS, police and government titles come from HM Land Registry (CCOD). Addressed sites are placed precisely by postcode; council land parcels without a postcode are placed by street where possible, otherwise approximately by locality and shown faded. Schools, fire and ambulance stations are placed precisely.",
+    "inheritance": inheritance,
 }
 json.dump({"meta": meta, "features": features}, open(OUT, "w"), separators=(",", ":"))
 print("total features:", len(features))

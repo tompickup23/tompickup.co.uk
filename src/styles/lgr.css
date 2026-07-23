@@ -22,6 +22,24 @@
 }
 .lgr-points li b { color: #f4f7fb; display: block; margin-bottom: 3px; font-size: 0.99rem; }
 
+/* ---- inheritance dashboard (#4) ---- */
+.lp-inherit {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.3rem 0 0.5rem;
+}
+.lp-inh-card {
+  background: rgba(14, 18, 28, 0.55); border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px; padding: 1.1rem 1.2rem;
+}
+.lp-inh-name { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.01em; }
+.lp-inh-big { margin-top: 6px; color: #f4f7fb; font-size: 0.85rem; }
+.lp-inh-num { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.lp-inh-track { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); overflow: hidden; margin: 10px 0 9px; }
+.lp-inh-fill { height: 100%; border-radius: 3px; }
+.lp-inh-split { font-size: 0.72rem; color: #99a2ad; line-height: 1.45; margin-bottom: 9px; }
+.lp-inh-list { display: grid; gap: 3px; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 8px; }
+.lp-inh-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; color: #c2c9d2; }
+.lp-inh-c { color: #8e8e93; font-variant-numeric: tabular-nums; font-weight: 600; }
+
 /* ---- map shell ---- */
 .lp-wrap { margin: 1.4rem 0 0.5rem; }
 .lp-controls {

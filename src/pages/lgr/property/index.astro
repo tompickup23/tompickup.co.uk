@@ -78,6 +78,16 @@ import '../../../styles/lgr.css';
       </p>
     </div>
 
+    <!-- ============== INHERITANCE DASHBOARD (#4) ============== -->
+    <h2 class="doge-h2" style="margin-top:2.6rem;">What each new council inherits</h2>
+    <p class="doge-note" style="max-width:720px;">
+      Every county and district council title, grouped into the four unitaries that take over in 2028. These
+      are the registered property and land holdings each new council starts life owning, before any are sold,
+      shared or written off. Town and parish councils, the NHS, police, fire and national bodies keep their own
+      estates and are not counted here.
+    </p>
+    <div class="lp-inherit" id="lp-inherit"><!-- cards injected from data --></div>
+
     <!-- ===================== MAP ===================== -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
@@ -328,6 +338,42 @@ import '../../../styles/lgr.css';
         });
       }
 
+      function renderInheritance(inh){
+        var wrap = document.getElementById('lp-inherit'); if (!wrap) return;
+        var UA = { N: '#12b6cf', E: '#f59e0b', S: '#a78bfa', W: '#34d399' };
+        var order = Object.keys(inh).sort(function(a, b){ return inh[b].titles - inh[a].titles; });
+        var maxT = Math.max.apply(null, order.map(function(u){ return inh[u].titles; }));
+        wrap.textContent = '';
+        order.forEach(function(u){
+          var b = inh[u], ac = UA[u] || '#12b6cf';
+          var card = document.createElement('div'); card.className = 'lp-inh-card';
+          var name = document.createElement('div'); name.className = 'lp-inh-name';
+          name.style.color = ac; name.textContent = b.name; card.appendChild(name);
+          var big = document.createElement('div'); big.className = 'lp-inh-big';
+          var bn = document.createElement('span'); bn.className = 'lp-inh-num'; bn.textContent = b.titles.toLocaleString();
+          big.appendChild(bn); big.appendChild(document.createTextNode(' titles')); card.appendChild(big);
+          var track = document.createElement('div'); track.className = 'lp-inh-track';
+          var fill = document.createElement('div'); fill.className = 'lp-inh-fill';
+          fill.style.width = (b.titles / maxT * 100) + '%'; fill.style.background = ac;
+          track.appendChild(fill); card.appendChild(track);
+          var sp = document.createElement('div'); sp.className = 'lp-inh-split';
+          sp.textContent = b.county.toLocaleString() + ' county + ' + b.district.toLocaleString() + ' district  ·  ' +
+            b.land.toLocaleString() + ' land, ' + b.buildings.toLocaleString() + ' buildings';
+          card.appendChild(sp);
+          var list = document.createElement('div'); list.className = 'lp-inh-list';
+          b.councils.filter(function(c){ return c.c >= 5; }).slice(0, 7).forEach(function(c){
+            var row = document.createElement('div'); row.className = 'lp-inh-row';
+            var nm = document.createElement('span');
+            nm.textContent = /Lancashire County/.test(c.n) ? 'Lancashire County (share)'
+              : c.n.replace(' Borough Council', '').replace(' City Council', '').replace(' Council', '');
+            var ct = document.createElement('span'); ct.className = 'lp-inh-c'; ct.textContent = c.c.toLocaleString();
+            row.appendChild(nm); row.appendChild(ct); list.appendChild(row);
+          });
+          card.appendChild(list);
+          wrap.appendChild(card);
+        });
+      }
+
       fetch('/data/lgr-public-property.json').then(function(r){ return r.json(); }).then(function(d){
         var counts = {}, districts = {};
         d.features.forEach(function(f){
@@ -346,6 +392,7 @@ import '../../../styles/lgr.css';
           clearTimeout(t); t = setTimeout(function(){ query = searchEl.value.toLowerCase().trim(); apply(); }, 180);
         });
         apply();
+        if (d.meta && d.meta.inheritance) renderInheritance(d.meta.inheritance);
         var cov = document.getElementById('lp-cov');
         if (cov && d.meta && d.meta.coverage_note) cov.textContent = d.meta.coverage_note;
       }).catch(function(){
