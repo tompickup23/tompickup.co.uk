@@ -40,6 +40,14 @@
 .lp-inh-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; color: #c2c9d2; }
 .lp-inh-c { color: #8e8e93; font-variant-numeric: tabular-nums; font-weight: 600; }
 
+/* ---- contracts page extras ---- */
+.lc-badge {
+  display: inline-block; font-size: 0.64rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; padding: 1px 6px; border-radius: 5px; vertical-align: middle;
+  background: rgba(167, 139, 250, 0.16); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.35);
+}
+.bsp-date.lc-past { color: #ff9f0a; font-weight: 700; }
+
 /* ---- map shell ---- */
 .lp-wrap { margin: 1.4rem 0 0.5rem; }
 .lp-controls {

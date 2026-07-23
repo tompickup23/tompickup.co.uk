@@ -1,0 +1,181 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/doge.css';
+import '../../../styles/lgr.css';
+---
+
+<Layout
+  title="Public contracts: what Lancashire's councils are buying | Tom Pickup"
+  description="A searchable record of contracts awarded by Lancashire's county, borough and city councils, drawn from the government's Contracts Finder service, with contract length front and centre: who is paid, how much, for what, and for how long."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lgr/">LGR</a>
+      <span class="sep">›</span>
+      <span class="here">Public contracts</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Public contracts &amp; procurement</span>
+      <h1 class="doge-title">What Lancashire is buying</h1>
+      <p class="doge-sub">
+        Councils spend a large part of their money through contracts with outside suppliers. By law those
+        contracts are published. Here I bring the Lancashire ones together from the government's own procurement
+        service into one searchable record, so you can see who is paid, how much, for what, and crucially for
+        how long.
+      </p>
+    </header>
+
+    <div class="lgr-prose" style="margin-top:0.5rem;">
+      <p>
+        The data comes from <strong>Contracts Finder</strong>, where public bodies must publish contracts and
+        awards above roughly £25,000, covering the county council and all thirteen borough and city councils.
+        It is a record of <strong>contracts awarded</strong> since 2015, not of every pound spent: day-to-day
+        payments below the threshold, wages and grants are not here. The part that matters most for
+        reorganisation is <strong>contract length</strong>: a long contract signed now is inherited by whichever
+        new unitary takes over on 1 April 2028, whether it wants it or not. So this page leads on term, and on
+        how many contracts are still running on handover day.
+      </p>
+    </div>
+
+    <div class="doge-statband" id="lc-stats">
+      <div class="doge-stat"><div class="v teal" id="lc-count">…</div><div class="l">Contracts awarded</div></div>
+      <div class="doge-stat"><div class="v" id="lc-value">…</div><div class="l">Value awarded (excluding framework ceilings)</div></div>
+      <div class="doge-stat"><div class="v" id="lc-vesting">…</div><div class="l">Still running on handover day (1 Apr 2028)</div></div>
+      <div class="doge-stat"><div class="v" id="lc-longest">…</div><div class="l">Longest term awarded</div></div>
+    </div>
+
+    <div class="bsp-wrap">
+      <div class="bsp-controls">
+        <input class="bsp-search" id="lc-search" type="search" placeholder="Search supplier, buyer or what was bought…" aria-label="Search contracts" />
+        <select class="bsp-sel" id="lc-buyer" aria-label="Buyer"><option value="">All public bodies</option></select>
+        <select class="bsp-sel" id="lc-scope" aria-label="Scope">
+          <option value="">All contracts</option>
+          <option value="vesting">Running past handover (2028)</option>
+          <option value="5yr">5 years or longer</option>
+          <option value="framework">Frameworks only</option>
+        </select>
+        <select class="bsp-sel" id="lc-sort" aria-label="Sort">
+          <option value="value">Highest value first</option>
+          <option value="term">Longest term first</option>
+          <option value="end">Latest end date first</option>
+          <option value="date">Newest first</option>
+        </select>
+      </div>
+      <p class="bsp-summary" id="lc-summary">Loading contracts…</p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table">
+          <thead><tr>
+            <th>Buyer &amp; contract</th><th>Supplier</th><th class="num">Value</th><th class="num">Term</th><th class="num">Ends</th>
+          </tr></thead>
+          <tbody id="lc-tbody"></tbody>
+        </table>
+      </div>
+      <div class="bsp-more"><button class="bsp-morebtn" id="lc-more">Show more</button></div>
+    </div>
+
+    <div class="doge-disclaimer">
+      <strong>Sources and limits.</strong> Contracts are drawn from the Cabinet Office
+      <a href="https://www.contractsfinder.service.gov.uk/">Contracts Finder</a>, published under the Open
+      Government Licence. This is a record of awarded contracts and framework agreements, which are commitments
+      to spend, not confirmed payments, and it excludes spending below the publication thresholds. Figures are
+      as published by each buyer; where a value was not published, none is shown.
+      <strong>On contract length:</strong> the term shown is the published contract period. Contracts Finder
+      does not record extension options, so a contract advertised as, say, "three years with the option of two
+      more" may appear here as three. Terms are therefore a <em>floor</em>: extensions only make a contract run
+      longer, so the count still running on handover day is a conservative minimum. Frameworks are flagged
+      because actual spend under them commonly outlives the stated term. Inclusion here is not a suggestion of
+      any wrongdoing.
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var GRP = { county: 'County council', district: 'District / borough', police: 'Police', fire: 'Fire' };
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+    function money(n){ return n == null ? '' : '£' + Math.round(n).toLocaleString(); }
+    var all = [], view = [], shown = 0, PAGE = 60;
+
+    var searchEl = document.getElementById('lc-search');
+    var buyerEl = document.getElementById('lc-buyer');
+    var scopeEl = document.getElementById('lc-scope');
+    var sortEl = document.getElementById('lc-sort');
+    var tbody = document.getElementById('lc-tbody');
+    var summary = document.getElementById('lc-summary');
+    var moreBtn = document.getElementById('lc-more');
+    var query = '';
+    function term(c){
+      if (!c.months) return '';
+      var y = c.months / 12;
+      return y >= 1 ? (Math.round(y * 10) / 10) + ' yr' + (y >= 1.05 ? 's' : '') : c.months + ' mo';
+    }
+    function pastVesting(c){ return (c.end || '') >= '2028-04-01'; }
+
+    function row(c){
+      var tr = document.createElement('tr');
+      var td1 = document.createElement('td');
+      var sup = document.createElement('div'); sup.className = 'bsp-sup'; sup.textContent = c.title || '(untitled contract)';
+      if (c.framework){ var fb = document.createElement('span'); fb.className = 'lc-badge'; fb.textContent = 'framework'; sup.appendChild(document.createTextNode(' ')); sup.appendChild(fb); }
+      var meta = document.createElement('div'); meta.className = 'bsp-rowmeta';
+      meta.textContent = c.buyer + (c.cat ? ' · ' + c.cat : '');
+      td1.appendChild(sup); td1.appendChild(meta);
+      if (c.desc) { var d = document.createElement('div'); d.className = 'bsp-rowmeta'; d.textContent = c.desc.slice(0, 150) + (c.desc.length > 150 ? '…' : ''); td1.appendChild(d); }
+      var td2 = document.createElement('td'); td2.className = 'bsp-sup'; td2.style.fontWeight = '500';
+      td2.textContent = c.supplier || '';
+      var td3 = document.createElement('td'); td3.className = 'num bsp-amt'; td3.textContent = money(c.value) || '';
+      var td4 = document.createElement('td'); td4.className = 'num bsp-date'; td4.textContent = term(c) || '';
+      var td5 = document.createElement('td'); td5.className = 'num bsp-date';
+      td5.textContent = c.end || '';
+      if (pastVesting(c)) td5.classList.add('lc-past');
+      tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4); tr.appendChild(td5);
+      return tr;
+    }
+    function apply(){
+      view = all.filter(function(c){
+        if (buyerEl.value && c.buyer !== buyerEl.value) return false;
+        if (scopeEl.value === 'vesting' && !pastVesting(c)) return false;
+        if (scopeEl.value === '5yr' && !(c.months >= 60)) return false;
+        if (scopeEl.value === 'framework' && !c.framework) return false;
+        if (query){
+          var hay = ((c.title||'') + ' ' + (c.desc||'') + ' ' + (c.buyer||'') + ' ' + (c.supplier||'')).toLowerCase();
+          if (hay.indexOf(query) < 0) return false;
+        }
+        return true;
+      });
+      if (sortEl.value === 'term') view.sort(function(a,b){ return (b.months||0) - (a.months||0); });
+      else if (sortEl.value === 'end') view.sort(function(a,b){ return (b.end||'').localeCompare(a.end||''); });
+      else if (sortEl.value === 'date') view.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+      else view.sort(function(a,b){ return (b.value||0) - (a.value||0); });
+      var sum = view.reduce(function(s,c){ return s + (c.value||0); }, 0);
+      summary.textContent = '';
+      var b1 = document.createElement('b'); b1.textContent = view.length.toLocaleString();
+      summary.appendChild(b1); summary.appendChild(document.createTextNode(' contracts'));
+      if (sum){ summary.appendChild(document.createTextNode(' worth ')); var b2 = document.createElement('b'); b2.textContent = money(sum); summary.appendChild(b2); }
+      summary.appendChild(document.createTextNode(' matching.'));
+      tbody.textContent = ''; shown = 0; renderMore();
+    }
+    function renderMore(){
+      var frag = document.createDocumentFragment();
+      for (var i = shown; i < view.length && i < shown + PAGE; i++) frag.appendChild(row(view[i]));
+      tbody.appendChild(frag); shown = Math.min(shown + PAGE, view.length);
+      moreBtn.style.display = shown < view.length ? '' : 'none';
+      moreBtn.textContent = 'Show more (' + (view.length - shown).toLocaleString() + ' left)';
+    }
+    moreBtn.addEventListener('click', renderMore);
+    [buyerEl, scopeEl, sortEl].forEach(function(s){ s.addEventListener('change', apply); });
+    var t; searchEl.addEventListener('input', function(){ clearTimeout(t); t = setTimeout(function(){ query = searchEl.value.toLowerCase().trim(); apply(); }, 180); });
+
+    fetch('/data/lgr-contracts.json').then(function(r){ return r.json(); }).then(function(d){
+      all = d.contracts || [];
+      var m = d.meta || {};
+      document.getElementById('lc-count').textContent = (m.total || all.length).toLocaleString();
+      document.getElementById('lc-value').textContent = m.sum ? '£' + (m.sum/1e6).toFixed(0) + 'm' : '…';
+      document.getElementById('lc-vesting').textContent = (m.running_past_vesting_2028 != null) ? m.running_past_vesting_2028.toLocaleString() : '…';
+      document.getElementById('lc-longest').textContent = m.max_term_months ? (Math.round(m.max_term_months/12*10)/10) + ' yrs' : '…';
+      var bs = {}; all.forEach(function(c){ bs[c.buyer] = true; });
+      Object.keys(bs).sort().forEach(function(b){ var o = document.createElement('option'); o.value = b; o.textContent = b; buyerEl.appendChild(o); });
+      apply();
+    }).catch(function(){ summary.textContent = 'The contracts data could not be loaded.'; });
+  })();
+  </script>
+</Layout>

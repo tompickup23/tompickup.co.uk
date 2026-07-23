@@ -501,9 +501,15 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
           starts inside a decade of its predecessors' procurement decisions.
         </p>
+        <p style="margin-top:1.1rem;">
+          <a href="/lgr/contracts/" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:0.9rem;text-decoration:none;background:rgba(18,182,207,0.12);border:1px solid rgba(18,182,207,0.4);color:#12b6cf;">
+            Search every council's contracts, by term and end date &rarr;
+          </a>
+        </p>
         <p class="doge-note" style="font-size:0.78rem;">
-          Mapping caveats, stated plainly: this register covers <strong>county council contracts only</strong>.
-          the twelve districts' and two unitaries' own contracts are not yet mapped; {C.contractsBeyondVesting.noEndDate} notices
+          Mapping caveats, stated plainly: the figures in this section are the <strong>county council's</strong>
+          own award notices. The searchable explorer linked above now covers all fourteen councils;
+          {C.contractsBeyondVesting.noEndDate} notices
           carry no end date, so the £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m straddling figure is a floor;
           and Contracts Finder values are self-reported at award, not final spend.
         </p>
