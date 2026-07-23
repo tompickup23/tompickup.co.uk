@@ -3,9 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import '../styles/doge.css';
 
 // ============================================================
-// Local Government Reorganisation (LGR) — Lancashire.
+// Local Government Reorganisation (LGR) for Lancashire.
 // ALL data comes from the canonical dataset in src/data/lgr/
-// (authorities.json, county.json, decision.json — every figure
+// (authorities.json, county.json, decision.json): every figure
 // individually sourced), assembled by scripts/lgr_build.py into
 // model.json. The same model is published at /data/lgr-model.json.
 // Never hand-edit figures here: change the canonical dataset and
@@ -43,7 +43,7 @@ const SUPPLIERS = C.topSuppliers.map((s) => ({ name: s.name, m: s.m }));
 const SUP_MAX = Math.max(...SUPPLIERS.map((s) => s.m));
 
 // ============================================================
-// FOUR-UNITARY MODEL — all figures from model.json (see header note).
+// FOUR-UNITARY MODEL: all figures from model.json (see header note).
 // ============================================================
 const LCC_BUDGET = model.lcc.budget_m;
 const LCC_PER_CAPITA = model.lcc.perCapita;
@@ -112,7 +112,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
 <Layout
   title="Lancashire is being redrawn: the LGR decision | Tom Pickup"
-  description="On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary authorities from April 2028. The decision, the new map, and the county's finances going into it — every figure sourced."
+  description="On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary authorities from April 2028. The decision, the new map, and the county's finances going into it, with every figure sourced."
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
@@ -128,7 +128,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         On 16 July 2026 the government announced its decision: Lancashire's 15 councils will be abolished and
         replaced by <strong>four new unitary authorities</strong> from April 2028. It is the biggest change to
         local government here in more than 50 years. This is what was decided, the new map, and the financial
-        state of the county going into it — with every figure traceable to a published source.
+        state of the county going into it, with every figure traceable to a published source.
       </p>
     </header>
 
@@ -144,8 +144,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <h2 class="doge-h2">The decision</h2>
       <p class="doge-note">
         The Secretary of State for Housing, Communities and Local Government announced on
-        <strong>16 July 2026</strong> that Lancashire's current structure — one county council, twelve district
-        councils and two unitary authorities (Blackpool and Blackburn with Darwen) — will be reorganised into
+        <strong>16 July 2026</strong> that Lancashire's current structure (one county council, twelve district
+        councils and two unitary authorities: Blackpool and Blackburn with Darwen) will be reorganised into
         four unitary councils. Elections to shadow authorities are due in <strong>May 2027</strong>, with the new
         councils taking over all local services on <strong>1 April 2028</strong>. The change is subject to
         Parliamentary approval. Until vesting day, all 15 existing councils continue to run services as now.
@@ -178,7 +178,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note">
         Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
         the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
-        ~500,000 population the government has used as a working guideline</strong> for new unitaries — East
+        ~500,000 population the government has used as a working guideline</strong> for new unitaries, with East
         Lancashire comes closest at {fmt(498255)}, while the other three sit between 334,000 and 353,000.
       </p>
       <div class="doge-panel">
@@ -199,7 +199,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note" style="margin-top:0.9rem;">
         For scale, Lancashire County Council's £1,329.312m net budget works out at roughly <strong>£1,076 per
         resident</strong> across the 1.24 million people in the county area it serves (Blackpool and Blackburn with
-        Darwen are already unitary) — spending on county services (adult social care, children's services,
+        Darwen are already unitary), with spending on county services (adult social care, children's services,
         highways) that will pass to the new unitaries.
       </p>
     </section>
@@ -209,7 +209,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <span class="doge-eyebrow"><span class="dot"></span> Interactive model</span>
       <h2 class="doge-h2">Explore the four-unitary model</h2>
       <p class="doge-note">
-        Pick a proposed council to see what it would actually be — who it merges, how many people it serves, the
+        Pick a proposed council to see what it would actually be: who it merges, how many people it serves, the
         money it would run, and the depth of need it would have to meet. Money figures combine the
         <strong>verified</strong> budgets of every body that merges with a <strong>modelled</strong> split of the
         county's £1,329.312m across each area by population. Full method below.
@@ -225,8 +225,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           </thead>
           <tbody>
             <tr><td class="lgr-cmp-rowh">Population</td>{MODEL.map((u) => <td>{fmt(u.pop)}</td>)}</tr>
-            <tr><td class="lgr-cmp-rowh">Combined net budget</td>{MODEL.map((u) => <td>{u.combined ? `£${fmt(u.combined)}m` : '—'}</td>)}</tr>
-            <tr><td class="lgr-cmp-rowh">Spend per resident</td>{MODEL.map((u) => <td>{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Combined net budget</td>{MODEL.map((u) => <td>{u.combined ? `£${fmt(u.combined)}m` : 'n/a'}</td>)}</tr>
+            <tr><td class="lgr-cmp-rowh">Spend per resident</td>{MODEL.map((u) => <td>{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : 'n/a'}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Councils merged</td>{MODEL.map((u) => <td>{u.councils.length}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Social-care demand</td>{MODEL.map((u) => <td>{u.metrics.healthDemandScore}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Employment rate</td>{MODEL.map((u) => <td>{u.metrics.empRate}%</td>)}</tr>
@@ -263,7 +263,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
             <div class="lgr-mx-money">
               <div class="lgr-mx-stat big">
-                <span class="lgr-mx-stat-v">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+                <span class="lgr-mx-stat-v">{u.combined ? `£${fmt(u.combined)}m` : 'n/a'}</span>
                 <span class="lgr-mx-stat-l">Estimated combined net budget{u.combined ? '' : ' (gathering district figures)'}</span>
               </div>
               <div class="lgr-mx-stat">
@@ -271,7 +271,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
                 <span class="lgr-mx-stat-l">County services apportioned in ({fmt(u.perCapitaCounty)}/head)</span>
               </div>
               <div class="lgr-mx-stat">
-                <span class="lgr-mx-stat-v">{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : '—'}</span>
+                <span class="lgr-mx-stat-v">{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : 'n/a'}</span>
                 <span class="lgr-mx-stat-l">Total spend per resident</span>
               </div>
             </div>
@@ -284,13 +284,13 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
               </div>
               {u.owns.map((o) => (
                 <div class="lgr-mx-brow">
-                  <span class="lgr-mx-bname">{o.c}{o.type === 'u' ? ' (existing unitary — full budget)' : ' (district)'}</span>
+                  <span class="lgr-mx-bname">{o.c}{o.type === 'u' ? ' (existing unitary: full budget)' : ' (district)'}</span>
                   <span class="lgr-mx-bval">{o.m !== null ? `£${o.m}m` : 'gathering…'}</span>
                 </div>
               ))}
               <div class="lgr-mx-brow total">
                 <span class="lgr-mx-bname">Estimated combined net budget</span>
-                <span class="lgr-mx-bval">{u.combined ? `£${fmt(u.combined)}m` : '—'}</span>
+                <span class="lgr-mx-bval">{u.combined ? `£${fmt(u.combined)}m` : 'n/a'}</span>
               </div>
               <div class="lgr-mx-brow alt">
                 <span class="lgr-mx-bname">…if county spend were split by social-care need instead of population</span>
@@ -306,11 +306,11 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
                 council must eventually harmonise these:
               </p>
               <div class="lgr-mx-brow">
-                <span class="lgr-mx-bname">Lowest today — {u.bandD.lowest.council}</span>
+                <span class="lgr-mx-bname">Lowest today: {u.bandD.lowest.council}</span>
                 <span class="lgr-mx-bval">£{u.bandD.lowest.bill.toFixed(2)}</span>
               </div>
               <div class="lgr-mx-brow">
-                <span class="lgr-mx-bname">Highest today — {u.bandD.highest.council}</span>
+                <span class="lgr-mx-bname">Highest today: {u.bandD.highest.council}</span>
                 <span class="lgr-mx-bval">£{u.bandD.highest.bill.toFixed(2)}</span>
               </div>
               <div class="lgr-mx-brow total">
@@ -353,7 +353,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note" style="margin-top:1rem; font-size:0.8rem;">
         <strong>Method.</strong> Population and place indicators are verified per constituent authority (ONS Census
         2021 and official statistics). County-service spend is Lancashire County Council's £1,329.312m net budget
-        split across each area in proportion to the population it serves — a first-order, population-based
+        split across each area in proportion to the population it serves. This is a first-order, population-based
         apportionment, not a service-by-service costing. Blackpool and Blackburn with Darwen are already unitary, so
         their full net budgets are added and no county spend is apportioned to them. "Combined net budget" sums the
         apportioned county spend and every constituent council's own latest net revenue budget; because councils
@@ -366,7 +366,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section">
       <h2 class="doge-h2">Where Padiham &amp; Burnley West land</h2>
       <p class="doge-note">
-        The division I represent falls inside the new <strong>East Lancashire</strong> unitary — the largest of
+        The division I represent falls inside the new <strong>East Lancashire</strong> unitary, the largest of
         the four by number of constituent councils, pulling together Blackburn with Darwen, Hyndburn, Rossendale,
         Pendle and Burnley. From April 2028 a single East Lancashire authority would run everything from adult
         social care and highways (today county responsibilities) to bins and planning (today borough
@@ -414,7 +414,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
       <p class="doge-note" style="margin-top:1rem;">
         The Medium Term Financial Strategy closes a £72.298m gross shortfall for 2026/27 and balances 2026/27 and
-        2027/28, but still shows a <strong>£17.320m gap in 2028/29</strong> — the very year the new unitaries take
+        2027/28, but still shows a <strong>£17.320m gap in 2028/29</strong>: the very year the new unitaries take
         over. The February 2026 Final Settlement delivered a £28m gain, and the council is building £58.4m of extra
         reserves over three years. The section 151 officer judges reserves adequate; no section 114 warning is in
         prospect. Grant dependency stands at 30% of net revenue, with council tax funding 65%.
@@ -450,7 +450,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section">
       <h2 class="doge-h2">The operation being merged</h2>
       <p class="doge-note">
-        The county's £1,329.312m net budget is dominated by three service blocks — all of which pass to the new
+        The county's £1,329.312m net budget is dominated by three service blocks, all of which pass to the new
         unitaries. Adult social care alone is 42% of it. These are the operations that must be split across, or
         merged into, the four successor councils (2026/27 net budget by directorate, from the council's own papers).
       </p>
@@ -473,7 +473,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <div class="doge-section">
         <h3 class="doge-h2" style="font-size:1.05rem;">The biggest supplier relationships that transfer</h3>
         <p class="doge-note">
-          Largest external suppliers by processed spend — the contracts and relationships the successor councils
+          Largest external suppliers by processed spend: the contracts and relationships the successor councils
           inherit. Many are long, multi-year arrangements (waste, PFI schools, homecare frameworks) that cannot
           simply be unwound on vesting day. Lawfully redacted payments to individuals (care packages) are excluded.
         </p>
@@ -495,14 +495,14 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         <p class="doge-note" style="margin-top:0.9rem;">
           Of the county's <strong>1,214 contract award notices (£3.96bn)</strong>,
           <strong>{C.contractsBeyondVesting.straddleVesting} contracts worth
-          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong> —
+          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong>.
           they transfer to the successor councils mid-term. The longest-running include a £204.3m public-health
           nursing contract to 2032, county-wide energy supply to September 2028, waste-recovery services to 2030 and
           an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
           starts inside a decade of its predecessors' procurement decisions.
         </p>
         <p class="doge-note" style="font-size:0.78rem;">
-          Mapping caveats, stated plainly: this register covers <strong>county council contracts only</strong> —
+          Mapping caveats, stated plainly: this register covers <strong>county council contracts only</strong>.
           the twelve districts' and two unitaries' own contracts are not yet mapped; {C.contractsBeyondVesting.noEndDate} notices
           carry no end date, so the £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m straddling figure is a floor;
           and Contracts Finder values are self-reported at award, not final spend.
@@ -514,7 +514,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section">
       <h2 class="doge-h2">How this compares to what was proposed</h2>
       <p class="doge-note">
-        The approved configuration was the proposal submitted by <strong>six councils</strong> — Chorley, Lancaster,
+        The approved configuration was the proposal submitted by <strong>six councils</strong>: Chorley, Lancaster,
         Preston, Ribble Valley, South Ribble and West Lancashire. Reform UK at County Hall submitted a
         <strong>two-unitary</strong> model as the best-value option; Burnley and Pendle championed a
         <strong>five-unitary</strong> model; the government chose the six-council four-unitary plan, citing
@@ -524,7 +524,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </p>
       <p class="doge-note">
         The proposers' business case claims cumulative net savings of <strong>£194.9m</strong>, with recurring
-        annual benefits of <strong>£81.9m from 2032/33</strong> — the bidding councils' own estimate, not an
+        annual benefits of <strong>£81.9m from 2032/33</strong>: the bidding councils' own estimate, not an
         independent or government-verified figure. Set that against the precedent record below: projected LGR
         savings were delivered in full only where the new council inherited a sound balance sheet, and county
         splits systematically under-delivered in their early years.
@@ -537,7 +537,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note">
         The county leading this change is <strong>Reform UK-controlled</strong>: at Lancashire County Council,
         Reform holds <strong>53 of 84 seats</strong> (a majority of 22), the administration that inherited the
-        reorganisation process and now has to deliver it. The current lower-tier councils are under mixed control —
+        reorganisation process and now has to deliver it. The current lower-tier councils are under mixed control,
         mostly Labour-led or in no overall control, with Reform UK the largest party in Burnley. Every one of them
         is abolished on vesting day.
       </p>
@@ -549,7 +549,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           </div>
           <div class="lgr-tl-item">
             <span class="lgr-tl-date">May 2027</span>
-            <span class="lgr-tl-text">All-out elections to the four new <strong>shadow authorities</strong> — the first time voters choose who runs North, West, East and South Lancashire.</span>
+            <span class="lgr-tl-text">All-out elections to the four new <strong>shadow authorities</strong>: the first time voters choose who runs North, West, East and South Lancashire.</span>
           </div>
           <div class="lgr-tl-item">
             <span class="lgr-tl-date">2027&ndash;28</span>
@@ -573,16 +573,16 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note">
         Reorganisation is not the whole picture. Lancashire's end-state is <strong>five bodies, not four</strong>:
         the four new unitaries plus the <strong>Lancashire Combined County Authority</strong>, formally launched on
-        5 February 2025 with Lancashire County Council, Blackpool and Blackburn with Darwen as constituent members —
+        5 February 2025 with Lancashire County Council, Blackpool and Blackburn with Darwen as constituent members.
         and a mayor promised alongside reorganisation. Strategic functions are already lifting to CCA level:
       </p>
       <div class="doge-statband" style="grid-template-columns: repeat(2, 1fr);">
-        <div class="doge-stat"><div class="v teal">£640m</div><div class="l">Four-year transport settlement — the CCA becomes Lancashire's Local Transport Authority from 1 April</div></div>
+        <div class="doge-stat"><div class="v teal">£640m</div><div class="l">Four-year transport settlement: the CCA becomes Lancashire's Local Transport Authority from 1 April</div></div>
         <div class="doge-stat"><div class="v teal">£40.8m</div><div class="l">Adult Skills Fund administered by the CCA from August 2026 (previously central government)</div></div>
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
         The CCA is in its infancy: strategy and funding move up, but <strong>delivery still sits with the county
-        and the two existing unitaries</strong> — and after vesting day, with the four successors, whose members
+        and the two existing unitaries</strong>, with delivery after vesting day shifting to the four successors, whose members
         will make up the CCA. Housing and environmental functions are proposed to follow under the devolution deal.
       </p>
       <p class="doge-note" style="font-size:0.8rem;">
@@ -590,7 +590,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         services. No published disaggregation yet shows what part of any council's net budget will transfer to the
         CCA (the Adult Skills Fund is new devolved money, not a carve-out from council budgets; the transport
         settlement flows alongside, not out of, them). Until a published split exists, the model deliberately does
-        not net anything off — flagged in the gaps below.
+        not net anything off, flagged in the gaps below.
       </p>
     </section>
 
@@ -599,7 +599,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <h2 class="doge-h2">The balance sheet they inherit</h2>
       <p class="doge-note">
         Reorganisation transfers balance sheets, not just services. From certified MHCLG returns (reserves at
-        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions —
+        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions.
         <strong>before</strong> Lancashire County Council's own £345.0m reserves and
         £{fmt(Math.round(C.debt_m_2026))}m borrowing, whose split across the four successors is undetermined:
       </p>
@@ -614,19 +614,19 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
         The standout risk sits in the new West Lancashire: <strong>Blackpool brings £606.8m of external debt against
-        £34.7m of reserves</strong> — by far the weakest balance sheet of any merging council, and it lands in the
+        £34.7m of reserves</strong>, by far the weakest balance sheet of any merging council, and it lands in the
         smallest unitary. By contrast Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. West Lancashire
         district's figures include council-housing (HRA) debt, which transfers with the housing stock.
       </p>
       <div class="doge-panel">
         <div class="lgr-mx-build-h">Pensions: unusually, a strength</div>
         <p class="doge-note" style="margin:0.4rem 0 0;">
-          All 15 councils are employers in the single <strong>Lancashire County Pension Fund</strong> — £12.0bn of
+          All 15 councils are employers in the single <strong>Lancashire County Pension Fund</strong>: £12.0bn of
           assets, <strong>134% funded with a £3.0bn surplus</strong> at the March 2025 valuation (204,958 members).
           Precedent says reorganisation does not split the fund: in both Cumbria and Northamptonshire one successor
           unitary became administering authority and the rest joined as employers. Which of the four inherits
           stewardship of £12bn is a live structural-changes-order question. The next valuation falls on
-          <strong>31 March 2028 — the day before vesting day</strong>. The surplus is already flowing back:
+          <strong>31 March 2028</strong>, the day before vesting day. The surplus is already flowing back:
           LCC's employer contribution falls from 16.3% to 9.3% (£87m → £52m) in 2026/27.
         </p>
       </div>
@@ -634,16 +634,16 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
     <!-- Process from here -->
     <section class="doge-section" id="process">
-      <h2 class="doge-h2">The process from here — and who pays</h2>
+      <h2 class="doge-h2">The process from here, and who pays</h2>
       <p class="doge-note">
         The decision is implemented by a <strong>Structural Changes Order</strong> under the Local Government and
-        Public Involvement in Health Act 2007, expected later in 2026 — it must be approved by
+        Public Involvement in Health Act 2007, expected later in 2026. It must be approved by
         <strong>both Houses of Parliament</strong> (draft affirmative procedure) before shadow arrangements begin.
         The government's stated position on cost is that <strong>reorganisation is paid for by the councils in the
         area</strong>, with flexibility over capital receipts and borrowing. Central support so far: a share of £7.6m
         proposal-development funding (£135,000 per area + 20p per resident), and transition funding of
         <strong>at least £900,000 per new unitary</strong> plus up to £150,000 each for children's, adult social
-        care and public-health leadership continuity — set against the £50m–£100m precedent-based transition
+        care and public-health leadership continuity, set against the £50m–£100m precedent-based transition
         envelope above. Lancashire was one of <strong>14 areas decided on 16 July 2026</strong>, a wave replacing
         134 councils with 38 unitaries.
       </p>
@@ -653,8 +653,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section" id="precedents">
       <h2 class="doge-h2">What previous reorganisations actually cost</h2>
       <p class="doge-note">
-        Six English reorganisations have completed since 2019. Their record — from official business cases, closure
-        reports and assurance reviews — is the best available benchmark for what Lancashire is about to attempt.
+        Six English reorganisations have completed since 2019. Their record comes from official business cases, closure
+        reports and assurance reviews, and is the best available benchmark for what Lancashire is about to attempt.
         Lancashire's <strong>{model.precedents.lancashire.months} months</strong> from decision to vesting day sits
         almost exactly on the 2023 cohort's 20.3-month track:
       </p>
@@ -697,12 +697,12 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         <p class="doge-note" style="margin:0.4rem 0 0.6rem;">
           Budgeted transition costs ran at <strong>£{model.precedents.lancashire.perResidentEnvelope.low_gbp}–£{model.precedents.lancashire.perResidentEnvelope.high_gbp}
           per resident</strong> across the six cases. Applied to Lancashire's {fmt(model.precedents.lancashire.population)} residents, that implies a transition envelope of roughly
-          <strong>£{model.precedents.lancashire.impliedTransition_m.low}m–£{model.precedents.lancashire.impliedTransition_m.high}m</strong> — before disaggregation risk.
+          <strong>£{model.precedents.lancashire.impliedTransition_m.low}m–£{model.precedents.lancashire.impliedTransition_m.high}m</strong>, before disaggregation risk.
           {model.precedents.lancashire.keyRisk}. No official costing for the four-unitary configuration has been published; this envelope is a precedent-based read-across, not a forecast.
         </p>
         <p class="doge-note" style="margin:0; font-size:0.82rem;">
           <strong>The workforce warning from 2023:</strong> {model.precedents.equalPay.cumbriaClaim.fact}. In Somerset,
-          staff were {model.precedents.equalPay.somerset.fact.split('(')[0].toLowerCase().replace('workforce still', 'still')} — while
+          staff were {model.precedents.equalPay.somerset.fact.split('(')[0].toLowerCase().replace('workforce still', 'still')}, while
           North Yorkshire avoided the trap by completing a single job-evaluated pay structure <em>before</em> vesting.
           Birmingham shows the downside when harmonisation goes wrong: {model.precedents.equalPay.birmingham.liability}.
         </p>
@@ -717,7 +717,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         claimed savings against the precedent record, transparently. All three scenarios start from the proposers'
         claimed run-rate (£{model.costsVsSavings.fullRunRate_m}m a year by 2032/33), apply a realisation rate and a
         transition cost drawn from the six completed reorganisations above, and net off the government's
-        ~£{model.costsVsSavings.$meta.governmentOffset_m}m support. Cumulative position runs to 2037/38 — a decade
+        ~£{model.costsVsSavings.$meta.governmentOffset_m}m support. Cumulative position runs to 2037/38, a decade
         after vesting.
       </p>
       <div class="lgr-prec-grid">
@@ -726,7 +726,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
             <div class="lgr-prec-name">{s.label}</div>
             <div class="lgr-prec-row"><span>Savings realised</span><b>£{s.annualRunRate_m}m/yr ({s.realisationPct}%)</b></div>
             <div class="lgr-prec-row"><span>Transition cost</span><b>£{s.transitionCost_m}m</b></div>
-            <div class="lgr-prec-row"><span>Equal-pay crystallised</span><b>{s.equalPay_m ? `£${s.equalPay_m}m` : '—'}</b></div>
+            <div class="lgr-prec-row"><span>Equal-pay crystallised</span><b>{s.equalPay_m ? `£${s.equalPay_m}m` : 'n/a'}</b></div>
             <div class="lgr-prec-row"><span>Payback year</span><b>{s.payback}</b></div>
             <div class="lgr-prec-row"><span>Net position by 2037/38</span><b>{s.tenYearNet_m > 0 ? '+' : ''}£{fmt(s.tenYearNet_m)}m</b></div>
             <p class="lgr-prec-note">{s.basis}</p>
@@ -736,7 +736,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note" style="margin-top:0.9rem;">
         The spread is the finding: on the same decision, the decade-end net position ranges from
         <strong>+£{fmt(model.costsVsSavings.scenarios[0].tenYearNet_m)}m</strong> to
-        <strong>+£{fmt(model.costsVsSavings.scenarios[2].tenYearNet_m)}m</strong> — a twenty-fold difference —
+        <strong>+£{fmt(model.costsVsSavings.scenarios[2].tenYearNet_m)}m</strong>, a twenty-fold difference,
         and payback moves from {model.costsVsSavings.scenarios[0].payback} to {model.costsVsSavings.scenarios[2].payback}.
         Which scenario Lancashire gets is decided by execution: whether pay harmonisation is done before vesting
         (North Yorkshire) or left to drift (Somerset), and whether the county split is managed better than Cumbria's
@@ -760,11 +760,11 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </p>
       <div class="doge-panel">
         <ul class="lgr-gaps">
-          <li><strong>Official transition costing</strong> for the four-unitary configuration — none has been published. The £50m–£100m envelope above is a precedent read-across, not a government figure.</li>
-          <li><strong>How council tax will actually be harmonised</strong> — the gaps per unitary are quantified above, but the harmonisation path (level, speed, direction) is a decision for the shadow councils and government; no scheme has been published.</li>
-          <li><strong>Balance-sheet disaggregation</strong> — how LCC's assets, debt (including the bond portfolio), reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>
-          <li><strong>A few Band D figures</strong> (Lancaster, Preston, Ribble Valley, Fylde, Chorley) are sourced from budget papers but await confirmation against the formal council-tax resolution — marked medium-confidence in the data feed.</li>
-          <li><strong>The Combined Authority split</strong> — which functions (and what money) end up at CCA rather than unitary level is still being settled; the model's combined budgets will need a CCA carve-out once a published disaggregation exists.</li>
+          <li><strong>Official transition costing</strong> for the four-unitary configuration has not been published. The £50m–£100m envelope above is a precedent read-across, not a government figure.</li>
+          <li><strong>How council tax will actually be harmonised</strong>: the gaps per unitary are quantified above, but the harmonisation path (level, speed, direction) is a decision for the shadow councils and government; no scheme has been published.</li>
+          <li><strong>Balance-sheet disaggregation</strong>: how LCC's assets, debt (including the bond portfolio), reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>
+          <li><strong>A few Band D figures</strong> (Lancaster, Preston, Ribble Valley, Fylde, Chorley) are sourced from budget papers but await confirmation against the formal council-tax resolution, marked medium-confidence in the data feed.</li>
+          <li><strong>The Combined Authority split</strong>: which functions (and what money) end up at CCA rather than unitary level is still being settled; the model's combined budgets will need a CCA carve-out once a published disaggregation exists.</li>
         </ul>
       </div>
     </section>
@@ -783,7 +783,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         Precedent figures come from MHCLG decision documents, council business cases, KPMG/CIPFA closure and
         assurance reviews, Hansard and audited accounts. Lower-tier political control is a May 2026 snapshot from
         the elections data platform (indicative at status level). Verify against the primary source before any
-        formal use. <strong>The full model — every input, its source and its confidence rating — is published as
+        formal use. <strong>The full model</strong>, every input, its source and its confidence rating, <strong>is published as
         open data at <a href="/data/lgr-model.json">/data/lgr-model.json</a>.</strong>
       </p>
     </section>
