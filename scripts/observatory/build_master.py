@@ -18,15 +18,26 @@ from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 
+def _crosswalk_path():
+    from pathlib import Path as _P
+    import os
+    for c in [os.environ.get("OBS_CROSSWALK"),
+              _P.home() / "clawd/briefings/lancashire-business-observatory/geo_crosswalk.json",
+              _P.home() / "aidoge/briefings/lancashire-business-observatory/geo_crosswalk.json"]:
+        if c and _P(c).exists():
+            return _P(c)
+    raise SystemExit("geo_crosswalk.json not found; set OBS_CROSSWALK")
+
+
 VPS = Path.home() / "observatory-data/vps"
 PROC = Path.home() / "observatory-data/processed"
-CROSSWALK = Path.home() / "clawd/briefings/lancashire-business-observatory/geo_crosswalk.json"
+CROSSWALK = _crosswalk_path()
 
 DISTRESS = {"Active - Proposal to Strike off", "Liquidation", "In Administration",
             "ADMINISTRATION ORDER", "In Administration/Administrative Receiver",
             "In Administration/Receiver Manager", "Voluntary Arrangement",
             "Live but Receiver Manager on at least one charge"}
-TODAY = date(2026, 7, 26)
+TODAY = date.today()
 
 xw = json.loads(CROSSWALK.read_text())["byAuthority"]
 lad_to_unitary = {v["name"]: v["newUnitary"] for v in xw.values()}
@@ -122,10 +133,10 @@ with gzip.open(PROC / "master.jsonl.gz", "wt") as f:
         f.write(json.dumps(r) + "\n")
 (PROC / "clusters.json").write_text(json.dumps(
     {"$meta": {"rule": ">=40 companies at one postcode with >=50% in distress statuses",
-               "asAt": "2026-07-01 register snapshot"},
+               "asAt": f"{TODAY.isoformat()} run, latest monthly register snapshot"},
      "clusters": clusters}, indent=1))
 (PROC / "master_aggregates.json").write_text(json.dumps(
-    {"$meta": {"asAt": "2026-07-01 register snapshot", "distressStatuses": sorted(DISTRESS)},
+    {"$meta": {"asAt": f"{TODAY.isoformat()} run, latest monthly register snapshot", "distressStatuses": sorted(DISTRESS)},
      "byLad": out_agg}, indent=1))
 
 print(f"master: {len(rows)} companies, {len(clusters)} clusters "

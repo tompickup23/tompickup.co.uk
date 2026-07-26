@@ -117,9 +117,8 @@ candidates.sort(key=lambda c: (-("ons-definition" in c["flags"]),
                                -c["latestEmployees"] * (c["cagrPct"] / 100)))
 out = {
     "$meta": {
-        "source": "Companies House Accounts Data Product monthly archives "
-                  "June 2025 to June 2026 (prior-period comparatives included)",
-        "retrieved": "2026-07-26",
+        "source": "Companies House Accounts Data Product monthly archives (prior-period comparatives included) plus API backfills",
+        "retrieved": __import__("datetime").date.today().isoformat(),
         "definitions": "ons-definition: >=10 employees at base, >20% annualised "
                        "employment growth over >=2 years. emerging: 3-9 base, "
                        ">=50% annualised, labelled separately.",

@@ -10,6 +10,17 @@ import gzip, json, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+def _crosswalk_path():
+    from pathlib import Path as _P
+    import os
+    for c in [os.environ.get("OBS_CROSSWALK"),
+              _P.home() / "clawd/briefings/lancashire-business-observatory/geo_crosswalk.json",
+              _P.home() / "aidoge/briefings/lancashire-business-observatory/geo_crosswalk.json"]:
+        if c and _P(c).exists():
+            return _P(c)
+    raise SystemExit("geo_crosswalk.json not found; set OBS_CROSSWALK")
+
+
 sys.path.insert(0, str(Path(__file__).parent))
 from resolve_suppliers import normalise, classify
 
@@ -17,9 +28,10 @@ ROOT = Path(__file__).resolve().parent.parent.parent   # repo root
 PUB = ROOT / "public" / "data"
 PROC = Path.home() / "observatory-data/processed"
 VPS = Path.home() / "observatory-data/vps"
-XW = json.loads((Path.home() / "clawd/briefings/lancashire-business-observatory/geo_crosswalk.json").read_text())
+XW = json.loads((_crosswalk_path()).read_text())
 
-GEN = "2026-07-26"
+from datetime import date as _date
+GEN = _date.today().isoformat()
 
 def load(p, default=None):
     p = Path(p)
