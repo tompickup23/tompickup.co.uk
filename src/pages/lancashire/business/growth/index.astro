@@ -1,0 +1,155 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="Growth engine: Lancashire's high-growth companies | Lancashire Business Observatory"
+  description="The official high-growth company share for each Lancashire area against the England benchmark, plus an Observatory assessment of candidate scale-ups drawn from filed accounts."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Growth engine</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Growth engine</span>
+      <h1 class="doge-title">The high-growth companies</h1>
+      <p class="doge-sub">
+        A small number of fast-growing firms create most new jobs. Two things are shown here: the official
+        measure of how many high-growth companies each area has, set against the England share, and an
+        Observatory assessment of individual candidate scale-ups, read from the employee numbers in their filed
+        accounts. The assessment is an opinion, not a statement of fact about any company.
+      </p>
+    </header>
+
+    <div class="biz-callout" id="gr-method">
+      <strong>How to read this.</strong> The bars use the official ONS Business Demography definition of a
+      high-growth company (average 20 percent annual growth in employment over three years, from a base of ten
+      or more staff). The candidates table is our own read of filed accounts against that same definition; it is
+      not turnover-based and has not been verified with the companies. See the
+      <a href="/lancashire/business/method/#gazelle">method page</a> for thresholds and limits.
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Official high-growth share, by area</h2>
+      <p class="doge-note" id="gr-bench-note">Share of active companies meeting the ONS high-growth definition, against the England benchmark.</p>
+      <div class="doge-panel">
+        <div class="doge-bars" id="gr-bars"></div>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Candidate scale-ups (Observatory assessment)</h2>
+      <p class="doge-note">Companies whose filed accounts show sustained growth in employee numbers. Sorted by compound growth rate. The employee trend reads oldest to newest.</p>
+      <div class="bsp-controls">
+        <input class="bsp-search" id="gr-search" type="search" placeholder="Search company name…" aria-label="Search candidates" />
+        <select class="bsp-sel" id="gr-area" aria-label="Area"><option value="">All areas</option></select>
+        <select class="bsp-sel" id="gr-flag" aria-label="Flag">
+          <option value="">All candidates</option>
+          <option value="ons-definition">Meets ONS definition</option>
+          <option value="emerging">Emerging (small base)</option>
+          <option value="young-company">Under 6 years old</option>
+        </select>
+      </div>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Company</th><th>Area</th><th>Employee trend</th><th class="num">Growth (CAGR)</th><th>Flags</th></tr></thead>
+          <tbody id="gr-body"></tbody>
+        </table>
+      </div>
+      <p class="biz-basis-line" id="gr-basis"></p>
+    </section>
+
+    <BizFooter attributions={[
+      'Company accounts and employee figures: Companies House, as filed under s411 Companies Act 2006.',
+      'High-growth benchmark: ONS Business Demography, under the Open Government Licence v3.0.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var candidates = [], query = '', areaFilter = '', flagFilter = '';
+    var FLAG_LABEL = { 'ons-definition': 'meets ONS definition', 'emerging': 'emerging (small base)', 'young-company': 'under 6 years old' };
+
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    function renderCandidates() {
+      var body = document.getElementById('gr-body');
+      body.textContent = '';
+      var view = candidates.filter(function (c) {
+        if (areaFilter && c.lad !== areaFilter) return false;
+        if (flagFilter && (c.flags || []).indexOf(flagFilter) < 0) return false;
+        if (query && c.name.toLowerCase().indexOf(query) < 0) return false;
+        return true;
+      });
+      view.slice(0, 200).forEach(function (c) {
+        var tr = document.createElement('tr');
+        tr.appendChild(td(c.name, 'bsp-sup'));
+        tr.appendChild(td(c.lad));
+        // employee trend as text "12 to 19 to 31"
+        var trend = (c.series || []).map(function (s) { return s.employees; }).join(' to ');
+        var tt = document.createElement('td'); tt.className = 'biz-trend'; tt.textContent = trend; tr.appendChild(tt);
+        tr.appendChild(td(c.cagrPct == null ? '-' : c.cagrPct + '%', 'num biz-amt'));
+        var fl = document.createElement('td');
+        (c.flags || []).forEach(function (f) {
+          var chip = document.createElement('span'); chip.className = 'biz-chip'; chip.textContent = FLAG_LABEL[f] || f; fl.appendChild(chip);
+        });
+        if (c.momentum && c.momentum.iukGrant) { var g = document.createElement('span'); g.className = 'biz-chip'; g.textContent = 'Innovate UK grant'; fl.appendChild(g); }
+        tr.appendChild(fl);
+        body.appendChild(tr);
+      });
+      if (!view.length) { var tr = document.createElement('tr'); tr.appendChild(td('No candidates match.')); body.appendChild(tr); }
+    }
+
+    fetch('/data/biz-growth.json').then(function (r) { return r.json(); }).then(function (d) {
+      candidates = d.candidates || [];
+      var bench = d.officialBenchmark || [];
+      var england = bench.length ? bench[0].englandPct : 4.9;
+      var sorted = bench.slice().sort(function (a, b) { return (b.highGrowthPct || 0) - (a.highGrowthPct || 0); });
+      var max = Math.max.apply(null, sorted.map(function (b) { return b.highGrowthPct || 0; }).concat([england]));
+      var bars = document.getElementById('gr-bars');
+      sorted.forEach(function (b) {
+        var row = document.createElement('div'); row.className = 'dg-row';
+        var top = document.createElement('div'); top.className = 'dg-top';
+        var nm = document.createElement('span'); nm.className = 'dg-name';
+        nm.textContent = b.slug.replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = (b.highGrowthPct == null ? '-' : b.highGrowthPct + '%');
+        top.appendChild(nm); top.appendChild(val);
+        var track = document.createElement('div'); track.className = 'dg-track biz-track-mark';
+        var fill = document.createElement('div'); fill.className = 'dg-fill' + (b.highGrowthPct >= england ? '' : ' amber');
+        fill.style.width = ((b.highGrowthPct || 0) / max * 100).toFixed(1) + '%';
+        track.appendChild(fill);
+        // England marker
+        var mark = document.createElement('div'); mark.className = 'biz-benchmark-mark'; mark.style.left = (england / max * 100).toFixed(1) + '%';
+        mark.title = 'England: ' + england + '%';
+        track.appendChild(mark);
+        row.appendChild(top); row.appendChild(track); bars.appendChild(row);
+      });
+      document.getElementById('gr-bench-note').textContent =
+        'Share of active companies meeting the ONS high-growth definition. The vertical marker is the England benchmark of ' + england + '%. Bars at or past it are teal; those below are amber.';
+
+      // area dropdown
+      var areas = {}; candidates.forEach(function (c) { areas[c.lad] = true; });
+      var sel = document.getElementById('gr-area');
+      Object.keys(areas).sort().forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a; sel.appendChild(o); });
+      sel.addEventListener('change', function () { areaFilter = sel.value; renderCandidates(); });
+      document.getElementById('gr-flag').addEventListener('change', function (e) { flagFilter = e.target.value; renderCandidates(); });
+      var t; document.getElementById('gr-search').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { query = e.target.value.toLowerCase().trim(); renderCandidates(); }, 160); });
+
+      var basis = (candidates[0] && candidates[0].basis) || d.methodNote || '';
+      document.getElementById('gr-basis').textContent = 'Basis: ' + basis + ' Companies meeting the full definition carry a "meets ONS definition" flag; those with a base of three to nine employees are flagged "emerging" and shown separately.';
+
+      renderCandidates();
+    }).catch(function () {
+      document.getElementById('gr-body').textContent = 'The growth data could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>

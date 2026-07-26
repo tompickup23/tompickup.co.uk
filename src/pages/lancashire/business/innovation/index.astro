@@ -1,0 +1,177 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="Innovation money: Innovate UK funding in Lancashire | Lancashire Business Observatory"
+  description="Public research and development grants won by Lancashire companies through Innovate UK and UKRI, by area, by year and project by project."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Innovation money</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Innovation money</span>
+      <h1 class="doge-title">Public research and development money</h1>
+      <p class="doge-sub">
+        Innovate UK, the government's innovation agency, funds firms to develop new products and processes. This
+        is the record of what Lancashire companies have won, drawn from the published funded-projects data: which
+        areas attract it, how it has moved year to year, and every project on record.
+      </p>
+    </header>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal" id="in-projects">…</div><div class="l">Funded projects on record</div></div>
+      <div class="doge-stat"><div class="v" id="in-award">…</div><div class="l">Total grant to Lancashire firms</div></div>
+      <div class="doge-stat"><div class="v" id="in-ktps">…</div><div class="l">Knowledge Transfer Partnerships</div></div>
+      <div class="doge-stat"><div class="v" id="in-areas">…</div><div class="l">Areas with funded projects</div></div>
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">By area</h2>
+      <p class="doge-note">Funded projects and total grant by area.</p>
+      <div class="doge-panel">
+        <div class="doge-bars" id="in-area-bars"></div>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">By year</h2>
+      <p class="doge-note">Projects funded each year across Lancashire.</p>
+      <div class="doge-panel">
+        <div class="doge-bars" id="in-year-bars"></div>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Every funded project</h2>
+      <p class="doge-note" id="in-ctx"></p>
+      <div class="bsp-controls">
+        <input class="bsp-search" id="in-search" type="search" placeholder="Search company, project or type…" aria-label="Search projects" />
+        <select class="bsp-sel" id="in-area" aria-label="Area"><option value="">All areas</option></select>
+        <select class="bsp-sel" id="in-sort" aria-label="Sort">
+          <option value="award">Largest award first</option>
+          <option value="year">Newest first</option>
+        </select>
+      </div>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Company &amp; project</th><th>Area</th><th>Type</th><th class="num">Year</th><th class="num">Award</th></tr></thead>
+          <tbody id="in-body"></tbody>
+        </table>
+      </div>
+      <div class="bsp-more"><button class="bsp-morebtn" id="in-more">Show more</button></div>
+    </section>
+
+    <BizFooter attributions={[
+      'Funded projects and awards: Innovate UK / UKRI, under the Open Government Licence v3.0.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var projects = [], view = [], shown = 0, PAGE = 40, query = '', areaFilter = '', sortK = 'award';
+
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+    function money(k) { return k >= 1000 ? '£' + (k / 1000).toFixed(2) + 'm' : '£' + k.toLocaleString('en-GB') + 'k'; }
+
+    function apply() {
+      view = projects.filter(function (p) {
+        if (areaFilter && p.lad !== areaFilter) return false;
+        if (query) { var h = (p.participant + ' ' + p.title + ' ' + p.productType).toLowerCase(); if (h.indexOf(query) < 0) return false; }
+        return true;
+      });
+      if (sortK === 'year') view.sort(function (a, b) { return b.year - a.year; });
+      else view.sort(function (a, b) { return b.awardK - a.awardK; });
+      document.getElementById('in-body').textContent = ''; shown = 0; renderMore();
+    }
+
+    function renderMore() {
+      var body = document.getElementById('in-body');
+      for (var i = shown; i < view.length && i < shown + PAGE; i++) {
+        var p = view[i];
+        var tr = document.createElement('tr');
+        var c0 = document.createElement('td');
+        var nm = document.createElement('div'); nm.className = 'bsp-sup'; nm.textContent = p.participant;
+        var sub = document.createElement('div'); sub.className = 'bsp-rowmeta'; sub.textContent = p.title + (p.isLead ? ' · lead partner' : '');
+        c0.appendChild(nm); c0.appendChild(sub); tr.appendChild(c0);
+        tr.appendChild(td(p.lad));
+        tr.appendChild(td(p.productType));
+        tr.appendChild(td(String(p.year), 'num bsp-date'));
+        tr.appendChild(td(money(p.awardK), 'num biz-amt'));
+        body.appendChild(tr);
+      }
+      shown = Math.min(shown + PAGE, view.length);
+      document.getElementById('in-more').style.display = shown < view.length ? '' : 'none';
+    }
+    document.getElementById('in-more').addEventListener('click', renderMore);
+
+    fetch('/data/biz-innovation.json').then(function (r) { return r.json(); }).then(function (d) {
+      projects = d.projects || [];
+      var byArea = d.byArea || [], byYear = d.byYear || [];
+      // Totals count current areas only: the 4 unitary rows are rollups of the
+      // same projects, so summing all 18 would double-count.
+      var UNI = { 'north-lancashire': 1, 'west-lancashire-unitary': 1, 'east-lancashire': 1, 'south-lancashire': 1 };
+      var currentAreas = byArea.filter(function (a) { return !UNI[a.slug]; });
+      var totProj = currentAreas.reduce(function (s, a) { return s + (a.projects || 0); }, 0);
+      var totAward = currentAreas.reduce(function (s, a) { return s + (a.awardTotalM || 0); }, 0);
+      var totKtp = currentAreas.reduce(function (s, a) { return s + (a.ktps || 0); }, 0);
+      document.getElementById('in-projects').textContent = totProj.toLocaleString('en-GB');
+      document.getElementById('in-award').textContent = '£' + totAward.toFixed(1) + 'm';
+      document.getElementById('in-ktps').textContent = totKtp.toLocaleString('en-GB');
+      document.getElementById('in-areas').textContent = currentAreas.filter(function (a) { return a.projects > 0; }).length;
+
+      // area bars (current areas only)
+      var areaRows = currentAreas.slice().sort(function (a, b) { return (b.awardTotalM || 0) - (a.awardTotalM || 0); });
+      var amax = Math.max.apply(null, areaRows.map(function (a) { return a.awardTotalM || 0; }).concat([1]));
+      var ab = document.getElementById('in-area-bars');
+      areaRows.forEach(function (a) {
+        var row = document.createElement('div'); row.className = 'dg-row';
+        var top = document.createElement('div'); top.className = 'dg-top';
+        var nm = document.createElement('span'); nm.className = 'dg-name';
+        nm.textContent = a.slug.replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); }) + ' · ' + a.projects + ' projects';
+        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = '£' + (a.awardTotalM || 0).toFixed(1) + 'm';
+        top.appendChild(nm); top.appendChild(val);
+        var track = document.createElement('div'); track.className = 'dg-track';
+        var fill = document.createElement('div'); fill.className = 'dg-fill'; fill.style.width = ((a.awardTotalM || 0) / amax * 100).toFixed(1) + '%';
+        track.appendChild(fill); row.appendChild(top); row.appendChild(track); ab.appendChild(row);
+      });
+
+      // year bars
+      var ymax = Math.max.apply(null, byYear.map(function (y) { return y.projects || 0; }).concat([1]));
+      var yb = document.getElementById('in-year-bars');
+      byYear.forEach(function (y) {
+        var row = document.createElement('div'); row.className = 'dg-row';
+        var top = document.createElement('div'); top.className = 'dg-top';
+        var nm = document.createElement('span'); nm.className = 'dg-name'; nm.textContent = String(y.year);
+        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = y.projects + ' projects · £' + (y.awardM || 0).toFixed(1) + 'm';
+        top.appendChild(nm); top.appendChild(val);
+        var track = document.createElement('div'); track.className = 'dg-track';
+        var fill = document.createElement('div'); fill.className = 'dg-fill'; fill.style.width = ((y.projects || 0) / ymax * 100).toFixed(1) + '%';
+        track.appendChild(fill); row.appendChild(top); row.appendChild(track); yb.appendChild(row);
+      });
+
+      if (d.nwContext) document.getElementById('in-ctx').textContent = d.nwContext.lancsShareVsPopulation + ' Search every project below.';
+
+      var areas = {}; projects.forEach(function (p) { areas[p.lad] = true; });
+      var sel = document.getElementById('in-area');
+      Object.keys(areas).sort().forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a; sel.appendChild(o); });
+      sel.addEventListener('change', function () { areaFilter = sel.value; apply(); });
+      document.getElementById('in-sort').addEventListener('change', function (e) { sortK = e.target.value; apply(); });
+      var t; document.getElementById('in-search').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { query = e.target.value.toLowerCase().trim(); apply(); }, 160); });
+
+      apply();
+    }).catch(function () {
+      document.getElementById('in-body').textContent = 'The innovation data could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>

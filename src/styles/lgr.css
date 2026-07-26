@@ -139,3 +139,141 @@
 .lp-row-main { min-width: 0; }
 .lp-row-name { color: #e9edf2; font-weight: 600; font-size: 0.88rem; line-height: 1.3; }
 .lp-row-meta { color: #8e8e93; font-size: 0.73rem; margin-top: 2px; line-height: 1.4; }
+
+/* ============================================================
+   business  (Lancashire Business Observatory: /lancashire/business/*)
+   Global because every table/row/bar is built with createElement,
+   which Astro scoped styles never reach. Tier colours:
+   rooted #12b6cf · trading #ffb340 · non-local #a78bfa · unclassified #55606f
+   ============================================================ */
+
+/* current / 2028 toggle (also reused on the Pound page) */
+.biz-toggle { display: inline-flex; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(10,22,40,0.6); border: 1px solid rgba(18,182,207,0.18); margin: 0.4rem 0 0.6rem; }
+.biz-toggle-btn {
+  padding: 8px 16px; border-radius: 9px; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  background: transparent; border: none; color: #aab2bd; transition: background 0.15s ease, color 0.15s ease;
+}
+.biz-toggle-btn.active { background: rgba(18,182,207,0.16); color: #12b6cf; }
+.biz-toggle-btn:hover { color: #f4f7fb; }
+
+/* comparator + generic business tables (extend .bsp-table) */
+.biz-cmp-table td, .biz-cmp-table th { vertical-align: middle; }
+.biz-cmp-table .biz-amt { font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.biz-sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.biz-sortable:hover { color: #12b6cf; }
+.biz-sortable.sorted-asc::after { content: ' ▲'; color: #12b6cf; font-size: 0.6rem; }
+.biz-sortable.sorted-desc::after { content: ' ▼'; color: #12b6cf; font-size: 0.6rem; }
+.biz-arealink { color: #12b6cf; font-weight: 600; text-decoration: none; background-image: none; }
+.biz-arealink:hover { text-decoration: underline; background-image: none; }
+.biz-tag {
+  display: inline-block; margin-left: 7px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
+  font-weight: 700; padding: 1px 6px; border-radius: 5px; vertical-align: middle;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #99a2ad;
+}
+.biz-good { color: #30d158 !important; font-weight: 700; }
+.biz-below { color: #ff9f0a !important; }
+.biz-bench-line { font-size: 0.78rem; color: #8b939e; line-height: 1.55; margin: 0.8rem 2px 0; }
+.biz-basis { color: #8e8e93; font-size: 0.76rem; line-height: 1.45; }
+.biz-basis-line { font-size: 0.78rem; color: #8b939e; line-height: 1.55; margin: 0.8rem 2px 0; }
+.biz-trend { color: #d6dee8; font-variant-numeric: tabular-nums; font-weight: 600; letter-spacing: 0.01em; }
+
+/* clean-distress explainer + info callout */
+.biz-clean-note {
+  font-size: 0.8rem; color: #99a2ad; line-height: 1.6; margin: 0.9rem 0 0;
+  padding: 0.8rem 1rem; border-radius: 11px; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02);
+}
+.biz-clean-note strong { color: #d6dee8; }
+.biz-clean-note a { color: #12b6cf; }
+.biz-callout {
+  font-size: 0.86rem; color: #b6bec8; line-height: 1.65; margin: 1.1rem 0;
+  padding: 1rem 1.2rem; border-radius: 12px; border: 1px solid rgba(18,182,207,0.22);
+  background: rgba(18,182,207,0.06); border-left: 3px solid #12b6cf;
+}
+.biz-callout strong { color: #eef2f7; }
+.biz-callout a { color: #12b6cf; }
+
+/* area footprint note */
+.biz-footprint {
+  font-size: 0.9rem; color: #c2c9d2; line-height: 1.6; margin: 0 0 1.2rem;
+  padding: 0.9rem 1.1rem; border-radius: 12px; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.06);
+}
+.biz-footprint p { margin: 0 0 0.4rem; }
+.biz-footprint p:last-child { margin: 0; }
+.biz-footprint strong { color: #f4f7fb; }
+.biz-datedate { font-size: 0.72rem !important; color: #7d8590 !important; margin-top: 0.5rem !important; }
+
+/* whole-economy modelled row */
+.biz-badge-modelled {
+  display: inline-block; margin-left: 8px; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em;
+  font-weight: 700; padding: 1px 7px; border-radius: 5px; vertical-align: middle;
+  background: rgba(255,159,10,0.14); color: #ff9f0a; border: 1px solid rgba(255,159,10,0.35);
+}
+.biz-modelled-row td { background: rgba(255,159,10,0.04); }
+
+/* VCSE cards */
+.biz-vcse { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; }
+.biz-vcse-card { background: rgba(14,18,28,0.9); padding: 0.9rem 1rem; }
+.biz-vcse-v { font-size: 1.3rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.biz-vcse-l { font-size: 0.72rem; color: #99a2ad; margin-top: 4px; line-height: 1.35; }
+
+/* address clusters */
+.biz-cluster { display: flex; gap: 14px; align-items: center; padding: 0.9rem 1.1rem; border-radius: 12px; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,159,10,0.2); margin-bottom: 0.7rem; }
+.biz-cluster-pc { font-size: 0.95rem; font-weight: 800; color: #ff9f0a; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: 0.02em; }
+.biz-cluster-big { font-size: 0.95rem; font-weight: 700; color: #f4f7fb; }
+.biz-cluster-sub { font-size: 0.78rem; color: #99a2ad; margin-top: 2px; line-height: 1.45; }
+
+/* flag / tier chips */
+.biz-chip {
+  display: inline-block; margin: 0 5px 4px 0; font-size: 0.68rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 999px; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12); color: #aab2bd; white-space: nowrap;
+}
+.biz-chip.tier-rooted { background: rgba(18,182,207,0.12); border-color: rgba(18,182,207,0.4); color: #12b6cf; }
+.biz-chip.tier-trading { background: rgba(255,179,64,0.12); border-color: rgba(255,179,64,0.4); color: #ffb340; }
+.biz-chip.tier-nonlocal { background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.4); color: #a78bfa; }
+.biz-chip.tier-unclassified { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: #99a2ad; }
+
+/* growth: England benchmark marker on a bar track */
+.biz-track-mark { position: relative; overflow: visible; }
+.biz-benchmark-mark { position: absolute; top: -3px; width: 2px; height: 14px; background: #e9edf2; opacity: 0.8; }
+
+/* Lancashire Pound: tier key, league table + stacked bars */
+.biz-tierkey { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.8rem; margin: 1.2rem 0; }
+.biz-tierkey-item { font-size: 0.78rem; color: #99a2ad; line-height: 1.5; padding-left: 20px; position: relative; }
+.biz-tierkey-item b { color: #e9edf2; display: block; }
+.biz-tsw { position: absolute; left: 0; top: 3px; width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+i.biz-tsw { position: static; margin-right: 5px; vertical-align: middle; width: 10px; height: 10px; }
+.biz-tsw.rooted { background: #12b6cf; }
+.biz-tsw.trading { background: #ffb340; }
+.biz-tsw.nonlocal { background: #a78bfa; }
+.biz-tsw.unclass { background: #55606f; }
+
+.biz-league { display: grid; gap: 0.8rem; margin-top: 1rem; }
+.biz-league-card { padding: 0.9rem 1.1rem; border-radius: 13px; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.06); }
+.biz-league-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.biz-league-name { font-size: 0.98rem; font-weight: 700; color: #f4f7fb; }
+.biz-league-tot { font-size: 0.76rem; color: #8e8e93; font-variant-numeric: tabular-nums; }
+.biz-stack { display: flex; height: 15px; border-radius: 5px; overflow: hidden; background: rgba(255,255,255,0.05); }
+.biz-seg { height: 100%; }
+.biz-seg.rooted { background: #12b6cf; }
+.biz-seg.trading { background: #ffb340; }
+.biz-seg.nonlocal { background: #a78bfa; }
+.biz-seg.unclass { background: #55606f; }
+.biz-league-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 0.73rem; color: #99a2ad; }
+.biz-league-leg-item { display: inline-flex; align-items: center; font-variant-numeric: tabular-nums; }
+
+/* shared legal footer */
+.biz-foot { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.08); }
+.biz-foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem 1.6rem; }
+.biz-foot-block h2.biz-foot-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #12b6cf; font-weight: 700; margin: 0 0 0.5rem; }
+.biz-foot-block p { font-size: 0.76rem; color: #8b939e; line-height: 1.6; margin: 0; }
+.biz-foot-block a { color: #12b6cf; }
+.biz-foot-attr { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.biz-foot-attr li { font-size: 0.72rem; color: #8b939e; line-height: 1.5; }
+.biz-foot-imprint { margin: 1.4rem 0 0; font-size: 0.74rem; color: #7d8590; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; }
+
+@media (max-width: 640px) {
+  .biz-cluster { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .biz-toggle { width: 100%; }
+  .biz-toggle-btn { flex: 1; }
+}

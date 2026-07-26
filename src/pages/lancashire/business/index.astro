@@ -1,0 +1,220 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BizFooter from '../../../components/BizFooter.astro';
+import '../../../styles/doge.css';
+import '../../../styles/lgr.css';
+---
+
+<Layout
+  title="Lancashire Business Observatory: the county's economy in public data | Tom Pickup"
+  description="An open-data picture of Lancashire's business economy, area by area: how many companies trade, how many show financial stress, where new firms are born and survive, and how it all maps onto the four unitary councils arriving in 2028."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <span class="here">Business Observatory</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Lancashire Business Observatory</span>
+      <h1 class="doge-title">Lancashire's economy, in public data</h1>
+      <p class="doge-sub">
+        Who trades in Lancashire, how firms fare, and where public money lands, built from the public registers
+        that the county's economy already leaves behind. Every figure carries its source and its date, and every
+        area is shown twice: as it is governed today, and as it will be under the four new unitary councils from
+        April 2028.
+      </p>
+    </header>
+
+    <div class="lgr-prose" style="margin-top:0.5rem;">
+      <p>
+        This is a first, open look at the shape of the Lancashire business base, assembled the same way as the
+        <a href="/lgr/property/">property map</a> and the <a href="/lgr/contracts/">contracts record</a>: from
+        registers that are public by law. It counts active companies, watches for financial distress in the
+        register, tracks where new firms are born and whether they survive, follows the official high-growth
+        companies, and asks how much of each council's spending stays with locally rooted suppliers. The tools
+        below go deeper on each.
+      </p>
+    </div>
+
+    <div class="doge-statband" id="biz-stats">
+      <div class="doge-stat"><div class="v teal" id="bs-companies">…</div><div class="l">Active companies across Lancashire</div></div>
+      <div class="doge-stat"><div class="v" id="bs-per1k">…</div><div class="l">Companies per 1,000 residents</div></div>
+      <div class="doge-stat"><div class="v" id="bs-births">…</div><div class="l">Average business birth rate</div></div>
+      <div class="doge-stat"><div class="v" id="bs-highgrowth">…</div><div class="l">Areas beating England on high growth</div></div>
+    </div>
+
+    <!-- tool cards -->
+    <div class="doge-grid" style="margin-top:1.4rem;">
+      <a class="doge-card" href="/lancashire/business/watch/">
+        <div class="doge-card-kicker">Distress watch</div>
+        <div class="doge-card-title">Insolvency and strike-off notices</div>
+        <div class="doge-card-desc">The Gazette notices and Companies House strike-off proposals, by month and by area. Register facts only.</div>
+        <span class="doge-card-go">Open the watch →</span>
+      </a>
+      <a class="doge-card" href="/lancashire/business/growth/">
+        <div class="doge-card-kicker">Growth engine</div>
+        <div class="doge-card-title">High-growth companies</div>
+        <div class="doge-card-desc">The official high-growth benchmark per area, plus an assessment of candidate scale-ups from filed accounts.</div>
+        <span class="doge-card-go">See the gazelles →</span>
+      </a>
+      <a class="doge-card" href="/lancashire/business/pound/">
+        <div class="doge-card-kicker">The Lancashire Pound</div>
+        <div class="doge-card-title">Where council spending lands</div>
+        <div class="doge-card-desc">How much of each council's supplier spend stays with locally rooted firms, and how much leaves.</div>
+        <span class="doge-card-go">Follow the pound →</span>
+      </a>
+      <a class="doge-card" href="/lancashire/business/innovation/">
+        <div class="doge-card-kicker">Innovation money</div>
+        <div class="doge-card-title">Innovate UK funding</div>
+        <div class="doge-card-desc">Public research and development grants won by Lancashire firms, by area, year and project.</div>
+        <span class="doge-card-go">Explore the awards →</span>
+      </a>
+    </div>
+
+    <!-- comparator -->
+    <section class="doge-section" id="compare">
+      <h2 class="doge-h2">Compare the areas</h2>
+      <p class="doge-note">
+        Every area, side by side. Switch between today's councils and the four unitaries that take over in 2028.
+        Click any column heading to sort; click an area to open its full profile.
+      </p>
+
+      <div class="biz-toggle" role="tablist" aria-label="Geography">
+        <button class="biz-toggle-btn active" id="tg-current" role="tab" aria-selected="true">Councils today</button>
+        <button class="biz-toggle-btn" id="tg-unitary" role="tab" aria-selected="false">Four unitaries (2028)</button>
+      </div>
+
+      <p class="biz-clean-note">
+        <strong>Clean distress rate</strong> excludes companies registered at flagged address clusters (large
+        numbers of companies at a single address, most dissolved or striking off), so it does not overstate
+        stress in one postcode. The raw rate is shown on each area profile.
+        <a href="/lancashire/business/method/#distress">How this is worked out</a>.
+      </p>
+
+      <div class="bsp-tablewrap" style="margin-top:0.8rem;">
+        <table class="bsp-table biz-cmp-table">
+          <thead>
+            <tr id="biz-cmp-head">
+              <th data-k="name" class="biz-sortable">Area</th>
+              <th data-k="companiesPer1k" class="num biz-sortable">Companies / 1k</th>
+              <th data-k="distressCleanPct" class="num biz-sortable">Clean distress</th>
+              <th data-k="birthRatePct" class="num biz-sortable" title="Business births as a share of active businesses (ONS)">Birth rate %</th>
+              <th data-k="survival3yrPct" class="num biz-sortable">3yr survival</th>
+              <th data-k="highGrowthOfficialPct" class="num biz-sortable">High growth</th>
+              <th data-k="medianPayWorkplace" class="num biz-sortable">Median pay</th>
+            </tr>
+          </thead>
+          <tbody id="biz-cmp-body"></tbody>
+        </table>
+      </div>
+      <p class="biz-bench-line" id="biz-bench-line"></p>
+    </section>
+
+    <BizFooter />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var overview = null, mode = 'current', sortK = 'companiesPer1k', sortDir = -1;
+    var ENGLAND = null;
+    var HIGHER_BETTER = { companiesPer1k: 1, birthRatePct: 1, survival3yrPct: 1, highGrowthOfficialPct: 1, medianPayWorkplace: 1 };
+    // distress: lower is better
+
+    function dash(v) { return (v === null || v === undefined) ? '-' : v; }
+    function num(v, suffix) { return (v === null || v === undefined) ? '-' : v.toLocaleString('en-GB') + (suffix || ''); }
+    function rate1(v) { return (v === null || v === undefined) ? '-' : v.toFixed(1) + '%'; }
+
+    function rows() { return mode === 'current' ? overview.areas : overview.unitaries; }
+
+    function cell(v, cls) { var td = document.createElement('td'); if (cls) td.className = cls; td.textContent = v; return td; }
+
+    function render() {
+      var body = document.getElementById('biz-cmp-body');
+      body.textContent = '';
+      var data = rows().slice();
+      data.sort(function (a, b) {
+        if (sortK === 'name') return sortDir * String(a.name).localeCompare(String(b.name));
+        var av = a[sortK], bv = b[sortK];
+        if (av === null || av === undefined) return 1;
+        if (bv === null || bv === undefined) return -1;
+        return sortDir * (av - bv);
+      });
+      data.forEach(function (a) {
+        var tr = document.createElement('tr');
+        var td0 = document.createElement('td');
+        var link = document.createElement('a');
+        link.className = 'biz-arealink';
+        link.href = '/lancashire/business/' + a.slug + '/';
+        link.textContent = a.name;
+        td0.appendChild(link);
+        if (a.type === 'district') { var t = document.createElement('span'); t.className = 'biz-tag'; t.textContent = 'district'; td0.appendChild(t); }
+        else if (a.type === 'unitary') { var t2 = document.createElement('span'); t2.className = 'biz-tag'; t2.textContent = 'unitary'; td0.appendChild(t2); }
+        tr.appendChild(td0);
+        tr.appendChild(cell(num(a.companiesPer1k), 'num biz-amt'));
+        var dc = cell(num(a.distressCleanPct, '%'), 'num');
+        tr.appendChild(dc);
+        tr.appendChild(cell(rate1(a.birthRatePct), 'num'));
+        tr.appendChild(cell(num(a.survival3yrPct, '%'), 'num'));
+        var hg = cell(num(a.highGrowthOfficialPct, '%'), 'num');
+        if (ENGLAND && a.highGrowthOfficialPct != null) hg.classList.add(a.highGrowthOfficialPct >= ENGLAND.highGrowthOfficialPct ? 'biz-good' : 'biz-below');
+        tr.appendChild(hg);
+        tr.appendChild(cell(a.medianPayWorkplace == null ? '-' : '£' + a.medianPayWorkplace.toFixed(0), 'num'));
+        body.appendChild(tr);
+      });
+      // header sort indicators
+      Array.prototype.forEach.call(document.querySelectorAll('#biz-cmp-head th'), function (th) {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        if (th.getAttribute('data-k') === sortK) th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+      });
+    }
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById('tg-current').classList.toggle('active', m === 'current');
+      document.getElementById('tg-unitary').classList.toggle('active', m === 'unitary');
+      document.getElementById('tg-current').setAttribute('aria-selected', m === 'current');
+      document.getElementById('tg-unitary').setAttribute('aria-selected', m === 'unitary');
+      render();
+    }
+
+    document.getElementById('tg-current').addEventListener('click', function () { setMode('current'); });
+    document.getElementById('tg-unitary').addEventListener('click', function () { setMode('unitary'); });
+    Array.prototype.forEach.call(document.querySelectorAll('#biz-cmp-head th.biz-sortable'), function (th) {
+      th.addEventListener('click', function () {
+        var k = th.getAttribute('data-k');
+        if (k === sortK) { sortDir = -sortDir; }
+        else { sortK = k; sortDir = (k === 'name') ? 1 : -1; }
+        render();
+      });
+    });
+
+    fetch('/data/biz-overview.json').then(function (r) { return r.json(); }).then(function (d) {
+      overview = d;
+      ENGLAND = d.benchmarks && d.benchmarks.england;
+      var tot = d.areas.reduce(function (s, a) { return s + (a.companiesActive || 0); }, 0);
+      var pop = d.areas.reduce(function (s, a) { return s + (a.population || 0); }, 0);
+      var birthRates = d.areas.filter(function (a) { return a.birthRatePct != null; });
+      var avgBirthRate = birthRates.length ? birthRates.reduce(function (s, a) { return s + a.birthRatePct; }, 0) / birthRates.length : null;
+      var beating = ENGLAND ? d.areas.filter(function (a) { return a.highGrowthOfficialPct != null && a.highGrowthOfficialPct >= ENGLAND.highGrowthOfficialPct; }).length : 0;
+      document.getElementById('bs-companies').textContent = tot.toLocaleString('en-GB');
+      document.getElementById('bs-per1k').textContent = pop ? (tot / pop * 1000).toFixed(1) : '…';
+      document.getElementById('bs-births').textContent = avgBirthRate == null ? '…' : avgBirthRate.toFixed(1) + '%';
+      document.getElementById('bs-highgrowth').textContent = beating + ' of ' + d.areas.length;
+      if (ENGLAND) {
+        document.getElementById('biz-bench-line').textContent =
+          'For scale: England runs at ' + ENGLAND.companiesPer1k + ' companies per 1,000 residents, ' +
+          ENGLAND.highGrowthOfficialPct + '% high-growth companies and £' + ENGLAND.medianPayWorkplace.toFixed(0) +
+          ' median weekly workplace pay (ONS). High-growth cells are shaded where an area meets or beats the England share.';
+      }
+      render();
+    }).catch(function () {
+      document.getElementById('biz-cmp-body').textContent = '';
+      var tr = document.createElement('tr'); var td = document.createElement('td');
+      td.colSpan = 7; td.textContent = 'The comparator data could not be loaded.'; tr.appendChild(td);
+      document.getElementById('biz-cmp-body').appendChild(tr);
+    });
+  })();
+  </script>
+</Layout>

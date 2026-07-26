@@ -1,0 +1,174 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="Distress watch: Lancashire insolvency and strike-off notices | Lancashire Business Observatory"
+  description="Insolvency notices from The Gazette and strike-off proposals from Companies House affecting Lancashire companies, by month and by area. Verbatim register facts with a link to each source notice."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Distress watch</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Distress watch</span>
+      <h1 class="doge-title">Insolvency and strike-off notices</h1>
+      <p class="doge-sub">
+        The formal notices that mark a company in trouble are published, by law, in The Gazette and on the
+        Companies House register. Here they are for Lancashire, gathered in one place. These are verbatim
+        register facts with a link to each source notice, not judgements about any business.
+      </p>
+    </header>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal" id="dw-ins90">…</div><div class="l">Insolvency notices, last 90 days</div></div>
+      <div class="doge-stat"><div class="v" id="dw-strike90">…</div><div class="l">Strike-off proposals, last 90 days</div></div>
+      <div class="doge-stat"><div class="v" id="dw-notices">…</div><div class="l">Recent notices on record</div></div>
+      <div class="doge-stat"><div class="v" id="dw-strikes">…</div><div class="l">Active strike-off proposals</div></div>
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">By month</h2>
+      <p class="doge-note">Insolvency notices and strike-off proposals recorded each month. Counts only; every underlying notice is in the tables below.</p>
+      <div class="doge-panel">
+        <div class="doge-bars" id="dw-months"></div>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Insolvency notices</h2>
+      <p class="doge-note">Most recent first. Each row links to the notice as published in The Gazette.</p>
+      <div class="bsp-controls">
+        <input class="bsp-search" id="dw-search" type="search" placeholder="Search company or notice type…" aria-label="Search notices" />
+        <select class="bsp-sel" id="dw-area" aria-label="Area"><option value="">All areas</option></select>
+      </div>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Date</th><th>Notice</th><th>Company</th><th>Area</th><th class="num">Source</th></tr></thead>
+          <tbody id="dw-notice-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Strike-off proposals</h2>
+      <p class="doge-note" id="dw-strike-note">Companies with an active proposal to strike off the register.</p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Company</th><th>CRN</th><th>Area</th><th>Status</th><th class="num">As at</th></tr></thead>
+          <tbody id="dw-strike-body"></tbody>
+        </table>
+      </div>
+      <div class="bsp-more"><button class="bsp-morebtn" id="dw-more">Show more</button></div>
+    </section>
+
+    <BizFooter attributions={[
+      'Insolvency notices: The Gazette, under the Open Government Licence v3.0. Personal bankruptcy notices are excluded.',
+      'Strike-off status: Companies House.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var notices = [], strikes = [], shown = 0, PAGE = 30, query = '', areaFilter = '';
+
+    function esc(v) { return v == null ? '' : String(v); }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    function renderNotices() {
+      var body = document.getElementById('dw-notice-body');
+      body.textContent = '';
+      var view = notices.filter(function (n) {
+        if (areaFilter && n.lad !== areaFilter) return false;
+        if (query) { var h = (n.company + ' ' + n.type).toLowerCase(); if (h.indexOf(query) < 0) return false; }
+        return true;
+      });
+      view.slice(0, 200).forEach(function (n) {
+        var tr = document.createElement('tr');
+        tr.appendChild(td(n.date, 'bsp-date'));
+        tr.appendChild(td(n.type));
+        tr.appendChild(td(n.company, 'bsp-sup'));
+        tr.appendChild(td(n.lad));
+        var c = document.createElement('td'); c.className = 'num';
+        var a = document.createElement('a'); a.className = 'biz-arealink'; a.href = n.uri; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Gazette →';
+        c.appendChild(a); tr.appendChild(c);
+        body.appendChild(tr);
+      });
+      if (!view.length) { var tr = document.createElement('tr'); tr.appendChild(td('No notices match.')); body.appendChild(tr); }
+    }
+
+    function renderStrikes() {
+      var body = document.getElementById('dw-strike-body');
+      for (var i = shown; i < strikes.length && i < shown + PAGE; i++) {
+        var s = strikes[i];
+        var tr = document.createElement('tr');
+        tr.appendChild(td(s.company, 'bsp-sup'));
+        tr.appendChild(td(s.crn, 'bsp-date'));
+        tr.appendChild(td(s.lad));
+        tr.appendChild(td(s.status));
+        tr.appendChild(td(s.asAt, 'num bsp-date'));
+        body.appendChild(tr);
+      }
+      shown = Math.min(shown + PAGE, strikes.length);
+      document.getElementById('dw-more').style.display = shown < strikes.length ? '' : 'none';
+    }
+
+    document.getElementById('dw-more').addEventListener('click', renderStrikes);
+
+    fetch('/data/biz-watch.json').then(function (r) { return r.json(); }).then(function (d) {
+      notices = d.notices || [];
+      strikes = d.strikeOffs || [];
+      var s = d.summary || {};
+      var last = s.last90days || {};
+      document.getElementById('dw-ins90').textContent = (last.insolvencyNotices || 0).toLocaleString('en-GB');
+      document.getElementById('dw-strike90').textContent = (last.strikeOffProposals || 0).toLocaleString('en-GB');
+      document.getElementById('dw-notices').textContent = notices.length.toLocaleString('en-GB');
+      document.getElementById('dw-strikes').textContent = (s.strikeOffsTotal || strikes.length).toLocaleString('en-GB');
+
+      // months
+      var mb = document.getElementById('dw-months');
+      var months = s.byMonth || [];
+      var max = Math.max.apply(null, months.map(function (m) { return m.strikeOffs || 0; }).concat([1]));
+      months.forEach(function (m) {
+        var row = document.createElement('div'); row.className = 'dg-row';
+        var top = document.createElement('div'); top.className = 'dg-top';
+        var nm = document.createElement('span'); nm.className = 'dg-name'; nm.textContent = m.month + ' · ' + m.notices + ' notices';
+        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = m.strikeOffs.toLocaleString('en-GB') + ' strike-offs';
+        top.appendChild(nm); top.appendChild(val);
+        var track = document.createElement('div'); track.className = 'dg-track';
+        var fill = document.createElement('div'); fill.className = 'dg-fill amber'; fill.style.width = (m.strikeOffs / max * 100).toFixed(1) + '%';
+        track.appendChild(fill);
+        row.appendChild(top); row.appendChild(track); mb.appendChild(row);
+      });
+
+      if (s.strikeOffsShown && s.strikeOffsTotal) {
+        document.getElementById('dw-strike-note').textContent =
+          'Companies with an active proposal to strike off the register. Showing the ' + s.strikeOffsShown.toLocaleString('en-GB') +
+          ' most recent of about ' + s.strikeOffsTotal.toLocaleString('en-GB') + ' on record.';
+      }
+
+      // area dropdown
+      var areas = {};
+      notices.forEach(function (n) { areas[n.lad] = true; });
+      strikes.forEach(function (n) { areas[n.lad] = true; });
+      var sel = document.getElementById('dw-area');
+      Object.keys(areas).sort().forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a; sel.appendChild(o); });
+      sel.addEventListener('change', function () { areaFilter = sel.value; renderNotices(); });
+      var t; document.getElementById('dw-search').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { query = e.target.value.toLowerCase().trim(); renderNotices(); }, 160); });
+
+      renderNotices();
+      renderStrikes();
+    }).catch(function () {
+      document.getElementById('dw-notice-body').textContent = 'The distress-watch data could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>

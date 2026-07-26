@@ -1,0 +1,68 @@
+---
+// Shared legal furniture for every Lancashire Business Observatory page.
+// Renders the required disclaimer set from the Observatory legal rulebook
+// (footer + journalism + personal-capacity statements, corrections route and
+// per-source attribution lines), compactly. See src/pages/lancashire/business/method/.
+interface Props {
+  attributions?: string[];
+}
+const defaultAttr = [
+  'Company facts: Companies House.',
+  'Insolvency and strike-off notices: The Gazette, under the Open Government Licence v3.0.',
+  'Food hygiene ratings: Food Standards Agency, under the Open Government Licence v3.0.',
+  'Business counts, pay and demography: ONS and NOMIS, under the Open Government Licence v3.0.',
+  'Innovation funding: Innovate UK / UKRI, under the Open Government Licence v3.0.',
+];
+const { attributions = defaultAttr } = Astro.props;
+---
+
+<footer class="biz-foot" aria-label="Legal and sources">
+  <div class="biz-foot-grid">
+    <div class="biz-foot-block">
+      <h2 class="biz-foot-h">What this is</h2>
+      <p>
+        This is a journalistic publication on the use of public money in Lancashire, published in the public
+        interest. Company profiles sit inside analysis; there is no directory or people-search feature. The
+        privacy notice on the <a href="/lancashire/business/method/#privacy">method page</a> covers directors and
+        persons with significant control, the lawful basis for publication, and how to object.
+      </p>
+    </div>
+
+    <div class="biz-foot-block">
+      <h2 class="biz-foot-h">Scores are opinions, not facts</h2>
+      <p>
+        Data is compiled from public registers. Figures reflect the register at the retrieval date shown and may
+        have changed. Scores and indicators are the Observatory's opinion, derived by the
+        <a href="/lancashire/business/method/">published methodology</a> from public data; they are not statements of
+        fact about solvency, creditworthiness or probity. This site does not provide credit or financial advice
+        and must not be used for lending, trading or investment decisions. Transparency spending data covers
+        payments over 500 pounds and is not a complete account of any body's budget.
+      </p>
+    </div>
+
+    <div class="biz-foot-block">
+      <h2 class="biz-foot-h">Corrections</h2>
+      <p>
+        Spotted something wrong? Report it to
+        <a href="mailto:corrections@tompickup.co.uk">corrections@tompickup.co.uk</a>. Reports are acknowledged
+        within 48 hours and re-checked at the primary source; where a figure is wrong it is corrected within
+        five working days and logged. See the
+        <a href="/lancashire/business/method/#corrections">corrections policy</a> and the route for named individuals
+        to object.
+      </p>
+    </div>
+
+    <div class="biz-foot-block">
+      <h2 class="biz-foot-h">Sources and licences</h2>
+      <ul class="biz-foot-attr">
+        {attributions.map((a) => <li>{a}</li>)}
+        <li>Postcode geography: contains OS data (Crown copyright), Royal Mail data and ONS data, under the Open Government Licence v3.0.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="biz-foot-imprint">
+    Published by Tom Pickup in a personal capacity. Not published by or on behalf of any political party or by
+    Lancashire County Council. Inclusion here is not a suggestion of wrongdoing by any person or company.
+  </p>
+</footer>

@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/doge.css';
+import '../../styles/lgr.css';
+---
+
+<Layout
+  title="Lancashire: open-data tools for the county | Tom Pickup"
+  description="A growing set of open-data tools for Lancashire, starting with the Business Observatory: the county's business economy in public data, area by area and under the four new unitary councils arriving in 2028."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="here">Lancashire</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Lancashire</span>
+      <h1 class="doge-title">Open-data tools for Lancashire</h1>
+      <p class="doge-sub">
+        A growing set of tools that read the county through the public data it already leaves behind. Each one is
+        built the same way: every figure carries its source and its date. This section starts with the Business
+        Observatory, and more Lancashire tools will join it here over time.
+      </p>
+    </header>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Explore</h2>
+      <div class="doge-grid">
+        <a class="doge-card" href="/lancashire/business/">
+          <div class="doge-card-kicker">Business Observatory</div>
+          <div class="doge-card-title">The Lancashire economy</div>
+          <div class="doge-card-desc">The county's business base in public data: company distress, high-growth firms, where the council pound lands, and innovation money, area by area and under the 2028 unitary boundaries.</div>
+          <span class="doge-card-go">Open the Observatory &rarr;</span>
+        </a>
+      </div>
+      <p class="doge-note" style="margin-top:1.1rem;">
+        More Lancashire tools are on the way and will appear here as they are built.
+      </p>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,261 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BizFooter from '../../../components/BizFooter.astro';
+import '../../../styles/doge.css';
+import '../../../styles/lgr.css';
+
+// Area index derived from the dual-geography crosswalk (14 current + 4 unitary).
+// Slugs are kebab-case. The 2028 unitary "West Lancashire" is slugged
+// "west-lancashire-unitary" to avoid colliding with the current West Lancashire
+// district (which joins South Lancashire, not the coastal unitary).
+export function getStaticPaths() {
+  const cur = [
+    { slug: 'lancaster', name: 'Lancaster', type: 'district', parent: 'Lancashire CC', unitary2028: 'North Lancashire' },
+    { slug: 'preston', name: 'Preston', type: 'district', parent: 'Lancashire CC', unitary2028: 'North Lancashire' },
+    { slug: 'ribble-valley', name: 'Ribble Valley', type: 'district', parent: 'Lancashire CC', unitary2028: 'North Lancashire' },
+    { slug: 'fylde', name: 'Fylde', type: 'district', parent: 'Lancashire CC', unitary2028: 'West Lancashire' },
+    { slug: 'wyre', name: 'Wyre', type: 'district', parent: 'Lancashire CC', unitary2028: 'West Lancashire' },
+    { slug: 'blackpool', name: 'Blackpool', type: 'unitary', parent: 'Blackpool', unitary2028: 'West Lancashire' },
+    { slug: 'blackburn-with-darwen', name: 'Blackburn with Darwen', type: 'unitary', parent: 'Blackburn with Darwen', unitary2028: 'East Lancashire' },
+    { slug: 'hyndburn', name: 'Hyndburn', type: 'district', parent: 'Lancashire CC', unitary2028: 'East Lancashire' },
+    { slug: 'rossendale', name: 'Rossendale', type: 'district', parent: 'Lancashire CC', unitary2028: 'East Lancashire' },
+    { slug: 'pendle', name: 'Pendle', type: 'district', parent: 'Lancashire CC', unitary2028: 'East Lancashire' },
+    { slug: 'burnley', name: 'Burnley', type: 'district', parent: 'Lancashire CC', unitary2028: 'East Lancashire' },
+    { slug: 'chorley', name: 'Chorley', type: 'district', parent: 'Lancashire CC', unitary2028: 'South Lancashire' },
+    { slug: 'south-ribble', name: 'South Ribble', type: 'district', parent: 'Lancashire CC', unitary2028: 'South Lancashire' },
+    { slug: 'west-lancashire', name: 'West Lancashire', type: 'district', parent: 'Lancashire CC', unitary2028: 'South Lancashire' },
+  ];
+  const uni = [
+    { slug: 'north-lancashire', name: 'North Lancashire', type: 'unitary2028', members: ['Lancaster', 'Preston', 'Ribble Valley'] },
+    { slug: 'west-lancashire-unitary', name: 'West Lancashire', type: 'unitary2028', members: ['Fylde', 'Wyre', 'Blackpool'] },
+    { slug: 'east-lancashire', name: 'East Lancashire', type: 'unitary2028', members: ['Blackburn with Darwen', 'Hyndburn', 'Rossendale', 'Pendle', 'Burnley'] },
+    { slug: 'south-lancashire', name: 'South Lancashire', type: 'unitary2028', members: ['Chorley', 'South Ribble', 'West Lancashire'] },
+  ];
+  return [...cur, ...uni].map((a) => ({ params: { area: a.slug }, props: { area: a } }));
+}
+
+const { area } = Astro.props;
+const isUnitary = area.type === 'unitary2028';
+const AREA_JSON = JSON.stringify(area);
+---
+
+<Layout
+  title={`${area.name}: business economy in public data | Lancashire Business Observatory`}
+  description={`The company base, financial-stress signals, new-firm survival, whole-economy layers and voluntary sector of ${area.name}, built from public registers and shown against its place in the 2028 unitary map.`}
+>
+  <div class="doge-page" data-area={AREA_JSON}>
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">{area.name}</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Area profile</span>
+      <h1 class="doge-title">{area.name}</h1>
+      <p class="doge-sub" id="ap-sub">The business economy of {area.name}, from public registers.</p>
+    </header>
+
+    <!-- footprint note -->
+    <div class="biz-footprint">
+      {!isUnitary && (
+        <p>
+          <strong>Today:</strong> {area.type === 'unitary' ? `${area.name} is already a unitary authority` : `${area.name} is a district of ${area.parent}`}.
+          <strong>From April 2028:</strong> it becomes part of the new <strong>{area.unitary2028}</strong> unitary council.
+        </p>
+      )}
+      {isUnitary && (
+        <p>
+          <strong>From April 2028</strong> the new <strong>{area.name}</strong> unitary council brings together
+          {' '}{area.members.join(', ')}. Figures here roll up its member areas.
+        </p>
+      )}
+      <p class="biz-datedate" id="ap-datedate"></p>
+    </div>
+
+    <div class="doge-statband" id="ap-stats">
+      <div class="doge-stat"><div class="v teal" id="ap-companies">…</div><div class="l">Active companies</div></div>
+      <div class="doge-stat"><div class="v" id="ap-per1k">…</div><div class="l">Companies per 1,000 residents</div></div>
+      <div class="doge-stat"><div class="v" id="ap-distress">…</div><div class="l">Clean distress indicator</div></div>
+      <div class="doge-stat"><div class="v" id="ap-survival">…</div><div class="l">Three-year survival rate</div></div>
+    </div>
+
+    <p class="biz-clean-note" style="margin-top:0.4rem;">
+      The <strong>clean distress indicator</strong> is an Observatory assessment, not a statement of fact about
+      any company. It is the share of active companies showing register-based stress signals, after excluding
+      flagged address clusters. The raw figure (before exclusion) is
+      <span id="ap-distress-raw">…</span>. <a href="/lancashire/business/method/#distress">Method</a>.
+    </p>
+
+    <!-- births / deaths / high growth secondary band -->
+    <div class="doge-statband" style="margin-top:1px;">
+      <div class="doge-stat"><div class="v" id="ap-births">…</div><div class="l" title="Business births as a share of active businesses (ONS)">Business birth rate</div></div>
+      <div class="doge-stat"><div class="v" id="ap-deaths">…</div><div class="l" title="Business deaths as a share of active businesses (ONS)">Business death rate</div></div>
+      <div class="doge-stat"><div class="v" id="ap-hg">…</div><div class="l">Official high-growth share</div></div>
+      <div class="doge-stat"><div class="v" id="ap-pay">…</div><div class="l">Median weekly workplace pay</div></div>
+    </div>
+
+    <!-- sectors -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The business base by sector</h2>
+      <p class="doge-note">Active companies by broad industry, with the clean distress indicator and new firms of the last three years.</p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Sector</th><th class="num">Live companies</th><th class="num">Clean distress</th><th class="num">New (3yr)</th></tr></thead>
+          <tbody id="ap-sectors"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- whole economy five-layer -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The whole economy, in five layers</h2>
+      <p class="doge-note">
+        Registered companies are only part of the picture. This lays the company base alongside registered
+        unincorporated businesses, a modelled estimate of unregistered and below-threshold activity, and the
+        physical premises the economy trades from.
+      </p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Layer</th><th class="num">Count</th><th>Basis</th></tr></thead>
+          <tbody id="ap-whole"></tbody>
+        </table>
+      </div>
+      <p class="doge-note" style="font-size:0.78rem; margin-top:0.6rem;" id="ap-whole-note"></p>
+    </section>
+
+    <!-- VCSE -->
+    <section class="doge-section">
+      <h2 class="doge-h2">The voluntary, community and social enterprise sector</h2>
+      <p class="doge-note">Registered charities, community interest companies, mutuals and schools rooted in the area.</p>
+      <div class="biz-vcse" id="ap-vcse"></div>
+    </section>
+
+    <!-- address clusters -->
+    <section class="doge-section" id="ap-cluster-sec" style="display:none;">
+      <h2 class="doge-h2">Address clusters</h2>
+      <p class="doge-note">
+        Addresses where an unusually large number of companies are registered. These are observable register
+        facts, stated without inferring any purpose. Companies at these addresses are excluded from the clean
+        distress rate so one postcode does not distort the area figure.
+      </p>
+      <div id="ap-clusters"></div>
+    </section>
+
+    <BizFooter />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var el = document.querySelector('.doge-page[data-area]');
+    var area = JSON.parse(el.getAttribute('data-area'));
+    var isUnitary = area.type === 'unitary2028';
+
+    function n(v) { return (v === null || v === undefined) ? '-' : v.toLocaleString('en-GB'); }
+    function pct(v) { return (v === null || v === undefined) ? '-' : v + '%'; }
+    function rate(v) { return (v === null || v === undefined) ? '-' : v.toFixed(1) + '%'; }
+    function txt(id, s) { var e = document.getElementById(id); if (e) e.textContent = s; }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    Promise.all([
+      fetch('/data/biz-overview.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-areas.json').then(function (r) { return r.json(); }),
+    ]).then(function (res) {
+      var overview = res[0], areas = res[1];
+      var list = isUnitary ? overview.unitaries : overview.areas;
+      var head = null;
+      for (var i = 0; i < list.length; i++) { if (list[i].slug === area.slug) head = list[i]; }
+      var detail = areas[area.slug];
+      if (!head || !detail) { txt('ap-sub', 'Data for this area could not be loaded.'); return; }
+
+      txt('ap-companies', n(head.companiesActive));
+      txt('ap-per1k', head.companiesPer1k == null ? '-' : head.companiesPer1k);
+      txt('ap-distress', pct(head.distressCleanPct));
+      txt('ap-survival', pct(head.survival3yrPct));
+      txt('ap-distress-raw', pct(head.distressRawPct));
+      txt('ap-births', rate(head.birthRatePct));
+      txt('ap-deaths', rate(head.deathRatePct));
+      txt('ap-hg', pct(head.highGrowthOfficialPct));
+      txt('ap-pay', head.medianPayWorkplace == null ? '-' : '£' + head.medianPayWorkplace.toFixed(0));
+
+      var meta = areas.$meta || {};
+      if (meta.generated) txt('ap-datedate', 'Register facts retrieved to ' + (meta.sources && meta.sources[0] ? meta.sources[0].retrieved : '') + '; data generated ' + meta.generated.slice(0, 10) + '. Figures reflect the register at that date and may have changed.');
+
+      // sectors
+      var st = document.getElementById('ap-sectors');
+      (detail.sectors || []).forEach(function (s) {
+        var tr = document.createElement('tr');
+        var c0 = document.createElement('td'); c0.className = 'bsp-sup';
+        c0.textContent = s.label; var sm = document.createElement('span'); sm.className = 'biz-tag'; sm.textContent = 'SIC ' + s.sic2; c0.appendChild(sm);
+        tr.appendChild(c0);
+        tr.appendChild(td(n(s.live), 'num biz-amt'));
+        tr.appendChild(td(pct(s.distressCleanPct), 'num'));
+        tr.appendChild(td(n(s.new3yr), 'num'));
+        st.appendChild(tr);
+      });
+
+      // whole economy
+      var w = detail.wholeEconomy || {};
+      var wt = document.getElementById('ap-whole');
+      var layers = [
+        ['Registered companies', w.registeredCompanies, 'Companies House, active register'],
+        ['Registered unincorporated businesses', w.registeredUnincorporated, 'Sole proprietors and partnerships on other registers'],
+        ['Unregistered / below-threshold (modelled estimate)', w.unregisteredModelled, w.unregisteredNote || 'Modelled, not a count'],
+        ['Premises with a food hygiene rating', w.premisesFhrs, 'FHRS establishments (FSA)'],
+        ['Non-domestic rated premises', w.premisesVoa, 'VOA rating list, aggregate'],
+      ];
+      layers.forEach(function (row, idx) {
+        var tr = document.createElement('tr');
+        if (idx === 2) tr.className = 'biz-modelled-row';
+        var c0 = document.createElement('td'); c0.className = 'bsp-sup'; c0.textContent = row[0];
+        if (idx === 2) { var b = document.createElement('span'); b.className = 'biz-badge-modelled'; b.textContent = 'modelled estimate'; c0.appendChild(b); }
+        tr.appendChild(c0);
+        tr.appendChild(td(n(row[1]), 'num biz-amt'));
+        tr.appendChild(td(row[2], 'biz-basis'));
+        wt.appendChild(tr);
+      });
+      txt('ap-whole-note', 'Self-employment income declared in the area was about £' + (w.selfEmploymentIncomeM || 0) + 'm (' + (w.selfEmploymentIncomeYear || '') + '). Care premises regulated by the CQC: ' + n(w.premisesCqc) + '. The modelled layer is an estimate of activity below registration thresholds, not a headcount, and must not be read as one.');
+
+      // VCSE
+      var v = detail.vcse || {};
+      var vwrap = document.getElementById('ap-vcse');
+      var vitems = [
+        ['Registered charities', n(v.charities)],
+        ['Charity income', '£' + (v.charityIncomeM || 0) + 'm'],
+        ['Charity employees', n(v.charityEmployees)],
+        ['Charity volunteers', n(v.charityVolunteers)],
+        ['Community interest companies', n(v.cics)],
+        ['Co-operatives and mutuals', n(v.mutuals)],
+        ['Schools', n(v.schools)],
+        ['Academy trusts', n(v.academyTrusts)],
+      ];
+      vitems.forEach(function (it) {
+        var card = document.createElement('div'); card.className = 'biz-vcse-card';
+        var val = document.createElement('div'); val.className = 'biz-vcse-v'; val.textContent = it[1];
+        var lab = document.createElement('div'); lab.className = 'biz-vcse-l'; lab.textContent = it[0];
+        card.appendChild(val); card.appendChild(lab); vwrap.appendChild(card);
+      });
+
+      // clusters
+      var clusters = detail.addressClusters || [];
+      if (clusters.length) {
+        document.getElementById('ap-cluster-sec').style.display = '';
+        var cw = document.getElementById('ap-clusters');
+        clusters.forEach(function (cl) {
+          var box = document.createElement('div'); box.className = 'biz-cluster';
+          var pc = document.createElement('div'); pc.className = 'biz-cluster-pc'; pc.textContent = cl.postcode;
+          var body = document.createElement('div'); body.className = 'biz-cluster-body';
+          var big = document.createElement('div'); big.className = 'biz-cluster-big';
+          big.textContent = n(cl.companies) + ' companies registered here';
+          var sub = document.createElement('div'); sub.className = 'biz-cluster-sub';
+          sub.textContent = cl.dissolvedOrStrikingPct + ' percent dissolved or in strike-off. Excluded from clean rates.';
+          body.appendChild(big); body.appendChild(sub);
+          box.appendChild(pc); box.appendChild(body); cw.appendChild(box);
+        });
+      }
+    }).catch(function () { txt('ap-sub', 'Data for this area could not be loaded.'); });
+  })();
+  </script>
+</Layout>

@@ -1,0 +1,245 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+
+const SOURCES = [
+  { name: 'Companies House', use: 'Company status, SIC codes, incorporation, officers and PSCs (as shown by CH), accounts as filed, charges, strike-off status.', licence: 'Public information (no CH use restriction). UK GDPR still applies.' },
+  { name: 'The Gazette', use: 'Insolvency notices as fair and accurate extracts, always with the current outcome.', licence: 'Open Government Licence v3.0. Personal bankruptcy notices are excluded.' },
+  { name: 'Food Standards Agency (FHRS)', use: 'Current food hygiene rating and inspection date; premises counts.', licence: 'Open Government Licence v3.0. Rating shown "as at" its date; FHRS imagery is never altered.' },
+  { name: 'ONS and NOMIS', use: 'Business demography, high-growth benchmark, jobs, workplace pay, population.', licence: 'Open Government Licence v3.0.' },
+  { name: 'Contracts Finder / Find a Tender', use: 'Award context for the supplier tiers.', licence: 'Open Government Licence v3.0.' },
+  { name: 'ONSPD (postcodes)', use: 'Placing companies and premises to an area.', licence: 'OGL with third-party IP: contains OS data (Crown copyright), Royal Mail data and ONS data. Northern Ireland postcodes are not OGL and are not used.' },
+  { name: 'Innovate UK / UKRI', use: 'Funded research and development projects and grant values.', licence: 'Open Government Licence v3.0.' },
+  { name: 'Charity Commission', use: 'Registered charities, income, employees and volunteers.', licence: 'Open Government Licence v3.0.' },
+  { name: 'Care Quality Commission (CQC)', use: 'Regulated care premises counts.', licence: 'Open Government Licence v3.0.' },
+  { name: 'Valuation Office Agency (VOA)', use: 'Non-domestic rated premises, aggregate rollups only.', licence: 'Crown copyright with dataset-specific notices; only aggregate rollups are republished.' },
+  { name: 'Get Information About Schools (GIAS)', use: 'Schools and academy trusts.', licence: 'Open Government Licence v3.0.' },
+];
+---
+
+<Layout
+  title="Method, sources and legal | Lancashire Business Observatory"
+  description="How the Lancashire Business Observatory is built: what it is, the two geographies, how each derived measure is worked out, the sources and their licences, data dates, corrections policy, the objection route for named individuals, and the disclaimers."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Method &amp; sources</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Method, sources and legal</span>
+      <h1 class="doge-title">How this is built</h1>
+      <p class="doge-sub">
+        Every figure on the Observatory can be traced to a public source and a date. This page explains what the
+        Observatory is, how each derived measure is worked out and what it does not mean, where the data comes
+        from and under what licence, and how to get something corrected.
+      </p>
+    </header>
+
+    <section class="doge-section" id="what">
+      <h2 class="doge-h2">What this is</h2>
+      <p class="lgr-prose">This is a journalistic publication on the use of public money in Lancashire, published in the public interest.</p>
+      <div class="lgr-prose">
+        <p>
+          It brings together information that is already public by law: the company register, insolvency notices,
+          food hygiene ratings, official statistics and councils' own spending data. Company profiles sit inside
+          analysis of the local economy; there is deliberately no directory or "search all directors" feature.
+          Scores and indicators are opinions formed from the public facts by the published method below, shown
+          next to those facts, never presented as statements of fact about any company's solvency, creditworthiness
+          or probity.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="geography">
+      <h2 class="doge-h2">Geography: the two views</h2>
+      <div class="lgr-prose">
+        <p>
+          Lancashire is mid-reorganisation. Every area is therefore shown in two ways, and a toggle switches
+          between them:
+        </p>
+      </div>
+      <ul class="lgr-points">
+        <li><b>Councils today</b> The twelve districts of Lancashire County Council plus the two existing unitary authorities, Blackpool and Blackburn with Darwen: fourteen areas.</li>
+        <li><b>Four unitaries (2028)</b> The four new councils that take over on 1 April 2028: North Lancashire, West Lancashire, East Lancashire and South Lancashire. Each area's figures roll up into its new unitary.</li>
+      </ul>
+      <p class="doge-note">
+        One naming point, because it catches people out: the 2028 <strong>West Lancashire</strong> unitary is
+        Blackpool, Fylde and Wyre on the coast. It is not the current West Lancashire district, which joins South
+        Lancashire. To keep the two apart, the current district uses the address <code>/lancashire/business/west-lancashire/</code>
+        and the new coastal unitary uses <code>/lancashire/business/west-lancashire-unitary/</code>.
+      </p>
+    </section>
+
+    <section class="doge-section" id="distress">
+      <h2 class="doge-h2">The clean distress indicator</h2>
+      <div class="lgr-prose">
+        <p>
+          The distress indicator is an <strong>Observatory assessment</strong>, not a statement of fact about any
+          company. For an area, it is the share of active companies showing register-based stress signals (for
+          example an active strike-off proposal, overdue accounts, or a filed insolvency step), measured against
+          the active company base.
+        </p>
+        <p>
+          The <strong>clean</strong> rate excludes companies registered at flagged address clusters: single
+          addresses where an unusually large number of companies are registered and most are dissolved or
+          striking off. Those clusters can sit in one postcode and would otherwise distort a whole area's figure,
+          so they are set aside and the raw (pre-exclusion) rate is shown alongside on each area profile. Cluster
+          notes describe only the observable pattern, for example "411 companies registered at this address; 98
+          percent dissolved or in strike-off". They never assert a purpose.
+        </p>
+        <p>
+          Each figure carries its basis and its data date. A company-level signal is shown next to the underlying
+          register fact it comes from, so the reader sees the fact and the assessment together.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="gazelle">
+      <h2 class="doge-h2">The high-growth (gazelle) assessment</h2>
+      <div class="lgr-prose">
+        <p>
+          Two measures sit on the growth page. The <strong>official benchmark</strong> is the ONS Business
+          Demography high-growth share: companies averaging 20 percent annual growth in employment over three
+          years, from a base of ten or more employees. That is a published official statistic, shown per area
+          against the England share for the same year.
+        </p>
+        <p>
+          The <strong>candidate scale-ups</strong> are an Observatory assessment, our own read of the average
+          employee numbers disclosed in filed accounts (section 411, Companies Act 2006) over at least three
+          consecutive periods. It is not turnover-based and has not been checked with the companies. Only complete
+          series from a base of ten or more employees carry the "meets ONS definition" flag; a base of three to
+          nine with strong growth is flagged "emerging" and shown separately. Obvious data errors (for example a
+          ten-fold jump from a filing typo) are cleaned out. Every candidate states its basis in the table.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="pound">
+      <h2 class="doge-h2">The Lancashire Pound tiers</h2>
+      <div class="lgr-prose">
+        <p>
+          Each council's published payments to suppliers are sorted into four tiers, an Observatory assessment
+          based on register facts:
+        </p>
+      </div>
+      <ul class="lgr-points">
+        <li><b>Rooted local</b> Registered office and trading premises in Lancashire, with no controlling parent registered outside the county.</li>
+        <li><b>Trades here, owned away</b> Trades from Lancashire premises, but the controlling parent is registered outside Lancashire. Described as "revenue flows to owners registered outside Lancashire", never as "siphoning".</li>
+        <li><b>Non-local</b> No registered office or trading premises identified in Lancashire.</li>
+        <li><b>Unclassified</b> Not enough register evidence to place the supplier.</li>
+      </ul>
+      <p class="doge-note">
+        The basis for each supplier's tier is stated in register terms. The spend itself is each council's own
+        published "payments over £500" transparency data. That data covers payments over £500 and is not a
+        complete account of any council's budget: the numerator and denominator, and this caveat, are shown with
+        the figures.
+      </p>
+    </section>
+
+    <section class="doge-section" id="modelled">
+      <h2 class="doge-h2">The modelled unregistered layer</h2>
+      <div class="lgr-prose">
+        <p>
+          Registered companies and registered unincorporated businesses are counts. The <strong>unregistered /
+          below-threshold</strong> layer on each area profile is a <strong>modelled estimate</strong>, not a
+          count, and is labelled as such wherever it appears. It applies a Business Population Estimates North West
+          ratio to Annual Population Survey self-employment, to indicate activity that sits below registration
+          thresholds. It must not be read as a headcount of businesses.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="sources">
+      <h2 class="doge-h2">Sources and licences</h2>
+      <p class="doge-note">Every dataset used, what it is used for, and the licence it is used under.</p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Source</th><th>Used for</th><th>Licence and conditions</th></tr></thead>
+          <tbody>
+            {SOURCES.map((s) => (
+              <tr>
+                <td class="bsp-sup">{s.name}</td>
+                <td class="biz-basis">{s.use}</td>
+                <td class="biz-basis">{s.licence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="doge-note" style="margin-top:0.8rem;">
+        Postcode geography carries the mandatory triple attribution: it contains OS data (Crown copyright), Royal
+        Mail data and ONS data, under the Open Government Licence v3.0. Property and land data is handled as
+        transformed analysis embedded in editorial; no raw bulk property table, export or standalone property
+        search is offered here.
+      </p>
+    </section>
+
+    <section class="doge-section" id="dates">
+      <h2 class="doge-h2">Data dates</h2>
+      <div class="lgr-prose">
+        <p>
+          A register is a snapshot. Every file records when it was generated and when its sources were retrieved,
+          and pages show a data-date line. A company figure reads, in effect, "based on accounts to a stated
+          date, filed on a stated date, retrieved on a stated date". Figures reflect the register at the retrieval
+          date shown and may have changed since. Food hygiene ratings, which can carry consumer-protection weight,
+          are shown with their "as at" date and refreshed on a schedule.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="corrections">
+      <h2 class="doge-h2">Corrections policy</h2>
+      <div class="lgr-prose">
+        <p>
+          If something here is wrong, it gets fixed. Report it to
+          <a href="mailto:corrections@tompickup.co.uk">corrections@tompickup.co.uk</a>.
+        </p>
+      </div>
+      <ul class="lgr-points">
+        <li><b>Acknowledge within 48 hours.</b> Every report is acknowledged within two days.</li>
+        <li><b>Re-verify at the primary source.</b> The claim is checked at the original register, never amended on a complainant's say-so alone.</li>
+        <li><b>Correct within 5 working days.</b> Where a figure is wrong it is corrected within five working days and recorded in a public corrections log.</li>
+        <li><b>Right of reply.</b> Where the figure is right but a company disputes it, the profile is annotated with the company's response.</li>
+      </ul>
+    </section>
+
+    <section class="doge-section" id="privacy">
+      <h2 class="doge-h2">Named individuals: privacy and objection route</h2>
+      <div class="lgr-prose">
+        <p>
+          Register data about directors and persons with significant control is personal data. It is published
+          here for journalism in the public interest (the special-purposes basis under the Data Protection Act
+          2018), inside analysis of public money, not as a people-search tool. The lawful basis is legitimate
+          interests, assessed and recorded before publication.
+        </p>
+        <p>
+          If you are named and want an entry reviewed, write to
+          <a href="mailto:corrections@tompickup.co.uk">corrections@tompickup.co.uk</a>. Objections are answered
+          within one month. As a default, resigned officers of dissolved companies and individuals with no live
+          public-money connection are suppressed on request; officers and persons with significant control of live
+          companies holding public contracts are, as a default, retained, with a recorded balancing test, because
+          of the public-money interest. No marketing or contact list is built from this data, and registered
+          proprietors are never contacted.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="disclaimers">
+      <h2 class="doge-h2">Disclaimers</h2>
+      <ul class="lgr-points">
+        <li><b>Not credit or financial advice.</b> Nothing here is credit, investment or financial advice, and it must not be used for lending, trading or investment decisions. Scores and indicators are opinion, not statements of fact about solvency, creditworthiness or probity.</li>
+        <li><b>Personal capacity.</b> Published by Tom Pickup in a personal capacity. Not published by or on behalf of any political party or by Lancashire County Council.</li>
+        <li><b>No imputation of wrongdoing.</b> Inclusion here is not a suggestion of impropriety by any person or company. Where a donation and a contract are both shown, no finding of impropriety is made.</li>
+      </ul>
+    </section>
+
+    <BizFooter />
+  </div>
+</Layout>

@@ -1,0 +1,169 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="The Lancashire Pound: where council spending lands | Lancashire Business Observatory"
+  description="How much of each Lancashire council's supplier spending stays with locally rooted firms, how much goes to firms that trade here but answer to owners elsewhere, and how much leaves the county. Built from published over-500-pound payment data."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancashire/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancashire/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">The Lancashire Pound</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> The Lancashire Pound</span>
+      <h1 class="doge-title">Where the council pound lands</h1>
+      <p class="doge-sub">
+        When a council spends with a supplier, some of that money stays and recirculates locally, and some of it
+        leaves. This follows each council's published supplier payments and sorts them by how rooted the supplier
+        is in Lancashire. The tiers are an Observatory assessment based on register facts; the underlying spend is
+        the councils' own published data.
+      </p>
+    </header>
+
+    <div class="doge-disclaimer" style="margin-top:1rem;">
+      <strong>What the numbers are.</strong> These figures come from each council's published "payments over
+      £500" transparency data. That is not a complete account of any council's budget: it excludes payments below
+      the threshold, and lawfully redacted payments to individuals. Read the tiers as the direction of travel of
+      supplier spend, not as a full budget.
+    </div>
+
+    <div class="biz-tierkey" id="pd-tierkey">
+      <div class="biz-tierkey-item"><span class="biz-tsw rooted"></span><b>Rooted local</b> Registered office and trading premises in Lancashire, no controlling parent registered outside the county.</div>
+      <div class="biz-tierkey-item"><span class="biz-tsw trading"></span><b>Trades here, owned away</b> Trades from Lancashire premises but the controlling parent is registered elsewhere.</div>
+      <div class="biz-tierkey-item"><span class="biz-tsw nonlocal"></span><b>Non-local</b> No registered office or trading premises identified in Lancashire.</div>
+      <div class="biz-tierkey-item"><span class="biz-tsw unclass"></span><b>Unclassified</b> Not enough register evidence to place the supplier.</div>
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Council league table</h2>
+      <p class="doge-note">Each council's supplier spend split by tier. Switch between today's councils and the 2028 unitaries.</p>
+      <div class="biz-toggle" role="tablist" aria-label="Geography">
+        <button class="biz-toggle-btn active" id="pd-tg-current" role="tab" aria-selected="true">Councils today</button>
+        <button class="biz-toggle-btn" id="pd-tg-unitary" role="tab" aria-selected="false">Four unitaries (2028)</button>
+      </div>
+      <div class="biz-league" id="pd-league"></div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Largest suppliers</h2>
+      <p class="doge-note">The biggest supplier relationships by processed spend, with the basis for each tier stated in register terms.</p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Supplier</th><th>Tier</th><th class="num">Spend</th><th>Basis (register facts)</th></tr></thead>
+          <tbody id="pd-suppliers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <div class="biz-callout" id="pd-preston">
+        <strong>The Preston comparator.</strong>
+        <span id="pd-preston-text"></span>
+      </div>
+    </section>
+
+    <BizFooter attributions={[
+      'Supplier payments: each council\'s published payments-over-£500 transparency data (Open Government Licence v3.0). Not a complete account of any budget.',
+      'Supplier location and ownership: Companies House, FHRS and VOA register facts.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var data = null, mode = 'current';
+    var TIERS = [
+      { k: 'rooted', label: 'Rooted local', cls: 'rooted' },
+      { k: 'tradingExternal', label: 'Trades here, owned away', cls: 'trading' },
+      { k: 'nonLocal', label: 'Non-local', cls: 'nonlocal' },
+      { k: 'unclassified', label: 'Unclassified', cls: 'unclass' },
+    ];
+    var TIER_LABEL = { rooted: 'Rooted local', tradingExternal: 'Trades here, owned away', nonLocal: 'Non-local', unclassified: 'Unclassified' };
+
+    function councils() { return mode === 'current' ? (data.councils || []) : (data.unitaries2028 || []); }
+
+    function renderLeague() {
+      var wrap = document.getElementById('pd-league');
+      wrap.textContent = '';
+      var list = councils().slice().sort(function (a, b) { return (b.tiers.rooted.pct || 0) - (a.tiers.rooted.pct || 0); });
+      list.forEach(function (c) {
+        var card = document.createElement('div'); card.className = 'biz-league-card';
+        var head = document.createElement('div'); head.className = 'biz-league-head';
+        var nm = document.createElement('span'); nm.className = 'biz-league-name'; nm.textContent = c.name;
+        var tot = document.createElement('span'); tot.className = 'biz-league-tot'; tot.textContent = '£' + c.spendTotalM + 'm spend · ' + c.coveragePct + '% classified';
+        head.appendChild(nm); head.appendChild(tot);
+        card.appendChild(head);
+        // stacked bar (CSS only)
+        var bar = document.createElement('div'); bar.className = 'biz-stack';
+        TIERS.forEach(function (t) {
+          var seg = c.tiers[t.k];
+          if (!seg || !seg.pct) return;
+          var s = document.createElement('div'); s.className = 'biz-seg ' + t.cls; s.style.width = seg.pct + '%';
+          s.title = t.label + ': ' + seg.pct + '% (£' + seg.valueM + 'm, ' + seg.suppliers + ' suppliers)';
+          bar.appendChild(s);
+        });
+        card.appendChild(bar);
+        // legend line
+        var leg = document.createElement('div'); leg.className = 'biz-league-legend';
+        TIERS.forEach(function (t) {
+          var seg = c.tiers[t.k]; if (!seg) return;
+          var span = document.createElement('span'); span.className = 'biz-league-leg-item';
+          var sw = document.createElement('i'); sw.className = 'biz-tsw ' + t.cls; span.appendChild(sw);
+          span.appendChild(document.createTextNode(' ' + t.label + ' ' + seg.pct + '%'));
+          leg.appendChild(span);
+        });
+        card.appendChild(leg);
+        wrap.appendChild(card);
+      });
+    }
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById('pd-tg-current').classList.toggle('active', m === 'current');
+      document.getElementById('pd-tg-unitary').classList.toggle('active', m === 'unitary');
+      document.getElementById('pd-tg-current').setAttribute('aria-selected', m === 'current');
+      document.getElementById('pd-tg-unitary').setAttribute('aria-selected', m === 'unitary');
+      renderLeague();
+    }
+    document.getElementById('pd-tg-current').addEventListener('click', function () { setMode('current'); });
+    document.getElementById('pd-tg-unitary').addEventListener('click', function () { setMode('unitary'); });
+
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    fetch('/data/biz-pound.json').then(function (r) { return r.json(); }).then(function (d) {
+      data = d;
+      renderLeague();
+      // suppliers
+      var body = document.getElementById('pd-suppliers');
+      (d.topSuppliers || []).forEach(function (s) {
+        var tr = document.createElement('tr');
+        tr.appendChild(td(s.name, 'bsp-sup'));
+        var tierTd = document.createElement('td');
+        var chip = document.createElement('span'); chip.className = 'biz-chip tier-' + (s.tier === 'tradingExternal' ? 'trading' : s.tier === 'nonLocal' ? 'nonlocal' : s.tier);
+        chip.textContent = TIER_LABEL[s.tier] || s.tier; tierTd.appendChild(chip);
+        tr.appendChild(tierTd);
+        tr.appendChild(td('£' + s.totalM + 'm', 'num biz-amt'));
+        tr.appendChild(td(s.tierBasis, 'biz-basis'));
+        body.appendChild(tr);
+      });
+      // preston
+      var p = d.preston;
+      if (p) {
+        document.getElementById('pd-preston-text').textContent =
+          ' Preston is the best-known attempt in England to keep more public spend local. Under the "Preston Model" tracked by CLES, the share of council spend with Preston-based suppliers rose from about ' +
+          p.baselineLancsPct + '% to ' + p.latestLancsPct + '% over the programme. It is the yardstick this page is measured against, and the reason the tiers matter.';
+      }
+    }).catch(function () {
+      document.getElementById('pd-league').textContent = 'The Lancashire Pound data could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>
