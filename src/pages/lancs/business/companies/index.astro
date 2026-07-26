@@ -1,0 +1,174 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="Companies in the Observatory: the profiled firms | Lancashire Business Observatory"
+  description="Every company the Lancashire Business Observatory profiles, and why it is included: council suppliers, growth candidates, Innovate UK winners and larger employers registered in Lancashire. Register facts with a source link on each profile."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancs/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancs/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Companies</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Company profiles</span>
+      <h1 class="doge-title">The companies in the Observatory</h1>
+      <p class="doge-sub">
+        This is the list of companies the Observatory profiles, and why each one is here. Every profile is built
+        from public registers, with a link to the Companies House record. It is a record of companies that touch
+        public money or public data, not a directory of people, and it carries no search of directors.
+      </p>
+    </header>
+
+    <div class="doge-disclaimer" style="margin-top:1rem;">
+      <strong>Inclusion criteria.</strong> <span id="co-criteria">…</span>
+    </div>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal" id="co-total">…</div><div class="l">Companies profiled</div></div>
+      <div class="doge-stat"><div class="v" id="co-suppliers">…</div><div class="l">Recorded public suppliers</div></div>
+      <div class="doge-stat"><div class="v" id="co-growth">…</div><div class="l">Growth candidates</div></div>
+      <div class="doge-stat"><div class="v" id="co-areas">…</div><div class="l">Areas represented</div></div>
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Search the profiles</h2>
+      <p class="doge-note">Search by name, filter by area, and sort any column. Each row opens the full company profile.</p>
+      <div class="bsp-controls">
+        <input class="bsp-search" id="co-search" type="search" placeholder="Search company name…" aria-label="Search companies" />
+        <select class="bsp-sel" id="co-area" aria-label="Area"><option value="">All areas</option></select>
+        <select class="bsp-sel" id="co-badge" aria-label="Type">
+          <option value="">All companies</option>
+          <option value="supplier">Public suppliers</option>
+          <option value="growth">Growth candidates</option>
+        </select>
+      </div>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead>
+            <tr id="co-head">
+              <th data-k="name" class="biz-sortable">Company</th>
+              <th data-k="lad" class="biz-sortable">Area today</th>
+              <th data-k="sic2" class="biz-sortable">Sector</th>
+              <th>Included as</th>
+            </tr>
+          </thead>
+          <tbody id="co-body"></tbody>
+        </table>
+      </div>
+      <div class="bsp-more"><button class="bsp-morebtn" id="co-more">Show more</button></div>
+    </section>
+
+    <BizFooter attributions={[
+      'Company facts and registered offices: Companies House.',
+      'Supplier status: Lancashire councils’ published payments-over-£500 transparency data (Open Government Licence v3.0).',
+      'Growth and innovation flags: Companies House filed accounts and Innovate UK / UKRI funded-projects data.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var all = [], view = [], shown = 0, PAGE = 60, query = '', areaFilter = '', badgeFilter = '', sortK = 'name', sortDir = 1;
+
+    // SIC section labels (2-digit division to a readable sector)
+    var SIC = {
+      '01': 'Agriculture', '10': 'Food manufacture', '41': 'Construction of buildings',
+      '42': 'Civil engineering', '43': 'Specialised construction', '45': 'Motor trade',
+      '46': 'Wholesale', '47': 'Retail', '49': 'Land transport', '52': 'Warehousing',
+      '55': 'Accommodation', '56': 'Food and drink service', '62': 'Computer services',
+      '68': 'Real estate', '69': 'Legal and accounting', '70': 'Head offices and consultancy',
+      '71': 'Architecture and engineering', '77': 'Rental and leasing', '78': 'Employment services',
+      '79': 'Travel', '81': 'Building and landscape services', '82': 'Business support',
+      '85': 'Education', '86': 'Human health', '87': 'Residential care', '88': 'Social work',
+      '90': 'Arts', '93': 'Sport and recreation', '94': 'Membership organisations'
+    };
+    function sector(sic2) { return SIC[sic2] || (sic2 ? 'SIC ' + sic2 : '-'); }
+
+    function el2(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    function apply() {
+      view = all.filter(function (c) {
+        if (areaFilter && c.lad !== areaFilter) return false;
+        if (badgeFilter === 'supplier' && !c.hasPayments) return false;
+        if (badgeFilter === 'growth' && !c.isGrowth) return false;
+        if (query && c.name.toLowerCase().indexOf(query) < 0) return false;
+        return true;
+      });
+      view.sort(function (a, b) {
+        var av = a[sortK], bv = b[sortK];
+        av = av == null ? '' : String(av); bv = bv == null ? '' : String(bv);
+        return sortDir * av.localeCompare(bv);
+      });
+      document.getElementById('co-body').textContent = ''; shown = 0; renderMore();
+      Array.prototype.forEach.call(document.querySelectorAll('#co-head th'), function (th) {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        if (th.getAttribute('data-k') === sortK) th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+      });
+    }
+
+    function renderMore() {
+      var body = document.getElementById('co-body');
+      for (var i = shown; i < view.length && i < shown + PAGE; i++) {
+        var c = view[i];
+        var tr = el2('tr');
+        var c0 = el2('td');
+        var a = el2('a', 'biz-arealink', c.name);
+        a.href = '/lancs/business/company/' + c.crn + '/';
+        c0.appendChild(a);
+        tr.appendChild(c0);
+        tr.appendChild(td(c.lad || '-'));
+        tr.appendChild(td(sector(c.sic2)));
+        var bcell = el2('td');
+        if (c.hasPayments) bcell.appendChild(el2('span', 'biz-chip tier-rooted', 'public supplier'));
+        if (c.isGrowth) bcell.appendChild(el2('span', 'biz-chip', 'growth candidate'));
+        if (!c.hasPayments && !c.isGrowth) bcell.appendChild(el2('span', 'biz-chip', 'larger employer'));
+        tr.appendChild(bcell);
+        body.appendChild(tr);
+      }
+      shown = Math.min(shown + PAGE, view.length);
+      document.getElementById('co-more').style.display = shown < view.length ? '' : 'none';
+      if (!view.length) { var tr = el2('tr'); tr.appendChild(td('No companies match.')); body.appendChild(tr); }
+    }
+    document.getElementById('co-more').addEventListener('click', renderMore);
+
+    fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).then(function (d) {
+      all = d.companies || [];
+      var meta = d.$meta || {};
+      if (meta.criteria) {
+        document.getElementById('co-criteria').textContent =
+          'A company is included where it meets any of these tests: ' + meta.criteria + '.';
+      }
+      document.getElementById('co-total').textContent = all.length.toLocaleString('en-GB');
+      document.getElementById('co-suppliers').textContent = all.filter(function (c) { return c.hasPayments; }).length.toLocaleString('en-GB');
+      document.getElementById('co-growth').textContent = all.filter(function (c) { return c.isGrowth; }).length.toLocaleString('en-GB');
+      var areas = {}; all.forEach(function (c) { if (c.lad) areas[c.lad] = true; });
+      var areaKeys = Object.keys(areas).sort();
+      document.getElementById('co-areas').textContent = areaKeys.length;
+      var sel = document.getElementById('co-area');
+      areaKeys.forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a; sel.appendChild(o); });
+      sel.addEventListener('change', function () { areaFilter = sel.value; apply(); });
+      document.getElementById('co-badge').addEventListener('change', function (e) { badgeFilter = e.target.value; apply(); });
+      var t; document.getElementById('co-search').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { query = e.target.value.toLowerCase().trim(); apply(); }, 160); });
+      Array.prototype.forEach.call(document.querySelectorAll('#co-head th.biz-sortable'), function (th) {
+        th.addEventListener('click', function () {
+          var k = th.getAttribute('data-k');
+          if (k === sortK) sortDir = -sortDir; else { sortK = k; sortDir = 1; }
+          apply();
+        });
+      });
+      apply();
+    }).catch(function () {
+      document.getElementById('co-body').textContent = 'The company list could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>

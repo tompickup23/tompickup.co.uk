@@ -89,6 +89,40 @@ OVERRIDES = {
         "County Council and the London Pensions Fund Authority."),
 }
 
+OCDS_IDS = {}
+_ocds_f = PROC / "ocds_supplier_ids.json"
+if _ocds_f.exists():
+    OCDS_IDS = json.loads(_ocds_f.read_text()).get("byName", {})
+    print(f"  OCDS identifier evidence: {len(OCDS_IDS)} names")
+
+import bisect
+_sorted_keys = None
+def prefix_unique(key):
+    """Register key that uniquely extends the supplier key (or vice versa).
+    Uniqueness across the whole 5.6M-name index is the safety property."""
+    global _sorted_keys
+    if _sorted_keys is None:
+        _sorted_keys = sorted(by_name)
+    if len(key) < 12:
+        return None
+    i = bisect.bisect_left(_sorted_keys, key)
+    hits = []
+    while i < len(_sorted_keys) and _sorted_keys[i].startswith(key):
+        # word-boundary extensions only: "RED ROSE SCHOOL" must not match
+        # "RED ROSE SCHOOLS...", and never a mid-token extension
+        if _sorted_keys[i] == key or _sorted_keys[i].startswith(key + " "):
+            hits.append(_sorted_keys[i])
+            if len(hits) > 2:
+                return None
+        i += 1
+    if len(hits) == 1:
+        cands = by_name[hits[0]]
+        active = [c for c in cands if c[2] == "Active"]
+        pool = active or cands
+        if len(pool) == 1:
+            return pool[0][0]
+    return None
+
 def match_entry(u):
     """-> (crn|None, how, ambiguous_pool)"""
     keys, seen = [], set()
@@ -100,6 +134,9 @@ def match_entry(u):
     for k in keys:
         if k in ALIASES:
             return ALIASES[k], "alias", []
+    for k in keys:
+        if k in OCDS_IDS:
+            return OCDS_IDS[k]["crn"], "ocds", []
     amb_pool = []
     for k in keys:
         cands = by_name.get(k)
@@ -116,7 +153,21 @@ def match_entry(u):
             amb_pool = (lancs or pool)[:6]
     if amb_pool:
         return None, "ambiguous", amb_pool
+    for k in keys:
+        if k in PREFIX_DENY:
+            continue
+        crn = prefix_unique(k)
+        if crn:
+            return crn, "prefix-unique", []
     return None, "no-match", []
+
+# Hand-verified bad prefix matches: the unique register extension is a
+# DIFFERENT organisation from the supplier being paid.
+PREFIX_DENY = {
+    "BROTHERS OF CHARITY SERVICES",   # England charity (Chorley) is not the SC entity
+    "RED ROSE SCHOOL",                # LCC pays the St Annes school, not Cardiff
+    "QUEENS LODGE",                   # care home vs management company
+}
 
 def is_lancs_individuals(crn):
     """True/False/None(no data) for 'majority of individual PSCs Lancashire'."""

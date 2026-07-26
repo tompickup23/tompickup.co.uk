@@ -262,6 +262,78 @@ i.biz-tsw { position: static; margin-right: 5px; vertical-align: middle; width: 
 .biz-league-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 0.73rem; color: #99a2ad; }
 .biz-league-leg-item { display: inline-flex; align-items: center; font-variant-numeric: tabular-nums; }
 
+/* ---- shared chart system (comparator bars, sparklines, bar labels) ---- */
+/* mini bar behind / below a numeric table cell */
+.biz-cellwrap { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.biz-cellbar { position: relative; width: 58px; max-width: 100%; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.07); overflow: visible; }
+.biz-cellbar-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px; background: linear-gradient(90deg, #0d9fb5, #12b6cf); }
+.biz-cellbar-fill.amber { background: linear-gradient(90deg, #d97a06, #ff9f0a); }
+.biz-cellbar-mark { position: absolute; top: -2px; width: 2px; height: 8px; background: #e9edf2; opacity: 0.85; }
+/* value label rendered at the end of a benchmark bar */
+.biz-barlab { position: absolute; top: 50%; transform: translateY(-50%); font-size: 0.66rem; font-weight: 700; color: #0a1628; padding: 0 5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.biz-barlab.out { color: #d6dee8; }
+/* England marker text label under a bar track */
+.biz-benchmark-lab { position: absolute; top: 12px; transform: translateX(-50%); font-size: 0.62rem; color: #aab2bd; white-space: nowrap; }
+.biz-benchmark-lab .flag { color: #e9edf2; font-weight: 700; }
+/* % label inside a stacked segment */
+.biz-seg { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.biz-seg-lab { font-size: 0.6rem; font-weight: 700; color: rgba(10,22,40,0.85); font-variant-numeric: tabular-nums; }
+.biz-seg.nonlocal .biz-seg-lab, .biz-seg.unclass .biz-seg-lab { color: rgba(255,255,255,0.92); }
+/* inline SVG sparkline (employee / accounts trends) */
+.biz-spark { display: inline-block; vertical-align: middle; }
+.biz-spark-dot { fill: #12b6cf; }
+/* the growth benchmark track needs a touch more height for end labels */
+.biz-track-lg { height: 15px; }
+.biz-track-lg .dg-fill { display: flex; align-items: center; justify-content: flex-end; }
+
+/* ---- company dossier ---- */
+.biz-dossier-head { margin: 0.4rem 0 1.2rem; }
+.biz-dossier-meta { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-top: 0.7rem; }
+.biz-status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 999px; }
+.biz-status.active { background: rgba(48,209,88,0.12); color: #30d158; border: 1px solid rgba(48,209,88,0.35); }
+.biz-status.warn { background: rgba(255,159,10,0.12); color: #ff9f0a; border: 1px solid rgba(255,159,10,0.35); }
+.biz-status.dissolved { background: rgba(255,255,255,0.05); color: #99a2ad; border: 1px solid rgba(255,255,255,0.15); }
+.biz-crn-link { font-size: 0.8rem; color: #12b6cf; font-variant-numeric: tabular-nums; background-image: none; }
+.biz-crn-link:hover { text-decoration: underline; background-image: none; }
+.biz-cic { background: rgba(167,139,250,0.14); color: #a78bfa; border: 1px solid rgba(167,139,250,0.4); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 9px; border-radius: 999px; }
+.biz-metagrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; overflow: hidden; margin-top: 1rem; }
+.biz-metacell { background: rgba(14,18,28,0.9); padding: 0.75rem 0.95rem; }
+.biz-meta-k { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: #7d8590; font-weight: 700; }
+.biz-meta-v { font-size: 0.9rem; color: #e9edf2; margin-top: 3px; line-height: 1.4; word-break: break-word; }
+.biz-panel { background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 1.1rem 1.3rem; margin-top: 0.9rem; }
+.biz-panel-h { font-size: 1.05rem; font-weight: 700; color: #f4f7fb; margin: 0 0 0.3rem; letter-spacing: -0.01em; }
+.biz-panel-sub { font-size: 0.8rem; color: #99a2ad; line-height: 1.55; margin: 0 0 0.9rem; }
+.biz-infoline { font-size: 0.78rem; color: #99a2ad; line-height: 1.55; margin: 0.6rem 0 0; padding: 0.55rem 0.8rem; border-radius: 9px; background: rgba(255,159,10,0.06); border: 1px solid rgba(255,159,10,0.18); }
+.biz-assess { font-size: 0.76rem; color: #8b939e; line-height: 1.55; margin: 0.7rem 0 0; font-style: italic; }
+.biz-psc-list { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 5px; }
+.biz-psc-list li { font-size: 0.85rem; color: #d6dee8; }
+.biz-psc-list li .country { color: #8e8e93; font-size: 0.76rem; }
+.biz-chain-list { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 5px; }
+.biz-chain-list li { font-size: 0.83rem; color: #c2c9d2; line-height: 1.45; }
+.biz-respond { margin-top: 2rem; font-size: 0.8rem; color: #99a2ad; line-height: 1.6; padding: 0.9rem 1.1rem; border-radius: 12px; border: 1px solid rgba(18,182,207,0.2); background: rgba(18,182,207,0.05); }
+.biz-respond a { color: #12b6cf; font-weight: 600; }
+.biz-empty { font-size: 0.83rem; color: #8e8e93; line-height: 1.55; }
+.biz-chiprow { display: flex; flex-wrap: wrap; gap: 0; align-items: center; margin: 0.5rem 0 0; }
+
+/* ---- money (donations x public money) ---- */
+.biz-partybars { display: grid; gap: 7px; margin-top: 0.6rem; }
+.biz-party-row { display: grid; grid-template-columns: 130px 1fr auto; align-items: center; gap: 10px; font-size: 0.8rem; }
+.biz-party-name { color: #d6dee8; }
+.biz-party-track { height: 9px; border-radius: 4px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.biz-party-fill { height: 100%; border-radius: 4px; }
+.biz-party-fill.lab { background: #e4483b; }
+.biz-party-fill.con { background: #2b7fd4; }
+.biz-party-fill.lib { background: #f2a900; }
+.biz-party-fill.oth { background: #8e8e93; }
+.biz-party-val { color: #e9edf2; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.biz-money-note { font-size: 0.8rem; color: #b6bec8; line-height: 1.6; margin: 1.1rem 0; padding: 0.9rem 1.1rem; border-radius: 12px; border: 1px solid rgba(18,182,207,0.22); background: rgba(18,182,207,0.06); border-left: 3px solid #12b6cf; }
+.biz-money-note strong { color: #eef2f7; }
+.biz-union-chip { background: rgba(228,72,59,0.12); border-color: rgba(228,72,59,0.4); color: #f08a80; }
+.biz-donrow-sub { color: #8e8e93; font-size: 0.74rem; line-height: 1.5; margin-top: 4px; }
+.biz-donations { margin: 5px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; }
+.biz-donations li { font-size: 0.74rem; color: #aab2bd; font-variant-numeric: tabular-nums; }
+.biz-donations .ec { color: #7d8590; }
+
 /* shared legal footer */
 .biz-foot { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.08); }
 .biz-foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem 1.6rem; }
@@ -276,4 +348,6 @@ i.biz-tsw { position: static; margin-right: 5px; vertical-align: middle; width: 
   .biz-cluster { flex-direction: column; align-items: flex-start; gap: 6px; }
   .biz-toggle { width: 100%; }
   .biz-toggle-btn { flex: 1; }
+  .biz-party-row { grid-template-columns: 96px 1fr auto; gap: 7px; font-size: 0.74rem; }
+  .biz-cellbar { width: 44px; }
 }

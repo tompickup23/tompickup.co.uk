@@ -40,6 +40,7 @@ import '../../../../styles/lgr.css';
       <div class="biz-tierkey-item"><span class="biz-tsw rooted"></span><b>Rooted local</b> Registered office and trading premises in Lancashire, no controlling parent registered outside the county.</div>
       <div class="biz-tierkey-item"><span class="biz-tsw trading"></span><b>Trades here, owned away</b> Trades from Lancashire premises but the controlling parent is registered elsewhere.</div>
       <div class="biz-tierkey-item"><span class="biz-tsw nonlocal"></span><b>Non-local</b> No registered office or trading premises identified in Lancashire.</div>
+      <div class="biz-tierkey-item"><a href="/lancs/business/method/">How tiers are set: method page</a></div>
       <div class="biz-tierkey-item"><span class="biz-tsw unclass"></span><b>Unclassified</b> Not enough register evidence to place the supplier.</div>
     </div>
 
@@ -60,6 +61,21 @@ import '../../../../styles/lgr.css';
         <table class="bsp-table biz-cmp-table">
           <thead><tr><th>Supplier</th><th>Tier</th><th class="num">Spend</th><th>Basis (register facts)</th></tr></thead>
           <tbody id="pd-suppliers"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doge-section" id="pd-split-sec" style="display:none;">
+      <h2 class="doge-h2">Suppliers spanning the new boundaries</h2>
+      <p class="doge-note">
+        Some suppliers trade across more than one of the four unitary areas that arrive in April 2028. When county
+        and district functions are disaggregated to the new councils, these are the contracts that will have to be
+        split, novated or re-let. This is the register evidence of where each one operates.
+      </p>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead><tr><th>Supplier</th><th class="num">Spend</th><th>New areas it spans</th><th>Evidence</th></tr></thead>
+          <tbody id="pd-split"></tbody>
         </table>
       </div>
     </section>
@@ -101,13 +117,17 @@ import '../../../../styles/lgr.css';
         var tot = document.createElement('span'); tot.className = 'biz-league-tot'; tot.textContent = '£' + c.spendTotalM + 'm spend · ' + c.coveragePct + '% classified';
         head.appendChild(nm); head.appendChild(tot);
         card.appendChild(head);
-        // stacked bar (CSS only)
+        // stacked bar (CSS only), with % labels inside segments >= 8%
         var bar = document.createElement('div'); bar.className = 'biz-stack';
         TIERS.forEach(function (t) {
           var seg = c.tiers[t.k];
           if (!seg || !seg.pct) return;
           var s = document.createElement('div'); s.className = 'biz-seg ' + t.cls; s.style.width = seg.pct + '%';
           s.title = t.label + ': ' + seg.pct + '% (£' + seg.valueM + 'm, ' + seg.suppliers + ' suppliers)';
+          if (seg.pct >= 8) {
+            var lab = document.createElement('span'); lab.className = 'biz-seg-lab'; lab.textContent = seg.pct + '%';
+            s.appendChild(lab);
+          }
           bar.appendChild(s);
         });
         card.appendChild(bar);
@@ -138,14 +158,29 @@ import '../../../../styles/lgr.css';
 
     function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
 
-    fetch('/data/biz-pound.json').then(function (r) { return r.json(); }).then(function (d) {
-      data = d;
+    // name cell that links to a dossier when a profile exists for the crn
+    function supplierNameCell(s, dossiers) {
+      var c = document.createElement('td');
+      if (s.crn && dossiers[s.crn]) {
+        var a = document.createElement('a'); a.className = 'biz-arealink'; a.href = '/lancs/business/company/' + s.crn + '/'; a.textContent = s.name;
+        c.appendChild(a);
+      } else { c.className = 'bsp-sup'; c.textContent = s.name; }
+      return c;
+    }
+
+    Promise.all([
+      fetch('/data/biz-pound.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).catch(function () { return { companies: [] }; })
+    ]).then(function (res) {
+      var d = res[0]; data = d;
+      var dossiers = {};
+      (res[1].companies || []).forEach(function (c) { dossiers[c.crn] = true; });
       renderLeague();
       // suppliers
       var body = document.getElementById('pd-suppliers');
       (d.topSuppliers || []).forEach(function (s) {
         var tr = document.createElement('tr');
-        tr.appendChild(td(s.name, 'bsp-sup'));
+        tr.appendChild(supplierNameCell(s, dossiers));
         var tierTd = document.createElement('td');
         var chip = document.createElement('span'); chip.className = 'biz-chip tier-' + (s.tier === 'tradingExternal' ? 'trading' : s.tier === 'nonLocal' ? 'nonlocal' : s.tier);
         chip.textContent = TIER_LABEL[s.tier] || s.tier; tierTd.appendChild(chip);
@@ -154,6 +189,24 @@ import '../../../../styles/lgr.css';
         tr.appendChild(td(s.tierBasis, 'biz-basis'));
         body.appendChild(tr);
       });
+      // split footprint (suppliers spanning the new unitaries)
+      var split = d.splitFootprint || [];
+      if (split.length) {
+        document.getElementById('pd-split-sec').style.display = '';
+        var sbody = document.getElementById('pd-split');
+        split.slice().sort(function (a, b) { return (b.totalM || 0) - (a.totalM || 0); }).forEach(function (s) {
+          var tr = document.createElement('tr');
+          tr.appendChild(supplierNameCell(s, dossiers));
+          tr.appendChild(td('£' + s.totalM + 'm', 'num biz-amt'));
+          var uc = document.createElement('td');
+          (s.unitaries2028 || []).forEach(function (u) {
+            var chip = document.createElement('span'); chip.className = 'biz-chip'; chip.textContent = u; uc.appendChild(chip);
+          });
+          tr.appendChild(uc);
+          tr.appendChild(td(s.evidence || '-', 'biz-basis'));
+          sbody.appendChild(tr);
+        });
+      }
       // preston
       var p = d.preston;
       if (p) {

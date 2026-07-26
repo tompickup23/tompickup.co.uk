@@ -113,6 +113,23 @@ for crn, periods in series.items():
                   f"{d0.isoformat()} to {d1.isoformat()}."),
     })
 
+# momentum signals (SH01 equity filings, new charges) from the CH API sweep
+momentum = {}
+mf = VPS / "momentum.jsonl"
+if mf.exists():
+    for line in mf.open():
+        r = json.loads(line)
+        momentum[r["crn"]] = r
+for c in candidates:
+    mo = momentum.get(c["crn"])
+    if mo:
+        c["momentum"] = {
+            "sh01Last24m": mo.get("sh01_24m", 0),
+            "sh01Latest": mo.get("sh01_latest"),
+            "newCharges24m": mo.get("charges_24m", 0),
+            "chargeLatest": mo.get("charge_latest"),
+        }
+
 candidates.sort(key=lambda c: (-("ons-definition" in c["flags"]),
                                -c["latestEmployees"] * (c["cagrPct"] / 100)))
 out = {

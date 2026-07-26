@@ -71,6 +71,18 @@ import '../../../styles/lgr.css';
         <div class="doge-card-desc">Public research and development grants won by Lancashire firms, by area, year and project.</div>
         <span class="doge-card-go">Explore the awards →</span>
       </a>
+      <a class="doge-card" href="/lancs/business/money/">
+        <div class="doge-card-kicker">Donations and public money</div>
+        <div class="doge-card-title">Where the two registers meet</div>
+        <div class="doge-card-desc">Organisations that appear both in the political donation register and as council suppliers. Registered facts; no finding of impropriety.</div>
+        <span class="doge-card-go">See the overlap →</span>
+      </a>
+      <a class="doge-card" href="/lancs/business/companies/">
+        <div class="doge-card-kicker">Company profiles</div>
+        <div class="doge-card-title">The companies in the Observatory</div>
+        <div class="doge-card-desc">Every profiled firm and why it is included, each with a full record built from public registers.</div>
+        <span class="doge-card-go">Browse the profiles →</span>
+      </a>
     </div>
 
     <!-- comparator -->
@@ -130,10 +142,38 @@ import '../../../styles/lgr.css';
 
     function cell(v, cls) { var td = document.createElement('td'); if (cls) td.className = cls; td.textContent = v; return td; }
 
+    // numeric cell with a mini bar (and optional England marker) behind the value
+    function cellBar(text, value, max, englandVal, amberBelow) {
+      var td = document.createElement('td'); td.className = 'num';
+      var wrap = document.createElement('div'); wrap.className = 'biz-cellwrap';
+      var v = document.createElement('span'); v.className = 'biz-amt'; v.textContent = text;
+      wrap.appendChild(v);
+      if (value != null && max > 0) {
+        var barWrap = document.createElement('div'); barWrap.className = 'biz-cellbar';
+        var below = englandVal != null && value < englandVal;
+        var fill = document.createElement('div'); fill.className = 'biz-cellbar-fill' + (amberBelow && below ? ' amber' : '');
+        fill.style.width = Math.min(100, (value / max) * 100).toFixed(1) + '%';
+        barWrap.appendChild(fill);
+        if (englandVal != null) {
+          var mark = document.createElement('div'); mark.className = 'biz-cellbar-mark';
+          mark.style.left = Math.min(100, (englandVal / max) * 100).toFixed(1) + '%';
+          mark.title = 'England: ' + englandVal;
+          barWrap.appendChild(mark);
+        }
+        wrap.appendChild(barWrap);
+      }
+      td.appendChild(wrap);
+      return td;
+    }
+
     function render() {
       var body = document.getElementById('biz-cmp-body');
       body.textContent = '';
       var data = rows().slice();
+      var engPer1k = (ENGLAND && ENGLAND.companiesPer1k != null) ? ENGLAND.companiesPer1k : null;
+      var engHg = (ENGLAND && ENGLAND.highGrowthOfficialPct != null) ? ENGLAND.highGrowthOfficialPct : null;
+      var maxPer1k = Math.max.apply(null, data.map(function (a) { return a.companiesPer1k || 0; }).concat([engPer1k || 0, 1]));
+      var maxHg = Math.max.apply(null, data.map(function (a) { return a.highGrowthOfficialPct || 0; }).concat([engHg || 0, 1]));
       data.sort(function (a, b) {
         if (sortK === 'name') return sortDir * String(a.name).localeCompare(String(b.name));
         var av = a[sortK], bv = b[sortK];
@@ -152,14 +192,12 @@ import '../../../styles/lgr.css';
         if (a.type === 'district') { var t = document.createElement('span'); t.className = 'biz-tag'; t.textContent = 'district'; td0.appendChild(t); }
         else if (a.type === 'unitary') { var t2 = document.createElement('span'); t2.className = 'biz-tag'; t2.textContent = 'unitary'; td0.appendChild(t2); }
         tr.appendChild(td0);
-        tr.appendChild(cell(num(a.companiesPer1k), 'num biz-amt'));
+        tr.appendChild(cellBar(num(a.companiesPer1k), a.companiesPer1k, maxPer1k, engPer1k, false));
         var dc = cell(num(a.distressCleanPct, '%'), 'num');
         tr.appendChild(dc);
         tr.appendChild(cell(rate1(a.birthRatePct), 'num'));
         tr.appendChild(cell(num(a.survival3yrPct, '%'), 'num'));
-        var hg = cell(num(a.highGrowthOfficialPct, '%'), 'num');
-        if (ENGLAND && a.highGrowthOfficialPct != null) hg.classList.add(a.highGrowthOfficialPct >= ENGLAND.highGrowthOfficialPct ? 'biz-good' : 'biz-below');
-        tr.appendChild(hg);
+        tr.appendChild(cellBar(num(a.highGrowthOfficialPct, '%'), a.highGrowthOfficialPct, maxHg, engHg, true));
         tr.appendChild(cell(a.medianPayWorkplace == null ? '-' : '£' + a.medianPayWorkplace.toFixed(0), 'num'));
         body.appendChild(tr);
       });

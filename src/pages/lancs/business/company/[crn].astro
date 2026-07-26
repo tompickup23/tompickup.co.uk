@@ -1,0 +1,390 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+import indexData from '../../../../../public/data/biz-companies-index.json';
+
+// One route per company in the index. The full dossier is fetched client-side
+// from /data/company/{crn}.json (same pattern as the area profiles), so the
+// build only carries the light index here.
+export function getStaticPaths() {
+  return (indexData.companies || []).map((c) => ({
+    params: { crn: c.crn },
+    props: { crn: c.crn, name: c.name, lad: c.lad },
+  }));
+}
+
+const { crn, name, lad } = Astro.props;
+const PROPS = JSON.stringify({ crn, name, lad });
+const subject = encodeURIComponent('Company profile correction: ' + name + ' (' + crn + ')');
+---
+
+<Layout
+  title={`${name}: company profile in public data | Lancashire Business Observatory`}
+  description={`A profile of ${name} (company ${crn}), built from Companies House, The Gazette, council spending and other public registers. Register facts with sources; assessments are Observatory opinion with their basis shown.`}
+>
+  <div class="doge-page" data-props={PROPS}>
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancs/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancs/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <a href="/lancs/business/companies/">Companies</a>
+      <span class="sep">›</span>
+      <span class="here">{name}</span>
+    </nav>
+
+    <header class="doge-head biz-dossier-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Company profile</span>
+      <h1 class="doge-title" id="cp-name">{name}</h1>
+      <div class="biz-dossier-meta" id="cp-meta-strip"></div>
+    </header>
+
+    <p class="biz-footprint" id="cp-footprint"></p>
+
+    <div id="cp-body"></div>
+
+    <div class="biz-respond">
+      Is something on this profile wrong or out of date? These are register facts and Observatory assessments,
+      not judgements about the company. Respond to this profile at
+      <a id="cp-respond" href={`mailto:corrections@tompickup.co.uk?subject=${subject}`}>corrections@tompickup.co.uk</a>.
+      Reports are acknowledged within 48 hours and re-checked at the primary source; where a figure is wrong it is
+      corrected within five working days and logged.
+    </div>
+
+    <BizFooter />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var el = document.querySelector('.doge-page[data-props]');
+    var P = JSON.parse(el.getAttribute('data-props'));
+
+    var LAD = {
+      E06000008: 'Blackburn with Darwen', E06000009: 'Blackpool',
+      E07000117: 'Burnley', E07000118: 'Chorley', E07000119: 'Fylde',
+      E07000120: 'Hyndburn', E07000121: 'Lancaster', E07000122: 'Pendle',
+      E07000123: 'Preston', E07000124: 'Ribble Valley', E07000125: 'Rossendale',
+      E07000126: 'South Ribble', E07000127: 'West Lancashire', E07000128: 'Wyre'
+    };
+    function ladName(x) { return LAD[x] || x; }
+
+    var TIER_LABEL = {
+      rooted: 'Rooted local', tradingExternal: 'Trades here, owned away',
+      nonLocal: 'Non-local', unclassified: 'Not classified',
+      councilOwned: 'Council-owned'
+    };
+    var TIER_CLS = {
+      rooted: 'tier-rooted', tradingExternal: 'tier-trading',
+      nonLocal: 'tier-nonlocal', unclassified: 'tier-unclassified',
+      councilOwned: 'tier-unclassified'
+    };
+
+    function n(v) { return (v === null || v === undefined) ? '-' : v.toLocaleString('en-GB'); }
+    function moneyM(v) { return (v === null || v === undefined) ? '-' : '£' + v.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + 'm'; }
+    function poundsFull(v) {
+      if (v === null || v === undefined) return '-';
+      if (Math.abs(v) >= 1000000) return '£' + (v / 1000000).toFixed(2) + 'm';
+      if (Math.abs(v) >= 1000) return '£' + (v / 1000).toFixed(1) + 'k';
+      return '£' + v.toLocaleString('en-GB');
+    }
+    function ukDate(iso) {
+      if (!iso) return '-';
+      var p = String(iso).split('-');
+      if (p.length === 3) return p[2] + '/' + p[1] + '/' + p[0];
+      return iso;
+    }
+    function el2(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    // small inline SVG sparkline from a numeric series
+    function sparkline(values, width, height) {
+      var svgns = 'http://www.w3.org/2000/svg';
+      var vals = values.filter(function (v) { return v !== null && v !== undefined; });
+      if (vals.length < 2) return null;
+      var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+      var span = (max - min) || 1;
+      var svg = document.createElementNS(svgns, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+      svg.setAttribute('width', String(width)); svg.setAttribute('height', String(height));
+      svg.setAttribute('class', 'biz-spark');
+      svg.setAttribute('role', 'img');
+      var pts = [];
+      for (var i = 0; i < values.length; i++) {
+        if (values[i] === null || values[i] === undefined) continue;
+        var x = (values.length === 1) ? 0 : (i / (values.length - 1)) * (width - 4) + 2;
+        var y = height - 3 - ((values[i] - min) / span) * (height - 6);
+        pts.push([x, y]);
+      }
+      var poly = document.createElementNS(svgns, 'polyline');
+      poly.setAttribute('points', pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '));
+      poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', '#12b6cf'); poly.setAttribute('stroke-width', '1.6');
+      poly.setAttribute('stroke-linejoin', 'round'); poly.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(poly);
+      var last = pts[pts.length - 1];
+      var dot = document.createElementNS(svgns, 'circle');
+      dot.setAttribute('cx', last[0].toFixed(1)); dot.setAttribute('cy', last[1].toFixed(1)); dot.setAttribute('r', '2');
+      dot.setAttribute('class', 'biz-spark-dot');
+      svg.appendChild(dot);
+      return svg;
+    }
+
+    function panel(title, sub) {
+      var p = el2('section', 'biz-panel');
+      p.appendChild(el2('h2', 'biz-panel-h', title));
+      if (sub) p.appendChild(el2('p', 'biz-panel-sub', sub));
+      return p;
+    }
+
+    function render(d) {
+      var reg = d.register || {};
+
+      // header meta strip: status, CRN link, type, CIC
+      var strip = document.getElementById('cp-meta-strip');
+      var status = reg.status || 'Unknown';
+      var sl = status.toLowerCase();
+      var statusCls = sl.indexOf('active') >= 0 ? 'active'
+        : (sl.indexOf('dissolved') >= 0 || sl.indexOf('closed') >= 0) ? 'dissolved' : 'warn';
+      strip.appendChild(el2('span', 'biz-status ' + statusCls, status));
+      var crnLink = el2('a', 'biz-crn-link', 'Companies House ' + P.crn + ' ↗');
+      crnLink.href = reg.chUrl || ('https://find-and-update.company-information.service.gov.uk/company/' + P.crn);
+      crnLink.target = '_blank'; crnLink.rel = 'noopener';
+      strip.appendChild(crnLink);
+      if (reg.cic) strip.appendChild(el2('span', 'biz-cic', 'Community interest company'));
+      if (d.$meta && d.$meta.generated) {
+        strip.appendChild(el2('span', 'biz-datestamp',
+          'Register facts retrieved to ' + d.$meta.generated + '; figures reflect the register at that date.'));
+      }
+
+      // meta grid
+      var grid = el2('div', 'biz-metagrid');
+      function metacell(k, v) {
+        if (v == null || v === '') return;
+        var c = el2('div', 'biz-metacell');
+        c.appendChild(el2('div', 'biz-meta-k', k));
+        c.appendChild(el2('div', 'biz-meta-v', v));
+        grid.appendChild(c);
+      }
+      metacell('Company type', reg.companyType);
+      metacell('Sector', reg.sicLabel || (reg.sic ? reg.sic.split(' - ')[0] : null));
+      metacell('SIC code', reg.sic ? reg.sic.split(' - ')[0] : null);
+      metacell('Incorporated', reg.incorporated);
+      metacell('Registered postcode', reg.registeredPostcode);
+      metacell('Area today', reg.lad);
+      metacell('From April 2028', reg.unitary2028 ? reg.unitary2028 + ' unitary council' : null);
+      metacell('Accounts category', reg.accountsCategory);
+      document.getElementById('cp-body').appendChild(grid);
+
+      if (reg.addressClusterNote) {
+        var info = el2('p', 'biz-infoline', reg.addressClusterNote);
+        document.getElementById('cp-body').appendChild(info);
+      }
+
+      // footprint strip
+      var fp = d.footprint || {};
+      var fpEl = document.getElementById('cp-footprint');
+      var evLads = (fp.evidenceLads || []).map(ladName);
+      var fpParts = [];
+      fpParts.push('Registered in ' + (fp.registeredLad || reg.lad || 'Lancashire') + '.');
+      if (fp.unitary2028) fpParts.push('Part of the new ' + fp.unitary2028 + ' unitary council from April 2028.');
+      if (evLads.length) fpParts.push('Register evidence of activity in: ' + evLads.join(', ') + '.');
+      var strong = el2('strong', null, 'Footprint. ');
+      fpEl.appendChild(strong);
+      fpEl.appendChild(document.createTextNode(fpParts.join(' ')));
+
+      var body = document.getElementById('cp-body');
+
+      // accounts series
+      var acc = d.accountsSeries || [];
+      if (acc.length) {
+        var ap = panel('Filed accounts', 'Figures as filed at Companies House under section 411 of the Companies Act 2006. The register at each period end.');
+        var wrap = el2('div', 'bsp-tablewrap');
+        var table = el2('table', 'bsp-table biz-cmp-table');
+        var thead = el2('thead');
+        var htr = el2('tr');
+        ['Period end', 'Employees', 'Shareholders’ equity', 'Total assets', 'Cash'].forEach(function (h, i) {
+          htr.appendChild(el2('th', i === 0 ? '' : 'num', h));
+        });
+        thead.appendChild(htr); table.appendChild(thead);
+        var tb = el2('tbody');
+        acc.forEach(function (a) {
+          var tr = el2('tr');
+          tr.appendChild(td(ukDate(a.periodEnd), 'bsp-date'));
+          tr.appendChild(td(a.employees == null ? '-' : n(a.employees), 'num'));
+          tr.appendChild(td(poundsFull(a.equity), 'num biz-amt'));
+          tr.appendChild(td(poundsFull(a.totalAssets), 'num'));
+          tr.appendChild(td(poundsFull(a.cash), 'num'));
+          tb.appendChild(tr);
+        });
+        table.appendChild(tb); wrap.appendChild(table); ap.appendChild(wrap);
+        // employee mini trend
+        var empSeries = acc.map(function (a) { return a.employees; });
+        var haveEmp = empSeries.filter(function (v) { return v != null; });
+        if (haveEmp.length >= 2) {
+          var trendWrap = el2('p', 'biz-panel-sub');
+          trendWrap.style.marginTop = '0.8rem'; trendWrap.style.marginBottom = '0';
+          trendWrap.appendChild(document.createTextNode('Employees over the filed periods: ' + haveEmp.join(' to ') + '  '));
+          var sp = sparkline(empSeries, 90, 22);
+          if (sp) { sp.setAttribute('aria-label', 'Employee trend: ' + haveEmp.join(' to ')); trendWrap.appendChild(sp); }
+          ap.appendChild(trendWrap);
+        }
+        body.appendChild(ap);
+      }
+
+      // public payments
+      var pays = d.payments || [];
+      if (pays.length) {
+        var pp = panel('Public money received', 'Payments recorded in Lancashire councils’ published payments-over-£500 transparency data. This is not a complete account of any body’s budget: it excludes payments below the threshold and lawfully redacted payments.');
+        var pwrap = el2('div', 'bsp-tablewrap');
+        var ptable = el2('table', 'bsp-table biz-cmp-table');
+        var pthead = el2('thead'); var pthr = el2('tr');
+        pthr.appendChild(el2('th', '', 'Public body'));
+        pthr.appendChild(el2('th', 'num', 'Recorded spend'));
+        pthr.appendChild(el2('th', '', 'Years'));
+        pthead.appendChild(pthr); ptable.appendChild(pthead);
+        var ptb = el2('tbody');
+        pays.forEach(function (pay) {
+          var tr = el2('tr');
+          tr.appendChild(td(pay.body, 'bsp-sup'));
+          tr.appendChild(td(moneyM(pay.totalM), 'num biz-amt'));
+          tr.appendChild(td((pay.years || []).join(', '), 'biz-basis'));
+          ptb.appendChild(tr);
+        });
+        ptable.appendChild(ptb); pwrap.appendChild(ptable); pp.appendChild(pwrap);
+        body.appendChild(pp);
+      }
+
+      // innovation awards
+      var innov = d.innovation || [];
+      if (innov.length) {
+        var ip = panel('Innovation funding', 'Research and development grants recorded in the published Innovate UK / UKRI funded-projects data.');
+        var iwrap = el2('div', 'bsp-tablewrap');
+        var itable = el2('table', 'bsp-table biz-cmp-table');
+        var ithead = el2('thead'); var ithr = el2('tr');
+        ithr.appendChild(el2('th', '', 'Project'));
+        ithr.appendChild(el2('th', '', 'Type'));
+        ithr.appendChild(el2('th', 'num', 'Year'));
+        ithr.appendChild(el2('th', 'num', 'Award'));
+        ithead.appendChild(ithr); itable.appendChild(ithead);
+        var itb = el2('tbody');
+        innov.forEach(function (a) {
+          var tr = el2('tr');
+          tr.appendChild(td(a.title, 'bsp-sup'));
+          tr.appendChild(td(a.type || '-'));
+          tr.appendChild(td(a.year || '-', 'num bsp-date'));
+          tr.appendChild(td(a.awardK == null ? '-' : (a.awardK >= 1000 ? '£' + (a.awardK / 1000).toFixed(2) + 'm' : '£' + a.awardK.toLocaleString('en-GB') + 'k'), 'num biz-amt'));
+          itb.appendChild(tr);
+        });
+        itable.appendChild(itb); iwrap.appendChild(itable); ip.appendChild(iwrap);
+        body.appendChild(ip);
+      }
+
+      // gazette notices (only if present)
+      var gaz = d.gazetteNotices || [];
+      if (gaz.length) {
+        var gp = panel('Gazette notices', 'Notices published about this company in The Gazette, the official public record. Shown verbatim with a link to each source notice.');
+        var gwrap = el2('div', 'bsp-tablewrap');
+        var gtable = el2('table', 'bsp-table biz-cmp-table');
+        var gthead = el2('thead'); var gthr = el2('tr');
+        gthr.appendChild(el2('th', '', 'Date'));
+        gthr.appendChild(el2('th', '', 'Notice'));
+        gthr.appendChild(el2('th', 'num', 'Source'));
+        gthead.appendChild(gthr); gtable.appendChild(gthead);
+        var gtb = el2('tbody');
+        gaz.forEach(function (g) {
+          var tr = el2('tr');
+          tr.appendChild(td(ukDate(g.date), 'bsp-date'));
+          tr.appendChild(td(g.type || '-'));
+          var srcTd = el2('td', 'num');
+          if (g.uri) {
+            var a = el2('a', 'biz-arealink', 'Gazette ↗'); a.href = g.uri; a.target = '_blank'; a.rel = 'noopener';
+            srcTd.appendChild(a);
+          } else { srcTd.textContent = '-'; }
+          tr.appendChild(srcTd);
+          gtb.appendChild(tr);
+        });
+        gtable.appendChild(gtb); gwrap.appendChild(gtable); gp.appendChild(gwrap);
+        body.appendChild(gp);
+      }
+
+      // ownership
+      var ow = d.ownership || {};
+      var hasOwn = ow.tier || (ow.chain && ow.chain.length) || (ow.pscIndividuals && ow.pscIndividuals.length);
+      if (hasOwn) {
+        var op = panel('Ownership and control', 'Where control of the company sits, read from the register. The tier is an Observatory assessment; the facts it rests on are shown alongside.');
+        if (ow.tier) {
+          var chiprow = el2('div', 'biz-chiprow');
+          var chip = el2('span', 'biz-chip ' + (TIER_CLS[ow.tier] || 'tier-unclassified'), TIER_LABEL[ow.tier] || ow.tier);
+          chiprow.appendChild(chip);
+          op.appendChild(chiprow);
+        }
+        if (ow.chain && ow.chain.length) {
+          op.appendChild(el2('div', 'biz-meta-k', 'Ownership chain per the register'));
+          var cl = el2('ul', 'biz-chain-list');
+          ow.chain.forEach(function (c) {
+            var li = el2('li');
+            var where = c.where ? (', registered ' + (/^[A-Z]{1,2}\d/.test(c.where) ? 'at ' + c.where : 'in ' + c.where)) : '';
+            li.textContent = c.name + (c.crn ? ' (' + c.crn + ')' : '') + where + '.';
+            cl.appendChild(li);
+          });
+          op.appendChild(cl);
+        }
+        if (ow.pscIndividuals && ow.pscIndividuals.length) {
+          op.appendChild(el2('div', 'biz-meta-k', 'Persons with significant control per the register'));
+          var pl = el2('ul', 'biz-psc-list');
+          ow.pscIndividuals.forEach(function (psc) {
+            var li = el2('li');
+            li.appendChild(document.createTextNode(psc.name + ' '));
+            if (psc.country) li.appendChild(el2('span', 'country', '(' + psc.country + ')'));
+            pl.appendChild(li);
+          });
+          op.appendChild(pl);
+        }
+        op.appendChild(el2('p', 'biz-assess', 'Observatory assessment. The tier above is our reading of the ownership and registered-office facts shown; it is not a statement about the company’s conduct, solvency or probity. '));
+        (function(){var a=document.createElement('a');a.href='/lancs/business/method/';a.textContent='How tiers are set';op.lastChild.appendChild(a);})();
+        body.appendChild(op);
+      }
+
+      // growth assessment
+      var gr = d.growth;
+      if (gr) {
+        var grp = panel('Growth assessment', 'Read from employee numbers disclosed in the filed accounts. This is an Observatory opinion, not a statement of fact about the company.');
+        var series = (gr.series || []).map(function (s) { return s.employees; });
+        if (series.filter(function (v) { return v != null; }).length >= 2) {
+          var line = el2('p', 'biz-panel-sub'); line.style.marginBottom = '0';
+          line.appendChild(document.createTextNode('Employees: ' + series.filter(function (v) { return v != null; }).join(' to ') + '  '));
+          var sp2 = sparkline(series, 90, 22);
+          if (sp2) { sp2.setAttribute('aria-label', 'Employee growth: ' + series.join(' to ')); line.appendChild(sp2); }
+          grp.appendChild(line);
+        }
+        var crow = el2('div', 'biz-chiprow'); crow.style.marginTop = '0.7rem';
+        if (gr.cagrPct != null) crow.appendChild(el2('span', 'biz-chip tier-rooted', 'Compound growth ' + gr.cagrPct.toFixed(1) + '% a year'));
+        var FLAG_LABEL = { 'ons-definition': 'meets ONS high-growth definition', 'emerging': 'emerging (small base)', 'young-company': 'under 6 years old', 'eurostat-10': 'meets Eurostat 10%+ measure' };
+        (gr.flags || []).forEach(function (f) { crow.appendChild(el2('span', 'biz-chip', FLAG_LABEL[f] || f)); });
+        grp.appendChild(crow);
+        if (gr.basis) grp.appendChild(el2('p', 'biz-assess', 'Observatory assessment. Basis: ' + gr.basis));
+        body.appendChild(grp);
+      }
+
+      // momentum (only if present)
+      var mo = d.momentum;
+      if (mo) {
+        var mp = panel('Register momentum', 'Recent filing activity on the register.');
+        var allot = (mo.equityAllotments24m != null) ? mo.equityAllotments24m : (mo.equityAllotments != null ? mo.equityAllotments : (mo.allotments != null ? mo.allotments : 0));
+        var charges = (mo.newCharges != null) ? mo.newCharges : (mo.charges != null ? mo.charges : 0);
+        mp.appendChild(el2('p', 'biz-panel-sub', 'Equity allotment filings in the last 24 months: ' + n(allot) + '; new charges registered: ' + n(charges) + '. Register facts.'));
+        body.appendChild(mp);
+      }
+    }
+
+    fetch('/data/company/' + P.crn + '.json').then(function (r) {
+      if (!r.ok) throw new Error('not found');
+      return r.json();
+    }).then(render).catch(function () {
+      var b = document.getElementById('cp-body');
+      b.appendChild(el2('p', 'biz-empty', 'The full record for this company could not be loaded. The register entry is at Companies House.'));
+    });
+  })();
+  </script>
+</Layout>

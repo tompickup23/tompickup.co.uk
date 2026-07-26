@@ -139,6 +139,12 @@ with gzip.open(PROC / "master.jsonl.gz", "wt") as f:
     {"$meta": {"asAt": f"{TODAY.isoformat()} run, latest monthly register snapshot", "distressStatuses": sorted(DISTRESS)},
      "byLad": out_agg}, indent=1))
 
+# archive account-category snapshot for month-on-month upgrade detection
+hist = PROC / "category_history"
+hist.mkdir(exist_ok=True)
+(hist / f"{TODAY.strftime('%Y-%m')}.json").write_text(
+    json.dumps({r["crn"]: r["category"] for r in rows}))
+
 print(f"master: {len(rows)} companies, {len(clusters)} clusters "
       f"({sum(c['companies'] for c in clusters)} companies excluded)")
 for c in clusters[:12]:

@@ -142,6 +142,7 @@ import '../../../../styles/lgr.css';
         top.appendChild(nm); top.appendChild(val);
         var track = document.createElement('div'); track.className = 'dg-track';
         var fill = document.createElement('div'); fill.className = 'dg-fill'; fill.style.width = ((a.awardTotalM || 0) / amax * 100).toFixed(1) + '%';
+        fill.title = a.projects + ' projects, £' + (a.awardTotalM || 0).toFixed(1) + 'm awarded';
         track.appendChild(fill); row.appendChild(top); row.appendChild(track); ab.appendChild(row);
       });
 
@@ -156,6 +157,7 @@ import '../../../../styles/lgr.css';
         top.appendChild(nm); top.appendChild(val);
         var track = document.createElement('div'); track.className = 'dg-track';
         var fill = document.createElement('div'); fill.className = 'dg-fill'; fill.style.width = ((y.projects || 0) / ymax * 100).toFixed(1) + '%';
+        fill.title = y.year + ': ' + y.projects + ' projects, £' + (y.awardM || 0).toFixed(1) + 'm';
         track.appendChild(fill); row.appendChild(top); row.appendChild(track); yb.appendChild(row);
       });
 

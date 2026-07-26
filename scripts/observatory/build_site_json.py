@@ -52,30 +52,7 @@ members = defaultdict(list)
 for n, v in LADS.items():
     members[v["newUnitary"]].append(n)
 
-SIC2 = {
- "01": "Agriculture", "10": "Food manufacturing", "13": "Textiles",
- "16": "Wood products", "18": "Printing", "22": "Rubber and plastics",
- "23": "Non-metallic minerals", "24": "Metals", "25": "Fabricated metal products",
- "26": "Electronics", "27": "Electrical equipment", "28": "Machinery",
- "29": "Motor vehicles", "30": "Other transport equipment", "31": "Furniture",
- "32": "Other manufacturing", "33": "Repair of machinery",
- "35": "Energy", "38": "Waste and recycling", "41": "Construction of buildings",
- "42": "Civil engineering", "43": "Specialised construction",
- "45": "Motor trades", "46": "Wholesale", "47": "Retail",
- "49": "Land transport", "52": "Warehousing", "53": "Postal and courier",
- "55": "Accommodation", "56": "Food and beverage", "58": "Publishing",
- "59": "Film and media", "61": "Telecoms", "62": "IT and software",
- "63": "Information services", "64": "Finance and holding companies",
- "66": "Financial auxiliaries", "68": "Real estate", "69": "Legal and accounting",
- "70": "Head offices and consultancy", "71": "Architecture and engineering",
- "72": "Research", "73": "Advertising", "74": "Other professional",
- "75": "Veterinary", "77": "Rental and leasing", "78": "Employment services",
- "79": "Travel", "80": "Security", "81": "Buildings and landscape services",
- "82": "Office administration", "85": "Education", "86": "Human health",
- "87": "Residential care", "88": "Social work", "90": "Arts",
- "93": "Sport and recreation", "94": "Membership organisations",
- "95": "Repair of goods", "96": "Personal services",
-}
+from sic_labels import SIC2
 def sic_label(s2):
     return SIC2.get(s2, f"SIC {s2}")
 
@@ -418,6 +395,12 @@ for lad in sorted(LADS):
                  "cics": a.get("cics"), "mutuals": mut_by_lad.get(lad) or None,
                  "schools": gias_by_lad.get(lad) or None, "academyTrusts": None},
         "addressClusters": [c for c in clusters if c["lad"] == lad],
+        "trends": next(({"years": sorted(int(y) for y in a.get("births", {})),
+                         "births": [a["births"][str(y)] for y in sorted(int(y) for y in a.get("births", {}))],
+                         "deaths": [a.get("deaths", {}).get(str(y)) for y in sorted(int(y) for y in a.get("births", {}))],
+                         "highGrowthPct": [a.get("high_growth_pct", {}).get(str(y)) for y in sorted(int(y) for y in a.get("births", {}))]}
+                        for a in (onsdem or {}).get("areas", {}).values()
+                        if a.get("name") == lad), None),
         "gazelleCount": gaz_by_lad.get(lad, 0),
         "innovationAwardsM": round(inn_by_lad[lad]["award"] / 1e6, 2)
                              if lad in inn_by_lad else None,
@@ -467,8 +450,11 @@ def nice_type(t):
 
 seen_n = set()
 notices = []
+PETITION_PREFIX = "PetitionsToWindUp"
 for n in sorted(rows_of(gazette, "notices"),
                 key=lambda x: x.get("date") or "", reverse=True):
+    if (n.get("type") or "").replace(" ", "").startswith(PETITION_PREFIX):
+        continue   # a petition without its outcome is not a fair extract
     key = (n.get("company_number"), n.get("type"), n.get("date"))
     if key in seen_n:
         continue
@@ -488,11 +474,17 @@ for n in notices:
 watch = {"$meta": meta(["Notices are fair and accurate extracts from The "
                         "Gazette; strike-off proposals are the register "
                         "status as at the snapshot date."]),
-         "summary": {"last90days": {"insolvencyNotices": len(notices),
-                                    "strikeOffProposals": sum(so_by_lad.values())},
+         "summary": {"last90days": {"insolvencyNotices": sum(1 for n in notices
+                                        if n["date"] and (__import__("datetime").date.today() - __import__("datetime").date.fromisoformat(n["date"])).days <= 90),
+                                    "strikeOffProposals": None},
+                     "noticesListed": len(notices),
+                     "currentStrikeOffProposals": sum(so_by_lad.values()),
                      "byMonth": [{"month": m, "notices": c, "strikeOffs": None}
                                  for m, c in sorted(by_month.items())]},
          "notices": notices, "strikeOffs": strikeoffs,
+         "petitionNote": "Winding-up petitions are not listed until their "
+                         "outcome is recorded, because a petition alone says "
+                         "nothing about the company's position.",
          "strikeOffTotal": sum(so_by_lad.values()),
          "strikeOffByLad": dict(so_by_lad)}
 (PUB / "biz-watch.json").write_text(json.dumps(watch))
@@ -510,7 +502,7 @@ for c in growth["candidates"]:
                    "sic2": c["sic2"], "unitary2028": c["unitary2028"],
                    "series": c["series"], "cagrPct": c["cagrPct"],
                    "baseEmployees": c["baseEmployees"], "flags": c["flags"],
-                   "momentum": {}, "basis": c["basis"]})
+                   "momentum": c.get("momentum") or {}, "basis": c["basis"]})
 growth_out = {"$meta": meta(), "officialBenchmark": bench, "candidates": gcands,
               "methodNote": "Observatory assessment from employee numbers in "
                             "filed accounts. Turnover is not public for most "
@@ -631,17 +623,38 @@ for q in queue[:30]:
                                   if key in cqc_names else [],
                     "unitaries2028": []})
 
+# suppliers with premises evidence in 2+ future unitaries
+lad_to_unit = {v["name"]: v["newUnitary"] for v in XW["byAuthority"].values()}
+split_rows = []
+for key, r in resolved.items():
+    if not r.get("crn"):
+        continue
+    lads = set(cqc_lads_by_name.get(key, set())) - {None}
+    units = {lad_to_unit.get(l) for l in lads if lad_to_unit.get(l)}
+    m = lancs_master.get(r["crn"]) if False else None
+    if r.get("lad"):
+        units.add(lad_to_unit.get(r["lad"]))
+    units.discard(None)
+    if len(units) >= 2:
+        u = next((x for x in uni_file.get("universe", []) if x["key"] == key), None)
+        split_rows.append({"name": (u["names"][0].title() if u else key.title()),
+                           "crn": r["crn"], "totalM": round((u["total"] if u else 0) / 1e6, 2),
+                           "unitaries2028": sorted(units),
+                           "evidence": "CQC-registered locations plus registered office"})
+split_rows.sort(key=lambda x: -x["totalM"])
+
 pound_out = {"$meta": meta(["Tier classification is mechanical from public "
                             "registers (method page); trading names that could "
                             "not be matched are shown as unclassified, never "
                             "guessed."]),
              "councils": council_rows, "unitaries2028": unit_rows,
+             "splitFootprint": split_rows[:40],
              "topSuppliers": top_sup,
              "preston": {"note": "CLES and Preston City Council anchor analysis: "
                                  "spend retained in Lancashire rose from 39 "
                                  "percent (2012/13) to 79.2 percent (2016/17).",
                          "baselineLancsPct": 39, "latestLancsPct": 79.2,
-                         "sourceUrl": "https://www.preston.gov.uk/article/1791/The-definitive-guide-to-the-Preston-model"}}
+                         "sourceUrl": "https://cles.org.uk/publications/how-we-built-community-wealth-in-preston/", "sourceNote": "CLES, How we built community wealth in Preston; absolute figures also at preston.gov.uk/article/1791"}}
 (PUB / "biz-pound.json").write_text(json.dumps(pound_out))
 print("biz-pound.json written")
 

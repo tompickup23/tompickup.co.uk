@@ -1,0 +1,208 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="Where political donations and public money meet | Lancashire Business Observatory"
+  description="Organisations that appear both in the Electoral Commission donation register and as payees in Lancashire councils’ published spending. Both are public records. No finding of impropriety is made about anyone listed."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancs/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancs/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Donations and public money</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Donations and public money</span>
+      <h1 class="doge-title">Where political donations and public money meet</h1>
+      <p class="doge-sub">
+        Two public records, laid side by side: the Electoral Commission’s register of political donations, and the
+        payments Lancashire councils publish to their suppliers. This lists the organisations that appear in both.
+        Every figure here is a registered fact.
+      </p>
+    </header>
+
+    <div class="biz-money-note" id="mo-note-top">…</div>
+
+    <div class="doge-statband">
+      <div class="doge-stat"><div class="v teal" id="mo-checked">…</div><div class="l">Donation records checked</div></div>
+      <div class="doge-stat"><div class="v" id="mo-donors">…</div><div class="l">Supplier-donors found</div></div>
+      <div class="doge-stat"><div class="v" id="mo-total">…</div><div class="l">Their donations, all parties</div></div>
+      <div class="doge-stat"><div class="v" id="mo-supply">…</div><div class="l">Their recorded public spend</div></div>
+    </div>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">Donations by party</h2>
+      <p class="doge-note">Total recorded donations from these supplier-donors, split by the party that received them.</p>
+      <div class="doge-panel">
+        <div class="biz-partybars" id="mo-partybars"></div>
+      </div>
+    </section>
+
+    <section class="doge-section">
+      <h2 class="doge-h2">The supplier-donors</h2>
+      <p class="doge-note">
+        Each organisation that appears in both registers. The evidence chip shows how the two records were matched:
+        on company number, or on an exact name match. Expand nothing; the recent donations are listed in place.
+      </p>
+      <div class="biz-money-note" id="mo-note-unions" style="border-left-color:#e4483b; border-color:rgba(228,72,59,0.22); background:rgba(228,72,59,0.05);">…</div>
+      <div class="bsp-tablewrap">
+        <table class="bsp-table biz-cmp-table">
+          <thead>
+            <tr>
+              <th>Organisation</th>
+              <th>Match</th>
+              <th class="num">Public spend</th>
+              <th>Donations by party</th>
+            </tr>
+          </thead>
+          <tbody id="mo-body"></tbody>
+        </table>
+      </div>
+      <p class="biz-basis-line" id="mo-note-match"></p>
+    </section>
+
+    <BizFooter attributions={[
+      'Political donations: Electoral Commission donation register, under the Open Government Licence v3.0.',
+      'Supplier payments: Lancashire councils’ published payments-over-£500 transparency data (Open Government Licence v3.0). Not a complete account of any budget.',
+      'Company matching: Companies House.',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var dossiers = {};
+
+    function partyCls(p) {
+      var s = (p || '').toLowerCase();
+      if (s.indexOf('labour') >= 0) return 'lab';
+      if (s.indexOf('conservative') >= 0) return 'con';
+      if (s.indexOf('liberal') >= 0) return 'lib';
+      return 'oth';
+    }
+    function money0(v) { return '£' + Math.round(v).toLocaleString('en-GB'); }
+    function moneyM(v) { return '£' + v.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + 'm'; }
+    function ukDate(iso) { var p = String(iso).split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso; }
+    function el2(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    function nameCell(donor) {
+      var c0 = el2('td');
+      var crn = donor.crn;
+      if (crn && dossiers[crn]) {
+        var a = el2('a', 'biz-arealink', donor.donorName);
+        a.href = '/lancs/business/company/' + crn + '/';
+        c0.appendChild(a);
+      } else {
+        c0.appendChild(el2('div', 'bsp-sup', donor.donorName));
+      }
+      var supNames = (donor.supplierNames || []).filter(function (s) { return s && s.toUpperCase() !== donor.donorName.toUpperCase(); });
+      if (supNames.length) c0.appendChild(el2('div', 'biz-donrow-sub', 'Paid as: ' + supNames.join(', ')));
+      return c0;
+    }
+
+    function matchCell(donor) {
+      var c = el2('td');
+      var evLabel = donor.evidence === 'company-number' ? 'company number' : 'name match';
+      c.appendChild(el2('span', 'biz-chip' + (donor.evidence === 'company-number' ? ' tier-rooted' : ''), evLabel));
+      if (donor.isUnion) c.appendChild(el2('span', 'biz-chip biz-union-chip', 'trade union'));
+      return c;
+    }
+
+    function partyCell(donor) {
+      var c = el2('td');
+      var recips = (donor.recipients || []).slice().sort(function (a, b) { return b.totalValue - a.totalValue; });
+      recips.forEach(function (r) {
+        var row = el2('div');
+        row.style.fontSize = '0.78rem'; row.style.color = '#d6dee8'; row.style.marginBottom = '2px';
+        var dot = el2('span'); dot.style.display = 'inline-block'; dot.style.width = '8px'; dot.style.height = '8px';
+        dot.style.borderRadius = '2px'; dot.style.marginRight = '6px'; dot.style.verticalAlign = 'middle';
+        var cls = partyCls(r.party);
+        dot.style.background = cls === 'lab' ? '#e4483b' : cls === 'con' ? '#2b7fd4' : cls === 'lib' ? '#f2a900' : '#8e8e93';
+        row.appendChild(dot);
+        row.appendChild(document.createTextNode(r.party + ': ' + money0(r.totalValue)));
+        c.appendChild(row);
+      });
+      // recent donations, inline
+      var recent = (donor.donations || []).slice(0, 4);
+      if (recent.length) {
+        var ul = el2('ul', 'biz-donations');
+        recent.forEach(function (dn) {
+          var li = el2('li');
+          li.appendChild(document.createTextNode(ukDate(dn.date) + ' · ' + money0(dn.value) + ' · ' + dn.party + ' '));
+          li.appendChild(el2('span', 'ec', '(EC ' + dn.ecRef + ')'));
+          ul.appendChild(li);
+        });
+        c.appendChild(ul);
+        if (donor.donationCount && donor.donationsShown &&
+            donor.donationCount > recent.length) {
+          c.appendChild(el2('div', 'biz-trunc-note',
+            'Showing ' + recent.length + ' of ' + donor.donationCount +
+            ' recorded donations; the totals above cover all of them.'));
+        }
+      }
+      return c;
+    }
+
+    function render(d) {
+      var meta = d.$meta || {}, notes = meta.notes || [];
+      var summary = d.summary || {};
+
+      if (notes[0]) { document.getElementById('mo-note-top').textContent = notes[0]; }
+      if (notes[1]) { document.getElementById('mo-note-unions').textContent = notes[1]; }
+      else { document.getElementById('mo-note-unions').style.display = 'none'; }
+      if (notes[2]) { document.getElementById('mo-note-match').textContent = notes[2]; }
+
+      document.getElementById('mo-checked').textContent = (summary.donationsChecked || 0).toLocaleString('en-GB');
+      document.getElementById('mo-donors').textContent = (summary.supplierDonors || (d.donors || []).length).toLocaleString('en-GB');
+      var totalDon = (d.donors || []).reduce(function (s, x) { return s + (x.donationTotal || 0); }, 0);
+      var totalSupply = (d.donors || []).reduce(function (s, x) { return s + (x.supplierTotalM || 0); }, 0);
+      document.getElementById('mo-total').textContent = money0(totalDon);
+      document.getElementById('mo-supply').textContent = moneyM(totalSupply);
+
+      // party bars
+      var byParty = (summary.byParty || []).slice().sort(function (a, b) { return b.totalValue - a.totalValue; });
+      var max = Math.max.apply(null, byParty.map(function (p) { return p.totalValue; }).concat([1]));
+      var pb = document.getElementById('mo-partybars');
+      byParty.forEach(function (p) {
+        var row = el2('div', 'biz-party-row');
+        row.appendChild(el2('span', 'biz-party-name', p.party));
+        var track = el2('div', 'biz-party-track');
+        var fill = el2('div', 'biz-party-fill ' + partyCls(p.party));
+        fill.style.width = (p.totalValue / max * 100).toFixed(1) + '%';
+        track.appendChild(fill);
+        row.appendChild(track);
+        row.appendChild(el2('span', 'biz-party-val', money0(p.totalValue)));
+        pb.appendChild(row);
+      });
+
+      // table
+      var body = document.getElementById('mo-body');
+      (d.donors || []).slice().sort(function (a, b) { return (b.donationTotal || 0) - (a.donationTotal || 0); }).forEach(function (donor) {
+        var tr = el2('tr');
+        tr.appendChild(nameCell(donor));
+        tr.appendChild(matchCell(donor));
+        tr.appendChild(td(moneyM(donor.supplierTotalM || 0), 'num biz-amt'));
+        tr.appendChild(partyCell(donor));
+        body.appendChild(tr);
+      });
+    }
+
+    Promise.all([
+      fetch('/data/biz-money.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).catch(function () { return { companies: [] }; })
+    ]).then(function (res) {
+      (res[1].companies || []).forEach(function (c) { dossiers[c.crn] = true; });
+      render(res[0]);
+    }).catch(function () {
+      document.getElementById('mo-body').textContent = 'The donations data could not be loaded.';
+    });
+  })();
+  </script>
+</Layout>

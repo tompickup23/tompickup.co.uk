@@ -97,6 +97,21 @@ const AREA_JSON = JSON.stringify(area);
       <div class="doge-stat"><div class="v" id="ap-pay">…</div><div class="l">Median weekly workplace pay</div></div>
     </div>
 
+    <!-- births / deaths / high-growth trend -->
+    <section class="doge-section" id="ap-trends-sec" style="display:none;">
+      <h2 class="doge-h2" id="ap-trends-h">Births and deaths of businesses</h2>
+      <p class="doge-note">
+        New businesses starting and businesses closing each year (ONS Business Demography), with the official
+        high-growth share overlaid as a line. Births and deaths share one scale; the high-growth line reads on its
+        own.
+      </p>
+      <div class="doge-panel">
+        <div id="ap-trends-chart"></div>
+        <div class="biz-league-legend" id="ap-trends-legend" style="margin-top:12px;"></div>
+        <p class="doge-note" style="font-size:0.76rem; margin:0.8rem 0 0;" id="ap-trends-fallback"></p>
+      </div>
+    </section>
+
     <!-- sectors -->
     <section class="doge-section">
       <h2 class="doge-h2">The business base by sector</h2>
@@ -159,6 +174,101 @@ const AREA_JSON = JSON.stringify(area);
     function txt(id, s) { var e = document.getElementById(id); if (e) e.textContent = s; }
     function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
 
+    function renderTrends(tr) {
+      var svgns = 'http://www.w3.org/2000/svg';
+      var years = tr.years, births = tr.births || [], deaths = tr.deaths || [], hg = tr.highGrowthPct || [];
+      var sec = document.getElementById('ap-trends-sec');
+      sec.style.display = '';
+      document.getElementById('ap-trends-h').textContent =
+        'Births and deaths of businesses, ' + years[0] + ' to ' + years[years.length - 1];
+
+      var W = 640, H = 220, padL = 40, padR = 40, padT = 12, padB = 28;
+      var plotW = W - padL - padR, plotH = H - padT - padB;
+      var maxCount = Math.max.apply(null, births.concat(deaths).concat([1]));
+      var maxHg = Math.max.apply(null, hg.concat([1]));
+      var groups = years.length;
+      var groupW = plotW / groups;
+      var barW = Math.min(22, groupW / 2 - 3);
+
+      var svg = document.createElementNS(svgns, 'svg');
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', 'Grouped bars of business births and deaths by year with a high-growth share line.');
+      svg.style.maxWidth = '100%'; svg.style.height = 'auto';
+
+      function yCount(v) { return padT + plotH - (v / maxCount) * plotH; }
+      function yHg(v) { return padT + plotH - (v / maxHg) * plotH; }
+
+      // gridline baseline
+      var base = document.createElementNS(svgns, 'line');
+      base.setAttribute('x1', padL); base.setAttribute('x2', W - padR);
+      base.setAttribute('y1', padT + plotH); base.setAttribute('y2', padT + plotH);
+      base.setAttribute('stroke', 'rgba(255,255,255,0.12)'); base.setAttribute('stroke-width', '1');
+      svg.appendChild(base);
+
+      years.forEach(function (yr, i) {
+        var gx = padL + i * groupW + groupW / 2;
+        // births bar (left), deaths bar (right)
+        var bx = gx - barW - 1, dx = gx + 1;
+        var bH = (births[i] / maxCount) * plotH, dH = (deaths[i] / maxCount) * plotH;
+        var b = document.createElementNS(svgns, 'rect');
+        b.setAttribute('x', bx.toFixed(1)); b.setAttribute('y', yCount(births[i]).toFixed(1));
+        b.setAttribute('width', barW.toFixed(1)); b.setAttribute('height', Math.max(0, bH).toFixed(1));
+        b.setAttribute('rx', '2'); b.setAttribute('fill', '#12b6cf');
+        var bt = document.createElementNS(svgns, 'title'); bt.textContent = yr + ': ' + births[i] + ' births'; b.appendChild(bt);
+        svg.appendChild(b);
+        var dd = document.createElementNS(svgns, 'rect');
+        dd.setAttribute('x', dx.toFixed(1)); dd.setAttribute('y', yCount(deaths[i]).toFixed(1));
+        dd.setAttribute('width', barW.toFixed(1)); dd.setAttribute('height', Math.max(0, dH).toFixed(1));
+        dd.setAttribute('rx', '2'); dd.setAttribute('fill', '#ff9f0a');
+        var dt = document.createElementNS(svgns, 'title'); dt.textContent = yr + ': ' + deaths[i] + ' deaths'; dd.appendChild(dt);
+        svg.appendChild(dd);
+        // x label
+        var xl = document.createElementNS(svgns, 'text');
+        xl.setAttribute('x', gx.toFixed(1)); xl.setAttribute('y', (H - 8).toFixed(1));
+        xl.setAttribute('text-anchor', 'middle'); xl.setAttribute('fill', '#8b939e'); xl.setAttribute('font-size', '11');
+        xl.textContent = yr;
+        svg.appendChild(xl);
+      });
+
+      // high-growth line (secondary scale)
+      var pts = [];
+      years.forEach(function (yr, i) {
+        if (hg[i] == null) return;
+        pts.push([padL + i * groupW + groupW / 2, yHg(hg[i])]);
+      });
+      if (pts.length >= 2) {
+        var line = document.createElementNS(svgns, 'polyline');
+        line.setAttribute('points', pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '));
+        line.setAttribute('fill', 'none'); line.setAttribute('stroke', '#a78bfa'); line.setAttribute('stroke-width', '2');
+        line.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(line);
+        pts.forEach(function (p, i) {
+          var c = document.createElementNS(svgns, 'circle');
+          c.setAttribute('cx', p[0].toFixed(1)); c.setAttribute('cy', p[1].toFixed(1)); c.setAttribute('r', '2.5');
+          c.setAttribute('fill', '#a78bfa');
+          svg.appendChild(c);
+        });
+      }
+      document.getElementById('ap-trends-chart').appendChild(svg);
+
+      // legend
+      var leg = document.getElementById('ap-trends-legend');
+      [['#12b6cf', 'Business births'], ['#ff9f0a', 'Business deaths'], ['#a78bfa', 'High-growth share']].forEach(function (it) {
+        var span = document.createElement('span'); span.className = 'biz-league-leg-item';
+        var sw = document.createElement('i'); sw.className = 'biz-tsw'; sw.style.background = it[0]; sw.style.position = 'static'; sw.style.marginRight = '5px';
+        span.appendChild(sw); span.appendChild(document.createTextNode(it[1]));
+        leg.appendChild(span);
+      });
+
+      // text fallback
+      var parts = years.map(function (yr, i) {
+        return yr + ': ' + births[i] + ' births, ' + deaths[i] + ' deaths, ' + (hg[i] == null ? '-' : hg[i] + '% high growth');
+      });
+      document.getElementById('ap-trends-fallback').textContent = 'Year by year: ' + parts.join('; ') + '.';
+    }
+
     Promise.all([
       fetch('/data/biz-overview.json').then(function (r) { return r.json(); }),
       fetch('/data/biz-areas.json').then(function (r) { return r.json(); }),
@@ -182,6 +292,12 @@ const AREA_JSON = JSON.stringify(area);
 
       var meta = areas.$meta || {};
       if (meta.generated) txt('ap-datedate', 'Register facts retrieved to ' + (meta.sources && meta.sources[0] ? meta.sources[0].retrieved : '') + '; data generated ' + meta.generated.slice(0, 10) + '. Figures reflect the register at that date and may have changed.');
+
+      // births / deaths / high-growth trend (present for current districts)
+      var trends = detail.trends;
+      if (trends && trends.years && trends.years.length) {
+        renderTrends(trends);
+      }
 
       // sectors
       var st = document.getElementById('ap-sectors');
@@ -250,7 +366,7 @@ const AREA_JSON = JSON.stringify(area);
           var big = document.createElement('div'); big.className = 'biz-cluster-big';
           big.textContent = n(cl.companies) + ' companies registered here';
           var sub = document.createElement('div'); sub.className = 'biz-cluster-sub';
-          sub.textContent = cl.dissolvedOrStrikingPct + ' percent dissolved or in strike-off. Excluded from clean rates.';
+          sub.textContent = cl.note || (cl.distressPct + ' percent dissolved, in liquidation or facing strike-off. Excluded from clean rates.');
           body.appendChild(big); body.appendChild(sub);
           box.appendChild(pc); box.appendChild(body); cw.appendChild(box);
         });

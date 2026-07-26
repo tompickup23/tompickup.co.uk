@@ -75,10 +75,19 @@ import '../../../../styles/lgr.css';
 
   <script is:inline>
   (function () {
-    var candidates = [], query = '', areaFilter = '', flagFilter = '';
-    var FLAG_LABEL = { 'ons-definition': 'meets ONS definition', 'emerging': 'emerging (small base)', 'young-company': 'under 6 years old' };
+    var candidates = [], query = '', areaFilter = '', flagFilter = '', dossiers = {};
+    var FLAG_LABEL = { 'ons-definition': 'meets ONS definition', 'emerging': 'emerging (small base)', 'young-company': 'under 6 years old', 'eurostat-10': 'meets Eurostat 10%+ measure' };
 
     function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+
+    function nameCell(c) {
+      var cell = document.createElement('td');
+      if (c.crn && dossiers[c.crn]) {
+        var a = document.createElement('a'); a.className = 'biz-arealink'; a.href = '/lancs/business/company/' + c.crn + '/'; a.textContent = c.name;
+        cell.appendChild(a);
+      } else { cell.className = 'bsp-sup'; cell.textContent = c.name; }
+      return cell;
+    }
 
     function renderCandidates() {
       var body = document.getElementById('gr-body');
@@ -91,7 +100,7 @@ import '../../../../styles/lgr.css';
       });
       view.slice(0, 200).forEach(function (c) {
         var tr = document.createElement('tr');
-        tr.appendChild(td(c.name, 'bsp-sup'));
+        tr.appendChild(nameCell(c));
         tr.appendChild(td(c.lad));
         // employee trend as text "12 to 19 to 31"
         var trend = (c.series || []).map(function (s) { return s.employees; }).join(' to ');
@@ -108,28 +117,48 @@ import '../../../../styles/lgr.css';
       if (!view.length) { var tr = document.createElement('tr'); tr.appendChild(td('No candidates match.')); body.appendChild(tr); }
     }
 
-    fetch('/data/biz-growth.json').then(function (r) { return r.json(); }).then(function (d) {
+    Promise.all([
+      fetch('/data/biz-growth.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).catch(function () { return { companies: [] }; })
+    ]).then(function (res) {
+      var d = res[0];
+      (res[1].companies || []).forEach(function (c) { dossiers[c.crn] = true; });
       candidates = d.candidates || [];
       var bench = d.officialBenchmark || [];
       var england = bench.length ? bench[0].englandPct : 4.9;
       var sorted = bench.slice().sort(function (a, b) { return (b.highGrowthPct || 0) - (a.highGrowthPct || 0); });
       var max = Math.max.apply(null, sorted.map(function (b) { return b.highGrowthPct || 0; }).concat([england]));
+      var engLeft = (england / max * 100);
       var bars = document.getElementById('gr-bars');
       sorted.forEach(function (b) {
-        var row = document.createElement('div'); row.className = 'dg-row';
+        var row = document.createElement('div'); row.className = 'dg-row'; row.style.marginBottom = '16px';
         var top = document.createElement('div'); top.className = 'dg-top';
         var nm = document.createElement('span'); nm.className = 'dg-name';
         nm.textContent = b.slug.replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); });
-        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = (b.highGrowthPct == null ? '-' : b.highGrowthPct + '%');
+        var beats = b.highGrowthPct != null && b.highGrowthPct >= england;
+        var val = document.createElement('span'); val.className = 'dg-val' + (beats ? '' : ''); val.textContent = (b.highGrowthPct == null ? '-' : b.highGrowthPct.toFixed(1) + '%');
+        if (b.highGrowthPct != null && !beats) val.style.color = '#ff9f0a';
         top.appendChild(nm); top.appendChild(val);
-        var track = document.createElement('div'); track.className = 'dg-track biz-track-mark';
-        var fill = document.createElement('div'); fill.className = 'dg-fill' + (b.highGrowthPct >= england ? '' : ' amber');
-        fill.style.width = ((b.highGrowthPct || 0) / max * 100).toFixed(1) + '%';
+        var track = document.createElement('div'); track.className = 'dg-track biz-track-mark biz-track-lg';
+        var w = ((b.highGrowthPct || 0) / max * 100);
+        var fill = document.createElement('div'); fill.className = 'dg-fill' + (beats ? '' : ' amber');
+        fill.style.width = w.toFixed(1) + '%';
+        // value label at the bar end
+        if (b.highGrowthPct != null) {
+          var lab = document.createElement('span'); lab.className = 'biz-barlab'; lab.textContent = b.highGrowthPct.toFixed(1) + '%';
+          if (w < 20) { lab.classList.add('out'); lab.style.left = w.toFixed(1) + '%'; lab.style.position = 'absolute'; track.appendChild(lab); }
+          else { fill.appendChild(lab); }
+        }
         track.appendChild(fill);
-        // England marker
-        var mark = document.createElement('div'); mark.className = 'biz-benchmark-mark'; mark.style.left = (england / max * 100).toFixed(1) + '%';
+        // England marker + small flag label
+        var mark = document.createElement('div'); mark.className = 'biz-benchmark-mark'; mark.style.left = engLeft.toFixed(1) + '%';
         mark.title = 'England: ' + england + '%';
         track.appendChild(mark);
+        var flag = document.createElement('div'); flag.className = 'biz-benchmark-lab';
+        flag.style.left = engLeft.toFixed(1) + '%';
+        var fspan = document.createElement('span'); fspan.className = 'flag'; fspan.textContent = 'England ' + england + '%';
+        flag.appendChild(fspan);
+        track.appendChild(flag);
         row.appendChild(top); row.appendChild(track); bars.appendChild(row);
       });
       document.getElementById('gr-bench-note').textContent =

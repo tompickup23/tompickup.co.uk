@@ -30,7 +30,7 @@ import '../../../../styles/lgr.css';
 
     <div class="doge-statband">
       <div class="doge-stat"><div class="v teal" id="dw-ins90">…</div><div class="l">Insolvency notices, last 90 days</div></div>
-      <div class="doge-stat"><div class="v" id="dw-strike90">…</div><div class="l">Strike-off proposals, last 90 days</div></div>
+      <div class="doge-stat"><div class="v" id="dw-strike90">…</div><div class="l">Current strike-off proposals on the register</div></div>
       <div class="doge-stat"><div class="v" id="dw-notices">…</div><div class="l">Recent notices on record</div></div>
       <div class="doge-stat"><div class="v" id="dw-strikes">…</div><div class="l">Active strike-off proposals</div></div>
     </div>
@@ -78,10 +78,18 @@ import '../../../../styles/lgr.css';
 
   <script is:inline>
   (function () {
-    var notices = [], strikes = [], shown = 0, PAGE = 30, query = '', areaFilter = '';
+    var notices = [], strikes = [], shown = 0, PAGE = 30, query = '', areaFilter = '', dossiers = {};
 
     function esc(v) { return v == null ? '' : String(v); }
     function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+    function companyCell(company, crn) {
+      var c = document.createElement('td');
+      if (crn && dossiers[crn]) {
+        var a = document.createElement('a'); a.className = 'biz-arealink'; a.href = '/lancs/business/company/' + crn + '/'; a.textContent = company;
+        c.appendChild(a);
+      } else { c.className = 'bsp-sup'; c.textContent = company; }
+      return c;
+    }
 
     function renderNotices() {
       var body = document.getElementById('dw-notice-body');
@@ -95,7 +103,7 @@ import '../../../../styles/lgr.css';
         var tr = document.createElement('tr');
         tr.appendChild(td(n.date, 'bsp-date'));
         tr.appendChild(td(n.type));
-        tr.appendChild(td(n.company, 'bsp-sup'));
+        tr.appendChild(companyCell(n.company, n.crn));
         tr.appendChild(td(n.lad));
         var c = document.createElement('td'); c.className = 'num';
         var a = document.createElement('a'); a.className = 'biz-arealink'; a.href = n.uri; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Gazette →';
@@ -110,7 +118,7 @@ import '../../../../styles/lgr.css';
       for (var i = shown; i < strikes.length && i < shown + PAGE; i++) {
         var s = strikes[i];
         var tr = document.createElement('tr');
-        tr.appendChild(td(s.company, 'bsp-sup'));
+        tr.appendChild(companyCell(s.company, s.crn));
         tr.appendChild(td(s.crn, 'bsp-date'));
         tr.appendChild(td(s.lad));
         tr.appendChild(td(s.status));
@@ -123,13 +131,18 @@ import '../../../../styles/lgr.css';
 
     document.getElementById('dw-more').addEventListener('click', renderStrikes);
 
-    fetch('/data/biz-watch.json').then(function (r) { return r.json(); }).then(function (d) {
+    Promise.all([
+      fetch('/data/biz-watch.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).catch(function () { return { companies: [] }; })
+    ]).then(function (res) {
+      var d = res[0];
+      (res[1].companies || []).forEach(function (c) { dossiers[c.crn] = true; });
       notices = d.notices || [];
       strikes = d.strikeOffs || [];
       var s = d.summary || {};
       var last = s.last90days || {};
       document.getElementById('dw-ins90').textContent = (last.insolvencyNotices || 0).toLocaleString('en-GB');
-      document.getElementById('dw-strike90').textContent = (last.strikeOffProposals || 0).toLocaleString('en-GB');
+      document.getElementById('dw-strike90').textContent = ((s.currentStrikeOffProposals != null ? s.currentStrikeOffProposals : last.strikeOffProposals) || 0).toLocaleString('en-GB');
       document.getElementById('dw-notices').textContent = notices.length.toLocaleString('en-GB');
       document.getElementById('dw-strikes').textContent = (s.strikeOffsTotal || strikes.length).toLocaleString('en-GB');
 
@@ -140,14 +153,26 @@ import '../../../../styles/lgr.css';
       months.forEach(function (m) {
         var row = document.createElement('div'); row.className = 'dg-row';
         var top = document.createElement('div'); top.className = 'dg-top';
-        var nm = document.createElement('span'); nm.className = 'dg-name'; nm.textContent = m.month + ' · ' + m.notices + ' notices';
-        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = m.strikeOffs.toLocaleString('en-GB') + ' strike-offs';
+        var mNotices = (m.notices || 0), mStrikes = (m.strikeOffs || 0);
+        var nm = document.createElement('span'); nm.className = 'dg-name'; nm.textContent = m.month + ' · ' + mNotices.toLocaleString('en-GB') + ' notices';
+        var val = document.createElement('span'); val.className = 'dg-val'; val.textContent = mStrikes.toLocaleString('en-GB') + ' strike-offs';
         top.appendChild(nm); top.appendChild(val);
         var track = document.createElement('div'); track.className = 'dg-track';
+        track.title = m.month + ': ' + mNotices.toLocaleString('en-GB') + ' insolvency notices, ' + mStrikes.toLocaleString('en-GB') + ' strike-off proposals';
         var fill = document.createElement('div'); fill.className = 'dg-fill amber'; fill.style.width = (m.strikeOffs / max * 100).toFixed(1) + '%';
+        fill.title = track.title;
         track.appendChild(fill);
         row.appendChild(top); row.appendChild(track); mb.appendChild(row);
       });
+      // axis: min/max scale under the bars
+      var axis = document.createElement('div');
+      axis.style.display = 'flex'; axis.style.justifyContent = 'space-between';
+      axis.style.fontSize = '0.66rem'; axis.style.color = '#7d8590'; axis.style.marginTop = '8px';
+      axis.style.fontVariantNumeric = 'tabular-nums';
+      var a0 = document.createElement('span'); a0.textContent = '0';
+      var a1 = document.createElement('span'); a1.textContent = 'peak ' + max.toLocaleString('en-GB') + ' strike-offs';
+      axis.appendChild(a0); axis.appendChild(a1);
+      mb.appendChild(axis);
 
       if (s.strikeOffsShown && s.strikeOffsTotal) {
         document.getElementById('dw-strike-note').textContent =
