@@ -11,7 +11,7 @@ import '../../../styles/lgr.css';
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
-      <a href="/lancashire/">Lancashire</a>
+      <a href="/lancs/">Lancashire</a>
       <span class="sep">›</span>
       <span class="here">Business Observatory</span>
     </nav>
@@ -47,25 +47,25 @@ import '../../../styles/lgr.css';
 
     <!-- tool cards -->
     <div class="doge-grid" style="margin-top:1.4rem;">
-      <a class="doge-card" href="/lancashire/business/watch/">
+      <a class="doge-card" href="/lancs/business/watch/">
         <div class="doge-card-kicker">Distress watch</div>
         <div class="doge-card-title">Insolvency and strike-off notices</div>
         <div class="doge-card-desc">The Gazette notices and Companies House strike-off proposals, by month and by area. Register facts only.</div>
         <span class="doge-card-go">Open the watch →</span>
       </a>
-      <a class="doge-card" href="/lancashire/business/growth/">
+      <a class="doge-card" href="/lancs/business/growth/">
         <div class="doge-card-kicker">Growth engine</div>
         <div class="doge-card-title">High-growth companies</div>
         <div class="doge-card-desc">The official high-growth benchmark per area, plus an assessment of candidate scale-ups from filed accounts.</div>
         <span class="doge-card-go">See the gazelles →</span>
       </a>
-      <a class="doge-card" href="/lancashire/business/pound/">
+      <a class="doge-card" href="/lancs/business/pound/">
         <div class="doge-card-kicker">The Lancashire Pound</div>
         <div class="doge-card-title">Where council spending lands</div>
         <div class="doge-card-desc">How much of each council's supplier spend stays with locally rooted firms, and how much leaves.</div>
         <span class="doge-card-go">Follow the pound →</span>
       </a>
-      <a class="doge-card" href="/lancashire/business/innovation/">
+      <a class="doge-card" href="/lancs/business/innovation/">
         <div class="doge-card-kicker">Innovation money</div>
         <div class="doge-card-title">Innovate UK funding</div>
         <div class="doge-card-desc">Public research and development grants won by Lancashire firms, by area, year and project.</div>
@@ -90,7 +90,7 @@ import '../../../styles/lgr.css';
         <strong>Clean distress rate</strong> excludes companies registered at flagged address clusters (large
         numbers of companies at a single address, most dissolved or striking off), so it does not overstate
         stress in one postcode. The raw rate is shown on each area profile.
-        <a href="/lancashire/business/method/#distress">How this is worked out</a>.
+        <a href="/lancs/business/method/#distress">How this is worked out</a>.
       </p>
 
       <div class="bsp-tablewrap" style="margin-top:0.8rem;">
@@ -146,7 +146,7 @@ import '../../../styles/lgr.css';
         var td0 = document.createElement('td');
         var link = document.createElement('a');
         link.className = 'biz-arealink';
-        link.href = '/lancashire/business/' + a.slug + '/';
+        link.href = '/lancs/business/' + a.slug + '/';
         link.textContent = a.name;
         td0.appendChild(link);
         if (a.type === 'district') { var t = document.createElement('span'); t.className = 'biz-tag'; t.textContent = 'district'; td0.appendChild(t); }

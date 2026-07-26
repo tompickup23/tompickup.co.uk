@@ -141,7 +141,7 @@
 .lp-row-meta { color: #8e8e93; font-size: 0.73rem; margin-top: 2px; line-height: 1.4; }
 
 /* ============================================================
-   business  (Lancashire Business Observatory: /lancashire/business/*)
+   business  (Lancashire Business Observatory: /lancs/business/*)
    Global because every table/row/bar is built with createElement,
    which Astro scoped styles never reach. Tier colours:
    rooted #12b6cf · trading #ffb340 · non-local #a78bfa · unclassified #55606f
