@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-07-27T09:42:46.032570+00:00",
+    "generated": "2026-07-27T19:21:08.179013+00:00",
     "live_works": 1388,
     "archived_works": 14327,
     "total_analysed": 15715
@@ -614,7 +614,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1094,
+        "days": 1095,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -622,7 +622,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 571,
+        "days": 572,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -782,6 +782,14 @@
         "category": "Minor"
       },
       {
+        "road": "St Johns Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Lancaster Road",
         "district": "lancaster",
         "operator": "BT",
@@ -804,6 +812,14 @@
         "planned_end": "2026-07-26",
         "days_overdue": 0,
         "category": "Standard"
+      },
+      {
+        "road": "New Scotland Road",
+        "district": "pendle",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Garstang Road",
@@ -870,9 +886,49 @@
         "category": "Minor"
       },
       {
+        "road": "Birtwistle Street",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Edge End Road",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "New Lane",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Halton Bridge",
         "district": "lancaster",
         "operator": "BT",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Athol Street",
+        "district": "pendle",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Walton Lane",
+        "district": "pendle",
+        "operator": "IX Wireless Limited",
         "planned_end": "2026-07-27",
         "days_overdue": 0,
         "category": "Minor"
@@ -894,6 +950,14 @@
         "category": "Standard"
       },
       {
+        "road": "Main Street",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Highbury Avenue",
         "district": "wyre",
         "operator": "United Utilities Water",
@@ -902,10 +966,34 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Larkholme Parade",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Railway Road",
         "district": "chorley",
         "operator": "Electricity North West Limited",
         "planned_end": "2026-07-26",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Preston Street",
+        "district": "fylde",
+        "operator": "Cadent",
+        "planned_end": "2026-07-27",
+        "days_overdue": 0,
+        "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Preston Street",
+        "district": "fylde",
+        "operator": "BT",
+        "planned_end": "2026-07-27",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -918,54 +1006,14 @@
         "category": "Minor"
       },
       {
-        "road": "Throstle Grove",
-        "district": "lancaster",
-        "operator": "BT",
+        "road": "Wesley Street",
+        "district": "hyndburn",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-07-27",
         "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Lightfoot Lane",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-07-27",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Manchester Road",
-        "district": "preston",
-        "operator": "Electricity North West Limited",
-        "planned_end": "2026-07-26",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Fawcett",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-27",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Graham Avenue",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-27",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Narrow Lane",
-        "district": "west_lancashire",
-        "operator": "BT",
-        "planned_end": "2026-07-27",
-        "days_overdue": 0,
-        "category": "Minor"
+        "category": "Major"
       }
     ],
-    "overdue_count": 24
+    "overdue_count": 30
   }
 }
