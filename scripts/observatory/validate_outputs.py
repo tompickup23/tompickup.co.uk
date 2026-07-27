@@ -105,6 +105,44 @@ if ix:
     if not (500 <= n <= 5000):
         fail(f"companies index size {n} outside sane range")
 
+# Verified websites. A link on a named company's profile is only defensible
+# with its match method and the evidence snippet attached, so a row missing
+# either one blocks the deploy rather than shipping an unsourced link.
+_dossiers = sorted((PUB / "company").glob("*.json"))
+if not _dossiers:
+    fail("no company dossiers found")
+else:
+    _sites = 0
+    _by_method = {}
+    for p in _dossiers:
+        try:
+            d = json.loads(p.read_text())
+        except Exception as e:
+            fail(f"dossier {p.name} unparseable: {e}")
+            break
+        w = d.get("website")
+        if w is None:
+            continue
+        _sites += 1
+        crn = d.get("crn")
+        if w.get("matchedOn") not in ("crn", "name-postcode"):
+            fail(f"website {crn}: matchedOn {w.get('matchedOn')!r} not an accepted rule")
+        if not (w.get("evidence") or "").strip():
+            fail(f"website {crn}: published without evidence snippet")
+        if not str(w.get("url", "")).startswith(("http://", "https://")):
+            fail(f"website {crn}: url {w.get('url')!r} is not an absolute http(s) URL")
+        if not w.get("checkedAt"):
+            fail(f"website {crn}: no checkedAt date")
+        _by_method[w.get("matchedOn")] = _by_method.get(w.get("matchedOn"), 0) + 1
+    if ix:
+        claimed = (ix.get("$meta", {}).get("websites") or {}).get("verified")
+        if claimed is not None and claimed != _sites:
+            fail(f"index claims {claimed} verified websites, dossiers carry {_sites}")
+        flagged = sum(1 for c in ix.get("companies", []) if c.get("hasWebsite"))
+        if flagged != _sites:
+            fail(f"index hasWebsite flags {flagged}, dossiers carry {_sites}")
+    print(f"websites: {_sites} published, by method {_by_method}")
+
 # em-dash sweep over the data files themselves
 for f in PUB.glob("biz-*.json"):
     if "—" in f.read_text():

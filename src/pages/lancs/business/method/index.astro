@@ -3,6 +3,10 @@ import Layout from '../../../../layouts/Layout.astro';
 import BizFooter from '../../../../components/BizFooter.astro';
 import '../../../../styles/doge.css';
 import '../../../../styles/lgr.css';
+import companiesIndex from '../../../../../public/data/biz-companies-index.json';
+
+const WEB = (companiesIndex as any).$meta?.websites || null;
+const WEB_METHOD = WEB?.byMethod || {};
 
 const SOURCES = [
   { name: 'Companies House', use: 'Company status, SIC codes, incorporation, officers and PSCs (as shown by CH), accounts as filed, charges, strike-off status.', licence: 'Public information (no CH use restriction). UK GDPR still applies.' },
@@ -16,6 +20,7 @@ const SOURCES = [
   { name: 'Care Quality Commission (CQC)', use: 'Regulated care premises counts.', licence: 'Open Government Licence v3.0.' },
   { name: 'Valuation Office Agency (VOA)', use: 'Non-domestic rated premises, aggregate rollups only.', licence: 'Crown copyright with dataset-specific notices; only aggregate rollups are republished.' },
   { name: 'Get Information About Schools (GIAS)', use: 'Schools and academy trusts.', licence: 'Open Government Licence v3.0.' },
+  { name: 'Company websites', use: 'The link on a company profile, and nothing else. A site is only linked where the site itself proves it belongs to that company.', licence: 'No content is republished. Links are plain and carry rel="nofollow"; a link is not an endorsement.' },
 ];
 ---
 
@@ -152,6 +157,48 @@ const SOURCES = [
           count, and is labelled as such wherever it appears. It applies a Business Population Estimates North West
           ratio to Annual Population Survey self-employment, to indicate activity that sits below registration
           thresholds. It must not be read as a headcount of businesses.
+        </p>
+      </div>
+    </section>
+
+    <section class="doge-section" id="websites">
+      <h2 class="doge-h2">How a website gets onto a company profile</h2>
+      <div class="lgr-prose">
+        <p>
+          A company profile links to that company's website only when the site itself proves the match. There is no
+          "probable" or "likely" tier, and nothing is published on a guess. Two proofs are accepted:
+        </p>
+      </div>
+      <ul class="lgr-points">
+        <li><b>Registration number on the site</b> The company's registration number appears on the page. UK companies must display it, so this is definitive.</li>
+        <li><b>Registered name and registered postcode</b> The exact registered company name and the registered-office postcode both appear on the same page.</li>
+      </ul>
+      <div class="lgr-prose">
+        <p>
+          Candidate addresses come from register-published URLs (the Charity Commission extract), from the company's
+          registered and trading names, and from a web search. Every candidate then has to pass the test above;
+          anything that does not is discarded, along with everything fetched from it. A candidate that came from a
+          search is held to the stricter of the two proofs, the registration number, because a page that quotes a
+          company's name and address is not necessarily that company's own page. The quoted evidence is shown next to
+          each link, with the date it was checked, and links are re-checked monthly so dead ones drop off.
+        </p>
+        <p>
+          Because the rule is strict, plenty of real websites are missed. Micro-firms in particular often do not display
+          their registration number, and some sites block automated checks. A company with no link here is not a company
+          without a website.
+          {WEB && WEB.verified ? (
+            <span>
+              {' '}As at the current edition, {WEB.verified} of {WEB.ofCompanies} company profiles
+              ({WEB.matchRatePct} percent) carry a verified link:
+              {' '}{WEB_METHOD['crn'] || 0} matched on the registration number and
+              {' '}{WEB_METHOD['name-postcode'] || 0} on the registered name with the registered postcode.
+            </span>
+          ) : null}
+        </p>
+        <p>
+          The crawler that does this identifies itself, honours robots.txt, waits a second between requests to the same
+          site and gives up on a site after five failures. It keeps the homepage text of verified sites only, to
+          classify what a company actually does in a later edition. Nothing is retained from a site that fails the test.
         </p>
       </div>
     </section>

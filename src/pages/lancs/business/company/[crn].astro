@@ -176,6 +176,26 @@ const subject = encodeURIComponent('Company profile correction: ' + name + ' (' 
       metacell('Accounts category', reg.accountsCategory);
       document.getElementById('cp-body').appendChild(grid);
 
+      // verified website. Shown only when the site itself proved the match,
+      // and always with the basis and the quoted evidence.
+      var w = d.website;
+      if (w && w.url) {
+        var wrow = el2('p', 'biz-infoline');
+        wrow.appendChild(el2('strong', null, 'Website. '));
+        var wa = el2('a', 'biz-arealink',
+          w.url.replace(/^https?:\/\//, '').replace(/\/$/, ''));
+        wa.href = w.url; wa.target = '_blank'; wa.rel = 'nofollow noopener';
+        wrow.appendChild(wa);
+        var basis = w.matchedOn === 'crn'
+          ? ' Matched because company registration number ' + P.crn + ' appears on the site itself'
+          : ' Matched because the registered company name and the registered office postcode both appear on the site itself';
+        var when = w.checkedAt ? (', checked ' + ukDate(String(w.checkedAt).slice(0, 10))) : '';
+        wrow.appendChild(document.createTextNode(basis + when + '. Quoted from the page: '));
+        wrow.appendChild(el2('span', 'biz-basis', '"' + w.evidence + '"'));
+        wrow.appendChild(document.createTextNode(' Linking is not endorsement and the Observatory is not responsible for the content of external sites.'));
+        document.getElementById('cp-body').appendChild(wrow);
+      }
+
       if (reg.addressClusterNote) {
         var info = el2('p', 'biz-infoline', reg.addressClusterNote);
         document.getElementById('cp-body').appendChild(info);

@@ -150,6 +150,26 @@ if mf.exists():
         r = json.loads(line)
         momentum[r["crn"]] = r
 
+# verified websites (verify_websites.py). Only rows that carry both a match
+# method and the evidence snippet are publishable; anything else is dropped
+# here rather than trusted downstream.
+websites = {}
+_wf = PROC / "websites.jsonl"
+if _wf.exists():
+    for line in _wf.open():
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        if (r.get("matchedOn") in ("crn", "name-postcode") and r.get("evidence")
+                and str(r.get("url", "")).startswith(("http://", "https://"))):
+            websites[r["crn"]] = {
+                "url": r["url"], "matchedOn": r["matchedOn"],
+                "evidence": r["evidence"][:200],
+                "evidenceUrl": r.get("evidenceUrl"),
+                "checkedAt": r.get("checkedAt")}
+print(f"verified websites available: {len(websites)}")
+
 _clusters = {c["postcode"]: c for c in json.loads(
     (PROC / "clusters.json").read_text())["clusters"]}
 def _cluster_note(pc):
@@ -212,6 +232,7 @@ for crn in sorted(crns):
             "addressClusterNote": (_cluster_note(m["postcode"])
                                    if m["cluster"] else None),
         },
+        "website": websites.get(crn),
         "accountsSeries": ss[-6:],
         "payments": payments_for(crn),
         "innovation": [{"title": p.get("project_title"),
@@ -244,13 +265,29 @@ for crn in sorted(crns):
     index.append({"crn": crn, "name": m["name"], "lad": m["lad"],
                   "sic2": m["sic2"],
                   "hasPayments": bool(d["payments"]),
-                  "isGrowth": bool(g)})
+                  "isGrowth": bool(g),
+                  "hasWebsite": crn in websites})
+
+_pub_sites = [websites[c] for c in crns if c in websites]
+_by_method = {}
+for w in _pub_sites:
+    _by_method[w["matchedOn"]] = _by_method.get(w["matchedOn"], 0) + 1
 
 (ROOT / "public/data/biz-companies-index.json").write_text(json.dumps(
     {"$meta": {"generated": GEN,
                "criteria": "council supplier >= £500k over 3 years, growth "
                            "candidate, Innovate UK winner >= £100k, or 100+ "
                            "employees in latest filed accounts; Lancashire-"
-                           "registered companies only"},
+                           "registered companies only",
+               "websites": {
+                   "verified": len(_pub_sites),
+                   "ofCompanies": len(index),
+                   "matchRatePct": (round(100.0 * len(_pub_sites) / len(index), 1)
+                                    if index else None),
+                   "byMethod": _by_method,
+                   "rule": "A website is shown only where the site itself "
+                           "proves the match: the company registration number "
+                           "on the page, or the exact registered name with the "
+                           "registered-office postcode."}},
      "companies": index}))
 print(f"wrote {len(index)} dossiers + index")
