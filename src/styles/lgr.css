@@ -334,6 +334,13 @@ i.biz-tsw { position: static; margin-right: 5px; vertical-align: middle; width: 
 .biz-donations li { font-size: 0.74rem; color: #aab2bd; font-variant-numeric: tabular-nums; }
 .biz-donations .ec { color: #7d8590; }
 
+/* full-register search + changes page */
+.biz-reg-hint { font-size: 0.78rem; color: #8b939e; line-height: 1.55; margin: 0 2px 0.8rem; }
+.biz-reg-hint.warn { color: #ff9f0a; }
+.biz-reg-clip { font-size: 0.78rem; color: #8b939e; line-height: 1.55; margin: 0.8rem 2px 0; }
+.biz-chip.up { background: rgba(48,209,88,0.12); border-color: rgba(48,209,88,0.4); color: #30d158; }
+.biz-chip.down { background: rgba(255,159,10,0.12); border-color: rgba(255,159,10,0.4); color: #ff9f0a; }
+
 /* shared legal footer */
 .biz-foot { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,0.08); }
 .biz-foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem 1.6rem; }

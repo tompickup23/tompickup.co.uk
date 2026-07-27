@@ -1,0 +1,245 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BizFooter from '../../../../components/BizFooter.astro';
+import '../../../../styles/doge.css';
+import '../../../../styles/lgr.css';
+---
+
+<Layout
+  title="What changed this month: Lancashire business register movements | Lancashire Business Observatory"
+  description="Month-on-month movements in the Lancashire business register: companies added and lost by area, high-growth entries and exits, new insolvency notices and tier drift by council. Differences between register snapshots, with a link to each source."
+>
+  <div class="doge-page">
+    <nav class="doge-crumbs" aria-label="Breadcrumb">
+      <a href="/lancs/">Lancashire</a>
+      <span class="sep">›</span>
+      <a href="/lancs/business/">Business Observatory</a>
+      <span class="sep">›</span>
+      <span class="here">Changes</span>
+    </nav>
+
+    <header class="doge-head">
+      <span class="doge-eyebrow"><span class="dot"></span> Changes</span>
+      <h1 class="doge-title">What changed this month</h1>
+      <p class="doge-sub">
+        Each month the Observatory takes a fresh snapshot of the public registers. This page records what moved
+        between snapshots: companies added and lost by area, high-growth entries and exits, new insolvency
+        notices and tier drift by council. These are differences between two register states, not a diary of
+        events on any one day.
+      </p>
+    </header>
+
+    <div class="biz-callout" id="ch-note">…</div>
+
+    <div id="ch-root"></div>
+
+    <BizFooter attributions={[
+      'Company facts and registered offices: Companies House.',
+      'Insolvency notices: The Gazette, under the Open Government Licence v3.0.',
+      'Supplier and locally-rooted classification: Lancashire councils’ published payments-over-£500 transparency data (Open Government Licence v3.0).',
+    ]} />
+  </div>
+
+  <script is:inline>
+  (function () {
+    var dossiers = {};
+
+    function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function td(v, cls) { var t = document.createElement('td'); if (cls) t.className = cls; t.textContent = v; return t; }
+    function n(v) { return (v == null) ? 0 : v; }
+    function signed(v) { v = n(v); return (v > 0 ? '+' : '') + v.toLocaleString('en-GB'); }
+    function deltaCls(v) { v = n(v); return v > 0 ? 'biz-good' : (v < 0 ? 'biz-below' : ''); }
+
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function editionLabel(ed) {
+      if (!ed) return '';
+      var m = /^(\d{4})-(\d{2})$/.exec(ed);
+      if (!m) return ed;
+      return MONTHS[parseInt(m[2], 10) - 1] + ' ' + m[1];
+    }
+
+    function companyCell(name, crn) {
+      var c = document.createElement('td');
+      if (crn && dossiers[crn]) {
+        var a = el('a', 'biz-arealink', name); a.href = '/lancs/business/company/' + crn + '/';
+        c.appendChild(a);
+      } else { c.className = 'bsp-sup'; c.textContent = name; }
+      return c;
+    }
+
+    function section(title, note) {
+      var s = el('section', 'doge-section');
+      s.appendChild(el('h2', 'doge-h2', title));
+      if (note) s.appendChild(el('p', 'doge-note', note));
+      return s;
+    }
+
+    function renderBaseline(d, root) {
+      var b = d.baseline || {};
+      var ed = editionLabel(d.$meta && d.$meta.edition);
+      var panel = el('div', 'biz-panel');
+      panel.appendChild(el('h2', 'biz-panel-h', 'Edition ' + ((d.$meta && d.$meta.edition) || '') + ': the baseline'));
+      panel.appendChild(el('p', 'biz-panel-sub',
+        'This is the first monthly edition of the changes record' + (ed ? ' (' + ed + ')' : '') +
+        '. There is nothing to compare it against yet, so this edition sets the baseline. Month-on-month changes, ' +
+        'by area and by register, appear from the next edition.'));
+      var grid = el('div', 'biz-vcse');
+      var cells = [
+        [b.companiesActive, 'Active companies on the register'],
+        [b.gazelles, 'High-growth companies (gazelles)'],
+        [b.noticesListed, 'Insolvency notices listed'],
+        [b.strikeOffs, 'Strike-off proposals on the register']
+      ];
+      cells.forEach(function (c) {
+        var card = el('div', 'biz-vcse-card');
+        card.appendChild(el('div', 'biz-vcse-v', n(c[0]).toLocaleString('en-GB')));
+        card.appendChild(el('div', 'biz-vcse-l', c[1]));
+        grid.appendChild(card);
+      });
+      panel.appendChild(grid);
+      root.appendChild(panel);
+    }
+
+    function renderAreaMovements(areas, root) {
+      if (!areas || !areas.length) return;
+      var s = section('Area movements', 'Change in active companies, companies in distress and high-growth companies since the previous snapshot. Click a column to sort.');
+      var wrap = el('div', 'bsp-tablewrap');
+      var table = el('table', 'bsp-table biz-cmp-table');
+      var thead = document.createElement('thead');
+      var hr = document.createElement('tr');
+      var cols = [['name', 'Area', ''], ['companiesActiveDelta', 'Active companies', 'num'], ['distressDelta', 'In distress', 'num'], ['highGrowthDelta', 'High growth', 'num']];
+      var sortK = 'companiesActiveDelta', sortDir = -1;
+      cols.forEach(function (c) {
+        var th = document.createElement('th'); th.textContent = c[1];
+        if (c[2]) th.className = c[2] + ' biz-sortable'; else th.className = 'biz-sortable';
+        th.setAttribute('data-k', c[0]);
+        hr.appendChild(th);
+      });
+      thead.appendChild(hr); table.appendChild(thead);
+      var tbody = document.createElement('tbody'); table.appendChild(tbody);
+      function areaName(a) { return a.name || a.area || a.slug || '-'; }
+      function draw() {
+        tbody.textContent = '';
+        var data = areas.slice();
+        data.sort(function (a, b) {
+          if (sortK === 'name') return sortDir * String(areaName(a)).localeCompare(String(areaName(b)));
+          return sortDir * (n(a[sortK]) - n(b[sortK]));
+        });
+        data.forEach(function (a) {
+          var tr = document.createElement('tr');
+          tr.appendChild(td(areaName(a)));
+          [['companiesActiveDelta'], ['distressDelta'], ['highGrowthDelta']].forEach(function (k) {
+            tr.appendChild(td(signed(a[k[0]]), 'num ' + deltaCls(a[k[0]])));
+          });
+          tbody.appendChild(tr);
+        });
+        Array.prototype.forEach.call(hr.querySelectorAll('th'), function (th) {
+          th.classList.remove('sorted-asc', 'sorted-desc');
+          if (th.getAttribute('data-k') === sortK) th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+        });
+      }
+      Array.prototype.forEach.call(hr.querySelectorAll('th'), function (th) {
+        th.addEventListener('click', function () {
+          var k = th.getAttribute('data-k');
+          if (k === sortK) sortDir = -sortDir; else { sortK = k; sortDir = (k === 'name') ? 1 : -1; }
+          draw();
+        });
+      });
+      draw();
+      wrap.appendChild(table); s.appendChild(wrap);
+      root.appendChild(s);
+    }
+
+    function renderGazelleList(title, items, root, kind) {
+      if (!items || !items.length) return;
+      var s = section(title, kind === 'entries'
+        ? 'Companies that joined the high-growth list this month.'
+        : 'Companies that left the high-growth list this month.');
+      var ul = el('ul', 'biz-chain-list');
+      items.forEach(function (g) {
+        var crn = g.crn || g[0];
+        var name = g.name || g[1];
+        var lad = g.lad || g.area;
+        var li = document.createElement('li');
+        if (crn && dossiers[crn]) {
+          var a = el('a', 'biz-arealink', name); a.href = '/lancs/business/company/' + crn + '/';
+          li.appendChild(a);
+        } else { li.appendChild(document.createTextNode(name)); }
+        if (lad) { li.appendChild(document.createTextNode(' · ' + lad)); }
+        ul.appendChild(li);
+      });
+      s.appendChild(ul); root.appendChild(s);
+    }
+
+    function renderNotices(notices, root) {
+      if (!notices || !notices.length) return;
+      var s = section('New insolvency notices', 'Insolvency notices new to the register since the previous snapshot. Each row links to the notice as published in The Gazette.');
+      var wrap = el('div', 'bsp-tablewrap');
+      var table = el('table', 'bsp-table biz-cmp-table');
+      var thead = document.createElement('thead');
+      var hr = document.createElement('tr');
+      ['Date', 'Notice', 'Company', 'Area', 'Source'].forEach(function (h, i) {
+        var th = document.createElement('th'); th.textContent = h; if (i === 4) th.className = 'num'; hr.appendChild(th);
+      });
+      thead.appendChild(hr); table.appendChild(thead);
+      var tbody = document.createElement('tbody');
+      notices.forEach(function (nt) {
+        var tr = document.createElement('tr');
+        tr.appendChild(td(nt.date, 'bsp-date'));
+        tr.appendChild(td(nt.type));
+        tr.appendChild(companyCell(nt.company, nt.crn));
+        tr.appendChild(td(nt.lad));
+        var c = document.createElement('td'); c.className = 'num';
+        if (nt.uri) {
+          var a = el('a', 'biz-arealink', 'Gazette →'); a.href = nt.uri; a.target = '_blank'; a.rel = 'noopener';
+          c.appendChild(a);
+        } else { c.textContent = '-'; }
+        tr.appendChild(c);
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      wrap.appendChild(table); s.appendChild(wrap);
+      root.appendChild(s);
+    }
+
+    function renderTierDrift(drift, root) {
+      if (!drift || !drift.length) return;
+      var s = section('Tier drift by council', 'Net movement in locally-rooted supplier classification for each council since the previous snapshot.');
+      var row = el('div', 'biz-chiprow');
+      drift.forEach(function (dr) {
+        var name = dr.area || dr.name || dr.council || '-';
+        var delta = n(dr.delta != null ? dr.delta : dr.net);
+        var chip = el('span', 'biz-chip ' + (delta > 0 ? 'up' : (delta < 0 ? 'down' : '')), name + ' ' + signed(delta));
+        row.appendChild(chip);
+      });
+      s.appendChild(row); root.appendChild(s);
+    }
+
+    function renderDiff(d, root) {
+      renderAreaMovements(d.areas, root);
+      renderGazelleList('High-growth entries', d.gazelleEntries, root, 'entries');
+      renderGazelleList('High-growth exits', d.gazelleExits, root, 'exits');
+      renderNotices(d.notices, root);
+      renderTierDrift(d.tierDrift, root);
+    }
+
+    var root = document.getElementById('ch-root');
+
+    Promise.all([
+      fetch('/data/biz-changes.json').then(function (r) { return r.json(); }),
+      fetch('/data/biz-companies-index.json').then(function (r) { return r.json(); }).catch(function () { return { companies: [] }; })
+    ]).then(function (res) {
+      var d = res[0];
+      (res[1].companies || []).forEach(function (c) { dossiers[c.crn] = true; });
+      var note = document.getElementById('ch-note');
+      var meta = d.$meta || {};
+      note.textContent = meta.note ||
+        'Changes are differences between two monthly register snapshots; a company appearing or leaving a list reflects new filings, not an event on that day.';
+      if ((d.mode || 'baseline') === 'diff') { renderDiff(d, root); }
+      else { renderBaseline(d, root); }
+    }).catch(function () {
+      root.appendChild(el('p', 'biz-empty', 'The changes data could not be loaded.'));
+    });
+  })();
+  </script>
+</Layout>

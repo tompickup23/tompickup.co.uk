@@ -101,7 +101,14 @@ for crn, periods in series.items():
     age = m.get("ageYears")
     if age is not None and age <= 6.0:
         flags.append("young-company")
+    birch = round((e1 - e0) * (e1 / e0), 1)
+    f0 = fin.get(crn, {}).get(d0.isoformat()) or {}
+    f1 = fin.get(crn, {}).get(d1.isoformat()) or {}
+    assets_cagr = None
+    if (f0.get("assets") or 0) > 10000 and (f1.get("assets") or 0) > 0:
+        assets_cagr = round(100 * ((f1["assets"] / f0["assets"]) ** (1 / span) - 1), 1)
     candidates.append({
+        "birchIndex": birch, "assetsCagrPct": assets_cagr,
         "crn": crn, "name": m["name"], "lad": m["lad"],
         "unitary2028": m["unitary2028"], "sic2": m["sic2"],
         "series": [{"periodEnd": d.isoformat(), "employees": e} for d, e in pts],
@@ -131,14 +138,20 @@ for c in candidates:
         }
 
 candidates.sort(key=lambda c: (-("ons-definition" in c["flags"]),
-                               -c["latestEmployees"] * (c["cagrPct"] / 100)))
+                               -c["birchIndex"]))
 out = {
     "$meta": {
         "source": "Companies House Accounts Data Product monthly archives (prior-period comparatives included) plus API backfills",
         "retrieved": __import__("datetime").date.today().isoformat(),
         "definitions": "ons-definition: >=10 employees at base, >20% annualised "
                        "employment growth over >=2 years. emerging: 3-9 base, "
-                       ">=50% annualised, labelled separately.",
+                       ">=50% annualised, labelled separately. Ranked by the "
+                       "Birch employment index (Et-E0)x(Et/E0), which balances "
+                       "absolute and relative growth.",
+        "persistenceCaveat": "The research literature finds high growth is "
+                             "rarely persistent: most firms that meet the "
+                             "definition in one period do not repeat it. This "
+                             "list is a snapshot, not a prediction.",
         "cleaning": dict(stats),
     },
     "counts": {

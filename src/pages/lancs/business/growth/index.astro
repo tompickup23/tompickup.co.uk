@@ -173,6 +173,7 @@ import '../../../../styles/lgr.css';
       var t; document.getElementById('gr-search').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { query = e.target.value.toLowerCase().trim(); renderCandidates(); }, 160); });
 
       var basis = (candidates[0] && candidates[0].basis) || d.methodNote || '';
+      if (d.persistenceCaveat) basis += ' ' + d.persistenceCaveat;
       document.getElementById('gr-basis').textContent = 'Basis: ' + basis + ' Companies meeting the full definition carry a "meets ONS definition" flag; those with a base of three to nine employees are flagged "emerging" and shown separately.';
 
       renderCandidates();

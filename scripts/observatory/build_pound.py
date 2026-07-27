@@ -79,6 +79,11 @@ ALIASES = {
     "EDENRED": "10730187",                        # Edenred Corporate Payment UK Ltd
     "COMMUNITY LIGHTING PARTNERSHIP BPOOL": "06939062",
     "BN W DWEN AND BOLTON PHS2": "07385656",      # BwD and Bolton Phase 2 Ltd (PFI)
+    "BBN W DWEN AND BOLTON PHS1": "07086441",     # BwD and Bolton Phase 1 Ltd (PFI)
+    "ACORN CARE AND EDUCATION": "05019430",       # Acorn Care and Education Ltd, Bolton
+    "TRANSDEV LANCASHIRE UNITED": "02546070",     # Lancashire United Ltd (Transdev)
+    "LANCASHIRE UNITED": "02546070",
+    "HOMECARE FOR YOU": "04743148",               # Home Care For You Ltd, Blackburn
 }
 
 # Curated tier overrides where the register walk cannot see a public JV.

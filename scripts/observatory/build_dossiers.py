@@ -130,6 +130,18 @@ for e in json.loads((PROC / "cqc_lancs.json").read_text()).get("locations", []):
         if e.get(k):
             cqc_by_name[normalise(e[k])].add(_lad_name(e.get("lad")))
 
+# officers seed (active appointments, name+role only per GDPR policy)
+officers = {}
+of = VPS / "officers_seed.jsonl"
+if of.exists():
+    from collections import defaultdict as _dd
+    officers = _dd(list)
+    for line in of.open():
+        o = json.loads(line)
+        officers[o["crn"]].append({"name": o.get("name"),
+                                   "role": o.get("officer_role"),
+                                   "appointed": o.get("appointed_on")})
+
 # momentum (may not exist yet)
 momentum = {}
 mf = VPS / "momentum.jsonl"
@@ -224,6 +236,7 @@ for crn in sorted(crns):
         },
         "growth": ({"series": g["series"], "cagrPct": g["cagrPct"],
                     "flags": g["flags"], "basis": g["basis"]} if g else None),
+        "officers": (officers.get(crn) or [])[:15],
         "momentum": ({"sh01Last24m": mo["sh01_24m"],
                       "newCharges24m": mo["charges_24m"]} if mo else None),
     }

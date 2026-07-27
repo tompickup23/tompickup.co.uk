@@ -498,12 +498,15 @@ for lad in sorted(LADS):
                   "englandPct": round(((onsdem or {}).get("england") or {}).get("highGrowthPct", 4.9), 1)})
 gcands = []
 for c in growth["candidates"]:
-    gcands.append({"crn": c["crn"], "name": c["name"], "lad": c["lad"],
+    gcands.append({"birchIndex": c.get("birchIndex"),
+                   "assetsCagrPct": c.get("assetsCagrPct"),
+                   "crn": c["crn"], "name": c["name"], "lad": c["lad"],
                    "sic2": c["sic2"], "unitary2028": c["unitary2028"],
                    "series": c["series"], "cagrPct": c["cagrPct"],
                    "baseEmployees": c["baseEmployees"], "flags": c["flags"],
                    "momentum": c.get("momentum") or {}, "basis": c["basis"]})
 growth_out = {"$meta": meta(), "officialBenchmark": bench, "candidates": gcands,
+              "persistenceCaveat": growth["$meta"].get("persistenceCaveat"),
               "methodNote": "Observatory assessment from employee numbers in "
                             "filed accounts. Turnover is not public for most "
                             "small companies. See method page."}
@@ -530,11 +533,27 @@ BODY_LAD = {"blackburn": "Blackburn with Darwen", "blackpool": "Blackpool",
 resolved = pound["resolved"]
 
 # stage 4: trading evidence upgrades nonLocal -> tradingExternal
+nndr = load(PROC / "nndr_presence.json", {}) or {}
+nndr_names = nndr.get("byName", {})
+nndr_by_crn = {}
+for k, v in nndr_names.items():
+    for c in v.get("crns", []):
+        nndr_by_crn[c] = k
 evidence = {}
 for key, r in resolved.items():
-    if r["tier"] == "nonLocal" and (key in fhrs_names or key in cqc_names):
+    if r["tier"] != "nonLocal":
+        continue
+    src = None
+    if key in cqc_names:
+        src = "CQC-registered care locations"
+    elif key in fhrs_names:
+        src = "FHRS-registered premises"
+    elif key in nndr_names or (r.get("crn") and r["crn"] in nndr_by_crn):
+        hit = nndr_names.get(key) or nndr_names.get(nndr_by_crn.get(r.get("crn"), ""))
+        where = ", ".join((hit or {}).get("councils", [])[:3])
+        src = f"business-rates ratepayer ({where})" if where else "business-rates ratepayer"
+    if src:
         r["tier"] = "tradingExternal"
-        src = "CQC-registered care locations" if key in cqc_names else "FHRS-registered premises"
         r["evidence"] = src
         evidence[key] = src
 print(f"stage-4 evidence upgrades: {len(evidence)}")

@@ -7,7 +7,7 @@ import '../../../../styles/lgr.css';
 
 <Layout
   title="Companies in the Observatory: the profiled firms | Lancashire Business Observatory"
-  description="Every company the Lancashire Business Observatory profiles, and why it is included: council suppliers, growth candidates, Innovate UK winners and larger employers registered in Lancashire. Register facts with a source link on each profile."
+  description="Every company the Lancashire Business Observatory profiles, and why it is included: council suppliers, growth candidates, Innovate UK winners and larger employers registered in Lancashire. Or search the full register of Lancashire-registered companies. Register facts with a source link on each profile."
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
@@ -24,7 +24,8 @@ import '../../../../styles/lgr.css';
       <p class="doge-sub">
         This is the list of companies the Observatory profiles, and why each one is here. Every profile is built
         from public registers, with a link to the Companies House record. It is a record of companies that touch
-        public money or public data, not a directory of people, and it carries no search of directors.
+        public money or public data, not a directory of people, and it carries no search of directors. You can
+        also search the full register of Lancashire-registered companies.
       </p>
     </header>
 
@@ -40,31 +41,65 @@ import '../../../../styles/lgr.css';
     </div>
 
     <section class="doge-section">
-      <h2 class="doge-h2">Search the profiles</h2>
-      <p class="doge-note">Search by name, filter by area, and sort any column. Each row opens the full company profile.</p>
-      <div class="bsp-controls">
-        <input class="bsp-search" id="co-search" type="search" placeholder="Search company name…" aria-label="Search companies" />
-        <select class="bsp-sel" id="co-area" aria-label="Area"><option value="">All areas</option></select>
-        <select class="bsp-sel" id="co-badge" aria-label="Type">
-          <option value="">All companies</option>
-          <option value="supplier">Public suppliers</option>
-          <option value="growth">Growth candidates</option>
-        </select>
+      <h2 class="doge-h2">Search the companies</h2>
+      <div class="biz-toggle" role="tablist" aria-label="Search scope">
+        <button class="biz-toggle-btn active" id="scope-profiles" role="tab" aria-selected="true">Profiled companies</button>
+        <button class="biz-toggle-btn" id="scope-register" role="tab" aria-selected="false">Full register (<span id="scope-reg-count">104,161</span>)</button>
       </div>
-      <div class="bsp-tablewrap">
-        <table class="bsp-table biz-cmp-table">
-          <thead>
-            <tr id="co-head">
-              <th data-k="name" class="biz-sortable">Company</th>
-              <th data-k="lad" class="biz-sortable">Area today</th>
-              <th data-k="sic2" class="biz-sortable">Sector</th>
-              <th>Included as</th>
-            </tr>
-          </thead>
-          <tbody id="co-body"></tbody>
-        </table>
+
+      <!-- profiled companies (default) -->
+      <div id="co-profiles-panel">
+        <p class="doge-note">Search by name, filter by area, and sort any column. Each row opens the full company profile.</p>
+        <div class="bsp-controls">
+          <input class="bsp-search" id="co-search" type="search" placeholder="Search company name…" aria-label="Search profiled companies" />
+          <select class="bsp-sel" id="co-area" aria-label="Area"><option value="">All areas</option></select>
+          <select class="bsp-sel" id="co-badge" aria-label="Type">
+            <option value="">All companies</option>
+            <option value="supplier">Public suppliers</option>
+            <option value="growth">Growth candidates</option>
+          </select>
+        </div>
+        <div class="bsp-tablewrap">
+          <table class="bsp-table biz-cmp-table">
+            <thead>
+              <tr id="co-head">
+                <th data-k="name" class="biz-sortable">Company</th>
+                <th data-k="lad" class="biz-sortable">Area today</th>
+                <th data-k="sic2" class="biz-sortable">Sector</th>
+                <th>Included as</th>
+              </tr>
+            </thead>
+            <tbody id="co-body"></tbody>
+          </table>
+        </div>
+        <div class="bsp-more"><button class="bsp-morebtn" id="co-more">Show more</button></div>
       </div>
-      <div class="bsp-more"><button class="bsp-morebtn" id="co-more">Show more</button></div>
+
+      <!-- full register -->
+      <div id="co-register-panel" hidden>
+        <p class="doge-note">
+          Search every Lancashire-registered company on the register, not only the profiled ones. Type at least
+          two letters of a company name; filter by area if you like.
+        </p>
+        <div class="bsp-controls">
+          <input class="bsp-search" id="reg-search" type="search" placeholder="Search the whole register…" aria-label="Search the full register" />
+          <select class="bsp-sel" id="reg-area" aria-label="Area"><option value="">All areas</option></select>
+        </div>
+        <p class="biz-reg-hint" id="reg-hint">Register extract held at Companies House.</p>
+        <div class="bsp-tablewrap">
+          <table class="bsp-table biz-cmp-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Area today</th>
+                <th>Record</th>
+              </tr>
+            </thead>
+            <tbody id="reg-body"></tbody>
+          </table>
+        </div>
+        <p class="biz-reg-clip" id="reg-clip" hidden></p>
+      </div>
     </section>
 
     <BizFooter attributions={[
@@ -169,6 +204,141 @@ import '../../../../styles/lgr.css';
     }).catch(function () {
       document.getElementById('co-body').textContent = 'The company list could not be loaded.';
     });
+
+    // ---- full-register search (lazy-loaded gzipped index) ----
+    var REG_MAX = 200;
+    var regRows = null, regMeta = null, regQuery = '', regArea = '', regLoading = false, regFailed = false;
+
+    function regNote(msg, warn) {
+      var hint = document.getElementById('reg-hint');
+      hint.textContent = msg;
+      hint.classList.toggle('warn', !!warn);
+    }
+
+    function renderRegister() {
+      var body = document.getElementById('reg-body');
+      var clip = document.getElementById('reg-clip');
+      body.textContent = '';
+      clip.hidden = true;
+      if (!regRows) { return; }
+      if (regQuery.length < 2 && !regArea) {
+        var tr0 = document.createElement('tr');
+        tr0.appendChild(td('Type at least two letters to search the register.'));
+        body.appendChild(tr0);
+        return;
+      }
+      var matched = 0, drawn = 0;
+      for (var i = 0; i < regRows.length; i++) {
+        var r = regRows[i];
+        var name = r[1], lad = r[2], nonActive = r[3], hasDossier = r[4];
+        if (regArea && lad !== regArea) continue;
+        if (regQuery && String(name).toLowerCase().indexOf(regQuery) < 0) continue;
+        matched++;
+        if (drawn >= REG_MAX) continue;
+        drawn++;
+        var crn = r[0];
+        var tr = document.createElement('tr');
+        // company
+        var c0 = document.createElement('td');
+        if (hasDossier) {
+          var a = document.createElement('a'); a.className = 'biz-arealink';
+          a.href = '/lancs/business/company/' + crn + '/'; a.textContent = name;
+          c0.appendChild(a);
+        } else {
+          c0.className = 'bsp-sup'; c0.textContent = name;
+        }
+        tr.appendChild(c0);
+        // area (with inactive tag)
+        var c1 = document.createElement('td');
+        c1.appendChild(document.createTextNode(lad || '-'));
+        if (nonActive === 1) {
+          var tag = document.createElement('span'); tag.className = 'biz-tag'; tag.textContent = 'no longer active';
+          c1.appendChild(tag);
+        }
+        tr.appendChild(c1);
+        // record link
+        var c2 = document.createElement('td');
+        var link = document.createElement('a'); link.className = 'biz-arealink';
+        if (hasDossier) {
+          link.href = '/lancs/business/company/' + crn + '/'; link.textContent = 'Observatory profile →';
+        } else {
+          link.href = 'https://find-and-update.company-information.service.gov.uk/company/' + crn;
+          link.target = '_blank'; link.rel = 'noopener'; link.textContent = 'Companies House →';
+        }
+        c2.appendChild(link);
+        tr.appendChild(c2);
+        body.appendChild(tr);
+      }
+      if (!matched) {
+        var trn = document.createElement('tr');
+        trn.appendChild(td('No companies on the register match.'));
+        body.appendChild(trn);
+      } else if (matched > REG_MAX) {
+        clip.hidden = false;
+        clip.textContent = 'Showing the first ' + REG_MAX.toLocaleString('en-GB') + ' of ' +
+          matched.toLocaleString('en-GB') + ' matches. Refine your search to narrow it down.';
+      }
+    }
+
+    function loadRegister() {
+      if (regRows || regLoading || regFailed) { return; }
+      regLoading = true;
+      regNote('Loading the full register (about 1.5 MB)…');
+      fetch('/data/biz-register-index.json.gz').then(function (resp) {
+        if (!resp.ok) throw new Error('fetch');
+        return resp.arrayBuffer();
+      }).then(function (buf) {
+        var bytes = new Uint8Array(buf);
+        // gzip magic bytes: raw file (Cloudflare / GitHub Pages). Some dev servers
+        // send Content-Encoding: gzip and hand back already-decompressed bytes.
+        if (bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b) {
+          if (typeof DecompressionStream === 'undefined') { throw { noDS: true }; }
+          var stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+          return new Response(stream).text();
+        }
+        return new TextDecoder().decode(bytes);
+      }).then(function (text) {
+        var d = JSON.parse(text);
+        regRows = d.rows || [];
+        regMeta = d.$meta || {};
+        regLoading = false;
+        if (regMeta.n) document.getElementById('scope-reg-count').textContent = Number(regMeta.n).toLocaleString('en-GB');
+        regNote('Register extract as at ' + (regMeta.generated || 'the retrieval date') + '. Full records are held at Companies House.');
+        // area dropdown from the register
+        var areas = {}; regRows.forEach(function (r) { if (r[2]) areas[r[2]] = true; });
+        var sel = document.getElementById('reg-area');
+        Object.keys(areas).sort().forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a; sel.appendChild(o); });
+        renderRegister();
+      }).catch(function (err) {
+        regLoading = false; regFailed = true;
+        if (err && err.noDS) {
+          regNote('Full-register search needs a current browser. Your browser cannot decompress the register file; the profiled-companies search above still works.', true);
+        } else {
+          regNote('The full register could not be loaded. The profiled-companies search above still works.', true);
+        }
+      });
+    }
+
+    var rt;
+    document.getElementById('reg-search').addEventListener('input', function (e) {
+      clearTimeout(rt);
+      var v = e.target.value.toLowerCase().trim();
+      rt = setTimeout(function () { regQuery = v; renderRegister(); }, 180);
+    });
+    document.getElementById('reg-area').addEventListener('change', function (e) { regArea = e.target.value; renderRegister(); });
+
+    // scope toggle
+    function setScope(reg) {
+      document.getElementById('scope-profiles').classList.toggle('active', !reg);
+      document.getElementById('scope-register').classList.toggle('active', reg);
+      document.getElementById('scope-profiles').setAttribute('aria-selected', String(!reg));
+      document.getElementById('scope-register').setAttribute('aria-selected', String(reg));
+      document.getElementById('co-profiles-panel').hidden = reg;
+      document.getElementById('co-register-panel').hidden = !reg;
+      if (reg) { loadRegister(); }
+    }
+    document.getElementById('scope-profiles').addEventListener('click', function () { setScope(false); });
+    document.getElementById('scope-register').addEventListener('click', function () { setScope(true); });
   })();
   </script>
 </Layout>

@@ -25,6 +25,8 @@ VAT_TAG = re.compile(r"\s*-\s*(NET|GROSS)\s*$", re.I)
 def normalise(name: str) -> str:
     n = VAT_TAG.sub("", name.upper().strip())
     n = re.sub(r"\bT/A\b.*$", " ", n)          # drop trading-as tails
+    n = re.sub(r"\b(LTD|LIMITED)\s+TA\s+.+$", " LTD ", n)  # "X LTD TA Y" trading-as
+    n = re.sub(r"\s*-?\s*SALES LEDGER\s*$", " ", n)
     n = re.sub(r"[^A-Z0-9& ]+", " ", n)
     n = n.replace("&", " AND ")                # canonical AND
     n = re.sub(r"\s+", " ", n).strip()
@@ -58,6 +60,9 @@ PUBLIC_PATTERNS = [
     r"\bHMRC\b", r"HM REVENUE", r"\bDWP\b", r"DEPARTMENT FOR", r"DEPARTMENT OF",
     r"HOME OFFICE", r"MINISTRY OF", r"\bHM COURTS?\b", r"\bDVLA\b",
     r"POLICE", r"CONSTABULARY", r"CROWN COMMISSIONER", r"FIRE (AND|&) RESCUE",
+    r"FIRE (AND RESCUE )?AUTH", r"FIRE RESCUE", r"HOUSING EXECUTIVE",
+    r"\b(PRIMARY|HIGH|GRAMMAR|NURSERY|JUNIOR|INFANT) SCHOOL\b",
+    r"\bSCHOOL$", r"\bACADEMY$", r"ACADEMY TRUST",
     r"ENVIRONMENT AGENCY", r"HIGHWAYS ENGLAND", r"NATIONAL HIGHWAYS",
     r"PENSION FUND", r"SUPERANNUATION", r"VALUATION OFFICE",
     r"^TEACHERS PENSIONS?\b", r"^NEST\b",
@@ -77,6 +82,7 @@ EXCLUDED_PATTERNS = [
     r"^UNKNOWN\b", r"\bINTERNAL\b", r"^THIRD PARTY SUPPLIER",
     r"^MR\b", r"^MRS\b", r"^MISS\b", r"^MS\b", r"^DR\b",
     r"^BANK OF\b", r"BUILDING SOCIETY$",   # treasury counterparties, not suppliers
+    r"\bBARCLAYCARD\b", r"DD PAYMENT", r"DIRECT DEBIT", r"DO NOT USE",
     r"^BARCLAYS\b", r"^LLOYDS\b", r"^NATWEST\b", r"^HSBC\b", r"^SANTANDER\b",
     r"LIQUIDITY FUND", r"^LONDON TREASURY", r"MONEY MARKET FUND",
 ]
