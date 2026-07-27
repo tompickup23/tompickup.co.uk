@@ -23,7 +23,14 @@ from resolve_suppliers import normalise, classify
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PROC = Path.home() / "observatory-data/processed"
-EC = Path.home() / "clawd/burnley-council/data/shared/ec_donations.json"
+def _ec_path():
+    for c in [Path.home() / "clawd/burnley-council/data/shared/ec_donations.json",
+              Path.home() / "aidoge/burnley-council/data/shared/ec_donations.json",
+              Path("/root/aidoge/burnley-council/data/shared/ec_donations.json")]:
+        if c.exists():
+            return c
+    raise SystemExit("ec_donations.json not found")
+EC = _ec_path()
 
 ec = json.loads(EC.read_text())
 rows = [r for rs in ec.get("donations_by_area", {}).values() for r in rs]

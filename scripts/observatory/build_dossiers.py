@@ -186,7 +186,7 @@ for crn in sorted(crns):
                   "note": "Register facts as at the snapshot dates shown; "
                           "assessments are Observatory opinion with their "
                           "basis stated. Report errors: "
-                          "corrections@tompickup.co.uk"},
+                          "tom.pickup@lancashire.gov.uk"},
         "crn": crn, "name": m["name"],
         "register": {
             "status": m["status"], "companyType": m["companyType"],

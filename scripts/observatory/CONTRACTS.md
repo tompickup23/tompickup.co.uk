@@ -189,5 +189,5 @@ Cap projects at the full Lancashire set (~700 rows, fine).
 Shared furniture (every page): breadcrumb from /lgr/; footer block with the
 disclaimer set (see LEGAL.md s7 in the clawd briefing pack); attribution lines
 per source; "Report an error" mailto link (info@ style address:
-corrections@tompickup.co.uk) + link to method page corrections section;
+tom.pickup@lancashire.gov.uk) + link to method page corrections section;
 data-date labels rendered from $meta.
