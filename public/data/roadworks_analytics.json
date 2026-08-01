@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-01T08:13:43.430368+00:00",
+    "generated": "2026-08-01T19:03:07.200374+00:00",
     "live_works": 985,
     "archived_works": 15295,
     "total_analysed": 16280
@@ -500,73 +500,73 @@
   "district_volume": {
     "lancaster": {
       "active": 140,
-      "completed_30d": 421,
+      "completed_30d": 397,
       "completed_90d": 1206,
       "trend": "stable"
     },
     "west_lancashire": {
       "active": 121,
-      "completed_30d": 643,
+      "completed_30d": 623,
       "completed_90d": 1737,
       "trend": "stable"
     },
     "south_ribble": {
       "active": 108,
-      "completed_30d": 452,
+      "completed_30d": 431,
       "completed_90d": 1169,
       "trend": "stable"
     },
     "pendle": {
       "active": 94,
-      "completed_30d": 261,
+      "completed_30d": 252,
       "completed_90d": 646,
-      "trend": "increasing"
+      "trend": "stable"
     },
     "preston": {
       "active": 80,
-      "completed_30d": 484,
+      "completed_30d": 464,
       "completed_90d": 1249,
       "trend": "stable"
     },
     "chorley": {
       "active": 73,
-      "completed_30d": 354,
+      "completed_30d": 337,
       "completed_90d": 930,
       "trend": "stable"
     },
     "hyndburn": {
       "active": 73,
-      "completed_30d": 194,
+      "completed_30d": 191,
       "completed_90d": 571,
       "trend": "stable"
     },
     "burnley": {
       "active": 64,
-      "completed_30d": 225,
+      "completed_30d": 214,
       "completed_90d": 637,
       "trend": "stable"
     },
     "ribble_valley": {
       "active": 62,
-      "completed_30d": 187,
+      "completed_30d": 181,
       "completed_90d": 514,
       "trend": "stable"
     },
     "rossendale": {
       "active": 60,
-      "completed_30d": 213,
+      "completed_30d": 203,
       "completed_90d": 566,
       "trend": "stable"
     },
     "fylde": {
       "active": 55,
-      "completed_30d": 275,
+      "completed_30d": 267,
       "completed_90d": 623,
       "trend": "increasing"
     },
     "wyre": {
       "active": 55,
-      "completed_30d": 281,
+      "completed_30d": 263,
       "completed_90d": 718,
       "trend": "stable"
     }
@@ -579,9 +579,9 @@
       "unknown": 0
     },
     "completed_30d": {
-      "high": 775,
-      "medium": 870,
-      "low": 2345,
+      "high": 750,
+      "medium": 826,
+      "low": 2247,
       "unknown": 0
     }
   },
@@ -624,7 +624,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 576,
+        "days": 577,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -632,7 +632,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 386,
+        "days": 387,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -648,7 +648,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 245,
+        "days": 246,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -656,7 +656,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 220,
+        "days": 221,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -678,6 +678,22 @@
         "category": "Major"
       },
       {
+        "road": "Millennium Way",
+        "district": "chorley",
+        "days": 208,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
+        "road": "Preston Road",
+        "district": "chorley",
+        "days": 208,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
         "road": "Colne Road",
         "district": "burnley",
         "days": 208,
@@ -691,22 +707,6 @@
         "days": 207,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-06T07:00:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Millennium Way",
-        "district": "chorley",
-        "days": 207,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Preston Road",
-        "district": "chorley",
-        "days": 207,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
         "category": "Major"
       },
       {
@@ -776,7 +776,7 @@
       {
         "road": "Lancaster Road",
         "district": "preston",
-        "days": 102,
+        "days": 103,
         "operator": "Lancashire County Council",
         "start_date": "2026-04-20T08:30:00+00:00",
         "category": "Major"
