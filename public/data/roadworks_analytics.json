@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-02T08:16:36.004140+00:00",
+    "generated": "2026-08-02T19:03:42.447439+00:00",
     "live_works": 1306,
     "archived_works": 15329,
     "total_analysed": 16635
@@ -500,73 +500,73 @@
   "district_volume": {
     "west_lancashire": {
       "active": 182,
-      "completed_30d": 626,
+      "completed_30d": 595,
       "completed_90d": 1735,
       "trend": "stable"
     },
     "lancaster": {
       "active": 173,
-      "completed_30d": 405,
+      "completed_30d": 393,
       "completed_90d": 1203,
       "trend": "stable"
     },
     "south_ribble": {
       "active": 157,
-      "completed_30d": 437,
+      "completed_30d": 427,
       "completed_90d": 1173,
       "trend": "stable"
     },
     "preston": {
       "active": 122,
-      "completed_30d": 467,
+      "completed_30d": 452,
       "completed_90d": 1244,
       "trend": "stable"
     },
     "pendle": {
       "active": 121,
-      "completed_30d": 252,
+      "completed_30d": 245,
       "completed_90d": 644,
       "trend": "stable"
     },
     "chorley": {
       "active": 105,
-      "completed_30d": 340,
+      "completed_30d": 323,
       "completed_90d": 925,
       "trend": "stable"
     },
     "hyndburn": {
       "active": 88,
-      "completed_30d": 192,
+      "completed_30d": 191,
       "completed_90d": 570,
       "trend": "stable"
     },
     "ribble_valley": {
       "active": 81,
-      "completed_30d": 182,
+      "completed_30d": 173,
       "completed_90d": 510,
       "trend": "stable"
     },
     "wyre": {
       "active": 73,
-      "completed_30d": 266,
+      "completed_30d": 256,
       "completed_90d": 714,
       "trend": "stable"
     },
     "burnley": {
       "active": 69,
-      "completed_30d": 216,
+      "completed_30d": 208,
       "completed_90d": 636,
       "trend": "stable"
     },
     "fylde": {
       "active": 69,
-      "completed_30d": 269,
+      "completed_30d": 251,
       "completed_90d": 623,
       "trend": "increasing"
     },
     "rossendale": {
       "active": 66,
-      "completed_30d": 205,
+      "completed_30d": 199,
       "completed_90d": 566,
       "trend": "stable"
     }
@@ -579,9 +579,9 @@
       "unknown": 0
     },
     "completed_30d": {
-      "high": 765,
-      "medium": 830,
-      "low": 2262,
+      "high": 740,
+      "medium": 792,
+      "low": 2181,
       "unknown": 0
     }
   },
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1100,
+        "days": 1101,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -632,7 +632,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 577,
+        "days": 578,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -640,7 +640,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 387,
+        "days": 388,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -648,7 +648,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 331,
+        "days": 332,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -664,7 +664,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 246,
+        "days": 247,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -672,7 +672,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 221,
+        "days": 222,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -694,6 +694,22 @@
         "category": "Major"
       },
       {
+        "road": "Millennium Way",
+        "district": "chorley",
+        "days": 209,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
+        "road": "Preston Road",
+        "district": "chorley",
+        "days": 209,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
         "road": "Colne Road",
         "district": "burnley",
         "days": 209,
@@ -707,22 +723,6 @@
         "days": 208,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-06T07:00:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Millennium Way",
-        "district": "chorley",
-        "days": 208,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Preston Road",
-        "district": "chorley",
-        "days": 208,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
         "category": "Major"
       },
       {
@@ -784,6 +784,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Whalley Road",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-01",
+        "days_overdue": 1,
+        "category": "Immediate - Emergency"
+      },
+      {
         "road": "Caton Road",
         "district": "lancaster",
         "operator": "Lancashire County Council",
@@ -800,14 +808,14 @@
         "category": "Minor"
       },
       {
-        "road": "Whalley Road",
-        "district": "ribble_valley",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-08-01",
+        "road": "Cemetery Road",
+        "district": "burnley",
+        "operator": "BT",
+        "planned_end": "2026-08-02",
         "days_overdue": 0,
-        "category": "Immediate - Emergency"
+        "category": "Minor"
       }
     ],
-    "overdue_count": 3
+    "overdue_count": 4
   }
 }
