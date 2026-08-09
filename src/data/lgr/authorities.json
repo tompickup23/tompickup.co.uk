@@ -1,12 +1,13 @@
 {
  "$meta": {
-  "title": "Lancashire LGR \u2014 constituent authorities, canonical dataset",
+  "title": "Lancashire LGR — constituent authorities, canonical dataset",
   "financialYear": "2026/27",
-  "budgetNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement) \u2014 see basis per entry.",
-  "bandDNote": "Council's own Band D element only (excl. police \u00a3292.40, fire \u00a394.73, parish precepts). District residents also pay the LCC county precept.",
+  "budgetNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement) — see basis per entry.",
+  "bandDNote": "Council's own Band D element only (excl. police £292.40, fire £94.73, parish precepts). District residents also pay the LCC county precept.",
   "metricsNote": "Population and place indicators: ONS Census 2021 and official statistics via the ukdemographics data platform (extracted 2026-07).",
   "compiled": "2026-07-18",
-  "balanceNote": "Usable revenue reserves at 31 Mar 2025 (earmarked + unallocated GF, excl. schools/DSG/HRA) from MHCLG Revenue Outturn Summary 2024-25; external borrowing from MHCLG Borrowing & Investment live table Q4 2025-26. Authority-reported; Blackburn with Darwen return uncertified."
+  "balanceNote": "Usable revenue reserves at 31 Mar 2025 (earmarked + unallocated GF, excl. schools/DSG/HRA) from MHCLG Revenue Outturn Summary 2024-25; external borrowing from MHCLG Borrowing & Investment live table Q4 2025-26. Authority-reported; Blackburn with Darwen return uncertified.",
+  "taxBaseNote": "Tax bases are each authority's actual 2026/27 council tax setting base. Primary source MHCLG, Council Tax levels set by local authorities in England 2026 to 2027, Table 10, column 7, corroborated against 13 of the 14 councils' own resolutions or tax base determinations and against the Lancashire PCC precept apportionment, which reproduces every figure to the penny. Chorley does not publish its resolution appendix, so its figure is the MHCLG return corroborated by the PCC apportionment. The 12 district bases sum to 397,990.26 against LCC's own 397,989.95."
  },
  "authorities": {
   "Lancaster": {
@@ -37,7 +38,11 @@
    "reserves_m": 28.7,
    "debt_m": 56.9,
    "debt_m_2026": 55.9,
-   "balanceNote": "part HRA-related"
+   "balanceNote": "part HRA-related",
+   "taxBase2627": 43833.0,
+   "taxBase2627Source": "https://www.lancaster.gov.uk/assets/attach/16386/2026-27-Final-Tax-Base.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Preston": {
    "ons": "E07000123",
@@ -47,10 +52,10 @@
    "budgetBasis": "Total Net Requirement (Summary Revenue Account)",
    "budgetConfidence": "high",
    "budgetSource": "https://www.preston.gov.uk/media/24815/Control-Budget-2026-27/pdf/Control_Book_2026-27_Final.pdf",
-   "budgetNote": "Includes business-rates retention and technical adjustments; council-tax-funded slice is \u00a316.974m",
+   "budgetNote": "Includes business-rates retention and technical adjustments; council-tax-funded slice is £16.974m",
    "bandD_own": 375.34,
    "bandDConfidence": "medium",
-   "bandDSource": "Control Budget 2026/27 (Band D \u00a3375.34, +2.99%)",
+   "bandDSource": "Control Budget 2026/27 (Band D £375.34, +2.99%)",
    "metrics": {
     "chargeableDwellings": 66601,
     "totalDwellings": 69951,
@@ -67,7 +72,11 @@
    },
    "reserves_m": 42.8,
    "debt_m": 12.4,
-   "debt_m_2026": 12.3
+   "debt_m_2026": 12.3,
+   "taxBase2627": 45222.9,
+   "taxBase2627Source": "https://www.preston.gov.uk/media/24815/Control-Budget-2026-27/pdf/Control_Book_2026-27_Final.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Ribble Valley": {
    "ons": "E07000124",
@@ -97,7 +106,11 @@
    "reserves_m": 20.7,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 25853.0,
+   "taxBase2627Source": "https://ribblevalley.moderngov.co.uk/documents/s10872/REVENUE%20BUDGET%20202627%20AND%20CAPITAL%20PROGRAMME%20202627%20202930%20AND%20SETTING%20THE%20COUNCIL%20TAX%20FOR%20EACH%20.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Fylde": {
    "ons": "E07000119",
@@ -127,7 +140,11 @@
    "reserves_m": 15.8,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 33067.0,
+   "taxBase2627Source": "https://new.fylde.gov.uk/wp-content/uploads/2026/03/Fylde-Council-Spending-Plans-2026-27.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Wyre": {
    "ons": "E07000128",
@@ -139,7 +156,7 @@
    "budgetSource": "https://wyre.moderngov.co.uk/documents/s31299/Revenue%20Budget%20Council%20Tax%20and%20Capital%20Programme.pdf",
    "bandD_own": 240.05,
    "bandDConfidence": "high",
-   "bandDSource": "Revenue Budget & Council Tax 2026/27, Full Council 5 Mar 2026 (Band D \u00a3240.05)",
+   "bandDSource": "Revenue Budget & Council Tax 2026/27, Full Council 5 Mar 2026 (Band D £240.05)",
    "metrics": {
     "chargeableDwellings": 54562,
     "totalDwellings": 55839,
@@ -157,7 +174,11 @@
    "reserves_m": 40.3,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 40088.94,
+   "taxBase2627Source": "https://wyre.moderngov.co.uk/documents/s31299/Revenue%20Budget%20Council%20Tax%20and%20Capital%20Programme.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Hyndburn": {
    "ons": "E07000120",
@@ -169,7 +190,7 @@
    "budgetSource": "https://democracy.hyndburnbc.gov.uk/documents/s23577/a%20General%20Fund%20Revenue%20Budget%20202627.pdf",
    "bandD_own": 276.46,
    "bandDConfidence": "high",
-   "bandDSource": "https://www.hyndburnbc.gov.uk/counciltax/5/ (frozen; reconciles to \u00a32,465.34 total)",
+   "bandDSource": "https://www.hyndburnbc.gov.uk/counciltax/5/ (frozen; reconciles to £2,465.34 total)",
    "metrics": {
     "chargeableDwellings": 36994,
     "totalDwellings": 37948,
@@ -186,7 +207,11 @@
    },
    "reserves_m": 18.1,
    "debt_m": 9.5,
-   "debt_m_2026": 9.5
+   "debt_m_2026": 9.5,
+   "taxBase2627": 22183.0,
+   "taxBase2627Source": "https://democracy.hyndburnbc.gov.uk/documents/s23579/",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Rossendale": {
    "ons": "E07000125",
@@ -215,19 +240,23 @@
    },
    "reserves_m": 12.2,
    "debt_m": 3.3,
-   "debt_m_2026": 3.0
+   "debt_m_2026": 3.0,
+   "taxBase2627": 21350.0,
+   "taxBase2627Source": "https://www.rossendale.gov.uk/download/meetings/id/12224/C1.%202026.27%20Council%20Budget%20and%20Medium-Term%20Financial%20Strategy",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Pendle": {
    "ons": "E07000122",
    "type": "district",
    "population": 95758,
    "netBudget2627_m": 18.444,
-   "budgetBasis": "Budget Requirement (net expenditure \u00a318.944m)",
+   "budgetBasis": "Budget Requirement (net expenditure £18.944m)",
    "budgetConfidence": "high",
    "budgetSource": "https://www.pendle.gov.uk/download/meetings/id/31576/item_10_b_-_general_fund_revenue_budget_202627",
    "bandD_own": 316.71,
    "bandDConfidence": "high",
-   "bandDSource": "https://www.pendle.gov.uk/news/article/407/ (+2.99%, Band D \u00a3316.71)",
+   "bandDSource": "https://www.pendle.gov.uk/news/article/407/ (+2.99%, Band D £316.71)",
    "metrics": {
     "chargeableDwellings": 40779,
     "totalDwellings": 41602,
@@ -244,7 +273,11 @@
    },
    "reserves_m": 13.5,
    "debt_m": 18.4,
-   "debt_m_2026": 16.9
+   "debt_m_2026": 16.9,
+   "taxBase2627": 25164.44,
+   "taxBase2627Source": "https://www.pendle.gov.uk/download/meetings/id/31585/item_11_-_appendix_-_council_tax_resolution",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Burnley": {
    "ons": "E07000117",
@@ -273,7 +306,11 @@
    },
    "reserves_m": 26.7,
    "debt_m": 59.5,
-   "debt_m_2026": 62.9
+   "debt_m_2026": 62.9,
+   "taxBase2627": 24497.0,
+   "taxBase2627Source": "https://burnley.moderngov.co.uk/documents/b12914/Council%20Tax%20Resolution%20Report%20of%20the%20Chief%20Financial%20Officer%20and%20Executive%20Minute%20Extracts%2003rd-Mar-2026%2018.30%20Full%20Council.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Chorley": {
    "ons": "E07000118",
@@ -285,7 +322,7 @@
    "budgetSource": "https://chorley.moderngov.co.uk/documents/s194092/",
    "bandD_own": 192.85,
    "bandDConfidence": "medium",
-   "bandDSource": "General precept, frozen; \u00a3215.99 incl. special expenses in unparished area (https://chorley.gov.uk/council-tax/finance)",
+   "bandDSource": "General precept, frozen; £215.99 incl. special expenses in unparished area (https://chorley.gov.uk/council-tax/finance)",
    "metrics": {
     "chargeableDwellings": 52077,
     "totalDwellings": 53081,
@@ -303,7 +340,11 @@
    "reserves_m": 11.6,
    "debt_m": 86.8,
    "debt_m_2026": 83.0,
-   "balanceNote": "investment-asset borrowing"
+   "balanceNote": "investment-asset borrowing",
+   "taxBase2627": 39157.93,
+   "taxBase2627Source": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "medium"
   },
   "South Ribble": {
    "ons": "E07000126",
@@ -333,7 +374,11 @@
    "reserves_m": 19.9,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "no external borrowing per MHCLG returns"
+   "balanceNote": "no external borrowing per MHCLG returns",
+   "taxBase2627": 38816.17,
+   "taxBase2627Source": "https://southribble.moderngov.co.uk/documents/s55419/Appendix+A+Formal+Council+Tax+Resolution+Including+Parish+Precepts+202627.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "West Lancashire": {
    "ons": "E07000127",
@@ -363,7 +408,11 @@
    "reserves_m": 3.5,
    "debt_m": 88.2,
    "debt_m_2026": 98.2,
-   "balanceNote": "includes HRA housing debt; HRA reserves \u00a36.7m excluded"
+   "balanceNote": "includes HRA housing debt; HRA reserves £6.7m excluded",
+   "taxBase2627": 38756.88,
+   "taxBase2627Source": "https://westlancs.moderngov.co.uk/documents/s51941/Appendix%20A%20-%20Declaration%20of%20Council%20Tax%20Base%202026.27.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Blackpool": {
    "ons": "E06000009",
@@ -393,7 +442,11 @@
    "reserves_m": 34.7,
    "debt_m": 570.4,
    "debt_m_2026": 606.8,
-   "balanceNote": "heaviest debt of any merging council, rising"
+   "balanceNote": "heaviest debt of any merging council, rising",
+   "taxBase2627": 39477.0,
+   "taxBase2627Source": "https://www.blackpool.gov.uk/Your-Council/Transparency-and-open-data/Documents/Budget-Book/Municipal-Budget-Year-Ending-31st-March-2027.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Blackburn with Darwen": {
    "ons": "E06000008",
@@ -423,7 +476,11 @@
    "reserves_m": 81.8,
    "debt_m": 116.5,
    "debt_m_2026": 108.3,
-   "balanceNote": "RS return uncertified"
+   "balanceNote": "RS return uncertified",
+   "taxBase2627": 38246.03,
+   "taxBase2627Source": "https://blackburn.moderngov.co.uk/documents/s32529/Revenue%20Budget%202026-27%20Medium%20Term%20Financial%20Strategy%202026-29.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   }
  }
 }

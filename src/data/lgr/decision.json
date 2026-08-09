@@ -13,10 +13,42 @@
  "monthsDecisionToVesting": 20.5,
  "subjectTo": "Parliamentary approval",
  "unitaries": {
-  "North Lancashire": { "accent": "#12b6cf", "councils": ["Lancaster", "Preston", "Ribble Valley"] },
-  "West Lancashire":  { "accent": "#30d158", "councils": ["Fylde", "Wyre", "Blackpool"],
-    "note": "\"West Lancashire\" is the government's own working label for the Blackpool, Fylde and Wyre unitary in its 16 July decision. Final names are not yet agreed, and this is not the current West Lancashire district, which joins South Lancashire" },
-  "East Lancashire":  { "accent": "#ff9f0a", "councils": ["Blackburn with Darwen", "Hyndburn", "Rossendale", "Pendle", "Burnley"], "home": true },
-  "South Lancashire": { "accent": "#bf5af2", "councils": ["Chorley", "South Ribble", "West Lancashire"] }
+  "North Lancashire": {
+   "accent": "#12b6cf",
+   "councils": [
+    "Lancaster",
+    "Preston",
+    "Ribble Valley"
+   ]
+  },
+  "West Lancashire": {
+   "accent": "#30d158",
+   "councils": [
+    "Fylde",
+    "Wyre",
+    "Blackpool"
+   ],
+   "note": "\"West Lancashire\" is the government's own working label for the Blackpool, Fylde and Wyre unitary in its 16 July decision. The bid name, used in the AI DOGE LGR tracker and internal modelling, is \"Fylde Coast\". Final names are not yet agreed, and this is not the current West Lancashire district, which joins South Lancashire.",
+   "altName": "Fylde Coast"
+  },
+  "East Lancashire": {
+   "accent": "#ff9f0a",
+   "councils": [
+    "Blackburn with Darwen",
+    "Hyndburn",
+    "Rossendale",
+    "Pendle",
+    "Burnley"
+   ],
+   "home": true
+  },
+  "South Lancashire": {
+   "accent": "#bf5af2",
+   "councils": [
+    "Chorley",
+    "South Ribble",
+    "West Lancashire"
+   ]
+  }
  }
 }

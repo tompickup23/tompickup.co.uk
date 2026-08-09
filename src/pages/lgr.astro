@@ -205,7 +205,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note">
         Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
         the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
-        ~500,000 population the government has used as a working guideline</strong> for new unitaries, with East
+        ~500,000 population the government has used as a working guideline</strong> for new unitaries. East
         Lancashire comes closest at {fmt(498255)}, while the other three sit between 334,000 and 353,000.
       </p>
       <div class="doge-panel">
@@ -345,9 +345,16 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
                 <span class="lgr-mx-bval">£{u.bandD.spread.toFixed(2)}</span>
               </div>
               <div class="lgr-mx-brow alt">
-                <span class="lgr-mx-bname">Dwelling-weighted average across the new council</span>
-                <span class="lgr-mx-bval">£{u.bandD.dwellingWeightedAvg.toFixed(2)}</span>
+                <span class="lgr-mx-bname">Revenue-neutral harmonised rate</span>
+                <span class="lgr-mx-bval">£{u.bandD.harmonisedBandD.toFixed(2)}</span>
               </div>
+              <p class="lgr-mx-bnote">
+                The harmonised rate is weighted by tax base, so the new council raises the same total as
+                its predecessors combined. Government has up to seven years to converge, with a single
+                uniform Band D mandatory by year eight, which for a 2028 vesting means 2035/36 at the
+                latest (Local Government (Structural Changes) (Finance) Regulations 2008, Part 4, as
+                extended by SI 2018/1296).
+              </p>
             </div>
 
             <div class="lgr-mx-needs-h">The need it would have to meet <span>vs Lancashire average</span></div>
@@ -522,7 +529,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         <p class="doge-note" style="margin-top:0.9rem;">
           Of the county's <strong>1,214 contract award notices (£3.96bn)</strong>,
           <strong>{C.contractsBeyondVesting.straddleVesting} contracts worth
-          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong>.
+          £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong>:
           they transfer to the successor councils mid-term. The longest-running include a £204.3m public-health
           nursing contract to 2032, county-wide energy supply to September 2028, waste-recovery services to 2030 and
           an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
@@ -607,11 +614,11 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <p class="doge-note">
         Reorganisation is not the whole picture. Lancashire's end-state is <strong>five bodies, not four</strong>:
         the four new unitaries plus the <strong>Lancashire Combined County Authority</strong>, formally launched on
-        5 February 2025 with Lancashire County Council, Blackpool and Blackburn with Darwen as constituent members.
+        5 February 2025 with Lancashire County Council, Blackpool and Blackburn with Darwen as constituent members,
         and a mayor promised alongside reorganisation. Strategic functions are already lifting to CCA level:
       </p>
       <div class="doge-statband" style="grid-template-columns: repeat(2, 1fr);">
-        <div class="doge-stat"><div class="v teal">£640m</div><div class="l">Four-year transport settlement: the CCA becomes Lancashire's Local Transport Authority from 1 April</div></div>
+        <div class="doge-stat"><div class="v teal">£640m</div><div class="l">Four-year transport settlement: the CCA became Lancashire's Local Transport Authority on 1 April 2026</div></div>
         <div class="doge-stat"><div class="v teal">£40.8m</div><div class="l">Adult Skills Fund administered by the CCA from August 2026 (previously central government)</div></div>
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
@@ -633,9 +640,9 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <h2 class="doge-h2">The balance sheet they inherit</h2>
       <p class="doge-note">
         Reorganisation transfers balance sheets, not just services. From certified MHCLG returns (reserves at
-        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions.
+        31 March 2025; borrowing at 31 March 2026, provisional), the merging councils bring these positions,
         <strong>before</strong> Lancashire County Council's own £345.0m reserves and
-        £{fmt(Math.round(C.debt_m_2026))}m borrowing, whose split across the four successors is undetermined:
+        £{fmt(Math.round(C.debt_m_2026))}m of external borrowing, whose split across the four successors is undetermined:
       </p>
       <div class="lgr-prec-grid">
         {MODEL.map((u) => (
@@ -795,8 +802,9 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <div class="doge-panel">
         <ul class="lgr-gaps">
           <li><strong>Official transition costing</strong> for the four-unitary configuration has not been published. The £50m–£100m envelope above is a precedent read-across, not a government figure.</li>
-          <li><strong>How council tax will actually be harmonised</strong>: the gaps per unitary are quantified above, but the harmonisation path (level, speed, direction) is a decision for the shadow councils and government; no scheme has been published.</li>
-          <li><strong>Balance-sheet disaggregation</strong>: how LCC's assets, debt (including the bond portfolio), reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>
+          <li><strong>How council tax will actually be harmonised</strong>: the legal framework is settled, the choice is not. The equalisation power lets a new unitary charge different amounts in predecessor areas for up to seven years, with a single uniform Band D mandatory by year eight (SI 2008/3022 Part 4, extended by SI 2018/1296). Because a new authority has no prior year of its own, the Secretary of State lays an Alternative Notional Amount under s.52ZE of the Local Government Finance Act 1992 as the referendum comparator, and a restructuring authority may test its increase either against each predecessor area or against the average across them. Of the four 2023 unitaries, Somerset and Cumberland harmonised on day one and North Yorkshire phased over two years. What has not been published is which path Lancashire takes: that is a decision for the shadow councils and government.</li>
+          <li><strong>The second-home premium clock is already running</strong>: a first determination under s.11C(3) must be made at least one year before the financial year it applies to, and SI 2026/406 (in force 8 May 2026) treats a successor council's determination as a first determination for any area whose predecessor had not made one. For the premium to apply from vesting on 1 April 2028 in Ribble Valley, Fylde, Wyre, Hyndburn, Rossendale and Burnley, a determination must be made by 31 March 2027, before the shadow authorities are elected. No council has published one.</li>
+          <li><strong>Balance-sheet disaggregation</strong>: how LCC's assets (including the £519m bond portfolio), debt, reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>
           <li><strong>A few Band D figures</strong> (Lancaster, Preston, Ribble Valley, Fylde, Chorley) are sourced from budget papers but await confirmation against the formal council-tax resolution, marked medium-confidence in the data feed.</li>
           <li><strong>The Combined Authority split</strong>: which functions (and what money) end up at CCA rather than unitary level is still being settled; the model's combined budgets will need a CCA carve-out once a published disaggregation exists.</li>
         </ul>

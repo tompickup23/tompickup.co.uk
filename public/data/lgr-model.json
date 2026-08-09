@@ -271,22 +271,30 @@
       "council": "Lancaster",
       "ownElement": 272.2,
       "councilBill": 2073.95,
-      "confidence": "medium"
+      "confidence": "medium",
+      "taxBase": 43833.0,
+      "delta": 17.75
      },
      {
       "council": "Preston",
       "ownElement": 375.34,
       "councilBill": 2177.09,
-      "confidence": "medium"
+      "confidence": "medium",
+      "taxBase": 45222.9,
+      "delta": -85.39
      },
      {
       "council": "Ribble Valley",
       "ownElement": 170.69,
       "councilBill": 1972.44,
-      "confidence": "medium"
+      "confidence": "medium",
+      "taxBase": 25853.0,
+      "delta": 119.26
      }
     ],
-    "dwellingWeightedAvg": 2098.53,
+    "harmonisedBandD": 2091.7,
+    "taxBase": 114908.9,
+    "basis": "Revenue neutral: tax base weighted, so the new council raises the same total as its predecessors. Council controlled element only; police, fire and parish precepts are excluded and are unaffected.",
     "lowest": {
      "council": "Ribble Valley",
      "bill": 1972.44
@@ -302,7 +310,7 @@
    "name": "West Lancashire",
    "accent": "#30d158",
    "home": false,
-   "note": "\"West Lancashire\" is the government's own working label for the Blackpool, Fylde and Wyre unitary in its 16 July decision. Final names are not yet agreed, and this is not the current West Lancashire district, which joins South Lancashire",
+   "note": "\"West Lancashire\" is the government's own working label for the Blackpool, Fylde and Wyre unitary in its 16 July decision. The bid name, used in the AI DOGE LGR tracker and internal modelling, is \"Fylde Coast\". Final names are not yet agreed, and this is not the current West Lancashire district, which joins South Lancashire.",
    "councils": [
     "Fylde",
     "Wyre",
@@ -366,22 +374,30 @@
       "council": "Fylde",
       "ownElement": 239.11,
       "councilBill": 2040.86,
-      "confidence": "medium"
+      "confidence": "medium",
+      "taxBase": 33067.0,
+      "delta": 30.21
      },
      {
       "council": "Wyre",
       "ownElement": 240.05,
       "councilBill": 2041.8,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 40088.94,
+      "delta": 29.27
      },
      {
       "council": "Blackpool",
       "ownElement": 2126.09,
       "councilBill": 2126.09,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 39477.0,
+      "delta": -55.02
      }
     ],
-    "dwellingWeightedAvg": 2077.64,
+    "harmonisedBandD": 2071.07,
+    "taxBase": 112632.94,
+    "basis": "Revenue neutral: tax base weighted, so the new council raises the same total as its predecessors. Council controlled element only; police, fire and parish precepts are excluded and are unaffected.",
     "lowest": {
      "council": "Fylde",
      "bill": 2040.86
@@ -479,34 +495,46 @@
       "council": "Blackburn with Darwen",
       "ownElement": 2062.96,
       "councilBill": 2062.96,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 38246.03,
+      "delta": 40.73
      },
      {
       "council": "Hyndburn",
       "ownElement": 276.46,
       "councilBill": 2078.21,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 22183.0,
+      "delta": 25.48
      },
      {
       "council": "Rossendale",
       "ownElement": 327.16,
       "councilBill": 2128.91,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 21350.0,
+      "delta": -25.22
      },
      {
       "council": "Pendle",
       "ownElement": 316.71,
       "councilBill": 2118.46,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 25164.44,
+      "delta": -14.77
      },
      {
       "council": "Burnley",
       "ownElement": 351.44,
       "councilBill": 2153.19,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 24497.0,
+      "delta": -49.5
      }
     ],
-    "dwellingWeightedAvg": 2103.69,
+    "harmonisedBandD": 2103.69,
+    "taxBase": 131440.47,
+    "basis": "Revenue neutral: tax base weighted, so the new council raises the same total as its predecessors. Council controlled element only; police, fire and parish precepts are excluded and are unaffected.",
     "lowest": {
      "council": "Blackburn with Darwen",
      "bill": 2062.96
@@ -586,22 +614,30 @@
       "council": "Chorley",
       "ownElement": 192.85,
       "councilBill": 1994.6,
-      "confidence": "medium"
+      "confidence": "medium",
+      "taxBase": 39157.93,
+      "delta": 33.65
      },
      {
       "council": "South Ribble",
       "ownElement": 241.28,
       "councilBill": 2043.03,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 38816.17,
+      "delta": -14.78
      },
      {
       "council": "West Lancashire",
       "ownElement": 245.71,
       "councilBill": 2047.46,
-      "confidence": "high"
+      "confidence": "high",
+      "taxBase": 38756.88,
+      "delta": -19.21
      }
     ],
-    "dwellingWeightedAvg": 2028.13,
+    "harmonisedBandD": 2028.25,
+    "taxBase": 116730.98,
+    "basis": "Revenue neutral: tax base weighted, so the new council raises the same total as its predecessors. Council controlled element only; police, fire and parish precepts are excluded and are unaffected.",
     "lowest": {
      "council": "Chorley",
      "bill": 1994.6
@@ -1226,7 +1262,11 @@
    "reserves_m": 28.7,
    "debt_m": 56.9,
    "debt_m_2026": 55.9,
-   "balanceNote": "part HRA-related"
+   "balanceNote": "part HRA-related",
+   "taxBase2627": 43833.0,
+   "taxBase2627Source": "https://www.lancaster.gov.uk/assets/attach/16386/2026-27-Final-Tax-Base.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Preston": {
    "ons": "E07000123",
@@ -1256,7 +1296,11 @@
    },
    "reserves_m": 42.8,
    "debt_m": 12.4,
-   "debt_m_2026": 12.3
+   "debt_m_2026": 12.3,
+   "taxBase2627": 45222.9,
+   "taxBase2627Source": "https://www.preston.gov.uk/media/24815/Control-Budget-2026-27/pdf/Control_Book_2026-27_Final.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Ribble Valley": {
    "ons": "E07000124",
@@ -1286,7 +1330,11 @@
    "reserves_m": 20.7,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 25853.0,
+   "taxBase2627Source": "https://ribblevalley.moderngov.co.uk/documents/s10872/REVENUE%20BUDGET%20202627%20AND%20CAPITAL%20PROGRAMME%20202627%20202930%20AND%20SETTING%20THE%20COUNCIL%20TAX%20FOR%20EACH%20.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Fylde": {
    "ons": "E07000119",
@@ -1316,7 +1364,11 @@
    "reserves_m": 15.8,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 33067.0,
+   "taxBase2627Source": "https://new.fylde.gov.uk/wp-content/uploads/2026/03/Fylde-Council-Spending-Plans-2026-27.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Wyre": {
    "ons": "E07000128",
@@ -1346,7 +1398,11 @@
    "reserves_m": 40.3,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "debt-free"
+   "balanceNote": "debt-free",
+   "taxBase2627": 40088.94,
+   "taxBase2627Source": "https://wyre.moderngov.co.uk/documents/s31299/Revenue%20Budget%20Council%20Tax%20and%20Capital%20Programme.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Hyndburn": {
    "ons": "E07000120",
@@ -1375,7 +1431,11 @@
    },
    "reserves_m": 18.1,
    "debt_m": 9.5,
-   "debt_m_2026": 9.5
+   "debt_m_2026": 9.5,
+   "taxBase2627": 22183.0,
+   "taxBase2627Source": "https://democracy.hyndburnbc.gov.uk/documents/s23579/",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Rossendale": {
    "ons": "E07000125",
@@ -1404,7 +1464,11 @@
    },
    "reserves_m": 12.2,
    "debt_m": 3.3,
-   "debt_m_2026": 3.0
+   "debt_m_2026": 3.0,
+   "taxBase2627": 21350.0,
+   "taxBase2627Source": "https://www.rossendale.gov.uk/download/meetings/id/12224/C1.%202026.27%20Council%20Budget%20and%20Medium-Term%20Financial%20Strategy",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Pendle": {
    "ons": "E07000122",
@@ -1433,7 +1497,11 @@
    },
    "reserves_m": 13.5,
    "debt_m": 18.4,
-   "debt_m_2026": 16.9
+   "debt_m_2026": 16.9,
+   "taxBase2627": 25164.44,
+   "taxBase2627Source": "https://www.pendle.gov.uk/download/meetings/id/31585/item_11_-_appendix_-_council_tax_resolution",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Burnley": {
    "ons": "E07000117",
@@ -1462,7 +1530,11 @@
    },
    "reserves_m": 26.7,
    "debt_m": 59.5,
-   "debt_m_2026": 62.9
+   "debt_m_2026": 62.9,
+   "taxBase2627": 24497.0,
+   "taxBase2627Source": "https://burnley.moderngov.co.uk/documents/b12914/Council%20Tax%20Resolution%20Report%20of%20the%20Chief%20Financial%20Officer%20and%20Executive%20Minute%20Extracts%2003rd-Mar-2026%2018.30%20Full%20Council.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Chorley": {
    "ons": "E07000118",
@@ -1492,7 +1564,11 @@
    "reserves_m": 11.6,
    "debt_m": 86.8,
    "debt_m_2026": 83.0,
-   "balanceNote": "investment-asset borrowing"
+   "balanceNote": "investment-asset borrowing",
+   "taxBase2627": 39157.93,
+   "taxBase2627Source": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "medium"
   },
   "South Ribble": {
    "ons": "E07000126",
@@ -1522,7 +1598,11 @@
    "reserves_m": 19.9,
    "debt_m": 0.0,
    "debt_m_2026": 0.0,
-   "balanceNote": "no external borrowing per MHCLG returns"
+   "balanceNote": "no external borrowing per MHCLG returns",
+   "taxBase2627": 38816.17,
+   "taxBase2627Source": "https://southribble.moderngov.co.uk/documents/s55419/Appendix+A+Formal+Council+Tax+Resolution+Including+Parish+Precepts+202627.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "West Lancashire": {
    "ons": "E07000127",
@@ -1552,7 +1632,11 @@
    "reserves_m": 3.5,
    "debt_m": 88.2,
    "debt_m_2026": 98.2,
-   "balanceNote": "includes HRA housing debt; HRA reserves \u00a36.7m excluded"
+   "balanceNote": "includes HRA housing debt; HRA reserves \u00a36.7m excluded",
+   "taxBase2627": 38756.88,
+   "taxBase2627Source": "https://westlancs.moderngov.co.uk/documents/s51941/Appendix%20A%20-%20Declaration%20of%20Council%20Tax%20Base%202026.27.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Blackpool": {
    "ons": "E06000009",
@@ -1582,7 +1666,11 @@
    "reserves_m": 34.7,
    "debt_m": 570.4,
    "debt_m_2026": 606.8,
-   "balanceNote": "heaviest debt of any merging council, rising"
+   "balanceNote": "heaviest debt of any merging council, rising",
+   "taxBase2627": 39477.0,
+   "taxBase2627Source": "https://www.blackpool.gov.uk/Your-Council/Transparency-and-open-data/Documents/Budget-Book/Municipal-Budget-Year-Ending-31st-March-2027.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   },
   "Blackburn with Darwen": {
    "ons": "E06000008",
@@ -1612,7 +1700,11 @@
    "reserves_m": 81.8,
    "debt_m": 116.5,
    "debt_m_2026": 108.3,
-   "balanceNote": "RS return uncertified"
+   "balanceNote": "RS return uncertified",
+   "taxBase2627": 38246.03,
+   "taxBase2627Source": "https://blackburn.moderngov.co.uk/documents/s32529/Revenue%20Budget%202026-27%20Medium%20Term%20Financial%20Strategy%202026-29.pdf",
+   "taxBase2627Basis": "Council tax setting base in Band D equivalents, item T in the section 31B formula, after discounts, exemptions, local council tax support and the authority's own allowance for losses on collection",
+   "taxBase2627Confidence": "high"
   }
  }
 }

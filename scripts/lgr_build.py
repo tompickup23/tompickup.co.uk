@@ -90,7 +90,22 @@ for uname, u in decision["unitaries"].items():
                       "confidence": A[n]["bandDConfidence"]})
     dwell = {n: A[n]["metrics"]["chargeableDwellings"] for n in members}
     wsum = sum(dwell.values())
-    band_avg = round(sum(b["councilBill"] * dwell[b["council"]] for b in bills) / wsum, 2)
+
+    # Revenue-neutral harmonised Band D. This MUST be weighted by tax base, not
+    # by dwellings: revenue equals the Band D rate times the tax base, so a
+    # dwelling-weighted mean does not raise the same money as the predecessors
+    # and is not the rate a merged council would actually set. Dwelling
+    # weighting overstated North Lancashire by £6.83 and the Blackpool, Fylde
+    # and Wyre unitary by £6.57, because it ignores band mix and council tax
+    # support. Matches burnley-council/scripts/lgr_budget_model.py.
+    tbase = {n: A[n]["taxBase2627"] for n in members}
+    tsum = sum(tbase.values())
+    for b in bills:
+        b["taxBase"] = tbase[b["council"]]
+    harmonised = round(
+        sum(b["councilBill"] * tbase[b["council"]] for b in bills) / tsum, 2)
+    for b in bills:
+        b["delta"] = round(harmonised - b["councilBill"], 2)
     lo = min(bills, key=lambda b: b["councilBill"])
     hi = max(bills, key=lambda b: b["councilBill"])
 
@@ -107,12 +122,25 @@ for uname, u in decision["unitaries"].items():
         "combined": {"population": combined, "needs": combined_need},
         "combinedPerCapita": round(combined * 1e6 / pop),
         "bandD": {
-            "bills": bills, "dwellingWeightedAvg": band_avg,
+            "bills": bills,
+            "harmonisedBandD": harmonised,
+            "taxBase": round(tsum, 2),
+            "basis": ("Revenue neutral: tax base weighted, so the new council "
+                      "raises the same total as its predecessors. Council "
+                      "controlled element only; police, fire and parish "
+                      "precepts are excluded and are unaffected."),
             "lowest": {"council": lo["council"], "bill": lo["councilBill"]},
             "highest": {"council": hi["council"], "bill": hi["councilBill"]},
             "spread": round(hi["councilBill"] - lo["councilBill"], 2),
         },
     })
+
+# The 12 district tax bases must reconcile to LCC's own, because the county
+# precept is levied on exactly the same properties. If this drifts, someone has
+# edited a tax base without checking it against the county.
+_dist = sum(A[n]["taxBase2627"] for n in all_names if A[n]["type"] == "district")
+assert abs(_dist - county["taxBase"]) < 5, (
+    f"district tax bases sum to {_dist:,.2f}, LCC has {county['taxBase']:,.2f}")
 
 # integrity checks — fail the build rather than publish a bad sum
 assert abs(sum(x["countyApportioned"]["population"] for x in unitaries) - LCC_BUDGET) < 0.5
