@@ -42,6 +42,47 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     </div>
   </section>
 
+  <!-- Section 2: Council Roles -->
+  <section class="roles-section">
+    <div class="container">
+      <ScrollReveal>
+        <div class="roles-card card">
+          <h2>My Council Work</h2>
+          <p class="roles-intro">
+            Alongside the Adult Social Care portfolio, my work at County Hall runs across
+            these committees and appointments.
+          </p>
+          <ul class="roles-list">
+            <li>
+              <strong>Cabinet</strong>
+              <span>Cabinet Member for Adult Social Care.</span>
+            </li>
+            <li>
+              <strong>Company Member Cabinet Committee</strong>
+              <span>The council's shareholder role in the companies it owns.</span>
+            </li>
+            <li>
+              <strong>Lancashire Health and Wellbeing Board</strong>
+              <span>Where the council and the NHS set shared health priorities.</span>
+            </li>
+            <li>
+              <strong>Edward Stocks Massey Bequest Fund</strong>
+              <span>Joint Advisory Committee, awarding grants for the benefit of Burnley.</span>
+            </li>
+            <li>
+              <strong>Arthur Edmondson Quinn Bequest</strong>
+              <span>A further Burnley charitable trust the council nominates to.</span>
+            </li>
+            <li>
+              <strong>Full Council</strong>
+              <span>County Councillor for the Padiham and Burnley West division.</span>
+            </li>
+          </ul>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
   <!-- Section 2: Accessibility Statement -->
   <section class="accessibility-section" id="accessibility">
     <div class="container-narrow">
@@ -137,6 +178,70 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     margin-bottom: 0;
   }
 
+  /* ---- Council Roles ---- */
+  .roles-section {
+    padding: 0 0 var(--space-xl);
+  }
+
+  .roles-card {
+    border-left: 3px solid var(--accent);
+  }
+
+  .roles-card h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+  }
+
+  .roles-intro {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+  }
+
+  .roles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .roles-list li {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .roles-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+
+  .roles-list strong {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .roles-list span {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 2px;
+  }
+
   /* ---- Accessibility ---- */
   .accessibility-section {
     padding: 0 0 var(--space-2xl);
@@ -190,6 +295,11 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     }
 
     .bio-body p {
+      text-align: left;
+    }
+
+    .roles-list {
+      grid-template-columns: 1fr;
       text-align: left;
     }
   }

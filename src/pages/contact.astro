@@ -160,18 +160,16 @@ import ScrollReveal from '../components/ScrollReveal.astro';
               </div>
             </div>
 
-            <!-- Surgery Hours Card -->
-            <div class="info-card card" id="surgery">
+            <!-- Response Times Card -->
+            <div class="info-card card" id="get-in-touch">
               <div class="info-card-icon" style="color: var(--accent-green);">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
                 </svg>
               </div>
               <h3>Get In Touch</h3>
-              <p class="surgery-notice">
+              <p class="contact-notice">
                 Use the contact form or email me directly. I aim to respond to most
                 enquiries within 48 hours.
               </p>
@@ -350,7 +348,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
     max-width: none;
   }
 
-  .surgery-notice {
+  .contact-notice {
     font-size: 0.9375rem;
     color: var(--text-secondary);
     line-height: 1.6;
