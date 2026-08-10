@@ -22,6 +22,8 @@ pip install -r requirements.txt
 python app.py                    # Run locally
 ```
 
+**Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
+
 ## Rules
 - Never commit .env or secrets
 - British English throughout
