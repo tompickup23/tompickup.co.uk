@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// One hub instead of three nav slots. Every project keeps its URL; this page
+// is where they are found, labelled in plain English by what a visitor wants
+// rather than by project codename.
+const PROJECTS = [
+  {
+    href: '/lgr/',
+    accent: '#ff9f0a',
+    title: "Lancashire's new councils",
+    desc: 'Fifteen councils become four in 2028. An interactive model of each new authority: who merges, the budget it runs, the need it has to meet.',
+    meta: 'Includes the contracts register and property map',
+  },
+  {
+    href: '/doge/',
+    accent: '#12b6cf',
+    title: 'Council spending investigations',
+    desc: 'Where the money actually goes, traced line by line through the spending files councils publish.',
+    meta: 'Burnley spending 2023 to 2026',
+  },
+  {
+    href: '/lancs/business/',
+    accent: '#30d158',
+    title: 'Lancashire Business Observatory',
+    desc: 'Live tracking of Lancashire companies: growth, money, innovation and the firms to watch, built from Companies House data.',
+    meta: 'Updated from official filings',
+  },
+  {
+    href: '/lancs/',
+    accent: '#bf5af2',
+    title: 'Lancashire in numbers',
+    desc: 'County-wide data on the council, the budget and the services people rely on.',
+    meta: 'The county picture',
+  },
+  {
+    href: 'https://aidoge.co.uk',
+    external: true,
+    accent: '#ffd60a',
+    title: 'AI DOGE',
+    desc: '22 million council spending transactions across dozens of English councils, searchable by supplier, category and council.',
+    meta: 'The full platform',
+  },
+];
+---
+
+<Layout
+  title="Projects | Tom Pickup"
+  description="The tools and investigations: Lancashire's new councils modelled, council spending traced line by line, the Business Observatory, and AI DOGE."
+>
+  <section class="projects-page">
+    <div class="container">
+      <h1>Projects</h1>
+      <p class="projects-intro">
+        The tools and investigations behind the numbers I publish. Everything here is
+        built from documents you can check.
+      </p>
+
+      <div class="projects-grid">
+        {PROJECTS.map((p) => (
+          <a
+            href={p.href}
+            class="project-card"
+            style={`--card-accent:${p.accent}`}
+            target={p.external ? '_blank' : undefined}
+            rel={p.external ? 'noopener noreferrer' : undefined}
+          >
+            <h2 class="project-title">{p.title}{p.external && <span class="ext" aria-hidden="true"> &#8599;</span>}</h2>
+            <p class="project-desc">{p.desc}</p>
+            <span class="project-meta">{p.meta}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .projects-page {
+    padding: 7rem 0 var(--space-2xl);
+  }
+
+  .projects-page h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .projects-intro {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2xl);
+    max-width: 560px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-lg);
+    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--separator);
+    border-left: 3px solid var(--card-accent);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-2px);
+  }
+
+  .project-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .ext {
+    color: var(--text-tertiary);
+    font-size: 0.9em;
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    flex-grow: 1;
+    line-height: 1.6;
+  }
+
+  .project-meta {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--card-accent);
+  }
+
+  @media (max-width: 768px) {
+    .projects-page {
+      padding: 6rem 0 var(--space-xl);
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
