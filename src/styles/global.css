@@ -893,6 +893,16 @@ legend {
   text-align: center;
 }
 
+/* Every stat value renders with tabular figures so digits align and numbers
+   read as a system across the site (dataviz house rule) */
+.stat-value,
+.achievement-stat,
+.hero-teaser-stat .v,
+.lgr-teaser-stat .v,
+.comparison-bars {
+  font-variant-numeric: tabular-nums;
+}
+
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }

@@ -2,6 +2,11 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieNotice from '../components/CookieNotice.astro';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
 import '../styles/global.css';
 
 interface Props {
@@ -55,13 +60,8 @@ const maintenanceMode = false;
 
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d166519fc11d4f12b9bd7b7d91ceac40"}'></script><!-- End Cloudflare Web Analytics -->
 
-    <!-- Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    {/* Inter is self-hosted via @fontsource (imported in the frontmatter):
+        no third-party font request, no render-blocking round-trip, no swap flash */}
 
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
