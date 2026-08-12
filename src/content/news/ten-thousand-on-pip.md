@@ -141,10 +141,10 @@ The honest version of this story is less satisfying than the sneer, but it is th
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **The Burnley figure of 10,323** is from DWP PIP statistics (Stat-Xplore), cases with entitlement, January 2026, for the Burnley parliamentary constituency (2024 boundaries).
+- **The Burnley figure of 10,323** is from DWP PIP statistics ([Stat-Xplore](https://stat-xplore.dwp.gov.uk/)), cases with entitlement, January 2026, for the Burnley parliamentary constituency (2024 boundaries).
 - **The rank and the comparison** are worked out across all 543 English constituencies in the same dataset: Burnley is 47th highest, against an average of 6,688 and a median of 6,212. That is where "54% above the typical seat" and "top 9%" come from.
 - **The national figures** are from DWP PIP statistics: nearly 4 million people across England and Wales received PIP by April 2026, roughly double the 2.05 million in January 2019.
-- **Deprivation** is from the English Indices of Deprivation 2025, on which Burnley is the 4th most deprived district in England, with 40% of its neighbourhoods in the most deprived tenth nationally.
+- **Deprivation** is from the [English Indices of Deprivation 2025](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025), on which Burnley is the 4th most deprived district in England, with 40% of its neighbourhoods in the most deprived tenth nationally.
 - **Universal Credit (about 30% of working age) and fuel poverty (16.2%, 2023, the latest available)** are from DWP and government fuel poverty statistics, for the Borough of Burnley.
 - **The reform timeline** is from the Universal Credit and Personal Independence Payment Act 2025 and the announced terms of the Timms review of the PIP assessment.
 

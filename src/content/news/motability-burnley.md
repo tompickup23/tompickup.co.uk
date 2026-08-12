@@ -147,8 +147,8 @@ The scheme matters and the genuine need is real. So is the taxpayer's stake: ove
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **Eligibility by area (4,540 in Burnley, the Lancashire table)** is from DWP Stat-Xplore, PIP cases with entitlement, April 2026, counting people on the **enhanced rate of the mobility component** by local authority. This is the main Motability qualification, though a small number also qualify through legacy DLA, so true eligibility is a touch higher.
-- **Per 1,000 residents** uses each authority's total resident population (ONS Census 2021). Because it covers all residents, not just working-age adults, areas with older populations look slightly lower; the ranking holds either way.
+- **Eligibility by area (4,540 in Burnley, the Lancashire table)** is from DWP [Stat-Xplore](https://stat-xplore.dwp.gov.uk/), PIP cases with entitlement, April 2026, counting people on the **enhanced rate of the mobility component** by local authority. This is the main [Motability](https://www.motability.co.uk/) qualification, though a small number also qualify through legacy DLA, so true eligibility is a touch higher.
+- **Per 1,000 residents** uses each authority's total resident population ([ONS Census 2021](https://www.ons.gov.uk/census)). Because it covers all residents, not just working-age adults, areas with older populations look slightly lower; the ranking holds either way.
 - **Scheme size (815,000 cars), the 18.8% share of 2024 new registrations, the £3.9bn reserves, the £924,000 pay and the July 2026 tax change** are from Motability Operations' annual report, SMMT registration data, the National Audit Office, the joint Treasury and Work and Pensions Committees, and the government's own tax policy paper.
 - **The PIP forecast** is from the Office for Budget Responsibility.
 

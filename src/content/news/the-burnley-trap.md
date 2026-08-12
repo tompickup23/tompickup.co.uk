@@ -134,10 +134,10 @@ I represent part of this town. I am not interested in pretending the welfare num
 
 You do not need this part to follow the story. It is here so the working can be checked. Figures are for the **Borough of Burnley** (local authority E07000117) unless stated.
 
-- **Deprivation:** English Indices of Deprivation 2025 (4th of 296, up from 11th in 2019). Children in low-income families 38.3% (DWP/OHID, 2022/23). ONS Health Index 2021 score 85.3.
+- **Deprivation:** [English Indices of Deprivation 2025](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025) (4th of 296, up from 11th in 2019). Children in low-income families 38.3% (DWP/OHID, 2022/23). ONS Health Index 2021 score 85.3.
 - **Life expectancy and premature mortality:** OHID Public Health Outcomes Framework (Fingertips), latest published periods. Life expectancy 2023 to 2025 (male 76.5, female 80.4; England 79.7, 83.5). Under-75 mortality rates are age-standardised per 100,000 for the most recent published periods (preventable 2024; heart disease and cancer 2023 to 2025; respiratory 2022 to 2024; suicide from the OHID profile). Burnley is flagged significantly worse than England on every one.
 - **The 8.7-year internal gap** is OHID's Slope Index of Inequality in male life expectancy, 2022 to 2024. (A separate local-decile measure puts the male gap as high as 11.5 years.)
-- **Work and economic inactivity:** ONS Annual Population Survey via NOMIS, January to December 2025: employment rate 71.5%, inactivity 27.0%, and 38.8% of the economically inactive (5,500 people) out of work due to long-term sickness, against a Great Britain average of 28.7%.
-- **Disability (20.6%)** is from ONS Census 2021. PIP and Motability figures are from DWP, as set out in my earlier articles.
+- **Work and economic inactivity:** ONS Annual Population Survey via [NOMIS](https://www.nomisweb.co.uk/), January to December 2025: employment rate 71.5%, inactivity 27.0%, and 38.8% of the economically inactive (5,500 people) out of work due to long-term sickness, against a Great Britain average of 28.7%.
+- **Disability (20.6%)** is from [ONS Census 2021](https://www.ons.gov.uk/census). PIP and Motability figures are from DWP, as set out in my earlier articles.
 
 One honest limit. **Healthy life expectancy is not produced at district level**, so there is no official Burnley figure and I have not invented one. The figures quoted are for Lancashire as a whole (ONS, 2022 to 2024), and Burnley, being more deprived than the county average, will be worse than that.

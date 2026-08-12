@@ -112,7 +112,7 @@ I have argued elsewhere that Burnley and Lancashire need more visible police on 
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **The charge rates and outcome breakdown** are from the Home Office, *Crime outcomes in England and Wales, year ending March 2025* (published July 2025). The England and Wales charge/summons rate across all offences (excluding fraud) is 7.3%. Lancashire's figures (10.2% charged; 31.4% closed with no suspect; 31.3% closed because the victim does not support action) are calculated from the same release's force-level open data, using the identical method as the national figure.
+- **The charge rates and outcome breakdown** are from the [Home Office](https://www.gov.uk/government/collections/crime-outcomes-in-england-and-wales-statistics), *Crime outcomes in England and Wales, year ending March 2025* (published July 2025). The England and Wales charge/summons rate across all offences (excluding fraud) is 7.3%. Lancashire's figures (10.2% charged; 31.4% closed with no suspect; 31.3% closed because the victim does not support action) are calculated from the same release's force-level open data, using the identical method as the national figure.
 - **"Second highest positive outcome rate in England and Wales"** is from Lancashire Constabulary's Annual Report 2024-25. "Positive outcome" is broader than a charge: it also includes cautions and community resolutions.
 - **"13.5% of crimes brought to justice, higher than expected"** is from the independent inspectorate HMICFRS's PEEL assessment of Lancashire, 2023-25.
 

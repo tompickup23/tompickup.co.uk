@@ -35,7 +35,7 @@ The [Lancashire Business Observatory](/lancs/business/) covers every one of the 
 - [Innovation money](/lancs/business/innovation/), showing which Lancashire firms actually win Innovate UK funding
 - A [monthly changes edition](/lancs/business/changes/), because an observatory that never updates is a brochure
 
-It refreshes itself every month from the primary sources: Companies House, the Gazette, the ONS, the Electoral Commission, the councils' own published spending. Every figure carries its source and its date, every assessment links its method, and there is a [corrections route](/lancs/business/method/) if we get anything wrong. Running cost to the taxpayer: nothing.
+It refreshes itself every month from the primary sources: [Companies House](https://find-and-update.company-information.service.gov.uk/), [the Gazette](https://www.thegazette.co.uk/), [the ONS](https://www.ons.gov.uk/), [the Electoral Commission](https://search.electoralcommission.org.uk/), the councils' own published spending. Every figure carries its source and its date, every assessment links its method, and there is a [corrections route](/lancs/business/method/) if we get anything wrong. Running cost to the taxpayer: nothing.
 
 ## The point
 

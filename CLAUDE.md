@@ -3,23 +3,23 @@
 ## Overview
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
-**Stack**: Python | Flask/FastAPI
-**Hosting**: Cloudflare
+**Stack**: Astro 5 (static output) | no runtime server
+**Hosting**: Cloudflare Pages, with a GitHub Pages mirror (manual deploy, `/publish-tompickup` in clawd)
 **Automation**: 2 GitHub Actions (deploy, data-etl)
 **Branch**: main
 
 ## Key Patterns
-- Python web application
-- Data ETL pipeline for automated content
-- Template-based rendering
-- API integrations for dynamic data
+- Astro content collections: articles are markdown in `src/content/news/`, schema in `src/content.config.ts`
+- Articles embed hand-written HTML for charts (`viz-panel`, `viz-reform-bar`); styling lives in `src/layouts/BlogPost.astro`
+- Python scripts under `scripts/` are offline pre-processing only, never request handlers; their output is committed
+- Page-level SEO and JSON-LD in `src/layouts/Layout.astro` and `src/layouts/BlogPost.astro`
 
 ## Commands
 
 ```bash
-python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-python app.py                    # Run locally
+npm install
+npm run dev                      # Run locally
+npm run build                    # Static build to dist/
 ```
 
 **Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
