@@ -1,6 +1,14 @@
 ---
 import EmailSignup from './EmailSignup.astro';
 const currentYear = new Date().getFullYear();
+
+// Elections Act 2022 digital imprint (in force since Nov 2023, applies at all
+// times, not just near elections). This site carries material promoting Reform
+// UK, so as a holder of elected office Tom is in scope for the organic-material
+// imprint duty. The imprint needs a promoter NAME and ADDRESS; the address
+// choice (home vs party office) is Tom's decision, so the line renders only
+// once IMPRINT_ADDRESS is filled in. Do not ship a half imprint.
+const IMPRINT_ADDRESS = '';
 ---
 
 <footer class="site-footer">
@@ -76,6 +84,8 @@ const currentYear = new Date().getFullYear();
 
     <!-- Legal links -->
     <div class="footer-legal-links">
+      <a href="/press/">Press</a>
+      <span class="footer-dot" aria-hidden="true">&middot;</span>
       <a href="/privacy/">Privacy Policy</a>
       <span class="footer-dot" aria-hidden="true">&middot;</span>
       <a href="/cookies/">Cookie Policy</a>
@@ -84,6 +94,11 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <div class="footer-legal">
+      {IMPRINT_ADDRESS && (
+        <p class="footer-imprint">
+          Promoted by Tom Pickup of {IMPRINT_ADDRESS}.
+        </p>
+      )}
       <p class="footer-copyright">
         &copy; {currentYear} Tom Pickup. All rights reserved.
       </p>

@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Press &amp; Researchers | Tom Pickup"
+  description="Method, data and contact routes for journalists covering Lancashire County Council, Burnley, and council spending. Every published figure traces to a checkable document."
+>
+  <section class="legal-page">
+    <div class="container-narrow">
+      <h1>Press &amp; Researchers</h1>
+      <p class="legal-updated">For journalists, producers and researchers covering Lancashire</p>
+
+      <div class="legal-content">
+        <h2>Who I Am</h2>
+        <p>
+          Tom Pickup. Lancashire County Councillor for Padiham &amp; Burnley West, elected
+          May 2025. Cabinet Member for Adult Social Care. Reform UK.
+        </p>
+
+        <h2>How the Figures Are Sourced</h2>
+        <p>
+          Every figure I publish traces to a primary document. That means council
+          spending files, committee papers, statements of accounts, Companies House
+          filings, or Electoral Commission records. Each figure is checked at the source
+          before it goes out. The source is named on the asset. If a number is modelled
+          rather than official, it says so.
+        </p>
+        <p>
+          "Over &pound;500" transparency data is not a council's total budget, and I say
+          so wherever it appears. Spend and purchase orders are never summed together.
+        </p>
+
+        <h2>Corrections</h2>
+        <p>
+          If you find an error, tell me and it gets corrected quickly and plainly. A
+          correction is permanent; a wrong number defended is worse.
+        </p>
+
+        <h2>What You Can Use</h2>
+        <ul>
+          <li>
+            <strong>Council spending data:</strong> <a href="https://aidoge.co.uk" target="_blank" rel="noopener noreferrer">AI DOGE</a> holds
+            22 million spending transactions across dozens of English councils. Search by
+            supplier, category or council. Every figure comes from each council's own
+            published transparency files.
+          </li>
+          <li>
+            <strong>Analysis on this site:</strong> articles under
+            <a href="/doge/">DOGE</a> and <a href="/lancs/">Lancashire</a> carry their
+            sources inline. Quote with attribution.
+          </li>
+          <li>
+            <strong>Comment:</strong> for Lancashire County Council official business,
+            contact the council&rsquo;s press office. For comment in a personal or party
+            capacity, use the <a href="/contact/">contact page</a> or X
+            (<a href="https://x.com/tompickup" target="_blank" rel="noopener noreferrer">@tompickup</a>).
+          </li>
+        </ul>
+
+        <h2>Response Times</h2>
+        <p>
+          Same day for anything on deadline where I can. Say you are press in the subject
+          line.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .legal-page {
+    padding: 7rem 0 var(--space-2xl);
+  }
+
+  .legal-page h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-updated {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .legal-content h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--separator);
+  }
+
+  .legal-content h2:first-child {
+    margin-top: 0;
+  }
+
+  .legal-content p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-content ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .legal-content a {
+    color: var(--accent);
+  }
+
+  .legal-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 6rem 0 var(--space-xl);
+    }
+  }
+</style>
