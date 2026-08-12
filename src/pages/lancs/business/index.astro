@@ -128,6 +128,10 @@ import '../../../styles/lgr.css';
         </table>
       </div>
       <p class="biz-bench-line" id="biz-bench-line"></p>
+      <p class="doge-note" style="font-size:0.78rem;">
+        Source: Companies House register and ONS / NOMIS business demography and pay statistics, as set out on the
+        <a href="/lancs/business/method/">method page</a>.
+      </p>
     </section>
 
     <BizFooter />
@@ -210,7 +214,12 @@ import '../../../styles/lgr.css';
       // header sort indicators
       Array.prototype.forEach.call(document.querySelectorAll('#biz-cmp-head th'), function (th) {
         th.classList.remove('sorted-asc', 'sorted-desc');
-        if (th.getAttribute('data-k') === sortK) th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+        if (th.getAttribute('data-k') === sortK) {
+          th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+          th.setAttribute('aria-sort', sortDir < 0 ? 'descending' : 'ascending');
+        } else {
+          th.removeAttribute('aria-sort');
+        }
       });
     }
 

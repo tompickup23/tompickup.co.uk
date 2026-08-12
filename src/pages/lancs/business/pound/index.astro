@@ -137,7 +137,7 @@ import '../../../../styles/lgr.css';
           var seg = c.tiers[t.k]; if (!seg) return;
           var span = document.createElement('span'); span.className = 'biz-league-leg-item';
           var sw = document.createElement('i'); sw.className = 'biz-tsw ' + t.cls; span.appendChild(sw);
-          span.appendChild(document.createTextNode(' ' + t.label + ' ' + seg.pct + '%'));
+          span.appendChild(document.createTextNode(' ' + t.label + ' ' + seg.pct + '% (£' + seg.valueM + 'm)'));
           leg.appendChild(span);
         });
         card.appendChild(leg);

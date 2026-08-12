@@ -1,6 +1,6 @@
 ---
 /**
- * RoadworksMap v3 — Netflix-quality interactive roadworks map.
+ * RoadworksMap v3: Netflix-quality interactive roadworks map.
  *
  * Features:
  * - Dark CartoDB tiles with ambient glow border
@@ -35,35 +35,35 @@ const cedBoundaries = cedBoundariesData as any[];
   <!-- Summary stats -->
   <div class="rw-stats-grid" id="rw-stats-grid">
     <div class="rw-stat-card rw-stat-active rw-shimmer">
-      <div class="rw-stat-value" id="stat-active">—</div>
+      <div class="rw-stat-value" id="stat-active">…</div>
       <div class="rw-stat-label">Active Works</div>
       <div class="rw-stat-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
     </div>
     <div class="rw-stat-card rw-stat-planned rw-shimmer">
-      <div class="rw-stat-value" id="stat-planned">—</div>
+      <div class="rw-stat-value" id="stat-planned">…</div>
       <div class="rw-stat-label">Planned Works</div>
       <div class="rw-stat-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       </div>
     </div>
     <div class="rw-stat-card rw-stat-high rw-shimmer">
-      <div class="rw-stat-value" id="stat-high">—</div>
+      <div class="rw-stat-value" id="stat-high">…</div>
       <div class="rw-stat-label">High Severity</div>
       <div class="rw-stat-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
     </div>
     <div class="rw-stat-card rw-stat-closures rw-shimmer">
-      <div class="rw-stat-value" id="stat-closures">—</div>
+      <div class="rw-stat-value" id="stat-closures">…</div>
       <div class="rw-stat-label">Road Closures</div>
       <div class="rw-stat-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
       </div>
     </div>
     <div class="rw-stat-card rw-stat-districts rw-shimmer">
-      <div class="rw-stat-value" id="stat-districts">—</div>
+      <div class="rw-stat-value" id="stat-districts">…</div>
       <div class="rw-stat-label">Districts</div>
       <div class="rw-stat-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -239,6 +239,7 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-legend-item rw-legend-jci" id="legend-jci" style="display:none"><span class="rw-lg-dot" style="background:#f97316"></span>JCI Junction</div>
   </div>
   <div class="rw-keyboard-hint" aria-live="polite">Use <kbd>Space</kbd> to play/pause, <kbd>&larr;</kbd><kbd>&rarr;</kbd> to navigate days</div>
+  <div class="rw-source-note">Source: Lancashire County Council's live Road Works data (MARIO highways system). Covers the 12 districts on the county highway network; Blackpool and Blackburn with Darwen run their own highways and are not included.</div>
 
   <!-- List -->
   <div class="rw-list-panel">
@@ -269,7 +270,7 @@ const cedBoundaries = cedBoundariesData as any[];
     <div class="rw-works-chart-header">
       <span class="rw-works-chart-title">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-        Works forecast - next 90 days
+        Works forecast: next 90 days
       </span>
       <div class="rw-works-chart-legend">
         <span class="rw-wc-legend"><span class="rw-wc-swatch" style="background:#dc2626"></span>Closures</span>
@@ -326,7 +327,7 @@ const cedBoundaries = cedBoundariesData as any[];
   var SEV_COLORS = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' };
   var SEV_ORDER = { high: 1, medium: 2, low: 3 };
 
-  // Restriction type classification — derived from raw roadworks fields
+  // Restriction type classification: derived from raw roadworks fields
   var RESTRICTION_COLORS = { full_closure: '#dc2626', lane_restriction: '#f59e0b', minor: '#6b7280' };
   var RESTRICTION_LABELS = { full_closure: 'Road Closed', lane_restriction: 'Lane Restriction', minor: 'Minor Works' };
   var RESTRICTION_ICONS = { full_closure: '\u26D4', lane_restriction: '\u26A0', minor: '\u2022' };
@@ -413,8 +414,8 @@ const cedBoundaries = cedBoundariesData as any[];
   }
 
   function fmtDate(iso) {
-    if (!iso) return '\u2014';
-    try { return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return '\u2014'; }
+    if (!iso) return '-';
+    try { return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return '-'; }
   }
   function fmtDateShort(d) { return d ? d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : ''; }
   function fmtDateFull(d) { return d ? d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}) : ''; }
@@ -446,7 +447,7 @@ const cedBoundaries = cedBoundariesData as any[];
     return hour >= sh && hour <= eh;
   }
 
-  // Animate counter — settles at final value, skips animation during play
+  // Animate counter: settles at final value, skips animation during play
   function animateCount(el, target) {
     if (!el) return;
     // During play, just set immediately to avoid perpetual animation
@@ -612,7 +613,7 @@ const cedBoundaries = cedBoundariesData as any[];
         var warn = document.getElementById('rw-stale-warning');
         var txt = document.getElementById('rw-stale-text');
         if (warn) warn.style.display = '';
-        if (txt) txt.textContent = 'Data may be stale \u2014 last updated ' + hoursAgo + ' hour' + (hoursAgo !== 1 ? 's' : '') + ' ago';
+        if (txt) txt.textContent = 'Data may be stale: last updated ' + hoursAgo + ' hour' + (hoursAgo !== 1 ? 's' : '') + ' ago';
       }
     }
   }
@@ -653,7 +654,7 @@ const cedBoundaries = cedBoundariesData as any[];
           } else {
             showToast('Postcode not found: ' + query.toUpperCase());
           }
-        }).catch(function(){ showToast('Postcode lookup failed \u2014 please try again'); });
+        }).catch(function(){ showToast('Postcode lookup failed, please try again'); });
     } else {
       // Search road names
       filters.road = query;
@@ -730,7 +731,7 @@ const cedBoundaries = cedBoundariesData as any[];
   function buildHourlyStrip() {
     var section = document.getElementById('rw-hourly-section');
     if (!section) return;
-    // Always show — use today's date if not in date mode
+    // Always show: use today's date if not in date mode
     var useDate = selectedDate;
     if (timelineMode !== 'date' || !useDate) {
       useDate = new Date(); useDate.setHours(0,0,0,0);
@@ -763,7 +764,7 @@ const cedBoundaries = cedBoundariesData as any[];
         + (selectedHour === i ? ' rw-hour-selected' : '');
       bar.style.height = barH + 'px';
       bar.setAttribute('data-hour', i);
-      bar.title = String(i).padStart(2,'0') + ':00 \u2014 ' + hourlyCounts[i] + ' works';
+      bar.title = String(i).padStart(2,'0') + ':00 \u00b7 ' + hourlyCounts[i] + ' works';
       chart.appendChild(bar);
     }
 
@@ -783,7 +784,7 @@ const cedBoundaries = cedBoundariesData as any[];
     var clearBtn = document.getElementById('hourly-clear');
     if (selectedHour !== null) {
       var rushTag = (selectedHour >= 7 && selectedHour < 9) ? ' \u00b7 AM rush' : (selectedHour >= 15 && selectedHour < 18) ? ' \u00b7 PM rush' : '';
-      if (info) info.textContent = String(selectedHour).padStart(2,'0') + ':00 \u2014 ' + hourlyCounts[selectedHour] + ' works' + rushTag;
+      if (info) info.textContent = String(selectedHour).padStart(2,'0') + ':00 \u00b7 ' + hourlyCounts[selectedHour] + ' works' + rushTag;
       if (clearBtn) clearBtn.style.display = '';
     } else {
       var peakH = hourlyCounts.indexOf(Math.max.apply(null, hourlyCounts));
@@ -899,7 +900,7 @@ const cedBoundaries = cedBoundariesData as any[];
       stackClosures.push(days[i].minor + days[i].lanes + days[i].closures);
     }
 
-    // Minor (grey) — bottom
+    // Minor (grey): bottom
     ctx.beginPath();
     ctx.moveTo(xPos(0), yPos(stackMinor[0]));
     for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackMinor[i]));
@@ -908,7 +909,7 @@ const cedBoundaries = cedBoundariesData as any[];
     ctx.fillStyle = 'rgba(107,114,128,0.35)';
     ctx.fill();
 
-    // Lanes (amber) — middle
+    // Lanes (amber): middle
     ctx.beginPath();
     ctx.moveTo(xPos(0), yPos(stackLanes[0]));
     for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackLanes[i]));
@@ -917,7 +918,7 @@ const cedBoundaries = cedBoundariesData as any[];
     ctx.fillStyle = 'rgba(245,158,11,0.4)';
     ctx.fill();
 
-    // Closures (red) — top
+    // Closures (red): top
     ctx.beginPath();
     ctx.moveTo(xPos(0), yPos(stackClosures[0]));
     for (var i = 1; i < DAYS; i++) ctx.lineTo(xPos(i), yPos(stackClosures[i]));
@@ -926,7 +927,7 @@ const cedBoundaries = cedBoundariesData as any[];
     ctx.fillStyle = 'rgba(220,38,38,0.4)';
     ctx.fill();
 
-    // Overlay line: Utility (non-LCC) — dashed cyan
+    // Overlay line: Utility (non-LCC): dashed cyan
     ctx.beginPath();
     ctx.setLineDash([5, 4]);
     ctx.strokeStyle = 'rgba(18,182,207,0.7)';
@@ -936,7 +937,7 @@ const cedBoundaries = cedBoundariesData as any[];
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Overlay line: LCC controlled — solid blue
+    // Overlay line: LCC controlled: solid blue
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(59,130,246,0.7)';
     ctx.lineWidth = 1.5;
@@ -1112,7 +1113,7 @@ const cedBoundaries = cedBoundariesData as any[];
       var m;
 
       if (rc === 'full_closure') {
-        // Full closures — large pulsing marker with X icon
+        // Full closures: large pulsing marker with X icon
         m = L.marker([rw.lat, rw.lng], {
           icon: L.divIcon({
             className: 'rw-marker-closure',
@@ -1124,7 +1125,7 @@ const cedBoundaries = cedBoundariesData as any[];
           })
         });
       } else if (rc === 'lane_restriction') {
-        // Lane restrictions — medium marker with warning triangle
+        // Lane restrictions: medium marker with warning triangle
         var laneColor = isActive ? '#f59e0b' : '#d97706';
         m = L.marker([rw.lat, rw.lng], {
           icon: L.divIcon({
@@ -1137,7 +1138,7 @@ const cedBoundaries = cedBoundariesData as any[];
           })
         });
       } else {
-        // Minor works — small dot
+        // Minor works: small dot
         m = L.circleMarker([rw.lat, rw.lng], {
           radius: isActive ? 6 : 4.5,
           fillColor: isActive ? '#6b7280' : '#4b5563',
@@ -1148,7 +1149,7 @@ const cedBoundaries = cedBoundariesData as any[];
         });
       }
 
-      // Popup — now includes restriction type badge
+      // Popup: now includes restriction type badge
       var sevColor = SEV_COLORS[rw.severity] || '#8e8e93';
       var stb = '<span style="display:inline-block;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+(isActive?'#ef444418':'#f59e0b18')+';color:'+(isActive?'#ef4444':'#f59e0b')+'">'+(isActive?'Active':'Planned')+'</span>';
       var rtb = '<span style="display:inline-block;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;background:'+rcColor+'18;color:'+rcColor+'">'+esc(rcLabel)+'</span>';
@@ -1166,9 +1167,9 @@ const cedBoundaries = cedBoundariesData as any[];
         + capacityBar(capPct)
         + '</div>'
         + '<div style="font-size:12.5px;color:rgba(235,235,245,0.7);line-height:1.7">'
-        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' <span style="color:rgba(235,235,245,0.3)">(' + durationLabel(days) + ')</span></div>';
+        + '<div><span style="color:rgba(235,235,245,0.35)">Dates</span> '+fmtDate(rw.start_date)+' to '+fmtDate(rw.end_date)+' <span style="color:rgba(235,235,245,0.3)">(' + durationLabel(days) + ')</span></div>';
       var wh = getWorkingHours(rw);
-      if (wh) h += '<div><span style="color:rgba(235,235,245,0.35)">Hours</span> '+wh.start+' \u2014 '+wh.end+'</div>';
+      if (wh) h += '<div><span style="color:rgba(235,235,245,0.35)">Hours</span> '+wh.start+' to '+wh.end+'</div>';
       else h += '<div><span style="color:rgba(235,235,245,0.35)">Hours</span> All day</div>';
       h += '<div><span style="color:rgba(235,235,245,0.35)">Operator</span> '+esc(rw.operator)+'</div>';
       if (rw.restrictions) h += '<div><span style="color:rgba(235,235,245,0.35)">Restrictions</span> '+esc(humanRestriction(rw.restrictions))+'</div>';
@@ -1214,7 +1215,7 @@ const cedBoundaries = cedBoundariesData as any[];
       markers.forEach(function(m){ clusterGroup.addLayer(m); });
       map.addLayer(clusterGroup);
     } else {
-      // Few markers — add directly
+      // Few markers: add directly
       markers.forEach(function(m){ m.addTo(map); });
     }
 
@@ -1271,7 +1272,7 @@ const cedBoundaries = cedBoundariesData as any[];
         + '<span class="rw-tag" style="background:'+rcColor+'18;color:'+rcColor+'">'+esc(rcLabel)+'</span>'
         + '</div></div>'
         + '<div class="rw-card-meta">'+(rw.district?'<span class="rw-district-badge">'+esc(DISTRICT_LABELS[rw.district]||rw.district)+'</span>':'')+esc(rw.ward)+'<span class="rw-sep">\u00b7</span>'+esc(rw.operator)+'</div>'
-        + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' \u2014 '+fmtDate(rw.end_date)+' ('+dur+')' + (function(){ var wh=getWorkingHours(rw); return wh ? ' <span class="rw-card-hours">\u00b7 '+wh.start+'\u2013'+wh.end+'</span>' : ''; })() + '</div>'
+        + '<div class="rw-card-dates">'+fmtDate(rw.start_date)+' to '+fmtDate(rw.end_date)+' ('+dur+')' + (function(){ var wh=getWorkingHours(rw); return wh ? ' <span class="rw-card-hours">\u00b7 '+wh.start+' to '+wh.end+'</span>' : ''; })() + '</div>'
         + '<div class="rw-card-capacity"><div class="rw-cap-track"><div class="rw-cap-fill" style="width:'+capPct+'%;background:'+capColor+'"></div></div><span class="rw-cap-label" style="color:'+capColor+'">'+capPct+'% capacity loss</span></div>'
         + '<div class="rw-dur-track"><div class="rw-dur-fill" style="width:'+bp+'%;background:'+c+';opacity:'+(isA?'0.6':'0.2')+'"></div></div>';
       if (rw.description && rw.description.length > 30) {
@@ -1297,7 +1298,7 @@ const cedBoundaries = cedBoundariesData as any[];
       var num = document.getElementById('rw-page-num');
       var prevBtn = document.getElementById('rw-page-prev');
       var nextBtn = document.getElementById('rw-page-next');
-      if (info) info.textContent = 'Showing ' + (startIdx + 1) + '\u2013' + endIdx + ' of ' + filtered.length + ' results';
+      if (info) info.textContent = 'Showing ' + (startIdx + 1) + '-' + endIdx + ' of ' + filtered.length + ' results';
       if (num) num.textContent = 'Page ' + (currentPage + 1) + ' of ' + totalPages;
       if (prevBtn) prevBtn.disabled = currentPage <= 0;
       if (nextBtn) nextBtn.disabled = currentPage >= totalPages - 1;
@@ -1549,7 +1550,7 @@ const cedBoundaries = cedBoundariesData as any[];
       var sumEl = document.getElementById('play-summary');
       if (sumEl) {
         var active = getFiltered().length;
-        sumEl.textContent = 'Day '+(c+1)+'/'+(mx+1)+' \u2014 '+active+' active';
+        sumEl.textContent = 'Day '+(c+1)+'/'+(mx+1)+' \u00b7 '+active+' active';
         sumEl.style.display = '';
       }
     }, playSpeed);
@@ -1568,7 +1569,7 @@ const cedBoundaries = cedBoundariesData as any[];
         playInterval = setInterval(function() {
           c++; if(c>mx){stopPlay();return;} setTimelineDate(c);
           var sumEl = document.getElementById('play-summary');
-          if (sumEl) { sumEl.textContent = 'Day '+(c+1)+'/'+(mx+1)+' \u2014 '+getFiltered().length+' active'; }
+          if (sumEl) { sumEl.textContent = 'Day '+(c+1)+'/'+(mx+1)+' \u00b7 '+getFiltered().length+' active'; }
         }, playSpeed);
       }
     });
@@ -1986,7 +1987,7 @@ const cedBoundaries = cedBoundariesData as any[];
   .rw-tl-action:active { transform: scale(0.96); }
   .rw-tl-action.active { background: rgba(18,182,207,0.12); border-color: rgba(18,182,207,0.25); color: #12b6cf; }
 
-  /* Play row — centered play button with edge labels */
+  /* Play row: centered play button with edge labels */
   .rw-play-row {
     display: flex;
     align-items: center;
@@ -2323,7 +2324,7 @@ const cedBoundaries = cedBoundariesData as any[];
     text-align: right;
   }
 
-  /* --- Markers — restriction-type aware --- */
+  /* --- Markers: restriction-type aware --- */
   :global(.rw-marker-active),
   :global(.rw-marker-closure),
   :global(.rw-marker-lane) { background: transparent !important; border: none !important; }
@@ -2708,6 +2709,12 @@ const cedBoundaries = cedBoundariesData as any[];
     background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
     border-radius: 3px; font-family: inherit; font-size: 0.6rem;
     color: rgba(235,235,245,0.3);
+  }
+
+  /* --- Source note --- */
+  .rw-source-note {
+    font-size: 0.6875rem; color: rgba(235,235,245,0.35);
+    text-align: center; margin-top: 0.5rem; line-height: 1.5;
   }
 
   /* --- Pagination --- */

@@ -75,7 +75,7 @@ if (isFocused) {
     const maxY = Math.max(...ys);
     const wardW = maxX - minX;
     const wardH = maxY - minY;
-    // Pad each axis independently — ward fills ~50% of its dimension
+    // Pad each axis independently: ward fills ~50% of its dimension
     const padX = Math.max(wardW * 0.5, 60);
     const padY = Math.max(wardH * 0.5, 60);
     const vx = Math.max(0, minX - padX);
@@ -146,7 +146,7 @@ if (isFocused) {
       </a>
     ))}
 
-    {/* Ward labels — full mode: all wards; focused mini: all visible wards */}
+    {/* Ward labels: full mode: all wards; focused mini: all visible wards */}
     {(size === 'full' || isFocused) && wards.map((w) => (
       <text
         x={w.cx}
@@ -179,6 +179,31 @@ if (isFocused) {
     </div>
   )}
 </div>
+
+{/* Static ward data: the same values the hover tooltip shows, readable without a mouse */}
+{size === 'full' && (
+  <details class="ward-data-details">
+    <summary>The ward data behind the map</summary>
+    <div class="ward-table-wrap">
+      <table class="ward-table">
+        <thead>
+          <tr><th>Ward</th><th>Party</th><th class="num">Electorate</th><th>Deprivation</th></tr>
+        </thead>
+        <tbody>
+          {wards.slice().sort((a, b) => a.name.localeCompare(b.name)).map((w) => (
+            <tr>
+              <td>{w.name}</td>
+              <td>{w.party}</td>
+              <td class="num">{w.electorate.toLocaleString('en-GB')}</td>
+              <td>{w.depLevel}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="ward-table-src">Deprivation: English Indices of Deprivation (IMD). Electorate: local election records.</p>
+  </details>
+)}
 
 <script>
   function initWardMap() {
@@ -281,7 +306,7 @@ if (isFocused) {
     padding: 0.5rem 0 0;
   }
 
-  /* ---- Focused mini mode (ward pages) — flat, zoomed ---- */
+  /* ---- Focused mini mode (ward pages): flat, zoomed ---- */
   .ward-map-focused {
     max-width: 520px;
     perspective: none;
@@ -297,7 +322,7 @@ if (isFocused) {
     transform: translate(2px, 3px);
   }
 
-  /* Context wards in focused mode — clearly visible grey */
+  /* Context wards in focused mode: clearly visible grey */
   .ward-map-focused .ward-group:not(.ward-active) .ward-face {
     fill: rgba(60, 60, 68, 1);
     stroke: rgba(255, 255, 255, 0.15);
@@ -314,7 +339,7 @@ if (isFocused) {
     opacity: 0.4;
   }
 
-  /* Active ward in focused mode — bold cyan, impossible to miss */
+  /* Active ward in focused mode: bold cyan, impossible to miss */
   .ward-map-focused .ward-active .ward-face {
     fill: rgba(18, 182, 207, 0.45);
     stroke: #12b6cf;
@@ -660,5 +685,62 @@ if (isFocused) {
     .ward-tooltip.visible {
       transform: translateY(0) scale(1);
     }
+  }
+
+  /* ---- Static ward data table ---- */
+  .ward-data-details {
+    margin-top: 0.75rem;
+  }
+
+  .ward-data-details summary {
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(235, 235, 245, 0.6);
+    padding: 0.4rem 0;
+  }
+
+  .ward-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    margin-top: 0.5rem;
+  }
+
+  .ward-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    background: rgba(14, 18, 28, 0.55);
+  }
+
+  .ward-table th,
+  .ward-table td {
+    padding: 0.45rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #d6dee8;
+  }
+
+  .ward-table thead th {
+    font-weight: 700;
+    color: #f4f7fb;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .ward-table th.num,
+  .ward-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ward-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .ward-table-src {
+    font-size: 0.6875rem;
+    color: rgba(235, 235, 245, 0.35);
+    margin: 0.5rem 0 0;
   }
 </style>

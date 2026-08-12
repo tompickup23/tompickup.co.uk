@@ -3,6 +3,8 @@
 // Renders the required disclaimer set from the Observatory legal rulebook
 // (footer + journalism + personal-capacity statements, corrections route and
 // per-source attribution lines), compactly. See src/pages/lancs/business/method/.
+import { CONTACT_EMAIL } from '../config';
+
 interface Props {
   attributions?: string[];
 }
@@ -44,7 +46,7 @@ const { attributions = defaultAttr } = Astro.props;
       <h2 class="biz-foot-h">Corrections</h2>
       <p>
         Spotted something wrong? Report it to
-        <a href="mailto:tom.pickup@lancashire.gov.uk">tom.pickup@lancashire.gov.uk</a>. Reports are acknowledged
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Reports are acknowledged
         within 48 hours and re-checked at the primary source; where a figure is wrong it is corrected within
         five working days and logged. See the
         <a href="/lancs/business/method/#corrections">corrections policy</a> and the route for named individuals

@@ -1,5 +1,5 @@
 /* ============================================================
-   DOGE section — shared styles (imported per page, so global;
+   DOGE section: shared styles (imported per page, so global;
    global is required because the spending table builds rows via
    createElement, which Astro scoped styles do not reach).
    ============================================================ */
@@ -112,7 +112,7 @@
   text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8e8e93;
   font-weight: 700; padding: 11px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(8, 16, 28, 0.6);
 }
-.bsp-table th.num, .bsp-table td.num { text-align: right; }
+.bsp-table th.num, .bsp-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .bsp-table tbody td { padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: top; }
 .bsp-table tbody tr:last-child td { border-bottom: none; }
 .bsp-sup { color: #e9edf2; font-weight: 600; line-height: 1.3; word-break: break-word; }

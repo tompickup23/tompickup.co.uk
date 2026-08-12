@@ -139,6 +139,11 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <div class="doge-stat"><div class="v">1 Apr 2028</div><div class="l">Vesting day (go-live)</div></div>
     </div>
 
+    <p class="doge-note" style="margin-top:0.9rem;">
+      LGR is the running story of Lancashire politics. Follow it as it happens:
+      <a href="/updates/">the weekly update</a>.
+    </p>
+
     <!-- Data explorers -->
     <section class="doge-section">
       <h2 class="doge-h2">Explore the data</h2>
@@ -201,7 +206,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
     <!-- Scale of the new councils -->
     <section class="doge-section">
-      <h2 class="doge-h2">The scale of the four new councils</h2>
+      <h2 class="doge-h2">All four new councils fall below the 500,000 guideline</h2>
       <p class="doge-note">
         Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
         the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
@@ -466,7 +471,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         <div class="doge-stat"><div class="v teal">1,219</div><div class="l">Property &amp; land assets in the county estate register</div></div>
         <div class="doge-stat"><div class="v">1,214</div><div class="l">Live contract award notices</div></div>
         <div class="doge-stat"><div class="v">£3.96bn</div><div class="l">Total value of those awards</div></div>
-        <div class="doge-stat"><div class="v">£4.14bn</div><div class="l">Published payments, 2024/25&ndash;2026/27 (855,890 lines)</div></div>
+        <div class="doge-stat"><div class="v">£4.14bn</div><div class="l">Published payments, 2024/25 to 2026/27 (855,890 lines)</div></div>
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
         The property register is compiled from the council's own Local Authority Land List with title, address and
@@ -510,6 +515,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           Largest external suppliers by processed spend: the contracts and relationships the successor councils
           inherit. Many are long, multi-year arrangements (waste, PFI schools, homecare frameworks) that cannot
           simply be unwound on vesting day. Lawfully redacted payments to individuals (care packages) are excluded.
+          Source: the council's published transparency spending data, compiled in the AI DOGE Lancashire pack.
         </p>
         <div class="doge-panel">
           <div class="doge-bars">
@@ -593,7 +599,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
             <span class="lgr-tl-text">All-out elections to the four new <strong>shadow authorities</strong>: the first time voters choose who runs North, West, East and South Lancashire.</span>
           </div>
           <div class="lgr-tl-item">
-            <span class="lgr-tl-date">2027&ndash;28</span>
+            <span class="lgr-tl-date">2027 to 2028</span>
             <span class="lgr-tl-text">Shadow councils prepare the handover while the existing 15 keep running services.</span>
           </div>
           <div class="lgr-tl-item">
@@ -684,7 +690,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         area</strong>, with flexibility over capital receipts and borrowing. Central support so far: a share of £7.6m
         proposal-development funding (£135,000 per area + 20p per resident), and transition funding of
         <strong>at least £900,000 per new unitary</strong> plus up to £150,000 each for children's, adult social
-        care and public-health leadership continuity, set against the £50m–£100m precedent-based transition
+        care and public-health leadership continuity, set against the £50m to £100m precedent-based transition
         envelope above. Lancashire was one of <strong>14 areas decided on 16 July 2026</strong>, a wave replacing
         134 councils with 38 unitaries.
       </p>
@@ -736,9 +742,9 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <div class="doge-panel" style="margin-top:1.1rem;">
         <div class="lgr-mx-build-h">What the precedents imply for Lancashire</div>
         <p class="doge-note" style="margin:0.4rem 0 0.6rem;">
-          Budgeted transition costs ran at <strong>£{model.precedents.lancashire.perResidentEnvelope.low_gbp}–£{model.precedents.lancashire.perResidentEnvelope.high_gbp}
+          Budgeted transition costs ran at <strong>£{model.precedents.lancashire.perResidentEnvelope.low_gbp} to £{model.precedents.lancashire.perResidentEnvelope.high_gbp}
           per resident</strong> across the six cases. Applied to Lancashire's {fmt(model.precedents.lancashire.population)} residents, that implies a transition envelope of roughly
-          <strong>£{model.precedents.lancashire.impliedTransition_m.low}m–£{model.precedents.lancashire.impliedTransition_m.high}m</strong>, before disaggregation risk.
+          <strong>£{model.precedents.lancashire.impliedTransition_m.low}m to £{model.precedents.lancashire.impliedTransition_m.high}m</strong>, before disaggregation risk.
           {model.precedents.lancashire.keyRisk}. No official costing for the four-unitary configuration has been published; this envelope is a precedent-based read-across, not a forecast.
         </p>
         <p class="doge-note" style="margin:0; font-size:0.82rem;">
@@ -801,7 +807,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </p>
       <div class="doge-panel">
         <ul class="lgr-gaps">
-          <li><strong>Official transition costing</strong> for the four-unitary configuration has not been published. The £50m–£100m envelope above is a precedent read-across, not a government figure.</li>
+          <li><strong>Official transition costing</strong> for the four-unitary configuration has not been published. The £50m to £100m envelope above is a precedent read-across, not a government figure.</li>
           <li><strong>How council tax will actually be harmonised</strong>: the legal framework is settled, the choice is not. The equalisation power lets a new unitary charge different amounts in predecessor areas for up to seven years, with a single uniform Band D mandatory by year eight (SI 2008/3022 Part 4, extended by SI 2018/1296). Because a new authority has no prior year of its own, the Secretary of State lays an Alternative Notional Amount under s.52ZE of the Local Government Finance Act 1992 as the referendum comparator, and a restructuring authority may test its increase either against each predecessor area or against the average across them. Of the four 2023 unitaries, Somerset and Cumberland harmonised on day one and North Yorkshire phased over two years. What has not been published is which path Lancashire takes: that is a decision for the shadow councils and government.</li>
           <li><strong>The second-home premium clock is already running</strong>: a first determination under s.11C(3) must be made at least one year before the financial year it applies to, and SI 2026/406 (in force 8 May 2026) treats a successor council's determination as a first determination for any area whose predecessor had not made one. For the premium to apply from vesting on 1 April 2028 in Ribble Valley, Fylde, Wyre, Hyndburn, Rossendale and Burnley, a determination must be made by 31 March 2027, before the shadow authorities are elected. No council has published one.</li>
           <li><strong>Balance-sheet disaggregation</strong>: how LCC's assets (including the £519m bond portfolio), debt, reserves and the £17.3m 2028/29 gap will be split across four successors is not yet determined; Northamptonshire's £953m dispute shows how contested this can be.</li>

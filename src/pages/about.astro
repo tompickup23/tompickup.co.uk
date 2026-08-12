@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import EmailSignup from '../components/EmailSignup.astro';
 ---
 
 <Layout
@@ -14,7 +15,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
         <div class="bio-photo-wrap">
           <div class="bio-photo-glow"></div>
           <div class="bio-photo">
-            <img src="/images/headshot.jpg" alt="Tom Pickup" loading="eager" />
+            <img src="/images/headshot.jpg" alt="Tom Pickup, Reform UK county councillor for Padiham and Burnley West" loading="eager" decoding="async" width="240" height="240" />
           </div>
         </div>
 
@@ -102,6 +103,13 @@ import ScrollReveal from '../components/ScrollReveal.astro';
           </p>
         </div>
       </ScrollReveal>
+    </div>
+  </section>
+
+  <!-- Section 3: Email signup -->
+  <section class="signup-section">
+    <div class="container-narrow">
+      <EmailSignup variant="inline" />
     </div>
   </section>
 </Layout>
@@ -244,6 +252,11 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 
   /* ---- Accessibility ---- */
   .accessibility-section {
+    padding: 0 0 var(--space-xl);
+  }
+
+  /* ---- Email signup ---- */
+  .signup-section {
     padding: 0 0 var(--space-2xl);
   }
 

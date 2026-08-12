@@ -146,7 +146,12 @@ import '../../../../styles/lgr.css';
       document.getElementById('co-body').textContent = ''; shown = 0; renderMore();
       Array.prototype.forEach.call(document.querySelectorAll('#co-head th'), function (th) {
         th.classList.remove('sorted-asc', 'sorted-desc');
-        if (th.getAttribute('data-k') === sortK) th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+        if (th.getAttribute('data-k') === sortK) {
+          th.classList.add(sortDir < 0 ? 'sorted-desc' : 'sorted-asc');
+          th.setAttribute('aria-sort', sortDir < 0 ? 'descending' : 'ascending');
+        } else {
+          th.removeAttribute('aria-sort');
+        }
       });
     }
 

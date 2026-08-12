@@ -132,7 +132,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
     {frontmatter.image && (
       <div class="article-hero-image">
-        <img src={frontmatter.image} alt="" loading="eager" decoding="async" />
+        <img src={frontmatter.image} alt={`Lead image for the article: ${frontmatter.title}`} loading="eager" decoding="async" />
         {frontmatter.imageCredit && <span class="hero-credit">{frontmatter.imageCredit}</span>}
       </div>
     )}
@@ -492,7 +492,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     font-style: italic;
   }
 
-  /* Inline data viz images — downloadable branded cards shown in article body */
+  /* Inline data viz images: downloadable branded cards shown in article body */
   .prose :global(.article-data-viz) {
     margin: 1.5rem auto;
     max-width: 540px;
@@ -746,7 +746,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
      Use these in markdown articles instead of verbose inline styles.
      ============================================================ */
 
-  /* Panels — navy glassmorphic containers (Reform press conference aesthetic) */
+  /* Panels: navy glassmorphic containers (Reform press conference aesthetic) */
   .prose :global(.viz-panel) {
     margin: 32px 0;
     padding: 28px;
@@ -771,7 +771,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     border-color: rgba(48, 209, 88, 0.15);
   }
 
-  /* Reform branded panel — broadcast accent bar */
+  /* Reform branded panel: broadcast accent bar */
   .prose :global(.viz-panel-reform) {
     margin: 32px 0;
     padding: 28px;
@@ -821,14 +821,14 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   /* Prevent stat value text from breaking grid on narrower containers */
   .prose :global(.viz-stat .value) { overflow-wrap: break-word; word-break: break-word; }
 
-  /* Tables — balanced column widths, right-align numeric columns */
+  /* Tables: balanced column widths, right-align numeric columns */
   .prose :global(table) { width: 100%; table-layout: auto; }
   .prose :global(th:last-child),
-  .prose :global(td:last-child) { text-align: right; }
+  .prose :global(td:last-child) { text-align: right; font-variant-numeric: tabular-nums; }
   .prose :global(th:first-child),
   .prose :global(td:first-child) { text-align: left; width: auto; }
 
-  /* Stat cards — navy-tinted with teal hover glow */
+  /* Stat cards: navy-tinted with teal hover glow */
   .prose :global(.viz-stat) {
     padding: 24px 20px;
     background: linear-gradient(135deg, rgba(10, 22, 40, 0.6), rgba(18, 34, 58, 0.4));
@@ -899,7 +899,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     line-height: 1.4;
   }
 
-  /* Callout — Reform broadcast banner */
+  /* Callout: Reform broadcast banner */
   .prose :global(.viz-callout) {
     margin: 40px 0;
     padding: 32px;
@@ -990,7 +990,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     border-radius: 0 16px 16px 0;
   }
 
-  /* Highlight bar — accent-tinted inline summary */
+  /* Highlight bar: accent-tinted inline summary */
   .prose :global(.viz-highlight) {
     margin: 16px 0;
     padding: 12px 16px;
@@ -1077,7 +1077,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   .prose :global(.viz-panel-party-independent) { border-color: var(--party-independent); }
   .prose :global(.viz-panel-party-reform) { border-color: var(--party-reform); }
 
-  /* Hero stat — Reform press conference "BRITAIN IS BROKEN" style */
+  /* Hero stat: Reform press conference "BRITAIN IS BROKEN" style */
   .prose :global(.viz-hero) {
     margin: 40px -20px;
     padding: 60px 40px;
@@ -1124,7 +1124,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     margin-top: 12px;
   }
 
-  /* Badge — Reform "DATA" / "LIVE" style label */
+  /* Badge: Reform "DATA" / "LIVE" style label */
   .prose :global(.viz-badge) {
     display: inline-flex;
     align-items: center;
@@ -1157,7 +1157,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     border: 1px solid rgba(255, 159, 10, 0.3);
   }
 
-  /* Marquee — Reform press conference bottom bar */
+  /* Marquee: Reform press conference bottom bar */
   .prose :global(.viz-marquee) {
     margin: 32px -20px;
     padding: 14px 40px;
@@ -1170,7 +1170,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     text-transform: uppercase;
   }
 
-  /* Comparison — "Then vs Now" split panels */
+  /* Comparison: "Then vs Now" split panels */
   .prose :global(.viz-comparison) {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1212,7 +1212,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     letter-spacing: 0.04em;
   }
 
-  /* Reform bar chart — horizontal progress fill */
+  /* Reform bar chart: horizontal progress fill */
   .prose :global(.viz-reform-bar) {
     height: 16px;
     border-radius: 8px;
@@ -1240,7 +1240,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     background: linear-gradient(90deg, #12b6cf, #0ef0ff);
   }
 
-  /* Person Quote — circular headshot with quote and attribution */
+  /* Person Quote: circular headshot with quote and attribution */
   .prose :global(.person-quote) {
     margin: 40px 0;
     padding: 36px 28px;
@@ -1330,7 +1330,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     color: #0087DC;
   }
 
-  /* Photo banner — full-width photo with dark overlay and text */
+  /* Photo banner: full-width photo with dark overlay and text */
   .prose :global(.photo-banner) {
     margin: 40px -20px;
     position: relative;
@@ -1471,7 +1471,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     .prose :global(.photo-banner .overlay p) { font-size: 0.875rem; }
   }
 
-  /* Mobile responsive — inline visualisation overrides */
+  /* Mobile responsive: inline visualisation overrides */
   @media (max-width: 768px) {
     /* Force 4-column grids to 2 columns on tablet */
     .prose :global(div[style*="repeat(4"]) {

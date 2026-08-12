@@ -44,7 +44,7 @@ function formatDate(dateStr: Date): string {
             <a href={`/news/${featured.id}`} class="featured-card">
               {featured.data.image && (
                 <div class="featured-image">
-                  <img src={featured.data.image} alt="" loading="eager" decoding="async" />
+                  <img src={featured.data.image} alt={`Lead image for the article: ${featured.data.title}`} loading="eager" decoding="async" />
                 </div>
               )}
               <div class="featured-content">

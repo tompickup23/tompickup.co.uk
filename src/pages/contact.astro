@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import { CONTACT_EMAIL } from '../config';
 ---
 
 <Layout
@@ -111,7 +112,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
                 </svg>
               </div>
               <h3>Email</h3>
-              <a href="mailto:tom.pickup@lancashire.gov.uk" class="info-card-link">tom.pickup@lancashire.gov.uk</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} class="info-card-link">{CONTACT_EMAIL}</a>
               <p class="info-card-note">I aim to respond within 48 hours</p>
             </div>
 
@@ -172,6 +173,12 @@ import ScrollReveal from '../components/ScrollReveal.astro';
               <p class="contact-notice">
                 Use the contact form or email me directly. I aim to respond to most
                 enquiries within 48 hours.
+              </p>
+              <p class="info-card-note">
+                Prefer to vote by post? <a href="https://www.gov.uk/apply-postal-vote" target="_blank" rel="noopener noreferrer">Apply for a postal vote on gov.uk</a>.
+              </p>
+              <p class="info-card-note">
+                For the weekly email on Padiham, Burnley and the council, <a href="/updates/">subscribe to updates</a>.
               </p>
             </div>
           </div>
@@ -427,6 +434,8 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 </style>
 
 <script>
+  import { CONTACT_EMAIL } from '../config';
+
   const form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -436,7 +445,7 @@ import ScrollReveal from '../components/ScrollReveal.astro';
       const subject = (form.querySelector('#subject') as HTMLSelectElement)?.value || 'General Enquiry';
       const message = (form.querySelector('#message') as HTMLTextAreaElement)?.value || '';
       const body = `From: ${name} (${email})\n\n${message}`;
-      const mailto = `mailto:tom.pickup@lancashire.gov.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.location.href = mailto;
     });
   }
