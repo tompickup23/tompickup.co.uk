@@ -109,7 +109,7 @@ Here is the version that holds up. PIP fraud rose, and it should be gripped at t
 
 ## Where these numbers come from
 
-You do not need this part to follow the story. It is here so the working can be checked. Everything is from one official source: the DWP's **"Fraud and error in the benefit system, financial year ending 2026"** statistics.
+You do not need this part to follow the story. It is here so the working can be checked. Everything is from one official source: the [DWP](https://www.gov.uk/government/organisations/department-for-work-pensions)'s **"Fraud and error in the benefit system, financial year ending 2026"** statistics.
 
 - **PIP fraud £410m (1.4%), up from £100m (0.4%)**, with "functional needs fraud" the main driver, rising to 1.2% from 0.3%.
 - **Universal Credit overpayments 8.5%, of which fraud 6.8% (£5.4bn).**

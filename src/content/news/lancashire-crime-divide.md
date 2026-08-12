@@ -104,9 +104,9 @@ I represent part of one of the towns at the top of this table, so I will not pre
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **All crime rates** are from the Office for National Statistics, *Crime in England and Wales: Police Force Area data tables*, Table C4 (recorded crime per 1,000 population by Community Safety Partnership area), year ending December 2025, published April 2026. Each Community Safety Partnership maps to one local authority district. Figures exclude fraud and are per 1,000 residents.
+- **All crime rates** are from the [Office for National Statistics](https://www.ons.gov.uk/), *Crime in England and Wales: Police Force Area data tables*, Table C4 (recorded crime per 1,000 population by Community Safety Partnership area), year ending December 2025, published April 2026. Each Community Safety Partnership maps to one local authority district. Figures exclude fraud and are per 1,000 residents.
 - **The England average (83.5) and Lancashire force average (79.4 total, 34.5 violence)** are from the same release, Table P3.
-- **Deprivation rankings** (Blackpool 1st, Burnley 4th most deprived district in England) are from the Ministry of Housing, Communities and Local Government's English Indices of Deprivation 2025.
+- **Deprivation rankings** (Blackpool 1st, Burnley 4th most deprived district in England) are from the [Ministry of Housing, Communities and Local Government's English Indices of Deprivation 2025](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025).
 - The "violence" figures in brackets are violence against the person per 1,000, the same ONS table.
 
 One honest note. Recorded crime depends partly on how much crime is reported and recorded, which can vary between areas, so small differences in the middle of the table should not be over-read. The big picture, a four-to-one gap that lines up with deprivation, is far too large to be an artefact of recording.

@@ -161,7 +161,7 @@ You do not need this part to follow the story. It is here so the working can be 
 
 All of this is for the **Borough of Burnley** (local authority E07000117), the council area, not the parliamentary constituency.
 
-- **The official count of 65** is from ONS Census 2021 (table RM192, dwellings that are houses in multiple occupation, by local authority). It uses a narrow statistical definition and is known to undercount, which is the point.
+- **The official count of 65** is from [ONS Census 2021](https://www.ons.gov.uk/census) (table RM192, dwellings that are houses in multiple occupation, by local authority). It uses a narrow statistical definition and is known to undercount, which is the point.
 - **The estimate of 916**, the 400 known and 516 modelled figures, the share of housing stock and the ward-by-ward numbers all come from Burnley Borough Council's HMO modelling, prepared in 2023 for its Article 4 decision (the HMO Article 4 Background Document, October 2023, Tables 4 and 5). The council's ward-by-ward estimates sum to the 916 total.
 - **The Article 4 and selective licensing details** are from Burnley Borough Council's own published policy: Article 4 in force October 2024 across nine wards, selective licensing in force April 2025 across five.
 

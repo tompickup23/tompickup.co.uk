@@ -2,21 +2,21 @@
   "meta": {
     "sources": [
       "LCC Local Highways Maintenance Transparency Report (condition data)",
-      "GOV.UK MHCLG Revenue Outturn 2021/22–2024/25 (confirmed expenditure)",
-      "LCC Cabinet reports — 2025/26 and 2026/27 capital programme (budgeted, not confirmed outturn)",
-      "LCC Cabinet Member Warren Goldsworthy statement — £650M backlog (March 2026)",
-      "AIA ALARM Survey 2025 — national backlog £16.81B",
-      "DfT Road Condition Statistics RDC series — national context",
-      "CIPFA Transport Infrastructure Code — asset valuation methodology",
-      "GOV.UK Highways Maintenance Block Formula Allocations 2022–2025 and 2026–2030",
-      "DfT Pothole Review 2024 — lifecycle cost evidence",
-      "LCC Highways and Transport Strategy 2023–2025",
-      "LCC Transport Asset Management Plan (TAMP) 2015–2030",
-      "LCC News releases — highways investment announcements 2017–2026",
-      "Network North highways allocation 2023–2025",
-      "Public Accounts Committee 2025 — planned vs reactive costs"
+      "GOV.UK MHCLG Revenue Outturn 2021/22 to 2024/25 (confirmed expenditure)",
+      "LCC Cabinet reports, 2025/26 and 2026/27 capital programme (budgeted, not confirmed outturn)",
+      "LCC Cabinet Member Warren Goldsworthy statement, £650M backlog (March 2026)",
+      "AIA ALARM Survey 2025, national backlog £16.81B",
+      "DfT Road Condition Statistics RDC series, national context",
+      "CIPFA Transport Infrastructure Code, asset valuation methodology",
+      "GOV.UK Highways Maintenance Block Formula Allocations 2022 to 2025 and 2026 to 2030",
+      "DfT Pothole Review 2024, lifecycle cost evidence",
+      "LCC Highways and Transport Strategy 2023 to 2025",
+      "LCC Transport Asset Management Plan (TAMP) 2015 to 2030",
+      "LCC News releases, highways investment announcements 2017 to 2026",
+      "Network North highways allocation 2023 to 2025",
+      "Public Accounts Committee 2025, planned vs reactive costs"
     ],
-    "data_quality_note": "Capital programme figures (2025/26, 2026/27) are budgeted allocations, NOT confirmed outturn spending. Revenue outturn data (2021/22–2024/25) is confirmed GOV.UK MHCLG data. Road condition data is from LCC's own DVS surveys. Historic capital investment figures are compiled from DfT allocation tables, LCC cabinet reports and news releases — some years are estimates based on available evidence.",
+    "data_quality_note": "Capital programme figures (2025/26, 2026/27) are budgeted allocations, NOT confirmed outturn spending. Revenue outturn data (2021/22 to 2024/25) is confirmed GOV.UK MHCLG data. Road condition data is from LCC's own DVS surveys. Historic capital investment figures are compiled from DfT allocation tables, LCC cabinet reports and news releases, some years are estimates based on available evidence.",
     "generated": "2026-03-08T00:00:00+00:00",
     "version": 3
   },
@@ -29,7 +29,7 @@
     "minor_roads_pct": 87.5,
     "footpaths_miles": 5300,
     "gross_replacement_cost": 10000000000,
-    "gross_replacement_cost_note": "Per CIPFA Transport Infrastructure Code — the cost to replace the entire network as new. This is NOT a market value.",
+    "gross_replacement_cost_note": "Per CIPFA Transport Infrastructure Code, the cost to replace the entire network as new. This is NOT a market value.",
     "depreciated_replacement_cost": null,
     "depreciated_replacement_cost_note": "DRC (GRC minus accumulated depreciation) not publicly published by LCC. If average asset age is 40% through life, DRC ≈ £6B.",
     "highway_authority": "Lancashire County Council",
@@ -45,7 +45,7 @@
       "grc_estimate": 7500000000,
       "grc_pct": 75,
       "quantity": "7,142 km",
-      "note": "Surface and sub-base. The largest single asset class — 75% of total GRC.",
+      "note": "Surface and sub-base. The largest single asset class, 75% of total GRC.",
       "primary_treatment": "Surface dressing (preventative) + resurfacing (structural)",
       "fill": "#ff9f0a"
     },
@@ -72,7 +72,7 @@
       "grc_estimate": 300000000,
       "grc_pct": 3,
       "quantity": "~100,000+ columns across Lancashire",
-      "note": "Column lifespan typically 30–40 years. LED conversion ongoing. Asset includes columns, lanterns, underground cable network.",
+      "note": "Column lifespan typically 30 to 40 years. LED conversion ongoing. Asset includes columns, lanterns, underground cable network.",
       "primary_treatment": "LED conversion, column replacement, cable upgrade",
       "fill": "#30d158"
     },
@@ -97,15 +97,15 @@
   ],
 
   "road_condition": {
-    "survey_method": "Detailed Video Survey (DVS) — Lancashire's own system. Graded 1–5: Grade 4 (Functionally Impaired) and Grade 5 (Structurally Impaired) = Red.",
-    "transition_note": "From 2026/27, LCC transitions to BSI PAS 2161 — five categories instead of three. Historical comparisons will break at that point.",
+    "survey_method": "Detailed Video Survey (DVS), Lancashire's own system. Graded 1 to 5: Grade 4 (Functionally Impaired) and Grade 5 (Structurally Impaired) = Red.",
+    "transition_note": "From 2026/27, LCC transitions to BSI PAS 2161, five categories instead of three. Historical comparisons will break at that point.",
     "current_year": "2025/26",
     "a_roads": {
       "red_pct": 3.9,
       "amber_pct": 23.4,
       "green_pct": 72.7,
       "national_avg_red": 5.0,
-      "note": "Below national average (~5%). A roads receive most maintenance investment — preventative surface dressing keeps them in better condition."
+      "note": "Below national average (~5%). A roads receive most maintenance investment, preventative surface dressing keeps them in better condition."
     },
     "bc_roads": {
       "red_pct": 6.5,
@@ -113,28 +113,28 @@
       "green_pct": 64.2,
       "national_avg_red": 7.0,
       "trend": "deteriorating",
-      "note": "B&C roads deteriorating fastest — jumped from 4.6% to 6.5% red in a single year (2024/25 → 2025/26). A 41% increase. High rainfall in 2024 (125% of 1991–2020 average) accelerated damage."
+      "note": "B&C roads deteriorating fastest, jumped from 4.6% to 6.5% red in a single year (2024/25 → 2025/26). A 41% increase. High rainfall in 2024 (125% of 1991 to 2020 average) accelerated damage."
     },
     "unclassified": {
       "red_pct": 27.6,
       "national_avg_red": 17.0,
-      "note": "Over 1-in-4 unclassified roads need structural maintenance. These are the streets residents actually live on. Lancashire's 27.6% is significantly worse than the 17% national average — more than 10 percentage points higher. Unclassified accounts for 87.5% of the network by length."
+      "note": "Over 1-in-4 unclassified roads need structural maintenance. These are the streets residents actually live on. Lancashire's 27.6% is significantly worse than the 17% national average, more than 10 percentage points higher. Unclassified accounts for 87.5% of the network by length."
     },
     "trend": [
       { "year": "2019/20", "a_red": null, "bc_red": null, "uc_red": null },
       { "year": "2020/21", "a_red": 2.1, "bc_red": 4.4, "uc_red": null, "note": "Pre-pandemic baseline" },
-      { "year": "2021/22", "a_red": 1.4, "bc_red": 3.6, "uc_red": 26.4, "note": "Post-lockdown — reduced traffic extended road life" },
+      { "year": "2021/22", "a_red": 1.4, "bc_red": 3.6, "uc_red": 26.4, "note": "Post-lockdown, reduced traffic extended road life" },
       { "year": "2022/23", "a_red": 2.2, "bc_red": 3.7, "uc_red": 27.7 },
       { "year": "2023/24", "a_red": 2.1, "bc_red": 4.4, "uc_red": 28.1 },
       { "year": "2024/25", "a_red": 3.0, "bc_red": 4.6, "uc_red": 27.7 },
       { "year": "2025/26", "a_red": 3.9, "bc_red": 6.5, "uc_red": 27.6, "note": "Significant deterioration in B&C roads. High rainfall a major factor." }
     ],
-    "key_insight": "The unclassified network — where people live — has been at ~27–28% red for 5 consecutive years. This is not a spike but a chronic, structural problem. Lancashire's residential roads are in significantly worse condition than the national average (27.6% vs 17%)."
+    "key_insight": "The unclassified network, where people live, has been at ~27 to 28% red for 5 consecutive years. This is not a spike but a chronic, structural problem. Lancashire's residential roads are in significantly worse condition than the national average (27.6% vs 17%)."
   },
 
   "historic_investment": {
     "section_title": "15 Years of Underfunding: What Was Spent vs What Was Needed",
-    "summary": "Lancashire's highway network has been structurally underfunded for over a decade. Even the 2026/27 programme — the highest in LCC's history at £72M — represents only 18% of what CIPFA methodology suggests is needed to maintain the £10B asset base. The result: a £650M backlog that grows every year.",
+    "summary": "Lancashire's highway network has been structurally underfunded for over a decade. Even the 2026/27 programme, the highest in LCC's history at £72M, represents only 18% of what CIPFA methodology suggests is needed to maintain the £10B asset base. The result: a £650M backlog that grows every year.",
     "dft_formula_note": "DfT Highways Maintenance Block (HMB) is the main government grant. It comprises a needs-based element, a pothole element, and an incentive element. LCC consistently earned Band 3 (highest) under the old incentive scheme.",
 
     "annual_investment": [
@@ -156,7 +156,7 @@
         "estimated_need": 90000000,
         "shortfall": 63000000,
         "data_quality": "estimated",
-        "context": "TAMP Phase 1 begins — LCC adopts lifecycle-based asset management."
+        "context": "TAMP Phase 1 begins, LCC adopts lifecycle-based asset management."
       },
       {
         "year": "2015/16",
@@ -241,7 +241,7 @@
         "estimated_need": 100000000,
         "shortfall": 68000000,
         "data_quality": "confirmed",
-        "context": "3-year DfT settlement 2022–25 averaged only £11.6M/year baseline. LCC topped up significantly from own resources.",
+        "context": "3-year DfT settlement 2022 to 25 averaged only £11.6M/year baseline. LCC topped up significantly from own resources.",
         "revenue_net": 62163000,
         "revenue_gross": 109850000,
         "source": "DfT 3-year allocation tables + GOV.UK MHCLG outturn"
@@ -267,7 +267,7 @@
         "estimated_need": 110000000,
         "shortfall": 56000000,
         "data_quality": "confirmed",
-        "context": "Highest capital spend to date. DfT £28.8M + £3.7M Network North. Plus £12M safety defects + £5M maintenance + £4.2M capital underspend redirect. 82 miles treated (58 surface dressing + 24 resurfacing) — still only 1.9% of network.",
+        "context": "Highest capital spend to date. DfT £28.8M + £3.7M Network North. Plus £12M safety defects + £5M maintenance + £4.2M capital underspend redirect. 82 miles treated (58 surface dressing + 24 resurfacing), still only 1.9% of network.",
         "revenue_net": 68472000,
         "capital_programme": 61000000,
         "source": "LCC cabinet report + DfT Band 3 allocation"
@@ -291,7 +291,7 @@
         "estimated_need": 110000000,
         "shortfall": 38000000,
         "data_quality": "budget_estimate",
-        "context": "First Reform UK budget. DfT £48.5M (via Lancashire CCA) + £18.5M council. Highest ever programme at £72M — but still only 65% of estimated need and 18% of CIPFA steady-state.",
+        "context": "First Reform UK budget. DfT £48.5M (via Lancashire CCA) + £18.5M council. Highest ever programme at £72M, but still only 65% of estimated need and 18% of CIPFA steady-state.",
         "source": "LCC Full Council Feb 2026 + DfT HMB 2026-30 allocations"
       }
     ],
@@ -304,7 +304,7 @@
       "average_annual_investment": 38600000,
       "average_annual_need": 98200000,
       "investment_as_pct_of_need": 39,
-      "note": "Over 14 years, Lancashire invested approximately £541M in highway capital works. The estimated need over the same period was approximately £1.38B. The cumulative shortfall of ~£834M closely matches the £650M stated backlog — the difference reflecting ongoing deterioration reducing the value of past work."
+      "note": "Over 14 years, Lancashire invested approximately £541M in highway capital works. The estimated need over the same period was approximately £1.38B. The cumulative shortfall of ~£834M closely matches the £650M stated backlog, the difference reflecting ongoing deterioration reducing the value of past work."
     },
 
     "dft_allocations_2026_2030": {
@@ -316,7 +316,7 @@
         { "year": "2029/30", "baseline": 59700000, "incentive": 19600000, "total": 79400000 }
       ],
       "four_year_total": 268100000,
-      "source": "GOV.UK Highways Maintenance Block Formula Allocations 2026–2030"
+      "source": "GOV.UK Highways Maintenance Block Formula Allocations 2026 to 2030"
     },
 
     "national_context": {
@@ -384,7 +384,7 @@
         }
       ],
       "key_finding": "Even the most conservative restoration scenario requires approximately doubling current investment to ~£120-150M/year capital for 10-15 years. The total cost to fully restore Lancashire's highway network and establish a sustainable maintenance regime is approximately £1.2-1.5 billion over 10-15 years.",
-      "lcc_statement": "LCC's Highways and Transport Strategy 2023–2025 stated that addressing the maintenance backlog would require a threefold increase in DfT funding — broadly equivalent to the Accelerated Catch-Up scenario above."
+      "lcc_statement": "LCC's Highways and Transport Strategy 2023 to 2025 stated that addressing the maintenance backlog would require a threefold increase in DfT funding, broadly equivalent to the Accelerated Catch-Up scenario above."
     },
 
     "maintenance_contract_performance": {
@@ -398,33 +398,33 @@
       "avg_repair_cost_after_per_m2": 100,
       "cost_saving_pct": 50,
       "note": "New maintenance contract (2025/26) achieved 42% defect reduction, 3× larger repairs (more durable), and 50% cost reduction per m2. AI-driven inspections being piloted on A-road network.",
-      "source": "LCC News — Progress on road maintenance report"
+      "source": "LCC News, Progress on road maintenance report"
     },
 
     "dft_rating": {
-      "old_system": "Band 3 (highest) — earned maximum incentive funding 2015-2022",
+      "old_system": "Band 3 (highest), earned maximum incentive funding 2015-2022",
       "new_system_year": "2025/26",
       "overall": "Amber",
       "road_condition": "Amber",
       "capital_spend": "Green",
       "best_practice": "Amber",
       "note": "25% of incentive funding at risk until criteria are met. LCC challenged the rating methodology.",
-      "source": "LCC News — County Council responds to new highways rating"
+      "source": "LCC News, County Council responds to new highways rating"
     },
 
     "tamp_phases": {
       "phase_1": {
-        "period": "2015/16–2019/20",
+        "period": "2015/16 to 2019/20",
         "focus": "A, B and C classified roads",
         "outcome": "Successfully improved classified road condition. A roads reached 1.4% red by 2021/22."
       },
       "phase_2": {
-        "period": "2020/21–2024/25",
+        "period": "2020/21 to 2024/25",
         "focus": "Unclassified (residential) roads while maintaining classified network",
         "outcome": "Survey work revealed unclassified backlog was 'even bigger than expected' (Cllr Edwards). 27-28% red for 5 consecutive years."
       },
       "phase_3": {
-        "period": "2025/26–2029/30",
+        "period": "2025/26 to 2029/30",
         "focus": "Condition data under review to shape priorities",
         "outcome": "Interim focus: maintain A/B/C condition, address potholes. First year under new BSI PAS 2161 standard."
       }
@@ -432,7 +432,7 @@
   },
 
   "budget_trend": {
-    "note": "Revenue expenditure is CONFIRMED GOV.UK MHCLG outturn data. Capital programme (2025/26, 2026/27) are BUDGETED allocations — actual spend may differ. Budget ≠ delivery.",
+    "note": "Revenue expenditure is CONFIRMED GOV.UK MHCLG outturn data. Capital programme (2025/26, 2026/27) are BUDGETED allocations, actual spend may differ. Budget ≠ delivery.",
     "years": [
       {
         "year": "2021/22",
@@ -509,7 +509,7 @@
         "capital_programme": 72000000,
         "capital_dft": 48500000,
         "capital_council": 18500000,
-        "capital_note": "£72M total (budgeted): £48.5M DfT (via Lancashire CCA) + £18.5M council. First Reform UK budget. Highest ever programme — but still only 18% of CIPFA steady-state."
+        "capital_note": "£72M total (budgeted): £48.5M DfT (via Lancashire CCA) + £18.5M council. First Reform UK budget. Highest ever programme, but still only 18% of CIPFA steady-state."
       }
     ]
   },
@@ -517,7 +517,7 @@
   "investment_analysis": {
     "lcc_maintenance_backlog": 650000000,
     "lcc_backlog_source": "Cabinet Member Warren Goldsworthy, March 2026 budget debate",
-    "lcc_backlog_note": "This £650M covers the entire highway asset portfolio — carriageways, footways, bridges, lighting, signals, and drainage. At £72M/year capital spend, this would take ~9 years to clear if NO further deterioration occurred (which is impossible).",
+    "lcc_backlog_note": "This £650M covers the entire highway asset portfolio, carriageways, footways, bridges, lighting, signals, and drainage. At £72M/year capital spend, this would take ~9 years to clear if NO further deterioration occurred (which is impossible).",
     "national_backlog_total": 16810000000,
     "national_backlog_source": "AIA ALARM Survey 2025",
     "national_backlog_note": "LCC's £650M represents ~3.9% of the national £16.81B backlog. Lancashire's 7,142km network represents a similar fraction of the 340,000km national local road network.",
@@ -526,9 +526,9 @@
     "grc_total": 10000000000,
     "average_asset_life_years": 25,
     "steady_state_estimate": 400000000,
-    "steady_state_note": "Rough estimate: £10B GRC ÷ 25-year average life = £400M/year. In practice, different asset types have very different lifespans (road surface 10–40yr, bridges 80–120yr, lighting 30–40yr). A more realistic practical steady-state for capital renewal alone is £90–120M/year.",
+    "steady_state_note": "Rough estimate: £10B GRC ÷ 25-year average life = £400M/year. In practice, different asset types have very different lifespans (road surface 10 to 40yr, bridges 80 to 120yr, lighting 30 to 40yr). A more realistic practical steady-state for capital renewal alone is £90 to 120M/year.",
     "practical_steady_state": 110000000,
-    "practical_steady_state_note": "Based on 7,142km at 25-year resurfacing cycle (286km/year × £225K/km = £64M/year for carriageways alone), plus footways, bridges, lighting, signals, drainage renewal. £90–120M/year is a credible all-asset steady-state figure.",
+    "practical_steady_state_note": "Based on 7,142km at 25-year resurfacing cycle (286km/year × £225K/km = £64M/year for carriageways alone), plus footways, bridges, lighting, signals, drainage renewal. £90 to 120M/year is a credible all-asset steady-state figure.",
 
     "current_best_annual_capital": 72000000,
     "capital_as_pct_steady_state": 18,
@@ -547,21 +547,21 @@
 
     "cost_of_reactive_vs_preventative": {
       "reactive_cost_multiplier": 5,
-      "note": "Every £1 not spent on preventative maintenance costs £2.50–£5 to fix reactively. The Public Accounts Committee (2025) found planned works are 35% cheaper than reactive fixes. DfT's Potholes Review found preventative maintenance is at least 20× less expensive per m2 than reactive work.",
+      "note": "Every £1 not spent on preventative maintenance costs £2.50£5 to fix reactively. The Public Accounts Committee (2025) found planned works are 35% cheaper than reactive fixes. DfT's Potholes Review found preventative maintenance is at least 20× less expensive per m2 than reactive work.",
       "pothole_repair_cost_each": 94,
-      "pothole_repair_cost_note": "Average £81–107 per pothole repair (ALARM 2025). 1.9 million potholes filled nationally at £137.4M total.",
+      "pothole_repair_cost_note": "Average £81 to 107 per pothole repair (ALARM 2025). 1.9 million potholes filled nationally at £137.4M total.",
       "surface_dressing_cost_m2": 5,
       "reconstruction_cost_m2": 18,
-      "ratio": "Surface dressing at £3–5/m2 before damage spreads beats emergency resurfacing at £15–20/m2 after structural failure."
+      "ratio": "Surface dressing at £3 to 5/m2 before damage spreads beats emergency resurfacing at £15 to 20/m2 after structural failure."
     },
 
-    "key_insight": "Over the last 14 years (2013–2027), Lancashire invested approximately £541M in highway capital — just 39% of the estimated £1.38B needed. The cumulative £834M shortfall closely mirrors today's £650M stated backlog. Even at the record £72M/year programme, the backlog will continue to grow because roads deteriorate faster than they are renewed. LCC's own strategy acknowledges a threefold increase in DfT funding would be needed to address the backlog."
+    "key_insight": "Over the last 14 years (2013 to 2027), Lancashire invested approximately £541M in highway capital, just 39% of the estimated £1.38B needed. The cumulative £834M shortfall closely mirrors today's £650M stated backlog. Even at the record £72M/year programme, the backlog will continue to grow because roads deteriorate faster than they are renewed. LCC's own strategy acknowledges a threefold increase in DfT funding would be needed to address the backlog."
   },
 
   "lifecycle_models": [
     {
       "treatment": "Surface Dressing",
-      "description": "Spray bitumen binder and chippings over existing surface. Preventative — seals cracks and waterproofs.",
+      "description": "Spray bitumen binder and chippings over existing surface. Preventative, seals cracks and waterproofs.",
       "lifespan_years": 10,
       "cost_per_km": 37500,
       "cost_per_km_per_year": 3750,
@@ -578,11 +578,11 @@
       "cost_per_km_per_year": 7143,
       "suitable_for": "Residential streets, lightly trafficked roads",
       "effectiveness": "good_value",
-      "note": "Fills surface texture without structural repair — only appropriate if road structure is sound."
+      "note": "Fills surface texture without structural repair, only appropriate if road structure is sound."
     },
     {
       "treatment": "Thin Surface Course System",
-      "description": "15–50mm overlay of premium asphalt. Gives new surface without full depth repair.",
+      "description": "15 to 50mm overlay of premium asphalt. Gives new surface without full depth repair.",
       "lifespan_years": 15,
       "cost_per_km": 100000,
       "cost_per_km_per_year": 6667,
@@ -592,7 +592,7 @@
     },
     {
       "treatment": "Conventional Resurfacing (Inlay/Overlay)",
-      "description": "Remove top 40–60mm and replace with new asphalt. Addresses surface and upper structural layer.",
+      "description": "Remove top 40 to 60mm and replace with new asphalt. Addresses surface and upper structural layer.",
       "lifespan_years": 25,
       "cost_per_km": 225000,
       "cost_per_km_per_year": 9000,
@@ -613,7 +613,7 @@
   ],
 
   "running_costs_context": {
-    "note": "Revenue running expenses from GOV.UK confirmed outturn include: staff costs, contracts for routine maintenance, street lighting energy, winter service, drainage maintenance, structure inspections, traffic signal maintenance, and management overhead. The revenue budget does NOT include capital renewal — that is a separate capital programme.",
+    "note": "Revenue running expenses from GOV.UK confirmed outturn include: staff costs, contracts for routine maintenance, street lighting energy, winter service, drainage maintenance, structure inspections, traffic signal maintenance, and management overhead. The revenue budget does NOT include capital renewal, that is a separate capital programme.",
     "latest_confirmed": {
       "year": "2023/24",
       "employees": 35305000,
@@ -625,11 +625,11 @@
     },
     "implied_running_cost_breakdown": [
       { "category": "Employee costs (direct + overhead)", "estimated_pct": 28, "estimated_value": 35305000, "basis": "Confirmed 2023/24 outturn" },
-      { "category": "Routine maintenance contracts", "estimated_pct": 30, "estimated_value": 27000000, "basis": "Estimated portion of running expenses — includes patching, reactive repairs, vegetation, drainage" },
-      { "category": "Street lighting (energy + maintenance)", "estimated_pct": 15, "estimated_value": 13500000, "basis": "Estimated — national avg £130/column/year for 100k columns" },
-      { "category": "Winter service (gritting, salt, plant)", "estimated_pct": 12, "estimated_value": 11000000, "basis": "Estimated — LCC grits ~2,000 miles of priority routes" },
-      { "category": "Structures (inspections, minor repairs)", "estimated_pct": 8, "estimated_value": 7000000, "basis": "Estimated — 2,009 structures need annual inspections and routine maintenance" },
-      { "category": "Traffic signals & technology", "estimated_pct": 7, "estimated_value": 6000000, "basis": "Estimated — 5,778 signals at ~£1,000/signal/year maintenance" }
+      { "category": "Routine maintenance contracts", "estimated_pct": 30, "estimated_value": 27000000, "basis": "Estimated portion of running expenses, includes patching, reactive repairs, vegetation, drainage" },
+      { "category": "Street lighting (energy + maintenance)", "estimated_pct": 15, "estimated_value": 13500000, "basis": "Estimated, national avg £130/column/year for 100k columns" },
+      { "category": "Winter service (gritting, salt, plant)", "estimated_pct": 12, "estimated_value": 11000000, "basis": "Estimated, LCC grits ~2,000 miles of priority routes" },
+      { "category": "Structures (inspections, minor repairs)", "estimated_pct": 8, "estimated_value": 7000000, "basis": "Estimated, 2,009 structures need annual inspections and routine maintenance" },
+      { "category": "Traffic signals & technology", "estimated_pct": 7, "estimated_value": 6000000, "basis": "Estimated, 5,778 signals at ~£1,000/signal/year maintenance" }
     ],
     "disclaimer": "Running cost breakdown estimates are derived from national benchmarks applied to LCC scale. LCC does not publish a service-level breakdown of running expenses. Only the total employee/running expense/income split is confirmed."
   },
@@ -641,7 +641,7 @@
       "category": "Energy & Carbon",
       "status": "Partially implemented",
       "payback_years": 5.5,
-      "value_summary": "50–70% energy saving per column. Nationally £125M/yr electricity + £60M/yr maintenance savings.",
+      "value_summary": "50 to 70% energy saving per column. Nationally £125M/yr electricity + £60M/yr maintenance savings.",
       "lancashire_angle": "LCC's capital programme includes lighting column replacement alongside resurfacing. Older estate areas and rural roads likely still have sodium lanterns. Full conversion = significant energy saving.",
       "policy_driver": "Net Zero 2050, Carbon Reduction Commitment",
       "risk_note": "Upfront capital cost. Some communities object to LED colour temperature. PFI/outsourced lighting contracts may complicate conversion timelines."
@@ -654,18 +654,18 @@
       "payback_years": null,
       "value_summary": "C18-C19 Yorkshire stone setts beneath tarmac in Lancashire mill towns. Potential heritage, tourism, and conservation area value.",
       "lancashire_angle": "Burnley, Accrington, Colne, Nelson, and Clitheroe all have historic mill street networks. When roads are due for resurfacing, ground-penetrating radar could identify sett locations.",
-      "policy_driver": "NPPF Chapters 16–17 (Heritage Assets), Historic England guidance, Conservation Area Appraisals",
+      "policy_driver": "NPPF Chapters 16 to 17 (Heritage Assets), Historic England guidance, Conservation Area Appraisals",
       "risk_note": "Sett streets have higher slip risk and are harder to navigate for cyclists/wheelchair users. Not appropriate for high-speed roads."
     },
     {
       "id": "bng_verges",
-      "title": "Biodiversity Net Gain — Highway Verges",
+      "title": "Biodiversity Net Gain, Highway Verges",
       "category": "Environment",
-      "status": "Emerging — mandatory BNG since Feb 2024",
+      "status": "Emerging, mandatory BNG since Feb 2024",
       "payback_years": null,
-      "value_summary": "Highway verges as BNG habitat bank. Developers need 10% BNG — highway authorities could sell credits.",
+      "value_summary": "Highway verges as BNG habitat bank. Developers need 10% BNG, highway authorities could sell credits.",
       "lancashire_angle": "Lancashire's 4,437 miles of roads come with substantial verge area. Rural verges in particular support rare grassland species. LCC could register verges as habitat bank sites.",
-      "policy_driver": "Environment Act 2021 s98–101 (mandatory BNG from Feb 2024), DEFRA metric 4.0",
+      "policy_driver": "Environment Act 2021 s98 to 101 (mandatory BNG from Feb 2024), DEFRA metric 4.0",
       "risk_note": "Requires upfront survey and habitat baseline. Management must be maintained for 30 years."
     },
     {
@@ -686,7 +686,7 @@
       "status": "Mandatory from 2025 (new development)",
       "payback_years": null,
       "value_summary": "SuDS typically cheaper over whole life than conventional piped drainage. Reduces flood risk and sewer overloading.",
-      "lancashire_angle": "Lancashire experienced 125% of average rainfall in 2024 — a direct cause of accelerated road deterioration. Permeable paving and drainage swales alongside resurfacing works would reduce water damage.",
+      "lancashire_angle": "Lancashire experienced 125% of average rainfall in 2024, a direct cause of accelerated road deterioration. Permeable paving and drainage swales alongside resurfacing works would reduce water damage.",
       "policy_driver": "Flood & Water Management Act 2010 Schedule 3, CIRIA SuDS Manual C753, Environment Act 2021",
       "risk_note": "Higher upfront construction cost. Maintenance regimes for permeable surfaces need careful design."
     },
@@ -705,10 +705,10 @@
       "id": "gpr_network_survey",
       "title": "Ground-Penetrating Radar (GPR) Network Survey",
       "category": "Asset Intelligence",
-      "status": "Proven technology — limited UK adoption",
+      "status": "Proven technology, limited UK adoption",
       "payback_years": 2,
       "value_summary": "Non-destructive subsurface condition mapping. Identifies voids, sub-base failure, and moisture ingress before surface shows distress. £15-25K/km vs £500/core sample. Can survey entire A-road network in weeks.",
-      "lancashire_angle": "LCC's £650M backlog is based on surface condition (DVS surveys). GPR would reveal sub-base condition — the hidden 60% of the problem. Targeting reconstruction only where sub-base has failed, rather than resurfacing over a failing foundation, could redirect £10-20M/yr of capital spend to more effective treatments.",
+      "lancashire_angle": "LCC's £650M backlog is based on surface condition (DVS surveys). GPR would reveal sub-base condition, the hidden 60% of the problem. Targeting reconstruction only where sub-base has failed, rather than resurfacing over a failing foundation, could redirect £10-20M/yr of capital spend to more effective treatments.",
       "policy_driver": "UKPMS enhancement, CIPFA Code requirement for asset condition data, HMEP lifecycle planning toolkit",
       "risk_note": "Requires specialist equipment and interpretation expertise. Data volumes are large. Not cost-effective for unclassified rural roads. Most valuable on A/B roads and heavily trafficked urban routes.",
       "estimated_saving_annual": 15000000,
@@ -718,10 +718,10 @@
       "id": "ai_defect_detection",
       "title": "AI-Driven Defect Detection & Classification",
       "category": "Efficiency & Safety",
-      "status": "Piloting — LCC exploring on A-road network",
+      "status": "Piloting, LCC exploring on A-road network",
       "payback_years": 1.5,
       "value_summary": "Camera-equipped vehicles + ML image classification. Detects and categorises potholes, cracking, rutting, edge deterioration automatically. Reduces inspector time by 60-70% and enables continuous monitoring vs annual survey snapshots.",
-      "lancashire_angle": "LCC currently relies on annual DVS machine surveys (A/B/C roads) plus reactive reports for unclassified roads. AI detection from routine council vehicle cameras (refuse trucks, highways vans) would provide continuous 7,142km coverage at near-zero marginal cost. The 87.5% unclassified network — currently only surveyed when reported — would gain systematic data for the first time.",
+      "lancashire_angle": "LCC currently relies on annual DVS machine surveys (A/B/C roads) plus reactive reports for unclassified roads. AI detection from routine council vehicle cameras (refuse trucks, highways vans) would provide continuous 7,142km coverage at near-zero marginal cost. The 87.5% unclassified network, currently only surveyed when reported, would gain systematic data for the first time.",
       "policy_driver": "PAS 2161:2021 (new 5-category condition classification from March 2027), UKRLG Code of Practice (risk-based approach requires evidence)",
       "risk_note": "ML models need training on UK-specific defect types. False positives create inspection overhead. Camera quality and lighting affect accuracy. Data processing infrastructure needed.",
       "estimated_saving_annual": 2000000,
@@ -731,25 +731,25 @@
       "id": "digital_twin",
       "title": "Digital Twin / Predictive Asset Management Platform",
       "category": "Strategic Intelligence",
-      "status": "Emerging — national pathfinder programmes",
+      "status": "Emerging, national pathfinder programmes",
       "payback_years": 4,
-      "value_summary": "Real-time network condition model linking DVS surveys, roadworks history, traffic volumes, weather data, spending records, and contractor performance. Enables predictive maintenance scheduling — fixing roads before they fail rather than after.",
+      "value_summary": "Real-time network condition model linking DVS surveys, roadworks history, traffic volumes, weather data, spending records, and contractor performance. Enables predictive maintenance scheduling, fixing roads before they fail rather than after.",
       "lancashire_angle": "LCC already generates most of the data needed: DVS surveys, MARIO roadworks records, DfT traffic counts, Met Office weather data, spending data (£8.1M/yr identifiable highways spend). A digital twin would integrate these into a single decision platform. The council's own highways intelligence data demonstrates the concept - linking roadworks, traffic, budgets, and condition data across 7,142km.",
       "policy_driver": "National Digital Twin Programme (Centre for Digital Built Britain), BIM Level 3 for infrastructure, DfT Technology Strategy",
-      "risk_note": "High upfront platform cost (£2-5M). Requires clean, interoperable data across multiple council systems. Change management challenge — moving from reactive 'worst first' to predictive prioritisation. Vendor lock-in risk.",
+      "risk_note": "High upfront platform cost (£2-5M). Requires clean, interoperable data across multiple council systems. Change management challenge, moving from reactive 'worst first' to predictive prioritisation. Vendor lock-in risk.",
       "estimated_saving_annual": 8000000,
       "saving_basis": "10-15% capital programme efficiency through optimised timing and treatment selection. Reduced emergency repairs. Better contractor scheduling. Evidence-based business cases for investment."
     }
   ],
 
   "valuation_questions": {
-    "intro": "Road asset valuation in UK local government follows CIPFA's Transport Infrastructure Code, which mandates Depreciated Replacement Cost (DRC) methodology. The numbers are large — but are they right?",
+    "intro": "Road asset valuation in UK local government follows CIPFA's Transport Infrastructure Code, which mandates Depreciated Replacement Cost (DRC) methodology. The numbers are large, but are they right?",
     "questions": [
       {
         "id": "cobble_undervaluation",
         "title": "Cobblestones: Hidden Heritage Asset?",
         "question": "Are sett streets valued as standard carriageway (resurfacing cost) or as heritage assets with higher intrinsic value?",
-        "analysis": "CIPFA Code values carriageways at their engineering replacement cost. A sett-paved street would be valued at the cost of relaying granite setts — which is significantly MORE expensive than laying asphalt. However, conservation area designation means the heritage value is not captured.",
+        "analysis": "CIPFA Code values carriageways at their engineering replacement cost. A sett-paved street would be valued at the cost of relaying granite setts, which is significantly MORE expensive than laying asphalt. However, conservation area designation means the heritage value is not captured.",
         "implication": "If LCC holds significant sett infrastructure under tarmac, and this is being valued as asphalt-equivalent, the heritage asset register may be understated."
       },
       {
@@ -779,16 +779,16 @@
   "asset_management_framework": {
     "legislation": [
       { "act": "Highways Act 1980", "section": "s41", "duty": "Duty to maintain adopted highways in a state of repair reasonably safe for ordinary traffic" },
-      { "act": "Highways Act 1980", "section": "s58", "duty": "Defence of reasonable maintenance — council must demonstrate it took all reasonable precautions to maintain" },
-      { "act": "Highways Act 1980", "section": "s42", "duty": "Principal road maintenance duty — A and B roads" }
+      { "act": "Highways Act 1980", "section": "s58", "duty": "Defence of reasonable maintenance, council must demonstrate it took all reasonable precautions to maintain" },
+      { "act": "Highways Act 1980", "section": "s42", "duty": "Principal road maintenance duty, A and B roads" }
     ],
     "standards": [
-      { "standard": "CIPFA Transport Infrastructure Code", "version": "2nd Ed 2016", "purpose": "GRC/DRC asset valuation methodology — how highway assets are valued on the balance sheet" },
-      { "standard": "UK Pavement Management System (UKPMS)", "version": "Current", "purpose": "Certified system for road condition surveys and analysis — used for DfT data returns" },
+      { "standard": "CIPFA Transport Infrastructure Code", "version": "2nd Ed 2016", "purpose": "GRC/DRC asset valuation methodology, how highway assets are valued on the balance sheet" },
+      { "standard": "UK Pavement Management System (UKPMS)", "version": "Current", "purpose": "Certified system for road condition surveys and analysis, used for DfT data returns" },
       { "standard": "BSI PAS 2161", "version": "2021 (mandatory from March 2027)", "purpose": "New 5-category road condition standard replacing 3-category RED/AMBER/GREEN for national reporting" },
-      { "standard": "Well-Managed Highway Infrastructure (WMHI)", "version": "UKRLG/CIHT Code of Practice 2016", "purpose": "Replaces Well-Maintained Highways — sets out risk-based approach to maintenance prioritisation" },
-      { "standard": "Highway Maintenance Efficiency Programme (HMEP)", "version": "LGA guidance", "purpose": "Lifecycle planning toolkit — models funding impact on asset performance and calculates steady-state" },
-      { "standard": "PAS 128", "version": "2022", "purpose": "Specification for underground utility detection, verification, and location — 4 quality levels for SUE surveys" }
+      { "standard": "Well-Managed Highway Infrastructure (WMHI)", "version": "UKRLG/CIHT Code of Practice 2016", "purpose": "Replaces Well-Maintained Highways, sets out risk-based approach to maintenance prioritisation" },
+      { "standard": "Highway Maintenance Efficiency Programme (HMEP)", "version": "LGA guidance", "purpose": "Lifecycle planning toolkit, models funding impact on asset performance and calculates steady-state" },
+      { "standard": "PAS 128", "version": "2022", "purpose": "Specification for underground utility detection, verification, and location, 4 quality levels for SUE surveys" }
     ]
   },
 
@@ -804,7 +804,7 @@
       "source": "ONS CPI, ONS Construction Output Price Indices, BCIS Labour Cost Index, DBT Construction Materials Statistics"
     },
     "component_costs": [
-      { "material": "Bitumen", "unit": "per tonne delivered", "price_2015": 280, "price_2025": 515, "change_pct": 84, "note": "Petroleum derivative — tracks crude oil with lag. Peak $525/t Dec 2024. Asphalt & concrete account for 77% of road construction inputs.", "source": "IndexBox, market data", "icon": "oil" },
+      { "material": "Bitumen", "unit": "per tonne delivered", "price_2015": 280, "price_2025": 515, "change_pct": 84, "note": "Petroleum derivative, tracks crude oil with lag. Peak $525/t Dec 2024. Asphalt & concrete account for 77% of road construction inputs.", "source": "IndexBox, market data", "icon": "oil" },
       { "material": "Aggregates", "unit": "per tonne", "price_2015": null, "price_2025": null, "change_pct": 40, "note": "6.6% rise in 12 months to Jan 2026. Aggregate Levy frozen at £2/t since 2009. Record low sales volumes in 2025 (-22% on 2015) driving higher per-unit prices.", "source": "MPA, GOV.UK DBT", "icon": "stone" },
       { "material": "Hot-mix asphalt", "unit": "per tonne delivered", "price_2015": 42, "price_2025": 65, "change_pct": 55, "note": "Asphalt rises ~0.7% for every 1% oil price increase. Construction materials for All Work in 2025 are more than double what they were in 2005.", "source": "DBT Construction Materials Statistics", "icon": "asphalt" },
       { "material": "Red diesel → white diesel", "unit": "per litre", "price_2021": 0.55, "price_2022": 1.35, "change_pct": 145, "note": "HMRC removed rebate 1 April 2022 for construction. Added 5-6% to all operating costs. £480M/yr additional cost sector-wide. Average contractor fuel costs rose from £30K to £51-87K/yr.", "source": "HMRC, SAPCA, Building.co.uk", "icon": "fuel" },
@@ -820,27 +820,27 @@
       "budget_2027_in_2015_terms": 50000000,
       "tamp_minimum_2015": 35000000,
       "tamp_minimum_2025_adjusted": 51000000,
-      "note": "£72M in 2026/27 buys approximately £50M of 2015 road work. The nominal 188% increase is actually ~85% in construction-adjusted terms. The 2015 TAMP said £35M was the minimum needed — adjusted for construction inflation that's £51M today. At the pre-Reform baseline of £32M/year, buying power was ~£22M in 2015 terms — barely above the £21M of a decade earlier."
+      "note": "£72M in 2026/27 buys approximately £50M of 2015 road work. The nominal 188% increase is actually ~85% in construction-adjusted terms. The 2015 TAMP said £35M was the minimum needed, adjusted for construction inflation that's £51M today. At the pre-Reform baseline of £32M/year, buying power was ~£22M in 2015 terms, barely above the £21M of a decade earlier."
     },
     "bcis_forecasts_2025_2030": {
       "civil_engineering_tender_prices_pct": 25,
       "labour_costs_pct": 17,
       "building_costs_pct": 15,
       "source": "BCIS Five-Year Forecasts Q4 2024",
-      "note": "Civil engineering tender prices forecast to rise a further 25% by 2030. BCIS chief economist described the current situation as a 'stagflation-type squeeze' — weak growth with elevated costs. Every year of delayed investment makes the backlog more expensive to clear."
+      "note": "Civil engineering tender prices forecast to rise a further 25% by 2030. BCIS chief economist described the current situation as a 'stagflation-type squeeze', weak growth with elevated costs. Every year of delayed investment makes the backlog more expensive to clear."
     },
     "backlog_inflation_impact": {
       "backlog_today": 650000000,
       "construction_inflation_rate": 0.04,
       "backlog_in_5yr": 791000000,
       "backlog_in_10yr": 962000000,
-      "note": "At 4% annual construction inflation, today's £650M backlog would cost £791M to clear in 5 years or £962M in 10 years. Delay is not free — it compounds the problem."
+      "note": "At 4% annual construction inflation, today's £650M backlog would cost £791M to clear in 5 years or £962M in 10 years. Delay is not free, it compounds the problem."
     }
   },
 
   "future_outlook": {
     "section_title": "The Road Ahead: Future Pressures on the Network",
-    "summary": "Lancashire's highway network faces converging pressures: population growth, heavier electric vehicles, delivery van explosion on residential streets, climate-driven deterioration, and a collapsing motoring tax base. These are not distant threats — they are happening now.",
+    "summary": "Lancashire's highway network faces converging pressures: population growth, heavier electric vehicles, delivery van explosion on residential streets, climate-driven deterioration, and a collapsing motoring tax base. These are not distant threats, they are happening now.",
 
     "population": {
       "lancashire_2022": 1253922,
@@ -876,7 +876,7 @@
       "eved_rate_phev_pence_per_mile": 1.5,
       "eved_revenue_2028_29": 1100000000,
       "eved_revenue_2050_51": 7000000000,
-      "highway_impact": "Heavier EVs accelerate surface wear on residential streets. Meanwhile, fuel duty revenue is collapsing — from 7% of total tax receipts (2020) to a projected 2% (2026). The new eVED (3p/mile from 2028) will only partially bridge the gap. Road maintenance funding becomes politically harder to justify as the direct link between motoring taxes and road spending weakens.",
+      "highway_impact": "Heavier EVs accelerate surface wear on residential streets. Meanwhile, fuel duty revenue is collapsing, from 7% of total tax receipts (2020) to a projected 2% (2026). The new eVED (3p/mile from 2028) will only partially bridge the gap. Road maintenance funding becomes politically harder to justify as the direct link between motoring taxes and road spending weakens.",
       "source": "OBR Fuel Duties forecast, DfT, HM Treasury eVED Consultation Nov 2025, RAC Foundation"
     },
 
@@ -884,7 +884,7 @@
       "lgv_increase_2010_2023_pct": 53,
       "lgv_share_of_traffic_pct": 16,
       "lgv_daily_km_billions": 5.2,
-      "highway_impact": "Online shopping deliveries have driven a 53% increase in light goods vehicle traffic since 2010. LGVs now account for 16% of all road traffic. Amazon/DPD/Evri vans are heavier than typical car traffic and concentrate on unclassified residential streets — the 87.5% of the network already at 27.6% red. These are roads designed for occasional car use, not continuous commercial delivery traffic.",
+      "highway_impact": "Online shopping deliveries have driven a 53% increase in light goods vehicle traffic since 2010. LGVs now account for 16% of all road traffic. Amazon/DPD/Evri vans are heavier than typical car traffic and concentrate on unclassified residential streets, the 87.5% of the network already at 27.6% red. These are roads designed for occasional car use, not continuous commercial delivery traffic.",
       "source": "DfT Road Traffic Statistics TRA0101"
     },
 
@@ -893,7 +893,7 @@
       "wettest_year_since": 1891,
       "bc_roads_deterioration_2024_25_pct": 41,
       "met_office_winter_rainfall_increase_by_2050_pct": "10-20",
-      "highway_impact": "2024 was the UK's wettest year since 1891, with 125% of the 1991-2020 average rainfall. The direct result: Lancashire's B&C roads jumped from 4.6% to 6.5% red in a single year — a 41% deterioration. Water infiltrates cracks, freezes, expands, and creates potholes. The Met Office projects 10-20% wetter winters by 2050. Roads designed for historical climate patterns are failing under the new normal.",
+      "highway_impact": "2024 was the UK's wettest year since 1891, with 125% of the 1991-2020 average rainfall. The direct result: Lancashire's B&C roads jumped from 4.6% to 6.5% red in a single year, a 41% deterioration. Water infiltrates cracks, freezes, expands, and creates potholes. The Met Office projects 10-20% wetter winters by 2050. Roads designed for historical climate patterns are failing under the new normal.",
       "source": "Met Office State of the UK Climate 2024, LCC DVS survey data"
     },
 
@@ -919,7 +919,7 @@
       "cost_of_freeze_since_2011": 120000000000,
       "fuel_duty_share_of_tax_2020_pct": 7,
       "fuel_duty_share_of_tax_2026_pct": 2,
-      "highway_impact": "15 consecutive years of frozen fuel duty have cost the Treasury an estimated £120B in foregone revenue. Roads are funded from general taxation, not ringfenced from motoring taxes — but the political case for road investment weakens as motoring tax revenues decline. The fundamental question: will roads be funded by their users (road pricing) or from general taxation? Neither pathway currently adds up.",
+      "highway_impact": "15 consecutive years of frozen fuel duty have cost the Treasury an estimated £120B in foregone revenue. Roads are funded from general taxation, not ringfenced from motoring taxes, but the political case for road investment weakens as motoring tax revenues decline. The fundamental question: will roads be funded by their users (road pricing) or from general taxation? Neither pathway currently adds up.",
       "source": "OBR Fuel Duties forecast, House of Commons Library, IFS 'A Road Map for Motoring Taxation'"
     }
   },
@@ -928,13 +928,13 @@
     "data_source": "LCC spending data (spending-*.json) filtered by 42 highways department codes identified in budget_mapping.json",
     "period": "12-month sample from available v4 monthly data",
     "top_contractors": [
-      { "supplier": "ROAD MAINTENANCE SERVICES LTD", "annual_spend": 4989473, "share_pct": 62, "note": "Dominant maintenance contractor — 62% of identifiable road maintenance spend" },
+      { "supplier": "ROAD MAINTENANCE SERVICES LTD", "annual_spend": 4989473, "share_pct": 62, "note": "Dominant maintenance contractor, 62% of identifiable road maintenance spend" },
       { "supplier": "MONKS CONTRACTORS LTD", "annual_spend": 1678894, "share_pct": 21, "note": "W Monks (Longridge) sub-entity" },
       { "supplier": "BAMBERS REMEDIAL CONTRACTORS LTD", "annual_spend": 571043, "share_pct": 7, "note": "Remedial/patching specialist" }
     ],
     "total_identifiable_highways_spend": 8100000,
     "budget_departments_count": 42,
-    "concentration_note": "ROAD MAINTENANCE SERVICES LTD holds 62% of identifiable maintenance spend. Top 3 contractors hold 90%. This concentration level warrants scrutiny — is there genuine competition for LCC highways work? Cross-reference with procurement.json contract notices for tender history.",
-    "cross_reference_note": "Roadworks operators in MARIO ArcGIS data (BT, United Utilities, ENW, Cadent) are mostly statutory undertakers, not LCC contractors. The spending data captures LCC's own commissioned maintenance — a different data source from the NRSWA-notified utility works."
+    "concentration_note": "ROAD MAINTENANCE SERVICES LTD holds 62% of identifiable maintenance spend. Top 3 contractors hold 90%. This concentration level warrants scrutiny, is there genuine competition for LCC highways work? Cross-reference with procurement.json contract notices for tender history.",
+    "cross_reference_note": "Roadworks operators in MARIO ArcGIS data (BT, United Utilities, ENW, Cadent) are mostly statutory undertakers, not LCC contractors. The spending data captures LCC's own commissioned maintenance, a different data source from the NRSWA-notified utility works."
   }
 }

@@ -21,8 +21,8 @@ import StatCard from './StatCard.astro';
 
       <p class="hero-subtitle">
         We inherited a &pound;28 million overspend and cut it to near zero.
-        Delivered the lowest council tax rise in 12 years. Secured &pound;72M for highways.
-        Now we&rsquo;re rebuilding Lancashire properly.
+        Delivered the lowest council tax rise in 12 years. Secured &pound;77M for highways.
+        Every figure on this site traces to a document you can open yourself.
       </p>
 
       <div class="hero-actions">
@@ -31,7 +31,7 @@ import StatCard from './StatCard.astro';
           Get in Touch
         </a>
         <a href="/about/" class="btn btn-secondary">
-          What We&rsquo;ve Delivered
+          See the Record
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
@@ -66,7 +66,7 @@ import StatCard from './StatCard.astro';
       />
       <StatCard
         icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
-        value="&pound;28M&rarr;&pound;3M"
+        value="&pound;28M&rarr;&pound;2.99M"
         label="Overspend Corrected"
         color="#12b6cf"
       />
@@ -382,12 +382,14 @@ import StatCard from './StatCard.astro';
       gap: var(--space-xl);
     }
 
+    /* Text first on narrow screens. The photo above the claim pushed every word
+       below the fold on a 375px viewport. */
     .hero-text {
-      order: 2;
+      order: 1;
     }
 
     .hero-photo-wrap {
-      order: 1;
+      order: 2;
     }
 
     .hero-subtitle {
