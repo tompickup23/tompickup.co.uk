@@ -677,16 +677,26 @@ code {
 .stagger-children > *:nth-child(9) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.54s forwards; }
 .stagger-children > *:nth-child(10) { opacity: 0; animation: fadeInUp 0.5s var(--ease-smooth) 0.60s forwards; }
 
-/* Scroll reveal */
+/* Scroll reveal.
+   Hidden state only applies when (a) JS is confirmed running (html.js set by an
+   inline script in Layout) and (b) the user has not asked for reduced motion.
+   Without both guards, a slow or blocked script leaves sections invisible,
+   which is the failure mode for Facebook in-app browsers on old phones. */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
+  opacity: 1;
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+@media (prefers-reduced-motion: no-preference) {
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
+  }
+
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 

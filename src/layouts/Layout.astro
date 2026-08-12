@@ -49,6 +49,10 @@ const maintenanceMode = false;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+    <!-- Marks JS as running; scroll-reveal hidden states are gated on html.js
+         so content is never invisible when scripts fail or load slowly -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d166519fc11d4f12b9bd7b7d91ceac40"}'></script><!-- End Cloudflare Web Analytics -->
 
     <!-- Preconnect to Google Fonts -->
@@ -141,7 +145,10 @@ const maintenanceMode = false;
 </html>
 
 <style is:global>
-  /* Ambient gradient orbs - decorative background */
+  /* Ambient gradient orbs - decorative background.
+     blur(100px) on two fixed full-viewport layers is a continuous GPU cost, so
+     the orbs are dropped on small screens: most mobile traffic arrives via the
+     Facebook in-app browser on mid-range phones, where this costs scroll frames. */
   body::before,
   body::after {
     content: '';
@@ -150,6 +157,13 @@ const maintenanceMode = false;
     pointer-events: none;
     z-index: -1;
     filter: blur(100px);
+  }
+
+  @media (max-width: 768px) {
+    body::before,
+    body::after {
+      display: none;
+    }
   }
 
   body::before {
