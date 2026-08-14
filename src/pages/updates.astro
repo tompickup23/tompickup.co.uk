@@ -1,25 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { LIST_ENDPOINT } from '../config';
 
-// Mailing-list signup. PROVIDER_ENDPOINT is empty until a list provider is
-// chosen (MailerLite / Brevo / Buttondown all take a plain form POST). While
-// empty, the form falls back to composing an email in the visitor's own mail
-// client, which the privacy policy already covers. Set the endpoint and the
-// same form posts straight to the provider.
-const PROVIDER_ENDPOINT = '';
+// Mailing-list signup. The endpoint lives in config.ts so there is one switch.
+// While it is empty the form falls back to composing a mail in the visitor's
+// own client. Neither list box is pre-ticked: PECR regulation 22 applies to
+// political campaigning by email, the soft opt-in does not, and a pre-ticked
+// box is not consent.
+const PROVIDER_ENDPOINT = LIST_ENDPOINT;
 ---
 
 <Layout
-  title="Get the Weekly Update | Tom Pickup"
+  title="The council decisions that never make the local news | Tom Pickup"
   description="A weekly email on Padiham, Burnley and Lancashire: what the council decided, what it spent, and what is being done about it. Plus an occasional national newsletter."
 >
   <section class="updates-page">
     <div class="container-narrow">
-      <h1>Get the Weekly Update</h1>
+      <h1>The council decisions that never make the local news</h1>
       <p class="updates-intro">
-        One email a week on what is actually happening here: what the council decided,
-        what it spent, and what I am doing about it. No spin, sources included, unsubscribe
-        any time.
+        Most of what the council decides is settled in papers nobody reads. One email a
+        week on what it decided, what it spent, and what I am doing about it. Every figure
+        carries its source. Unsubscribe any time.
       </p>
 
       <form
@@ -40,9 +41,9 @@ const PROVIDER_ENDPOINT = '';
         </div>
 
         <fieldset class="form-lists">
-          <legend>What would you like?</legend>
+          <legend>Tick what you want. Nothing is sent that you have not asked for.</legend>
           <label class="list-option">
-            <input type="checkbox" name="list-local" value="yes" checked />
+            <input type="checkbox" name="list-local" value="yes" />
             <span>
               <strong>Padiham &amp; Burnley weekly</strong>
               <small>The area, the council, the money. Once a week.</small>
@@ -57,7 +58,11 @@ const PROVIDER_ENDPOINT = '';
           </label>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary signup-submit">Sign Up</button>
+        <p id="list-required" class="signup-error" role="alert" hidden>
+          Pick at least one email before signing up.
+        </p>
+
+        <button type="submit" class="btn btn-primary signup-submit">Send Me the Update</button>
 
         <p class="signup-consent">
           By signing up you agree to receive the emails you tick above. Your details are
@@ -73,19 +78,39 @@ const PROVIDER_ENDPOINT = '';
   import { CONTACT_EMAIL } from '../config';
 
   const form = document.getElementById('signup-form') as HTMLFormElement | null;
-  if (form && !form.dataset.endpoint) {
+
+  // No box is pre-ticked, so consent has to be an actual choice. This guard runs
+  // whether the form posts to a provider or falls back to mailto, because neither
+  // path may assume a list the visitor did not select.
+  const selectedLists = (data: FormData) =>
+    [
+      data.get('list-local') ? 'Padiham & Burnley weekly' : null,
+      data.get('list-national') ? 'National spending newsletter' : null,
+    ].filter(Boolean) as string[];
+
+  if (form) {
+    const notice = document.getElementById('list-required');
+
     form.addEventListener('submit', (e) => {
-      e.preventDefault();
       const data = new FormData(form);
+      const lists = selectedLists(data);
+
+      if (lists.length === 0) {
+        e.preventDefault();
+        if (notice) notice.hidden = false;
+        form.querySelector<HTMLInputElement>('input[name="list-local"]')?.focus();
+        return;
+      }
+      if (notice) notice.hidden = true;
+
+      if (form.dataset.endpoint) return;
+
+      e.preventDefault();
       const name = (data.get('name') as string) || '';
       const email = (data.get('email') as string) || '';
-      const lists = [
-        data.get('list-local') ? 'Padiham & Burnley weekly' : null,
-        data.get('list-national') ? 'National spending newsletter' : null,
-      ].filter(Boolean).join(', ') || 'Padiham & Burnley weekly';
       const subject = encodeURIComponent('Mailing list signup');
       const body = encodeURIComponent(
-        `Please add me to: ${lists}\n\nName: ${name}\nEmail: ${email}\n\n(Sent from tompickup.co.uk/updates)`
+        `Please add me to: ${lists.join(', ')}\n\nName: ${name}\nEmail: ${email}\n\n(Sent from tompickup.co.uk/updates)`
       );
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
     });
@@ -199,6 +224,16 @@ const PROVIDER_ENDPOINT = '';
 
   .signup-submit {
     align-self: flex-start;
+  }
+
+  .signup-error {
+    font-size: 0.85rem;
+    color: #ff453a;
+    margin: 0;
+  }
+
+  .signup-error[hidden] {
+    display: none;
   }
 
   .signup-consent {
