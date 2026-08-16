@@ -268,6 +268,16 @@ for crn in sorted(crns):
                   "isGrowth": bool(g),
                   "hasWebsite": crn in websites})
 
+# A company that has left the dossier set must not keep serving last
+# edition's file: the deploy gate counts every file in this directory, and a
+# stale dossier carries stale facts under a live URL.
+_current = {f"{c}.json" for c in crns}
+_stale = [p for p in OUT.glob("*.json") if p.name not in _current]
+for p in _stale:
+    p.unlink()
+if _stale:
+    print(f"removed {len(_stale)} stale dossier file(s)")
+
 _pub_sites = [websites[c] for c in crns if c in websites]
 _by_method = {}
 for w in _pub_sites:
