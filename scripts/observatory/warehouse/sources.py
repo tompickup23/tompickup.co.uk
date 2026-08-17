@@ -1007,6 +1007,52 @@ SOURCES = [
         ),
     ),
     dict(
+        id="postcode_lad_cache",
+        name="Postcode to local authority cache (postcodes.io lookups)",
+        hosts=["vps", "mac"],
+        capture="derived-extract",
+        globs=["processed/_postcode_lad_cache.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://postcodes.io/",
+        notes=(
+            "_common.resolve_postcodes accumulates postcodes.io answers here "
+            "and every fetcher that places a record by postcode reads it, "
+            "including fetch_gazette, which is why a Gazette notice's LAD "
+            "cannot be reproduced from ONSPD alone. Landed in bronze in M4 so "
+            "the notices mart has an immutable, hash-pinned copy of the exact "
+            "lookup the published edition used. F1 replaces this cache with "
+            "the ONSPD plus OS Open UPRN location hierarchy; until then it is "
+            "the geocoding layer and it is a cache, not a register."
+        ),
+    ),
+    dict(
+        id="ch_accounts_api_backfill",
+        name="Companies House accounts, API backfill extract",
+        hosts=["vps"],
+        capture="derived-extract",
+        globs=[
+            "/opt/observatory/out/lancs_accounts_backfill.jsonl",
+            "/opt/observatory/out/backfill_progress.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://api.company-information.service.gov.uk/",
+        notes=(
+            "backfill_accounts.py pulls filings the monthly archives never "
+            "carried, straight from the CH REST API, and writes them with "
+            "filed_zip='api-backfill'. Registered separately from "
+            "ch_accounts_ixbrl because it is a different capture with a "
+            "different provenance, and because the site's consumers read it "
+            "AFTER the archive extract, which is what decides which filing "
+            "wins for a period. Landed in bronze in M4: it was missing from "
+            "the M2 registry, so silver under-covered the accounts the site "
+            "actually publishes from by 1,377 rows."
+        ),
+    ),
+    dict(
         id="gazette_notices",
         name="The Gazette corporate insolvency notices, Lancashire candidates",
         hosts=["vps"],

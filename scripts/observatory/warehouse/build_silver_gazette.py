@@ -64,6 +64,10 @@ def main():
            "Lancashire notices in the published subset")
 
     con, dv = SV.connect()
+    # The published notices file is in candidate-file order and build_site_json
+    # dedupes on (company_number, type, date) keeping the first it meets, so
+    # the order decides which notice_id and URI get published.
+    con.execute("SET preserve_insertion_order=true")
     SV.log(f"duckdb {dv}")
 
     read = f"""
@@ -74,7 +78,8 @@ def main():
       'reg_office_postcode': 'VARCHAR', 'insolvency_type': 'VARCHAR'
     }})
     """
-    con.execute(f"CREATE VIEW cand AS SELECT * FROM {read}")
+    con.execute("CREATE VIEW cand AS SELECT *, row_number() OVER () "
+                f"AS file_ordinal FROM {read}")
     total = con.execute("SELECT count(*) FROM cand").fetchone()[0]
 
     dropped = dict(con.execute("""
@@ -105,6 +110,14 @@ def main():
       any_value(uri)                                AS uri,
       list_sort(list_distinct(list(matched_circle))) AS matched_circles,
       any_value(nullif(trim(company_number), ''))   AS company_number,
+      -- The number EXACTLY as The Gazette published it. 15 of the 10,644
+      -- candidate notices carry a trailing space, and the live site joins the
+      -- register on the raw string, so those notices silently fail to match a
+      -- company we hold and render with the notice's own LAD and no sector.
+      -- That is a live fault (M4 finding, DATA-INTEGRITY s11.10). Silver holds
+      -- both: the trimmed number is the one to join on, the raw one is what
+      -- lets the gold mart reproduce the published edition.
+      any_value(nullif(company_number, ''))         AS company_number_raw,
       regexp_matches(upper(replace(coalesce(any_value(trim(company_number)), ''),
                                    ' ', '')), '{ET.CRN_SHAPE_RE}')
         AS company_number_is_crn,
@@ -112,11 +125,17 @@ def main():
       any_value(nullif(trim(insolvency_type), ''))  AS insolvency_type,
       (any_value(notice_code) IN ({codes}))         AS is_strike_off,
       (notice_id IN ({ids}))                        AS in_published_lancs_subset,
+      -- the earliest position this notice appeared at in the candidate file.
+      -- gazette_lancs.json is written in that order and build_site_json dedupes
+      -- on (company_number, type, date) keeping the first it meets, so the
+      -- order decides which notice_id and URI reach the site.
+      min(file_ordinal)                             AS file_ordinal,
       DATE '{snap}'                                 AS snapshot_date,
       '{cand_sha}'                                  AS source_sha256
     FROM cand
     WHERE substr(coalesce(notice_code, '__'), 1, 2) = '{KEEP_CATEGORY}'
     GROUP BY notice_id
+    ORDER BY min(file_ordinal)
     """
 
     out = SV.table_dir(TABLE, snap)
