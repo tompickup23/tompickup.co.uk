@@ -19,14 +19,15 @@ Four things happen here.
    requires an `unregisteredNote` that contains the word "modelled". A modelled
    count published as a count is failure mode 1 in the rulebook.
 
-3. **V-R3, measured rather than enforced, and that is a decision.** The gate
-   wants asAt, retrievedAt and licence on every `$meta.sources[]` entry. The
-   published contract carries `retrieved` (not `retrievedAt`) and no `asAt` on
-   any entry. Enforcing it today would block every deploy over a change that
-   moves published files, which is Tom's call in the same class as the six
-   reproduced faults. So this counts the gap exactly, prints it, and writes it
-   to the report as `pendingGates`. `--enforce-vr3` turns it into a hard gate
-   on the day the contract changes, so the switch exists before it is needed.
+3. **V-R3, now enforced.** The gate wants asAt, retrievedAt and licence on
+   every `$meta.sources[]` entry. The published contract carried none of the
+   first and the wrong shape of the second, and two files carried no sources
+   array at all. `scripts/observatory/sources_meta.py` now builds the block
+   once, dating each entry from the input it describes, and all three files
+   that publish one read it from there. The driver runs this with
+   `--enforce-vr3`, so a source entry that loses its dates fails the build
+   rather than being counted in a report nobody reads. Without the flag the gap
+   is still measured and reported, which is what a bare local run does.
 
 4. **V-L1, the restricted-licence tripwire.** No published file currently draws
    on a non-OGL source. If one ever does, the file has to carry the attribution
@@ -74,29 +75,44 @@ FAMILIES = {
 #
 # The alternative was to weaken the schema so the fault stops being visible,
 # which is how a rulebook quietly stops meaning anything.
-KNOWN_SERVE_FAULTS = [
+KNOWN_SERVE_FAULTS = []
+
+# Faults that WERE declared here and are now fixed. The record stays, with the
+# commit that fixed it, because a fault that vanishes from the register without
+# trace is indistinguishable from one nobody ever found. An entry here that
+# still matches a live schema error is a regression, and the gate says so.
+CLEARED_SERVE_FAULTS = [
     {
         "id": "F7",
-        "ref": "DATA-INTEGRITY s4 rule 1 (gate V-R2)",
+        "ref": "DATA-INTEGRITY s4 rule 1 (gate V-R2), s13.3",
         "file": "biz-areas.json",
         "pathPattern": r"^(east|north|south|west)-lancashire(-unitary)?/wholeEconomy$",
         "messagePattern": r"'selfEmploymentIncomeYear' is a required property",
-        "what": ("the four 2028 unitary rollups publish an HMRC "
+        "what": ("the four 2028 unitary rollups published an HMRC "
                  "self-employment income figure with no year label, while the "
-                 "14 districts carry one. build_site_json.py rolls up only "
-                 "numeric keys, then re-adds unregisteredNote by hand and does "
-                 "not re-add selfEmploymentIncomeYear. One caption was "
-                 "remembered and the other was not."),
+                 "14 districts carried one. build_site_json.py rolls up only "
+                 "numeric keys, then re-added unregisteredNote by hand and did "
+                 "not re-add selfEmploymentIncomeYear."),
         "rowsAffected": 4,
-        "fixIsOneClause": ('merged["wholeEconomy"]["selfEmploymentIncomeYear"] '
-                           '= areas_detail[mem[0]]["wholeEconomy"]'
-                           '["selfEmploymentIncomeYear"]'),
-        "movesAPublishedFigure": False,
-        "note": ("This adds a label to four area pages; it changes no number. "
-                 "It is the cheapest of the declared faults to clear and it is "
-                 "the first time gate V-R2 has fired in production."),
+        "fix": ("build_site_json.py now carries both whole-economy captions "
+                "across the unitary rollup in one loop, so adding a third "
+                "cannot leave one behind."),
+        "clearedIn": "fix/observatory-faults-f2-f7",
     },
 ]
+
+
+def regressions(errs):
+    """A cleared fault that matches a live error again is a regression."""
+    out = []
+    for e in errs:
+        for f in CLEARED_SERVE_FAULTS:
+            if (e["file"] == f["file"]
+                    and re.search(f["pathPattern"], e["path"])
+                    and re.search(f["messagePattern"], e["message"])):
+                out.append(dict(e, regressedFaultId=f["id"], ref=f["ref"]))
+                break
+    return out
 
 
 def classify(errs):
@@ -133,8 +149,8 @@ def validate_one(validator_cls, schema, instance, label, limit=8):
     return errs
 
 
-def measure_vr3(serve, files):
-    """Count the V-R3 gap exactly. No opinion, just the population."""
+def measure_vr3(serve, files, enforced=False):
+    """Count the V-R3 gap exactly, and say whether it is a gate today."""
     total = missing_asat = missing_retrieved = missing_licence = 0
     no_sources = []
     for name in files:
@@ -156,20 +172,22 @@ def measure_vr3(serve, files):
                 missing_licence += 1
     return {
         "gate": "V-R3",
-        "status": "PENDING",
+        "status": "ENFORCED" if enforced else "PENDING",
         "sourceEntries": total,
         "missingAsAt": missing_asat,
         "missingRetrieved": missing_retrieved,
         "missingLicence": missing_licence,
         "filesWithNoSourcesArray": no_sources,
-        "why": ("The published $meta.sources[] contract has never carried asAt. "
-                "Closing this changes every published file, so it is a scoped "
-                "task with Tom's sign-off, not a gate flipped in a build "
-                "session. Bronze already satisfies V-R3 in full."),
-        "fix": ("emit asAt beside retrieved in build_site_json.py's source "
-                "block, sourced from the bronze manifest of each input, and "
-                "give biz-changes.json and biz-companies-index.json a sources "
-                "array of their own."),
+        "why": ("The published $meta.sources[] contract carried no asAt until "
+                "the source block moved into sources_meta.py, which dates each "
+                "entry from the input it describes. Bronze already satisfied "
+                "V-R3 in full; the serve layer now does too, so the gate is "
+                "switched on in the driver rather than counted."),
+        "fix": ("scripts/observatory/sources_meta.py builds the block once, "
+                "with asAt, asAtBasis, retrievedAt and licence on every entry; "
+                "build_site_json, build_diff and build_dossiers all emit it, "
+                "so biz-changes.json and biz-companies-index.json now carry a "
+                "sources array of their own."),
     }
 
 
@@ -269,18 +287,26 @@ def main():
     print(f"  {'ok  ' if not dash else 'FAIL'} house style: "
           f"{len(dash)} file(s) carry a dash")
 
-    vr3 = measure_vr3(serve, FAMILIES)
+    vr3 = measure_vr3(serve, FAMILIES, args.enforce_vr3)
     vl1 = check_vl1(serve, FAMILIES)
-    print(f"  V-R3 PENDING: {vr3['missingAsAt']} of {vr3['sourceEntries']} "
-          f"source entries carry no asAt, {vr3['missingRetrieved']} no "
-          f"retrieved date, {len(vr3['filesWithNoSourcesArray'])} file(s) "
-          f"carry no sources array at all")
+    vr3_ok = not (vr3["missingAsAt"] or vr3["missingRetrieved"]
+                  or vr3["filesWithNoSourcesArray"])
+    print(f"  {'ok  ' if vr3_ok else 'FAIL'} V-R3 {vr3['status']}: "
+          f"{vr3['missingAsAt']} of {vr3['sourceEntries']} source entries "
+          f"carry no asAt, {vr3['missingRetrieved']} no retrieved date, "
+          f"{len(vr3['filesWithNoSourcesArray'])} file(s) carry no sources "
+          "array at all")
     print(f"  {'ok  ' if not vl1 else 'FAIL'} V-L1: "
           f"{len(vl1)} restricted-licence finding(s)")
     for f in KNOWN_SERVE_FAULTS:
         hit = [d for d in declared if d["faultId"] == f["id"]]
         print(f"  declared {f['id']} ({f['ref']}): {len(hit)} of "
               f"{f['rowsAffected']} expected occurrence(s)")
+    regressed = regressions(errors)
+    for f in CLEARED_SERVE_FAULTS:
+        hit = [r for r in regressed if r["regressedFaultId"] == f["id"]]
+        print(f"  {'ok  ' if not hit else 'FAIL'} cleared {f['id']} "
+              f"({f['ref']}): {len(hit)} occurrence(s), expected 0")
 
     report = {
         "gates": ["V-T3", "V-R3", "V-L1"],
@@ -294,6 +320,8 @@ def main():
         "schemaErrors": errors,
         "declaredServeFaults": declared,
         "knownServeFaults": KNOWN_SERVE_FAULTS,
+        "clearedServeFaults": CLEARED_SERVE_FAULTS,
+        "regressedServeFaults": regressed,
         "dossierErrors": dossier_errors[:50],
         "dossierErrorCount": len(dossier_errors),
         "houseStyleFindings": dash,
@@ -315,7 +343,7 @@ def main():
             print(f"    {e['file']} {e['path']}: {e['message']}")
         print(f"\nSCHEMA GATES FAILED: {len(hard)} finding(s)")
         return 1
-    print("\nSCHEMA GATES GREEN (V-R3 pending, counted above)")
+    print(f"\nSCHEMA GATES GREEN (V-R3 {vr3['status'].lower()})")
     return 0
 
 

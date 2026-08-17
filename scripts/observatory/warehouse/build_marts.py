@@ -17,47 +17,46 @@ typing.
 | mart_notices_lancs       | fetch_gazette.py, filter half   | silver+bronze  |
 | mart_supplier_identifiers| fetch_ocds_ids.py               | gold crosswalk |
 
-**These marts reproduce the PRODUCTION basis, faults included.** Each one that
-carries a known fault says so in a comment naming its DATA-INTEGRITY section
-and records it in `reproducedFaults` in its manifest. The list, all flagged and
-none fixed here:
+**These marts reproduce the PRODUCTION basis.** Each one that carries a known
+fault says so in a comment naming its DATA-INTEGRITY section and records it in
+`reproducedFaults` in its manifest; a fault that has been fixed moves to
+`clearedFaults` in the same manifest, with the commit and the count it moved,
+so the register never loses an entry.
+
+STILL REPRODUCED:
 
   F1 (s7.1)  the Lancashire register frame counts overseas establishments and
              overseas entities as companies. The frame is "every register row
              whose registered-office postcode is in one of the 14 LADs", with
              no entity-type filter, so 8 FC and 3 OE rows are inside the
              103,468. DATA-INTEGRITY says headline company counts exclude both.
-  F2 (s11.2) the OCDS supplier identifier map is empty on the host that runs
-             the monthly cron, so every supplier identification a buyer had
-             published on an award notice silently stopped happening. The
-             crosswalk still carries them, 574 dated decisions covering 339
-             distinct supplier names and 312 company numbers, because an edge
-             survives its input going missing. The projection emits the empty
-             map the published edition had, so the fix is one flag away.
-  F3 (s11.9) the accounts series keeps the ORIGINAL filing rather than the
-             restatement for most periods, because the extractor appended its
-             13-month backfill in reverse chronological order and the consumers
-             keep the last line. 7,342 of 138,420 periods resolve to a
-             different filing from the chronologically latest one, 968 of them
-             with a different employee figure.
   F4 (s9.1)  the register summary counts 5,695,466 UK companies, which is a
              line count: one record spans two lines and one line is blank. The
              record count is 5,695,465. Not published, so not load-bearing, but
              the index the supplier matcher reads has the same extra blank row.
-  F5 (s11.10) 13 of the 271 published Gazette notices carry a company number
-             with a trailing space, and the site joins the register on the raw
-             string, so the notice renders as though the company were unknown
-             to us: the notice's own LAD instead of the registered one, and no
-             sector at all.
-  F6 (s11.12) build_pound.py calls parents[crn][0] "the primary corporate
-             parent". It is whichever corporate PSC row the extract happens to
-             list first. Where a company has two, the ownership chain the site
-             publishes about a named firm is a file artefact.
 
-Row ORDER is therefore part of what a mart carries. Four of these five faults
-are only reproducible if the mart preserves the order of the file it stands in
-for, which is why `file_ordinal` exists on the accounts, PSC and notices marts
-and why the register mart is written in the CH bulk file's own name order.
+CLEARED, each recorded in `clearedFaults` on the mart that carried it:
+
+  F2 (s11.2) the OCDS supplier identifier map was empty on the host that runs
+             the monthly cron. fetch_ocds_ids.py now talks to the Contracts
+             Finder API directly and the projection emits the crosswalk's full
+             set, so the two paths carry the same identifications.
+  F3 (s11.9) the accounts series published the ORIGINAL filing rather than the
+             restatement, because the extractor appended its 13-month backfill
+             in reverse chronological order and the consumers kept the last
+             line. Both consumers now resolve a period by filing date.
+  F5 (s11.10) published Gazette notices carried a company number with a
+             trailing space and the site joined the register on the raw
+             string. The projection emits the trimmed number silver derives.
+  F6 (s11.12) build_pound.py called parents[crn][0] "the primary corporate
+             parent", which was whichever row the extract listed first. It now
+             applies a stated selection rule that reads no file position.
+
+Row ORDER is still part of what a mart carries: the register frame feeds a
+truncated published list and the accounts stream is read as a stream, which is
+why `file_ordinal` exists on the accounts, PSC and notices marts and why the
+register mart is written in the CH bulk file's own name order. Preserving it is
+what lets a pre-fix edition be reproduced on demand.
 
 Usage:
     build_marts.py [--only mart_register_lancs] [--snapshot 2026-08-01]
@@ -289,13 +288,14 @@ def build_accounts_lancs(con, h, args):
     it exactly as it does today. That is also what DATA-INTEGRITY 10.4 rule 4
     asks for: every edition is kept.
 
-    REPRODUCED FAULT F3 (DATA-INTEGRITY s11.9): build_growth.py and
-    build_dossiers.py keep the LAST line for a (crn, period_end), and the
-    extractor appended its 13-month backfill in reverse chronological order, so
-    for those periods the site publishes the ORIGINAL filing rather than the
-    restatement. `site_winner` marks what the site picks, `latest_winner` marks
-    the chronologically latest filing, and where the two disagree both are
-    visible instead of one being lost.
+    F3 (DATA-INTEGRITY s11.9) CLEARED. build_growth.py and build_dossiers.py
+    kept the LAST line for a (crn, period_end), and the extractor appended its
+    13-month backfill in reverse chronological order, so for those periods the
+    site published the ORIGINAL filing rather than the restatement. Both now
+    resolve a period through accounts_rules.resolve_latest, which picks the
+    filing made most recently. `site_winner` still marks what the old rule
+    picked and `latest_winner` what the new one picks, because the difference
+    between them is the measured size of the fix.
 
     The two rows silver rejects for an impossible period (0001-01-01, s9.6) are
     unioned back in here, flagged, because the live pipeline reads them and
@@ -360,14 +360,18 @@ def build_accounts_lancs(con, h, args):
                     "notTheLatestFiling": differs,
                     "differentEmployeeFigure": emp_differs,
                     "impossiblePeriods": impossible},
-        reproduced_faults=[
+        cleared_faults=[
             {"id": "F3", "ref": "DATA-INTEGRITY s11.9",
-             "what": "the site keeps the last line rather than the latest "
+             "what": "the site kept the last line rather than the latest "
                      "filing, and the extract is in reverse chronological "
-                     "order, so the original filing usually wins",
-             "rowsAffected": differs,
-             "periodsAffected": differs,
-             "rowsWithDifferentEmployees": emp_differs}],
+                     "order, so the original filing usually won",
+             "fix": "scripts/observatory/accounts_rules.resolve_latest picks "
+                    "the filing made most recently, by filed_zip vintage with "
+                    "stream position as tie-break, and both accounts consumers "
+                    "call it",
+             "periodsMovedToADifferentFiling": differs,
+             "periodsWithADifferentEmployeeFigure": emp_differs,
+             "clearedIn": "fix/observatory-faults-f2-f7"}],
         notes=("Employee figures are the s411 average for the PERIOD and are "
                "never a current headcount. employees_as_filed is exactly what "
                "was parsed; employees is nulled where it cannot be a "
@@ -411,11 +415,12 @@ def build_psc_corporate(con, h, args):
            registration_is_crn_shaped, country_registered, legal_form,
            postcode, ceased_on, active, file_ordinal, snapshot_date
     FROM read_parquet('{pq}')
-    -- REPRODUCED FAULT F6 (DATA-INTEGRITY s11.12): build_pound.py calls
-    -- parents[crn][0] "the primary corporate parent", which is whichever
-    -- corporate PSC row this file happens to list first. Where a company has
-    -- two, the published ownership chain is a file artefact. The order has to
-    -- be preserved to reproduce which parent the site names.
+    -- F6 (DATA-INTEGRITY s11.12) CLEARED: build_pound.py used to call
+    -- parents[crn][0] "the primary corporate parent", which was whichever row
+    -- this file happened to list first. It now applies a stated rule that
+    -- reads no file position. The order is still preserved, because it is what
+    -- lets a pre-fix edition be reproduced and because build_dossiers reads
+    -- the first eight individual PSCs positionally.
     ORDER BY file_ordinal
     """
     out = M.table_dir("mart_psc_corporate", snap, h)
@@ -432,13 +437,18 @@ def build_psc_corporate(con, h, args):
                  "snapshot": snap}],
         assertions={"rows": rows,
                     "companiesWithMoreThanOneLiveCorporatePsc": multi},
-        reproduced_faults=[
+        cleared_faults=[
             {"id": "F6", "ref": "DATA-INTEGRITY s11.12",
-             "what": "the site names parents[crn][0] as the primary corporate "
+             "what": "the site named parents[crn][0] as the primary corporate "
                      "parent, which is whichever row this file lists first, so "
-                     "a company with two corporate PSCs gets an arbitrary "
+                     "a company with two corporate PSCs got an arbitrary "
                      "published ownership chain",
-             "rowsAffected": multi}],
+             "fix": "build_pound.primary_parent applies a stated rule: a PSC "
+                    "giving a registered company number first, then the lowest "
+                    "company number, then the name in codepoint order. Nothing "
+                    "in it reads file position",
+             "companiesWithMoreThanOneLiveCorporatePsc": multi,
+             "clearedIn": "fix/observatory-faults-f2-f7"}],
         notes=("registration_is_crn_shaped is a SHAPE test and never proof of "
                "a company: a society number can be CRN-shaped (s9.4). Row "
                "order is preserved because the site depends on it."))
@@ -455,14 +465,13 @@ def build_notices_lancs(con, h, args):
     replaces it with the real location hierarchy; reproducing the published
     edition means using the lookup the published edition used.
 
-    REPRODUCED FAULT F5 (DATA-INTEGRITY s11.10): 13 of the 271 published
-    notices carry a company number with a TRAILING SPACE exactly as The Gazette
-    published it, and the live site joins the register on that raw string. The
-    join fails, so a notice about a company we hold renders with the notice's
-    own postcode-derived LAD and no sector, as though the company were unknown
-    to us. `company_number` here is the trimmed number that actually joins;
-    `company_number_raw` is what the site reads. The projection emits the raw
-    one, and clearing the fault is a one-column change.
+    F5 (DATA-INTEGRITY s11.10) CLEARED. Published notices carried a company
+    number with a TRAILING SPACE exactly as The Gazette published it, and the
+    site joined the register on that raw string, so a notice about a company we
+    hold rendered with the notice's own postcode-derived LAD and no sector.
+    `company_number` is the trimmed number that joins and is what the
+    projection now emits; `company_number_raw` stays as the verbatim record of
+    what the publisher wrote, which is the evidence a reader would need.
     """
     snap, pq = _silver("gazette_notices", None, h)
     cache_snap, cache_path, cache_manifest = SV.resolve_bronze(
@@ -519,12 +528,18 @@ def build_notices_lancs(con, h, args):
         assertions={"rows": rows, "outsideCategory24": off_cat,
                     "unplaced": no_lad,
                     "untrimmedCompanyNumbers": untrimmed},
-        reproduced_faults=[
+        cleared_faults=[
             {"id": "F5", "ref": "DATA-INTEGRITY s11.10",
-             "what": "the site joins the register on the raw Gazette company "
-                     "number, so a notice whose number carries a trailing "
-                     "space renders as though the company were unknown to us",
-             "rowsAffected": untrimmed}],
+             "what": "the site joined the register on the raw Gazette company "
+                     "number, so a notice whose number carried a trailing "
+                     "space rendered as though the company were unknown to us",
+             "fix": "the projection emits company_number, the trimmed form "
+                    "silver derives, and fetch_gazette.py trims at the point "
+                    "the publisher's text arrives, so both paths join clean. "
+                    "company_number_raw stays in the mart as the verbatim "
+                    "record of what was published",
+             "noticesWithAnUntrimmedNumber": untrimmed,
+             "clearedIn": "fix/observatory-faults-f2-f7"}],
         notes=("Category 24 only. The fetcher's own cache still holds 1,150 "
                "category 25 personal insolvency notices naming individuals "
                "(s9.5); they have never reached a published file and the "
@@ -542,13 +557,13 @@ def build_supplier_identifiers(con, h, args):
     argument of DATA-INTEGRITY s11.2 in one table: a decision recorded as an
     edge survives its input going missing.
 
-    REPRODUCED FAULT F2 (s11.2): the live pipeline's OCDS map is EMPTY on
-    vps-main, because fetch_ocds_ids.py reads Contracts Finder releases from a
-    path in another repository that exists only on the Mac. 260 supplier
-    identifications silently stopped happening. The mart carries all of them
-    with `in_production_edition` marking which ones the published edition
-    actually had, and the projection honours that flag so the golden file
-    reproduces. Clearing the fault is one flag on the projection.
+    F2 (s11.2) CLEARED. The live pipeline's OCDS map was empty on vps-main,
+    because fetch_ocds_ids.py read Contracts Finder releases from a path in
+    another repository that existed only on the Mac. The repaired fetcher talks
+    to the API directly and the projection emits every identification the
+    crosswalk holds. `in_production_edition` stays as the reconciliation
+    column: it says which identifications the legacy path is also producing, so
+    the two paths can be shown to agree rather than assumed to.
     """
     edges = sorted((XW.gold_dir(h) / "crosswalk_edges").glob(
         "snapshot_date=*/part.parquet"))
@@ -582,27 +597,40 @@ def build_supplier_identifiers(con, h, args):
         f"SELECT count(*) FROM read_parquet('{f}') "
         "WHERE in_production_edition").fetchone()[0]
     M.log(f"  {rows} OCDS identifications in the crosswalk, {in_prod} of them "
-          f"in the published edition, {rows - in_prod} silently lost")
+          f"also on the legacy path, {rows - in_prod} carried by the crosswalk "
+          "alone")
     return dict(
         table="mart_supplier_identifiers", snapshot=snap, rows=rows,
         nbytes=nbytes,
         inputs=[{"layer": "gold", "table": "crosswalk_edges",
                  "snapshot": snap}],
         assertions={"identifications": rows,
-                    "inPublishedEdition": in_prod,
-                    "lostByTheOcdsFault": rows - in_prod},
-        reproduced_faults=[
+                    "alsoOnTheLegacyPath": in_prod,
+                    "carriedByTheCrosswalkAlone": rows - in_prod},
+        cleared_faults=[
             {"id": "F2", "ref": "DATA-INTEGRITY s11.2",
-             "what": "fetch_ocds_ids.py reads a path that exists only on the "
-                     "Mac, so the monthly cron produces an empty map and the "
-                     "identifications look like an honest zero",
-             "rowsAffected": rows - in_prod}],
+             "what": "fetch_ocds_ids.py read a path that existed only on the "
+                     "Mac, so the monthly cron produced an empty map and the "
+                     "identifications looked like an honest zero",
+             "fix": "fetch_ocds_ids.py talks to the Contracts Finder API "
+                    "directly (f73ce55) and the projection emits the "
+                    "crosswalk's full set rather than filtering to the "
+                    "identifications the pre-fix edition happened to have",
+             "identifications": rows,
+             "alsoPresentOnTheLegacyPath": in_prod,
+             "clearedIn": "fix/observatory-faults-f2-f7"}],
         notes=("An identifier-observed edge: a buyer wrote the company number "
                "on an award notice and we read it. Confidence 1.0, no score."))
 
 
 def _production_ocds_names():
-    """The byName keys the PUBLISHED edition actually had. Empty on vps."""
+    """The byName keys the LEGACY path produces, read from its own output.
+
+    Before the fetcher was repaired this was empty on vps-main and the gap was
+    F2. It is now the reconciliation set: the mart records which of its
+    identifications the legacy path also has, which is how the two paths are
+    shown to agree instead of being assumed to.
+    """
     for p in (Path("/root/observatory-data/processed/ocds_supplier_ids.json"),
               Path.home() / "observatory-data/processed/ocds_supplier_ids.json"):
         if p.exists():
@@ -660,7 +688,8 @@ def main():
             out, res["table"], res["snapshot"], res["rows"], res["nbytes"], dv,
             inputs=res.get("inputs"), assertions=res.get("assertions"),
             notes=res.get("notes"),
-            reproduced_faults=res.get("reproduced_faults"))
+            reproduced_faults=res.get("reproduced_faults"),
+            cleared_faults=res.get("cleared_faults"))
         summary[res["table"]] = {"snapshot": res["snapshot"],
                                  "rows": res["rows"],
                                  "MB": round(res["nbytes"] / 1e6, 1)}

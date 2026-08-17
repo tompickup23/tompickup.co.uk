@@ -11,6 +11,9 @@ import json, sys
 from datetime import date
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sources_meta as SM
+
 ROOT = Path(__file__).resolve().parent.parent.parent
 PUB = ROOT / "public" / "data"
 ARC = Path.home() / "observatory-data/archive"
@@ -30,6 +33,12 @@ cur = {n: load(PUB / f"biz-{n}.json") for n in
        ("overview", "growth", "pound", "watch")}
 out = {"$meta": {"generated": today.isoformat(),
                  "edition": this_ed, "previousEdition": prev_ed,
+                 # Gate V-R3: a published file states what it is drawn from
+                 # and how recent that is, this one included. It used to carry
+                 # no sources array at all, which read as though a diff had no
+                 # inputs.
+                 "sources": SM.sources(today.isoformat()),
+                 "notes": [SM.DATE_NOTE],
                  "note": "Changes are differences between two monthly register "
                          "snapshots; a company appearing or leaving a list "
                          "reflects new filings, not an event on that day."}}

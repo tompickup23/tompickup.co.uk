@@ -76,6 +76,14 @@ TABLE = "ch_accounts"
 # The earliest period end a Companies House iXBRL filing can plausibly carry.
 MIN_PERIOD_END = "1990-01-01"
 # No single UK filer reports an s411 average headcount anywhere near this.
+# The plausibility band for a section 411 average headcount, stated as two
+# explicit bounds rather than one, and imported by the consumers as well so the
+# warehouse path and the legacy path apply the same rule to the same stream
+# (scripts/observatory/accounts_rules.py holds the same two constants and says
+# why). A value outside the band is an iXBRL parse or scale artefact: 269
+# filings in the 2026-08-08 extract report a negative average and two report
+# over 700,000. The filing is kept verbatim; only the derived figure is refused.
+MIN_EMPLOYEES = 0
 MAX_EMPLOYEES = 500000
 
 # Explicit column list rather than inference: both feeds must land in the same
@@ -130,10 +138,11 @@ def main():
       try_strptime(nullif(trim(period_end), ''), '%Y-%m-%d')::DATE AS period_end,
       try_strptime(nullif(trim(period_end), ''), '%Y-%m-%d')::DATE AS as_at,
       employees                                    AS employees_as_filed,
-      CASE WHEN employees < 0 OR employees > {MAX_EMPLOYEES} THEN NULL
-           ELSE employees END                      AS employees,
+      CASE WHEN employees < {MIN_EMPLOYEES} OR employees > {MAX_EMPLOYEES}
+           THEN NULL ELSE employees END            AS employees,
       (employees IS NOT NULL
-       AND (employees < 0 OR employees > {MAX_EMPLOYEES})) AS employees_suspect,
+       AND (employees < {MIN_EMPLOYEES}
+            OR employees > {MAX_EMPLOYEES}))       AS employees_suspect,
       equity,
       total_assets,
       net_current,

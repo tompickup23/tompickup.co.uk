@@ -163,7 +163,13 @@ def fetch_detail(nid):
         comp = about.get("company", {}) if isinstance(about, dict) else {}
         if isinstance(comp, list):
             comp = comp[0] if comp else {}
-        cnum = comp.get("companyNumber")
+        # An identifier read out of a publisher's text is not clean until it
+        # has been trimmed, and the place to do that is here, where the text
+        # arrives, not in the consumer that joins on it. The Gazette publishes
+        # some company numbers with a trailing space ("12541918 "); joined raw,
+        # the register lookup misses and the notice renders as though we had
+        # never heard of a company we hold in our own register.
+        cnum = (comp.get("companyNumber") or "").strip() or None
         ro = comp.get("hasRegisteredOffice", {}) if isinstance(comp, dict) else {}
         if isinstance(ro, list):
             ro = ro[0] if ro else {}

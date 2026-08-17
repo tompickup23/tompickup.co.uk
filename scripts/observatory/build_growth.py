@@ -12,17 +12,22 @@ Definitions (METHODS.md s1, cite ONS/Eurostat):
  - emerging: base 3-9 employees, CAGR >= 50%, span >= 2 years. Labelled
    separately; NOT called high-growth on the site.
  - young-company: incorporated <= 6 years before latest period end.
-Cleaning: employee values must be integers >= 0 after rounding; drop companies
-whose series contains a >6x jump that then reverts (typo signature); drop
-values > 20000; periods deduped by period_end keeping the LATEST filing's
-value (restatements win).
+Cleaning: an s411 average outside 0 to 500,000 is an iXBRL artefact and is
+dropped before anything else sees it (accounts_rules); employee values must be
+integers >= 0 after rounding; drop companies whose series contains a >6x jump
+that then reverts (typo signature); drop values > 20000; a period resolves to
+the filing made most recently, so a restatement replaces the original filing
+(accounts_rules.resolve_latest).
 Every candidate row carries the basis string; the site frames the list as an
 Observatory assessment.
 """
-import gzip, json, math
+import gzip, json, math, sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import accounts_rules as AR
 
 VPS = Path.home() / "observatory-data/vps"
 PROC = Path.home() / "observatory-data/processed"
@@ -35,7 +40,6 @@ with gzip.open(PROC / "master.jsonl.gz", "rt") as f:
 
 series = defaultdict(dict)   # crn -> period_end -> employees
 fin = defaultdict(dict)      # crn -> period_end -> {equity, total_assets}
-import io
 def _account_lines():
     with gzip.open(VPS / "lancs_accounts.jsonl.gz", "rt") as f:
         yield from f
@@ -44,12 +48,16 @@ def _account_lines():
         with open(bf) as f:
             yield from f
 
-if True:
-    for line in _account_lines():
-        r = json.loads(line)
-        pe, crn = r["period_end"], r["crn"]
+# One filing per accounting period, chosen by filing date rather than by
+# stream position. See accounts_rules for why position was the wrong rule and
+# what filed_zip actually carries. The same call resolves the same stream in
+# build_dossiers.py, so the two published views of a company's accounts cannot
+# disagree about which filing they are showing.
+resolved_accounts = AR.resolve_latest(json.loads(line) for line in _account_lines())
+for crn, periods in resolved_accounts.items():
+    for pe, r in periods.items():
         if r.get("employees") is not None:
-            series[crn][pe] = r["employees"]   # later lines = later zips: keep last
+            series[crn][pe] = r["employees"]
         fin[crn][pe] = {"equity": r.get("equity"), "assets": r.get("total_assets")}
 
 def parse_d(s):

@@ -361,16 +361,21 @@ rule pointblank:
         """  --extra '{{"gates": ["V-R1", "V-R2"]}}'"""
 
 rule schemas:
-    """Gates V-T3, V-R3 (pending, counted) and V-L1 over the emitted files."""
+    """Gates V-T3, V-R3 and V-L1 over the emitted files.
+
+    V-R3 is enforced here, not counted. Every published $meta.sources[] entry
+    carries asAt, retrievedAt and licence, built once in sources_meta.py, so a
+    file that loses its source dates fails the build.
+    """
     input:  marker("assemble", "site_json.done")
     output: marker("gate", "schemas.done")
     shell:
         "set -euo pipefail; "
-        "{PY} {WH}/check_schemas.py --serve {SERVE} --dossiers "
+        "{PY} {WH}/check_schemas.py --serve {SERVE} --dossiers --enforce-vr3 "
         "  --out {REPORTS}/schemas.json && "
         "{MARK} --out {output} --rule schemas "
         "  --from-json {REPORTS}/schemas.json:dossiersChecked,pendingGates "
-        """  --extra '{{"gates": ["V-T3", "V-R3 pending", "V-L1"]}}'"""
+        """  --extra '{{"gates": ["V-T3", "V-R3", "V-L1"]}}'"""
 
 rule manifests:
     """Provenance: every manifest complete, and pipelineGitSha wired in."""
