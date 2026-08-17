@@ -156,12 +156,13 @@ const SOURCES = [
         <p>
           <b>Which parent the ownership chain names.</b> A company can have more than one corporate person with
           significant control on the register at the same time, and about one in nine of those that have any have
-          two or more. Where that happens the chain we show names one of them, chosen by a fixed rule: first a
-          controller that gives its own registered company number, because that is the one a reader can check and
-          the one the chain can be followed through; then, among those, the lowest company number, which is the
-          longest established. The chain is walked upwards from there until it reaches a controller with no
-          registered corporate owner of its own. Where a company has several corporate controllers, the tier
-          reflects the one named, and the register entry for the company lists them all.
+          two or more. Where that happens, every controller's chain is walked, and the company takes the tier of
+          its least local controller: a supplier is described as rooted only if every one of its registered
+          corporate controllers resolves to Lancashire ownership. The chain shown is the controller that sets the
+          tier, so the basis for the classification is always the chain on the page; where controllers tie, the
+          one giving its own registered company number is preferred, then the lowest company number, which is the
+          longest established. Each chain is walked upwards until it reaches a controller with no registered
+          corporate owner of its own, and the register entry for the company lists all its controllers.
         </p>
       </div>
       <p class="doge-note">
