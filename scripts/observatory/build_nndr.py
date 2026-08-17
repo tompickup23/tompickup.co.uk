@@ -7,13 +7,21 @@ suppliers to tradingExternal with "business-rates ratepayer" evidence.
 The raw data is NOT republished (several councils state no licence; used as
 evidence only, disclosed on the method page).
 """
-import csv, json, sys
+import csv, json, re, sys
 from collections import defaultdict
 from pathlib import Path
 import openpyxl
 
 sys.path.insert(0, str(Path(__file__).parent))
 from resolve_suppliers import normalise
+from warehouse.entity_type import COMPANIES_ACT_NUMBER_RE
+
+# Every Companies House registered number is exactly eight characters
+# (DATA-INTEGRITY 9.3); COMPANIES_ACT_NUMBER_RE encodes the four shapes a
+# Companies Act body's number actually takes. Shape is a filter, not proof:
+# a registered society number can be CRN-shaped (9.4), so the crosswalk still
+# validates every number we emit against the register.
+CRN_RE = re.compile(COMPANIES_ACT_NUMBER_RE)
 
 RAW = Path.home() / "observatory-data/raw/nndr"
 OUT = Path.home() / "observatory-data/processed/nndr_presence.json"
@@ -84,7 +92,7 @@ for slug, lad in COUNCILS.items():
                 crn = str(row[ci]).strip().upper().replace(" ", "")
                 if crn.isdigit():
                     crn = crn.zfill(8)
-                if 6 <= len(crn) <= 8:
+                if CRN_RE.match(crn):
                     p["crns"].add(crn)
             n += 1
     except Exception as e:
