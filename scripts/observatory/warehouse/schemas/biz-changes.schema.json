@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-changes.schema.json",
+  "title": "biz-changes.json",
+  "description": "The monthly diff. s4 vintage rule 5: a source refresh gap is 'no data', never 'no change', so the mode field is required and its baseline branch is a distinct shape rather than an empty diff.",
+  "type": "object",
+  "required": [
+    "$meta",
+    "mode"
+  ],
+  "properties": {
+    "$meta": {
+      "type": "object",
+      "required": [
+        "generated",
+        "edition"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string"
+        },
+        "edition": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}$"
+        },
+        "previousEdition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "diff"
+      ]
+    },
+    "baseline": {
+      "type": "object"
+    },
+    "changes": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    }
+  }
+}

@@ -14,3 +14,8 @@ secrets/
 secrets/**
 **/social.json
 !**/social.example.json
+
+# Observatory warehouse deploy stamp: written per host by deploy_warehouse.sh
+# so a manifest built on vps-main can name the commit it came from. Host state,
+# not source, and committing it would make one host's sha look like everyone's.
+scripts/observatory/warehouse/PIPELINE_STAMP.json

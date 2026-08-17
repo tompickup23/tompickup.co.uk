@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-innovation.schema.json",
+  "title": "biz-innovation.json",
+  "description": "Innovate UK award money joined to the register by company number.",
+  "type": "object",
+  "required": [
+    "$meta",
+    "byArea",
+    "projects"
+  ],
+  "properties": {
+    "$meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "byArea": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slug"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "projects": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "awardTotalM": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "ktps": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "byYear": {
+      "type": "array"
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "participant",
+          "year"
+        ],
+        "properties": {
+          "participant": {
+            "type": "string",
+            "minLength": 1
+          },
+          "crn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lad": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "year": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "awardK": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "isLead": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "nwContext": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    }
+  }
+}

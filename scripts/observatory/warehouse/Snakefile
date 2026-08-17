@@ -1,0 +1,399 @@
+# Lancashire Business Observatory: the pipeline as a DAG (M5).
+#
+# `monthly_refresh.sh` is a 200-line shell script that runs the whole pipeline
+# top to bottom every time. It works, and it is why the observatory exists, but
+# it has three properties this replaces:
+#
+#   * a failure halfway through leaves no resumable state, so the fix is to run
+#     the whole thing again, which for the Companies House family is hours;
+#   * the dependency graph is implicit in the order of the lines, so nothing
+#     can tell you what a given output actually depends on;
+#   * the gates run at the end, where a bad silver table has already cost a
+#     full mart build.
+#
+# Rules here are file-based, so `snakemake monthly` reruns exactly the steps
+# whose inputs moved and nothing else, and the gates sit BETWEEN the layers
+# rather than after them.
+#
+# Markers, not partitions, are the dependency edges: a builder writes to
+# <table>/snapshot_date=YYYY-MM-DD/ and the date is not known until it has read
+# bronze, so no rule can name its own output path in advance. Each rule writes
+# one marker holding the partition it produced and that partition's manifest
+# hash (driver.py, mark.py).
+#
+# WHAT THIS DOES NOT DO, deliberately: it does not fetch, it does not deploy,
+# and it does not notify. Fetching still belongs to the existing fetchers until
+# each one lands as a bronze rule in its F-phase; deploying is a supervised act
+# with its own runbook (CUTOVER-RUNBOOK.md in the clawd briefing pack); and a
+# driver that can post to aidoge-ops is a driver that can post the wrong thing
+# at 04:10 on day 8.
+#
+#   snakemake -s Snakefile monthly --cores 4
+#   snakemake -s Snakefile monthly --cores 4 -n            # what would run
+#   snakemake -s Snakefile gates   --cores 4               # gates only
+#   snakemake -s Snakefile --config as_of=2026-08-17 as_of_etl=2026-08-16 \
+#             shadow=/opt/observatory/m5 \
+#             golden=/opt/observatory/site/public/data monthly --cores 4
+#
+# Config keys, all optional:
+#   root       warehouse root                (default: the host's own)
+#   shadow     where the candidate site tree is emitted (default <root>/m5)
+#   site       the site checkout the unchanged assemblers are copied from
+#   as_of      the site clock                (default: today)
+#   as_of_etl  the ETL clock where a run straddled midnight (default: as_of)
+#   golden     a public/data to diff against; empty means the diff rule is off
+#   pin        comma-separated TABLE=YYYY-MM-DD silver pins for the mart build,
+#              e.g. pin=gazette_notices=2026-08-16. Needed whenever a golden
+#              comparison runs against a published edition, because a newer
+#              snapshot on disk would otherwise become the input and the diff
+#              would be measuring the feed rather than the warehouse.
+#   linkage    "1" to rebuild the Splink tier (heavy, and it never reaches the
+#              crosswalk in any case, DATA-INTEGRITY s10.3)
+#   python     interpreter for the assembler chain (default: python3)
+
+import datetime
+import os
+import sys
+from pathlib import Path
+
+WAREHOUSE = Path(workflow.basedir).resolve()
+sys.path.insert(0, str(WAREHOUSE))
+import driver as D
+
+ROOT    = Path(config.get("root") or D.warehouse_root())
+STATE   = ROOT / "state"
+REPORTS = ROOT / "reports"
+SHADOW  = Path(config.get("shadow") or (ROOT / "m5"))
+SITE    = Path(config.get("site") or (ROOT / "site"))
+AS_OF     = config.get("as_of") or datetime.date.today().isoformat()
+AS_OF_ETL = config.get("as_of_etl") or AS_OF
+GOLDEN    = config.get("golden") or ""
+LINKAGE   = str(config.get("linkage", "0")) == "1"
+CHAIN_PY  = config.get("python", "python3")
+
+# Snapshot pins for the mart build: `pin=gazette_notices=2026-08-16,...`.
+# The clock is an input and so is every snapshot. A golden-file comparison
+# against a published edition has to read the partitions that edition read,
+# or it is measuring the feed rather than the warehouse.
+PINS = " ".join(f"--pin {p}" for p in
+                str(config.get("pin", "")).split(",") if p.strip())
+
+STATE.mkdir(parents=True, exist_ok=True)
+REPORTS.mkdir(parents=True, exist_ok=True)
+
+WH = str(WAREHOUSE)
+PY = sys.executable          # the venv running snakemake: duckdb 1.4.5, splink
+MARK = f"{PY} {WH}/mark.py --root {ROOT}"
+SERVE = SHADOW / "run/public/data"
+
+# One run id for every rule in this invocation, so an artefact, a gate report
+# and a log line can be tied together afterwards without guessing from clocks.
+os.environ.setdefault("OBS_RUN_ID", D.run_id())
+
+SILVER_MARKERS = ["ch_register", "ch_psc", "ch_accounts", "ch_strikeoff",
+                  "gazette_notices"]
+
+
+def marker(*parts):
+    return str(STATE.joinpath(*parts))
+
+
+# ---------------------------------------------------------------- targets ---
+
+rule monthly:
+    """The single entrypoint. Everything a monthly run needs, gates included."""
+    input:
+        marker("gate", "manifests.done"),
+        marker("gate", "pointblank.done"),
+        marker("gate", "schemas.done"),
+        marker("report", "staleness.done"),
+        marker("assemble", "site_json.done"),
+        ([marker("gate", "golden.done")] if GOLDEN else []),
+
+rule gates:
+    """Every gate, over whatever is already built. No builders run."""
+    input:
+        marker("gate", "silver_checks.done"),
+        marker("gate", "gold_checks.done"),
+        marker("gate", "manifests.done"),
+        marker("report", "staleness.done"),
+
+rule clean_state:
+    """Forget the markers, keep the data. The next run re-derives everything.
+
+    No rule in this file deletes a data file. In particular
+    gold/entity_id_registry.jsonl is the mint-once guarantee: deleting it would
+    re-mint ids for organisations that may already have published ones
+    (DATA-INTEGRITY s10.1), which is the single failure this design exists to
+    prevent.
+    """
+    run:
+        import shutil
+        if STATE.exists():
+            shutil.rmtree(STATE)
+        print(f"removed {STATE}; bronze, silver and gold untouched")
+
+
+# ----------------------------------------------------------------- bronze ---
+
+rule bronze:
+    """Land every registry-matched raw file, then re-hash the whole layer.
+
+    build_bronze is idempotent and refuses to overwrite: a partition that
+    already holds a filename with different bytes aborts the build rather than
+    shadowing the earlier ones. check_bronze then re-hashes, so the marker
+    means "bronze is what its manifests say it is", not "the copy ran".
+    """
+    output: marker("bronze", "bronze.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_bronze.py && "
+        "{PY} {WH}/check_bronze.py && "
+        "{MARK} --out {output} --rule bronze"
+
+
+# ----------------------------------------------------------------- silver ---
+
+rule silver_ch_register:
+    input:  marker("bronze", "bronze.done")
+    output: marker("silver", "ch_register.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_silver_ch_register.py && "
+        "{MARK} --out {output} --rule silver_ch_register "
+        "  --table silver:ch_register"
+
+rule silver_ch_psc:
+    # One builder, two tables: the Lancashire PSC extract and the national
+    # corporate-PSC edges. The marker is named for the builder, not for one of
+    # its outputs, so nothing downstream can depend on half a build.
+    input:  marker("bronze", "bronze.done")
+    output: marker("silver", "ch_psc.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_silver_ch_psc.py && "
+        "{MARK} --out {output} --rule silver_ch_psc "
+        "  --table silver:ch_psc --table silver:ch_psc_corporate"
+
+rule silver_ch_accounts:
+    input:  marker("bronze", "bronze.done")
+    output: marker("silver", "ch_accounts.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_silver_ch_accounts.py && "
+        "{MARK} --out {output} --rule silver_ch_accounts "
+        "  --table silver:ch_accounts"
+
+rule silver_ch_strikeoff:
+    # Depends on the register silver rather than on bronze alone, because
+    # ch_strikeoff is a PROJECTION of the register status (s8) and never a
+    # second source for it. The DAG should say that out loud.
+    input:  marker("silver", "ch_register.done")
+    output: marker("silver", "ch_strikeoff.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_silver_ch_strikeoff.py && "
+        "{MARK} --out {output} --rule silver_ch_strikeoff "
+        "  --table silver:ch_strikeoff"
+
+rule silver_gazette:
+    input:  marker("bronze", "bronze.done")
+    output: marker("silver", "gazette_notices.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_silver_gazette.py && "
+        "{MARK} --out {output} --rule silver_gazette "
+        "  --table silver:gazette_notices"
+
+rule silver_checks:
+    """Gates V-T1, V-T2, V-T4 and the no-future-dates half of V-R1.
+
+    Any row returned by any check is a failure. There is no warning tier here
+    and there should not be: a society number in a CRN column is never
+    acceptable at any rate. The tolerance band lives in pointblank.
+    """
+    input:  [marker("silver", f"{t}.done") for t in SILVER_MARKERS]
+    output: marker("gate", "silver_checks.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/check_silver.py | tee {REPORTS}/check_silver.txt && "
+        "{MARK} --out {output} --rule silver_checks "
+        """  --extra '{{"gates": ["V-T1", "V-T2", "V-T4", "V-R1 dates"]}}'"""
+
+
+# ------------------------------------------------------------------- gold ---
+
+rule gold_crosswalk:
+    """The deterministic tier: every bronze EDITION of every matcher, not the
+    latest. That is how the 329 OCDS identifications survive an input that has
+    gone missing on the cron host (DATA-INTEGRITY s11.2)."""
+    input:
+        marker("silver", "ch_register.done"),
+        marker("silver", "gazette_notices.done"),
+    output: marker("gold", "crosswalk_edges.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_crosswalk.py && "
+        "{MARK} --out {output} --rule gold_crosswalk "
+        "  --table gold:crosswalk_edges"
+
+rule gold_entities:
+    """Mint-once ULIDs. `--with-probabilistic` is NOT passed and must not be:
+    nothing probabilistic is in the crosswalk and nothing probabilistic may
+    surface publicly until a clerical review exists (s10.3)."""
+    input:  marker("gold", "crosswalk_edges.done")
+    output: marker("gold", "entity.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_entities.py && "
+        "{MARK} --out {output} --rule gold_entities "
+        "  --table gold:entity --table gold:crosswalk --table gold:entity_alias "
+        "  --count-lines registryRows={ROOT}/gold/entity_id_registry.jsonl"
+
+rule gold_linkage:
+    """The Splink tier. Off unless linkage=1: heavy, its output is not in the
+    crosswalk, and at 0.837 in-scope precision it may not surface anyway."""
+    input:  marker("gold", "crosswalk_edges.done")
+    output: marker("gold", "linkage_pairs.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_linkage.py && "
+        "{MARK} --out {output} --rule gold_linkage "
+        "  --table gold:linkage_pairs"
+
+rule gold_entity_history:
+    """SCD2 over the register snapshots. The synthetic fixture runs FIRST:
+    `baseline` is not a creation and `gone` is not a dissolution (s12.1), and
+    the fixture is what holds those six behaviours in place."""
+    input:  marker("silver", "ch_register.done")
+    output: marker("gold", "entity_history.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/test_entity_history.py && "
+        "{PY} {WH}/build_entity_history.py && "
+        "{MARK} --out {output} --rule gold_entity_history "
+        "  --table gold:entity_history"
+
+rule gold_checks:
+    input:
+        marker("gold", "entity.done"),
+        marker("gold", "entity_history.done"),
+        ([marker("gold", "linkage_pairs.done")] if LINKAGE else []),
+    output: marker("gate", "gold_checks.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/check_gold.py | tee {REPORTS}/check_gold.txt && "
+        "{MARK} --out {output} --rule gold_checks "
+        """  --extra '{{"gates": ["V-T4", "mint-once registry", "normalise port drift"]}}'"""
+
+
+# ------------------------------------------------------------------ marts ---
+
+rule marts:
+    """Eight marts, each standing in for one step of the old fetch/ETL layer.
+    A mart replaces an ETL step, never an aggregation step (s12.1)."""
+    input:
+        marker("gate", "silver_checks.done"),
+        marker("gate", "gold_checks.done"),
+        marker("silver", "ch_accounts.done"),
+        marker("silver", "ch_psc.done"),
+        marker("silver", "ch_strikeoff.done"),
+    output: marker("gold", "marts.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_marts.py {PINS} && "
+        "{MARK} --out {output} --rule marts "
+        "  --table gold:mart_register_lancs --table gold:mart_register_index "
+        "  --table gold:mart_accounts_lancs --table gold:mart_psc_lancs "
+        "  --table gold:mart_psc_corporate --table gold:mart_notices_lancs "
+        "  --table gold:mart_supplier_identifiers"
+
+
+# --------------------------------------------------------------- assemble ---
+
+rule assemble:
+    """Re-emit every biz-*.json from the marts, with the two clocks pinned.
+
+    The eight assemblers run UNCHANGED from a sha256-verified copy of the site
+    checkout. Output goes to the SHADOW root and nowhere else: this rule cannot
+    write into the site clone or the Pages repo, and the runbook is what moves
+    an edition from here to a deploy.
+    """
+    input:  marker("gold", "marts.done")
+    output: marker("assemble", "site_json.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/build_site_json_v2.py --as-of {AS_OF} "
+        "  --as-of-etl {AS_OF_ETL} --root {SHADOW} --site {SITE} "
+        "  --python {CHAIN_PY} && "
+        "{MARK} --out {output} --rule assemble "
+        "  --from-json {SHADOW}/v2_run.json:asOf,asOfEtl,files,dossiers "
+        """  --extra '{{"shadowRoot": "{SHADOW}"}}'"""
+
+
+# ------------------------------------------------------------------ gates ---
+
+rule staleness:
+    """Gate V-R1, and the /method source-freshness table, in one artefact."""
+    input:  marker("bronze", "bronze.done")
+    output: marker("report", "staleness.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/staleness.py --as-of {AS_OF} --out {REPORTS}/staleness.json && "
+        "{MARK} --out {output} --rule staleness "
+        "  --from-json {REPORTS}/staleness.json:counts,asOf "
+        """  --extra '{{"gate": "V-R1"}}'"""
+
+rule pointblank:
+    """Gates V-R1 and V-R2 with a warn tier, plus the HTML report artefact."""
+    input:
+        marker("gold", "marts.done"),
+        marker("assemble", "site_json.done"),
+        marker("report", "staleness.done"),
+    output: marker("gate", "pointblank.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/pointblank_suite.py --as-of {AS_OF} --serve {SERVE} "
+        "  --out-html {REPORTS}/pointblank.html "
+        "  --out-json {REPORTS}/pointblank.json && "
+        "{MARK} --out {output} --rule pointblank "
+        "  --from-json {REPORTS}/pointblank.json:levels "
+        """  --extra '{{"gates": ["V-R1", "V-R2"]}}'"""
+
+rule schemas:
+    """Gates V-T3, V-R3 (pending, counted) and V-L1 over the emitted files."""
+    input:  marker("assemble", "site_json.done")
+    output: marker("gate", "schemas.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/check_schemas.py --serve {SERVE} --dossiers "
+        "  --out {REPORTS}/schemas.json && "
+        "{MARK} --out {output} --rule schemas "
+        "  --from-json {REPORTS}/schemas.json:dossiersChecked,pendingGates "
+        """  --extra '{{"gates": ["V-T3", "V-R3 pending", "V-L1"]}}'"""
+
+rule manifests:
+    """Provenance: every manifest complete, and pipelineGitSha wired in."""
+    input:  marker("gold", "marts.done")
+    output: marker("gate", "manifests.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/check_manifests.py --out {REPORTS}/manifests.json && "
+        "{MARK} --out {output} --rule manifests "
+        "  --from-json {REPORTS}/manifests.json:counts"
+
+rule golden:
+    """The M4 migration gate, re-run: the site must notice nothing.
+
+    Only wired when a golden directory is configured, and only meaningful with
+    the clocks pinned to the edition being reproduced. A diff run against the
+    wall clock is measuring the calendar (s12.4).
+    """
+    input:  marker("assemble", "site_json.done")
+    output: marker("gate", "golden.done")
+    shell:
+        "set -euo pipefail; "
+        "{PY} {WH}/golden_diff.py --golden {GOLDEN} --candidate {SERVE} "
+        "  --dossiers --json {SHADOW}/golden_report.json && "
+        "{MARK} --out {output} --rule golden "
+        """  --extra '{{"golden": "{GOLDEN}"}}'"""

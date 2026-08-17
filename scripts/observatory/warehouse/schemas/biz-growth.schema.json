@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-growth.schema.json",
+  "title": "biz-growth.json",
+  "description": "The gazelle view. Two method rules are schema-enforced: a candidate needs at least three filed periods (the >=3-year window rule), and the ons-definition flag requires a base of at least 10 employees. Neither is a preference; publishing either wrong would misstate a method we cite by name on /method.",
+  "type": "object",
+  "required": [
+    "$meta",
+    "candidates"
+  ],
+  "properties": {
+    "$meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "officialBenchmark": {
+      "type": "array"
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    },
+    "methodNote": {
+      "type": "string"
+    },
+    "persistenceCaveat": {
+      "type": [
+        "string",
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    },
+    "candidate": {
+      "type": "object",
+      "required": [
+        "crn",
+        "name",
+        "series",
+        "flags",
+        "basis"
+      ],
+      "properties": {
+        "crn": {
+          "$ref": "#/$defs/crn"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lad": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sic2": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "series": {
+          "type": "array",
+          "minItems": 3,
+          "description": "Growth is measured over windows of three years or more. A two-point series is not a CAGR.",
+          "items": {
+            "type": "object",
+            "required": [
+              "periodEnd"
+            ],
+            "properties": {
+              "periodEnd": {
+                "type": "string"
+              },
+              "employees": {
+                "type": [
+                  "integer",
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "cagrPct": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "baseEmployees": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 20,
+          "description": "Every published growth figure states the filing basis it came from."
+        }
+      },
+      "if": {
+        "properties": {
+          "flags": {
+            "contains": {
+              "const": "ons-definition"
+            }
+          }
+        },
+        "required": [
+          "flags"
+        ]
+      },
+      "then": {
+        "properties": {
+          "baseEmployees": {
+            "type": "integer",
+            "minimum": 10
+          }
+        },
+        "required": [
+          "baseEmployees"
+        ],
+        "description": "The ONS high-growth definition starts at 10 employees in the base year. Base-year size, never end-year."
+      }
+    }
+  }
+}

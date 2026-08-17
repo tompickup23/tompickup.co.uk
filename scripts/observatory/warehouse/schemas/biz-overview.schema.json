@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-overview.schema.json",
+  "title": "biz-overview.json",
+  "description": "Observatory home: headline band plus the area comparator. Schemas are additive by design: additionalProperties stays open so a new field ships without a CI break, and every rule below is an invariant that would be a published error if it broke. Shape reference: scripts/observatory/CONTRACTS.md.",
+  "type": "object",
+  "required": ["$meta", "areas", "unitaries", "benchmarks"],
+  "properties": {
+    "$meta": { "$ref": "#/$defs/meta" },
+    "areas": {
+      "description": "The 14 current billing authorities. The count is fixed by the geography, not by the data, so a 13 or a 15 is a build fault rather than a change in Lancashire.",
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": { "$ref": "#/$defs/area" }
+    },
+    "unitaries": {
+      "description": "The four 2028 LGR unitaries. Members roll up from areas.",
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "allOf": [
+          { "$ref": "#/$defs/area" },
+          {
+            "type": "object",
+            "required": ["members"],
+            "properties": {
+              "members": { "type": "array", "minItems": 1,
+                           "items": { "type": "string" } }
+            }
+          }
+        ]
+      }
+    },
+    "benchmarks": { "type": "object" }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": ["generated", "sources"],
+      "properties": {
+        "generated": { "type": "string", "minLength": 4 },
+        "methodologyVersion": { "type": "string" },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": ["name", "licence"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "url": { "type": "string" },
+              "retrieved": { "type": "string" },
+              "asAt": { "type": "string" },
+              "licence": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "area": {
+      "type": "object",
+      "required": ["slug", "name", "geo"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "geo": { "type": "string", "enum": ["current", "unitary2028"] },
+        "type": { "type": ["string", "null"] },
+        "parent": { "type": ["string", "null"] },
+        "unitary2028": { "type": ["string", "null"] },
+        "population": { "type": ["integer", "null"], "minimum": 0 },
+        "companiesActive": { "type": ["integer", "null"], "minimum": 0 },
+        "companiesPer1k": { "type": ["number", "null"], "minimum": 0 },
+        "distressCleanPct": { "$ref": "#/$defs/pct" },
+        "distressRawPct": { "$ref": "#/$defs/pct" },
+        "survival3yrPct": { "$ref": "#/$defs/pct" },
+        "highGrowthOfficialPct": { "$ref": "#/$defs/pct" },
+        "shellCompaniesExcluded": { "type": ["integer", "null"], "minimum": 0 },
+        "birthsLatest": { "type": ["integer", "null"], "minimum": 0 },
+        "deathsLatest": { "type": ["integer", "null"], "minimum": 0 },
+        "birthsYear": {
+          "description": "Gate V-R2: an ONS demography count joined to a Companies House snapshot renders both dates. Where a births or deaths figure exists this label must exist with it, which is asserted in pointblank_suite.py because JSON Schema cannot express a conditional across sibling keys of differing nullability cleanly.",
+          "type": ["integer", "string", "null"]
+        },
+        "jobs": { "type": ["integer", "null"], "minimum": 0 },
+        "medianPayWorkplace": { "type": ["number", "null"], "minimum": 0 },
+        "solePropsRegistered": { "type": ["integer", "null"], "minimum": 0 },
+        "charities": { "type": ["integer", "null"], "minimum": 0 },
+        "cics": { "type": ["integer", "null"], "minimum": 0 },
+        "topSectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["sic", "count"],
+            "properties": {
+              "sic": { "type": "string" },
+              "label": { "type": ["string", "null"] },
+              "count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "pct": {
+      "description": "A percentage. Out of 0 to 100 is an arithmetic error, not a surprising finding.",
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

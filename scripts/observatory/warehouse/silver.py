@@ -95,6 +95,23 @@ def bronze_file(manifest, path, suffix):
 
 
 def git_sha():
+    """The commit this pipeline came from, for the manifest.
+
+    Delegates to driver.pipeline_git_sha(), which reads the deploy stamp before
+    falling back to git. `/opt/observatory/warehouse` on vps-main is an rsync
+    target rather than a checkout, which is why every manifest written in M1 to
+    M4 carries null here. M5 wires the stamp in at deploy time so a vps-built
+    manifest names its own code.
+
+    The local import keeps the fallback honest if driver.py is ever absent from
+    a partial deploy: an unstamped manifest is recoverable, a crashed build is
+    not.
+    """
+    try:
+        import driver as _D
+        return _D.pipeline_git_sha()
+    except Exception:
+        pass
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=str(Path(__file__).resolve().parent),

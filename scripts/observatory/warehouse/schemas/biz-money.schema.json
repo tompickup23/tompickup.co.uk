@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-money.schema.json",
+  "title": "biz-money.json",
+  "description": "Political donations crossed with council supplier payments. The no-finding-of-impropriety note is a LEGAL.md requirement and lives in notes[0]; validate_outputs.py asserts its position, the schema asserts its presence.",
+  "type": "object",
+  "required": [
+    "$meta",
+    "donors"
+  ],
+  "properties": {
+    "$meta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/meta"
+        },
+        {
+          "type": "object",
+          "required": [
+            "notes"
+          ],
+          "properties": {
+            "notes": {
+              "type": "array",
+              "minItems": 1,
+              "contains": {
+                "type": "string",
+                "pattern": "No finding of impropriety"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "type": "object"
+    },
+    "donors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "donorName",
+          "evidence"
+        ],
+        "properties": {
+          "donorName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "crn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Evidence tier per DATA-INTEGRITY s3. A named donor crossed with public money without a stated evidence tier is exactly the claim LEGAL.md gates."
+          },
+          "tier": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "donationTotal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "totalValue"
+              ],
+              "properties": {
+                "totalValue": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    }
+  }
+}

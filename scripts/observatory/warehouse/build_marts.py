@@ -82,8 +82,19 @@ def mart(name):
     return deco
 
 
+# Snapshot pins, set from --pin on the command line. The clock is an input
+# (DATA-INTEGRITY s12.4) and so is every snapshot: reproducing a published
+# edition means reading the partitions that edition read, not the newest ones
+# that happen to be on disk. M5 found this the honest way, when a second
+# gazette snapshot landed between the M4 golden run and the first driver cycle
+# and the marts silently moved to it.
+_PINS = {}
+
+
 def _silver(table, snapshot=None, h=None):
-    """The silver partition for a table: the named snapshot, else the latest."""
+    """The silver partition for a table: the pin, else the named snapshot,
+    else the latest."""
+    snapshot = snapshot or _PINS.get(table)
     base = SV.silver_dir(h) / table
     parts = sorted(p for p in base.glob("snapshot_date=*")
                    if (p / "part.parquet").exists())
@@ -611,8 +622,23 @@ def main():
     ap.add_argument("--only", action="append", default=None)
     ap.add_argument("--snapshot", default=None,
                     help="register snapshot_date; default latest")
+    ap.add_argument("--pin", action="append", default=[],
+                    metavar="TABLE=YYYY-MM-DD",
+                    help="pin a silver table to one snapshot, repeatable. "
+                         "Reproducing a published edition means reading the "
+                         "partitions that edition read; without this a newer "
+                         "snapshot silently becomes the input and a "
+                         "golden-file diff measures the feed rather than the "
+                         "warehouse.")
     ap.add_argument("--home", default=None)
     args = ap.parse_args()
+    for spec in args.pin:
+        table, _, snap = spec.partition("=")
+        if not snap:
+            raise SystemExit(f"FATAL: --pin wants TABLE=YYYY-MM-DD, got {spec!r}")
+        _PINS[table] = snap
+    if _PINS:
+        M.log(f"snapshot pins: {_PINS}")
     h = args.home
 
     con, dv = M.connect()

@@ -24,6 +24,7 @@ import json
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -48,6 +49,13 @@ def sha256(path):
 
 
 def git_sha():
+    """See driver.pipeline_git_sha: the deploy stamp comes first, because
+    /opt/observatory/warehouse is an rsync target and not a git checkout."""
+    try:
+        import driver as _D
+        return _D.pipeline_git_sha()
+    except Exception:
+        pass
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=str(Path(__file__).resolve().parent),
@@ -92,6 +100,44 @@ def scan_unclaimed(host, claimed):
                 if p.is_file() and p not in claimed and not p.name.endswith(".part"):
                     out.append(p)
     return out
+
+
+# How recently a file may have been written and still be landed. A fetcher
+# still appending to its output produces a TORN capture: bronze records a
+# partial file, hashes it, and the immutability guard then refuses to correct
+# it, because a torn capture and a legitimately changed source look identical
+# from the outside.
+#
+# Found in M5, live: a concurrent session was running the repaired
+# fetch_ocds_ids.py while a bronze build ran, and 84 KB of a file that reached
+# 160 KB ten minutes later was landed as though it were the whole thing. The
+# guard did its job on the second pass and refused the overwrite, which is how
+# the torn capture became visible at all.
+#
+# 180 seconds is chosen against the fetchers we have: they write their output
+# in one pass at the end of a run, so a file untouched for three minutes is
+# finished. A long-running append-mode writer would need the size-stability
+# check below, which is why both are here rather than only the age one.
+SETTLE_SECONDS = 180
+
+
+def unsettled(p, now=None):
+    """True if this file looks like it is still being written.
+
+    Two independent tests, because each misses a different case: mtime age
+    catches a writer that has stalled, and a size re-read catches a writer that
+    is appending steadily enough to keep its mtime fresh.
+    """
+    now = now or _dt.datetime.now(_dt.timezone.utc).timestamp()
+    st = p.stat()
+    age = now - st.st_mtime
+    if age < SETTLE_SECONDS:
+        return f"modified {age:.0f}s ago, under the {SETTLE_SECONDS}s settle window"
+    size1 = st.st_size
+    time.sleep(0.4)
+    if p.stat().st_size != size1:
+        return "size changed while being read"
+    return None
 
 
 def write_partition(src, snap, files, bronze, dry, gsha):
@@ -191,12 +237,29 @@ def main():
 
     gsha = git_sha()
     total_files = total_bytes = 0
+    deferred = []
     for (sid, snap), files in sorted(by_part.items()):
         src = S.BY_ID[sid]
         log(f"source={sid} snapshot_date={snap} ({len(files)} files)")
+        # A partition is landed whole or not at all. If ANY file in it is
+        # still being written, the whole partition waits for the next run:
+        # half a partition recorded as complete is exactly the failure the
+        # immutability guard then makes permanent.
+        busy = [(p.name, why) for p in sorted(files)
+                if (why := unsettled(p)) and p.exists()]
+        if busy:
+            for name, why in busy:
+                log(f"  ! {name} deferred: {why}")
+            deferred.append({"source": sid, "snapshot": snap,
+                             "files": [b[0] for b in busy]})
+            continue
         m = write_partition(src, snap, sorted(files), bronze, args.dry_run, gsha)
         total_files += m["fileCount"]
         total_bytes += m["totalBytes"]
+    if deferred:
+        log(f"DEFERRED {len(deferred)} partition(s), still being written: "
+            f"{[d['source'] for d in deferred]}. Not an error: bronze lands a "
+            "file when it has stopped moving, and the next run picks it up.")
 
     # Quarantine is a report, not a dumping ground: we copy nothing there
     # silently. An unclaimed file is a registry gap and must be named.

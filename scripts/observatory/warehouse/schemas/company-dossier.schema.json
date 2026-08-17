@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/company-dossier.schema.json",
+  "title": "company-dossier.json",
+  "description": "One company dossier, public/data/company/<crn>.json. The website block encodes the zero-false-positive rule: a link on a named company's profile is only defensible with its match method, its evidence snippet and the date it was checked.",
+  "type": "object",
+  "required": [
+    "$meta",
+    "crn",
+    "name"
+  ],
+  "properties": {
+    "$meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "crn": {
+      "$ref": "#/$defs/crn"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "register": {
+      "type": "object"
+    },
+    "website": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/website"
+        }
+      ]
+    },
+    "accountsSeries": {
+      "type": "array"
+    },
+    "gazetteNotices": {
+      "type": "array"
+    },
+    "ownership": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    },
+    "website": {
+      "type": "object",
+      "required": [
+        "url",
+        "matchedOn",
+        "evidence",
+        "checkedAt"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https?://"
+        },
+        "matchedOn": {
+          "type": "string",
+          "enum": [
+            "crn",
+            "name-postcode"
+          ],
+          "description": "The only two rules that clear the zero-false-positive bar."
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "checkedAt": {
+          "type": "string",
+          "minLength": 4
+        }
+      }
+    }
+  }
+}
