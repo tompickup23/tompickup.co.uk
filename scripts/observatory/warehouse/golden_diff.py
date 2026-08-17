@@ -57,14 +57,21 @@ def strip_run_dates(doc):
                 meta[key] = None
         srcs = meta.get("sources")
         if isinstance(srcs, list):
-            seen = set()
-            for s in srcs:
-                if isinstance(s, dict) and "retrieved" in s:
-                    seen.add(s["retrieved"])
-                    s["retrieved"] = None
-            if seen:
-                found["$meta.sources[].retrieved"] = sorted(
-                    v for v in seen if v is not None)
+            # retrievedAt and asAt joined the contract with V-R3 (s14.6) and
+            # both can carry the run date: a live register's as-at IS the day
+            # it was read, and a source with no machine-readable edition falls
+            # back to the retrieval date by design. Leaving them in would make
+            # a re-run on a different day read as a difference, which is the
+            # calendar and not the warehouse (s12.4).
+            for key in ("retrieved", "retrievedAt", "asAt"):
+                seen = set()
+                for s in srcs:
+                    if isinstance(s, dict) and key in s:
+                        seen.add(s[key])
+                        s[key] = None
+                if seen:
+                    found[f"$meta.sources[].{key}"] = sorted(
+                        v for v in seen if v is not None)
     return found
 
 

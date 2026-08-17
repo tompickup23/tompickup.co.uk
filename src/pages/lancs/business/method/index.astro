@@ -122,7 +122,10 @@ const SOURCES = [
           consecutive periods. It is not turnover-based and has not been checked with the companies. Only complete
           series from a base of ten or more employees carry the "meets ONS definition" flag; a base of three to
           nine with strong growth is flagged "emerging" and shown separately. Obvious data errors (for example a
-          ten-fold jump from a filing typo) are cleaned out. Every candidate states its basis in the table.
+          ten-fold jump from a filing typo) are cleaned out, as is any figure that cannot be a headcount at all.
+          Where a company has filed more than once for the same accounting period, the figures shown are the ones
+          in the most recently filed set of accounts for that period, so a restatement replaces the original
+          filing. Every candidate states its basis in the table.
         </p>
         <p>
           The two measures count different universes and will not match. The official share is built from the
@@ -149,6 +152,18 @@ const SOURCES = [
         <li><b>Non-local</b> No registered office or trading premises identified in Lancashire.</li>
         <li><b>Unclassified</b> Not enough register evidence to place the supplier.</li>
       </ul>
+      <div class="lgr-prose">
+        <p>
+          <b>Which parent the ownership chain names.</b> A company can have more than one corporate person with
+          significant control on the register at the same time, and about one in nine of those that have any have
+          two or more. Where that happens the chain we show names one of them, chosen by a fixed rule: first a
+          controller that gives its own registered company number, because that is the one a reader can check and
+          the one the chain can be followed through; then, among those, the lowest company number, which is the
+          longest established. The chain is walked upwards from there until it reaches a controller with no
+          registered corporate owner of its own. Where a company has several corporate controllers, the tier
+          reflects the one named, and the register entry for the company lists them all.
+        </p>
+      </div>
       <p class="doge-note">
         The basis for each supplier's tier is stated in register terms. The spend itself is each council's own
         published "payments over £500" transparency data. That data covers payments over £500 and is not a

@@ -72,7 +72,7 @@ def _nomis_reference_year():
     return f"{max(years)}-12-31" if years else None
 
 
-def _spend_window_end():
+def spend_window_end():
     years = (_load(PROC / "council_supplier_spend.json").get("$meta") or {}
              ).get("years") or []
     if not years:
@@ -93,7 +93,7 @@ def sources(generated=None):
     char_r = _retrieved("charities_lancs.json", gen)
     cqc_r = _retrieved("cqc_lancs.json", gen)
     onspd_r = _retrieved("voa_lancs.json", gen)
-    spend_end = _spend_window_end()
+    spend_end = spend_window_end()
     return [
         {"name": "Companies House Free Company Data + PSC + accounts bulk",
          "url": "https://download.companieshouse.gov.uk/",
