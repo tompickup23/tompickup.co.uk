@@ -40,11 +40,23 @@ WHERE period_end < DATE '1990-01-01'
 LIMIT 20;
 
 -- check: employees is an s411 average headcount, so a value that cannot be one
--- has been nulled. 269 filings in this extract report a negative average and
--- two report over 700,000.
+-- has been nulled. The band is asserted here, at the silver boundary, in both
+-- directions: 269 filings in this extract report a negative average and two
+-- report over 700,000. Any row surviving this check would be a headcount the
+-- consumers would publish.
 SELECT crn, period_end, employees
 FROM read_parquet('{pq}')
 WHERE employees < 0 OR employees > 500000
+LIMIT 20;
+
+-- check: the band caught everything it should have. employees_suspect is the
+-- count of filings whose figure cannot be a headcount, and every one of them
+-- must have a null derived value and a non-null filed value, or the artefact
+-- has leaked into a published series.
+SELECT crn, period_end, employees_as_filed, employees
+FROM read_parquet('{pq}')
+WHERE employees_suspect
+  AND (employees IS NOT NULL OR employees_as_filed IS NULL)
 LIMIT 20;
 
 -- check: nothing filed is lost. employees_suspect marks exactly the rows where

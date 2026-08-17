@@ -35,7 +35,7 @@ presence layer and the verified-websites layer do not, yet.
 
 Usage:
     build_site_json_v2.py --as-of 2026-08-17 [--root /opt/observatory/v2]
-                          [--fix-ocds]   reproduce the fault or clear it
+                          [--reproduce-ocds-fault]
 """
 import argparse
 import gzip
@@ -223,7 +223,7 @@ def project_jsonl_gz(con, sql, out_path, keys):
     return n
 
 
-def project_all(root, fix_ocds, h):
+def project_all(root, reproduce_ocds_fault, h):
     con, dv = M.connect()
     # See build_marts.main: the projections reproduce input FILES, and the
     # order of the rows in them is part of what the consumers read.
@@ -306,8 +306,11 @@ def project_all(root, fix_ocds, h):
          "company_number": r[3], "date": r[4], "uri": r[5], "lad": r[6],
          "postcode": r[7]}
         for r in con.execute(
-            # company_number_raw, not company_number: REPRODUCED FAULT F5.
-            "SELECT notice_id, notice_type, company_name, company_number_raw, "
+            # company_number, the trimmed one silver derived, not
+            # company_number_raw. The Gazette publishes some numbers with a
+            # trailing space and the site joins the register on this string,
+            # so the raw form loses the company (DATA-INTEGRITY s11.10).
+            "SELECT notice_id, notice_type, company_name, company_number, "
             f"notice_date, uri, lad_code, postcode FROM read_parquet('{npq}') "
             "ORDER BY file_ordinal").fetchall()]
     (P / "gazette_lancs.json").write_text(json.dumps(
@@ -324,26 +327,42 @@ def project_all(root, fix_ocds, h):
 
     ssnap = snap_of("mart_supplier_identifiers")
     spq = M.mart_dir(h) / "mart_supplier_identifiers" / f"snapshot_date={ssnap}" / "part.parquet"
-    where = "" if fix_ocds else " WHERE in_production_edition"
+    # The crosswalk's full set is what the projection emits. F2 is cleared:
+    # fetch_ocds_ids.py talks to the Contracts Finder API directly now instead
+    # of reading a path that existed only on the Mac, so the legacy path
+    # produces these same identifications and the two paths agree.
+    # --reproduce-ocds-fault restores the empty map the pre-fix editions
+    # carried, which is the only way to reproduce one of those editions.
+    # NOT is_ambiguous, always. This dict is keyed on the supplier NAME, so a
+    # name that award notices attach to two company numbers would resolve to
+    # whichever row sorted last: a coin toss published as an identification.
+    # Ambiguity is never a merger (DATA-INTEGRITY s11.5), so those names
+    # resolve to no company. The filter is outside the fault flag because it
+    # is not part of the fault: reproducing a pre-fix edition must not
+    # reproduce a bug we never shipped.
+    where = (" WHERE NOT is_ambiguous AND in_production_edition"
+             if reproduce_ocds_fault else " WHERE NOT is_ambiguous")
     rows = con.execute(
         "SELECT supplier_key, company_number, evidence "
         f"FROM read_parquet('{spq}'){where}").fetchall()
     by_name = {r[0]: {"crn": r[1], "evidence": r[2]} for r in rows}
     total = con.execute(
         f"SELECT count(*) FROM read_parquet('{spq}')").fetchone()[0]
-    # REPRODUCED FAULT F2 (DATA-INTEGRITY s11.2). Default off means the golden
-    # file reproduces: the published edition's map is EMPTY, because
-    # fetch_ocds_ids.py reads a path that exists only on the Mac. --fix-ocds
-    # emits the crosswalk's full set instead, which is how the impact of the
-    # fault is measured without touching the live pipeline.
+    refused = con.execute(
+        f"SELECT count(DISTINCT supplier_key) FROM read_parquet('{spq}') "
+        "WHERE is_ambiguous").fetchone()[0]
     (P / "ocds_supplier_ids.json").write_text(json.dumps(
         {"byName": by_name,
          "source": "gold/mart_supplier_identifiers",
-         "faultReproduced": (None if fix_ocds else "DATA-INTEGRITY s11.2")}))
+         "faultReproduced": ("DATA-INTEGRITY s11.2" if reproduce_ocds_fault
+                             else None)}))
     M.log(f"  processed/ocds_supplier_ids.json: {len(by_name)} of {total} "
-          f"identifications ({'fault cleared' if fix_ocds else 'fault reproduced'})")
+          f"identifications ("
+          f"{'fault reproduced' if reproduce_ocds_fault else 'full crosswalk set'}"
+          f"), {refused} ambiguous name(s) refused")
     report["ocds"] = {"emitted": len(by_name), "inCrosswalk": total,
-                      "faultReproduced": not fix_ocds}
+                      "ambiguousNamesRefused": refused,
+                      "faultReproduced": reproduce_ocds_fault}
 
     con.close()
     return report
@@ -397,8 +416,8 @@ def main():
     ap.add_argument("--root", default="/opt/observatory/v2")
     ap.add_argument("--site", default="/opt/observatory/site")
     ap.add_argument("--src-home", default=str(Path.home()))
-    ap.add_argument("--fix-ocds", action="store_true",
-                    help="clear the OCDS fault instead of reproducing it")
+    ap.add_argument("--reproduce-ocds-fault", action="store_true",
+                    help="emit the empty OCDS map the pre-fix editions carried, for reproducing one of those editions")
     ap.add_argument("--home", default=None, help="warehouse root override")
     ap.add_argument("--skip-project", action="store_true")
     ap.add_argument("--python", default="python3",
@@ -419,7 +438,7 @@ def main():
 
     if not args.skip_project:
         M.log("projecting marts into the shadow tree")
-        report = project_all(root, args.fix_ocds, args.home)
+        report = project_all(root, args.reproduce_ocds_fault, args.home)
         M.log(f"copied {copy_passthrough(args.src_home, root)} pass-through "
               f"inputs of {len(PASSTHROUGH)}")
     else:
@@ -437,7 +456,8 @@ def main():
     M.log(f"v2 emitted {len(files)} biz files: {files}")
     (root / "v2_run.json").write_text(json.dumps(
         {"asOf": args.as_of, "asOfEtl": dates["etl"],
-         "fixOcds": args.fix_ocds, "projection": report,
+         "reproduceOcdsFault": args.reproduce_ocds_fault,
+         "projection": report,
          "steps": steps, "files": files,
          "dossiers": len(list((out / "company").glob("*.json")))}, indent=1))
     print(json.dumps({"files": files, "root": str(out)}, indent=1))

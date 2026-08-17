@@ -19,6 +19,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from resolve_suppliers import normalise, classify
 from sic_labels import SIC2
+import accounts_rules as AR
+import sources_meta as SM
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 OUT = ROOT / "public/data/company"
@@ -33,7 +35,10 @@ with gzip.open(PROC / "master.jsonl.gz", "rt") as f:
         r = json.loads(line)
         master[r["crn"]] = r
 
-# accounts series
+# accounts series. One filing per accounting period, chosen by filing date:
+# the same accounts_rules.resolve_latest call build_growth.py makes, so the
+# dossier accounts table and the growth engine cannot show different filings
+# for the same period.
 series = defaultdict(dict)
 def lines():
     with gzip.open(VPS / "lancs_accounts.jsonl.gz", "rt") as f:
@@ -41,12 +46,12 @@ def lines():
     bf = VPS / "lancs_accounts_backfill.jsonl"
     if bf.exists():
         yield from bf.open()
-for line in lines():
-    r = json.loads(line)
-    series[r["crn"]][r["period_end"]] = {
-        "periodEnd": r["period_end"], "employees": r.get("employees"),
-        "equity": r.get("equity"), "totalAssets": r.get("total_assets"),
-        "cash": r.get("cash")}
+for crn, periods in AR.resolve_latest(json.loads(l) for l in lines()).items():
+    for pe, r in periods.items():
+        series[crn][pe] = {
+            "periodEnd": pe, "employees": r.get("employees"),
+            "equity": r.get("equity"), "totalAssets": r.get("total_assets"),
+            "cash": r.get("cash")}
 
 growth = {c["crn"]: c for c in json.loads((PROC / "growth.json").read_text())["candidates"]}
 resolved = json.loads((PROC / "pound.json").read_text())["resolved"]
@@ -285,6 +290,10 @@ for w in _pub_sites:
 
 (ROOT / "public/data/biz-companies-index.json").write_text(json.dumps(
     {"$meta": {"generated": GEN,
+               # Gate V-R3: the index is a published file and carries the same
+               # dated source block as the rest of the edition.
+               "sources": SM.sources(GEN),
+               "notes": [SM.DATE_NOTE],
                "criteria": "council supplier >= £500k over 3 years, growth "
                            "candidate, Innovate UK winner >= £100k, or 100+ "
                            "employees in latest filed accounts; Lancashire-"

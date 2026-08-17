@@ -72,12 +72,17 @@ def table_dir(table, snapshot, h=None):
 
 def write_manifest(out_dir, table, snapshot, rows, nbytes, duckdb_version,
                    inputs=None, assertions=None, notes=None,
-                   reproduced_faults=None, extra=None):
+                   reproduced_faults=None, cleared_faults=None, extra=None):
     """Gold-mart manifest.
 
     `reproducedFaults` is a first-class field rather than a note. A mart that
     knowingly carries a live fault has to say which one, in machine-readable
     form, or the next session has no way of telling a bug from a decision.
+
+    `clearedFaults` is where an entry goes when it is fixed, with the commit
+    that fixed it and the count it moved. A fault that simply disappears from
+    the register leaves a reader unable to tell a fix from an oversight, and
+    leaves the next diff in published figures unexplained.
     """
     m = {
         "table": table,
@@ -93,6 +98,7 @@ def write_manifest(out_dir, table, snapshot, rows, nbytes, duckdb_version,
         "builtAt": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "assertions": assertions or {},
         "reproducedFaults": reproduced_faults or [],
+        "clearedFaults": cleared_faults or [],
         "notes": notes,
     }
     if extra:

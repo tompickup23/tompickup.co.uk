@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from resolve_suppliers import normalise, classify
+import sources_meta as SM
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PROC = Path.home() / "observatory-data/processed"
@@ -101,14 +102,52 @@ for d in out_rows:
         party_totals[rr["party"]] += rr["totalValue"]
 
 from datetime import date as _date
+
+
+def _ec_as_at():
+    """The donation register extract speaks for the end of its own window.
+
+    The extract states that window itself, so there is nothing to infer: a
+    register we hold as an extract speaks for the last donation it could have
+    contained, not for the day the extract was taken, and the two are months
+    apart here.
+    """
+    return (ec.get("date_range") or {}).get("to") or _date.today().isoformat()
+
+
+def _ec_retrieved():
+    return str(ec.get("generated_at") or _date.today().isoformat())[:10]
+
+
 out = {
     "$meta": {
         "generated": _date.today().isoformat(),
+        # Gate V-R3: every source entry states what date the data speaks
+        # for, when we read it and what it is licensed under. This file keeps
+        # its own two-entry list rather than the shared block because neither
+        # source is one the shared block covers: the donation register is read
+        # from the AI DOGE extract, not fetched here, and the spend ledger
+        # entry is worded for this page.
         "sources": [
             {"name": "Electoral Commission donation register (NW extract 2015 onwards)",
-             "url": "https://search.electoralcommission.org.uk/", "licence": "OGL v3"},
+             "url": "https://search.electoralcommission.org.uk/",
+             "asAt": _ec_as_at(),
+             "asAtBasis": "most recent donation accepted date in the extract",
+             "retrievedAt": _ec_retrieved(),
+             "retrieved": _ec_retrieved(),
+             "licence": "OGL v3"},
             {"name": "Council transparency spending, 17 Lancashire bodies",
+             "url": "https://tompickup.co.uk/lgr/",
+             "asAt": SM.spend_window_end() or _date.today().isoformat(),
+             "asAtBasis": "end of the latest financial year in the spend window",
+             "retrievedAt": _date.today().isoformat(),
+             "retrieved": _date.today().isoformat(),
              "licence": "OGL v3 per council"}],
+        # notes[0] is load-bearing and validate_outputs.py asserts it: the
+        # no-finding-of-impropriety line must come FIRST on a page that names
+        # organisations beside donation records. The source-date note goes at
+        # the end, behind every legal caveat, which is where a housekeeping
+        # note belongs.
         "notes": [
             "This table lists organisations that appear BOTH in the Electoral "
             "Commission donation register AND as payees in Lancashire council "
@@ -118,7 +157,8 @@ out = {
             "facility-time relationships, not procurement.",
             "Matches are made on company number where the EC record carries "
             "one, otherwise on exact normalised name; the evidence level is "
-            "shown per row."],
+            "shown per row.",
+            SM.DATE_NOTE],
     },
     "summary": {
         "donationsChecked": len(donations),

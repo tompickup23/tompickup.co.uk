@@ -23,6 +23,7 @@ def _crosswalk_path():
 
 sys.path.insert(0, str(Path(__file__).parent))
 from resolve_suppliers import normalise, classify
+import sources_meta as SM
 
 ROOT = Path(__file__).resolve().parent.parent.parent   # repo root
 PUB = ROOT / "public" / "data"
@@ -83,22 +84,18 @@ def rows_of(d, *keys):
             d = d[k]
     return d if isinstance(d, list) else []
 
-SOURCES = [
- {"name": "Companies House Free Company Data + PSC + accounts bulk", "url": "https://download.companieshouse.gov.uk/", "retrieved": GEN, "licence": "Public register data"},
- {"name": "ONS / NOMIS (business counts, demography, BRES, ASHE)", "url": "https://www.nomisweb.co.uk/", "retrieved": GEN, "licence": "OGL v3"},
- {"name": "The Gazette", "url": "https://www.thegazette.co.uk/", "retrieved": GEN, "licence": "OGL v3"},
- {"name": "FSA Food Hygiene Rating Scheme", "url": "https://ratings.food.gov.uk/", "retrieved": GEN, "licence": "OGL v3, FSA attribution"},
- {"name": "Innovate UK funded projects", "url": "https://www.ukri.org/publications/innovate-uk-funded-projects-since-2004/", "retrieved": GEN, "licence": "OGL v3"},
- {"name": "Charity Commission register extract", "url": "https://register-of-charities.charitycommission.gov.uk/", "retrieved": GEN, "licence": "OGL v3"},
- {"name": "CQC care directory", "url": "https://www.cqc.org.uk/", "retrieved": GEN, "licence": "OGL v3"},
- {"name": "Council transparency spending (17 Lancashire bodies)", "url": "https://tompickup.co.uk/lgr/", "retrieved": GEN, "licence": "OGL v3 per council"},
- {"name": "ONSPD", "url": "https://geoportal.statistics.gov.uk/", "retrieved": GEN, "licence": "OGL; contains OS and Royal Mail data, Crown copyright"},
-]
+# Source recency: the $meta.sources[] block and its two dates live in
+# sources_meta, because three published files carry one and a block maintained
+# in three places is a block that disagrees with itself. See that module for
+# what asAt means and where each date is read from.
+SOURCES = SM.sources(GEN)
+
 def meta(extra_notes=()):
     return {"generated": GEN + "T18:00:00Z", "methodologyVersion": "1.0",
             "sources": SOURCES,
             "notes": ["Transparency spending covers payments over £500 and is not a complete account of any body's budget.",
-                      "Derived indicators are Observatory assessments from public data; see the method page."] + list(extra_notes)}
+                      "Derived indicators are Observatory assessments from public data; see the method page.",
+                      SM.DATE_NOTE] + list(extra_notes)}
 
 # ------------------------------------------------- per-LAD context joins ----
 nomis_areas = (nomis or {}).get("areas", {})
@@ -425,7 +422,14 @@ for us in UNITARIES:
         for k, v in d["vcse"].items():
             if isinstance(v, (int, float)):
                 merged["vcse"][k] = (merged["vcse"].get(k) or 0) + v
-    merged["wholeEconomy"]["unregisteredNote"] = areas_detail[mem[0]]["wholeEconomy"]["unregisteredNote"]
+    # The rollup sums numeric keys, so every caption on a whole-economy figure
+    # has to be carried across by hand. Both of them, together, so that adding
+    # a third cannot leave one behind: a modelled count published without its
+    # note and an HMRC income figure published without its year are the same
+    # failure, a figure on the page with nothing saying what it is.
+    for caption in ("unregisteredNote", "selfEmploymentIncomeYear"):
+        merged["wholeEconomy"][caption] = \
+            areas_detail[mem[0]]["wholeEconomy"][caption]
     merged["sectors"] = [{"sic2": s, "label": sic_label(s), "live": c,
                           "new3yr": new3[s], "distressCleanPct": None}
                          for s, c in sec.most_common(15)]

@@ -58,6 +58,37 @@ with gzip.open(VPS / "corporate_psc_all.jsonl.gz", "rt") as f:
             continue
         parents[r["company_number"]].append(r)
 
+# ---------------------------------------------------- parent selection rule --
+# Where a company has more than one live corporate PSC, one of them is named in
+# the ownership chain the site publishes about that company. Which one is a
+# stated rule, applied here, and not the order the extract happened to list
+# them in. 50,404 companies nationally have more than one live corporate PSC.
+#
+# The rule, in order:
+#
+#   1. a PSC that gives a registered company number outranks one that does not,
+#      because only that one lets the chain be walked another step and only
+#      that one is checkable against the register by a reader;
+#   2. then the lowest company number. Company numbers are issued in sequence,
+#      so the lowest is the longest established of the candidates. The PSC
+#      register does carry a notified-on date and it would be the better key,
+#      but our extract does not capture it, so the rule uses what the data we
+#      hold supports and says so;
+#   3. then the parent name in codepoint order, which cannot tie.
+#
+# Nothing here depends on file position, so the published chain is the same
+# whatever order the extractor writes.
+def _parent_sort_key(p):
+    reg = (p.get("registration_number") or "").strip().upper()
+    usable = bool(re.fullmatch(r"[0-9A-Z]{6,8}", reg))
+    return (0 if usable else 1,
+            reg.zfill(8) if usable else "",
+            (p.get("name") or "").strip())
+
+def primary_parent(candidates):
+    """The corporate PSC the published ownership chain names, by the rule above."""
+    return min(candidates, key=_parent_sort_key)
+
 print("loading lancs individual PSCs...")
 indiv = defaultdict(list)     # lancs crn -> [{postcode, country_of_residence}]
 with gzip.open(VPS / "lancs_psc.jsonl.gz", "rt") as f:
@@ -191,7 +222,7 @@ def walk(crn, depth=0, seen=None):
     seen.add(crn)
     corp = parents.get(crn, [])
     if corp:
-        p = corp[0]  # primary corporate parent
+        p = primary_parent(corp)
         pname = p.get("name") or ""
         if PUBLIC_RE.search(normalise(pname)):
             return "councilOwned", [{"name": pname, "where": "public body"}]

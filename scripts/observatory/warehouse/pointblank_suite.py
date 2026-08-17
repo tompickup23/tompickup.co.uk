@@ -215,10 +215,11 @@ def suite_vintage(pb, serve_dir):
             label="V-R2 joined-vintage labels, DATA-INTEGRITY s4 rule 1",
             thresholds=pb.Thresholds(warning=1 / len(df), error=1 / len(df),
                                      critical=0.10))
-         # DECLARED FAULT F7: the four 2028 unitary rollups carry an HMRC
-         # income figure with no year label (check_schemas.KNOWN_SERVE_FAULTS).
-         .col_vals_eq(columns="labelled", value=1,
-                      thresholds=declared(pb, 4))
+         # F7 CLEARED: the four 2028 unitary rollups used to carry an HMRC
+         # income figure with no year label. The rule is asserted at full
+         # strength now, so a rollup that drops a caption again fails here
+         # rather than warning.
+         .col_vals_eq(columns="labelled", value=1)
          .interrogate())
     return v, {"fields": len(df)}
 
@@ -275,12 +276,16 @@ def suite_marts(pb, con, as_of):
         # "differs" flag, so F3's population is the disagreement between them:
         # the row the site publishes is not the chronologically latest one.
         df = load(con, pq,
-                  "crn, period_end, employees_as_filed, file_ordinal, "
+                  "crn, period_end, employees_as_filed, employees, "
+                  "file_ordinal, "
                   "(site_winner AND NOT latest_winner) "
                   "  AS differs_from_latest_filing, "
                   f"(period_end > DATE '{as_of}' "
                   "  OR period_end < DATE '1900-01-01') AS period_implausible,",
-                  where="site_winner")
+                  # latest_winner, not site_winner: the consumers now resolve a
+                  # period to the filing made most recently, so this is the set
+                  # they publish and the set the rules below have to hold over.
+                  where="latest_winner")
         flags(df, "differs_from_latest_filing", "period_implausible")
         v = (pb.Validate(
                 data=df, tbl_name="gold/mart_accounts_lancs",
@@ -289,17 +294,31 @@ def suite_marts(pb, con, as_of):
                                          critical=0.05))
              .col_vals_regex(columns="crn", pattern=r"^[0-9A-Z]{8}$")
              .col_vals_eq(columns="period_implausible", value=0)
-             # The plausible-headcount band. 271 rows outside it is the known
-             # iXBRL scale-and-sign artefact (s9.6); a tenth of the table
-             # outside it is a broken extractor, and the difference between
-             # those two is a threshold, not a rule.
+             # Two bands, and the difference between them is the point.
+             # employees_as_filed is what the extractor wrote and is allowed to
+             # be wrong: 271 rows outside the band is the known iXBRL
+             # scale-and-sign artefact (s9.6), a tenth of the table outside it
+             # is a broken extractor, and that difference is a threshold. The
+             # derived employees column is what a consumer publishes and is not
+             # allowed to be wrong at any rate, so it carries the silver bounds
+             # with no tolerance at all.
              .col_vals_between(columns="employees_as_filed", left=0,
                                right=200000, na_pass=True)
+             .col_vals_between(columns="employees", left=0, right=500000,
+                               na_pass=True,
+                               thresholds=pb.Thresholds(warning=1, error=1,
+                                                        critical=1))
              .col_vals_not_null(columns="file_ordinal")
-             # F3, declared: the site keeps the original filing rather than the
-             # restatement for 7,342 periods. Warn tier, same reasoning as F1.
-             .col_vals_eq(columns="differs_from_latest_filing", value=0,
-                          thresholds=declared(pb, 7342))
+             # F3 CLEARED, and there is deliberately no step asserting it
+             # here. The correction is a change of BASIS, not a row-level
+             # property: this validation now runs over latest_winner, which is
+             # what the consumers publish, where before it ran over
+             # site_winner. Asserting "the published row is the latest filing"
+             # against a set defined as the latest filings would be a
+             # tautology. The size of the correction is counted where it can be
+             # counted honestly, in the mart manifest's own assertions
+             # (notTheLatestFiling, differentEmployeeFigure) and in the
+             # per-fault diff of the published edition.
              .interrogate())
         out.append(("mart_accounts_lancs", v))
 
@@ -331,17 +350,19 @@ def suite_marts(pb, con, as_of):
              # The legal blocker, mirrored from validate_outputs.py so it fires
              # in the warehouse rather than only at the last gate before deploy.
              .col_vals_eq(columns="is_petition", value=0)
-             # F5, declared: 13 notices carry a trailing space in the number.
-             .col_vals_eq(columns="trailing_space", value=0,
-                          thresholds=declared(pb, 13))
+             # F5 CLEARED: the projection emits the trimmed number and the
+             # fetcher trims at the point the publisher's text arrives, so a
+             # published notice carrying an untrimmed number is now a failure
+             # rather than a known population.
+             .col_vals_eq(columns="trailing_space", value=0)
              .interrogate())
         out.append(("mart_notices_lancs", v))
 
     pq = latest(gold, "mart_supplier_identifiers")
     if pq:
-        df = load(con, pq, "supplier_key, company_number, evidence, "
-                           "in_production_edition")
-        flags(df, "in_production_edition")
+        df = load(con, pq, "decision_id, supplier_key, company_number, "
+                           "evidence, in_production_edition, is_ambiguous")
+        flags(df, "in_production_edition", "is_ambiguous")
         v = (pb.Validate(
                 data=df, tbl_name="gold/mart_supplier_identifiers",
                 label="OCDS supplier identifications, from the crosswalk",
@@ -357,13 +378,32 @@ def suite_marts(pb, con, as_of):
              # each, so the projection collapsing on the name is harmless here
              # even though it reads position as meaning.
              .rows_distinct(columns_subset=["decision_id"])
-             # DECLARED FAULT F2: the production edition emits NONE of these,
-             # because the cron host read a path that exists only on the Mac.
-             # The whole table is outside the published edition, so the
-             # population is every row and this step can only ever warn until
-             # the fault is cleared. It stops warning the moment it is.
+             # A name that award notices attach to two company numbers is
+             # refused by the projection, so the population of ambiguous rows
+             # is expected to be small and is worth a warning when it moves.
+             # It is not an error: the ambiguity is in the source, and the
+             # right response to it is already implemented.
+             .col_vals_eq(columns="is_ambiguous", value=0,
+                          thresholds=pb.Thresholds(warning=1, error=0.10,
+                                                   critical=0.25))
+             # F2 CLEARED. in_production_edition is the reconciliation column:
+             # it says which of these identifications the LEGACY path is also
+             # producing, which is how the two paths are shown to agree rather
+             # than assumed to.
+             #
+             # WARN ONLY, and the reason is a rule about gate shape rather than
+             # about this column. It compares a warehouse table against a file
+             # OUTSIDE the warehouse: processed/ocds_supplier_ids.json is a
+             # fetcher output, not a versioned artefact, and it can legitimately
+             # be absent, stale, or an edition behind. A build that FAILS
+             # because an external file disagrees is the same mistake V-R1
+             # already learned: a gate that fails a monthly run over a file
+             # nothing derived from gets switched off, and then it guards
+             # nothing. The assertion that must never bend is already a hard
+             # SQL assert in build_marts: no unambiguous supplier name may hold
+             # two company numbers.
              .col_vals_eq(columns="in_production_edition", value=1,
-                          thresholds=declared(pb, len(df)))
+                          thresholds=pb.Thresholds(warning=1))
              .interrogate())
         out.append(("mart_supplier_identifiers", v))
 
