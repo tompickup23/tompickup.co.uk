@@ -71,6 +71,36 @@ def _from_name(pattern, group=1):
     return f
 
 
+def _halfyear_edition(default=None):
+    """snapshot_date resolver for a source published in half-year editions.
+
+    UK Finance names its data files "... SME H2 2025 Aggregate.xlsx", so the
+    edition is in the filename and the partition can key on it rather than on
+    when we happened to download it. That is the CH-bulk rule in s4: where a
+    file states its own edition, re-downloading the same edition must land in
+    the same partition instead of manufacturing a second one of identical
+    bytes.
+
+    H1 keys on 30 June, H2 on 31 December, which are the period ends the
+    figures are outstanding balances at.
+
+    The edition companions (the notes PDF and the summary docx) carry no
+    edition in their filenames, so they take `default`. Bumping that constant
+    is part of landing a new edition, and the immutability guard is what
+    catches it being forgotten: unchanged companions hash-match and land
+    silently, changed ones refuse to overwrite.
+    """
+    rx = re.compile(r"H([12])\s*(\d{4})")
+
+    def f(p):
+        m = rx.search(p.name)
+        if not m:
+            return default
+        half, year = m.group(1), m.group(2)
+        return f"{year}-06-30" if half == "1" else f"{year}-12-31"
+    return f
+
+
 def _mtime(p):
     """Fallback snapshot_date: the file's own mtime, in UTC date form.
 
@@ -1173,6 +1203,138 @@ SOURCES = [
             "Hyndburn withholds names and Wyre publishes premises without "
             "them, so absence of a match is never absence of a premises "
             "(DATA-INTEGRITY s3)."
+        ),
+    ),
+    dict(
+        id="fca_register",
+        name="FCA Financial Services Register, firms matched to observatory CRNs",
+        hosts=["mac"],
+        capture="derived-extract",
+        globs=["raw/fca/fca_register_lancs.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=(
+            "FCA Financial Services Register, public register data. Attribution "
+            "to the FCA required on any use; re-use subject to the FCA's own "
+            "terms."
+        ),
+        source_url="https://register.fca.org.uk/services/V0.1",
+        notes=(
+            "LOOKUP ONLY, and that is a finding rather than a limitation of "
+            "this fetcher. The V0.1 API has no bulk download and no geographic "
+            "query: tested 17 Aug 2026, a search for BB11 returns nothing and "
+            "a search for PR1 returns a firm with PR1 in its NAME, so the "
+            "postcode printed in a search result is display text and not an "
+            "index. A Lancashire firm cannot be enumerated, only confirmed. "
+            "Pagination WAS checked and does advance properly, unlike "
+            "Contracts Finder (s11.2). "
+            "What makes it worth holding: the per-firm record publishes a "
+            "Companies House Number, so this is a DETERMINISTIC crosswalk "
+            "source (GB-COH edge), not a fuzzy one. A row lands only where the "
+            "FCA-published company number EQUALS the CRN searched for, which "
+            "is evidence_class identifier-observed at confidence 1.0. A name "
+            "match never lands one: the search is loosely ranked and a query "
+            "for barclays returns PEAC Business Finance Limited first. "
+            "Population is the dossier companies, not the whole register."
+        ),
+    ),
+    dict(
+        id="ch_disqualified_officers",
+        name="Companies House disqualified officers, candidates against dossier officers",
+        hosts=["mac"],
+        capture="derived-extract",
+        globs=["raw/ch_disqualified/disqualified_candidates.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://api.company-information.service.gov.uk/search/disqualified-officers",
+        notes=(
+            "REGISTER OF INDIVIDUALS: LEGAL.md amber, and this file publishes "
+            "NOTHING. Every row carries publication=BLOCKED and is a CANDIDATE "
+            "for human checking, never a finding. "
+            "Scope is the officers already named on observatory dossiers, "
+            "because those are the only people a published surface could put a "
+            "disqualification beside; 103,468 CRNs of raw lookups would be "
+            "neither proportionate nor useful. "
+            "MATCH RULE, which is the whole point: a candidate requires "
+            "normalised name agreement AND date of birth equal on BOTH month "
+            "and year. The dossier officer list carries no DOB, so the sweep "
+            "first reads it from /company/{crn}/officers; an officer with no "
+            "published DOB is not swept at all, because there would be nothing "
+            "to test a name against. Matching on name alone would attach a "
+            "disqualification to a namesake, which is the most damaging false "
+            "positive available to this project. "
+            "Even a passing match is not identity: a name plus a month and year "
+            "of birth is a strong candidate and no more. "
+            "Rate limit is 600 requests per 5 minute window per key and the key "
+            "is shared with the monthly refresh, so the fetcher reads "
+            "x-ratelimit-remain and parks itself with a reserve rather than "
+            "racing the pipeline for the window."
+        ),
+    ),
+    dict(
+        id="ukfinance_postcode_lending",
+        name="UK Finance postcode lending, SME, H2 2025 edition",
+        hosts=["mac"],
+        capture="as-published",
+        globs=[
+            "raw/ukfinance/*.xlsx",
+            "raw/ukfinance/*.pdf",
+            "raw/ukfinance/*.docx",
+        ],
+        snapshot_date=_halfyear_edition(default="2025-12-31"),
+        as_at="H2 2025, balances outstanding at 31 December 2025",
+        licence=(
+            "UK Finance website Terms of Use. NOT an open licence: personal, "
+            "non-commercial use only, no republication or redistribution "
+            "without prior written consent from press@ukfinance.org.uk, and "
+            "downloads may not be modified from their original format without "
+            "written permission. INTERNAL EVIDENCE ONLY, nothing derived from "
+            "this source may be published. Verified 17 Aug 2026."
+        ),
+        source_url="https://www.ukfinance.org.uk/data-and-research/data/postcode-lending",
+        notes=(
+            "Manual browser download: ukfinance.org.uk 403s scripted clients. "
+            "Two data workbooks (GB 11,116 postcode-sector rows, NI 862) plus "
+            "the edition's own notes PDF and summary docx, landed together "
+            "because the caveats below come from that PDF and are not "
+            "recoverable from the workbooks alone. "
+            "CAVEATS, verbatim from Postcode Lending Notes & Definitions: "
+            "(1) SIX GB LENDERS ONLY, Barclays, Lloyds Banking Group, HSBC, "
+            "NatWest, Santander and Virgin Money, so this is not the SME "
+            "lending market, it is those lenders' share of it; NI is a "
+            "different eight-lender panel. "
+            "(2) The postcode attributed to SME lending is derived from the "
+            "business's PRIMARY TRADING LOCATION, not a registered office, "
+            "which is the one respect in which it is better geography than the "
+            "CH register and the reason it is worth holding at all. "
+            "(3) STOCK NOT FLOW: figures are amounts outstanding drawn down "
+            "against agreed facilities, never new lending or demand, and "
+            "UK Finance states borrowing is not a direct indication of "
+            "borrower financial health. "
+            "(4) THREE GOVERNMENT-AGREED REDACTION FILTERS, applied in "
+            "hierarchical order: fewer than 10 active borrowers in the sector; "
+            "borrowing highly concentrated among a few borrowers; and a lender "
+            "holding under 10 percent of SME borrowing in a sector need not "
+            "publish. About 4 percent of SME lending value is redacted. A "
+            "further aggregate rule suppresses the all-lender sum where "
+            "exactly one or two lenders redacted. "
+            "(5) NIL MEANS NO LENDING, \"0\" MEANS REDACTED. They are "
+            "different facts in the same column and must never be summed or "
+            "coerced to zero together. In the 430 Lancashire-relevant rows the "
+            "H2 2025 column carries 46 NIL and 44 redacted zeros, so 21 "
+            "percent of sectors carry no usable value. "
+            "(6) PUBLISHED SIX MONTHS IN ARREARS by design, as a "
+            "confidentiality protection, so the edition is always half a year "
+            "behind the register layers. "
+            "(7) Postcode sectors DO NOT map cleanly to local authorities; "
+            "UK Finance says so explicitly. Any LAD or 2028-unitary "
+            "aggregation is an approximation and needs a stated method, and "
+            "the sector list is the Royal Mail November 2014 vintage. "
+            "Redacted sectors ARE included in postcode-area totals. "
+            "The notes PDF still says \"all 7 lenders\" in its aggregate "
+            "worked example while listing six GB lenders at the top, which is "
+            "legacy text in the source, not our transcription error."
         ),
     ),
     dict(
