@@ -143,8 +143,12 @@ out = {
              "retrievedAt": _date.today().isoformat(),
              "retrieved": _date.today().isoformat(),
              "licence": "OGL v3 per council"}],
+        # notes[0] is load-bearing and validate_outputs.py asserts it: the
+        # no-finding-of-impropriety line must come FIRST on a page that names
+        # organisations beside donation records. The source-date note goes at
+        # the end, behind every legal caveat, which is where a housekeeping
+        # note belongs.
         "notes": [
-            SM.DATE_NOTE,
             "This table lists organisations that appear BOTH in the Electoral "
             "Commission donation register AND as payees in Lancashire council "
             "transparency spending. Both facts are public records. No finding "
@@ -153,7 +157,8 @@ out = {
             "facility-time relationships, not procurement.",
             "Matches are made on company number where the EC record carries "
             "one, otherwise on exact normalised name; the evidence level is "
-            "shown per row."],
+            "shown per row.",
+            SM.DATE_NOTE],
     },
     "summary": {
         "donationsChecked": len(donations),
