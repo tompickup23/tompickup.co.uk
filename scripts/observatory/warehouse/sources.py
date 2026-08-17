@@ -1025,11 +1025,12 @@ SOURCES = [
         notes=(
             "Candidate set gathered by fetch_gazette.py over postcode-centroid "
             "circles. The feed does NOT honour category-code=24 when the "
-            "location parameters are present, so the candidate file also "
-            "contains category 25 personal insolvency, 29 deceased estates "
-            "and 16 planning notices. The silver builder drops everything "
-            "outside category 24 by explicit code rule and asserts the "
-            "dropped counts."
+            "location parameters are present, so the geo search returns "
+            "category 25 personal insolvency, 29 deceased estates and 16 "
+            "planning notices too. fetch_gazette.py drops everything outside "
+            "category 24 before writing the candidate file, and the silver "
+            "builder repeats the rule as a second gate and asserts the dropped "
+            "counts, which are zero once a post-fix candidate file is snapshotted."
         ),
     ),
 

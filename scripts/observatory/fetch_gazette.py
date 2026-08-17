@@ -2,8 +2,14 @@
 """fetch_gazette.py - The Gazette corporate insolvency notices (category 24),
 2024-01-01 to now, filtered to Lancashire.
 
-Personal insolvency (category 25) is EXCLUDED entirely (legal rule) by querying
-category-code=24 only.
+Personal insolvency (category 25) is EXCLUDED entirely (legal rule). Asking the
+feed for it is not enough: the feed does NOT honour category-code when the
+location parameters are present, so a geo search returns category 25 personal
+insolvency, 29 deceased estates and 16 planning notices too, all naming private
+individuals. Every notice outside category 24 is therefore dropped here, before
+the detail fetch, so those notices are neither fetched nor cached, and the
+dropped counts are logged and recorded in $meta so the feed's behaviour stays
+visible. The silver builder repeats the rule as a second gate.
 
 The Gazette summary feed carries no address or company number, and category 24
 nationally is ~1M notices (it includes high-volume strike-off notices), so a
@@ -37,6 +43,9 @@ START = "2024-01-01"
 END = time.strftime("%Y-%m-%d")
 ATOM = "{http://www.w3.org/2005/Atom}"
 GZ = "{https://www.thegazette.co.uk/facets}"
+
+KEEP_CATEGORY = "24"      # corporate insolvency, including strike-off notices
+PERSONAL_CATEGORY = "25"  # personal insolvency: excluded entirely, legal rule
 
 # Geo circles (postcode centroid + radius in miles) blanketing the 14 LADs.
 # The Gazette notice feed supports location-postcode-1 + location-distance-1
@@ -174,7 +183,32 @@ def main():
         log(f"  {circle[0]}/{circle[1]}mi: {len(rows)} hits (running unique {len(candidates)})")
     log(f"total unique candidate notices: {len(candidates)}")
 
-    # 2. Fetch detail (company number + postcode + type) concurrently.
+    # 2. Drop everything outside category 24. The feed ignores category-code
+    #    when the location parameters are present, so what comes back includes
+    #    category 25 personal insolvency, 29 deceased estates and 16 planning
+    #    notices, all naming private individuals. Personal insolvency is
+    #    excluded entirely by legal rule (DATA-INTEGRITY s3, s9.5). Dropping
+    #    here, before the detail fetch, means those notices are never fetched
+    #    and never written to the candidate file.
+    kept, dropped = {}, {}
+    for nid, r in candidates.items():
+        cat = (r.get("notice_code") or "__")[:2]
+        if cat == KEEP_CATEGORY:
+            kept[nid] = r
+        else:
+            dropped[cat] = dropped.get(cat, 0) + 1
+    candidates = kept
+    if dropped:
+        by_cat = ", ".join(f"{c}:{n}" for c, n in
+                           sorted(dropped.items(), key=lambda kv: -kv[1]))
+        log(f"dropped {sum(dropped.values())} notices outside category "
+            f"{KEEP_CATEGORY} (the feed ignores category-code alongside the "
+            f"location parameters): {by_cat}")
+        log(f"  of those, {dropped.get(PERSONAL_CATEGORY, 0)} were category "
+            f"{PERSONAL_CATEGORY} personal insolvency, excluded by legal rule")
+    log(f"category {KEEP_CATEGORY} candidates: {len(candidates)}")
+
+    # 3. Fetch detail (company number + postcode + type) concurrently.
     ids = list(candidates.keys())
     details = {}
     with cf.ThreadPoolExecutor(max_workers=8) as ex:
@@ -187,9 +221,11 @@ def main():
             if done % 1000 == 0:
                 log(f"  detail {done}/{len(ids)}")
 
-    # 3. Save the ENRICHED candidate set as the join table (JSONL): every
-    #    corporate insolvency notice gathered, with company number + postcode +
-    #    precise type. This is the table the CH company-number join runs against.
+    # 4. Save the ENRICHED candidate set as the join table (JSONL): every
+    #    category 24 notice gathered, with company number + postcode + precise
+    #    type. This is the table the CH company-number join runs against. The
+    #    file is rewritten whole on every run, so a run with this filter in
+    #    place clears any out-of-category rows a previous run left behind.
     jsonl = PROC / "gazette_corporate_all.jsonl"
     with open(jsonl, "w") as f:
         for nid, r in candidates.items():
@@ -201,7 +237,7 @@ def main():
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
     log(f"wrote gazette_corporate_all.jsonl: {len(candidates)} rows (enriched)")
 
-    # 4. Resolve postcodes -> LAD, keep Lancashire.
+    # 5. Resolve postcodes -> LAD, keep Lancashire.
     pcs = [d["postcode"] for d in details.values() if d and d.get("postcode")]
     cache = resolve_postcodes(pcs)
 
@@ -233,8 +269,13 @@ def main():
     m = meta(
         FEED + "?category-code=24 (corporate insolvency)",
         "Open Government Licence v3.0 / Crown copyright (The Gazette)",
-        "Corporate insolvency notices only (category-code=24); personal "
-        "insolvency (category 25) excluded entirely per legal rule. Category 24 "
+        "Corporate insolvency notices only (category 24); personal insolvency "
+        "(category 25) excluded entirely per legal rule. The feed does not "
+        "honour category-code when the location parameters are present, so the "
+        "geo search also returns categories 25, 29 (deceased estates) and 16 "
+        "(planning); every notice outside category 24 is dropped by explicit "
+        "code rule before the detail fetch, and the dropped counts are recorded "
+        "in candidates_dropped_by_category below. Category 24 "
         "nationally is ~1M notices in the window (includes high-volume strike-off "
         "notices) and the summary feed carries no address or company number, so a "
         "national pull is impractical. Candidates were gathered via the feed's "
@@ -246,12 +287,16 @@ def main():
         "indexed on one address, not always the registered office), so this list "
         "under-counts and skews toward areas with prolific local practitioners; "
         "the authoritative Lancashire set comes from joining company_number to the "
-        "CH spine. gazette_corporate_all.jsonl holds the full candidate set "
+        "CH spine. gazette_corporate_all.jsonl holds the category 24 candidate set "
         "enriched with company_number + reg_office_postcode + insolvency_type for "
         "that join.")
     with_cn = sum(1 for d in details.values() if d and d.get("company_number"))
     m["window"] = {"start": START, "end": END}
     m["candidate_count"] = len(candidates)
+    m["candidates_dropped_by_category"] = dict(
+        sorted(dropped.items(), key=lambda kv: -kv[1]))
+    m["candidates_dropped_personal_insolvency"] = dropped.get(
+        PERSONAL_CATEGORY, 0)
     m["candidates_with_company_number"] = with_cn
     m["per_lad_counts"] = {LANCS_14[k]: v for k, v in per_lad.items()}
     m["candidates_no_postcode_in_detail"] = no_pc
