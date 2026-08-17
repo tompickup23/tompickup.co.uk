@@ -738,6 +738,204 @@ SOURCES = [
         ),
     ),
     dict(
+        id="fsa_approved_establishments",
+        name="FSA approved food establishments (meat/dairy/fish/egg plants)",
+        hosts=["mac", "vps"],
+        globs=["raw/fsa_approved_establishments_*.csv"],
+        snapshot_date=_from_name(r"fsa_approved_establishments_(\d{4}-\d{2}-\d{2})"),
+        as_at="1 August 2026 edition",
+        licence=OGL,
+        source_url="https://ckan.publishing.service.gov.uk/dataset/approved-food-establishments",
+        notes=(
+            "5,336 rows nationally (177 match a Lancashire GeographicLocalAuthority "
+            "value), monthly editions. AppNo + TradingName + full address + Postcode, "
+            "plus ~50 Part A/B activity-section flag columns (meat, dairy, fish, eggs, "
+            "gelatine, collagen etc) and species/establishment-type flags (Cutting "
+            "Plant, Cold Store, Slaughterhouse, Factory Vessel...). Distinct from FHRS "
+            "(already in bronze): this is the EU/UK approval-number register for "
+            "high-risk food premises, which FHRS ratings do not cover. Candidate A7, "
+            "verified 17 Aug 2026; the page's own resource list was checked via the "
+            "CKAN API to confirm this is the live August 2026 edition, not a stale "
+            "cached filename."
+        ),
+    ),
+    dict(
+        id="mmo_fishing_vessels",
+        name="MMO UK fishing vessel lists (under-10m and over-10m)",
+        hosts=["mac", "vps"],
+        globs=[
+            "raw/mmo_under10m_vessel_list_*.xlsx",
+            "raw/mmo_over10m_vessel_list_*.xlsx",
+        ],
+        snapshot_date=_from_name(r"vessel_list_(\d{4}-\d{2})"),
+        as_at="1 August 2026 edition",
+        licence=OGL,
+        source_url=(
+            "https://www.gov.uk/government/statistical-data-sets/"
+            "vessel-lists-10-metres-and-under + "
+            "https://www.gov.uk/government/statistical-data-sets/"
+            "vessel-lists-over-10-metres"
+        ),
+        notes=(
+            "Two monthly workbooks, unioned as one source: under-10m (3,517 rows, "
+            "55 Fleetwood-administrative-port) and over-10m (1,000 rows, 20 "
+            "Fleetwood). Administrative port, home port, PLN, vessel name, RSS "
+            "number, licence number, PO membership, length/tonnage/engine power, "
+            "year built, hull material, licence category, shellfish/scallop licence "
+            "flags. Duplicate rows exist per vessel where multiple licence "
+            "categories apply (stated in the workbook's own notes row). "
+            "Administrative/home port fields are the Lancashire join surface "
+            "(Fleetwood). Candidate A8, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="heritage_fund_awards",
+        name="National Lottery Heritage Fund grant awards (own 360Giving export)",
+        hosts=["mac", "vps"],
+        globs=["raw/heritage_fund_nlhf_360data_*.csv"],
+        snapshot_date=_mtime,
+        as_at="edition to 30 June 2026",
+        licence=OGL,
+        source_url="https://www.heritagefund.org.uk/about/insight/open-data",
+        notes=(
+            "Three CSVs covering 1995-2004, 2004-2013 and 2013-2026 (49,041 rows "
+            "total, 1,167 Lancashire-name-matched on Recipient Org:Location:Name or "
+            "Beneficiary Location:Name). NOT redundant with the existing "
+            "lottery_grants source (DCMS API): this is the Heritage Fund's own "
+            "360Giving export and carries BOTH Recipient Org:Location AND "
+            "Beneficiary Location as separate geographic-code fields, which the "
+            "main DCMS API does not split out, plus Charity Number and Company "
+            "Number columns the DCMS API lacks entirely. Identifiers are "
+            "360G-NLHF-prefixed and should crosswalk to matching rows inside the "
+            "lottery_grants source's own 'identifier' field where both exist. "
+            "Candidate B4, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="sport_england_grants",
+        name="Sport England grant awards, April 2009 to March 2022 (360Giving)",
+        hosts=["mac", "vps"],
+        globs=["raw/sport_england_grants_*.xlsx"],
+        snapshot_date=_mtime,
+        as_at="April 2009 to March 2022 edition",
+        licence=OGL + " (attribution string required, see notes)",
+        source_url="https://www.sportengland.org/our-work/open-data/",
+        notes=(
+            "35,916 rows nationally, not yet Lancashire-filtered. Recipient Org "
+            "Postal Code AND Latitude/Longitude present (richer geography than "
+            "most 360Giving exports), plus up to 4 Beneficiary Location fields "
+            "with geographic codes. Coverage stops at March 2022: no newer edition "
+            "was found on the open-data page as at 17 Aug 2026, so treat as a "
+            "closed historical window, not a live feed, until a refreshed file "
+            "appears. Mandatory attribution string quoted verbatim on the source "
+            "page: 'Contains public sector grants data from Sport England, <year "
+            "of publication>, licensed under the Open Government Licence v3.0, "
+            "accessed on <DD/MM/YY>.' Candidate B5 (grants half only; the Active "
+            "Places facility register is CC BY 4.0 on an ArcGIS Hub platform with "
+            "no single-file/API export, not attempted this session). Verified 17 "
+            "Aug 2026."
+        ),
+    ),
+    dict(
+        id="gro_places_of_worship",
+        name="GRO certified places of worship (HM Passport Office)",
+        hosts=["mac", "vps"],
+        globs=["raw/gro_places_of_worship_*.ods"],
+        snapshot_date=_mtime,
+        as_at="18 March 2015 edition",
+        licence=OGL,
+        source_url=(
+            "https://www.data.gov.uk/dataset/143fdbae-daae-45b1-b970-061dcaaf109f/"
+            "places-of-worship"
+        ),
+        notes=(
+            "Places of worship registered for marriages under the Marriage Act. "
+            "STALE: the file is the 18 March 2015 edition and no newer resource "
+            "was found on data.gov.uk after a direct search; any registrations "
+            "since 2015 (new-build mosques, gurdwaras, churches etc) are absent "
+            "and this must ship with a hard vintage caption, never as a current "
+            "count. Candidate B7, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="lancs_community_foundation_grants",
+        name="Community Foundation for Lancashire and Merseyside grant awards (360Giving)",
+        hosts=["mac", "vps"],
+        globs=["raw/lancs_community_foundation_grants_*.xlsx"],
+        snapshot_date=_from_name(r"lancs_community_foundation_grants_(\d{4}-\d{2})"),
+        as_at="quarterly editions 2022-23 through 2025-26",
+        licence="Creative Commons Attribution 4.0 International (CC BY 4.0), NOT OGL",
+        source_url="https://lancsfoundation.org.uk/grants-awarded",
+        notes=(
+            "Four annual 360Giving workbooks (2022-23 through 2025-26), 1,702 "
+            "grants total, not yet Lancashire-vs-Merseyside split (the foundation "
+            "covers both counties jointly; location fields need parsing to "
+            "isolate Lancashire). Grants to individuals and direct donations are "
+            "deliberately excluded from the published data (the foundation's own "
+            "privacy policy, stated on the source page). Licence is CC BY 4.0, "
+            "quoted verbatim on the page: 'This work is licensed under the "
+            "Creative Commons Attribution 4.0 International License... the data "
+            "must [be attributed]'; NOT OGL, a step beyond the usual licence check "
+            "this session otherwise used (same class as coops_uk_open_data). "
+            "Candidate B9, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="givefood_foodbanks",
+        name="Give Food UK food bank locations (Trussell + independent + IFAN)",
+        hosts=["mac", "vps"],
+        globs=["raw/givefood_foodbanks.csv"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence="no formal open licence; good-faith reuse with attribution, see notes",
+        source_url="https://www.givefood.org.uk/api/",
+        notes=(
+            "4,639 rows (name, address, postcode, ward, district, parliamentary "
+            "constituency + MP, charity number where registered, network: "
+            "Trussell/Independent/IFAN, closed flag), maintained by Give Food "
+            "(registered charity 1188192) and mirrored to a public GitHub repo "
+            "this session fetched from. No stated open licence: the source's own "
+            "'Rules' page says only 'Do good with the data, and credit us with a "
+            "link when you use it,' plus a request not to reorder/modify item "
+            "lists where present. Treat as good-faith reuse with mandatory "
+            "attribution to Give Food, never claim OGL or any formal licence "
+            "class for this source. SAFEGUARDING CAVEAT: these are addresses of a "
+            "vulnerable-people-facing service; apply the same presentation care "
+            "as other such layers, no added precision beyond what the food banks "
+            "themselves publish, and check for any delisting requests before "
+            "publication. Candidate B10, verified 17 Aug 2026; IFAN's own site is "
+            "a postcode-lookup tool only with no bulk export (BLOCKED-scrape-"
+            "only, not attempted directly, this file already merges IFAN-network "
+            "entries via Give Food's own 'network' column)."
+        ),
+    ),
+    dict(
+        id="hmrc_nmw_naming_round23",
+        name="HMRC National Minimum Wage naming scheme, Round 23 (March 2026)",
+        hosts=["mac", "vps"],
+        globs=["raw/hmrc_nmw_naming_round23.xlsx"],
+        snapshot_date=_mtime,
+        as_at="Round 23, published 19 March 2026",
+        licence=OGL,
+        source_url=(
+            "https://www.gov.uk/government/news/"
+            "hundreds-of-employers-handed-penalties-for-illegally-underpaying-workers"
+        ),
+        notes=(
+            "388 named employers, one round only (historical rounds are separate "
+            "editions not pulled this session). Employer/Company name, Trading "
+            "Name, Partial Postcode, Region, Local Authority, Constituency, LPC "
+            "Low Paying Sector, ONS SIC sector/division/activity, Arrears, Number "
+            "of Workers, arrears period. 14 rows match a Lancashire Local "
+            "Authority. NAMED-EMPLOYER REGISTER: DATA-INTEGRITY / LEGAL.md amber, "
+            "register-verbatim facts only, ingest for internal evidence, nothing "
+            "publishes without the solicitor-cleared wording pattern. Candidate "
+            "A14b, verified 17 Aug 2026. The companion HMRC deliberate tax "
+            "defaulters list (A14a) is OGL but HTML-table-only with no bulk file, "
+            "not ingested this session."
+        ),
+    ),
+    dict(
         id="ocds",
         name="OCDS contract notices cache (supplier identifiers)",
         hosts=["mac", "vps"],
@@ -749,6 +947,89 @@ SOURCES = [
         notes=(
             "Supplier identifier scheme is GB-COH, which is why these 329 "
             "mappings become deterministic crosswalk edges in M3."
+        ),
+    ),
+
+    # --- Companies House derived captures (M2) -----------------------------
+    # These three are NOT raw source files and are marked so. Companies House
+    # deletes the PSC snapshot and the monthly accounts archives from its own
+    # download index on a short retention, and our fetchers delete the zips
+    # after parsing to keep the disk inside its guard. The extractor output is
+    # therefore the ONLY immutable capture of those editions that exists
+    # anywhere, which is exactly the audit-trail job bronze does. Registering
+    # them here keeps the M2 rule intact (silver reads bronze, never a live
+    # fetch) instead of pointing silver at a mutable working directory.
+    # capture="derived-extract" marks the distinction so no later session
+    # mistakes them for as-published bytes.
+    dict(
+        id="ch_psc_extract",
+        name="Companies House PSC snapshot, parsed extract",
+        hosts=["vps"],
+        capture="derived-extract",
+        globs=[
+            "/opt/observatory/out/corporate_psc_all.jsonl.gz",
+            "/opt/observatory/out/lancs_psc.jsonl.gz",
+            "/opt/observatory/out/psc_summary.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://download.companieshouse.gov.uk/en_pscdata.html",
+        notes=(
+            "Parsed from the daily PSC snapshot by refresh_psc.py, which "
+            "deletes the source zip after use. lancs_psc holds every PSC kind "
+            "for Lancashire-registered companies; corporate_psc_all holds "
+            "every corporate-entity PSC nationally, which is the group "
+            "structure input. psc_summary.json carries the line counts the "
+            "silver checks assert against."
+        ),
+    ),
+    dict(
+        id="ch_accounts_ixbrl",
+        name="Companies House iXBRL accounts, parsed extract",
+        hosts=["vps"],
+        capture="derived-extract",
+        globs=[
+            "/opt/observatory/out/lancs_accounts.jsonl.gz",
+            "/opt/observatory/out/accounts_progress.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://download.companieshouse.gov.uk/en_accountsdata.html",
+        notes=(
+            "Parsed from the monthly Accounts_Monthly_Data archives by "
+            "etl_accounts.py. Companies House keeps only 13 monthly archives "
+            "online, so an unparsed month is gone for good. No file-level "
+            "asAt: the reference date is record-level (period_end), per "
+            "DATA-INTEGRITY s4. accounts_progress.json is the per-month "
+            "filing and parse-failure ledger."
+        ),
+    ),
+    dict(
+        id="gazette_notices",
+        name="The Gazette corporate insolvency notices, Lancashire candidates",
+        hosts=["vps"],
+        capture="derived-extract",
+        globs=[
+            "/root/observatory-data/processed/gazette_corporate_all.jsonl",
+            "/root/observatory-data/processed/gazette_lancs.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL + " / Crown copyright (The Gazette)",
+        source_url=(
+            "https://www.thegazette.co.uk/all-notices/notice/data.feed"
+            "?category-code=24"
+        ),
+        notes=(
+            "Candidate set gathered by fetch_gazette.py over postcode-centroid "
+            "circles. The feed does NOT honour category-code=24 when the "
+            "location parameters are present, so the candidate file also "
+            "contains category 25 personal insolvency, 29 deceased estates "
+            "and 16 planning notices. The silver builder drops everything "
+            "outside category 24 by explicit code rule and asserts the "
+            "dropped counts."
         ),
     ),
 ]
