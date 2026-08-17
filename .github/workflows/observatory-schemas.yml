@@ -1,0 +1,89 @@
+# Observatory serve-layer schema gate.
+#
+# The pipeline runs on vps-main, not here, so CI cannot rebuild the warehouse.
+# What it CAN do is assert that whatever biz-*.json is on main is the shape it
+# is contracted to be, which is the half of the gate that catches a hand edit,
+# a bad merge or a cron run that wrote something unexpected before anybody
+# reads the page.
+#
+# Same schema files as the local gate (scripts/observatory/warehouse/schemas/),
+# so a local pass and a CI pass are the same assertion rather than two similar
+# ones. check-jsonschema is the runner here; check_schemas.py is the runner
+# locally and adds the V-R3 measurement and the V-L1 tripwire on top.
+#
+# No secrets, no deploy, no interpolation of any GitHub event value into a
+# shell command: every value below is a literal path in the checkout.
+
+name: Observatory schemas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/data/biz-*.json'
+      - 'public/data/company/**'
+      - 'scripts/observatory/warehouse/schemas/**'
+      - 'scripts/observatory/warehouse/check_schemas.py'
+      - '.github/workflows/observatory-schemas.yml'
+  pull_request:
+    paths:
+      - 'public/data/biz-*.json'
+      - 'public/data/company/**'
+      - 'scripts/observatory/warehouse/schemas/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  schemas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install the validators
+        run: pip install --quiet 'check-jsonschema>=0.38,<1' 'jsonschema>=4.20'
+
+      - name: Validate each published file against its schema
+        env:
+          SCHEMAS: scripts/observatory/warehouse/schemas
+        run: |
+          set -euo pipefail
+          for f in overview areas watch growth pound innovation money \
+                   companies-index changes; do
+            echo "--- biz-$f.json"
+            check-jsonschema --schemafile "$SCHEMAS/biz-$f.schema.json" \
+              "public/data/biz-$f.json"
+          done
+
+      - name: Validate every company dossier
+        env:
+          SCHEMAS: scripts/observatory/warehouse/schemas
+        run: |
+          set -euo pipefail
+          # One invocation over the whole set: 1,046 files, and a per-file loop
+          # would spend more time starting Python than validating.
+          check-jsonschema --schemafile "$SCHEMAS/company-dossier.schema.json" \
+            public/data/company/*.json
+
+      - name: Gates V-T3, V-R3 and V-L1, and the house-style sweep
+        run: |
+          set -euo pipefail
+          python3 scripts/observatory/warehouse/check_schemas.py \
+            --serve public/data --dossiers \
+            --out /tmp/observatory-schemas.json
+
+      - name: Upload the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: observatory-schema-report
+          path: /tmp/observatory-schemas.json
+          if-no-files-found: ignore

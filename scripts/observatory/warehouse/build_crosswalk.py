@@ -474,8 +474,22 @@ def main():
            f"across {len(web_inputs)} snapshot(s)")
 
     # --- D6 Gazette notice-stated numbers ----------------------------------
+    # One edge per company number ACROSS snapshots, keeping the earliest
+    # snapshot that observed it, which is what D4 and D5 already do.
+    #
+    # This diverged until M5 and nothing noticed, because there was exactly one
+    # gazette snapshot in silver. The moment a second landed, every company
+    # appearing in both produced two edges carrying the same decision_id and
+    # the crosswalk's own double-load gate fired on 20 of them. The gate was
+    # right and the tier was wrong: `gazette:<crn>` says "this number appeared
+    # on a notice", which is one decision however many editions of the
+    # candidate file record it.
+    #
+    # With a single snapshot present this is byte-identical to the previous
+    # behaviour, so the M3 baseline is unaffected.
     gz_parts = sorted((SV.silver_dir() / "gazette_notices").glob("snapshot_date=*"))
     gz_edges = 0
+    gz_seen = {}
     for p in gz_parts:
         pq = str(p / "part.parquet")
         snap = p.name.split("=", 1)[1]
@@ -492,12 +506,16 @@ def main():
             GROUP BY company_number
         """).fetchall()
         for cn, name, sha in rows:
-            edges.append(edge("GB-COH", cn, "gazette", name, snap, sha,
-                              decision_id=f"gazette:{cn}"))
-            gz_edges += 1
+            if cn not in gz_seen:
+                gz_seen[cn] = (name, snap, sha)
         inputs.append({"layer": "silver", "table": "gazette_notices",
                        "snapshot": snap, "companyNumbers": len(rows)})
-    SV.log(f"D6 Gazette: {gz_edges:,} notice-stated company numbers")
+    for cn, (name, snap, sha) in gz_seen.items():
+        edges.append(edge("GB-COH", cn, "gazette", name, snap, sha,
+                          decision_id=f"gazette:{cn}"))
+        gz_edges += 1
+    SV.log(f"D6 Gazette: {gz_edges:,} notice-stated company numbers across "
+           f"{len(gz_parts)} snapshot(s)")
 
     # --- validate + land ----------------------------------------------------
     import pandas as pd  # noqa: E402  (arrives with splink)

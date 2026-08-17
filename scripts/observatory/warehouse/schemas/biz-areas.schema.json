@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tompickup.co.uk/schemas/observatory/biz-areas.schema.json",
+  "title": "biz-areas.json",
+  "description": "Per-area drill data, keyed by slug. This file is where gate V-T3 lives: a modelled figure may only appear in a whitelisted key and may not appear without its caption. unregisteredModelled is the only modelled count the observatory publishes and unregisteredNote is the caption DATA-INTEGRITY s2 makes mandatory for it.",
+  "type": "object",
+  "required": [
+    "$meta"
+  ],
+  "properties": {
+    "$meta": {
+      "$ref": "#/$defs/meta"
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "generated"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "minLength": 4
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "Gate V-R3 wants asAt AND retrievedAt AND licence on every entry. The live contract carries name, url, retrieved and licence and no asAt at all, so the schema requires the fields the contract has and check_schemas.py counts the gap. Raising asAt to required here would block every deploy over a change that moves published files.",
+            "required": [
+              "name",
+              "licence"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string"
+              },
+              "retrieved": {
+                "type": "string"
+              },
+              "asAt": {
+                "type": "string"
+              },
+              "licence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pct": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "crn": {
+      "type": "string",
+      "pattern": "^[0-9A-Z]{8}$",
+      "description": "Every Companies House registered number is exactly eight uppercase alphanumerics. The narrower two-letters-plus-six-digits test rejects 99 real companies, 93 of them pre-1922 Northern Ireland R-prefix registrations (DATA-INTEGRITY s9.3)."
+    },
+    "areaBody": {
+      "type": "object",
+      "properties": {
+        "sectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "sic2"
+            ],
+            "properties": {
+              "sic2": {
+                "type": "string"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "live": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "distressCleanPct": {
+                "$ref": "#/$defs/pct"
+              },
+              "new3yr": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "sizeBands": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "legalStatus": {
+          "type": "object"
+        },
+        "wholeEconomy": {
+          "$ref": "#/$defs/wholeEconomy"
+        },
+        "vcse": {
+          "type": "object"
+        },
+        "addressClusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cluster"
+          }
+        },
+        "gazelleCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "innovationAwardsM": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "wholeEconomy": {
+      "type": "object",
+      "description": "V-T3. The modelled slice carries its own caption or it does not ship.",
+      "properties": {
+        "registeredCompanies": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "registeredUnincorporated": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "unregisteredModelled": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "unregisteredNote": {
+          "type": "string",
+          "minLength": 20
+        },
+        "selfEmploymentIncomeM": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "selfEmploymentIncomeYear": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "premisesFhrs": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "premisesVoa": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "premisesCqc": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "unregisteredModelled"
+            ],
+            "properties": {
+              "unregisteredModelled": {
+                "type": "integer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "unregisteredNote"
+            ],
+            "properties": {
+              "unregisteredNote": {
+                "pattern": "[Mm]odelled",
+                "description": "The caption has to say the word. A note that does not name the figure as modelled is not a caption."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "selfEmploymentIncomeM"
+            ],
+            "properties": {
+              "selfEmploymentIncomeM": {
+                "type": "number"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "selfEmploymentIncomeYear"
+            ],
+            "description": "V-R2: an HMRC income figure joined to a monthly register snapshot renders its own year."
+          }
+        }
+      ]
+    },
+    "cluster": {
+      "type": "object",
+      "required": [
+        "postcode",
+        "companies",
+        "note"
+      ],
+      "description": "LEGAL.md: cluster notes carry observable facts only. The vocabulary ban is enforced here as a schema rule rather than a review habit.",
+      "properties": {
+        "postcode": {
+          "type": "string"
+        },
+        "lad": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "companies": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "distressPct": {
+          "$ref": "#/$defs/pct"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 10,
+          "not": {
+            "pattern": "(?i)(shell|siphon|fraud|bogus|sham)"
+          }
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^[a-z0-9-]+$": {
+      "$ref": "#/$defs/areaBody"
+    }
+  }
+}
