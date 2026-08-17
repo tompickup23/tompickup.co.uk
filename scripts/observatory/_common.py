@@ -97,7 +97,8 @@ def download(url, dest, days=7, headers=None, timeout=120, stream=True):
     if fresh(dest, days):
         log(f"cache hit {dest.name} ({dest.stat().st_size/1e6:.1f} MB)")
         return dest
-    h = {"User-Agent": UA}
+    # gzip/deflate only: the vps brotli decoder rejects some NOMIS br responses
+    h = {"User-Agent": UA, "Accept-Encoding": "gzip, deflate"}
     if headers:
         h.update(headers)
     log(f"GET {url}")
@@ -115,7 +116,8 @@ def download(url, dest, days=7, headers=None, timeout=120, stream=True):
 
 def get_json(url, headers=None, timeout=60, params=None, retries=3):
     import requests
-    h = {"User-Agent": UA}
+    # gzip/deflate only: the vps brotli decoder rejects some NOMIS br responses
+    h = {"User-Agent": UA, "Accept-Encoding": "gzip, deflate"}
     if headers:
         h.update(headers)
     last = None
