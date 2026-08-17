@@ -81,7 +81,7 @@ def search_locality(circle):
                 break
             root = etree.fromstring(r.content)
         except Exception as e:  # noqa
-            log(f"  {term} p{page} error: {e}")
+            log(f"  {postcode}/{radius}mi p{page} error: {e}")
             break
         total_el = root.find(GZ + "total")
         total = int(total_el.text) if total_el is not None and total_el.text else 0
