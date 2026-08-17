@@ -181,6 +181,54 @@ def write_partition(src, snap, files, bronze, dry, gsha):
         _dt.datetime.utcfromtimestamp(p.stat().st_mtime) for p in files
     ).strftime("%Y-%m-%d") if files else None
 
+    # A manifest describes the PARTITION, not the files this run happened to
+    # resolve. Those differ the moment a source file changes: the new bytes
+    # land in a new snapshot_date, the old bytes stay where they were landed,
+    # and nothing at the source path resolves to the old partition any more.
+    # Rewriting from `entries` alone then silently unclaims the files already
+    # sitting there, and check_bronze reports them as "present on disk, absent
+    # from manifest" (seen live 17 Aug 2026: a concurrent session regenerated
+    # processed/pound.json, so the July partition lost its claim on the July
+    # pound.json and pound_review_queue.json).
+    #
+    # So: carry forward every entry whose file is still present in the
+    # partition, re-verifying its hash rather than trusting the old record. A
+    # carried entry that no longer hashes to its recorded value is corruption,
+    # not drift, and it stops the build.
+    carried = []
+    old = {}
+    if manifest_path.exists():
+        try:
+            with open(manifest_path) as f:
+                old = json.load(f)
+        except (ValueError, OSError):
+            old = {}
+        have = {e["name"] for e in entries}
+        for e in old.get("files", []):
+            if e["name"] in have:
+                continue
+            on_disk = part / e["name"]
+            if not on_disk.exists():
+                continue
+            digest = sha256(on_disk)
+            if digest != e.get("sha256"):
+                raise SystemExit(
+                    f"FATAL: {on_disk} is in the manifest but its bytes have "
+                    f"changed.\n  manifest {e.get('sha256')}\n  on disk  {digest}\n"
+                    "Bronze is immutable; this is corruption, not a new edition.")
+            carried.append(e)
+        if carried:
+            log(f"  ^ carried {len(carried)} earlier entr"
+                f"{'y' if len(carried) == 1 else 'ies'} still in this partition: "
+                f"{', '.join(e['name'] for e in carried)}")
+    entries = carried + entries
+    entries.sort(key=lambda e: e["name"])
+
+    # retrievedAt is the earliest capture in the partition. Carrying an older
+    # entry forward must not make the partition look newer than it is.
+    if carried and old.get("retrievedAt"):
+        retrieved = min(retrieved, old["retrievedAt"]) if retrieved else old["retrievedAt"]
+
     manifest = {
         "source": src["id"],
         "sourceName": src["name"],
@@ -203,6 +251,12 @@ def write_partition(src, snap, files, bronze, dry, gsha):
         "manifestWrittenAt": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "pipelineGitSha": gsha,
     }
+    # Tombstones survive a rewrite, on the same rule as the redaction block and
+    # clearedFaults: a partition that was repaired or redacted says so forever,
+    # otherwise the next rewrite quietly launders its own history.
+    for k in ("manifestRepair", "redaction"):
+        if old.get(k) and k not in manifest:
+            manifest[k] = old[k]
     if dry:
         log(f"  ~ would write {manifest_path}")
         return manifest
