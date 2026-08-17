@@ -360,9 +360,9 @@ def suite_marts(pb, con, as_of):
 
     pq = latest(gold, "mart_supplier_identifiers")
     if pq:
-        df = load(con, pq, "supplier_key, company_number, evidence, "
-                           "in_production_edition")
-        flags(df, "in_production_edition")
+        df = load(con, pq, "decision_id, supplier_key, company_number, "
+                           "evidence, in_production_edition, is_ambiguous")
+        flags(df, "in_production_edition", "is_ambiguous")
         v = (pb.Validate(
                 data=df, tbl_name="gold/mart_supplier_identifiers",
                 label="OCDS supplier identifications, from the crosswalk",
@@ -378,6 +378,14 @@ def suite_marts(pb, con, as_of):
              # each, so the projection collapsing on the name is harmless here
              # even though it reads position as meaning.
              .rows_distinct(columns_subset=["decision_id"])
+             # A name that award notices attach to two company numbers is
+             # refused by the projection, so the population of ambiguous rows
+             # is expected to be small and is worth a warning when it moves.
+             # It is not an error: the ambiguity is in the source, and the
+             # right response to it is already implemented.
+             .col_vals_eq(columns="is_ambiguous", value=0,
+                          thresholds=pb.Thresholds(warning=1, error=0.10,
+                                                   critical=0.25))
              # F2 CLEARED. in_production_edition is now the reconciliation
              # column: it says which of these identifications the LEGACY path
              # is also producing, which is how the two paths are shown to agree

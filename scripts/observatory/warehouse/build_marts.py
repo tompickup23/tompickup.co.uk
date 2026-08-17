@@ -583,6 +583,13 @@ def build_supplier_identifiers(con, h, args):
            any_value(evidence_class) AS evidence_class,
            any_value(confidence)     AS confidence,
            list_sort(list(DISTINCT source_snapshot)) AS source_snapshots,
+           -- A supplier name that award notices attach to two different
+           -- company numbers is an ambiguity, not a merger (s11.5). The
+           -- crosswalk already refuses to give those a shared decision id;
+           -- the mart carries the fact forward as a column because the
+           -- projection collapses on the NAME and would otherwise publish
+           -- whichever of the two rows happened to sort last.
+           starts_with(decision_id, 'ocds-ambiguous') AS is_ambiguous,
            (source_name_norm IN {prod_sql}) AS in_production_edition
     FROM read_parquet('{edge_pq}')
     WHERE matcher = 'ocds'
@@ -596,9 +603,25 @@ def build_supplier_identifiers(con, h, args):
     in_prod = con.execute(
         f"SELECT count(*) FROM read_parquet('{f}') "
         "WHERE in_production_edition").fetchone()[0]
+    ambiguous = con.execute(
+        f"SELECT count(*) FROM read_parquet('{f}') WHERE is_ambiguous"
+    ).fetchone()[0]
+    ambiguous_names = con.execute(
+        f"SELECT count(DISTINCT supplier_key) FROM read_parquet('{f}') "
+        "WHERE is_ambiguous").fetchone()[0]
+    # The whole point of the column: among the rows a consumer may publish,
+    # one name must mean one company number. If this ever returns a row the
+    # projection would be choosing between two identifications by sort order.
+    dup = con.execute(
+        f"SELECT count(*) FROM (SELECT supplier_key FROM read_parquet('{f}') "
+        "WHERE NOT is_ambiguous GROUP BY 1 "
+        "HAVING count(DISTINCT company_number) > 1)").fetchone()[0]
+    SV.assert_equal("unambiguous names with more than one company number",
+                    dup, 0)
     M.log(f"  {rows} OCDS identifications in the crosswalk, {in_prod} of them "
           f"also on the legacy path, {rows - in_prod} carried by the crosswalk "
-          "alone")
+          f"alone; {ambiguous} row(s) over {ambiguous_names} name(s) are "
+          "ambiguous and are refused, not published")
     return dict(
         table="mart_supplier_identifiers", snapshot=snap, rows=rows,
         nbytes=nbytes,
@@ -606,7 +629,10 @@ def build_supplier_identifiers(con, h, args):
                  "snapshot": snap}],
         assertions={"identifications": rows,
                     "alsoOnTheLegacyPath": in_prod,
-                    "carriedByTheCrosswalkAlone": rows - in_prod},
+                    "carriedByTheCrosswalkAlone": rows - in_prod,
+                    "ambiguousRowsRefused": ambiguous,
+                    "ambiguousNamesRefused": ambiguous_names,
+                    "unambiguousNamesWithTwoCompanyNumbers": dup},
         cleared_faults=[
             {"id": "F2", "ref": "DATA-INTEGRITY s11.2",
              "what": "fetch_ocds_ids.py read a path that existed only on the "
@@ -620,7 +646,10 @@ def build_supplier_identifiers(con, h, args):
              "alsoPresentOnTheLegacyPath": in_prod,
              "clearedIn": "fix/observatory-faults-f2-f7"}],
         notes=("An identifier-observed edge: a buyer wrote the company number "
-               "on an award notice and we read it. Confidence 1.0, no score."))
+               "on an award notice and we read it. Confidence 1.0, no score. "
+               "is_ambiguous marks a supplier name that award notices attach "
+               "to two different company numbers; those names resolve to no "
+               "company at all rather than to whichever row sorts last."))
 
 
 def _production_ocds_names():

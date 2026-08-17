@@ -333,13 +333,24 @@ def project_all(root, reproduce_ocds_fault, h):
     # produces these same identifications and the two paths agree.
     # --reproduce-ocds-fault restores the empty map the pre-fix editions
     # carried, which is the only way to reproduce one of those editions.
-    where = " WHERE in_production_edition" if reproduce_ocds_fault else ""
+    # NOT is_ambiguous, always. This dict is keyed on the supplier NAME, so a
+    # name that award notices attach to two company numbers would resolve to
+    # whichever row sorted last: a coin toss published as an identification.
+    # Ambiguity is never a merger (DATA-INTEGRITY s11.5), so those names
+    # resolve to no company. The filter is outside the fault flag because it
+    # is not part of the fault: reproducing a pre-fix edition must not
+    # reproduce a bug we never shipped.
+    where = (" WHERE NOT is_ambiguous AND in_production_edition"
+             if reproduce_ocds_fault else " WHERE NOT is_ambiguous")
     rows = con.execute(
         "SELECT supplier_key, company_number, evidence "
         f"FROM read_parquet('{spq}'){where}").fetchall()
     by_name = {r[0]: {"crn": r[1], "evidence": r[2]} for r in rows}
     total = con.execute(
         f"SELECT count(*) FROM read_parquet('{spq}')").fetchone()[0]
+    refused = con.execute(
+        f"SELECT count(DISTINCT supplier_key) FROM read_parquet('{spq}') "
+        "WHERE is_ambiguous").fetchone()[0]
     (P / "ocds_supplier_ids.json").write_text(json.dumps(
         {"byName": by_name,
          "source": "gold/mart_supplier_identifiers",
@@ -347,8 +358,10 @@ def project_all(root, reproduce_ocds_fault, h):
                              else None)}))
     M.log(f"  processed/ocds_supplier_ids.json: {len(by_name)} of {total} "
           f"identifications ("
-          f"{'fault reproduced' if reproduce_ocds_fault else 'full crosswalk set'})")
+          f"{'fault reproduced' if reproduce_ocds_fault else 'full crosswalk set'}"
+          f"), {refused} ambiguous name(s) refused")
     report["ocds"] = {"emitted": len(by_name), "inCrosswalk": total,
+                      "ambiguousNamesRefused": refused,
                       "faultReproduced": reproduce_ocds_fault}
 
     con.close()
