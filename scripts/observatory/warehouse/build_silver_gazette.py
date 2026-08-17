@@ -6,15 +6,22 @@ bronze/source=gazette_notices/snapshot_date=.../
     gazette_lancs.json            the resolved, postcode-confirmed subset
   -> silver/gazette_notices/snapshot_date=.../part.parquet
 
-**The category filter is not optional and it is not the fetcher's.** The fetcher
-asks the feed for category-code=24 (corporate insolvency), but the feed does not
-honour that parameter when the location parameters are present, so the candidate
-file also contains category 25 personal insolvency, category 29 deceased estates
-and category 16 planning notices, all naming private individuals. Personal
-insolvency is excluded entirely by legal rule. This builder therefore drops
-every notice whose code is outside category 24 by explicit rule and asserts the
-dropped counts, exactly like the Companies House prefix exclusions. Nothing
-downstream may re-admit them.
+**The category filter is not optional, and this builder keeps its own copy of
+it.** The fetcher asks the feed for category-code=24 (corporate insolvency), but
+the feed does not honour that parameter when the location parameters are
+present, so a geo search returns category 25 personal insolvency, category 29
+deceased estates and category 16 planning notices too, all naming private
+individuals. Personal insolvency is excluded entirely by legal rule.
+
+fetch_gazette.py now drops everything outside category 24 before it writes the
+candidate file, so a file produced by a current fetcher run makes the drop
+counts below zero. That is the expected reading, not a broken assertion: this
+builder still drops every notice whose code is outside category 24 by explicit
+rule and still asserts the counts, exactly like the Companies House prefix
+exclusions, because a candidate file predating that fix, or a fetcher change
+that regresses it, must not be able to put a person in this table. A non-zero
+count here means the fetcher's filter did not run. Nothing downstream may
+re-admit them.
 
 What a row may assert, per DATA-INTEGRITY s3: the notice fact, verbatim and
 dated. Not that a company is insolvent beyond what the notice says, and nothing
@@ -154,10 +161,13 @@ def main():
                     "withParsableCrn": with_crn,
                     "inPublishedLancsSubset": published_hit},
         notes=("Category 24 only. The feed ignores category-code=24 when the "
-               "location parameters are present, so the candidate file carries "
+               "location parameters are present, so a candidate file written "
+               "before the fetcher gained its own category filter carries "
                "personal insolvency, deceased estates and planning notices; "
                "they are dropped here by explicit code rule and the counts are "
-               "asserted. A row asserts the notice fact and nothing further."))
+               "asserted. Zero drops means the fetcher filtered first, which "
+               "is the expected state. A row asserts the notice fact and "
+               "nothing further."))
     con.close()
     return 0
 
