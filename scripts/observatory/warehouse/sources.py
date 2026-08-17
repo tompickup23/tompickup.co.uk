@@ -1032,6 +1032,120 @@ SOURCES = [
             "dropped counts."
         ),
     ),
+
+    # --- Entity resolution inputs (M3) -------------------------------------
+    # The scheme axis for the crosswalk. Vendored rather than fetched at build
+    # time so a crosswalk edge minted today still resolves its scheme code in
+    # five years, and pinned by hash so a silently republished codelist cannot
+    # change what GB-COH means underneath an edge already written.
+    dict(
+        id="org_id_guide",
+        name="org-id.guide organisation identifier codelist",
+        hosts=["mac", "vps"],
+        globs=["raw/org-id-guide-codelist-*.json"],
+        snapshot_date=_from_name(r"codelist-(\d{4}-\d{2}-\d{2})"),
+        as_at="2026-07-31",
+        licence="Creative Commons Attribution (org-id.guide)",
+        source_url="https://org-id.guide/download.json",
+        notes=(
+            "565 identifier lists, 25 of them GB. The codelist OCDS, BODS and "
+            "360Giving all normatively reference, which is why our crosswalk "
+            "uses its scheme codes rather than inventing an id vocabulary. "
+            "asAt is the register repository commit the published codelist "
+            "was generated from, github.com/org-id/register at "
+            "f500b45f6c2a6f8b7c54eddbfb7628e73e3f01c7 dated 2026-07-31. "
+            "Schemes this project needs and the codelist provides: GB-COH, "
+            "GB-CHC, GB-SC, GB-NIC, GB-MPR, GB-NHS, GB-EDU, GB-UKPRN, "
+            "GB-CASC. Sources with no org-id list (NNDR ratepayer rolls, "
+            "council supplier ledgers, verified websites, FHRS) carry LOCAL "
+            "scheme codes that are labelled local in the crosswalk and are "
+            "never presented as standard codes."
+        ),
+    ),
+
+    # The four production matchers whose decisions M3 migrates into crosswalk
+    # edges. Each is our own output, not a publisher's bytes, so all four are
+    # derived-extract captures: registering them is what lets the crosswalk
+    # builder read a frozen, hashed copy instead of a working directory that
+    # the next monthly run will overwrite.
+    dict(
+        id="matcher_pound",
+        name="Pound council spend supplier resolution output",
+        hosts=["vps", "mac"],
+        capture="derived-extract",
+        globs=[
+            "processed/pound.json",
+            "processed/supplier_universe.json",
+            "processed/pound_review_queue.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence="Derived from council transparency data (OGL v3.0)",
+        source_url="https://tompickup.co.uk/observatory/",
+        notes=(
+            "build_pound.py resolves council supplier ledger names to "
+            "companies using an ALIASES canonicalisation table and an "
+            "OVERRIDES map of hand-verified supplier-to-CRN decisions. Those "
+            "decisions are the highest-precision tier we hold and they become "
+            "deterministic crosswalk edges in M3."
+        ),
+    ),
+    dict(
+        id="matcher_websites",
+        name="Verified company website matcher output",
+        hosts=["vps", "mac"],
+        capture="derived-extract",
+        globs=[
+            "processed/websites.jsonl",
+            "processed/websites_summary.json",
+            "processed/website_seeds.json",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence="Derived, mixed sources",
+        source_url="https://tompickup.co.uk/observatory/",
+        notes=(
+            "verify_websites.py fetches a candidate domain and accepts it "
+            "only on hard on-page evidence, principally the company number "
+            "printed in the footer. It is the zero-false-positive tier and "
+            "becomes deterministic crosswalk edges to a LOCAL website scheme."
+        ),
+    ),
+    dict(
+        id="matcher_nndr",
+        name="NNDR ratepayer to company matcher output",
+        hosts=["vps", "mac"],
+        capture="derived-extract",
+        globs=["processed/nndr_presence.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence="Derived from council NNDR publications (OGL v3.0)",
+        source_url="https://tompickup.co.uk/observatory/",
+        notes=(
+            "build_nndr.py matches published ratepayer names to companies. "
+            "Hyndburn withholds names and Wyre publishes premises without "
+            "them, so absence of a match is never absence of a premises "
+            "(DATA-INTEGRITY s3)."
+        ),
+    ),
+    dict(
+        id="matcher_ocds",
+        name="OCDS supplier organisation identifier mappings",
+        hosts=["vps", "mac"],
+        capture="derived-extract",
+        globs=["processed/ocds_supplier_ids.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://www.find-tender.service.gov.uk/",
+        notes=(
+            "fetch_ocds_ids.py reads the organisation identifier block that "
+            "Find a Tender and Contracts Finder publish against award "
+            "notices. Those blocks already carry org-id scheme codes, which "
+            "is why they drop into the crosswalk unchanged rather than being "
+            "re-derived."
+        ),
+    ),
 ]
 
 BY_ID = {s["id"]: s for s in SOURCES}
