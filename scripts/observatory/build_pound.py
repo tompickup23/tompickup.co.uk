@@ -89,6 +89,13 @@ def primary_parent(candidates):
     """The corporate PSC the published ownership chain names, by the rule above."""
     return min(candidates, key=_parent_sort_key)
 
+# Joint control is classified by its least-local controller: a company is
+# rooted only if EVERY live corporate controller resolves rooted, and the
+# published chain is the controller that sets the tier. Ties keep the
+# _parent_sort_key ordering. (DATA-INTEGRITY s14.4)
+TIER_SEVERITY = {"tradingExternal": 3, "councilOwned": 2, "unclassified": 1,
+                 "rooted": 0}
+
 print("loading lancs individual PSCs...")
 indiv = defaultdict(list)     # lancs crn -> [{postcode, country_of_residence}]
 with gzip.open(VPS / "lancs_psc.jsonl.gz", "rt") as f:
@@ -214,6 +221,35 @@ def is_lancs_individuals(crn):
                   and p["postcode"].split()[0] in lancs_outcodes)
     return n_lancs * 2 >= len(ps)
 
+def _walk_parent(p, depth, seen):
+    """Resolve ONE corporate PSC to (tier, chain): the single-chain rule."""
+    pname = p.get("name") or ""
+    if PUBLIC_RE.search(normalise(pname)):
+        return "councilOwned", [{"name": pname, "where": "public body"}]
+    preg = p.get("registration_number") or ""
+    country = (p.get("country_registered") or "").lower()
+    if not preg or not re.fullmatch(r"[0-9A-Za-z]{6,8}", preg) or (
+            country and "england" not in country and "wales" not in country
+            and "united kingdom" not in country and "scotland" not in country
+            and "northern ireland" not in country):
+        where = p.get("country_registered") or "unknown jurisdiction"
+        return "tradingExternal", [{"name": pname, "where": where}]
+    tier, chain = walk(preg.zfill(8) if preg.isdigit() else preg,
+                       depth + 1, seen)
+    where = "Lancashire" if preg in lancs_crn else (p.get("postcode") or "UK")
+    link = [{"name": pname, "crn": preg, "where": where}]
+    if tier == "unclassified" and chain == []:
+        # terminal parent with no further data: locate it
+        if preg in lancs_crn:
+            li = is_lancs_individuals(preg)
+            if li:
+                return "rooted", link
+            if li is False:
+                return "tradingExternal", link
+            return "unclassified", link
+        return "tradingExternal", link
+    return tier, link + chain
+
 def walk(crn, depth=0, seen=None):
     """-> (tier, chain[list of {name, crn, where}])"""
     seen = seen or set()
@@ -222,33 +258,12 @@ def walk(crn, depth=0, seen=None):
     seen.add(crn)
     corp = parents.get(crn, [])
     if corp:
-        p = primary_parent(corp)
-        pname = p.get("name") or ""
-        if PUBLIC_RE.search(normalise(pname)):
-            return "councilOwned", [{"name": pname, "where": "public body"}]
-        preg = p.get("registration_number") or ""
-        country = (p.get("country_registered") or "").lower()
-        if not preg or not re.fullmatch(r"[0-9A-Za-z]{6,8}", preg) or (
-                country and "england" not in country and "wales" not in country
-                and "united kingdom" not in country and "scotland" not in country
-                and "northern ireland" not in country):
-            where = p.get("country_registered") or "unknown jurisdiction"
-            return "tradingExternal", [{"name": pname, "where": where}]
-        tier, chain = walk(preg.zfill(8) if preg.isdigit() else preg,
-                           depth + 1, seen)
-        where = "Lancashire" if preg in lancs_crn else (p.get("postcode") or "UK")
-        link = [{"name": pname, "crn": preg, "where": where}]
-        if tier == "unclassified" and chain == []:
-            # terminal parent with no further data: locate it
-            if preg in lancs_crn:
-                li = is_lancs_individuals(preg)
-                if li:
-                    return "rooted", link
-                if li is False:
-                    return "tradingExternal", link
-                return "unclassified", link
-            return "tradingExternal", link
-        return tier, link + chain
+        best = None
+        for p in sorted(corp, key=_parent_sort_key):
+            t, ch = _walk_parent(p, depth, set(seen))
+            if best is None or TIER_SEVERITY[t] > TIER_SEVERITY[best[0]]:
+                best = (t, ch)
+        return best
     li = is_lancs_individuals(crn)
     if li:
         return "rooted", []
