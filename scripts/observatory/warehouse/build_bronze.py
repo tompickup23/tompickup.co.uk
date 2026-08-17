@@ -142,6 +142,11 @@ def write_partition(src, snap, files, bronze, dry, gsha):
         "asAt": S.resolve(src["as_at"], files[0]) if files else None,
         "retrievedAt": retrieved,
         "licence": src["licence"],
+        # as-published = the bytes the publisher served. derived-extract = our
+        # own parse of a source whose raw bytes are gone (Companies House
+        # retention). Both are immutable once landed; only one is evidence of
+        # what the publisher actually said, so the distinction is recorded.
+        "capture": src.get("capture", "as-published"),
         "sourceUrl": src["source_url"],
         "notes": src["notes"],
         "hosts": src["hosts"],
