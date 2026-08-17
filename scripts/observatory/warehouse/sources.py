@@ -289,6 +289,109 @@ SOURCES = [
         ),
     ),
     dict(
+        id="nhsbsa_contractors",
+        name="NHSBSA Contractor Details (pharmacies + dispensing GP practices)",
+        hosts=["mac", "vps"],
+        globs=["raw/nhsbsa_contractor_details_*.csv"],
+        snapshot_date=_from_name(r"nhsbsa_contractor_details_(\d{4}-\d{2})", 1),
+        as_at="2026-07 edition",
+        licence=OGL,
+        source_url="https://opendata.nhsbsa.net/dataset/contractor-details",
+        notes=(
+            "21,209 rows, monthly. Name+trading name+full address+postcode+"
+            "phone for every pharmacy/appliance/dispensing-GP contractor "
+            "account in England (plus Crown Dependencies). 692 rows match a "
+            "Lancashire postcode area. CONTRACTOR_TYPE distinguishes single "
+            "contractors, multiples (Boots, Bestway, 5+ shop chains) and "
+            "practice dispensaries. Candidate A1, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="nhs_payments_gp",
+        name="NHS payments to general practice, England 2024-25 (practice-level)",
+        hosts=["mac", "vps"],
+        globs=["raw/nhs_payments_gp_2024-25_practice.csv"],
+        snapshot_date=_mtime,
+        as_at="2024-25 financial year",
+        licence=OGL,
+        source_url=(
+            "https://digital.nhs.uk/data-and-information/publications/"
+            "statistical/nhs-payments-to-general-practice/england-2024-25"
+        ),
+        notes=(
+            "6,375 GP practices nationally (196 Lancashire-postcode), named "
+            "practice + address + postcode + PCN + Sub ICB, with ~40 payment-"
+            "category columns and Total NHS Payments to General Practice. "
+            "Public money to (mostly) private GP partnerships, per the "
+            "candidate note. Candidate A2, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="gambling_commission",
+        name="Gambling Commission public register (business licence data)",
+        hosts=["mac", "vps"],
+        globs=[
+            "raw/gambling_commission_businesses.csv",
+            "raw/gambling_commission_licences.csv",
+        ],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://www.gamblingcommission.gov.uk/public-register/businesses/download",
+        notes=(
+            "OPERATOR licences (remote/non-remote betting, bingo, casino, "
+            "arcade, lottery), NOT premises addresses: businesses.csv is "
+            "Account Number + Licence Account Name only (2,656 rows), "
+            "licences.csv adds licence number/status/type/activity/dates "
+            "(4,518 rows). Premises-level betting shop/arcade addresses are "
+            "NOT in this register (that is council licensing, SOURCES-"
+            "CANDIDATES section A item 15, not attempted this session). "
+            "Name-only join, no CRN in this extract. Candidate A4, verified "
+            "17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="coops_uk_open_data",
+        name="Co-operatives UK open dataset (organisations)",
+        hosts=["mac", "vps"],
+        globs=["raw/coops_uk_open_data_*.csv"],
+        snapshot_date=_from_name(r"coops_uk_open_data_(\d{4}-\d{2})", 1),
+        as_at="2026-07 edition",
+        licence="Open Data Commons Attribution License (ODC-BY v1.0), NOT OGL",
+        source_url="https://www.uk.coop/resources/open-data",
+        notes=(
+            "1,941 co-operatives nationally (19 Lancashire LAD-matched). "
+            "Registered Number + Registrar (Companies House or FCA) gives a "
+            "clean CRN/society-number split (83 CH, 754 FCA nationally). "
+            "Unusually rich geography: LAD, ward, LSOA, MSOA, parish and "
+            "constituency codes AND names already resolved, plus SIC codes "
+            "at 3 levels. Licence is ODC-BY v1.0, the first non-OGL/non-CC0 "
+            "licence in either verification sweep: read the full terms "
+            "before republication, attribution wording differs from OGL's. "
+            "Candidate B1, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
+        id="hmrc_casc",
+        name="HMRC Community Amateur Sports Club (CASC) register",
+        hosts=["mac", "vps"],
+        globs=["raw/hmrc_casc_register.ods"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url=(
+            "https://www.gov.uk/government/publications/"
+            "community-amateur-sports-clubs-casc-registered-with-hmrc--2"
+        ),
+        notes=(
+            "8,126 clubs nationally (229 Lancashire-postcode). Organisation "
+            "Name + address + postcode only, no registration number of any "
+            "kind: name-only join throughout. Grassroots sports clubs "
+            "invisible to the CH/CC register spine, per the candidate note. "
+            "Candidate B2, verified 17 Aug 2026."
+        ),
+    ),
+    dict(
         id="census_ts066_lsoa",
         name="Census 2021 TS066 economic activity status, LSOA",
         hosts=["mac", "vps"],
