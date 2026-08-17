@@ -1206,6 +1206,73 @@ SOURCES = [
         ),
     ),
     dict(
+        id="fca_register",
+        name="FCA Financial Services Register, firms matched to observatory CRNs",
+        hosts=["mac"],
+        capture="derived-extract",
+        globs=["raw/fca/fca_register_lancs.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=(
+            "FCA Financial Services Register, public register data. Attribution "
+            "to the FCA required on any use; re-use subject to the FCA's own "
+            "terms."
+        ),
+        source_url="https://register.fca.org.uk/services/V0.1",
+        notes=(
+            "LOOKUP ONLY, and that is a finding rather than a limitation of "
+            "this fetcher. The V0.1 API has no bulk download and no geographic "
+            "query: tested 17 Aug 2026, a search for BB11 returns nothing and "
+            "a search for PR1 returns a firm with PR1 in its NAME, so the "
+            "postcode printed in a search result is display text and not an "
+            "index. A Lancashire firm cannot be enumerated, only confirmed. "
+            "Pagination WAS checked and does advance properly, unlike "
+            "Contracts Finder (s11.2). "
+            "What makes it worth holding: the per-firm record publishes a "
+            "Companies House Number, so this is a DETERMINISTIC crosswalk "
+            "source (GB-COH edge), not a fuzzy one. A row lands only where the "
+            "FCA-published company number EQUALS the CRN searched for, which "
+            "is evidence_class identifier-observed at confidence 1.0. A name "
+            "match never lands one: the search is loosely ranked and a query "
+            "for barclays returns PEAC Business Finance Limited first. "
+            "Population is the dossier companies, not the whole register."
+        ),
+    ),
+    dict(
+        id="ch_disqualified_officers",
+        name="Companies House disqualified officers, candidates against dossier officers",
+        hosts=["mac"],
+        capture="derived-extract",
+        globs=["raw/ch_disqualified/disqualified_candidates.json"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://api.company-information.service.gov.uk/search/disqualified-officers",
+        notes=(
+            "REGISTER OF INDIVIDUALS: LEGAL.md amber, and this file publishes "
+            "NOTHING. Every row carries publication=BLOCKED and is a CANDIDATE "
+            "for human checking, never a finding. "
+            "Scope is the officers already named on observatory dossiers, "
+            "because those are the only people a published surface could put a "
+            "disqualification beside; 103,468 CRNs of raw lookups would be "
+            "neither proportionate nor useful. "
+            "MATCH RULE, which is the whole point: a candidate requires "
+            "normalised name agreement AND date of birth equal on BOTH month "
+            "and year. The dossier officer list carries no DOB, so the sweep "
+            "first reads it from /company/{crn}/officers; an officer with no "
+            "published DOB is not swept at all, because there would be nothing "
+            "to test a name against. Matching on name alone would attach a "
+            "disqualification to a namesake, which is the most damaging false "
+            "positive available to this project. "
+            "Even a passing match is not identity: a name plus a month and year "
+            "of birth is a strong candidate and no more. "
+            "Rate limit is 600 requests per 5 minute window per key and the key "
+            "is shared with the monthly refresh, so the fetcher reads "
+            "x-ratelimit-remain and parks itself with a reserve rather than "
+            "racing the pipeline for the window."
+        ),
+    ),
+    dict(
         id="ukfinance_postcode_lending",
         name="UK Finance postcode lending, SME, H2 2025 edition",
         hosts=["mac"],
