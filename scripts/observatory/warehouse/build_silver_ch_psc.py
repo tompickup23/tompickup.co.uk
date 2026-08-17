@@ -46,6 +46,13 @@ def main():
            f"{summary.get('snapshot_date')}")
 
     con, dv = SV.connect()
+    # file_ordinal is the row's position in the extractor's output, and it is
+    # load-bearing rather than cosmetic: build_pound.py calls parents[crn][0]
+    # "the primary corporate parent", which is simply whichever corporate PSC
+    # row the file happens to list first. Without the ordinal the warehouse
+    # cannot reproduce which parent the site publishes. See the M4 finding in
+    # DATA-INTEGRITY s11.12.
+    con.execute("SET preserve_insertion_order=true")
     SV.log(f"duckdb {dv}")
     inputs_common = {"layer": "bronze", "source": "ch_psc_extract",
                      "snapshotDate": snap}
@@ -58,8 +65,8 @@ def main():
     # is that no complete row repeats, so the builder takes DISTINCT over every
     # value column and reports how many exact copies that removed. An exact
     # copy carries no information and can only come from a double read.
-    lancs_sql = f"""
-    SELECT DISTINCT
+    lancs_typed = f"""
+    SELECT
       company_number,
       kind,
       nullif(trim(name), '')                       AS name,
@@ -79,8 +86,10 @@ def main():
       (kind LIKE 'corporate-entity-%')             AS is_corporate,
       (kind LIKE '%beneficial-owner')              AS is_beneficial_owner,
       DATE '{snap}'                                AS snapshot_date,
-      '{lancs_sha}'                                AS source_sha256
-    FROM read_json('{lancs}', format='newline_delimited',
+      '{lancs_sha}'                                AS source_sha256,
+      file_ordinal
+    FROM (SELECT *, row_number() OVER () AS file_ordinal
+          FROM read_json('{lancs}', format='newline_delimited',
                    columns={{
                      'company_number': 'VARCHAR', 'kind': 'VARCHAR',
                      'name': 'VARCHAR',
@@ -88,11 +97,15 @@ def main():
                      'nationality': 'VARCHAR', 'country_of_residence': 'VARCHAR',
                      'postcode': 'VARCHAR', 'natures_of_control': 'VARCHAR[]',
                      'ceased_on': 'VARCHAR'
-                   }})
+                   }}))
     """
-    raw_l = con.execute(
-        f"SELECT count(*) FROM ({lancs_sql.replace('SELECT DISTINCT', 'SELECT', 1)})"
-    ).fetchone()[0]
+    # DISTINCT over every value column, keeping the EARLIEST position each
+    # distinct row appeared at. An exact duplicate carries no information and
+    # can only come from a double read, but its position does.
+    lancs_sql = (f"SELECT * EXCLUDE (file_ordinal), "
+                 f"min(file_ordinal) AS file_ordinal "
+                 f"FROM ({lancs_typed}) GROUP BY ALL ORDER BY file_ordinal")
+    raw_l = con.execute(f"SELECT count(*) FROM ({lancs_typed})").fetchone()[0]
     SV.assert_equal("lancs_psc rows as extracted", raw_l, summary["lancs_psc"])
 
     out_l = SV.table_dir("ch_psc", snap)
@@ -154,14 +167,17 @@ def main():
       try_strptime(nullif(trim(ceased_on), ''), '%Y-%m-%d')::DATE AS ceased_on,
       (nullif(trim(ceased_on), '') IS NULL)         AS active,
       DATE '{snap}'                                 AS snapshot_date,
-      '{corp_sha}'                                  AS source_sha256
-    FROM read_json('{corp}', format='newline_delimited',
+      '{corp_sha}'                                  AS source_sha256,
+      file_ordinal
+    FROM (SELECT *, row_number() OVER () AS file_ordinal
+          FROM read_json('{corp}', format='newline_delimited',
                    columns={{
                      'company_number': 'VARCHAR', 'name': 'VARCHAR',
                      'registration_number': 'VARCHAR',
                      'country_registered': 'VARCHAR', 'legal_form': 'VARCHAR',
                      'postcode': 'VARCHAR', 'ceased_on': 'VARCHAR'
-                   }})
+                   }}))
+    ORDER BY file_ordinal
     """
     out_c = SV.table_dir("ch_psc_corporate", snap)
     SV.log("writing ch_psc_corporate")
