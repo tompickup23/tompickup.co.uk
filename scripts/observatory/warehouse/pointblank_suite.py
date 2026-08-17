@@ -386,16 +386,24 @@ def suite_marts(pb, con, as_of):
              .col_vals_eq(columns="is_ambiguous", value=0,
                           thresholds=pb.Thresholds(warning=1, error=0.10,
                                                    critical=0.25))
-             # F2 CLEARED. in_production_edition is now the reconciliation
-             # column: it says which of these identifications the LEGACY path
-             # is also producing, which is how the two paths are shown to agree
-             # rather than assumed to. A row the crosswalk holds and the
-             # repaired fetcher does not is worth a warning and not a failure,
-             # because the crosswalk keeps every edition of every matcher and
-             # a buyer can withdraw a notice.
+             # F2 CLEARED. in_production_edition is the reconciliation column:
+             # it says which of these identifications the LEGACY path is also
+             # producing, which is how the two paths are shown to agree rather
+             # than assumed to.
+             #
+             # WARN ONLY, and the reason is a rule about gate shape rather than
+             # about this column. It compares a warehouse table against a file
+             # OUTSIDE the warehouse: processed/ocds_supplier_ids.json is a
+             # fetcher output, not a versioned artefact, and it can legitimately
+             # be absent, stale, or an edition behind. A build that FAILS
+             # because an external file disagrees is the same mistake V-R1
+             # already learned: a gate that fails a monthly run over a file
+             # nothing derived from gets switched off, and then it guards
+             # nothing. The assertion that must never bend is already a hard
+             # SQL assert in build_marts: no unambiguous supplier name may hold
+             # two company numbers.
              .col_vals_eq(columns="in_production_edition", value=1,
-                          thresholds=pb.Thresholds(warning=1, error=0.25,
-                                                   critical=0.50))
+                          thresholds=pb.Thresholds(warning=1))
              .interrogate())
         out.append(("mart_supplier_identifiers", v))
 
