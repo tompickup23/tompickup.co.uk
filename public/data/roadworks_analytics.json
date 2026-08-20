@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-20T06:38:13.911460+00:00",
+    "generated": "2026-08-20T18:32:43.111115+00:00",
     "live_works": 1447,
     "archived_works": 16983,
     "total_analysed": 18430
@@ -501,73 +501,73 @@
     "west_lancashire": {
       "active": 171,
       "completed_30d": 492,
-      "completed_90d": 1635,
+      "completed_90d": 1606,
       "trend": "stable"
     },
     "preston": {
       "active": 159,
       "completed_30d": 416,
-      "completed_90d": 1209,
+      "completed_90d": 1195,
       "trend": "stable"
     },
     "south_ribble": {
       "active": 150,
       "completed_30d": 441,
-      "completed_90d": 1171,
+      "completed_90d": 1150,
       "trend": "stable"
     },
     "lancaster": {
       "active": 142,
       "completed_30d": 372,
-      "completed_90d": 1169,
+      "completed_90d": 1155,
       "trend": "stable"
     },
     "wyre": {
       "active": 137,
       "completed_30d": 218,
-      "completed_90d": 704,
+      "completed_90d": 684,
       "trend": "stable"
     },
     "pendle": {
       "active": 124,
       "completed_30d": 254,
-      "completed_90d": 645,
+      "completed_90d": 637,
       "trend": "stable"
     },
     "chorley": {
       "active": 111,
       "completed_30d": 321,
-      "completed_90d": 915,
+      "completed_90d": 899,
       "trend": "stable"
     },
     "ribble_valley": {
       "active": 102,
       "completed_30d": 205,
-      "completed_90d": 543,
+      "completed_90d": 536,
       "trend": "stable"
     },
     "rossendale": {
       "active": 95,
       "completed_30d": 192,
-      "completed_90d": 567,
+      "completed_90d": 561,
       "trend": "stable"
     },
     "fylde": {
       "active": 94,
       "completed_30d": 254,
-      "completed_90d": 632,
+      "completed_90d": 625,
       "trend": "increasing"
     },
     "burnley": {
       "active": 88,
       "completed_30d": 206,
-      "completed_90d": 589,
+      "completed_90d": 579,
       "trend": "stable"
     },
     "hyndburn": {
       "active": 74,
       "completed_30d": 187,
-      "completed_90d": 522,
+      "completed_90d": 518,
       "trend": "stable"
     }
   },
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1118,
+        "days": 1119,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -632,7 +632,7 @@
       {
         "road": "Haslingden Old Road",
         "district": "hyndburn",
-        "days": 595,
+        "days": 596,
         "operator": "Lancashire County Council",
         "start_date": "2025-01-01T10:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -640,7 +640,7 @@
       {
         "road": "Chipping Road",
         "district": "ribble_valley",
-        "days": 405,
+        "days": 406,
         "operator": "Lancashire County Council",
         "start_date": "2025-07-10T09:00:00+00:00",
         "category": "Major"
@@ -648,7 +648,7 @@
       {
         "road": "Blackleach Lane",
         "district": "preston",
-        "days": 349,
+        "days": 350,
         "operator": "Lancashire County Council",
         "start_date": "2025-09-04T09:00:00+00:00",
         "category": "Major"
@@ -656,7 +656,7 @@
       {
         "road": "Lytham Road",
         "district": "fylde",
-        "days": 264,
+        "days": 265,
         "operator": "Lancashire County Council",
         "start_date": "2025-11-28T09:00:00+00:00",
         "category": "Major"
@@ -664,7 +664,7 @@
       {
         "road": "Henrietta Street",
         "district": "preston",
-        "days": 239,
+        "days": 240,
         "operator": "Electricity North West Limited",
         "start_date": "2025-12-23T09:00:00+00:00",
         "category": "Major"
@@ -686,6 +686,22 @@
         "category": "Major"
       },
       {
+        "road": "Millennium Way",
+        "district": "chorley",
+        "days": 227,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
+        "road": "Preston Road",
+        "district": "chorley",
+        "days": 227,
+        "operator": "Lancashire County Council",
+        "start_date": "2026-01-05T08:30:00+00:00",
+        "category": "Major"
+      },
+      {
         "road": "Colne Road",
         "district": "burnley",
         "days": 227,
@@ -694,25 +710,9 @@
         "category": "Major"
       },
       {
-        "road": "Millennium Way",
-        "district": "chorley",
-        "days": 226,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
-        "category": "Major"
-      },
-      {
-        "road": "Preston Road",
-        "district": "chorley",
-        "days": 226,
-        "operator": "Lancashire County Council",
-        "start_date": "2026-01-05T08:30:00+00:00",
-        "category": "Major"
-      },
-      {
         "road": "Manchester Road",
         "district": "burnley",
-        "days": 219,
+        "days": 220,
         "operator": "Lancashire County Council",
         "start_date": "2026-01-12T08:00:00+00:00",
         "category": "Major"
@@ -720,7 +720,7 @@
       {
         "road": "Belmont Road",
         "district": "chorley",
-        "days": 197,
+        "days": 198,
         "operator": "Lancashire County Council",
         "start_date": "2026-02-03T08:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -728,7 +728,7 @@
       {
         "road": "West Way",
         "district": "wyre",
-        "days": 168,
+        "days": 169,
         "operator": "Lancashire County Council",
         "start_date": "2026-03-04T08:00:00+00:00",
         "category": "Major"
@@ -736,7 +736,7 @@
       {
         "road": "Friday Street",
         "district": "chorley",
-        "days": 163,
+        "days": 164,
         "operator": "Lancashire County Council",
         "start_date": "2026-03-09T08:00:00+00:00",
         "category": "Major"
@@ -744,7 +744,7 @@
       {
         "road": "Copse Road",
         "district": "wyre",
-        "days": 153,
+        "days": 154,
         "operator": "Lancashire County Council",
         "start_date": "2026-03-19T08:00:00+00:00",
         "category": "Major"
@@ -752,7 +752,7 @@
       {
         "road": "Manchester Road",
         "district": "pendle",
-        "days": 149,
+        "days": 150,
         "operator": "Lancashire County Council",
         "start_date": "2026-03-23T07:30:00+00:00",
         "category": "Major"
@@ -776,13 +776,69 @@
       {
         "road": "New Scotland Road",
         "district": "pendle",
-        "days": 121,
+        "days": 122,
         "operator": "Lancashire County Council",
         "start_date": "2026-04-20T07:00:00+00:00",
         "category": "Major"
       }
     ],
     "overdue_works": [
+      {
+        "road": "Accrington Road",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Harold Street",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Lowerhouse Lane",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Market Street",
+        "district": "chorley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Ulnes Walton Lane",
+        "district": "chorley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Ulnes Walton Lane",
+        "district": "chorley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Wood Lane",
+        "district": "chorley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
       {
         "road": "Bryning Lane",
         "district": "fylde",
@@ -806,6 +862,46 @@
         "planned_end": "2026-08-20",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Burnley Road",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Burnley Road",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Little Street",
+        "district": "hyndburn",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "New Lane",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Whalley Road",
+        "district": "hyndburn",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Nelson Street",
@@ -864,6 +960,22 @@
         "category": "Major"
       },
       {
+        "road": "Leamington Avenue",
+        "district": "burnley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Todmorden Road",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Dickens Road",
         "district": "chorley",
         "operator": "United Utilities Water",
@@ -878,6 +990,14 @@
         "planned_end": "2026-08-19",
         "days_overdue": 0,
         "category": "Major"
+      },
+      {
+        "road": "Higher Meadow",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-08-20",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Magnolia Drive",
@@ -896,130 +1016,10 @@
         "category": "Standard"
       },
       {
-        "road": "Birkdale Close",
-        "district": "lancaster",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "M65 Junction 13 From A6068",
-        "district": "pendle",
-        "operator": "National Highways",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Immediate - Emergency"
-      },
-      {
-        "road": "Town House Road",
-        "district": "pendle",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "St Marys Street",
-        "district": "preston",
-        "operator": "BT",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Trafford Street",
-        "district": "preston",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Helmshore Road",
-        "district": "rossendale",
-        "operator": "BT",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Brindle Road",
-        "district": "south_ribble",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Immediate - Emergency"
-      },
-      {
-        "road": "Renshaw Drive",
-        "district": "south_ribble",
-        "operator": "BT",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Burnley Road",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Mill Street",
-        "district": "burnley",
-        "operator": "BT",
-        "planned_end": "2026-08-20",
-        "days_overdue": 0,
-        "category": "Minor"
-      },
-      {
-        "road": "Serpentine Road",
-        "district": "burnley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Bank Hall Drive",
+        "road": "The Common",
         "district": "chorley",
         "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Pear Tree Road",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "The Willows",
-        "district": "chorley",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Standard"
-      },
-      {
-        "road": "Larbreck Avenue",
-        "district": "fylde",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-19",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Mains Lane",
-        "district": "fylde",
-        "operator": "Lancashire County Council",
-        "planned_end": "2026-08-19",
+        "planned_end": "2026-08-20",
         "days_overdue": 0,
         "category": "Minor"
       }
