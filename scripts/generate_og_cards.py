@@ -146,6 +146,9 @@ def card(stat, label, eyebrow, source, out):
 
 
 CARDS = [
+    dict(out="two-wind-farms-one-view.png", eyebrow="Lancashire  ·  Planning", stat="702",
+         label="square kilometres would have a view of turbines of both wind farms. Neither applicant has assessed them together.",
+         source="Bare earth model, OS Terrain 50 and the applicants' own turbine schedules"),
     dict(out="who-owns-burnley.png", eyebrow="Burnley housing  ·  1 / 3", stat="27.4%",
          label="of Burnley home sales are now buy-to-let, the highest rate of any district in Lancashire.",
          source="HM Land Registry, 2025"),
