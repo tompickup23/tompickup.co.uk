@@ -3,6 +3,7 @@ title: "The state cannot see its own data centres"
 date: 2026-08-24T12:00:00
 description: "The ONS said today that data centres are not separately visible in the national accounts. The grid operator has a connection queue fourteen times its own forecast. And in January the government opened a faster consenting route without producing an impact assessment."
 image: "/images/data-centre-queue.png"
+ogImage: "/images/share/state-cannot-see-its-own-data-centres.png"
 imageCredit: "Chart: Tom Pickup, from NESO written evidence to the Environmental Audit Committee (DCU0081)"
 category: "National"
 subcategory: "Energy"
