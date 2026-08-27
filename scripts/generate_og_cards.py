@@ -146,6 +146,9 @@ def card(stat, label, eyebrow, source, out):
 
 
 CARDS = [
+    dict(out="lytham-supported-living.png", eyebrow="Lancashire  ·  Adult Social Care", stat="9",
+         label="self-contained apartments with 24-hour support are being built in Lytham St Annes, for people with a learning disability and autistic people.",
+         source="Lancashire County Council, August 2026"),
     dict(out="two-wind-farms-one-view.png", eyebrow="Lancashire  ·  Planning", stat="702",
          label="square kilometres would have a view of turbines of both wind farms. Neither applicant has assessed them together.",
          source="Bare earth model, OS Terrain 50 and the applicants' own turbine schedules"),
