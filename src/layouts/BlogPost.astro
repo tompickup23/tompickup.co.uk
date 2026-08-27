@@ -38,10 +38,20 @@ const rawContent = await Astro.slots.render('default');
 const textContent = rawContent.replace(/<[^>]*>/g, '');
 const wordCount = textContent.split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+
+/* Google truncates the title around 60 characters, and the brand suffix is the
+   least useful part of it: the site name is already carried by the WebSite node
+   and shown separately in search results. So append it only when it fits, rather
+   than pushing a headline out to 104 characters and losing the end of the claim. */
+const BRAND_SUFFIX = ' | Tom Pickup';
+const pageTitle =
+  frontmatter.title.length + BRAND_SUFFIX.length <= 60
+    ? frontmatter.title + BRAND_SUFFIX
+    : frontmatter.title;
 ---
 
 <Layout
-  title={`${frontmatter.title} | Tom Pickup`}
+  title={pageTitle}
   description={frontmatter.description}
   article={true}
   ogImage={frontmatter.ogImage || frontmatter.image || '/images/headshot.jpg'}

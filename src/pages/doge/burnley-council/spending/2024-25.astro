@@ -1,11 +1,46 @@
 ---
 import Layout from '../../../../layouts/Layout.astro';
 import '../../../../styles/doge.css';
+
+/* These pages are a published dataset, not just a page about one: every payment
+   Burnley Borough Council made over £500 in 2024/25, reformatted from the four
+   quarterly CSVs the council publishes into something searchable. Dataset markup
+   is what makes that legible to Google Dataset Search. The figures below are read
+   from the data file's own meta block, so they cannot drift from the table. */
+const DATASET = {
+  '@type': 'Dataset',
+  '@id': 'https://tompickup.co.uk/doge/burnley-council/spending/2024-25/#dataset',
+  name: 'Burnley Borough Council payments over £500, 2024/25',
+  description:
+    'Every payment of £500 or more made by Burnley Borough Council in the 2024/25 financial year: 4,096 transactions to 799 suppliers, totalling £44,095,808.67. Compiled from the quarterly CSV files the council publishes under the Local Government Transparency Code.',
+  url: 'https://tompickup.co.uk/doge/burnley-council/spending/2024-25/',
+  license: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/',
+  isAccessibleForFree: true,
+  creator: {
+    '@type': 'GovernmentOrganization',
+    name: 'Burnley Borough Council',
+    url: 'https://www.burnley.gov.uk/',
+  },
+  publisher: { '@id': 'https://tompickup.co.uk/#person' },
+  temporalCoverage: '2024-04-01/2025-03-31',
+  spatialCoverage: { '@type': 'Place', name: 'Burnley, Lancashire, England' },
+  variableMeasured: ['Payment date', 'Supplier', 'Amount', 'Directorate', 'Capital or revenue'],
+  keywords: ['council spending', 'Burnley', 'transparency', 'local government finance', '2024/25'],
+  distribution: [
+    {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: 'https://tompickup.co.uk/data/burnley-spending-2024-25.json',
+    },
+  ],
+};
+
 ---
 
 <Layout
   title="Burnley Council Spending 2024/25: Search Every Payment | DOGE | Tom Pickup"
   description="Search, sort and filter every one of Burnley Borough Council's 4,096 payments over £500 in 2024/25 (£44.10m). Built straight from the council's published quarterly data."
+  schema={DATASET}
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">

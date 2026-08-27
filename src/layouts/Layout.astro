@@ -17,6 +17,11 @@ interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
+  /* Page-specific structured data. When set it replaces the automatic
+     WebPage node; the BreadcrumbList is still emitted alongside it. */
+  schema?: Record<string, unknown>;
+  /* Overrides the last breadcrumb label, which is otherwise derived from the URL. */
+  breadcrumbLabel?: string;
 }
 
 const {
@@ -27,6 +32,8 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
+  schema,
+  breadcrumbLabel,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -38,9 +45,70 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const GOOGLE_SITE_VERIFICATION = 'vb4uNee1F78RASgAx6LVTwfRdyWz2XkrMoCc4RfJjKU';
 const googleSiteVerification =
   import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION;
+
 const isHome = Astro.url.pathname === '/';
 const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
 const maintenanceMode = false;
+
+/* Structured data for ordinary pages.
+
+   Articles bring their own NewsArticle + BreadcrumbList from BlogPost.astro and the
+   home page has its WebSite + Person graph, but until now every other page on the
+   site emitted no JSON-LD at all: /about/, /contact/, the whole DOGE section, the
+   LGR pages, and the legal pages. Rather than patch each one, the default is built
+   here from the URL, so a page added later cannot quietly regress. */
+const SEGMENT_LABELS: Record<string, string> = {
+  doge: 'DOGE',
+  lgr: 'Local Government Reorganisation',
+  lancs: 'Lancashire',
+  'burnley-council': 'Burnley Borough Council',
+  news: 'News',
+};
+
+function labelFor(segment: string): string {
+  if (SEGMENT_LABELS[segment]) return SEGMENT_LABELS[segment];
+  /* A financial year like 2025-26 is not a phrase to title case. */
+  if (/^\d{4}-\d{2}$/.test(segment)) return segment.replace('-', '/');
+  return segment
+    .split('-')
+    .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(' ');
+}
+
+const segments = Astro.url.pathname.split('/').filter(Boolean);
+
+const breadcrumbItems = [
+  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tompickup.co.uk/' },
+  ...segments.map((segment, i) => {
+    const isLast = i === segments.length - 1;
+    return {
+      '@type': 'ListItem',
+      position: i + 2,
+      name: isLast && breadcrumbLabel ? breadcrumbLabel : labelFor(segment),
+      item: `https://tompickup.co.uk/${segments.slice(0, i + 1).join('/')}/`,
+    };
+  }),
+];
+
+/* Home and articles are already covered elsewhere; adding a second WebPage node
+   for them would describe the same URL twice. */
+const emitDefaultSchema = !isHome && !article;
+
+const pageSchema = schema ?? {
+  '@type': 'WebPage',
+  '@id': canonicalURL.href,
+  url: canonicalURL.href,
+  name: title,
+  description,
+  inLanguage: 'en-GB',
+  isPartOf: { '@id': 'https://tompickup.co.uk/#website' },
+  about: { '@id': 'https://tompickup.co.uk/#person' },
+};
+
+const defaultGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [pageSchema, { '@type': 'BreadcrumbList', itemListElement: breadcrumbItems }],
+};
 ---
 
 <!doctype html>
@@ -113,6 +181,10 @@ const maintenanceMode = false;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+
+    {emitDefaultSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(defaultGraph)} />
+    )}
 
     {/* Site identity graph, home page only.
         WebSite.name is what Google uses to pick the site name shown in search and,
