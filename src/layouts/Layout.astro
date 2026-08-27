@@ -15,19 +15,29 @@ interface Props {
   ogImage?: string;
   article?: boolean;
   publishedTime?: string;
+  modifiedTime?: string;
   tags?: string[];
 }
 
 const {
   title,
-  description = 'Tom Pickup.',
+  description = 'Tom Pickup, Reform UK county councillor for Padiham and Burnley West and Cabinet Member for Adult Social Care. Investigations into how public money is spent in Lancashire.',
   ogImage = '/images/headshot.jpg',
   article = false,
   publishedTime,
+  modifiedTime,
   tags = [],
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Search Console ownership. tompickup.co.uk's DNS is at one.com, so this is the
+// HTML-tag method rather than a TXT record. The token is public (it ships in the
+// HTML of every verified site) and is hard-coded on purpose: this site deploys by
+// hand, and a build that quietly missed a .env would silently unverify the
+// property. Removing this tag breaks verification. Env var overrides if ever needed.
+const GOOGLE_SITE_VERIFICATION = 'vb4uNee1F78RASgAx6LVTwfRdyWz2XkrMoCc4RfJjKU';
+const googleSiteVerification =
+  import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION;
 const isHome = Astro.url.pathname === '/';
 const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
 const maintenanceMode = false;
@@ -44,6 +54,16 @@ const maintenanceMode = false;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
+
+    {/* Large image previews are a precondition for Google Discover and Top Stories
+        image treatment. Without this Google assumes a thumbnail-sized preview. */}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Feed autodiscovery -->
+    <link rel="alternate" type="application/rss+xml" title="Tom Pickup" href="https://tompickup.co.uk/rss.xml" />
 
     {/* MAINTENANCE MODE: Redirect all pages to coming-soon */}
     {maintenanceMode && !isComingSoon && (
@@ -76,8 +96,8 @@ const maintenanceMode = false;
     {article && publishedTime && (
       <meta property="article:published_time" content={publishedTime} />
     )}
-    {article && publishedTime && (
-      <meta property="article:modified_time" content={publishedTime} />
+    {article && (modifiedTime || publishedTime) && (
+      <meta property="article:modified_time" content={modifiedTime || publishedTime} />
     )}
     {article && (
       <meta property="article:author" content="https://tompickup.co.uk/about/" />
@@ -94,17 +114,56 @@ const maintenanceMode = false;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
 
-    <!-- Person Structured Data (home page only) -->
+    {/* Site identity graph, home page only.
+        WebSite.name is what Google uses to pick the site name shown in search and,
+        since Publisher Center stopped gating it, the publication title in Google News.
+        The Person node is the author entity every NewsArticle points back to. */}
     {isHome && (
       <script type="application/ld+json" set:html={JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: 'Tom Pickup',
-        url: Astro.site,
-        sameAs: [
-          'https://x.com/tompickup',
-          'https://www.facebook.com/tompickupburnley',
-          'https://www.instagram.com/tompickupburnley',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': 'https://tompickup.co.uk/#website',
+            name: 'Tom Pickup',
+            alternateName: 'Tom Pickup, Lancashire',
+            url: 'https://tompickup.co.uk/',
+            inLanguage: 'en-GB',
+            publisher: { '@id': 'https://tompickup.co.uk/#person' },
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: 'https://tompickup.co.uk/news/?q={search_term_string}',
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          },
+          {
+            '@type': 'Person',
+            '@id': 'https://tompickup.co.uk/#person',
+            name: 'Tom Pickup',
+            url: 'https://tompickup.co.uk/',
+            image: 'https://tompickup.co.uk/images/headshot.jpg',
+            jobTitle: 'County Councillor for Padiham and Burnley West',
+            worksFor: {
+              '@type': 'GovernmentOrganization',
+              name: 'Lancashire County Council',
+              url: 'https://www.lancashire.gov.uk/',
+            },
+            memberOf: { '@type': 'PoliticalParty', name: 'Reform UK' },
+            knowsAbout: [
+              'Local government finance',
+              'Adult social care',
+              'Public spending transparency',
+              'Lancashire',
+            ],
+            sameAs: [
+              'https://x.com/tompickup',
+              'https://www.facebook.com/tompickupburnley',
+              'https://www.instagram.com/tompickupburnley',
+            ],
+          },
         ],
       })} />
     )}

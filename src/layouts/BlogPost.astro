@@ -9,6 +9,7 @@ interface Props {
     description: string;
     tags: string[];
     featured?: boolean;
+    updated?: Date;
     image?: string;
     ogImage?: string;
     imageCredit?: string;
@@ -45,6 +46,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
   article={true}
   ogImage={frontmatter.ogImage || frontmatter.image || '/images/headshot.jpg'}
   publishedTime={frontmatter.date.toISOString()}
+  modifiedTime={(frontmatter.updated || frontmatter.date).toISOString()}
   tags={frontmatter.tags}
 >
   <!-- NewsArticle structured data -->
@@ -58,15 +60,18 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     headline: frontmatter.title,
     description: frontmatter.description,
     datePublished: frontmatter.date.toISOString(),
-    dateModified: frontmatter.date.toISOString(),
+    dateModified: (frontmatter.updated || frontmatter.date).toISOString(),
     image: (frontmatter.ogImage || frontmatter.image) ? [new URL((frontmatter.ogImage || frontmatter.image)!, Astro.site).href] : [],
     author: {
       '@type': 'Person',
+      '@id': 'https://tompickup.co.uk/#person',
       name: 'Tom Pickup',
       url: 'https://tompickup.co.uk/about/',
+      jobTitle: 'County Councillor for Padiham and Burnley West',
     },
     publisher: {
       '@type': 'Person',
+      '@id': 'https://tompickup.co.uk/#person',
       name: 'Tom Pickup',
       url: 'https://tompickup.co.uk/',
     },
@@ -74,6 +79,20 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
     wordCount: wordCount,
     keywords: frontmatter.tags.join(', '),
     inLanguage: 'en-GB',
+    ...(frontmatter.category ? { articleSection: frontmatter.subcategory
+      ? `${frontmatter.category} / ${frontmatter.subcategory}`
+      : frontmatter.category } : {}),
+    /* Local relevance is one of the factors Google names for News ranking.
+       Nearly everything here is about the same place, so say so. */
+    contentLocation: {
+      '@type': 'Place',
+      name: 'Lancashire, England',
+      address: {
+        '@type': 'PostalAddress',
+        addressRegion: 'Lancashire',
+        addressCountry: 'GB',
+      },
+    },
   })} />
 
   <!-- BreadcrumbList structured data -->

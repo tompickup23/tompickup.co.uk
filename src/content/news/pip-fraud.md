@@ -1,7 +1,7 @@
 ---
 title: "PIP Fraud Quadrupled to £410 Million. The Real Leak Is £5.4 Billion."
 date: 2026-06-19T18:00:00
-description: "Fraud in the disability benefit PIP quadrupled in a year. That is bad enough. But the same official figures show 6.8 billion pounds lost to benefit fraud across the board, most of it nowhere near PIP, in a system that writes the cheques and barely checks again."
+description: "Fraud in the disability benefit PIP quadrupled in a year. The same figures show £6.8 billion lost to benefit fraud overall, most of it nowhere near PIP."
 image: "/images/data-dashboard.jpg"
 ogImage: "/images/share/pip-fraud.png"
 category: "UK"

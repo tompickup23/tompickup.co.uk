@@ -148,3 +148,44 @@
   .bsp-table thead th, .bsp-table tbody td { padding: 9px 9px; }
   .doge-page { padding: 1.5rem 1rem 3rem; }
 }
+
+/* Server-rendered register facts on a company profile. Visible to crawlers and to
+   readers without JavaScript; removed by the page script once the full dossier
+   renders the same fields in its interactive grid. */
+.cp-register-facts {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.cp-register-facts h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--doge-muted, #9aa4ad);
+}
+.cp-register-facts dl {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) 1fr;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+}
+.cp-register-facts dt {
+  color: var(--doge-muted, #9aa4ad);
+  font-size: 0.875rem;
+}
+.cp-register-facts dd {
+  margin: 0;
+  font-weight: 500;
+}
+.cp-register-source {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--doge-muted, #9aa4ad);
+}
+@media (max-width: 560px) {
+  .cp-register-facts dl { grid-template-columns: 1fr; gap: 0.15rem; }
+  .cp-register-facts dd { margin-bottom: 0.6rem; }
+}

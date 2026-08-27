@@ -5,10 +5,24 @@ import { CONTACT_EMAIL } from '../../../../config';
 import '../../../../styles/doge.css';
 import '../../../../styles/lgr.css';
 import indexData from '../../../../../public/data/biz-companies-index.json';
+import fs from 'node:fs';
+import path from 'node:path';
 
-// One route per company in the index. The full dossier is fetched client-side
-// from /data/company/{crn}.json (same pattern as the area profiles), so the
-// build only carries the light index here.
+// One route per company in the index. The full dossier is still fetched client-side
+// from /data/company/{crn}.json for the interactive body, but the register facts are
+// also read at build time and rendered into the HTML below. Without that, every one
+// of these pages served byte-identical boilerplate to any crawler that does not run
+// JavaScript, which is what a duplicate-page cluster looks like from outside.
+const DOSSIER_DIR = path.resolve('./public/data/company');
+
+function readDossier(crn) {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(DOSSIER_DIR, `${crn}.json`), 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
 export function getStaticPaths() {
   return (indexData.companies || []).map((c) => ({
     params: { crn: c.crn },
@@ -19,12 +33,118 @@ export function getStaticPaths() {
 const { crn, name, lad } = Astro.props;
 const PROPS = JSON.stringify({ crn, name, lad });
 const subject = encodeURIComponent('Company profile correction: ' + name + ' (' + crn + ')');
+
+const dossier = readDossier(crn);
+const reg = dossier?.register ?? {};
+const pageUrl = `https://tompickup.co.uk/lancs/business/company/${crn}/`;
+
+function ukYear(dmy) {
+  if (!dmy) return null;
+  const m = String(dmy).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  return m ? m[3] : (String(dmy).match(/^(\d{4})/)?.[1] ?? null);
+}
+function isoDate(dmy) {
+  if (!dmy) return null;
+  const m = String(dmy).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;
+}
+
+const incorporatedYear = ukYear(reg.incorporated);
+const latestAccounts = (dossier?.accountsSeries ?? []).at(-1) ?? null;
+const paymentCount = (dossier?.payments ?? []).length;
+
+// Facts, in a fixed order, only where the register actually holds a value.
+const facts = [
+  ['Company number', crn],
+  ['Status', reg.status],
+  ['Company type', reg.companyType],
+  ['Incorporated', reg.incorporated],
+  ['Registered district', reg.lad ?? lad],
+  ['Registered postcode', reg.registeredPostcode],
+  ['Nature of business (SIC)', reg.sic],
+  ['Employees, latest accounts', latestAccounts?.employees != null
+    ? Number(latestAccounts.employees).toLocaleString('en-GB') : null],
+].filter(([, v]) => v != null && v !== '');
+
+// A description built from this company's own facts. Every one of these pages
+// previously shared a single 242-character boilerplate description.
+const descBits = [
+  reg.companyType ? `${reg.companyType.toLowerCase()}` : 'company',
+  incorporatedYear ? `incorporated ${incorporatedYear}` : null,
+  (reg.lad ?? lad) ? `registered in ${reg.lad ?? lad}` : null,
+  reg.status ? `status ${reg.status.toLowerCase()}` : null,
+].filter(Boolean).join(', ');
+
+const paymentsBit = paymentCount > 0
+  ? ` Council payments on record.`
+  : '';
+
+// Build up to the SERP limit by whole clauses. Cutting mid-word leaves a snippet
+// ending in "from...", which reads as broken rather than truncated.
+const descLead = `${name} (${crn}): ${descBits}.`;
+const descTail = ' Public register facts from Companies House and council spending.';
+const metaDescription = (descLead + paymentsBit + descTail).length <= 158
+  ? descLead + paymentsBit + descTail
+  : (descLead + paymentsBit).length <= 158
+    ? descLead + paymentsBit
+    : descLead.length <= 158
+      ? descLead
+      : `${name} (${crn}): public register facts, ${reg.lad ?? lad}, Lancashire.`;
+
+const pageTitle = `${name} (${crn}), ${reg.lad ?? lad} company records`;
+
+// WebPage about an Organization, not Organization on its own: this is a profile
+// of a third party built from public registers, it is not the company's own page.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+      url: pageUrl,
+      name: pageTitle,
+      description: metaDescription,
+      inLanguage: 'en-GB',
+      isPartOf: { '@id': 'https://tompickup.co.uk/#website' },
+      about: { '@id': `${pageUrl}#organization` },
+      ...(dossier?.$meta?.generated ? { dateModified: dossier.$meta.generated } : {}),
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${pageUrl}#organization`,
+      name,
+      identifier: crn,
+      ...(reg.chUrl ? { sameAs: [reg.chUrl] } : {}),
+      ...(dossier?.website ? { url: dossier.website } : {}),
+      ...(isoDate(reg.incorporated) ? { foundingDate: isoDate(reg.incorporated) } : {}),
+      ...(latestAccounts?.employees != null
+        ? { numberOfEmployees: { '@type': 'QuantitativeValue', value: latestAccounts.employees } }
+        : {}),
+      ...((reg.registeredPostcode || reg.lad || lad) ? {
+        address: {
+          '@type': 'PostalAddress',
+          ...(reg.registeredPostcode ? { postalCode: reg.registeredPostcode } : {}),
+          ...((reg.lad ?? lad) ? { addressLocality: reg.lad ?? lad } : {}),
+          addressRegion: 'Lancashire',
+          addressCountry: 'GB',
+        },
+      } : {}),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Lancashire', item: 'https://tompickup.co.uk/lancs/' },
+        { '@type': 'ListItem', position: 2, name: 'Business Observatory', item: 'https://tompickup.co.uk/lancs/business/' },
+        { '@type': 'ListItem', position: 3, name: 'Companies', item: 'https://tompickup.co.uk/lancs/business/companies/' },
+        { '@type': 'ListItem', position: 4, name, item: pageUrl },
+      ],
+    },
+  ],
+};
 ---
 
-<Layout
-  title={`${name}: company profile in public data | Lancashire Business Observatory`}
-  description={`A profile of ${name} (company ${crn}), built from Companies House, The Gazette, council spending and other public registers. Register facts with sources; assessments are Observatory opinion with their basis shown.`}
->
+<Layout title={pageTitle} description={metaDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <div class="doge-page" data-props={PROPS}>
     <nav class="doge-crumbs" aria-label="Breadcrumb">
       <a href="/lancs/">Lancashire</a>
@@ -43,6 +163,26 @@ const subject = encodeURIComponent('Company profile correction: ' + name + ' (' 
     </header>
 
     <p class="biz-footprint" id="cp-footprint"></p>
+
+    {facts.length > 0 && (
+      <section class="cp-register-facts">
+        <h2>Register facts</h2>
+        <dl>
+          {facts.map(([label, value]) => (
+            <>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </>
+          ))}
+        </dl>
+        {reg.chUrl && (
+          <p class="cp-register-source">
+            Source: <a href={reg.chUrl} rel="nofollow noopener" target="_blank">Companies House register entry for {name}</a>.
+            {dossier?.$meta?.generated && <> Snapshot taken {dossier.$meta.generated}.</>}
+          </p>
+        )}
+      </section>
+    )}
 
     <div id="cp-body"></div>
 
@@ -140,6 +280,13 @@ const subject = encodeURIComponent('Company profile correction: ' + name + ' (' 
 
     function render(d) {
       var reg = d.register || {};
+
+      // The register facts are rendered server-side so crawlers and no-JS readers
+      // get real content. Once the full dossier loads, the richer interactive
+      // version below supersedes it, so drop the static block to avoid showing
+      // the same fields twice.
+      var staticFacts = document.querySelector('.cp-register-facts');
+      if (staticFacts && staticFacts.parentNode) staticFacts.parentNode.removeChild(staticFacts);
 
       // header meta strip: status, CRN link, type, CIC
       var strip = document.getElementById('cp-meta-strip');

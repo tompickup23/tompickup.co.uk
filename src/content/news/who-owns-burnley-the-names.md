@@ -1,7 +1,7 @@
 ---
 title: "The Names Behind the Doors: Burnley's Biggest Property Owners"
 date: 2026-06-19T11:00:00
-description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The single biggest owner is not a local landlord. It is a faraway fund that owns the ground under more than a thousand Burnley homes and charges the people living in them for the privilege."
+description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The biggest owner is a faraway fund, not a local landlord."
 image: "/images/burnley-townscape.jpg"
 ogImage: "/images/share/who-owns-burnley-the-names.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

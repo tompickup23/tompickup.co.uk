@@ -1,19 +1,26 @@
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 
+// Google's news sitemap spec is explicit: include only articles published in the
+// last two days, and remove them after that. This file previously listed all 21
+// articles regardless of age, which advertised two-month-old pieces as breaking
+// news. Everything older is still discoverable through the main sitemap.
+const NEWS_WINDOW_DAYS = 2;
+
 export async function GET(context: APIContext) {
   const posts = await getCollection('news', ({ data }) => !data.draft);
 
-  const sortedPosts = posts.sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
+  const cutoff = Date.now() - NEWS_WINDOW_DAYS * 24 * 60 * 60 * 1000;
 
-  // Google News sitemap only includes articles from last 2 days (Google requirement)
-  // but we include all for discovery — Google will filter
-  const newsEntries = sortedPosts
+  const recent = posts
+    .filter((post) => (post.data.updated ?? post.data.date).valueOf() >= cutoff)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  const newsEntries = recent
     .map((post) => {
       const url = new URL(`/news/${post.id}/`, context.site).href;
       const pubDate = post.data.date.toISOString();
+      const modDate = (post.data.updated ?? post.data.date).toISOString();
       const keywords = (post.data.tags || []).join(', ');
 
       return `  <url>
@@ -27,7 +34,7 @@ export async function GET(context: APIContext) {
       <news:title>${escapeXml(post.data.title)}</news:title>
       <news:keywords>${escapeXml(keywords)}</news:keywords>
     </news:news>
-    <lastmod>${pubDate}</lastmod>
+    <lastmod>${modDate}</lastmod>
   </url>`;
     })
     .join('\n');

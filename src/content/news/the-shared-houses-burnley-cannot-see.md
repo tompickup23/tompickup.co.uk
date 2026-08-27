@@ -1,7 +1,7 @@
 ---
 title: "The Shared Houses Burnley Cannot See"
 date: 2026-06-19T13:00:00
-description: "The official statistics say Burnley has 65 shared houses. The council's own research says 916, and it had no record of more than half of them. That is how little the people in charge know about the homes being carved up on our streets. Here is the gap, in plain English."
+description: "The official statistics say Burnley has 65 shared houses. The council's own research says 916, and it had no record of more than half of them."
 image: "/images/burnley-queens-park.jpg"
 ogImage: "/images/share/shared-houses.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"

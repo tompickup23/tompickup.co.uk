@@ -1,7 +1,7 @@
 ---
 title: "638 Empty Homes, 2,657 Families Waiting"
 date: 2026-06-19T15:00:00
-description: "Burnley has hundreds of homes standing empty long-term while thousands of families wait for somewhere to live and people sleep rough. Two numbers that should shame a wealthy country into action. Here they are side by side, and what should be done."
+description: "Burnley has hundreds of homes standing empty long term while thousands of families wait for somewhere to live. The two numbers, side by side."
 image: "/images/burnley-crown-point.jpg"
 ogImage: "/images/share/empty-homes.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"

@@ -1,7 +1,7 @@
 ---
 title: "Four Councils, One Decision: I Modelled What Lancashire's Reorganisation Actually Means"
 date: 2026-07-18T21:30:00
-description: "The government has decided: 15 councils become 4 from April 2028. I've built an interactive, fully sourced model of the new councils, their budgets, the need they inherit, what previous reorganisations really cost, and the £28m-to-£585m question nobody else is asking."
+description: "15 councils become 4 from April 2028. An interactive, sourced model of the new councils, their budgets, the need they inherit and what it will cost."
 tags: ["lancashire", "lgr", "burnley", "local-government", "transparency"]
 featured: true
 ---

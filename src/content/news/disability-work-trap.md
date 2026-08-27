@@ -1,7 +1,7 @@
 ---
 title: "They Want to Work. The System Will Not Let Them."
 date: 2026-06-20T12:00:00
-description: "Most disabled people who are out of work want a job. A wall of government rules, from a frozen savings limit to a year-long support backlog to a shortage of accessible vehicles tied up by the school run, makes sure they cannot get one. The benefits bill is the result, not the cause."
+description: "Most disabled people out of work want a job. A frozen savings limit, a year-long support backlog and a shortage of accessible vehicles stop them."
 image: "/images/accessible-transport.jpg"
 ogImage: "/images/share/disability-work-trap.png"
 imageCredit: "Photo: Turini2 / Wikimedia Commons (CC BY-SA 4.0)"

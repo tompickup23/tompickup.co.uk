@@ -1,7 +1,7 @@
 ---
 title: "Who Owns Burnley? Increasingly, Not the People Who Live Here"
 date: 2026-06-19T12:00:00
-description: "I went through ten years of public records for my home town. More and more of Burnley is being bought up by landlords, companies and faraway funds, while local families are priced out of owning a home in the place they grew up. Here is what the numbers show, and what I want done about it."
+description: "Ten years of public records for my home town. More of Burnley is bought up by landlords, companies and faraway funds while local families are priced out."
 image: "/images/burnley-panorama.jpg"
 ogImage: "/images/share/who-owns-burnley.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

@@ -6,6 +6,8 @@ const news = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
+    // Set when an article is materially revised. Feeds dateModified + article:modified_time.
+    updated: z.date().optional(),
     description: z.string(),
     tags: z.array(z.string()).default([]),
     image: z.string().optional(),

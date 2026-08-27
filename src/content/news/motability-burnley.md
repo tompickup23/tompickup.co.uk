@@ -1,7 +1,7 @@
 ---
 title: "Nearly One in Five New Cars in Britain Now Runs on Benefits"
 date: 2026-06-19T17:00:00
-description: "The Motability scheme puts almost one in five new cars on Britain's roads, runs on benefit money plus a stack of tax breaks, sits on £3.9 billion of reserves and pays its boss £924,000. Here is what it costs, and how many people in Burnley qualify."
+description: "Motability puts nearly one in five new cars on Britain's roads, holds £3.9 billion in reserves and pays its boss £924,000. What it costs, and who qualifies."
 image: "/images/motability-cars.jpg"
 ogImage: "/images/share/motability-burnley.png"
 imageCredit: "Photo: Bob Harvey / geograph.org.uk (CC BY-SA 2.0)"

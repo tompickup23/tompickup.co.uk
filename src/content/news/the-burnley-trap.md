@@ -1,7 +1,7 @@
 ---
 title: "Sick Sooner, Out of Work, Gone Earlier: The Burnley Trap"
 date: 2026-06-20T10:00:00
-description: "Burnley is the 4th most deprived town in England. Its people fall ill younger, are pushed out of work by that illness, and die sooner than almost anywhere in the country. This is not bad luck. It is what decades of managed decline did to a town the country chose to forget."
+description: "Burnley is the 4th most deprived town in England. Its people fall ill younger, are pushed out of work by that illness, and die sooner than almost anywhere."
 image: "/images/burnley-rooftops.jpg"
 ogImage: "/images/share/the-burnley-trap.png"
 imageCredit: "Photo: Ian Greig / geograph.org.uk (CC BY-SA 2.0)"

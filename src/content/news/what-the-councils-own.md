@@ -1,7 +1,7 @@
 ---
 title: "What the Councils Own in Burnley: Every Public Title, Mapped"
 date: 2026-06-21T10:00:00
-description: "Burnley Borough Council and Lancashire County Council hold more than a thousand property titles in the town, from schools and civic buildings to car parks and slivers of land. I took the public ownership records and put every one I could place on an interactive map. This is the public estate you already own."
+description: "Burnley Borough Council and Lancashire County Council hold more than a thousand property titles in the town. Every one I could place, on a map."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/what-the-councils-own.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

@@ -1,7 +1,7 @@
 ---
 title: "More People, Fewer Homes: The Squeeze Nobody in Burnley Voted For"
 date: 2026-06-19T10:00:00
-description: "In ten years Burnley's population grew almost entirely through immigration, home ownership fell, and the cheap housing was bought up to rent out. Whitehall set the numbers, sent the bill, and never asked the town. Here are the figures in full."
+description: "In ten years Burnley's population grew almost entirely through immigration, home ownership fell, and the cheap housing was bought up to rent out."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/more-people-fewer-homes.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

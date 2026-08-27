@@ -23,7 +23,33 @@ function formatDate(dateStr: Date): string {
 }
 ---
 
-<Layout title="News & Updates | Tom Pickup" description="Latest news and updates from Tom Pickup.">
+<Layout
+  title="Investigations and news | Tom Pickup"
+  description="Investigations into Lancashire public spending, housing, benefits and policing, by county councillor Tom Pickup. Every figure sourced to the primary record."
+>
+  {/* A collection page listing the articles, so the index itself is understood as
+      the front door to the archive rather than an unlabelled page of links. */}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': 'https://tompickup.co.uk/news/',
+    url: 'https://tompickup.co.uk/news/',
+    name: 'Investigations and news',
+    description: 'Investigations into Lancashire public spending, housing, benefits and policing.',
+    inLanguage: 'en-GB',
+    isPartOf: { '@id': 'https://tompickup.co.uk/#website' },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListOrder: 'https://schema.org/ItemListOrderDescending',
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://tompickup.co.uk/news/${post.id}/`,
+        name: post.data.title,
+      })),
+    },
+  })} />
   <div class="news-page">
     <header class="page-header">
       <h1 class="page-title">News &amp; Updates</h1>

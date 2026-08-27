@@ -1,7 +1,7 @@
 ---
 title: "Two Wind Farms, One View, and No Assessment of Either Together"
 date: 2026-08-24T10:00:00
-description: "Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. Neither applicant has assessed what they look like together, and nobody has published a map of it. So I built one, and I have objected."
+description: "Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. Neither applicant has assessed the combined view. So I mapped it."
 image: "/images/scout-moor-cumulative-ztv.png"
 ogImage: "/images/share/two-wind-farms-one-view.png"
 imageCredit: "Analysis by Tom Pickup. Contains OS data © Crown copyright and database right 2026."

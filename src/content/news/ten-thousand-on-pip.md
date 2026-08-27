@@ -1,7 +1,7 @@
 ---
 title: "Ten Thousand People in Burnley Are on PIP. This Is the Bill for Managed Decline."
 date: 2026-06-19T14:00:00
-description: "More than ten thousand people in Burnley claim the disability benefit PIP, the 47th highest of 543 seats in England. It is not because the town is idle. It is the bill for decades of managed decline by an establishment that let the work go and looked away."
+description: "More than ten thousand people in Burnley claim the disability benefit PIP, the 47th highest of 543 seats in England. This is why."
 image: "/images/burnley-singing-ringing-tree.jpg"
 ogImage: "/images/share/pip-burnley.png"
 imageCredit: "Photo: Bill Boaden / geograph.org.uk (CC BY-SA 2.0)"

@@ -1,7 +1,7 @@
 ---
 title: "The LCCA's data observatory is 'a concept'. So we built one over the weekend."
 date: 2026-07-27T08:00:00
-description: "On Friday the combined authority's officers admitted their promised data observatory does not yet exist. By Monday, Cllr Ged Mirfin and I had a working one live: 104,161 Lancashire companies, nine analytical tools, built from public data at no cost to you."
+description: "Officers admitted the promised data observatory did not exist. By Monday we had one live: 104,161 Lancashire companies, nine tools, built at no cost to you."
 image: "/images/data-dashboard.jpg"
 tags: ["lancashire", "economy", "transparency", "lcca", "data"]
 category: "Lancashire"

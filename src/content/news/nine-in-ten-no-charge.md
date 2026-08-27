@@ -1,7 +1,7 @@
 ---
 title: "Nine in Ten Crimes in Lancashire End With No One Charged"
 date: 2026-06-22T14:00:00
-description: "Report a crime in Lancashire and the odds anyone is charged are about one in ten. That is actually one of the better records in the country, which tells you how broken the system is everywhere else. Here are the real numbers on whether crime gets answered for."
+description: "Report a crime in Lancashire and the odds anyone is charged are about one in ten. That is one of the better records in the country. The real numbers."
 image: "/images/burnley-townscape.jpg"
 ogImage: "/images/share/nine-in-ten-no-charge.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

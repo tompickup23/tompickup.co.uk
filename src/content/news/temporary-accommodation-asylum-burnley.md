@@ -1,7 +1,7 @@
 ---
 title: "The Asylum System Is Dumping Its Bill on Burnley"
 date: 2026-06-23T16:00:00
-description: "I went through every penny Burnley Council spends on temporary accommodation, then the official homelessness figures. A national asylum policy written in Westminster keeps arriving here as a homelessness bill, and in a single year the asylum share of Burnley's homelessness jumped from 1 in 60 to 1 in 9, in a town that can least afford it."
+description: "I went through every penny Burnley Council spends on temporary accommodation. In one year the asylum share of its homelessness went from 1 in 60 to 1 in 9."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/temporary-accommodation.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"

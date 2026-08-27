@@ -1,7 +1,7 @@
 ---
 title: "Put the Police Back on Burnley's Streets"
 date: 2026-06-21T16:00:00
-description: "Violent crime in Burnley runs about a third above the national average, yet the neighbourhood officers who prevent it have been cut by more than half, and we pay more for them every year. After a run of serious knife attacks across East Lancashire, it is time to put visible policing back on our streets."
+description: "Violent crime in Burnley runs about a third above the national average, yet the neighbourhood officers who prevent it have been cut by more than half."
 image: "/images/burnley-crown-point.jpg"
 ogImage: "/images/share/put-police-back.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
