@@ -41,15 +41,30 @@ jobs:
       # GitHub event data of any kind, so there is no injection surface here.
       - name: House style gate (no em-dashes, no encoded dashes)
         run: |
-          set -euo pipefail
-          literal=$(grep -roh '—' dist/ | wc -l | tr -d ' ')
-          encoded=$(grep -rohi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ | wc -l | tr -d ' ')
+          set -u
+          # `grep -I` skips binary files. Without it a JPEG and an MP4 whose
+          # bytes happen to contain the em-dash sequence both counted, and
+          # nobody reads an em-dash inside a JPEG.
+          #
+          # NO `pipefail`, deliberately. grep exits 1 when it finds nothing,
+          # which is the PASSING case here. Actions already runs this as
+          # `bash -e`, so with pipefail on, a clean build aborted the step
+          # before it printed a single count: the gate's first real run failed
+          # on a build that was completely clean. Without pipefail the
+          # pipeline's status is `tr`'s, which is 0, and the counts decide.
+          #
+          # A gate that fails every run is worth less than no gate, because it
+          # teaches everyone to ignore it.
+          literal=$(grep -rohI '—' dist/ | wc -l | tr -d ' ')
+          encoded=$(grep -rohIi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ | wc -l | tr -d ' ')
           echo "literal em-dashes: $literal"
           echo "entity-encoded dashes: $encoded"
           if [ "$literal" != "0" ] || [ "$encoded" != "0" ]; then
             echo "::error::House style gate failed. Offending files:"
-            grep -rl '—' dist/ || true
-            grep -rli '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ || true
+            # -I here too, or the failure message sends someone hunting
+            # through a JPEG for a dash that is just image data.
+            grep -rlI '—' dist/ || true
+            grep -rlIi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ || true
             exit 1
           fi
           echo "House style gate passed."
