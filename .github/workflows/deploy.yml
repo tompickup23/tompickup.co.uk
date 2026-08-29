@@ -29,6 +29,31 @@ jobs:
       - name: Build Astro
         run: npm run build
 
+      # House style, checked mechanically on the BUILT output rather than on
+      # source, because the dashes that matter are the ones a reader sees and
+      # a component can emit one that no source file contains.
+      #
+      # Both greps are needed. An entity-encoded dash renders identically to a
+      # literal one and scores zero on a literal grep, which is how a clean
+      # count can be reported for a page full of them.
+      #
+      # This step reads only files this job just built. It interpolates no
+      # GitHub event data of any kind, so there is no injection surface here.
+      - name: House style gate (no em-dashes, no encoded dashes)
+        run: |
+          set -euo pipefail
+          literal=$(grep -roh '—' dist/ | wc -l | tr -d ' ')
+          encoded=$(grep -rohi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ | wc -l | tr -d ' ')
+          echo "literal em-dashes: $literal"
+          echo "entity-encoded dashes: $encoded"
+          if [ "$literal" != "0" ] || [ "$encoded" != "0" ]; then
+            echo "::error::House style gate failed. Offending files:"
+            grep -rl '—' dist/ || true
+            grep -rli '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ || true
+            exit 1
+          fi
+          echo "House style gate passed."
+
       # Edit below adds a literal `if: false` disable — no GitHub event interpolation, no injection risk.
       # DEPLOY_TOKEN expired 20 May 2026. Direct push from local was used instead.
       # Remove `if: false` after minting a fresh PAT and updating the DEPLOY_TOKEN secret.
@@ -36,6 +61,12 @@ jobs:
         if: false
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          # Passed as an environment variable, never interpolated into the
+          # script body. `${{ }}` is substituted before bash parses the line,
+          # so a commit message containing $(...) or backticks would EXECUTE,
+          # in the one job that holds the deploy token. As an env var bash
+          # reads it as data.
+          HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           # Clone target repo with PAT auth, replace contents, push
           git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git" /tmp/deploy-target
@@ -54,6 +85,6 @@ jobs:
           git config user.email "deploy@tompickup.co.uk"
           git add -A
           git diff --cached --quiet && echo "No changes to deploy" || {
-            git commit -m "deploy: ${{ github.event.head_commit.message }}"
+            git commit -m "deploy: ${HEAD_COMMIT_MESSAGE}"
             git push origin main
           }
