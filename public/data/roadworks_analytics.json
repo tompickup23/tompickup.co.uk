@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-29T12:13:05.879725+00:00",
+    "generated": "2026-08-29T20:20:54.325688+00:00",
     "live_works": 1291,
     "archived_works": 18052,
     "total_analysed": 19343
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1127,
+        "days": 1128,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -832,6 +832,14 @@
         "category": "Major"
       },
       {
+        "road": "Plantation Street",
+        "district": "hyndburn",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-29",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Windsor Road",
         "district": "hyndburn",
         "operator": "Lancashire County Council",
@@ -1000,28 +1008,20 @@
         "category": "Minor"
       },
       {
+        "road": "Booth Road",
+        "district": "rossendale",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-29",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Bannister Lane",
         "district": "south_ribble",
         "operator": "Lancashire County Council",
         "planned_end": "2026-08-28",
         "days_overdue": 0,
         "category": "Major"
-      },
-      {
-        "road": "Glebe Road",
-        "district": "west_lancashire",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-28",
-        "days_overdue": 0,
-        "category": "Immediate - Urgent"
-      },
-      {
-        "road": "Crescent Road",
-        "district": "wyre",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-08-28",
-        "days_overdue": 0,
-        "category": "Minor"
       }
     ],
     "overdue_count": 30
