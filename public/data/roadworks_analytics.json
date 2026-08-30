@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-30T11:09:48.738370+00:00",
+    "generated": "2026-08-30T20:29:09.638105+00:00",
     "live_works": 1248,
     "archived_works": 18090,
     "total_analysed": 19338
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1128,
+        "days": 1129,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -788,6 +788,14 @@
         "district": "hyndburn",
         "operator": "Lancashire County Council",
         "planned_end": "2026-08-29",
+        "days_overdue": 1,
+        "category": "Major"
+      },
+      {
+        "road": "Calder Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-30",
         "days_overdue": 0,
         "category": "Major"
       },
@@ -822,8 +830,16 @@
         "planned_end": "2026-08-30",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Warner Street",
+        "district": "rossendale",
+        "operator": "BT",
+        "planned_end": "2026-08-30",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 5
+    "overdue_count": 7
   }
 }
