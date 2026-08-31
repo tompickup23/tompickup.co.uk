@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-08-31T12:35:17.947404+00:00",
+    "generated": "2026-08-31T22:22:24.928945+00:00",
     "live_works": 1281,
     "archived_works": 18100,
     "total_analysed": 19381
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1129,
+        "days": 1130,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -816,6 +816,14 @@
         "category": "Minor"
       },
       {
+        "road": "Golden Hill Lane",
+        "district": "south_ribble",
+        "operator": "Cadent",
+        "planned_end": "2026-08-31",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Pope Lane",
         "district": "south_ribble",
         "operator": "Lancashire County Council",
@@ -830,8 +838,32 @@
         "planned_end": "2026-08-31",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Longton Bypass",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-08-31",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "Gloucester Drive",
+        "district": "lancaster",
+        "operator": "Cadent",
+        "planned_end": "2026-08-31",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Clifford Avenue",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-08-31",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 6
+    "overdue_count": 10
   }
 }
