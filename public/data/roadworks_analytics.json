@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-09-01T11:01:51.578409+00:00",
+    "generated": "2026-09-01T20:28:39.115081+00:00",
     "live_works": 1339,
     "archived_works": 18113,
     "total_analysed": 19452
@@ -624,7 +624,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1130,
+        "days": 1131,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -784,6 +784,14 @@
     ],
     "overdue_works": [
       {
+        "road": "Whalley Road",
+        "district": "burnley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Spendmore Lane",
         "district": "chorley",
         "operator": "Cadent",
@@ -798,6 +806,38 @@
         "planned_end": "2026-09-01",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Albert Road",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Lord Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Walter Street",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Further Lane",
+        "district": "ribble_valley",
+        "operator": "BT",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Myerscough Road",
@@ -816,9 +856,33 @@
         "category": "Minor"
       },
       {
+        "road": "Croston Road",
+        "district": "south_ribble",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Further Lane",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "The Common",
         "district": "west_lancashire",
         "operator": "BT",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Orders Lane",
+        "district": "fylde",
+        "operator": "Lancashire County Council",
         "planned_end": "2026-09-01",
         "days_overdue": 0,
         "category": "Minor"
@@ -832,10 +896,34 @@
         "category": "Minor"
       },
       {
+        "road": "Northway",
+        "district": "west_lancashire",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Footway From Willow Road To Wade Brook Road",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Pippin Street",
         "district": "chorley",
         "operator": "United Utilities Water",
         "planned_end": "2026-08-31",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Wymundsley",
+        "district": "chorley",
+        "operator": "BT",
+        "planned_end": "2026-09-01",
         "days_overdue": 0,
         "category": "Minor"
       },
@@ -854,8 +942,16 @@
         "planned_end": "2026-08-31",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Borwick Close",
+        "district": "lancaster",
+        "operator": "BT",
+        "planned_end": "2026-09-01",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 9
+    "overdue_count": 21
   }
 }
