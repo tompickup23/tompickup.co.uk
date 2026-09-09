@@ -147,20 +147,16 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <!-- Data explorers -->
     <section class="doge-section">
       <h2 class="doge-h2">Explore the data</h2>
-      <p class="doge-note">Two open-data tools sit underneath this analysis: what the public sector buys, and the economy it governs.</p>
-      <div class="doge-grid">
+      <p class="doge-note">An open-data tool sits underneath this analysis: what the public sector buys.</p>
+      <!-- One card since the Observatory was parked. .doge-grid uses auto-fill, which
+           lays a lone card into a 280px track with empty ones beside it. Override to a
+           single track: capped on desktop, full width once the viewport is narrower. -->
+      <div class="doge-grid" style="grid-template-columns:minmax(0,560px);">
         <a class="doge-card" href="/lgr/contracts/">
           <div class="doge-card-kicker">Contracts &amp; procurement</div>
           <div class="doge-card-title">What the public sector buys</div>
           <div class="doge-card-desc">Every Lancashire public contract from Contracts Finder, searchable by supplier, buyer and, crucially, term and end date.</div>
           <span class="doge-card-go">Search contracts &rarr;</span>
-        </a>
-        <a class="doge-card" href="/lancs/business/">
-          <div class="doge-card-kicker">Business Observatory</div>
-          <div class="doge-card-title">The Lancashire economy</div>
-          <div class="doge-card-desc">The county's business base in public data: company distress, high-growth firms, where the council pound lands, and innovation money, area by area.</div>
-          <div class="doge-card-desc" style="font-size:0.78rem; color:#8e8e93; margin-top:0.4rem;">Now in the Lancashire section, and it shows every area under the 2028 unitary boundaries too.</div>
-          <span class="doge-card-go">Open the Observatory &rarr;</span>
         </a>
       </div>
     </section>

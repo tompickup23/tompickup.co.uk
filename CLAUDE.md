@@ -19,10 +19,28 @@ Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 ```bash
 npm install
 npm run dev                      # Run locally
-npm run build                    # Static build to dist/
+npm run build                    # Static build to dist/ (guards run pre and post)
+npm run dev:observatory          # Run the parked Observatory locally, then re-park it
 ```
 
 **Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
+
+## Parked: Lancashire Business Observatory (10 Sep 2026)
+
+`/lancs/` and `/lancs/business/` are **parked, not deleted**. They were 1,074 of the site's
+1,112 pages — 1,046 of them near-identical Companies House profiles — which is scaled thin
+content on a domain that carries a councillor's name and journalism. The section now lives at
+`src/pages/_lancs/`, unrouted by Astro's underscore rule; the launch article is archived at
+`src/content/news/_archive-lancashire-business-observatory-launch.md`.
+
+- **Do not un-park it into a build.** `prebuild` and `postbuild` guards (`scripts/guard-parked.mjs`)
+  fail the build if the routes or their data reach `dist/`.
+- **Do not add `Disallow: /lancs/` to robots.txt.** The URLs must stay crawlable to be seen as
+  404s and dropped from the index.
+- To view it: `npm run dev:observatory` (plain `npm run dev` will 404 it).
+- Full reasoning, and the outstanding Search Console steps: `docs/parked-observatory.md`.
+
+It returns on its own domain, scaled UK-wide — not as a subdirectory here.
 
 ## Rules
 - Never commit .env or secrets

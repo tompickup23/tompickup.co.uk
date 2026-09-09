@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "dev:observatory": "bash scripts/observatory-dev.sh",
+    "prebuild": "node scripts/guard-parked.mjs pre",
     "build": "astro build",
+    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post",
     "preview": "astro preview"
   },
   "dependencies": {
