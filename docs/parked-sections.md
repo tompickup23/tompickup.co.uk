@@ -119,11 +119,14 @@ Both now point at `aidoge.co.uk/councils/burnley/`. The prose changed with them:
 the previous wording described this site's own filters, and it would have been
 wrong about a different tool.
 
-**One thing this loses.** AI DOGE holds Burnley from 2024/25. The 2023-24 year
-that `/doge/` published is not there, so retiring the section takes that year off
-the public web. The data is still in `public/data/burnley-spending-2023-24.json`
-and the page still runs under `npm run dev:doge`. If that year matters, the fix
-is to get it into AI DOGE rather than to un-park this.
+**A caveat that turned out not to matter.** AI DOGE holds Burnley from 2024/25,
+so retiring `/doge/` was noted here as taking the 2023-24 year off the public web.
+Checked on 11 Sept 2026: it does not. Burnley Borough Council still publishes all
+four quarters of 2023-24 on its own spending page, along with 2022-23 and 2021-22,
+which `/doge/` never covered. The council's own publication is the primary source
+and it is more complete than the copy that was here, so nothing was lost by
+parking. The data is also still in `public/data/burnley-spending-2023-24.json` and
+the page still runs under `npm run dev:doge`.
 
 ## When the Observatory comes back
 
