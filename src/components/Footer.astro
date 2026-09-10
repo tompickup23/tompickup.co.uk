@@ -28,9 +28,9 @@ const currentYear = new Date().getFullYear();
             <li><a href="/projects/">Projects</a></li>
             <li><a href="/contact/">Contact</a></li>
             <li>
-              <a href="https://reformukburnley.co.uk" target="_blank" rel="noopener noreferrer"
-                >Reform UK Burnley</a
-              >
+              <a href="https://reformukburnley.co.uk" target="_blank" rel="noopener noreferrer">
+                Reform UK Burnley<span class="footer-ext" aria-hidden="true">&#8599;</span>
+              </a>
             </li>
           </ul>
         </nav>
@@ -49,10 +49,11 @@ const currentYear = new Date().getFullYear();
                   rel={p.external ? 'noopener noreferrer' : undefined}
                 >
                   {p.title}
+                  {p.external && <span class="footer-ext" aria-hidden="true">&#8599;</span>}
                 </a>
               </li>
             ))}
-            <li><a href="/projects/">All projects</a></li>
+            <li><a class="footer-all" href="/projects/">All projects</a></li>
           </ul>
         </nav>
       </div>
@@ -197,6 +198,19 @@ const currentYear = new Date().getFullYear();
 
   .footer-links a:hover {
     color: var(--text-primary);
+  }
+
+  .footer-ext {
+    font-size: 0.8em;
+    margin-left: 3px;
+    color: var(--text-secondary);
+  }
+
+  /* The index link, not another project. Teal marks it as the way in.
+     Matches the specificity of `.footer-links a` rather than reaching for
+     !important, so the hover rule below still wins. */
+  .footer-links a.footer-all {
+    color: var(--accent);
   }
 
   /* Social */

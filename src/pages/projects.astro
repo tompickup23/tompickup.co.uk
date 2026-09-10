@@ -2,27 +2,28 @@
 import Layout from '../layouts/Layout.astro';
 import { ON_THIS_SITE, DATA_PROJECTS } from '../data/projects';
 
-// One hub instead of several nav slots. Every project keeps its URL; this page
-// is where they are found, labelled in plain English by what a visitor wants
-// rather than by project codename.
-//
-// Two groups, because they are two different things. The first is councillor
-// work published here. The second is separate publications on their own
-// domains, each with its own method and corrections route, and a visitor
-// clicking one is leaving this site.
-//
-// The list itself lives in src/data/projects.ts so the footer column and this
-// page cannot drift apart.
+/* One hub instead of several nav slots. Every project keeps its URL; this page
+   is where they are found, labelled in plain English by what a visitor wants
+   rather than by project codename.
+   
+   Presented as a register rather than a card grid. These are statistical
+   publications, and the two things a reader checking one actually wants are its
+   scope and where its numbers came from. So each row leads with the figure the
+   project itself leads with, and ends by naming the primary record behind it.
+   Six accented figures stacked down the right is the page's spine.
+   
+   Two groups, because they are two different things: council work published
+   here, and separate publications on their own domains. The list lives in
+   src/data/projects.ts so the footer column and this page cannot drift apart. */
 const GROUPS = [
   {
-    heading: 'On this site',
-    blurb: 'Built as part of the council work, and published here.',
+    label: 'On this site',
+    note: 'Council work, published here.',
     items: ON_THIS_SITE,
   },
   {
-    heading: 'The data projects',
-    blurb:
-      'Separate publications, each on its own site. Each one states its sources and carries a route to correct it.',
+    label: 'Separate sites',
+    note: 'Each one states its sources and carries a route to correct it. These open in a new tab.',
     items: DATA_PROJECTS,
   },
 ];
@@ -30,39 +31,57 @@ const GROUPS = [
 
 <Layout
   title="Projects | Tom Pickup"
-  description="The tools and investigations: Lancashire's new councils modelled, council spending traced line by line, plus AI DOGE, UK Demographics, UK Elections and Asylum Stats."
+  description="Six open data projects: Lancashire's new councils, council spending investigations, AI DOGE, UK Demographics, UK Elections and Asylum Stats. Every figure traces to a published document."
 >
-  <section class="projects-page">
+  <section class="proj">
     <div class="container">
-      <h1>Projects</h1>
-      <p class="projects-intro">
-        The tools and investigations behind the numbers I publish. Everything here is
-        built from documents you can check.
-      </p>
+      <header class="proj-head">
+        <h1 class="proj-h1">Projects</h1>
+        <p class="proj-lead">
+          Every number on these sites traces back to a document you can open yourself.
+          Two are published here. Four are separate sites, each with its own method and
+          its own route to correct it.
+        </p>
+      </header>
 
       {GROUPS.map((group) => (
-        <section class="projects-group">
-          <h2 class="group-heading">{group.heading}</h2>
-          <p class="group-blurb">{group.blurb}</p>
-
-          <div class="projects-grid">
-            {group.items.map((p) => (
-              <a
-                href={p.href}
-                class="project-card"
-                style={`--card-accent:${p.accent}`}
-                target={p.external ? '_blank' : undefined}
-                rel={p.external ? 'noopener noreferrer' : undefined}
-              >
-                <h3 class="project-title">
-                  {p.title}
-                  {p.external && <span class="ext" aria-hidden="true"> &#8599;</span>}
-                </h3>
-                <p class="project-desc">{p.desc}</p>
-                <span class="project-meta">{p.meta}</span>
-              </a>
-            ))}
+        <section class="proj-group">
+          <div class="proj-grouphead">
+            <h2 class="proj-grouplabel">{group.label}</h2>
+            <span class="proj-groupcount">{group.items.length}</span>
           </div>
+          <p class="proj-groupnote">{group.note}</p>
+
+          <ul class="proj-list">
+            {group.items.map((p) => (
+              <li>
+                <a
+                  class="proj-row"
+                  style={`--accent:${p.accent}`}
+                  href={p.href}
+                  target={p.external ? '_blank' : undefined}
+                  rel={p.external ? 'noopener noreferrer' : undefined}
+                >
+                  <div class="proj-body">
+                    <h3 class="proj-name">
+                      {p.title}
+                      {p.external && <span class="proj-ext" aria-hidden="true">&#8599;</span>}
+                    </h3>
+                    <p class="proj-desc">{p.desc}</p>
+                    <p class="proj-source">
+                      <span class="proj-sourcekey">Source</span>
+                      <span class="proj-sourceval">{p.source}</span>
+                    </p>
+                  </div>
+
+                  <div class="proj-figure">
+                    <span class="proj-value">{p.figure}</span>
+                    <span class="proj-unit">{p.unit}</span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
       ))}
     </div>
@@ -70,102 +89,235 @@ const GROUPS = [
 </Layout>
 
 <style>
-  .projects-page {
+  .proj {
     padding: 7rem 0 var(--space-2xl);
   }
 
-  .projects-page h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  /* The site container runs to 1200px. A register needs a tighter measure than
+     that: at full width the description and the figure sit at opposite edges
+     with a void between them and stop reading as one row. */
+  .proj-head,
+  .proj-group {
+    max-width: 1020px;
+  }
+
+  /* Head */
+  .proj-h1 {
+    font-size: clamp(2rem, 5.5vw, 3.25rem);
     font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: var(--space-sm);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin: 0 0 var(--space-md);
   }
 
-  .projects-intro {
-    font-size: 0.9375rem;
+  .proj-lead {
+    font-size: 1.0625rem;
+    line-height: 1.65;
     color: var(--text-secondary);
-    margin-bottom: var(--space-2xl);
-    max-width: 560px;
+    max-width: 48ch;
+    margin: 0;
   }
 
-  .projects-group + .projects-group {
+  /* Group heads. The count is information, not ornament: it says how many of
+     each kind there are before you start reading rows. */
+  .proj-group {
     margin-top: var(--space-2xl);
   }
 
-  .group-heading {
-    font-size: 0.75rem;
+  .proj-grouphead {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .proj-grouplabel {
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary, #8e8e93);
-    margin: 0 0 var(--space-2xs, 0.25rem);
-  }
-
-  .group-blurb {
-    font-size: 0.875rem;
+    letter-spacing: 0.14em;
     color: var(--text-secondary);
-    margin: 0 0 var(--space-md);
-    max-width: 560px;
+    margin: 0;
   }
 
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-  }
-
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    padding: var(--space-lg);
-    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
+  .proj-groupcount {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
     border: 1px solid var(--separator);
-    border-left: 3px solid var(--card-accent);
-    border-radius: var(--radius-lg);
+    border-radius: 999px;
+    padding: 1px 8px;
+    line-height: 1.5;
+  }
+
+  .proj-groupnote {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: var(--space-xs) 0 var(--space-md);
+    max-width: 54ch;
+  }
+
+  /* Rows */
+  .proj-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 3px;
+  }
+
+  .proj-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: var(--space-2xl);
+    padding: var(--space-lg);
+    padding-left: calc(var(--space-lg) + 5px);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: background var(--transition-normal);
   }
 
-  .project-card:hover {
-    border-color: var(--card-accent);
-    transform: translateY(-2px);
+  /* The accent rail. A pseudo-element rather than a border so its width and
+     strength can change on hover without shifting the row's text. */
+  .proj-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    background: var(--accent);
+    opacity: 0.5;
+    transition:
+      opacity var(--transition-normal),
+      width var(--transition-normal);
   }
 
-  .project-title {
-    font-size: 1.05rem;
+  .proj-row:hover,
+  .proj-row:focus-visible {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .proj-row:hover::before,
+  .proj-row:focus-visible::before {
+    opacity: 1;
+    width: 5px;
+  }
+
+  .proj-row:hover .proj-name {
+    color: var(--accent);
+  }
+
+  .proj-row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .proj-name {
+    font-size: 1.15rem;
     font-weight: 700;
-    margin: 0;
+    letter-spacing: -0.015em;
     line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xs);
+    transition: color var(--transition-normal);
   }
 
-  .ext {
-    color: var(--text-tertiary);
-    font-size: 0.9em;
-  }
-
-  .project-desc {
-    font-size: 0.9rem;
+  .proj-ext {
+    font-size: 0.78em;
     color: var(--text-secondary);
+    margin-left: 5px;
+  }
+
+  .proj-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-md);
+    max-width: 56ch;
+  }
+
+  /* Provenance line. The key is set as tracked micro-caps; the value stays in
+     sentence case because it is full of proper nouns that all-caps mangles. */
+  .proj-source {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
     margin: 0;
-    flex-grow: 1;
-    line-height: 1.6;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
   }
 
-  .project-meta {
-    font-size: 0.8rem;
+  .proj-sourcekey {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  /* The figure. The page's spine: six accented numbers down the right edge. */
+  .proj-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  .proj-value {
+    font-size: clamp(1.75rem, 3.6vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .proj-unit {
+    font-size: 0.7rem;
     font-weight: 600;
-    color: var(--card-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin-top: 10px;
+    max-width: 22ch;
   }
 
-  @media (max-width: 768px) {
-    .projects-page {
+  @media (max-width: 760px) {
+    .proj {
       padding: 6rem 0 var(--space-xl);
     }
 
-    .projects-grid {
+    .proj-row {
       grid-template-columns: 1fr;
+      row-gap: var(--space-md);
+      padding: var(--space-md);
+      padding-left: calc(var(--space-md) + 5px);
+    }
+
+    /* Figure leads visually on narrow screens; the name still comes first in
+       the DOM, so reading order is unchanged for assistive tech. */
+    .proj-figure {
+      order: -1;
+      align-items: flex-start;
+      text-align: left;
+      padding-top: 0;
+    }
+
+    .proj-unit {
+      max-width: none;
+      margin-top: 6px;
     }
   }
 </style>
