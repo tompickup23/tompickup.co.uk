@@ -4,8 +4,14 @@
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
 **Stack**: Astro 5 (static output) | no runtime server
-**Hosting**: Cloudflare Pages, with a GitHub Pages mirror (manual deploy, `/publish-tompickup` in clawd)
-**Automation**: 2 GitHub Actions (deploy, data-etl)
+**Hosting**: GitHub Pages serves the live domain, from the `tompickup23/tompickup23.github.io`
+repo. Checked 10 Sep 2026: `server: GitHub.com`, A records 185.199.108-111.153. There is no
+Cloudflare Pages deploy in front of it.
+**Deploying**: MANUAL. `deploy.yml`'s deploy step is `if: false` (PAT expired 20 May 2026), so
+pushing source builds and gates but publishes nothing. Follow `/publish-tompickup` in clawd:
+rsync `dist/` into the Pages clone, then commit and push there. That rsync uses `--delete`, which
+also removes the Pages repo's own `CLAUDE.md`/`AGENTS.md` — restore them before committing.
+**Automation**: 3 GitHub Actions (deploy, data-etl, observatory-schemas)
 **Branch**: main
 
 ## Key Patterns
