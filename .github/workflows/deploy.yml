@@ -1,15 +1,36 @@
 name: Deploy tompickup.co.uk
 
+# Deploys straight to GitHub Pages from this repo.
+#
+# It used to build here and push the result into tompickup23/tompickup23.github.io,
+# which needed a cross-repo PAT. That token expired on 20 May 2026 and the deploy
+# step sat behind `if: false` for months, so every ETL commit reached the repo and
+# stopped there while the live site went stale until somebody rsynced by hand.
+#
+# Pages publishes from this repo now, so the only credential is the GITHUB_TOKEN
+# Actions mints per run. Nothing to rotate, nothing to expire, no manual step.
+
 on:
   push:
     branches: [main]
     paths-ignore:
       - '*.md'
-      - 'scripts/**'
+      - 'docs/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. Queue rather than cancel: an in-flight deploy that
+# is cancelled half way can leave Pages serving a partial build.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -26,6 +47,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # `npm run build` carries the prebuild and postbuild guards, so a parked
+      # section reaching the routed tree or the output fails here, not in public.
       - name: Build Astro
         run: npm run build
 
@@ -37,69 +60,38 @@ jobs:
       # literal one and scores zero on a literal grep, which is how a clean
       # count can be reported for a page full of them.
       #
-      # This step reads only files this job just built. It interpolates no
-      # GitHub event data of any kind, so there is no injection surface here.
+      # NO `pipefail`, deliberately. grep exits 1 when it finds nothing, which is
+      # the PASSING case here. Actions already runs this as `bash -e`, so with
+      # pipefail on, a clean build aborted the step before it printed a single
+      # count. Without pipefail the pipeline's status is `tr`'s, which is 0, and
+      # the counts decide.
       - name: House style gate (no em-dashes, no encoded dashes)
         run: |
           set -u
-          # `grep -I` skips binary files. Without it a JPEG and an MP4 whose
-          # bytes happen to contain the em-dash sequence both counted, and
-          # nobody reads an em-dash inside a JPEG.
-          #
-          # NO `pipefail`, deliberately. grep exits 1 when it finds nothing,
-          # which is the PASSING case here. Actions already runs this as
-          # `bash -e`, so with pipefail on, a clean build aborted the step
-          # before it printed a single count: the gate's first real run failed
-          # on a build that was completely clean. Without pipefail the
-          # pipeline's status is `tr`'s, which is 0, and the counts decide.
-          #
-          # A gate that fails every run is worth less than no gate, because it
-          # teaches everyone to ignore it.
           literal=$(grep -rohI '—' dist/ | wc -l | tr -d ' ')
           encoded=$(grep -rohIi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ | wc -l | tr -d ' ')
           echo "literal em-dashes: $literal"
           echo "entity-encoded dashes: $encoded"
           if [ "$literal" != "0" ] || [ "$encoded" != "0" ]; then
             echo "::error::House style gate failed. Offending files:"
-            # -I here too, or the failure message sends someone hunting
-            # through a JPEG for a dash that is just image data.
             grep -rlI '—' dist/ || true
             grep -rlIi '&mdash;\|&ndash;\|&#8212;\|&#8211;\|&#x2014;\|&#x2013;' dist/ || true
             exit 1
           fi
           echo "House style gate passed."
 
-      # Edit below adds a literal `if: false` disable — no GitHub event interpolation, no injection risk.
-      # DEPLOY_TOKEN expired 20 May 2026. Direct push from local was used instead.
-      # Remove `if: false` after minting a fresh PAT and updating the DEPLOY_TOKEN secret.
-      - name: Deploy to tompickup23.github.io
-        if: false
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-          # Passed as an environment variable, never interpolated into the
-          # script body. `${{ }}` is substituted before bash parses the line,
-          # so a commit message containing $(...) or backticks would EXECUTE,
-          # in the one job that holds the deploy token. As an env var bash
-          # reads it as data.
-          HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        run: |
-          # Clone target repo with PAT auth, replace contents, push
-          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/tompickup23/tompickup23.github.io.git" /tmp/deploy-target
-          # Remove old files but keep .git
-          cd /tmp/deploy-target
-          ls -A | grep -v '^\.git$' | xargs rm -rf
-          # Copy new build
-          cp -r $GITHUB_WORKSPACE/dist/* /tmp/deploy-target/
-          # Ensure CNAME exists for custom domain
-          echo 'tompickup.co.uk' > /tmp/deploy-target/CNAME
-          # Disable Jekyll processing (required for _astro/ directory)
-          touch /tmp/deploy-target/.nojekyll
-          # Commit and push
-          cd /tmp/deploy-target
-          git config user.name "tompickup.co.uk Deploy"
-          git config user.email "deploy@tompickup.co.uk"
-          git add -A
-          git diff --cached --quiet && echo "No changes to deploy" || {
-            git commit -m "deploy: ${HEAD_COMMIT_MESSAGE}"
-            git push origin main
-          }
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
