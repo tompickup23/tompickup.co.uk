@@ -52,6 +52,10 @@ It returns on its own domain, scaled UK-wide — not as a subdirectory here.
 
 ## Rules
 - Never commit .env or secrets
+- The footer imprint (Elections Act 2022, Part 6) is live on every page and must stay
+  accurate: `src/data/imprint.ts`. The address is Reform UK's registered office, which
+  holds only while the party accepts correspondence there on Tom's behalf. Same field
+  names and sentence as the reform-burnley repo's `src/data/site.ts`, deliberately
 - British English throughout
 - Keep the site fast and lightweight
 - SEO: proper meta tags on every page

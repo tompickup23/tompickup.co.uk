@@ -12,9 +12,23 @@ export async function GET(context: APIContext) {
 
   const cutoff = Date.now() - NEWS_WINDOW_DAYS * 24 * 60 * 60 * 1000;
 
-  const recent = posts
-    .filter((post) => (post.data.updated ?? post.data.date).valueOf() >= cutoff)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const newest = [...posts].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const inWindow = newest.filter(
+    (post) => (post.data.updated ?? post.data.date).valueOf() >= cutoff
+  );
+
+  // Google rejects a <urlset> carrying no <url>: Search Console reports it as
+  // "Missing XML tag" with zero pages discovered, which is what this file did
+  // from 7 Sept 2026. Two things make an empty window the normal case here, not
+  // the exception. Articles arrive in bursts rather than daily, and the site is
+  // a static build, so the file freezes at whatever the last build produced and
+  // stays empty until the next one.
+  //
+  // So when nothing is inside the window, fall back to the single most recent
+  // article. Google will not treat a fortnight-old piece as breaking news, and
+  // it should not: the point is a valid file rather than a standing error in
+  // Search Console. Everything older stays discoverable through the main sitemap.
+  const recent = inWindow.length > 0 ? inWindow : newest.slice(0, 1);
 
   const newsEntries = recent
     .map((post) => {

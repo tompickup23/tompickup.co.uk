@@ -1,15 +1,8 @@
 ---
 import EmailSignup from './EmailSignup.astro';
 import { FOOTER_PROJECTS } from '../data/projects';
+import { imprint as imp } from '../data/imprint';
 const currentYear = new Date().getFullYear();
-
-// Elections Act 2022 digital imprint (in force since Nov 2023, applies at all
-// times, not just near elections). This site carries material promoting Reform
-// UK, so as a holder of elected office Tom is in scope for the organic-material
-// imprint duty. The imprint needs a promoter NAME and ADDRESS; the address
-// choice (home vs party office) is Tom's decision, so the line renders only
-// once IMPRINT_ADDRESS is filled in. Do not ship a half imprint.
-const IMPRINT_ADDRESS = '';
 ---
 
 <footer class="site-footer">
@@ -122,9 +115,9 @@ const IMPRINT_ADDRESS = '';
     </div>
 
     <div class="footer-legal">
-      {IMPRINT_ADDRESS && (
+      {imp.show && (
         <p class="footer-imprint">
-          Promoted by Tom Pickup of {IMPRINT_ADDRESS}.
+          Promoted by {imp.promoter} on behalf of {imp.onBehalfOf}, both at {imp.address}{imp.party ? `, and by ${imp.party}` : ''}.
         </p>
       )}
       <p class="footer-copyright">
@@ -272,9 +265,13 @@ const IMPRINT_ADDRESS = '';
     flex-wrap: wrap;
   }
 
+  /* Deliberately more legible than the copyright line beside it. --text-tertiary
+     is 3.51:1 on this footer's black, which fails AA for normal text, and an
+     imprint that cannot be read fails at the only thing it exists to do.
+     --text-secondary is 6.44:1. */
   .footer-imprint {
     font-size: 0.8125rem;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     max-width: none;
   }
 
