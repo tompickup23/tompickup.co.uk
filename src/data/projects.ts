@@ -80,7 +80,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#30d158',
     title: 'UK Elections',
-    desc: 'Every election forecast, then graded against the result.',
+    desc: 'Every seat, every English council: forecast, then graded on the result.',
     figure: '650',
     unit: 'constituencies',
     source: 'Named pollsters, declared results, Democracy Club',
