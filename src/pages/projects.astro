@@ -235,12 +235,14 @@ const GROUPS = [
     margin-left: 5px;
   }
 
+  /* One terse line per project, so it is sized to sit on one line rather than
+     wrapped to a paragraph measure. The grid column already caps how wide it
+     can get; a ch cap on top of that only forced a needless second line. */
   .proj-desc {
     font-size: 0.9rem;
-    line-height: 1.65;
+    line-height: 1.6;
     color: var(--text-secondary);
-    margin: 0 0 var(--space-md);
-    max-width: 56ch;
+    margin: 0 0 var(--space-sm);
   }
 
   /* Provenance line. The key is set as tracked micro-caps; the value stays in

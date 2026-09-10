@@ -16,6 +16,8 @@
 export interface Project {
   href: string;
   title: string;
+  /** One terse line: the subject, then what it holds. No claim wider than the
+      project's own coverage page will support. */
   desc: string;
   /** The scope this project leads with. Set large, in tabular figures. */
   figure: string;
@@ -40,7 +42,7 @@ export const ON_THIS_SITE: Project[] = [
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
-    desc: 'Fifteen councils become four in 2028. An interactive model of each new authority: who merges, the budget it runs, the need it has to meet.',
+    desc: 'Fifteen councils into four: who merges, the budget, the need each one inherits.',
     figure: '15→4',
     unit: 'councils by 2028',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
@@ -56,7 +58,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#ffd60a',
     title: 'AI DOGE',
-    desc: 'What every public body in England publishes about the money it spends. Councils, police and fire bodies, searchable by supplier, category and body.',
+    desc: 'Public spending, transaction by transaction: councils, police, fire, Whitehall.',
     figure: '22m',
     unit: 'spending transactions',
     source: 'The files those bodies publish themselves',
@@ -67,7 +69,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#bf5af2',
     title: 'UK Demographics',
-    desc: 'Population data for every community: ethnic projections to 2061, schools, housing demand, health and tenure, for local authorities and constituencies alike.',
+    desc: 'Population: ethnicity, schools, housing, health and tenure, by area and seat.',
     figure: '318',
     unit: 'local authorities',
     source: 'ONS Census 2021, DWP Stat-Xplore, DfE School Census',
@@ -78,7 +80,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#30d158',
     title: 'UK Elections',
-    desc: 'A rolling general election forecast for every seat in the Commons, published alongside an honest backtest of every prediction it has ever made.',
+    desc: 'Every seat in the Commons: the forecast, the polling, every past call scored.',
     figure: '650',
     unit: 'constituencies',
     source: 'Published polling and the 2024 result',
@@ -89,7 +91,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#64d2ff',
     title: 'Asylum Stats',
-    desc: 'What asylum accommodation costs and who is paid for it, built from Home Office statistics, Companies House filings and council evidence.',
+    desc: 'Asylum accommodation: the cost, the contracts, the companies paid.',
     figure: '£2.1bn',
     unit: 'on hotels in 2024/25',
     source: 'Home Office statistics, Companies House, council evidence',
