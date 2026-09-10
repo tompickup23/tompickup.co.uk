@@ -80,10 +80,10 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#30d158',
     title: 'UK Elections',
-    desc: 'Every seat in the Commons: the forecast, the polling, every past call scored.',
+    desc: 'Every election forecast, then graded against the result.',
     figure: '650',
     unit: 'constituencies',
-    source: 'Published polling and the 2024 result',
+    source: 'Named pollsters, declared results, Democracy Club',
     inFooter: true,
   },
   {
