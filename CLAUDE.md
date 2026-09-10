@@ -19,6 +19,8 @@ also removes the Pages repo's own `CLAUDE.md`/`AGENTS.md` — restore them befor
 - Articles embed hand-written HTML for charts (`viz-panel`, `viz-reform-bar`); styling lives in `src/layouts/BlogPost.astro`
 - Python scripts under `scripts/` are offline pre-processing only, never request handlers; their output is committed
 - Page-level SEO and JSON-LD in `src/layouts/Layout.astro` and `src/layouts/BlogPost.astro`
+- The projects list is one file, `src/data/projects.ts`. `/projects/` and the footer's Projects
+  column both read it, so they cannot drift; add a project there, not in either template
 
 ## Commands
 

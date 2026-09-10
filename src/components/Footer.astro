@@ -1,5 +1,6 @@
 ---
 import EmailSignup from './EmailSignup.astro';
+import { FOOTER_PROJECTS } from '../data/projects';
 const currentYear = new Date().getFullYear();
 
 // Elections Act 2022 digital imprint (in force since Nov 2023, applies at all
@@ -33,6 +34,11 @@ const IMPRINT_ADDRESS = '';
             <li><a href="/news/">News</a></li>
             <li><a href="/projects/">Projects</a></li>
             <li><a href="/contact/">Contact</a></li>
+            <li>
+              <a href="https://reformukburnley.co.uk" target="_blank" rel="noopener noreferrer"
+                >Reform UK Burnley</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
@@ -42,9 +48,18 @@ const IMPRINT_ADDRESS = '';
         <h4 class="footer-heading">Projects</h4>
         <nav aria-label="Projects navigation">
           <ul>
-            <li><a href="/lgr/">Lancashire's New Councils</a></li>
-            <li><a href="/doge/">Spending Investigations</a></li>
-            <li><a href="https://aidoge.co.uk" target="_blank" rel="noopener noreferrer">AI DOGE</a></li>
+            {FOOTER_PROJECTS.map((p) => (
+              <li>
+                <a
+                  href={p.href}
+                  target={p.external ? '_blank' : undefined}
+                  rel={p.external ? 'noopener noreferrer' : undefined}
+                >
+                  {p.title}
+                </a>
+              </li>
+            ))}
+            <li><a href="/projects/">All projects</a></li>
           </ul>
         </nav>
       </div>
