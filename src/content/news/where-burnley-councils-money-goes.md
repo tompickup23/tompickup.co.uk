@@ -14,7 +14,7 @@ draft: false
 
 Every year Burnley Borough Council spends tens of millions of pounds of public money, and every year it publishes where most of it went. The catch is the form. The data comes out as four raw spreadsheets a year, buried on a page almost nobody visits, in a layout you cannot search, sort or add up without knowing your way around it. Technically it is published. In practice it is invisible.
 
-So I took all four quarters of the council's official 2025/26 spending data, every single payment of £500 or more, and built a tool to make sense of it. This article is the story those numbers tell: **£38.06 million** across **4,489 payments** to **843 different suppliers**. If you would rather skip the analysis and dig through the raw record yourself, every payment is searchable in my **[DOGE spending explorer](/doge/burnley-council/spending/2025-26/)**. Everything, here and there, comes straight from the council's own published files, and the working is set out at the bottom so it can be checked to the penny.
+So I took all four quarters of the council's official 2025/26 spending data, every single payment of £500 or more, and built a tool to make sense of it. This article is the story those numbers tell: **£38.06 million** across **4,489 payments** to **843 different suppliers**. If you would rather skip the analysis and dig through the raw record yourself, every payment is searchable on **[AI DOGE](https://aidoge.co.uk/councils/burnley/)**. Everything, here and there, comes straight from the council's own published files, and the working is set out at the bottom so it can be checked to the penny.
 
 <div class="viz-info">
 This is not a leak or a scoop. It is the council's own data, which it is legally required to publish, simply made usable. The point of transparency is not that the numbers exist somewhere. It is that residents can actually see them.
@@ -138,12 +138,12 @@ None of these is wrong. The point is that until now you could not find any of th
 
 ## Search every payment yourself
 
-The figures above are the headlines. The complete record, every one of the 4,489 payments, lives in my DOGE spending explorer: filter by supplier, service or month, sort by size or date, and watch the running total move as you go.
+The figures above are the headlines. The complete record, every one of the 4,489 payments, lives on AI DOGE: search it by supplier, filter it by month or quarter, and check the year total against the council's own budget.
 
 <div class="viz-cta">
 <div class="viz-cta-title">Burnley Council spending, 2025/26</div>
-<p class="viz-cta-sub">All 4,489 payments. Searchable, sortable, filterable.</p>
-<a href="/doge/burnley-council/spending/2025-26/" class="viz-cta-btn">Open the DOGE spending explorer &rarr;</a>
+<p class="viz-cta-sub">All 4,489 payments. Searchable and filterable.</p>
+<a href="https://aidoge.co.uk/councils/burnley/" class="viz-cta-btn" target="_blank" rel="noopener noreferrer">Open Burnley on AI DOGE &rarr;</a>
 </div>
 
 ## What I want done

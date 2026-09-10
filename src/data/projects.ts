@@ -26,11 +26,15 @@ export interface Project {
   accent: string;
   /** External sites open in a new tab and get the arrow glyph. */
   external?: boolean;
-  /** Shown in the footer's Projects column, which has room for four. */
+  /** Shown in the footer's Projects column. */
   inFooter?: boolean;
 }
 
-/* Built into this site: part of the councillor work, not separate publications. */
+/* Built into this site: part of the councillor work, not a separate publication.
+   The Burnley spending explorer used to live here too. It was retired on
+   11 Sept 2026: the same payments are on AI DOGE at /councils/burnley/, checked
+   by hand against the council's source files, so keeping a second copy here only
+   split the record in two. */
 export const ON_THIS_SITE: Project[] = [
   {
     href: '/lgr/',
@@ -40,16 +44,6 @@ export const ON_THIS_SITE: Project[] = [
     figure: '15→4',
     unit: 'councils by 2028',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
-    inFooter: true,
-  },
-  {
-    href: '/doge/',
-    accent: '#12b6cf',
-    title: 'Council spending investigations',
-    desc: 'Where the money actually goes, traced line by line through the spending files councils publish. Includes the contracts register and property map.',
-    figure: '2023-26',
-    unit: 'of Burnley spending',
-    source: "Councils' own published transparency files",
     inFooter: true,
   },
 ];
@@ -88,6 +82,7 @@ export const DATA_PROJECTS: Project[] = [
     figure: '650',
     unit: 'constituencies',
     source: 'Published polling and the 2024 result',
+    inFooter: true,
   },
   {
     href: 'https://asylumstats.co.uk',
@@ -98,8 +93,9 @@ export const DATA_PROJECTS: Project[] = [
     figure: '£2.1bn',
     unit: 'on hotels in 2024/25',
     source: 'Home Office statistics, Companies House, council evidence',
+    inFooter: true,
   },
 ];
 
-export const ALL_PROJECTS: Project[] = [...ON_THIS_SITE, ...DATA_PROJECTS];
+export const ALL_PROJECTS: Project[] = [...DATA_PROJECTS, ...ON_THIS_SITE];
 export const FOOTER_PROJECTS: Project[] = ALL_PROJECTS.filter((p) => p.inFooter);

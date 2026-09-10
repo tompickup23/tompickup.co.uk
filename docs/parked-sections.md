@@ -1,4 +1,8 @@
-# The Lancashire Business Observatory is parked
+# Parked sections
+
+Two sections are parked: kept in the repo, kept runnable locally, not published.
+
+## The Lancashire Business Observatory
 
 **Parked 10 September 2026.** The code is intact and still runs locally. Nothing about
 the project is abandoned — it is coming back on its own domain, sized for the whole UK.
@@ -89,7 +93,39 @@ steps need a human logged in to Search Console for `tompickup.co.uk`:
    "Crawled – currently not indexed" and in the total. Watch **Search results** for
    impressions on the 37 real pages — that is the number that should recover.
 
-## When it comes back
+## The Burnley spending explorer
+
+**Parked 11 September 2026.** Not an SEO problem: a duplication one.
+
+`/doge/` published Burnley Borough Council's payments over £500 for 2023-24,
+2024-25 and 2025-26. The same payments are now on AI DOGE at
+`aidoge.co.uk/councils/burnley/`, processed through a pipeline checked by hand
+against the council's own files and reconciled to its published revenue account
+budget. Its 2025/26 page shows £38,056,787 across 4,489 payments, which is what
+the article on this site reports. Keeping a second copy here only split one
+record across two places, each needing its own maintenance.
+
+Parked the same way as the Observatory: `src/pages/doge/` moved to
+`src/pages/_doge/`, and `npm run dev:doge` runs it locally.
+
+Two published articles staked their "check my working" promise on that explorer,
+so both were repointed rather than left to 404:
+
+- `where-burnley-councils-money-goes.md`, in the standfirst and in a mid-article
+  call to action.
+- `temporary-accommodation-asylum-burnley.md`, in the methodology note.
+
+Both now point at `aidoge.co.uk/councils/burnley/`. The prose changed with them:
+the previous wording described this site's own filters, and it would have been
+wrong about a different tool.
+
+**One thing this loses.** AI DOGE holds Burnley from 2024/25. The 2023-24 year
+that `/doge/` published is not there, so retiring the section takes that year off
+the public web. The data is still in `public/data/burnley-spending-2023-24.json`
+and the page still runs under `npm run dev:doge`. If that year matters, the fix
+is to get it into AI DOGE rather than to un-park this.
+
+## When the Observatory comes back
 
 It goes on its own property, not a subdirectory here. A UK-wide register — roughly
 5 million companies — cannot live on a personal site under any circumstances, and a

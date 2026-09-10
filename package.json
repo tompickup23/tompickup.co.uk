@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "dev:observatory": "bash scripts/observatory-dev.sh",
+    "dev:observatory": "bash scripts/parked-dev.sh observatory",
+    "dev:doge": "bash scripts/parked-dev.sh doge",
     "prebuild": "node scripts/guard-parked.mjs pre",
     "build": "astro build",
     "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post",

@@ -10,28 +10,28 @@ import { ON_THIS_SITE, DATA_PROJECTS } from '../data/projects';
    publications, and the two things a reader checking one actually wants are its
    scope and where its numbers came from. So each row leads with the figure the
    project itself leads with, and ends by naming the primary record behind it.
-   Six accented figures stacked down the right is the page's spine.
+   The accented figures stacked down the right are the page's spine.
    
-   Two groups, because they are two different things: council work published
-   here, and separate publications on their own domains. The list lives in
+   Two groups, because they are two different things: separate publications on
+   their own domains, and council work published here. The list lives in
    src/data/projects.ts so the footer column and this page cannot drift apart. */
 const GROUPS = [
-  {
-    label: 'On this site',
-    note: 'Council work, published here.',
-    items: ON_THIS_SITE,
-  },
   {
     label: 'Separate sites',
     note: 'Each one states its sources and carries a route to correct it. These open in a new tab.',
     items: DATA_PROJECTS,
+  },
+  {
+    label: 'On this site',
+    note: 'Council work, published here.',
+    items: ON_THIS_SITE,
   },
 ];
 ---
 
 <Layout
   title="Projects | Tom Pickup"
-  description="Six open data projects: Lancashire's new councils, council spending investigations, AI DOGE, UK Demographics, UK Elections and Asylum Stats. Every figure traces to a published document."
+  description="Five open data projects: AI DOGE, UK Demographics, UK Elections, Asylum Stats and a model of Lancashire's new councils. Every figure traces to a published document."
 >
   <section class="proj">
     <div class="container">
@@ -39,8 +39,8 @@ const GROUPS = [
         <h1 class="proj-h1">Projects</h1>
         <p class="proj-lead">
           Every number on these sites traces back to a document you can open yourself.
-          Two are published here. Four are separate sites, each with its own method and
-          its own route to correct it.
+          Four are separate sites, each with its own method and its own route to correct
+          it. One is published here.
         </p>
       </header>
 

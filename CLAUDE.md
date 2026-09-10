@@ -33,7 +33,19 @@ npm run dev:observatory          # Run the parked Observatory locally, then re-p
 
 **Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
 
-## Parked: Lancashire Business Observatory (10 Sep 2026)
+## Parked sections (see `docs/parked-sections.md`)
+
+Two sections are parked: in the repo, runnable locally, not published. Both are held
+out of the routed tree by Astro's underscore rule, and `prebuild`/`postbuild` guards
+(`scripts/guard-parked.mjs`) fail the build if either the routes or their data reach
+`dist/`. View them with `npm run dev:observatory` and `npm run dev:doge`.
+
+**Burnley spending explorer, `/doge/` (11 Sep 2026)** at `src/pages/_doge/`. Retired as
+a duplicate: the same payments are on `aidoge.co.uk/councils/burnley/`, checked against
+the council's files. The two articles that linked it were repointed there. AI DOGE holds
+Burnley from 2024/25 only, so the 2023-24 year is no longer public anywhere.
+
+### Lancashire Business Observatory (10 Sep 2026)
 
 `/lancs/` and `/lancs/business/` are **parked, not deleted**. They were 1,074 of the site's
 1,112 pages — 1,046 of them near-identical Companies House profiles — which is scaled thin
@@ -46,7 +58,7 @@ content on a domain that carries a councillor's name and journalism. The section
 - **Do not add `Disallow: /lancs/` to robots.txt.** The URLs must stay crawlable to be seen as
   404s and dropped from the index.
 - To view it: `npm run dev:observatory` (plain `npm run dev` will 404 it).
-- Full reasoning, and the outstanding Search Console steps: `docs/parked-observatory.md`.
+- Full reasoning, and the outstanding Search Console steps: `docs/parked-sections.md`.
 
 It returns on its own domain, scaled UK-wide — not as a subdirectory here.
 
