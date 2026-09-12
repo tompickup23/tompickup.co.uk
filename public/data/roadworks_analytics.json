@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-09-12T10:00:34.805150+00:00",
+    "generated": "2026-09-12T20:07:47.275006+00:00",
     "live_works": 1265,
     "archived_works": 19362,
     "total_analysed": 20627
@@ -644,7 +644,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1141,
+        "days": 1142,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -834,6 +834,14 @@
         "planned_end": "2026-09-11",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Preston Road",
+        "district": "chorley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-12",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Lytham St Annes Way",
@@ -1034,14 +1042,6 @@
         "planned_end": "2026-09-11",
         "days_overdue": 0,
         "category": "Minor"
-      },
-      {
-        "road": "Lancaster Road",
-        "district": "lancaster",
-        "operator": "United Utilities Water",
-        "planned_end": "2026-09-11",
-        "days_overdue": 0,
-        "category": "Standard"
       }
     ],
     "overdue_count": 30
