@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-09-13T11:01:32.223494+00:00",
+    "generated": "2026-09-13T20:14:49.845456+00:00",
     "live_works": 1232,
     "archived_works": 19392,
     "total_analysed": 20624
@@ -644,7 +644,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1142,
+        "days": 1143,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -804,15 +804,15 @@
     ],
     "overdue_works": [
       {
-        "road": "Euxton Lane",
+        "road": "Preston Road",
         "district": "chorley",
         "operator": "Lancashire County Council",
         "planned_end": "2026-09-12",
-        "days_overdue": 0,
+        "days_overdue": 1,
         "category": "Major"
       },
       {
-        "road": "Preston Road",
+        "road": "Euxton Lane",
         "district": "chorley",
         "operator": "Lancashire County Council",
         "planned_end": "2026-09-12",
@@ -836,12 +836,36 @@
         "category": "Minor"
       },
       {
+        "road": "Ribbleton Lane",
+        "district": "preston",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-09-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Woodlands Crescent",
         "district": "preston",
         "operator": "United Utilities Water",
         "planned_end": "2026-09-12",
         "days_overdue": 0,
         "category": "Immediate - Emergency"
+      },
+      {
+        "road": "Moor Lane",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-13",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Parson Lane",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-13",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Newchurch Road",
@@ -860,12 +884,28 @@
         "category": "Minor"
       },
       {
+        "road": "Stratford Road",
+        "district": "fylde",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-09-13",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Lowther Lane",
         "district": "pendle",
         "operator": "Lancashire County Council",
         "planned_end": "2026-09-12",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Castle Gate",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-13",
+        "days_overdue": 0,
+        "category": "Major"
       },
       {
         "road": "Greenside",
@@ -900,6 +940,6 @@
         "category": "Minor"
       }
     ],
-    "overdue_count": 12
+    "overdue_count": 17
   }
 }
