@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-09-14T11:40:42.201338+00:00",
+    "generated": "2026-09-14T21:24:01.580641+00:00",
     "live_works": 1229,
     "archived_works": 19419,
     "total_analysed": 20648
@@ -644,7 +644,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1143,
+        "days": 1144,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -804,12 +804,36 @@
     ],
     "overdue_works": [
       {
+        "road": "Hartmann Street",
+        "district": "hyndburn",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Kelbrook Road",
         "district": "pendle",
         "operator": "Yorkshire Water",
         "planned_end": "2026-09-14",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Broadgate",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Garstang Road",
+        "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Immediate - Urgent"
       },
       {
         "road": "North Street",
@@ -836,12 +860,36 @@
         "category": "Minor"
       },
       {
+        "road": "Liverpool Road",
+        "district": "south_ribble",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Tithebarn Street",
         "district": "wyre",
         "operator": "United Utilities Water",
         "planned_end": "2026-09-13",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
+      },
+      {
+        "road": "West Drive",
+        "district": "wyre",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Liverpool Road",
+        "district": "burnley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Stanhill Road",
@@ -860,12 +908,44 @@
         "category": "Immediate - Urgent"
       },
       {
+        "road": "Swanpool Lane",
+        "district": "west_lancashire",
+        "operator": "SP Energy Networks",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Sower Carr Lane",
+        "district": "wyre",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Heron Syke",
+        "district": "lancaster",
+        "operator": "Cadent",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
         "road": "Willow Lane",
         "district": "lancaster",
         "operator": "Electricity North West Limited",
         "planned_end": "2026-09-13",
         "days_overdue": 0,
         "category": "Immediate - Urgent"
+      },
+      {
+        "road": "Colne Road",
+        "district": "pendle",
+        "operator": "Yorkshire Water",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
       },
       {
         "road": "Dunderdale Avenue",
@@ -876,14 +956,94 @@
         "category": "Minor"
       },
       {
+        "road": "Kelbrook Road",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
         "road": "Montford Road",
         "district": "pendle",
         "operator": "Virgin Media",
         "planned_end": "2026-09-13",
         "days_overdue": 0,
         "category": "Minor"
+      },
+      {
+        "road": "Weavers Croft",
+        "district": "ribble_valley",
+        "operator": "United Utilities Water",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Whalley Road",
+        "district": "ribble_valley",
+        "operator": "IX Wireless Limited",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Birkdale Avenue",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Thurston Road",
+        "district": "south_ribble",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Alderley",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Belfield",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Blakehall",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Elmridge",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
+      },
+      {
+        "road": "Fawcett",
+        "district": "west_lancashire",
+        "operator": "BT",
+        "planned_end": "2026-09-14",
+        "days_overdue": 0,
+        "category": "Minor"
       }
     ],
-    "overdue_count": 10
+    "overdue_count": 30
   }
 }
