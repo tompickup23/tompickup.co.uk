@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 type Post = CollectionEntry<'news'>;
 
 export const NEWS_AREAS = [
-  { id: 'burnley', title: 'Burnley', description: 'Community news, public spending, housing, health and policing in Burnley and Padiham.' },
+  { id: 'burnley', title: 'Burnley & Padiham', description: 'Community news, public spending, housing, health and policing in Burnley and Padiham.' },
   { id: 'lancashire', title: 'Lancashire', description: 'Council reorganisation, public services and decisions across the county.' },
   { id: 'national', title: 'National', description: 'UK policy, public money and the systems behind the local picture.' },
 ] as const;
