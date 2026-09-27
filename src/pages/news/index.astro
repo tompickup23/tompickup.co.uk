@@ -39,6 +39,8 @@ const schema = {
       </a>)}
     </nav>
 
+    <a class="debates-link" href="/news/public-debates/"><strong>Public debates</strong><span>Debates, speeches and public appearances <span aria-hidden="true">→</span></span></a>
+
     {areas.map((area, i) => <section class="news-area" id={area.id} aria-labelledby={`${area.id}-title`}>
       <header class="area-heading">
         <div><p class="news-eyebrow">0{i + 1} / {area.count} articles</p><h2 id={`${area.id}-title`}>{area.title}</h2><p>{area.description}</p></div>
@@ -71,6 +73,8 @@ const schema = {
   .news-page { max-width: 1200px; margin: 0 auto; padding: 70px 32px 30px; color: #f2f1ed; }
   .news-page a { background-image: none; }
   .news-page a:focus-visible { outline: 2px solid #85d6e1; outline-offset: 5px; }
+  .debates-link { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid #2a2e32; color: #b8d8df; }
+  .debates-link > span { color: #b0bac2; font-size: .85rem; }
   .news-header { margin-bottom: 36px; }
   .news-eyebrow { font-size: .67rem; letter-spacing: .13em; text-transform: uppercase; color: #9fbdc5; }
   h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.055em; font-weight: 600; margin: 18px 0; }

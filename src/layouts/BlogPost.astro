@@ -12,6 +12,7 @@ interface Props {
     updated?: Date;
     image?: string;
     imageAlt?: string;
+    imageUncropped?: boolean;
     ogImage?: string;
     imageCredit?: string;
     category?: string;
@@ -129,7 +130,9 @@ const pageTitle =
       </a>
 
       {(frontmatter.category || frontmatter.subcategory) && (
-        <p class="article-category">{[frontmatter.category, frontmatter.subcategory].filter(Boolean).join(' › ')}</p>
+        <p class="article-category">{frontmatter.subcategory === 'Public debates'
+          ? <>{frontmatter.category && `${frontmatter.category} › `}<a href="/news/public-debates/">Public debates</a></>
+          : [frontmatter.category, frontmatter.subcategory].filter(Boolean).join(' › ')}</p>
       )}
 
       <h1 class="article-title">{frontmatter.title}</h1>
@@ -161,7 +164,7 @@ const pageTitle =
     </header>
 
     {frontmatter.image && (
-      <div class="article-hero-image">
+      <div class:list={['article-hero-image', { 'hero-uncropped': frontmatter.imageUncropped }]}>
         <img src={frontmatter.image} alt={frontmatter.imageAlt || `Lead image for the article: ${frontmatter.title}`} loading="eager" decoding="async" />
         {frontmatter.imageCredit && <span class="hero-credit">{frontmatter.imageCredit}</span>}
       </div>
@@ -312,6 +315,8 @@ const pageTitle =
     max-height: 400px;
     object-fit: cover;
   }
+
+  .hero-uncropped img { max-height: none; }
 
   .article-category {
     font-size: 0.75rem;
@@ -496,6 +501,42 @@ const pageTitle =
     height: auto;
     border-radius: 12px;
     margin: 2rem 0;
+  }
+
+  .prose :global(.article-photo-gallery) {
+    columns: 2;
+    column-gap: 1.25rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .prose :global(.article-photo-gallery figure) {
+    break-inside: avoid;
+    margin: 0 0 1.25rem;
+    padding: 0;
+  }
+
+  .prose :global(.article-photo-gallery a) {
+    display: block;
+    background: none;
+    border: 0;
+  }
+
+  .prose :global(.article-photo-gallery img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  .prose :global(.article-photo-gallery figcaption) {
+    margin-top: .5rem;
+    color: #aab4bd;
+    font-size: .8rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .prose :global(.article-photo-gallery) { columns: 1; }
   }
 
   /* Video embeds */
