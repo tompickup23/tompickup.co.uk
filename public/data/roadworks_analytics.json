@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-09-27T11:19:17.471931+00:00",
+    "generated": "2026-09-27T20:48:04.757708+00:00",
     "live_works": 1199,
     "archived_works": 20396,
     "total_analysed": 21595
@@ -644,7 +644,7 @@
       {
         "road": "Bolton Road",
         "district": "chorley",
-        "days": 1156,
+        "days": 1157,
         "operator": "Lancashire County Council",
         "start_date": "2023-07-28T13:00:00+00:00",
         "category": "Immediate - Emergency"
@@ -812,8 +812,48 @@
         "category": "Standard"
       },
       {
+        "road": "Park Avenue",
+        "district": "pendle",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-27",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
         "road": "Birley Street",
         "district": "preston",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-27",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Eastway",
+        "district": "preston",
+        "operator": "Cornerstone Telecommunications Infrastru",
+        "planned_end": "2026-09-27",
+        "days_overdue": 0,
+        "category": "Standard"
+      },
+      {
+        "road": "Castle Gate",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-27",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Moor Lane",
+        "district": "ribble_valley",
+        "operator": "Lancashire County Council",
+        "planned_end": "2026-09-27",
+        "days_overdue": 0,
+        "category": "Major"
+      },
+      {
+        "road": "Parson Lane",
+        "district": "ribble_valley",
         "operator": "Lancashire County Council",
         "planned_end": "2026-09-27",
         "days_overdue": 0,
@@ -852,6 +892,6 @@
         "category": "Minor"
       }
     ],
-    "overdue_count": 6
+    "overdue_count": 11
   }
 }
