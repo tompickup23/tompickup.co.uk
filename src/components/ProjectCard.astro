@@ -1,0 +1,54 @@
+---
+import type { Project } from '../data/projects';
+import { PROJECT_DETAILS } from '../data/projects';
+interface Props { project: Project }
+const { project: p } = Astro.props;
+const detail = PROJECT_DETAILS[p.title];
+const location = p.external ? new URL(p.href).hostname : 'Here on tompickup.co.uk';
+---
+
+<article class="project-card" style={`--project-accent:${p.accent}`}>
+  <div class="card-top">
+    <span class="project-mark" aria-hidden="true">{detail.mark}</span>
+    <span class="project-type">{detail.subject}</span>
+  </div>
+  <h3><a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? 'noopener noreferrer' : undefined}>
+    {p.title}<span class="title-arrow" aria-hidden="true">{p.external ? '↗' : '→'}</span>
+    {p.external && <span class="sr-only"> (opens in a new tab)</span>}
+  </a></h3>
+  <p class="project-description">{p.desc}</p>
+  <div class="card-bottom">
+    {p.source && <p class="project-source"><span>Sources</span>{p.source}</p>}
+    <p class="project-location">{location}</p>
+  </div>
+  {(detail.article || detail.section) && <div class="related-links">
+    <span class="related-label">Also on this site</span>
+    {detail.article && <a href={`/news/${detail.article.slug}/`}>{detail.article.label}<span aria-hidden="true">→</span></a>}
+    {detail.section && <a href={detail.section.href}>{detail.section.label}<span aria-hidden="true">→</span></a>}
+  </div>}
+</article>
+
+<style>
+  .project-card { height: 100%; display: flex; flex-direction: column; padding: 28px; border: 1px solid #292c30; border-radius: 16px; background: #101214; position: relative; overflow: hidden; transition: border-color 180ms, background-color 180ms; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 28px; width: 40px; height: 2px; background: var(--project-accent); }
+  .project-card:hover, .project-card:focus-within { border-color: color-mix(in srgb, var(--project-accent) 50%, #292c30); background: #141719; }
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 27px; }
+  .project-mark { display: grid; place-items: center; width: 45px; height: 45px; flex-shrink: 0; border-radius: 11px; color: var(--project-accent); background: color-mix(in srgb, var(--project-accent) 9%, #101214); border: 1px solid color-mix(in srgb, var(--project-accent) 22%, #101214); font-size: 15px; font-weight: 700; letter-spacing: -.04em; }
+  .project-type { color: #b4b9bf; font-size: 12px; text-align: right; line-height: 1.5; }
+  h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); letter-spacing: -.035em; margin: 0 0 12px; }
+  h3 a { display: flex; justify-content: space-between; gap: 15px; color: #f2f1ed; background: none; }
+  h3 a:hover { color: var(--project-accent); }
+  .title-arrow { color: var(--project-accent); font-size: 1.1rem; font-weight: 400; padding-top: 3px; }
+  .project-description { color: #b7bdc4; font-size: .94rem; line-height: 1.7; margin: 0 0 24px; }
+  .card-bottom { margin-top: auto; }
+  .project-source { color: #a9afb6; font-size: .75rem; line-height: 1.6; }
+  .project-source > span { display: block; color: #d4d8dc; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .project-location { color: var(--project-accent); font-size: .72rem; margin-top: 16px; overflow-wrap: anywhere; }
+  .related-links { border-top: 1px solid #2d3135; margin-top: 21px; padding-top: 17px; }
+  .related-label { display: block; color: #a9afb6; font-size: .65rem; text-transform: uppercase; letter-spacing: .09em; margin-bottom: 6px; }
+  .related-links a { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; color: #e0e4e7; font-size: .8rem; padding: 6px 0; background: none; }
+  .related-links a:hover { color: var(--project-accent); }
+  a:focus-visible { outline: 2px solid var(--project-accent); outline-offset: 5px; border-radius: 2px; }
+  @media (max-width: 560px) { .project-card { padding: 23px; } .card-top { margin-bottom: 22px; } }
+  @media (prefers-reduced-motion: reduce) { .project-card { transition: none; } }
+</style>

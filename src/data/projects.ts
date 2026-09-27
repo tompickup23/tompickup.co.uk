@@ -4,11 +4,8 @@
  * cannot drift. Before this existed the footer listed a section the page did not
  * and vice versa.
  *
- * Every project carries a `figure`. That is not decoration: these are statistical
- * publications, and the first thing anyone checking one wants to know is what it
- * covers. The figure is the scope the project itself leads with, and `source`
- * names the primary record it is built from, because provenance is the whole
- * claim these projects make.
+ * Data projects name their sources and may carry a verified scope figure.
+ * Other websites use a description without a statistic.
  *
  * House style: no em-dashes anywhere user-visible. The build gate greps dist/.
  */
@@ -20,11 +17,11 @@ export interface Project {
       project's own coverage page will support. */
   desc: string;
   /** The scope this project leads with. Set large, in tabular figures. */
-  figure: string;
+  figure?: string;
   /** What the figure counts. Reads as a continuation of it. */
-  unit: string;
+  unit?: string;
   /** The primary record behind the numbers. */
-  source: string;
+  source?: string;
   accent: string;
   /** External sites open in a new tab and get the arrow glyph. */
   external?: boolean;
@@ -39,12 +36,19 @@ export interface Project {
    split the record in two. */
 export const ON_THIS_SITE: Project[] = [
   {
+    href: '/stocks-massey/',
+    accent: '#d9bd83',
+    title: 'Stocks Massey',
+    desc: 'The history of the Edward Stocks Massey Bequest Fund and its continuing support for education, music and the arts in Burnley.',
+    inFooter: true,
+  },
+  {
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
-    desc: 'Fifteen councils into four: who merges, the budget, the need each one inherits.',
+    desc: 'An interactive model of Lancashire’s council reorganisation, exploring the budgets, needs and obligations in the July 2026 four-council proposal.',
     figure: '15→4',
-    unit: 'councils by 2028',
+    unit: 'councils in the July proposal',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
     inFooter: true,
   },
@@ -58,7 +62,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#ffd60a',
     title: 'AI DOGE',
-    desc: 'Public spending, transaction by transaction: councils, police, fire, Whitehall.',
+    desc: 'Searchable public spending records showing who public bodies pay, how much and what the published files reveal.',
     figure: '22m',
     unit: 'spending transactions',
     source: 'The files those bodies publish themselves',
@@ -69,7 +73,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#bf5af2',
     title: 'UK Demographics',
-    desc: 'Population: ethnicity, schools, housing, health and tenure, by area and seat.',
+    desc: 'Population data and projections alongside local statistics on housing, schools, health and living conditions.',
     figure: '318',
     unit: 'local authorities',
     source: 'ONS Census 2021, DWP Stat-Xplore, DfE School Census',
@@ -80,7 +84,7 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#30d158',
     title: 'UK Elections',
-    desc: 'Every seat, every English council: forecast, then graded on the result.',
+    desc: 'Election results, forecasts and council control, with transparent methods and a record of how predictions performed.',
     figure: '650',
     unit: 'constituencies',
     source: 'Named pollsters, declared results, Democracy Club',
@@ -91,13 +95,101 @@ export const DATA_PROJECTS: Project[] = [
     external: true,
     accent: '#64d2ff',
     title: 'Asylum Stats',
-    desc: 'Asylum accommodation: the cost, the contracts, the companies paid.',
+    desc: 'Official asylum statistics, accommodation costs and contractor records, organised nationally and by local area.',
     figure: '£2.1bn',
     unit: 'on hotels in 2024/25',
     source: 'Home Office statistics, Companies House, council evidence',
     inFooter: true,
   },
+  {
+    href: 'https://ukcouncils.co.uk',
+    external: true,
+    accent: '#8cc4ed',
+    title: 'UK Councils',
+    desc: 'Council tax by band and year, with links to local election results, public spending and other council information.',
+    source: 'Official council tax tables and linked local records',
+    inFooter: true,
+  },
+  {
+    href: 'https://ukplaces.co.uk',
+    external: true,
+    accent: '#f5c77e',
+    title: 'UK Places',
+    desc: 'A postcode and place directory bringing together local spending, demographics, elections and asylum data.',
+    source: 'ONS geography and linked specialist data publications',
+    inFooter: true,
+  },
+  {
+    href: 'https://ukfoodhygiene.co.uk',
+    external: true,
+    accent: '#9bdaab',
+    title: 'UK Food Hygiene',
+    desc: 'Food hygiene ratings by business and area, drawn from Food Standards Agency records.',
+    source: 'Food Standards Agency food hygiene ratings',
+    inFooter: true,
+  },
+  {
+    href: 'https://ukschoolholidaydates.co.uk',
+    external: true,
+    accent: '#ffb69e',
+    title: 'UK School Holiday Dates',
+    desc: 'School term dates, half terms and holidays by local authority, with source links and downloadable calendars.',
+    source: 'Local authorities’ published term dates',
+    inFooter: true,
+  },
 ];
 
-export const ALL_PROJECTS: Project[] = [...DATA_PROJECTS, ...ON_THIS_SITE];
+export const WEBSITE_PROJECTS: Project[] = [
+  {
+    href: 'https://reformukburnley.co.uk',
+    external: true,
+    accent: '#12b6cf',
+    title: 'Reform UK Burnley',
+    desc: 'The Burnley and Padiham branch website, bringing together councillor profiles, local news, priorities and ways to get involved.',
+    inFooter: true,
+  },
+];
+
+export const ALL_PROJECTS: Project[] = [...DATA_PROJECTS, ...ON_THIS_SITE, ...WEBSITE_PROJECTS];
 export const FOOTER_PROJECTS: Project[] = ALL_PROJECTS.filter((p) => p.inFooter);
+
+/** Portfolio categories also drive the page's jump navigation. */
+function projectsNamed(...titles: string[]): Project[] {
+  return titles.map(title => {
+    const project = ALL_PROJECTS.find(project => project.title === title);
+    if (!project) throw new Error(`Unknown portfolio project: ${title}`);
+    return project;
+  });
+}
+
+export const PROJECT_GROUPS = [
+  { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
+  { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
+  { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', 'Reform UK Burnley') },
+  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils") },
+];
+
+/** Related reading is labelled as such, rather than presented as a launch article. */
+export const PROJECT_DETAILS: Record<string, {
+  mark: string;
+  subject: string;
+  article?: { slug: string; label: string };
+  section?: { href: string; label: string };
+}> = {
+  'Stocks Massey': { mark: 'SM', subject: 'History & charitable legacy', section: { href: '/stocks-massey/#articles', label: 'Read the award articles' } },
+  'AI DOGE': { mark: 'DG', subject: 'Public spending', article: { slug: 'where-burnley-councils-money-goes', label: 'Where Burnley Council’s money goes' } },
+  'UK Councils': { mark: 'UC', subject: 'Local government' },
+  'UK Elections': { mark: 'UE', subject: 'Elections & forecasts' },
+  'Asylum Stats': { mark: 'AS', subject: 'Asylum & accommodation', article: { slug: 'temporary-accommodation-asylum-burnley', label: 'Burnley’s temporary accommodation bill' } },
+  'UK Places': { mark: 'UP', subject: 'Local data directory' },
+  'UK Demographics': { mark: 'UD', subject: 'Population & society', article: { slug: 'the-burnley-trap', label: 'Health, work and deprivation in Burnley' } },
+  'UK Food Hygiene': { mark: 'FH', subject: 'Food hygiene ratings' },
+  'UK School Holiday Dates': { mark: 'SH', subject: 'School calendars' },
+  "Lancashire's new councils": { mark: 'LC', subject: 'Interactive council model', article: { slug: 'lancashire-four-unitaries-model', label: 'Read the introduction to the model' }, section: { href: '/lgr/contracts/', label: 'Explore the contracts register' } },
+  'Reform UK Burnley': { mark: 'RB', subject: 'Political website' },
+};
+
+export const LOCAL_READING: Record<string, string[]> = {
+  burnley: ['where-burnley-councils-money-goes', 'who-owns-burnley', 'the-burnley-trap'],
+  lancashire: ['two-wind-farms-one-view', 'lytham-supported-living', 'lancashire-crime-divide'],
+};

@@ -1,325 +1,140 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import { ON_THIS_SITE, DATA_PROJECTS } from '../data/projects';
+import ProjectCard from '../components/ProjectCard.astro';
+import { newsArea, newsTopic } from '../lib/news-categories';
+import { ALL_PROJECTS, PROJECT_GROUPS, PROJECT_DETAILS, LOCAL_READING } from '../data/projects';
 
-/* One hub instead of several nav slots. Every project keeps its URL; this page
-   is where they are found, labelled in plain English by what a visitor wants
-   rather than by project codename.
-   
-   Presented as a register rather than a card grid. These are statistical
-   publications, and the two things a reader checking one actually wants are its
-   scope and where its numbers came from. So each row leads with the figure the
-   project itself leads with, and ends by naming the primary record behind it.
-   The accented figures stacked down the right are the page's spine.
-   
-   Two groups, because they are two different things: separate publications on
-   their own domains, and council work published here. The list lives in
-   src/data/projects.ts so the footer column and this page cannot drift apart. */
-const GROUPS = [
-  {
-    label: 'Separate sites',
-    note: 'Each one states its sources and carries a route to correct it. These open in a new tab.',
-    items: DATA_PROJECTS,
-  },
-  {
-    label: 'On this site',
-    note: 'Council work, published here.',
-    items: ON_THIS_SITE,
-  },
+const posts = await getCollection('news', ({ data }) => !data.draft);
+const groupedProjects = PROJECT_GROUPS.flatMap(group => group.projects);
+if (groupedProjects.length !== ALL_PROJECTS.length || new Set(groupedProjects).size !== ALL_PROJECTS.length) {
+  throw new Error('Each portfolio project must appear in exactly one category.');
+}
+const postMap = new Map(posts.map(post => [post.id, post]));
+// A removed or unpublished article must not leave a dead link in the portfolio.
+const readingSlugs = [
+  ...Object.values(LOCAL_READING).flat(),
+  ...Object.values(PROJECT_DETAILS).flatMap(detail => detail.article ? [detail.article.slug] : []),
 ];
+for (const slug of readingSlugs) {
+  if (!postMap.has(slug)) throw new Error(`Portfolio article is not published: ${slug}`);
+}
+for (const [area, slugs] of Object.entries(LOCAL_READING)) {
+  for (const slug of slugs) {
+    if (newsArea(postMap.get(slug)!) !== area) throw new Error(`Portfolio article is in the wrong area: ${slug}`);
+  }
+}
+const description = 'Explore Tom Pickup’s data projects, everyday tools and Lancashire council work, with the investigations and explainers behind them.';
+const schema = {
+  '@type': 'CollectionPage', '@id': 'https://tompickup.co.uk/projects/',
+  url: 'https://tompickup.co.uk/projects/', name: 'Projects | Tom Pickup', description,
+  mainEntity: {
+    '@type': 'ItemList', numberOfItems: ALL_PROJECTS.length,
+    itemListElement: ALL_PROJECTS.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.title, url: new URL(p.href, 'https://tompickup.co.uk').href })),
+  },
+};
 ---
 
-<Layout
-  title="Projects | Tom Pickup"
-  description="Five open data projects: AI DOGE, UK Demographics, UK Elections, Asylum Stats and a model of Lancashire's new councils. Every figure traces to a published document."
->
-  <section class="proj">
-    <div class="container">
-      <header class="proj-head">
-        <h1 class="proj-h1">Projects</h1>
-        <p class="proj-lead">
-          Every number on these sites traces back to a document you can open yourself.
-          Four are separate sites, each with its own method and its own route to correct
-          it. One is published here.
-        </p>
-      </header>
+<Layout title="Projects | Tom Pickup" description={description} schema={schema}>
+  <div class="portfolio">
+    <header class="portfolio-hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="small-rule"></span> Projects by Tom Pickup</p>
+        <h1>Public records.<br /><span>Practical tools.</span></h1>
+        <p class="hero-intro">I build websites that make public information easier to find, understand and use. Explore the projects, or read the investigations behind them.</p>
+        <a href="#public-data" class="hero-link">Explore the projects <span aria-hidden="true">↓</span></a>
+      </div>
+      <nav class="portfolio-index" aria-label="On this page">
+        <div class="index-heading"><span>Explore the collection</span><span>{ALL_PROJECTS.length} projects</span></div>
+        {PROJECT_GROUPS.map((group, i) => <a href={`#${group.id}`}>
+          <span class="index-number">0{i + 1}</span><span>{group.shortTitle}</span><span class="index-count">{group.projects.length}</span><span aria-hidden="true">↘</span>
+        </a>)}
+        <p>Independent data publications, local tools and selected writing, in one place.</p>
+      </nav>
+    </header>
 
-      {GROUPS.map((group) => (
-        <section class="proj-group">
-          <div class="proj-grouphead">
-            <h2 class="proj-grouplabel">{group.label}</h2>
-            <span class="proj-groupcount">{group.items.length}</span>
-          </div>
-          <p class="proj-groupnote">{group.note}</p>
-
-          <ul class="proj-list">
-            {group.items.map((p) => (
-              <li>
-                <a
-                  class="proj-row"
-                  style={`--accent:${p.accent}`}
-                  href={p.href}
-                  target={p.external ? '_blank' : undefined}
-                  rel={p.external ? 'noopener noreferrer' : undefined}
-                >
-                  <div class="proj-body">
-                    <h3 class="proj-name">
-                      {p.title}
-                      {p.external && <span class="proj-ext" aria-hidden="true">&#8599;</span>}
-                    </h3>
-                    <p class="proj-desc">{p.desc}</p>
-                    <p class="proj-source">
-                      <span class="proj-sourcekey">Source</span>
-                      <span class="proj-sourceval">{p.source}</span>
-                    </p>
-                  </div>
-
-                  <div class="proj-figure">
-                    <span class="proj-value">{p.figure}</span>
-                    <span class="proj-unit">{p.unit}</span>
-                  </div>
-                </a>
-              </li>
-            ))}
+    <div class="portfolio-body">
+      {PROJECT_GROUPS.map((group, i) => <section class="project-section" id={group.id} aria-labelledby={`${group.id}-title`}>
+        <header class="portfolio-section-heading">
+          <div class="section-kicker"><span>0{i + 1}</span><span>{group.projects.length} {group.projects.length === 1 ? 'project' : 'projects'}{LOCAL_READING[group.id] ? ' & selected writing' : ''}</span></div>
+          <h2 id={`${group.id}-title`}>{group.title}</h2>
+          <p>{group.description}</p>
+        </header>
+        <div class:list={['group-content', { 'local-layout': LOCAL_READING[group.id] }]}>
+          <ul class="project-grid">
+            {group.projects.map(project => <li><ProjectCard project={project} /></li>)}
           </ul>
-        </section>
-      ))}
+          {LOCAL_READING[group.id] && <aside class="local-reading" aria-label={`${group.title} news and investigations`}>
+            <div class="local-reading-heading"><h3>News &amp; investigations</h3><a href={`/news/#${group.id}`}>All {group.title} articles <span aria-hidden="true">↗</span></a></div>
+            {LOCAL_READING[group.id].map(slug => {
+              const post = postMap.get(slug)!;
+              return <article class="local-story">
+                <a href={`/news/${post.id}/`}>
+                  {post.data.image && <img src={post.data.image} alt="" width="104" height="90" loading="lazy" decoding="async" />}
+                  <div><p class="reading-topic">{newsTopic(post).title}</p><h4>{post.data.title}</h4></div>
+                  <span class="story-arrow" aria-hidden="true">→</span>
+                </a>
+                {post.data.imageCredit && <p class="image-credit">{post.data.imageCredit}</p>}
+              </article>;
+            })}
+          </aside>}
+        </div>
+      </section>)}
+
+      <aside class="more-work" aria-label="More on this site">
+        <div><p class="eyebrow">Keep exploring</p><h2>More about the work.</h2></div>
+        <div class="more-links"><a href="/news/">All news &amp; investigations <span aria-hidden="true">→</span></a><a href="/about/">About me <span aria-hidden="true">→</span></a><a href="/updates/">Subscribe for updates <span aria-hidden="true">→</span></a><a href="/contact/">Get in touch <span aria-hidden="true">→</span></a></div>
+      </aside>
     </div>
-  </section>
+  </div>
 </Layout>
 
 <style>
-  .proj {
-    padding: 7rem 0 var(--space-2xl);
-  }
-
-  /* The site container runs to 1200px. A register needs a tighter measure than
-     that: at full width the description and the figure sit at opposite edges
-     with a void between them and stop reading as one row. */
-  .proj-head,
-  .proj-group {
-    max-width: 1020px;
-  }
-
-  /* Head */
-  .proj-h1 {
-    font-size: clamp(2rem, 5.5vw, 3.25rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin: 0 0 var(--space-md);
-  }
-
-  .proj-lead {
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    max-width: 48ch;
-    margin: 0;
-  }
-
-  /* Group heads. The count is information, not ornament: it says how many of
-     each kind there are before you start reading rows. */
-  .proj-group {
-    margin-top: var(--space-2xl);
-  }
-
-  .proj-grouphead {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .proj-grouplabel {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  .proj-groupcount {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    font-variant-numeric: tabular-nums;
-    border: 1px solid var(--separator);
-    border-radius: 999px;
-    padding: 1px 8px;
-    line-height: 1.5;
-  }
-
-  .proj-groupnote {
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin: var(--space-xs) 0 var(--space-md);
-    max-width: 54ch;
-  }
-
-  /* Rows */
-  .proj-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 3px;
-  }
-
-  .proj-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    column-gap: var(--space-2xl);
-    padding: var(--space-lg);
-    padding-left: calc(var(--space-lg) + 5px);
-    border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.02);
-    text-decoration: none;
-    color: inherit;
-    transition: background var(--transition-normal);
-  }
-
-  /* The accent rail. A pseudo-element rather than a border so its width and
-     strength can change on hover without shifting the row's text. */
-  .proj-row::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    border-radius: var(--radius-md) 0 0 var(--radius-md);
-    background: var(--accent);
-    opacity: 0.5;
-    transition:
-      opacity var(--transition-normal),
-      width var(--transition-normal);
-  }
-
-  .proj-row:hover,
-  .proj-row:focus-visible {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .proj-row:hover::before,
-  .proj-row:focus-visible::before {
-    opacity: 1;
-    width: 5px;
-  }
-
-  .proj-row:hover .proj-name {
-    color: var(--accent);
-  }
-
-  .proj-row:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-
-  .proj-name {
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
-    color: var(--text-primary);
-    margin: 0 0 var(--space-xs);
-    transition: color var(--transition-normal);
-  }
-
-  .proj-ext {
-    font-size: 0.78em;
-    color: var(--text-secondary);
-    margin-left: 5px;
-  }
-
-  /* One terse line per project, so it is sized to sit on one line rather than
-     wrapped to a paragraph measure. The grid column already caps how wide it
-     can get; a ch cap on top of that only forced a needless second line. */
-  .proj-desc {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin: 0 0 var(--space-sm);
-  }
-
-  /* Provenance line. The key is set as tracked micro-caps; the value stays in
-     sentence case because it is full of proper nouns that all-caps mangles. */
-  .proj-source {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 4px 10px;
-    margin: 0;
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
-
-  .proj-sourcekey {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-  }
-
-  /* The figure. The page's spine: six accented numbers down the right edge. */
-  .proj-figure {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-    padding-top: 2px;
-  }
-
-  .proj-value {
-    font-size: clamp(1.75rem, 3.6vw, 2.6rem);
-    font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 0.95;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  .proj-unit {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    line-height: 1.45;
-    color: var(--text-secondary);
-    margin-top: 10px;
-    max-width: 22ch;
-  }
-
-  @media (max-width: 760px) {
-    .proj {
-      padding: 6rem 0 var(--space-xl);
-    }
-
-    .proj-row {
-      grid-template-columns: 1fr;
-      row-gap: var(--space-md);
-      padding: var(--space-md);
-      padding-left: calc(var(--space-md) + 5px);
-    }
-
-    /* Figure leads visually on narrow screens; the name still comes first in
-       the DOM, so reading order is unchanged for assistive tech. */
-    .proj-figure {
-      order: -1;
-      align-items: flex-start;
-      text-align: left;
-      padding-top: 0;
-    }
-
-    .proj-unit {
-      max-width: none;
-      margin-top: 6px;
-    }
-  }
+  .portfolio { --portfolio-ink: #f2f1ed; --portfolio-muted: #b0b7be; --portfolio-line: #2a2e32; max-width: 1200px; margin: 0 auto; padding: 36px 32px 20px; color: var(--portfolio-ink); }
+  .portfolio a { background-image: none; }
+  .portfolio a:focus-visible { outline: 2px solid #68d4df; outline-offset: 6px; border-radius: 3px; }
+  .portfolio-hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: end; padding: 42px 0 70px; border-bottom: 1px solid var(--portfolio-line); }
+  .eyebrow { display: flex; align-items: center; gap: 12px; color: #b6bec5; text-transform: uppercase; letter-spacing: .14em; font-size: .67rem; font-weight: 600; }
+  .small-rule { width: 28px; height: 2px; background: #68d4df; }
+  h1 { font-size: clamp(2.75rem, 5.6vw, 4.6rem); line-height: 1.06; letter-spacing: -.065em; font-weight: 600; margin: 24px 0; text-wrap: initial; }
+  h1 > span { color: #91a6af; }
+  .hero-intro { color: var(--portfolio-muted); font-size: 1.02rem; line-height: 1.8; max-width: 45ch; }
+  .hero-link { display: inline-flex; align-items: center; gap: 30px; margin-top: 30px; font-size: .88rem; font-weight: 600; color: #e5edef; padding: 9px 0; border-bottom: 1px solid #63868d; }
+  .hero-link span { color: #68d4df; }
+  .portfolio-index { padding: 26px; border: 1px solid var(--portfolio-line); border-radius: 13px; background: #0c0f11; }
+  .index-heading { display: flex; justify-content: space-between; gap: 10px; color: #b2bcc4; font-size: .63rem; letter-spacing: .08em; text-transform: uppercase; padding-bottom: 21px; }
+  .portfolio-index > a { display: grid; grid-template-columns: 22px 1fr 16px 12px; align-items: center; gap: 12px; padding: 16px 0; border-top: 1px solid var(--portfolio-line); color: #eee; font-size: .9rem; }
+  .portfolio-index > a:hover { color: #68d4df; }
+  .index-number, .index-count { color: #a2acb5; font-size: .68rem; font-variant-numeric: tabular-nums; }
+  .portfolio-index > p { margin-top: 15px; color: #9aa6ae; font-size: .73rem; line-height: 1.7; max-width: 34ch; }
+  .project-section { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 52px; padding: 58px 0; border-bottom: 1px solid var(--portfolio-line); scroll-margin-top: 95px; }
+  .portfolio-section-heading { padding-top: 6px; }
+  .section-kicker { display: flex; align-items: center; gap: 13px; margin-bottom: 19px; color: #a8b3bb; font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+  .section-kicker > span:first-child { color: #75cdd7; border-right: 1px solid #40555b; padding-right: 13px; }
+  .portfolio-section-heading h2 { font-size: 1.75rem; font-weight: 600; line-height: 1.15; letter-spacing: -.045em; margin-bottom: 15px; }
+  .portfolio-section-heading > p { color: #a9b2ba; font-size: .87rem; line-height: 1.75; max-width: 29ch; }
+  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; margin: 0; padding: 0; list-style: none; }
+  .project-grid > li { min-width: 0; }
+  .group-content { min-width: 0; }
+  .local-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+  .local-layout .project-grid { grid-template-columns: 1fr; }
+  .local-reading { min-width: 0; }
+  .local-reading-heading { padding: 4px 0 18px; border-bottom: 1px solid var(--portfolio-line); }
+  .local-reading-heading h3 { font-size: 1rem; font-weight: 600; margin-bottom: 7px; }
+  .local-reading-heading > a { color: #9ed2dc; font-size: .75rem; }
+  .local-story { padding: 19px 0; border-bottom: 1px solid var(--portfolio-line); }
+  .local-story > a { display: grid; grid-template-columns: 82px minmax(0, 1fr) 14px; gap: 14px; align-items: start; color: #e4e9ec; }
+  .local-story > a:hover { color: #85d6e1; }
+  .local-story img { width: 82px; height: 82px; object-fit: cover; border-radius: 6px; }
+  .local-story h4 { font-size: .85rem; line-height: 1.55; letter-spacing: -.015em; text-wrap: initial; }
+  .reading-topic { color: #93c9d1; font-size: .6rem; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 7px; }
+  .story-arrow { color: #9ed2dc; }
+  .image-credit { color: #a5afb7; font-size: .58rem; line-height: 1.5; margin-top: 9px; }
+  .more-work { display: flex; justify-content: space-between; align-items: center; gap: 40px; padding: 32px 0; border-top: 1px solid var(--portfolio-line); }
+  .more-work h2 { font-size: 1.4rem; font-weight: 600; margin-top: 10px; }
+  .more-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+  .more-links a { display: flex; align-items: center; gap: 12px; color: #b8cbd1; font-size: .8rem; padding: 10px 0; }
+  @media (max-width: 1050px) { .portfolio-hero { gap: 35px; } .project-section { grid-template-columns: 205px minmax(0, 1fr); gap: 25px; } }
+  @media (max-width: 850px) { .portfolio { padding-top: 25px; } .portfolio-hero { grid-template-columns: 1fr; gap: 36px; padding-bottom: 42px; } .portfolio-index { max-width: none; } .project-section { grid-template-columns: 1fr; gap: 25px; padding: 38px 0; } .portfolio-section-heading > p { max-width: 60ch; } .portfolio-section-heading h2 { font-size: 1.8rem; } .more-work { align-items: start; flex-direction: column; gap: 18px; } }
+  @media (max-width: 600px) { .portfolio { padding-left: 20px; padding-right: 20px; } .portfolio-hero { padding-top: 26px; } h1 { font-size: clamp(2.65rem, 10vw, 3.5rem); } .hero-intro { font-size: .96rem; } .portfolio-index { padding: 22px; } .project-grid, .local-layout { grid-template-columns: 1fr; } .more-links { flex-direction: column; width: 100%; gap: 0; } .more-links a { justify-content: space-between; border-bottom: 1px solid var(--portfolio-line); padding: 14px 0; } }
 </style>

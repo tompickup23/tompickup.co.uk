@@ -111,8 +111,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 ---
 
 <Layout
-  title="Lancashire is being redrawn: the LGR decision | Tom Pickup"
-  description="On 16 July 2026 the government decided Lancashire's 15 councils will be replaced by four new unitary authorities from April 2028. The decision, the new map, and the county's finances going into it, with every figure sourced."
+  title="Lancashire council reorganisation: July model, programme paused | Tom Pickup"
+  description="Explore the July 2026 model for four Lancashire councils. The reorganisation programme was paused on 7 September 2026 pending a national review."
 >
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
@@ -121,11 +121,17 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <span class="here">Local Government Reorganisation</span>
     </nav>
 
+    <aside class="lgr-status-note" aria-labelledby="lgr-status-heading">
+      <h2 id="lgr-status-heading">Programme paused: this is the July 2026 model</h2>
+      <p>On 7 September 2026 the government paused the programme for review. May 2027 local elections will take place on existing council boundaries. The dates and financial scenarios below reproduce the July model; they are not a confirmed implementation timetable or a new financial assessment.</p>
+      <p><a href="https://www.gov.uk/government/news/review-of-local-government-reorganisation-launched">Read the government announcement</a>. Status note checked 27 September 2026.</p>
+    </aside>
+
     <header class="doge-head">
       <span class="doge-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
-      <h1 class="doge-title">Lancashire is being redrawn</h1>
+      <h1 class="doge-title">The July model for Lancashire’s new councils</h1>
       <p class="doge-sub">
-        On 16 July 2026 the government announced its decision: Lancashire's 15 councils will be abolished and
+        On 16 July 2026 the government announced its decision: Lancashire's 15 councils would be abolished and
         replaced by <strong>four new unitary authorities</strong> from April 2028. It is the biggest change to
         local government here in more than 50 years. This is what was decided, the new map, and the financial
         state of the county going into it, with every figure traceable to a published source.
@@ -135,8 +141,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <div class="doge-statband">
       <div class="doge-stat"><div class="v teal">4</div><div class="l">New unitary councils</div></div>
       <div class="doge-stat"><div class="v">15 &rarr; 4</div><div class="l">Councils replaced</div></div>
-      <div class="doge-stat"><div class="v">May 2027</div><div class="l">Shadow council elections</div></div>
-      <div class="doge-stat"><div class="v">1 Apr 2028</div><div class="l">Vesting day (go-live)</div></div>
+      <div class="doge-stat"><div class="v">May 2027</div><div class="l">Shadow elections in July plan</div></div>
+      <div class="doge-stat"><div class="v">1 Apr 2028</div><div class="l">Vesting date in July plan</div></div>
     </div>
 
     <p class="doge-note" style="margin-top:0.9rem;">
@@ -992,4 +998,11 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     .doge-statband { grid-template-columns: repeat(2, 1fr); }
     .lgr-tl-item { grid-template-columns: 84px 1fr; gap: 10px; }
   }
+</style>
+
+<style>
+  .lgr-status-note { padding: 24px; margin: 24px 0; border: 1px solid #d9bd83; border-left-width: 4px; border-radius: 8px; background: #1d1a13; color: #f2eadb; }
+  .lgr-status-note h2 { font-size: 1.25rem; margin: 0 0 12px; }
+  .lgr-status-note p { color: #d4cdc0; max-width: 80ch; line-height: 1.7; margin: 10px 0 0; }
+  .lgr-status-note a { color: #f0d7a6; text-decoration: underline; }
 </style>

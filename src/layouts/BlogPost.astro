@@ -11,6 +11,7 @@ interface Props {
     featured?: boolean;
     updated?: Date;
     image?: string;
+    imageAlt?: string;
     ogImage?: string;
     imageCredit?: string;
     category?: string;
@@ -161,7 +162,7 @@ const pageTitle =
 
     {frontmatter.image && (
       <div class="article-hero-image">
-        <img src={frontmatter.image} alt={`Lead image for the article: ${frontmatter.title}`} loading="eager" decoding="async" />
+        <img src={frontmatter.image} alt={frontmatter.imageAlt || `Lead image for the article: ${frontmatter.title}`} loading="eager" decoding="async" />
         {frontmatter.imageCredit && <span class="hero-credit">{frontmatter.imageCredit}</span>}
       </div>
     )}
@@ -1449,6 +1450,10 @@ const pageTitle =
   }
 
   @media (max-width: 640px) {
+    .article-hero-image {
+      margin-inline: 0;
+    }
+
     .prose :global(.viz-grid-2),
     .prose :global(.viz-grid-3),
     .prose :global(.viz-grid-4) {

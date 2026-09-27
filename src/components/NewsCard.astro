@@ -6,9 +6,10 @@ interface Props {
   slug: string;
   tags?: string[];
   image?: string;
+  headingLevel?: 'h3' | 'h4';
 }
 
-const { title, date, description, slug, tags = [], image } = Astro.props;
+const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3' } = Astro.props;
 
 function formatDate(dateStr: string): string {
   try {
@@ -29,7 +30,7 @@ function formatDate(dateStr: string): string {
 
   {image && (
     <div class="news-card-image">
-      <img src={image} alt={`Lead image for the article: ${title}`} loading="lazy" decoding="async" />
+      <img src={image} alt="" loading="lazy" decoding="async" />
     </div>
   )}
 
@@ -41,7 +42,7 @@ function formatDate(dateStr: string): string {
     </div>
   )}
 
-  <h3 class="news-title">{title}</h3>
+  <Heading class="news-title">{title}</Heading>
 
   <time class="news-date" datetime={date}>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -171,7 +172,7 @@ function formatDate(dateStr: string): string {
     align-items: center;
     gap: 6px;
     font-size: 0.8125rem;
-    color: rgba(235, 235, 245, 0.4);
+    color: #aab4bd;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     position: relative;
@@ -232,8 +233,11 @@ function formatDate(dateStr: string): string {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .news-card {
+    .news-card, .news-card-image img {
       transition: none;
+    }
+    .news-card:hover, .news-card:hover .news-card-image img {
+      transform: none;
     }
 
     .read-more {

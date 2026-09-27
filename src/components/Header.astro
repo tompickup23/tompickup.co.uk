@@ -64,7 +64,7 @@ function isActive(href: string): boolean {
     </div>
   </div>
 
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
     <nav aria-label="Mobile navigation">
       {navLinks.map((link) => (
         <a
@@ -91,6 +91,7 @@ function isActive(href: string): boolean {
         toggle.setAttribute('aria-expanded', String(!isOpen));
         toggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
         menu.setAttribute('aria-hidden', String(isOpen));
+        menu.inert = isOpen;
         menu.classList.toggle('is-open', !isOpen);
         header.classList.toggle('menu-open', !isOpen);
       });
@@ -101,6 +102,7 @@ function isActive(href: string): boolean {
           toggle.setAttribute('aria-expanded', 'false');
           toggle.setAttribute('aria-label', 'Open menu');
           menu.setAttribute('aria-hidden', 'true');
+          menu.inert = true;
           menu.classList.remove('is-open');
           header.classList.remove('menu-open');
         }
@@ -111,6 +113,7 @@ function isActive(href: string): boolean {
           toggle.setAttribute('aria-expanded', 'false');
           toggle.setAttribute('aria-label', 'Open menu');
           menu.setAttribute('aria-hidden', 'true');
+          menu.inert = true;
           menu.classList.remove('is-open');
           header.classList.remove('menu-open');
           toggle.focus();
@@ -226,8 +229,8 @@ function isActive(href: string): boolean {
     justify-content: center;
     align-items: center;
     gap: 5px;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     padding: 6px;
     border-radius: var(--radius-sm);
     cursor: pointer;

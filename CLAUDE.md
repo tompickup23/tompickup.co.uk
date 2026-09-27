@@ -4,13 +4,16 @@
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
 **Stack**: Astro 5 (static output) | no runtime server
-**Hosting**: GitHub Pages serves the live domain, from the `tompickup23/tompickup23.github.io`
-repo. Checked 10 Sep 2026: `server: GitHub.com`, A records 185.199.108-111.153. There is no
-Cloudflare Pages deploy in front of it.
-**Deploying**: MANUAL. `deploy.yml`'s deploy step is `if: false` (PAT expired 20 May 2026), so
-pushing source builds and gates but publishes nothing. Follow `/publish-tompickup` in clawd:
-rsync `dist/` into the Pages clone, then commit and push there. That rsync uses `--delete`, which
-also removes the Pages repo's own `CLAUDE.md`/`AGENTS.md` — restore them before committing.
+**Hosting**: GitHub Pages. Verified 27 September 2026 via both repositories' Pages APIs:
+`tompickup23/tompickup.co.uk` owns the custom domain and uses workflow publishing.
+The separate `tompickup23.github.io` repository remains a legacy publishing mirror.
+**Deploying**: `.github/workflows/deploy.yml` now deploys source `main` directly using
+`actions/deploy-pages@v4`; commit `dde8c2e` replaced the expired PAT procedure.
+A source push to main CAN publish. Validate an isolated release tree before pushing.
+When updating the legacy mirror, follow the manual rsync procedure but preserve its
+CLAUDE.md/AGENTS.md symlink and any unrelated mirrored projects. The mirror deliberately
+removed CNAME in commit `0141bb5`; exclude CNAME from rsync to avoid reclaiming the domain.
+Verify public URLs and the workflow result; a push alone does not prove delivery.
 **Automation**: 3 GitHub Actions (deploy, data-etl, observatory-schemas)
 **Branch**: main
 
