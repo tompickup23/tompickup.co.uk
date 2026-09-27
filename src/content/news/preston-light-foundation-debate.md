@@ -13,6 +13,8 @@ featured: false
 draft: false
 ---
 
+*Retrospective account of the debate held on 2 October 2025. The article is filed under its archive date.*
+
 On **2 October 2025**, I joined **Adnan Hussain MP** and **Councillor Matthew Brown**, leader of Preston City Council and a fellow county councillor, for a public debate at Preston Quaker Meeting House on St George's Road.
 
 Organised by the **Light Foundation** and hosted by **Shaykh Adam Kelwick**, the evening asked: **Is hostile politics endangering refugees?**

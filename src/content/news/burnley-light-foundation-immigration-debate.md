@@ -13,6 +13,8 @@ featured: false
 draft: false
 ---
 
+*Retrospective account of the debate held on 13 November 2025. The article is filed under its archive date.*
+
 On **13 November 2025**, I took part in the Light Foundation's public debate at **Burnley Boys and Girls Club**, alongside **Adnan Hussain MP** and **Gordon Birtwistle**, the former Liberal Democrat MP for Burnley.
 
 The evening's question was **Is Britain better off because of immigration?** It was held in the club's function room at Barden Playing Fields, on Barden Lane, and co-hosted by **Adam Kelwick and Skander Bakhat**.

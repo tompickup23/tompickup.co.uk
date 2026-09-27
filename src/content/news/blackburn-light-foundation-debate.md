@@ -13,6 +13,8 @@ featured: false
 draft: false
 ---
 
+*Retrospective account of the debate held on 27 March 2026. The article is filed under its archive date.*
+
 On **27 March 2026**, I joined **Adnan Hussain MP** and **Councillor Elaine Whittingham** at **Wesley Hall Methodist Church** in Blackburn for the Light Foundation's discussion, **Blackburn in Question: Community or Parallel Lives?**
 
 Whittingham, formerly a Labour councillor, was sitting as an Independent by the time of the event. The final panel differed from the original advert: Phil Riley did not attend, with Whittingham taking his place. I joined the panel in place of Tommy Temperley.
