@@ -12,9 +12,11 @@ Apportionment bases for LCC's county-service budget:
   population : each unitary's share of LCC-served population (Blackpool and
                Blackburn with Darwen are already unitary, so no county spend
                is apportioned to them and their own budgets are added whole).
-  needs      : population weighted by the health-demand score, as a first-order
-               proxy for adult-social-care-driven cost distribution. Modelled,
-               not a service-level costing.
+
+A needs-weighted basis built on the ukdemographics "health-demand score" was
+withdrawn on 27 September 2026: that score is computed from employment and qualification
+rates by ethnic group, weighted by ethnic composition, and has no health or age
+content. Do not reintroduce it.
 """
 import json
 from pathlib import Path
@@ -36,7 +38,7 @@ LCC_BUDGET = county["netBudget2627_m"]
 BAND_D_COUNTY = county["bandD_county"]
 
 WEIGHTED_METRICS = [
-    "healthDemandScore", "noQuals", "empRate", "socialRentPct",
+    "noQuals", "empRate", "socialRentPct",
     "crimeRate", "fsmPct", "ealPct", "hmoPer1k",
 ]
 
@@ -53,8 +55,6 @@ baseline = {k: wavg(all_names, k) for k in WEIGHTED_METRICS}
 districts = [n for n in all_names if A[n]["type"] == "district"]
 lcc_pop = {n: A[n]["population"] for n in districts}
 LCC_SERVED = sum(lcc_pop.values())
-need_w = {n: A[n]["population"] * A[n]["metrics"]["healthDemandScore"] for n in districts}
-NEED_TOTAL = sum(need_w.values())
 
 unitaries = []
 for uname, u in decision["unitaries"].items():
@@ -64,7 +64,6 @@ for uname, u in decision["unitaries"].items():
     served = sum(A[n]["population"] for n in dist)
 
     app_pop = round(LCC_BUDGET * served / LCC_SERVED, 1)
-    app_need = round(LCC_BUDGET * sum(need_w[n] for n in dist) / NEED_TOTAL, 1)
 
     owns = [{
         "council": n, "type": A[n]["type"], "m": A[n]["netBudget2627_m"],
@@ -73,7 +72,6 @@ for uname, u in decision["unitaries"].items():
     } for n in members]
     own_total = round(sum(o["m"] for o in owns), 1)
     combined = round(app_pop + own_total, 1)
-    combined_need = round(app_need + own_total, 1)
 
     # Balance sheet brought by the constituent councils (LCC's excluded — its
     # county-wide reserves/debt split across successors is undetermined).
@@ -115,11 +113,11 @@ for uname, u in decision["unitaries"].items():
         "population": pop, "lccServedPop": served,
         "chargeableDwellings": wsum,
         "metrics": {k: wavg(members, k) for k in WEIGHTED_METRICS},
-        "countyApportioned": {"population": app_pop, "needs": app_need},
+        "countyApportioned": {"population": app_pop},
         "perCapitaCounty": round(app_pop * 1e6 / served) if served else None,
         "constituentReserves_m": reserves, "constituentDebt_m": debt,
         "owns": owns, "ownTotal": own_total,
-        "combined": {"population": combined, "needs": combined_need},
+        "combined": {"population": combined},
         "combinedPerCapita": round(combined * 1e6 / pop),
         "bandD": {
             "bills": bills,
@@ -144,7 +142,6 @@ assert abs(_dist - county["taxBase"]) < 5, (
 
 # integrity checks — fail the build rather than publish a bad sum
 assert abs(sum(x["countyApportioned"]["population"] for x in unitaries) - LCC_BUDGET) < 0.5
-assert abs(sum(x["countyApportioned"]["needs"] for x in unitaries) - LCC_BUDGET) < 0.5
 assert sum(x["population"] for x in unitaries) == sum(A[n]["population"] for n in all_names)
 
 model = {
@@ -215,4 +212,4 @@ pub_path.write_text(json.dumps(public, indent=1))
 print(f"model.json: {len(unitaries)} unitaries; LCC served pop {LCC_SERVED:,}")
 for x in unitaries:
     print(f"  {x['name']}: pop {x['population']:,} | combined £{x['combined']['population']}m"
-          f" (needs-basis £{x['combined']['needs']}m) | Band D spread £{x['bandD']['spread']}")
+          f" | Band D spread £{x['bandD']['spread']}")
