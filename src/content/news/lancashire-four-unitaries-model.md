@@ -1,7 +1,7 @@
 ---
 title: "Four Councils, One Decision: I Modelled What Lancashire's Reorganisation Actually Means"
 date: 2026-07-18T21:30:00
-description: "15 councils become 4 from April 2028. An interactive, sourced model of the new councils, their budgets, the need they inherit and what it will cost."
+description: "15 councils become 4 from April 2028. An interactive, sourced model of the new councils, their budgets, their balance sheets and what it will cost."
 tags: ["lancashire", "lgr", "burnley", "local-government", "transparency"]
 featured: true
 ---
@@ -14,7 +14,7 @@ Announcements tell you the map. They don't tell you what the new councils actual
 
 ## What it shows
 
-**East Lancashire is the biggest and the poorest.** 498,255 residents, the closest of the four to the government's 500,000 guideline, which all four miss. Its employment rate (44.6%) is the lowest of any new unitary and its social-care demand the highest. On a needs-weighted split of county spending rather than a population split, East Lancashire's share would be roughly **£41m a year higher**, a number that should be central to how the new council is funded.
+**East Lancashire is the biggest and the poorest.** 498,255 residents, the closest of the four to the government's 500,000 guideline, which all four miss. Its employment rate (44.6%) is the lowest of any new unitary.
 
 **The balance sheets are wildly unequal.** Blackpool brings **£607m of debt against £35m of reserves** into the smallest unitary. Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. The county's own £345m of reserves and £953m of borrowing have no agreed split, the same issue that took Northamptonshire's councils four years of dispute to settle.
 
@@ -33,3 +33,5 @@ Modelled against that record, the same decision nets Lancashire anywhere from **
 Every assumption, every source and every confidence rating is published as open data at [/data/lgr-model.json](/data/lgr-model.json). If you think a number is wrong, you can check it, that's the point.
 
 [**See the full model →**](/lgr/)
+
+*Correction, 27 September 2026: an earlier version of this article and of the model gave each new council a "social-care demand" score and a needs-weighted split of county spending, including a figure of about £41m a year for East Lancashire. The score came from a data extract that turned out to be built from employment and qualification rates by ethnic group, weighted by ethnic composition, with no health or age content. It is not a measure of care need, and it has been removed from the article, the model and the data feed.*

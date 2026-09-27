@@ -58,7 +58,6 @@ const BASELINE: Record<string, number> = model.baseline;
 // need: 'high' = a higher value signals greater service need/disadvantage;
 // 'low' = higher is better; 'neutral' = contextual.
 const METRICS = [
-  { key: 'healthDemandScore', label: 'Adult social-care demand', suffix: '', need: 'high', help: 'Composite health-need score' },
   { key: 'empRate', label: 'Employment rate', suffix: '%', need: 'low', help: 'Share of adults in work' },
   { key: 'noQuals', label: 'No qualifications', suffix: '%', need: 'high', help: 'Adults with no formal qualifications' },
   { key: 'fsmPct', label: 'Free school meals', suffix: '%', need: 'high', help: 'Pupils eligible for FSM' },
@@ -78,12 +77,10 @@ const MODEL = model.unitaries
     name: u.name, accent: u.accent, councils: u.councils, metrics: u.metrics,
     pop: u.population, lccServedPop: u.lccServedPop,
     countyApportioned: u.countyApportioned.population,
-    countyApportionedNeeds: u.countyApportioned.needs,
     perCapitaCounty: u.perCapitaCounty,
     owns: u.owns.map((o) => ({ c: o.council, m: o.m, type: o.type === 'unitary' ? 'u' : 'd' })),
     ownTotal: u.ownTotal,
     combined: u.combined.population,
-    combinedNeeds: u.combined.needs,
     combinedPerCapita: u.combinedPerCapita,
     bandD: u.bandD,
   }));
@@ -238,7 +235,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       <h2 class="doge-h2">Explore the four-unitary model</h2>
       <p class="doge-note">
         Pick a proposed council to see what it would actually be: who it merges, how many people it serves, the
-        money it would run, and the depth of need it would have to meet. Money figures combine the
+        money it would run, and how its places compare with the Lancashire average. Money figures combine the
         <strong>verified</strong> budgets of every body that merges with a <strong>modelled</strong> split of the
         county's £1,329.312m across each area by population. Full method below.
       </p>
@@ -256,7 +253,6 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
             <tr><td class="lgr-cmp-rowh">Combined net budget</td>{MODEL.map((u) => <td>{u.combined ? `£${fmt(u.combined)}m` : 'n/a'}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Spend per resident</td>{MODEL.map((u) => <td>{u.combinedPerCapita ? `£${fmt(u.combinedPerCapita)}` : 'n/a'}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Councils merged</td>{MODEL.map((u) => <td>{u.councils.length}</td>)}</tr>
-            <tr><td class="lgr-cmp-rowh">Social-care demand</td>{MODEL.map((u) => <td>{u.metrics.healthDemandScore}</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Employment rate</td>{MODEL.map((u) => <td>{u.metrics.empRate}%</td>)}</tr>
             <tr><td class="lgr-cmp-rowh">Free school meals</td>{MODEL.map((u) => <td>{u.metrics.fsmPct}%</td>)}</tr>
           </tbody>
@@ -320,10 +316,6 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
                 <span class="lgr-mx-bname">Estimated combined net budget</span>
                 <span class="lgr-mx-bval">{u.combined ? `£${fmt(u.combined)}m` : 'n/a'}</span>
               </div>
-              <div class="lgr-mx-brow alt">
-                <span class="lgr-mx-bname">…if county spend were split by social-care need instead of population</span>
-                <span class="lgr-mx-bval">£{fmt(u.combinedNeeds)}m</span>
-              </div>
             </div>
 
             <div class="lgr-mx-build">
@@ -358,7 +350,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
               </p>
             </div>
 
-            <div class="lgr-mx-needs-h">The need it would have to meet <span>vs Lancashire average</span></div>
+            <div class="lgr-mx-needs-h">Place indicators <span>vs Lancashire average</span></div>
             <div class="lgr-mx-needs">
               {METRICS.map((m) => {
                 const val = (u.metrics as any)[m.key];
