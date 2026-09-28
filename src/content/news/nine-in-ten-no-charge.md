@@ -3,6 +3,7 @@ title: "Nine in Ten Crimes in Lancashire End With No One Charged"
 date: 2026-06-22T14:00:00
 description: "Report a crime in Lancashire and the odds anyone is charged are about one in ten. That is one of the better records in the country. The real numbers."
 image: "/images/burnley-townscape.jpg"
+imageAlt: "Rows of houses across Burnley, seen from above, with the hills rising behind the town."
 ogImage: "/images/share/nine-in-ten-no-charge.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Lancashire"
@@ -21,22 +22,22 @@ This is not a "Lancashire police are failing" article. The opposite: on this mea
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">10.2%</span>
+<span class="value xl">10.2%</span>
 <span class="label">Lancashire crimes ending in a charge</span>
 <span class="sublabel">So about nine in ten do not</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">7.3%</span>
+<span class="value xl">7.3%</span>
 <span class="label">The England &amp; Wales charge rate</span>
 <span class="sublabel">Fewer than one in thirteen</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">31%</span>
+<span class="value xl">31%</span>
 <span class="label">Lancashire cases closed with no suspect</span>
 <span class="sublabel">Investigation over, nobody identified</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">2nd</span>
+<span class="value xl">2nd</span>
 <span class="label">Lancashire's national rank on outcomes</span>
 <span class="sublabel">One of the best-performing forces</span>
 </div>
@@ -49,29 +50,29 @@ Take every crime recorded by Lancashire Constabulary in the latest year and foll
 
 <div class="viz-panel">
 <div class="viz-label teal">What happens to recorded crime in Lancashire (year to March 2025)</div>
-<div style="display: grid; gap: 14px;">
+<div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Someone charged or summonsed</span><span class="text-teal text-bold">10.2%</span></div>
+<div class="viz-row"><span class="text-white text-bold">Someone charged or summonsed</span><span class="text-teal text-bold">10.2%</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:10%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Closed: no suspect ever identified</span><span style="color:#ff453a;font-weight:700;">31.4%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:31%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div>
+<div class="viz-row"><span class="text-muted">Closed: no suspect ever identified</span><span class="text-red" style="font-weight:700;">31.4%</span></div>
+<div class="viz-reform-bar"><div class="fill red" style="width:31%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Dropped: victim no longer supports action</span><span style="color:#ff9f0a;font-weight:700;">31.3%</span></div>
+<div class="viz-row"><span class="text-muted">Dropped: victim no longer supports action</span><span class="text-orange" style="font-weight:700;">31.3%</span></div>
 <div class="viz-reform-bar"><div class="fill amber" style="width:31%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Other evidential difficulties</span><span class="text-muted">12.3%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:12%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Other evidential difficulties</span><span class="text-muted">12.3%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:12%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Cautions, community resolutions, other</span><span class="text-muted">14.8%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:15%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Cautions, community resolutions, other</span><span class="text-muted">14.8%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:15%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: Home Office, Crime outcomes in England and Wales, year ending March 2025. Excludes fraud.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: Home Office, Crime outcomes in England and Wales, year ending March 2025. Excludes fraud.</div>
 </div>
 
 Two numbers should stop you. **Almost a third of all crime is closed with no suspect ever identified**, the investigation simply running out of road. And **another third is dropped because the victim no longer supports action**, very often because they have been worn down by months of waiting, or never felt safe enough to see it through. Between them, those two outcomes account for nearly two crimes in every three. The charge, the thing most people think of as justice, happens in roughly one case in ten.

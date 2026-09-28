@@ -3,6 +3,7 @@ title: "PIP Fraud Quadrupled to £410 Million. The Real Leak Is £5.4 Billion."
 date: 2026-06-19T18:00:00
 description: "Fraud in the disability benefit PIP quadrupled in a year. The same figures show £6.8 billion lost to benefit fraud overall, most of it nowhere near PIP."
 image: "/images/data-dashboard.jpg"
+imageAlt: "A laptop screen showing web analytics charts."
 ogImage: "/images/share/pip-fraud.png"
 category: "UK"
 subcategory: "Benefits"
@@ -16,22 +17,22 @@ The government published its annual benefit fraud figures in May 2026, and one n
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£410m</span>
+<span class="value xl">£410m</span>
 <span class="label">PIP lost to fraud, 2025/26</span>
 <span class="sublabel">Up from £100m the year before</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">1.4%</span>
+<span class="value xl">1.4%</span>
 <span class="label">The PIP fraud rate</span>
 <span class="sublabel">Low, but up from 0.4%</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">6.8%</span>
+<span class="value xl">6.8%</span>
 <span class="label">The Universal Credit fraud rate</span>
 <span class="sublabel">Nearly five times higher than PIP</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">£6.8bn</span>
+<span class="value xl">£6.8bn</span>
 <span class="label">Total benefit fraud, all benefits</span>
 <span class="sublabel">PIP is a small part of it</span>
 </div>
@@ -54,25 +55,25 @@ If you only read the headline, you would think PIP is where the welfare money le
 
 <div class="viz-panel">
 <div class="viz-label teal">Fraud rate by benefit, 2025/26</div>
-<div style="display: grid; gap: 16px;">
+<div style="display:grid; gap:16px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Universal Credit</span><span class="text-bold" style="color:#ff453a;">6.8%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:100%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div>
+<div class="viz-row"><span class="text-white text-bold">Universal Credit</span><span class="text-bold text-red">6.8%</span></div>
+<div class="viz-reform-bar"><div class="fill red" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">All benefits (average)</span><span class="text-muted">2.2%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:32%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">All benefits (average)</span><span class="text-muted">2.2%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:32%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">PIP</span><span class="text-teal text-bold">1.4%</span></div>
+<div class="viz-row"><span class="text-white text-bold">PIP</span><span class="text-teal text-bold">1.4%</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:21%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">State Pension</span><span class="text-muted">0.0%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:1%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">State Pension</span><span class="text-muted">0.0%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:1%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Universal Credit fraud alone was £5.4 billion. PIP was £410 million.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Universal Credit fraud alone was £5.4 billion. PIP was £410 million.</div>
 </div>
 
 Universal Credit fraud ran at **6.8%, some £5.4 billion**, nearly five times the PIP rate and thirteen times the cash. The State Pension, the single biggest benefit, had a fraud rate of effectively **zero**. So the next time a minister talks tough about disabled claimants, remember the government's own audit says the opposite: **PIP is one of the cleaner benefits, the genuine disabled are not the leak, and £5.4 billion is walking out of a different door while Westminster looks the other way.**

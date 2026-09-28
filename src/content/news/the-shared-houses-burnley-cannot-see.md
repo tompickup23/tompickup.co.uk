@@ -3,6 +3,7 @@ title: "The Shared Houses Burnley Cannot See"
 date: 2026-06-19T13:00:00
 description: "The official statistics say Burnley has 65 shared houses. The council's own research says 916, and it had no record of more than half of them."
 image: "/images/burnley-queens-park.jpg"
+imageAlt: "A path through Queen's Park in Burnley, between lawns, trees and beds of red tulips."
 ogImage: "/images/share/shared-houses.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -21,22 +22,22 @@ This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">916</span>
+<span class="value xl">916</span>
 <span class="label">Shared houses, the council's own estimate</span>
 <span class="sublabel">About one in every 46 homes in the borough</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">65</span>
+<span class="value xl">65</span>
 <span class="label">Shared houses in the official statistics</span>
 <span class="sublabel">The national census measure, for the same town</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">516</span>
+<span class="value xl">516</span>
 <span class="label">That sat on no register at all</span>
 <span class="sublabel">More than half of the estimate</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">9 of 15</span>
+<span class="value xl">9 of 15</span>
 <span class="label">Wards with planning protection</span>
 <span class="sublabel">Six wards still have none</span>
 </div>
@@ -53,11 +54,11 @@ The 2021 census counted **65** shared houses in Burnley. That is the official nu
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #ff9f0a;">65</span>
+<span class="value">65</span>
 <span class="label">In the official statistics</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #12b6cf;">916</span>
+<span class="value">916</span>
 <span class="label">In the council's own count</span>
 </div>
 </div>
@@ -69,9 +70,9 @@ Both numbers are real. They just measure different things, and the honest conclu
 The worst part is what the study found about the council's own knowledge. Of the 916, it had records for only about **400**. The other **516** were modelled to exist but appeared on no official list. More than half the town's shared houses were, in effect, invisible.
 
 <div class="viz-callout">
-<span class="value" style="color: #ff9f0a; font-size: 3.5rem; font-weight: 900;">516</span>
-<div class="headline" style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 12px;">Shared houses on no official register</div>
-<div class="subtext" style="color: #8e8e93; margin-top: 8px;">A house the council cannot see is a house it cannot check for safety, overcrowding or basic standards.</div>
+<span class="value" style="font-size:3.5rem; font-weight:900;">516</span>
+<div class="headline text-white" style="font-size:1.25rem; font-weight:700; margin-top:12px;">Shared houses on no official register</div>
+<div class="subtext text-muted" style="margin-top:8px;">A house the council cannot see is a house it cannot check for safety, overcrowding or basic standards.</div>
 </div>
 
 ---
@@ -82,30 +83,30 @@ Shared houses cluster. They are concentrated in a handful of inner wards where t
 
 <div class="viz-panel">
 <div class="viz-label teal">Estimated shared houses by ward (top six)</div>
-<div style="display: grid; gap: 14px;">
+<div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Bank Hall</span><span class="text-teal text-bold">184 &nbsp;(6.6% of homes)</span></div>
+<div class="viz-row"><span class="text-white text-bold">Bank Hall</span><span class="text-teal text-bold">184 &nbsp;(6.6% of homes)</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Trinity</span><span class="text-teal text-bold">180 &nbsp;(6.5%)</span></div>
+<div class="viz-row"><span class="text-white text-bold">Trinity</span><span class="text-teal text-bold">180 &nbsp;(6.5%)</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:98%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Gawthorpe</span><span class="text-muted">72 &nbsp;(2.5%)</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:39%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Gawthorpe</span><span class="text-muted">72 &nbsp;(2.5%)</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:39%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Daneshouse with Stoneyholme</span><span class="text-muted">68 &nbsp;(2.9%)</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:37%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Daneshouse with Stoneyholme</span><span class="text-muted">68 &nbsp;(2.9%)</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:37%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Queensgate</span><span class="text-muted">67 &nbsp;(2.6%)</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:36%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Queensgate</span><span class="text-muted">67 &nbsp;(2.6%)</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:36%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Gannow</span><span class="text-muted">62 &nbsp;(2.4%)</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:34%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Gannow</span><span class="text-muted">62 &nbsp;(2.4%)</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:34%;"></div></div>
 </div>
 </div>
 </div>

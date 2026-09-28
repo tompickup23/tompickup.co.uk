@@ -204,8 +204,7 @@ const schema = {
     width: 280px;
     height: 280px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(18, 182, 207, 0.2) 0%, transparent 70%);
-    filter: blur(40px);
+    display: none;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -55%);
@@ -218,8 +217,7 @@ const schema = {
     height: 240px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(18, 182, 207, 0.3);
-    box-shadow: 0 0 40px rgba(18, 182, 207, 0.15), 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--line);
   }
 
   .bio-photo img {
@@ -232,10 +230,9 @@ const schema = {
   /* Bio text */
   .bio-text h1 {
     font-size: clamp(2.25rem, 5vw, 3.25rem);
-    font-weight: 800;
     line-height: 1.05;
-    letter-spacing: -0.04em;
-    color: #fff;
+    letter-spacing: -0.025em;
+    color: var(--ink);
     margin: 0 0 var(--space-lg);
   }
 

@@ -3,6 +3,7 @@ title: "More People, Fewer Homes: The Squeeze Nobody in Burnley Voted For"
 date: 2026-06-19T10:00:00
 description: "In ten years Burnley's population grew almost entirely through immigration, home ownership fell, and the cheap housing was bought up to rent out."
 image: "/images/burnley-aerial.jpg"
+imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
 ogImage: "/images/share/more-people-fewer-homes.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
@@ -26,22 +27,22 @@ The people who run the country would rather you did not put those two things in 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">12.7%</span>
+<span class="value xl">12.7%</span>
 <span class="label">Of Burnley was born outside the UK (2021)</span>
 <span class="sublabel">Nearly double the 7.7% in 2011</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">+5,324</span>
+<span class="value xl">+5,324</span>
 <span class="label">More non-UK-born residents in a decade</span>
 <span class="sublabel">Almost all of the town's population growth</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">1,141</span>
+<span class="value xl">1,141</span>
 <span class="label">New overseas NI numbers, 2023 peak</span>
 <span class="sublabel">Up from about 200 a year before 2016</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">1 in 4</span>
+<span class="value xl">1 in 4</span>
 <span class="label">Households now rent privately</span>
 <span class="sublabel">Home ownership is projected to keep falling</span>
 </div>
@@ -61,32 +62,32 @@ A separate measure tells the same story. Each year, people arriving to work or c
 <div class="viz-panel">
 <div class="viz-label teal">New National Insurance numbers issued to overseas nationals in Burnley, by year</div>
 <div style="display:flex; align-items:flex-end; gap:7px; height:175px; margin-top:14px;">
-<div style="flex:1; height:18%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:23%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:54%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:91%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:80%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:82%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:33%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:76%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:80%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:100%; background:linear-gradient(180deg, #16c5e0, #0c8499); border-radius:4px 4px 0 0; box-shadow:0 0 16px rgba(18,182,207,0.5);"></div>
-<div style="flex:1; height:62%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:44%; background:linear-gradient(180deg, rgba(18,182,207,0.6), rgba(18,182,207,0.12)); border-radius:4px 4px 0 0;"></div>
+<div class="viz-col" style="height:18%;"></div>
+<div class="viz-col" style="height:23%;"></div>
+<div class="viz-col" style="height:54%;"></div>
+<div class="viz-col" style="height:91%;"></div>
+<div class="viz-col" style="height:80%;"></div>
+<div class="viz-col" style="height:82%;"></div>
+<div class="viz-col" style="height:33%;"></div>
+<div class="viz-col" style="height:76%;"></div>
+<div class="viz-col" style="height:80%;"></div>
+<div class="viz-col peak" style="height:100%;"></div>
+<div class="viz-col" style="height:62%;"></div>
+<div class="viz-col" style="height:44%;"></div>
 </div>
 <div style="display:flex; gap:7px; margin-top:8px;">
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'14</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'15</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'16</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'17</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'18</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'19</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'20</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'21</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'22</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#12b6cf; font-weight:700;">'23</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'24</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'25</div>
+<div class="viz-axis">'14</div>
+<div class="viz-axis">'15</div>
+<div class="viz-axis">'16</div>
+<div class="viz-axis">'17</div>
+<div class="viz-axis">'18</div>
+<div class="viz-axis">'19</div>
+<div class="viz-axis">'20</div>
+<div class="viz-axis">'21</div>
+<div class="viz-axis">'22</div>
+<div class="viz-axis peak">'23</div>
+<div class="viz-axis">'24</div>
+<div class="viz-axis">'25</div>
 </div>
 </div>
 

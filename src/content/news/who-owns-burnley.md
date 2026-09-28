@@ -3,6 +3,7 @@ title: "Who Owns Burnley? Increasingly, Not the People Who Live Here"
 date: 2026-06-19T12:00:00
 description: "Ten years of public records for my home town. More of Burnley is bought up by landlords, companies and faraway funds while local families are priced out."
 image: "/images/burnley-panorama.jpg"
+imageAlt: "Burnley spread across the valley floor, seen from high ground, with snow on the hills beyond."
 ogImage: "/images/share/who-owns-burnley.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
@@ -28,22 +29,22 @@ One thing up front. When I say Burnley, I mean the borough: the council area tha
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">27.4%</span>
+<span class="value xl">27.4%</span>
 <span class="label">Homes bought to rent out, 2025</span>
 <span class="sublabel">More than one in four. The highest in Lancashire.</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">+51.5%</span>
+<span class="value xl">+51.5%</span>
 <span class="label">Rise in house prices in ten years</span>
 <span class="sublabel">From £72,625 to £110,000</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">92</span>
+<span class="value xl">92</span>
 <span class="label">New property companies a year</span>
 <span class="sublabel">Up from 14 a decade ago</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">916</span>
+<span class="value xl">916</span>
 <span class="label">Estimated shared rented houses</span>
 <span class="sublabel">The council had no record of 516 of them</span>
 </div>
@@ -60,11 +61,11 @@ In 2015, the typical Burnley home sold for about **£72,000**. By 2025 it was **
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #ff9f0a;">£72,625</span>
+<span class="value">£72,625</span>
 <span class="label">Typical home, 2015</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #30d158;">£110,000</span>
+<span class="value">£110,000</span>
 <span class="label">Typical home, 2025</span>
 </div>
 </div>
@@ -83,33 +84,33 @@ That is the highest rate of any district in Lancashire. More of Burnley is being
 
 <div class="viz-panel">
 <div class="viz-label teal">Share of homes bought as an investment, 2025</div>
-<div style="display: grid; gap: 16px;">
+<div style="display:grid; gap:16px;">
 <div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">27.4%</span></div>
-<div class="viz-reform-bar"><div class="fill teal" style="width: 100%;"></div></div>
-</div>
-<div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-muted">Blackpool</span><span class="text-muted">26.0%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width: 95%; background: rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">27.4%</span></div>
+<div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-muted">Blackburn with Darwen</span><span class="text-muted">19.1%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width: 70%; background: rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Blackpool</span><span class="text-muted">26.0%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:95%;"></div></div>
 </div>
 <div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-muted">Pendle</span><span class="text-muted">18.2%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width: 66%; background: rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Blackburn with Darwen</span><span class="text-muted">19.1%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:70%;"></div></div>
 </div>
 <div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-muted">Ribble Valley</span><span class="text-muted">14.6%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width: 53%; background: rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Pendle</span><span class="text-muted">18.2%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:66%;"></div></div>
 </div>
 <div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span class="text-muted">Rossendale</span><span class="text-muted">14.0%</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width: 51%; background: rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Ribble Valley</span><span class="text-muted">14.6%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:53%;"></div></div>
+</div>
+<div>
+<div class="viz-row"><span class="text-muted">Rossendale</span><span class="text-muted">14.0%</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:51%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Burnley tops every other district in Lancashire.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Burnley tops every other district in Lancashire.</div>
 </div>
 
 Oddly, the classic move, a cheap house under £50,000 snapped up to rent out, has actually fallen, from **336** of them in 2017 to **88** in 2025. Not because landlords lost interest, but because there are barely any cheap houses left to buy.
@@ -125,7 +126,7 @@ A decade ago, about **14** of these property companies were registered to a Burn
 Here is the simplest way to picture the change. In 2015, there was roughly one new property company for every **115** house sales in the borough. By 2025, there was one for every **19**. (Companies are counted by postcode and sales by borough, so treat this as an illustration of the trend rather than an exact ratio. More on that at the bottom.)
 
 <div class="viz-info">
-<strong>So who are these companies?</strong> That is a fair question, and the answer is public too. The Land Registry keeps a record of every property a company owns. I have now done exactly that: [The Names Behind the Doors](/news/who-owns-burnley-the-names/) names the biggest company owners of Burnley property.
+<strong>So who are these companies?</strong> That is a fair question, and the answer is public too. The Land Registry keeps a record of every property a company owns. I have now done exactly that: <a href="/news/who-owns-burnley-the-names/">The Names Behind the Doors</a> names the biggest company owners of Burnley property.
 </div>
 
 ---
@@ -136,17 +137,17 @@ The boom is not the same everywhere. Some parts of Burnley have shot up in price
 
 <div class="viz-grid viz-grid-3">
 <div class="viz-stat green">
-<span class="value" style="color: #30d158;">+53.4%</span>
+<span class="value">+53.4%</span>
 <span class="label">BB10</span>
 <span class="sublabel">2020 to 2025</span>
 </div>
 <div class="viz-stat green">
-<span class="value" style="color: #30d158;">+48.4%</span>
+<span class="value">+48.4%</span>
 <span class="label">BB11 (town centre)</span>
 <span class="sublabel">2020 to 2025</span>
 </div>
 <div class="viz-stat red">
-<span class="value" style="color: #ff453a;">+4.5%</span>
+<span class="value">+4.5%</span>
 <span class="label">BB12</span>
 <span class="sublabel">2020 to 2025</span>
 </div>
@@ -165,9 +166,9 @@ The sharpest end of all this is the shared house, or HMO, where one family home 
 The council's own research, carried out by an independent housing body in 2023, estimated there are about **916** of these in Burnley. Here is the worrying part. The council only officially knew about **400** of them. The other **516** were estimated to exist but sat on no register at all.
 
 <div class="viz-callout">
-<span class="value" style="color: #ff9f0a; font-size: 3.5rem; font-weight: 900;">516</span>
-<div class="headline" style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 12px;">Shared houses the council had no record of</div>
-<div class="subtext" style="color: #8e8e93; margin-top: 8px;">More than half of Burnley's estimated shared rented houses are not on any official list.</div>
+<span class="value" style="font-size:3.5rem; font-weight:900;">516</span>
+<div class="headline text-white" style="font-size:1.25rem; font-weight:700; margin-top:12px;">Shared houses the council had no record of</div>
+<div class="subtext text-muted" style="margin-top:8px;">More than half of Burnley's estimated shared rented houses are not on any official list.</div>
 </div>
 
 There is a tool that helps. It is called an Article 4 Direction, and in plain terms it means a landlord has to ask the council for permission before turning a family home into one of these shared houses. Burnley brought one in, in October 2024. But it only covers **9 of the town's 15 wards**. Those nine hold the bulk of the problem, an estimated 775 of the 916 shared houses, while the other six have no such protection. They hold an estimated **141** between them, and they are where the next wave of conversions will go once the inner wards are locked down.

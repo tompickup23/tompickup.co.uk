@@ -13,7 +13,7 @@ const currentYear = new Date().getFullYear();
         <a href="/" class="footer-logo" aria-label="Tom Pickup">
           Tom <span class="footer-logo-accent">Pickup</span>
         </a>
-        <div style="margin-top: var(--space-md);">
+        <div class="footer-signup">
           <EmailSignup variant="compact" />
         </div>
       </div>
@@ -124,15 +124,31 @@ const currentYear = new Date().getFullYear();
 </footer>
 
 <style>
+  /* Ink footer, as in the approved prototype. The tokens are redefined for this
+     block so the signup form and links inside it read on the dark ground.
+     Contrast on #1b3035: #f7f4eb 12.6:1, #c5d1d0 8.8:1, #9fd6cc 8.5:1, #e0c48f 8.2:1. */
   .site-footer {
-    border-top: 1px solid var(--separator);
+    --ink: #f7f4eb;
+    --muted: #c5d1d0;
+    --teal: #9fd6cc;
+    --line: #3d5257;
+    --line-strong: #5b7076;
+    --surface: #243c42;
+    --panel: #243c42;
+    --text-primary: #f7f4eb;
+    --text-secondary: #c5d1d0;
+    --accent: #9fd6cc;
+    --accent-glow: rgba(159, 214, 204, 0.08);
+    --accent-border: rgba(159, 214, 204, 0.3);
+    background: #1b3035;
+    color: #f7f4eb;
     margin-top: var(--space-2xl);
   }
 
   .footer-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+    padding: var(--space-2xl) var(--gutter) var(--space-xl);
   }
 
   .footer-grid {
@@ -142,73 +158,64 @@ const currentYear = new Date().getFullYear();
     margin-bottom: var(--space-2xl);
   }
 
-  /* Brand */
   .footer-logo {
     display: inline-block;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.015em;
     text-decoration: none;
-    background-image: none;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
   .footer-logo:hover {
-    background-image: none;
-    background-size: 0;
+    color: var(--ink);
   }
 
   .footer-logo-accent {
-    color: var(--accent);
+    color: inherit;
   }
 
-  .footer-tagline {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  /* Links */
   .footer-heading {
-    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #aab4bd;
-    margin-bottom: var(--space-md);
+    color: #e0c48f;
+    margin-bottom: var(--space-sm);
   }
 
   .footer-links ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
   }
 
   .footer-links a {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    font-size: 1rem;
+    color: var(--muted);
+    text-decoration: none;
   }
 
   .footer-links a:hover {
-    color: var(--text-primary);
+    color: var(--ink);
+    text-decoration: underline;
   }
 
   .footer-ext {
     font-size: 0.8em;
-    margin-left: 3px;
-    color: var(--text-secondary);
+    margin-left: 4px;
   }
 
-  /* The index link, not another project. Teal marks it as the way in.
-     Matches the specificity of `.footer-links a` rather than reaching for
-     !important, so the hover rule below still wins. */
+  /* The index link, not another project. */
   .footer-links a.footer-all {
-    color: var(--accent);
+    color: var(--teal);
   }
 
-  /* Social */
   .social-links {
     display: flex;
     gap: var(--space-sm);
@@ -218,103 +225,88 @@ const currentYear = new Date().getFullYear();
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    width: var(--touch);
+    height: var(--touch);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    border: 1px solid var(--line);
     text-decoration: none;
-    background-image: none;
-    transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
   }
 
   .social-icon:hover {
-    color: var(--accent);
-    background: var(--accent-glow);
-    border-color: var(--accent-border);
-    background-image: none;
-    background-size: 0;
-    transform: translateY(-2px);
+    color: var(--ink);
+    border-color: var(--line-strong);
   }
 
-  /* Legal links */
   .footer-legal-links {
-    border-top: 1px solid var(--separator);
-    padding-top: var(--space-lg);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-md);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    column-gap: var(--space-md);
     flex-wrap: wrap;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
   .footer-legal-links a {
-    font-size: 0.8125rem;
-    color: #aab4bd;
-    transition: color var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    font-size: 0.9375rem;
+    color: var(--muted);
+    text-decoration: none;
   }
 
   .footer-legal-links a:hover {
-    color: var(--text-primary);
+    color: var(--ink);
+    text-decoration: underline;
   }
 
   .footer-dot {
-    color: #aab4bd;
-    opacity: 0.4;
-    font-size: 0.75rem;
+    display: none;
   }
 
-  /* Legal / imprint */
+  /* Imprint: same size and contrast as the links above it. An imprint that
+     cannot be read fails at the only thing it exists to do. */
   .footer-legal {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-md);
     flex-wrap: wrap;
   }
 
-  /* Deliberately more legible than the copyright line beside it. --text-tertiary
-     is 3.51:1 on this footer's black, which fails AA for normal text, and an
-     imprint that cannot be read fails at the only thing it exists to do.
-     --text-secondary is 6.44:1. */
-  .footer-imprint {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    max-width: none;
-  }
-
+  .footer-imprint,
   .footer-copyright {
-    font-size: 0.8125rem;
-    color: #aab4bd;
-    max-width: none;
+    font-size: 0.875rem;
+    color: var(--muted);
+    max-width: 75ch;
   }
 
-  /* Responsive */
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .footer-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: var(--space-xl);
     }
 
-    .footer-inner {
-      padding: var(--space-xl) var(--space-md) var(--space-lg);
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
     }
 
-    .footer-legal-links {
-      justify-content: center;
+    .footer-inner {
+      padding: var(--space-xl) var(--gutter) var(--space-lg);
     }
 
     .footer-legal {
       flex-direction: column;
-      text-align: center;
       gap: var(--space-sm);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .footer-inner {
-      padding: var(--space-lg) var(--space-sm) var(--space-md);
     }
   }
 </style>

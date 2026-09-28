@@ -3,6 +3,7 @@ title: "Nine Front Doors: Supported Living Starts in Lytham St Annes"
 date: 2026-08-27T12:00:00
 description: "Work has started on nine supported living apartments in Lytham St Annes for people with a learning disability and autistic people. Completion summer 2027."
 image: "/images/lytham-st-annes-pier.jpg"
+imageAlt: "St Anne's Pier at low tide, its Victorian pavilions standing on iron legs above the sand."
 ogImage: "/images/share/lytham-supported-living.png"
 imageCredit: "St Anne's Pier, Lytham St Annes. Photo by Matt Harrop, CC BY-SA 2.0, via Wikimedia Commons."
 category: "Lancashire"

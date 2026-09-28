@@ -3,6 +3,7 @@ title: "The state cannot see its own data centres"
 date: 2026-08-24T12:00:00
 description: "The ONS says data centres are not separately visible in the national accounts. The grid operator's connection queue is fourteen times its own forecast."
 image: "/images/data-centre-queue.png"
+imageAlt: "Bar chart. Developers have asked to connect 72.8 GW of data centres to the grid by 2039, of which nearly 59 GW is awaiting connection at transmission level. NESO forecasts 5.2 GW will actually be connected by 2030."
 ogImage: "/images/share/state-cannot-see-its-own-data-centres.png"
 imageCredit: "Chart: Tom Pickup, from NESO written evidence to the Environmental Audit Committee (DCU0081)"
 category: "National"

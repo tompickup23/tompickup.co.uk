@@ -30,48 +30,55 @@ const { items } = Astro.props;
 )}
 
 <style>
+  /* Sources are for checking, so they are set to be read: body-adjacent size,
+     full ink, not decorative small print. */
   .sources {
     margin-top: var(--space-xl);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-md);
+    border-top: 2px solid var(--ink);
   }
 
   .sources h2 {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-secondary);
+    font-size: 1.375rem;
     margin: 0 0 var(--space-sm);
   }
 
   .sources ol {
     margin: 0;
-    padding-left: 1.5rem;
+    padding-left: 1.75rem;
     list-style: decimal;
-    font-size: 0.8125rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
   }
 
   .sources li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     padding-left: 0.25rem;
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 88px;
+  }
+
+  .sources li::marker {
+    color: var(--muted);
+    font-weight: 600;
   }
 
   .sources a {
-    color: var(--text-secondary);
-    text-decoration: none;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 0.18em;
     overflow-wrap: anywhere;
   }
 
   .sources a:hover {
-    color: var(--accent);
-    text-decoration: underline;
+    color: var(--teal);
+    text-decoration-color: currentColor;
   }
 
-  .sources li:target a {
-    color: var(--accent);
+  .sources li:target {
+    background: rgba(128, 92, 37, 0.1);
+    outline: 2px solid rgba(128, 92, 37, 0.1);
   }
 </style>

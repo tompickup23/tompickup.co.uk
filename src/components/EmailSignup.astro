@@ -32,21 +32,23 @@ const { variant = 'inline' } = Astro.props;
     align-items: center;
     gap: var(--space-lg);
     padding: var(--space-lg);
-    background: rgba(18, 182, 207, 0.06);
-    border: 1px solid rgba(18, 182, 207, 0.15);
-    border-radius: var(--radius-lg);
+    background: var(--panel);
+    border-top: 3px solid var(--gold);
+    border-radius: var(--radius-sm);
   }
 
   .email-signup--inline {
-    flex-direction: column;
-    text-align: center;
-    padding: var(--space-xl);
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-xl);
   }
 
   .email-signup--compact {
     flex-direction: column;
-    gap: var(--space-md);
-    padding: var(--space-md);
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: 0;
+    background: none;
+    border-top: 0;
   }
 
   .email-signup-text {
@@ -54,53 +56,67 @@ const { variant = 'inline' } = Astro.props;
   }
 
   .email-signup-heading {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 var(--space-sm);
+    font-size: 1.375rem;
+    color: var(--ink);
+    margin: 0 0 var(--space-xs);
   }
 
   .email-signup-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.55;
     margin: 0;
-    max-width: none;
+    max-width: 60ch;
   }
 
   .email-signup-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 0.65rem 1.25rem;
-    background: var(--accent);
-    color: #000;
-    font-size: 0.875rem;
+    min-height: var(--touch);
+    padding: 0.6rem 1.25rem;
+    background: var(--teal);
+    color: var(--paper);
+    border: 1px solid var(--teal);
+    font-size: 1rem;
     font-weight: 600;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    background-image: none;
     white-space: nowrap;
-    transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
-    box-shadow: 0 2px 12px rgba(18, 182, 207, 0.2);
   }
 
   .email-signup-btn:hover {
-    background: #14c8e3;
-    background-image: none;
-    background-size: 0;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(18, 182, 207, 0.35);
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  /* In the ink footer the button is outlined: paper text on a light teal fails */
+  .email-signup--compact .email-signup-btn {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  .email-signup--compact .email-signup-btn:hover {
+    border-color: var(--ink);
+    background: transparent;
+    color: var(--ink);
   }
 
   @media (max-width: 768px) {
-    .email-signup {
+    .email-signup,
+    .email-signup--inline {
       flex-direction: column;
-      text-align: center;
+      align-items: stretch;
+      padding: var(--space-lg) 18px;
+    }
+
+    .email-signup--compact {
+      padding: 0;
     }
 
     .email-signup-btn {
-      width: 100%;
       justify-content: center;
     }
   }

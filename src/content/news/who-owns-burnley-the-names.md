@@ -3,6 +3,7 @@ title: "The Names Behind the Doors: Burnley's Biggest Property Owners"
 date: 2026-06-19T11:00:00
 description: "I pulled HM Land Registry's record of every company that owns property in Burnley. The biggest owner is a faraway fund, not a local landlord."
 image: "/images/burnley-townscape.jpg"
+imageAlt: "Rows of houses across Burnley, seen from above, with the hills rising behind the town."
 ogImage: "/images/share/who-owns-burnley-the-names.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
@@ -26,22 +27,22 @@ In the Borough of Burnley, **12,123 property titles are held by companies**, spr
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">12,123</span>
+<span class="value xl">12,123</span>
 <span class="label">Company-owned property titles in Burnley</span>
 <span class="sublabel">HM Land Registry, June 2026</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">2,783</span>
+<span class="value xl">2,783</span>
 <span class="label">Different companies own them</span>
 <span class="sublabel">The top 10 hold about 40%</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">1,204</span>
+<span class="value xl">1,204</span>
 <span class="label">Titles held by one company alone</span>
 <span class="sublabel">Wallace Estates Ltd, all freehold</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">6,703</span>
+<span class="value xl">6,703</span>
 <span class="label">Of the titles are freehold</span>
 <span class="sublabel">5,420 are leasehold</span>
 </div>
@@ -60,30 +61,30 @@ Here is what that means in plain terms. When you buy a leasehold home, you own t
 
 <div class="viz-panel">
 <div class="viz-label teal">The biggest freehold owners of Burnley property (titles held)</div>
-<div style="display: grid; gap: 14px;">
+<div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Wallace Estates Ltd</span><span class="text-teal text-bold">1,204</span></div>
+<div class="viz-row"><span class="text-white text-bold">Wallace Estates Ltd</span><span class="text-teal text-bold">1,204</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Morgoed Estates Ltd</span><span class="text-muted">337</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:28%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Morgoed Estates Ltd</span><span class="text-muted">337</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:28%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Helpfavour Ltd</span><span class="text-muted">221</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:18%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Helpfavour Ltd</span><span class="text-muted">221</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:18%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Shenstone Properties Ltd</span><span class="text-muted">197</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:16%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Shenstone Properties Ltd</span><span class="text-muted">197</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:16%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Fairhold Ltd</span><span class="text-muted">190</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:16%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Fairhold Ltd</span><span class="text-muted">190</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:16%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Fairfield Rents Ltd</span><span class="text-muted">122</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:10%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Fairfield Rents Ltd</span><span class="text-muted">122</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:10%;"></div></div>
 </div>
 </div>
 </div>
@@ -98,12 +99,12 @@ Not every big owner is an investor. Two of the largest are the councils themselv
 
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat green">
-<span class="value" style="color: #30d158;">1,074</span>
+<span class="value">1,074</span>
 <span class="label">Burnley Borough Council</span>
 <span class="sublabel">Parks, civic buildings, council land</span>
 </div>
 <div class="viz-stat green">
-<span class="value" style="color: #30d158;">930</span>
+<span class="value">930</span>
 <span class="label">Lancashire County Council</span>
 <span class="sublabel">Schools, highways, county sites</span>
 </div>

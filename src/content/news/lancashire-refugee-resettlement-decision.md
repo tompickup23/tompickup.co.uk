@@ -31,22 +31,22 @@ The second thing is that these schemes are already ending. The Afghanistan Reset
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">745</span>
+<span class="value xl">745</span>
 <span class="label">Individuals supported by the schemes</span>
 <span class="sublabel">At 31 March 2026. 1,250 since 2016.</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">£18.013m</span>
+<span class="value xl">£18.013m</span>
 <span class="label">Claimed from the Home Office since 2020</span>
 <span class="sublabel">Peak year 2024/25 at £6.430m.</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£6.530m</span>
+<span class="value xl">£6.530m</span>
 <span class="label">Received but unspent, held in reserve</span>
 <span class="sublabel">Ringfenced. It can only be spent on these schemes.</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">180</span>
+<span class="value xl">180</span>
 <span class="label">Properties still in use under the schemes</span>
 <span class="sublabel">Against 41,954 households on Lancashire waiting lists.</span>
 </div>
@@ -90,7 +90,7 @@ It does not stop refugees settling in Lancashire. The report is explicit: withdr
 It does not remove a single duty the county council owes to anyone living here. Refugees who live in Lancashire are Lancashire residents, and they get the same statutory services as everyone else, from the same council, on the same terms. That does not change.
 
 <div class="viz-callout">
-<span class="value" style="color: #12b6cf; font-size: 1.15rem; font-weight: 900; line-height: 1.4;">This was a decision about who administers a national scheme. It was not a decision about whether refugees are welcome in Lancashire, and it does not have the power to be one.</span>
+<span class="value" style="font-size:1.15rem; font-weight:900; line-height:1.4;">This was a decision about who administers a national scheme. It was not a decision about whether refugees are welcome in Lancashire, and it does not have the power to be one.</span>
 </div>
 
 ## The argument I actually want to have
@@ -106,6 +106,6 @@ All of the opposition groups at County Hall have called the decision in. A speci
 That is the process working as it should. Scrutiny's job is to test whether we reached this properly, and if the committee has found something we got wrong I would rather hear it there than read it later. I will not pretend to be neutral about a decision I took part in. But a call-in is not an inconvenience to be seen off, and if it comes back to cabinet it comes back to be reconsidered, not rubber stamped.
 
 <div class="viz-sources">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
-<span style="font-size: 0.75rem; color: #8e8e93; line-height: 1.5;">Sources: Report to Cabinet, 3 September 2026, Refugee Resettlement Schemes, Director of Communities and Engagement (Lancashire County Council, document s279743). Appendix A, Detailed Options (document s285375). Cabinet minutes, 3 September 2026, Item 10. Cabinet decision record AIId 118309. Community, Cultural and Corporate Services Scrutiny Committee, special meeting listed for 11 September 2026. Local Authority Housing Statistics (waiting list figure as cited in the officer report). Confidential Appendix C is exempt under paragraphs 1, 2 and 5 of Schedule 12A to the Local Government Act 1972 and is not drawn on here.</span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11.5 14.5 15 9.5" stroke-width="2.5"></polyline></svg>
+<span class="text-muted" style="font-size:0.875rem; line-height:1.5;">Sources: Report to Cabinet, 3 September 2026, Refugee Resettlement Schemes, Director of Communities and Engagement (Lancashire County Council, document s279743). Appendix A, Detailed Options (document s285375). Cabinet minutes, 3 September 2026, Item 10. Cabinet decision record AIId 118309. Community, Cultural and Corporate Services Scrutiny Committee, special meeting listed for 11 September 2026. Local Authority Housing Statistics (waiting list figure as cited in the officer report). Confidential Appendix C is exempt under paragraphs 1, 2 and 5 of Schedule 12A to the Local Government Act 1972 and is not drawn on here.</span>
 </div>

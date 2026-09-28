@@ -3,6 +3,7 @@ title: "Two Wind Farms, One View, and No Assessment of Either Together"
 date: 2026-08-24T10:00:00
 description: "Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. Neither applicant has assessed the combined view. So I mapped it."
 image: "/images/scout-moor-cumulative-ztv.png"
+imageAlt: "Map of where turbines of the proposed Scout Moor II and Calderdale Energy Park wind farms would be visible. Shaded areas show one scheme, the other, or both; 702 square kilometres would see both."
 ogImage: "/images/share/two-wind-farms-one-view.png"
 imageCredit: "Analysis by Tom Pickup. Contains OS data © Crown copyright and database right 2026."
 category: "Lancashire"
@@ -41,22 +42,22 @@ I modelled both schemes on the same terrain grid, using every turbine coordinate
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">702 km²</span>
+<span class="value xl">702 km²</span>
 <span class="label">Would see turbines of both schemes</span>
 <span class="sublabel">205 named places sit inside it, 62 of them in Lancashire</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">560 km²</span>
+<span class="value xl">560 km²</span>
 <span class="label">Would have both inside one photomontage frame</span>
 <span class="sublabel">The 53.5 degree frame national guidance sets for an applicant's own visualisations</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">371 km²</span>
+<span class="value xl">371 km²</span>
 <span class="label">Would see ten or more turbines of each</span>
 <span class="sublabel">Not a single blade tip on a horizon. Ten from each scheme</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">51 of 51</span>
+<span class="value xl">51 of 51</span>
 <span class="label">Turbines theoretically visible from one point</span>
 <span class="sublabel">Every machine of both wind farms, from the same spot</span>
 </div>

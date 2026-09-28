@@ -3,6 +3,7 @@ title: "Ten Thousand People in Burnley Are on PIP. This Is the Bill for Managed 
 date: 2026-06-19T14:00:00
 description: "More than ten thousand people in Burnley claim the disability benefit PIP, the 47th highest of 543 seats in England. This is why."
 image: "/images/burnley-singing-ringing-tree.jpg"
+imageAlt: "The Singing Ringing Tree, the steel pipe wind sculpture on the moor above Burnley."
 ogImage: "/images/share/pip-burnley.png"
 imageCredit: "Photo: Bill Boaden / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -23,22 +24,22 @@ A quick word on geography. PIP is published by parliamentary constituency, so th
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">10,323</span>
+<span class="value xl">10,323</span>
 <span class="label">People in Burnley claim PIP</span>
 <span class="sublabel">January 2026</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">47th</span>
+<span class="value xl">47th</span>
 <span class="label">Highest of 543 seats in England</span>
 <span class="sublabel">In the top 9% for claims</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">+54%</span>
+<span class="value xl">+54%</span>
 <span class="label">Above the typical English seat</span>
 <span class="sublabel">Average is 6,688; Burnley has 10,323</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">4th</span>
+<span class="value xl">4th</span>
 <span class="label">Most deprived district in England</span>
 <span class="sublabel">English Indices of Deprivation 2025</span>
 </div>
@@ -63,21 +64,21 @@ Burnley is the **4th most deprived district in England** on the 2025 deprivation
 
 <div class="viz-panel">
 <div class="viz-label teal">PIP claims, Burnley against the typical English seat</div>
-<div style="display: grid; gap: 16px;">
+<div style="display:grid; gap:16px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">10,323</span></div>
+<div class="viz-row"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">10,323</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Average English seat</span><span class="text-muted">6,688</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:65%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Average English seat</span><span class="text-muted">6,688</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:65%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Typical (median) English seat</span><span class="text-muted">6,212</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:60%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Typical (median) English seat</span><span class="text-muted">6,212</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:60%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Nearby Blackpool South, on 13,974, is among the very highest in the country.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Nearby Blackpool South, on 13,974, is among the very highest in the country.</div>
 </div>
 
 This is the part the national debate skips. When ministers talk about the PIP bill rising, they talk as if the numbers fell from the sky. They did not. They are highest in exactly the places Westminster hollowed out and never rebuilt: the mill towns, the coalfields, the post-industrial North. The same establishment that let the work go now tuts at the benefits bill it created. Burnley is one of those places, and it is owed better than a sneer.
@@ -98,11 +99,11 @@ The cost of PIP has roughly doubled in seven years. Across England and Wales, th
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #8e8e93;">2.05m</span>
+<span class="value">2.05m</span>
 <span class="label">On PIP in 2019</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #12b6cf;">4.0m</span>
+<span class="value">4.0m</span>
 <span class="label">On PIP in 2026</span>
 </div>
 </div>

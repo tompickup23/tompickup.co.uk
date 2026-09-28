@@ -4,6 +4,7 @@ date: 2026-06-22T10:00:00
 updated: 2026-09-28
 description: "I ranked all fourteen Lancashire districts by recorded crime rate. A four to one gap that follows deprivation. Not a high-crime county, a divided one."
 image: "/images/burnley-panorama.jpg"
+imageAlt: "Burnley spread across the valley floor, seen from high ground, with snow on the hills beyond."
 ogImage: "/images/share/lancashire-crime-divide.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Lancashire"
@@ -29,22 +30,22 @@ The honest headline first: Lancashire as a whole is <strong>not</strong> a high-
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">148.7</span>
+<span class="value xl">148.7</span>
 <span class="label">Recorded crimes per 1,000 in Blackpool</span>
 <span class="sublabel">Highest recorded rate in the county</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">37.5</span>
+<span class="value xl">37.5</span>
 <span class="label">Recorded crimes per 1,000 in Ribble Valley</span>
 <span class="sublabel">Lowest recorded rate, about a quarter of Blackpool's</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">2nd</span>
+<span class="value xl">2nd</span>
 <span class="label">Burnley's place in the table</span>
 <span class="sublabel">103.2 per 1,000, behind only Blackpool</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">79.4</span>
+<span class="value xl">79.4</span>
 <span class="label">Lancashire police force area rate</span>
 <span class="sublabel">Below the England average of 83.5</span>
 </div>
@@ -57,24 +58,24 @@ Every district, ranked by total recorded crime per 1,000 residents, year ending 
 
 <div class="viz-panel">
 <div class="viz-label teal">Recorded crime per 1,000 people, Lancashire districts (year to Dec 2025)</div>
-<div style="display: grid; gap: 11px;">
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">1. Blackpool</span><span class="text-bold" style="color:#ff453a;">148.7 &nbsp;<span style="color:#8e8e93;font-weight:400;">(69.0)</span></span></div><div class="viz-reform-bar"><div class="fill" style="width:100%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">2. Burnley</span><span class="text-bold" style="color:#ff453a;">103.2 &nbsp;<span style="color:#8e8e93;font-weight:400;">(40.5)</span></span></div><div class="viz-reform-bar"><div class="fill" style="width:69%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">3. Preston</span><span style="color:#ff9f0a;font-weight:700;">96.6 &nbsp;<span style="color:#8e8e93;font-weight:400;">(38.5)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:65%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">4. Hyndburn</span><span style="color:#ff9f0a;font-weight:700;">93.4 &nbsp;<span style="color:#8e8e93;font-weight:400;">(41.6)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:63%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">5. Blackburn with Darwen</span><span style="color:#ff9f0a;font-weight:700;">84.2 &nbsp;<span style="color:#8e8e93;font-weight:400;">(36.3)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:57%;"></div></div></div>
-<div style="border-top:1px dashed rgba(255,255,255,0.18); padding-top:9px;"><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">England average</span><span class="text-muted">83.5</span></div><div class="viz-reform-bar"><div class="fill" style="width:56%; background:rgba(255,255,255,0.25);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">6. Lancaster</span><span class="text-muted">73.2 &nbsp;(30.2)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:49%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">7. Pendle</span><span class="text-muted">69.2 &nbsp;(31.5)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:47%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">8. Rossendale</span><span class="text-muted">64.2 &nbsp;(27.7)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:43%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">9. Wyre</span><span class="text-muted">58.8 &nbsp;(26.2)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:40%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">10. Chorley</span><span class="text-muted">56.8 &nbsp;(26.7)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:38%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">11. South Ribble</span><span class="text-muted">55.7 &nbsp;(25.1)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:37%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">12. Fylde</span><span class="text-muted">54.2 &nbsp;(24.4)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:36%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">13. West Lancashire</span><span class="text-muted">48.4 &nbsp;(21.9)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:33%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">14. Ribble Valley</span><span class="text-teal text-bold">37.5 &nbsp;<span style="color:#8e8e93;font-weight:400;">(17.3)</span></span></div><div class="viz-reform-bar"><div class="fill teal" style="width:25%;"></div></div></div>
+<div style="display:grid; gap:11px;">
+<div><div class="viz-row"><span class="text-white text-bold">1. Blackpool</span><span class="text-bold text-red">148.7 &nbsp;<span class="text-muted" style="font-weight:400;">(69.0)</span></span></div><div class="viz-reform-bar"><div class="fill red" style="width:100%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white text-bold">2. Burnley</span><span class="text-bold text-red">103.2 &nbsp;<span class="text-muted" style="font-weight:400;">(40.5)</span></span></div><div class="viz-reform-bar"><div class="fill red" style="width:69%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">3. Preston</span><span class="text-orange" style="font-weight:700;">96.6 &nbsp;<span class="text-muted" style="font-weight:400;">(38.5)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:65%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">4. Hyndburn</span><span class="text-orange" style="font-weight:700;">93.4 &nbsp;<span class="text-muted" style="font-weight:400;">(41.6)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:63%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">5. Blackburn with Darwen</span><span class="text-orange" style="font-weight:700;">84.2 &nbsp;<span class="text-muted" style="font-weight:400;">(36.3)</span></span></div><div class="viz-reform-bar"><div class="fill amber" style="width:57%;"></div></div></div>
+<div class="viz-rule-dashed"><div class="viz-row"><span class="text-muted">England average</span><span class="text-muted">83.5</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:56%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">6. Lancaster</span><span class="text-muted">73.2 &nbsp;(30.2)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:49%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">7. Pendle</span><span class="text-muted">69.2 &nbsp;(31.5)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:47%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">8. Rossendale</span><span class="text-muted">64.2 &nbsp;(27.7)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:43%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">9. Wyre</span><span class="text-muted">58.8 &nbsp;(26.2)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:40%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">10. Chorley</span><span class="text-muted">56.8 &nbsp;(26.7)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:38%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">11. South Ribble</span><span class="text-muted">55.7 &nbsp;(25.1)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:37%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">12. Fylde</span><span class="text-muted">54.2 &nbsp;(24.4)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:36%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">13. West Lancashire</span><span class="text-muted">48.4 &nbsp;(21.9)</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:33%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white text-bold">14. Ribble Valley</span><span class="text-teal text-bold">37.5 &nbsp;<span class="text-muted" style="font-weight:400;">(17.3)</span></span></div><div class="viz-reform-bar"><div class="fill teal" style="width:25%;"></div></div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Brackets show violence against the person per 1,000. Source: ONS recorded crime, year ending December 2025. Red and amber bars are above the England average; teal are below.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Brackets show violence against the person per 1,000. Source: ONS recorded crime, year ending December 2025. Red and amber bars are above the England average; teal are below.</div>
 </div>
 
 ## It is a map of deprivation

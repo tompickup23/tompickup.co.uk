@@ -4,11 +4,14 @@ import Footer from '../components/Footer.astro';
 import CookieNotice from '../components/CookieNotice.astro';
 import { person } from '../data/person';
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_ALT } from '../data/seo';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/inter/800.css';
+import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/400-italic.css';
+import '@fontsource/source-sans-3/600.css';
+import '@fontsource/source-sans-3/700.css';
+import '@fontsource/source-serif-4/600.css';
+import '@fontsource/source-serif-4/600-italic.css';
+import sansLatin400 from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
+import serifLatin600 from '@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url';
 import '../styles/global.css';
 
 interface Props {
@@ -26,6 +29,9 @@ interface Props {
   schema?: Record<string, unknown>;
   /* Overrides the last breadcrumb label, which is otherwise derived from the URL. */
   breadcrumbLabel?: string;
+  /* Keeps the old dark styling inside <main>, for the LGR pages until they are
+     rebuilt on the light design. */
+  legacyDark?: boolean;
 }
 
 const {
@@ -39,6 +45,7 @@ const {
   tags = [],
   schema,
   breadcrumbLabel,
+  legacyDark = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -52,6 +59,9 @@ const googleSiteVerification =
   import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION;
 
 const isHome = Astro.url.pathname === '/';
+/* The LGR pages keep their dark styling until they are rebuilt on the finished
+   LGR work. Matched by path so those files need no edit in the meantime. */
+const keepDark = legacyDark || Astro.url.pathname.startsWith('/lgr');
 const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
 const maintenanceMode = false;
 
@@ -121,8 +131,8 @@ const defaultGraph = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#faf9f5" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -153,8 +163,11 @@ const defaultGraph = {
 
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d166519fc11d4f12b9bd7b7d91ceac40"}'></script><!-- End Cloudflare Web Analytics -->
 
-    {/* Inter is self-hosted via @fontsource (imported in the frontmatter):
-        no third-party font request, no render-blocking round-trip, no swap flash */}
+    {/* Source Sans 3 and Source Serif 4 are self-hosted via @fontsource (imported in
+        the frontmatter): no third-party font request. The two faces every page uses
+        above the fold are preloaded so the swap happens before first paint. */}
+    <link rel="preload" href={sansLatin400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifLatin600} as="font" type="font/woff2" crossorigin />
 
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
@@ -222,7 +235,7 @@ const defaultGraph = {
 
     <Header />
 
-    <main id="main" class="noise-overlay">
+    <main id="main" class:list={[{ 'legacy-dark': keepDark }]}>
       <slot />
     </main>
 
@@ -253,48 +266,9 @@ const defaultGraph = {
 </html>
 
 <style is:global>
-  /* Ambient gradient orbs - decorative background.
-     blur(100px) on two fixed full-viewport layers is a continuous GPU cost, so
-     the orbs are dropped on small screens: most mobile traffic arrives via the
-     Facebook in-app browser on mid-range phones, where this costs scroll frames. */
-  body::before,
-  body::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: -1;
-    filter: blur(100px);
-  }
-
-  @media (max-width: 768px) {
-    body::before,
-    body::after {
-      display: none;
-    }
-  }
-
-  body::before {
-    top: -15%;
-    right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(18, 182, 207, 0.12) 0%, transparent 70%);
-    animation: gradientShift 20s ease-in-out infinite;
-  }
-
-  body::after {
-    bottom: -10%;
-    left: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(18, 182, 207, 0.08) 0%, transparent 70%);
-    animation: gradientShift 25s ease-in-out infinite reverse;
-  }
-
-  /* Page content needs padding for fixed header */
+  /* Page content clears the fixed header */
   main {
-    padding-top: 72px;
-    min-height: calc(100dvh - 72px);
+    padding-top: 64px;
+    min-height: calc(100dvh - 64px);
   }
 </style>

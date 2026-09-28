@@ -3,6 +3,7 @@ title: "638 Empty Homes, 2,657 Families Waiting"
 date: 2026-06-19T15:00:00
 description: "Burnley has hundreds of homes standing empty long term while thousands of families wait for somewhere to live. The two numbers, side by side."
 image: "/images/burnley-crown-point.jpg"
+imageAlt: "Rough grassland on the high ground at Crown Point, looking out across the valley towards Burnley under a grey sky."
 ogImage: "/images/share/empty-homes.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -21,22 +22,22 @@ This sits alongside my articles on <a href="/news/who-owns-burnley/">who owns Bu
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">638</span>
+<span class="value xl">638</span>
 <span class="label">Homes empty long-term</span>
 <span class="sublabel">Up from 557 the year before</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">2,657</span>
+<span class="value xl">2,657</span>
 <span class="label">Households on the waiting list</span>
 <span class="sublabel">Up from 1,669 in 2022</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">1,750</span>
+<span class="value xl">1,750</span>
 <span class="label">Empty homes in total</span>
 <span class="sublabel">Down from 2,384 in 2016</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">7</span>
+<span class="value xl">7</span>
 <span class="label">People sleeping rough</span>
 <span class="sublabel">Up from 4 the year before (autumn 2024)</span>
 </div>
@@ -53,11 +54,11 @@ The contrast is the whole story.
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #ff9f0a;">638</span>
+<span class="value">638</span>
 <span class="label">Homes empty long-term</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #12b6cf;">2,657</span>
+<span class="value">2,657</span>
 <span class="label">Families waiting for a home</span>
 </div>
 </div>
@@ -69,26 +70,26 @@ The queue for an affordable home has been climbing for years, even as homes sit 
 <div class="viz-panel">
 <div class="viz-label teal">Households on Burnley's housing waiting list, by year</div>
 <div style="display:flex; align-items:flex-end; gap:8px; height:175px; margin-top:14px;">
-<div style="flex:1; height:51%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:58%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:53%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:68%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:63%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:98%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
-<div style="flex:1; height:100%; background:linear-gradient(180deg, #16c5e0, #0c8499); border-radius:4px 4px 0 0; box-shadow:0 0 16px rgba(18,182,207,0.5);"></div>
-<div style="flex:1; height:96%; background:linear-gradient(180deg, rgba(18,182,207,0.55), rgba(18,182,207,0.1)); border-radius:4px 4px 0 0;"></div>
+<div class="viz-col" style="height:51%;"></div>
+<div class="viz-col" style="height:58%;"></div>
+<div class="viz-col" style="height:53%;"></div>
+<div class="viz-col" style="height:68%;"></div>
+<div class="viz-col" style="height:63%;"></div>
+<div class="viz-col" style="height:98%;"></div>
+<div class="viz-col peak" style="height:100%;"></div>
+<div class="viz-col" style="height:96%;"></div>
 </div>
 <div style="display:flex; gap:8px; margin-top:8px;">
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'18</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'19</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'20</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'21</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'22</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'23</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#12b6cf; font-weight:700;">'24</div>
-<div style="flex:1; text-align:center; font-size:0.62rem; color:#8e8e93;">'25</div>
+<div class="viz-axis">'18</div>
+<div class="viz-axis">'19</div>
+<div class="viz-axis">'20</div>
+<div class="viz-axis">'21</div>
+<div class="viz-axis">'22</div>
+<div class="viz-axis">'23</div>
+<div class="viz-axis peak">'24</div>
+<div class="viz-axis">'25</div>
 </div>
-<div class="text-dim" style="font-size:0.75rem; margin-top:12px;">From 1,359 households in 2018 to a peak of 2,657 in 2024, easing slightly to 2,543 in 2025.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">From 1,359 households in 2018 to a peak of 2,657 in 2024, easing slightly to 2,543 in 2025.</div>
 </div>
 
 Set the long-term empties against the waiting list and it works out at roughly **one idle home for every four families waiting.** That will not house everyone. But every empty home brought back is one more family housed, one less house rotting on a terrace, and one more lived-in front door on a street that needs them.
