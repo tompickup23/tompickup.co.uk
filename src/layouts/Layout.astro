@@ -29,9 +29,6 @@ interface Props {
   schema?: Record<string, unknown>;
   /* Overrides the last breadcrumb label, which is otherwise derived from the URL. */
   breadcrumbLabel?: string;
-  /* Keeps the old dark styling inside <main>, for the LGR pages until they are
-     rebuilt on the light design. */
-  legacyDark?: boolean;
 }
 
 const {
@@ -45,7 +42,6 @@ const {
   tags = [],
   schema,
   breadcrumbLabel,
-  legacyDark = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -59,9 +55,6 @@ const googleSiteVerification =
   import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION;
 
 const isHome = Astro.url.pathname === '/';
-/* The LGR pages keep their dark styling until they are rebuilt on the finished
-   LGR work. Matched by path so those files need no edit in the meantime. */
-const keepDark = legacyDark || Astro.url.pathname.startsWith('/lgr');
 const isComingSoon = Astro.url.pathname === '/coming-soon' || Astro.url.pathname === '/coming-soon/';
 const maintenanceMode = false;
 
@@ -235,7 +228,7 @@ const defaultGraph = {
 
     <Header />
 
-    <main id="main" class:list={[{ 'legacy-dark': keepDark }]}>
+    <main id="main">
       <slot />
     </main>
 
