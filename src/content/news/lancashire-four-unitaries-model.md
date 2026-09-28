@@ -1,10 +1,13 @@
 ---
 title: "Four Councils, One Decision: I Modelled What Lancashire's Reorganisation Actually Means"
 date: 2026-07-18T21:30:00
-description: "15 councils become 4 from April 2028. An interactive, sourced model of the new councils, their budgets, their balance sheets and what it will cost."
+updated: 2026-09-27
+description: "The July 2026 plan to replace Lancashire's 15 councils with 4, now paused for review: a sourced model of the new councils' budgets, balance sheets and costs."
 tags: ["lancashire", "lgr", "burnley", "local-government", "transparency"]
 featured: true
 ---
+
+*Status, 27 September 2026: on 7 September 2026 the government paused the programme for review, and confirmed that the May 2027 local elections will go ahead on existing council boundaries ([government announcement](https://www.gov.uk/government/news/review-of-local-government-reorganisation-launched)). This article and the [model](/lgr/) describe the July 2026 decision; they are not a confirmed timetable.*
 
 On 16 July the government decided Lancashire's 15 councils will be abolished and replaced by four new unitary authorities from 1 April 2028. Padiham & Burnley West lands in the new **East Lancashire**, the largest of the four, merging Blackburn with Darwen, Hyndburn, Rossendale, Pendle and Burnley.
 

@@ -5,7 +5,7 @@ description: "On 3 September I was one of ten cabinet members who agreed Lancash
 image: "/images/county-hall-preston.jpg"
 category: "Lancashire"
 subcategory: "Council"
-tags: ["lancashire", "county-council", "refugees", "home-office", "local-government"]
+tags: ["lancashire", "local-government", "refugees", "home-office"]
 featured: false
 draft: true
 ---

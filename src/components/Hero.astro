@@ -1,5 +1,6 @@
 ---
 import StatCard from './StatCard.astro';
+import Cite from './Cite.astro';
 ---
 
 <section class="hero">
@@ -20,8 +21,9 @@ import StatCard from './StatCard.astro';
       </p>
 
       <p class="hero-subtitle">
-        We inherited a &pound;28 million overspend and cut it to near zero.
-        Delivered the lowest council tax rise in 12 years. Secured &pound;77M for highways.
+        I was Lead Member for Finance and Resources in 2025/26, the year the council's
+        forecast overspend fell from &pound;27.9 million to &pound;2.99 million.<Cite n={1} />
+        The 2026/27 budget set a 3.80% council tax rise, the lowest since 2015/16.<Cite n={2} /><Cite n={3} />
         Every figure on this site traces to a document you can open yourself.
       </p>
 
@@ -61,19 +63,22 @@ import StatCard from './StatCard.astro';
       <StatCard
         icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
         value="3.80%"
-        label="Lowest CT Rise in 12 Years"
+        label="Lowest Council Tax Rise Since 2015/16"
+        cite={3}
         color="#30d158"
       />
       <StatCard
         icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
-        value="&pound;28M&rarr;&pound;2.99M"
-        label="Overspend Corrected"
+        value="&pound;27.9M&rarr;&pound;2.99M"
+        label="2025/26 Overspend, Forecast to Outturn"
+        cite={1}
         color="#12b6cf"
       />
       <StatCard
         icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
-        value="52/84"
-        label="Reform Seats at LCC"
+        value="51/84"
+        label="Reform UK Seats at LCC, September 2026"
+        cite={4}
         color="#bf5af2"
       />
     </div>

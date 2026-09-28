@@ -1,0 +1,29 @@
+---
+/* A numbered source marker. Pairs with <Sources />, which renders the list the
+   number points to at the foot of the page. Kept deliberately small: the source
+   is there for anyone who wants to check it, not in the way of the sentence. */
+interface Props {
+  n: number;
+}
+
+const { n } = Astro.props;
+---
+
+<sup class="cite"><a href={`#source-${n}`} aria-label={`Source ${n}`}>{n}</a></sup>
+
+<style>
+  .cite {
+    font-size: 0.7em;
+    line-height: 0;
+    margin-left: 0.1em;
+  }
+
+  .cite a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .cite a:hover {
+    color: var(--accent);
+  }
+</style>

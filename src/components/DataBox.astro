@@ -1,0 +1,78 @@
+---
+/* "Data behind this article": where the figures came from on the family sites,
+   the article's own table as CSV, and how it was worked out. It is what a reader
+   or a journalist needs to check or reuse a figure with attribution. */
+interface Props {
+  links: { label: string; url: string }[];
+  csv?: string;
+  method?: string;
+  doi?: string;
+  title?: string;
+  year?: number;
+}
+
+const { links, csv, method, doi, title, year } = Astro.props;
+---
+
+<aside class="data-box" aria-labelledby="data-box-heading">
+  <h2 id="data-box-heading">Data behind this article</h2>
+  <ul>
+    {links.map((link) => (
+      <li><a href={link.url}>{link.label}</a></li>
+    ))}
+  </ul>
+  {csv && (
+    <p class="data-box-csv"><a href={csv} download>Download this article's data (CSV)</a></p>
+  )}
+  {method && <p class="data-box-method"><strong>Method.</strong> {method}</p>}
+  {doi && title && (
+    <p class="data-box-cite">
+      <strong>Cite this data.</strong> Pickup, T. ({year}) <em>{title}</em>. Zenodo.
+      <a href={`https://doi.org/${doi}`}>doi:{doi}</a>
+    </p>
+  )}
+</aside>
+
+<style>
+  .data-box {
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .data-box h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+  }
+
+  .data-box ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.375rem;
+  }
+
+  .data-box a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9375rem;
+  }
+
+  .data-box a:hover {
+    text-decoration: underline;
+  }
+
+  .data-box p {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+</style>

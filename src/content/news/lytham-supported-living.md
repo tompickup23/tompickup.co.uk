@@ -7,7 +7,7 @@ ogImage: "/images/share/lytham-supported-living.png"
 imageCredit: "St Anne's Pier, Lytham St Annes. Photo by Matt Harrop, CC BY-SA 2.0, via Wikimedia Commons."
 category: "Lancashire"
 subcategory: "Adult Social Care"
-tags: ["lancashire", "adult social care", "housing", "learning disability", "fylde"]
+tags: ["lancashire", "adult-social-care", "housing", "learning-disability", "fylde"]
 featured: false
 draft: false
 ---
@@ -50,6 +50,6 @@ So: good day for nine households in Lytham St Annes, and a small down payment on
 
 Every fact above about the scheme comes from Lancashire County Council's announcement of 27 August 2026, [Work starts on new supported living scheme in Lytham St Annes](https://news.lancashire.gov.uk/news/work-starts-on-new-supported-living-scheme-in-lytham-st-annes). That is the source for the nine apartments, the accessible and self-contained design, the communal areas, garden and wet rooms, the on-site staff accommodation and 24-hour support, the summer 2027 completion date, the roles of RWP and Swanton Care, the attendance at the site, the air source heat pumps, and the reference to the council's Housing with Care and Support Strategy. My own quotation is reproduced from that announcement word for word.
 
-Background on what supported living means in practice, and what the council offers, is at [Lancashire County Council: housing for people with learning disabilities](https://www.lancashire.gov.uk/health-and-social-care/living-with-a-disability/living-with-learning-disabilities/housing/).
+Background on what supported living means in practice, and what the council offers, is at [Lancashire County Council: supported living](https://www.lancashire.gov.uk/adult-social-care/day-centres-and-residential-care/supported-living/).
 
 The characterisation of the difference a tenancy makes, and the closing point about scale, are my own argument rather than figures taken from the council. I have deliberately not attached a number to unmet need in Lancashire here, because I am not willing to publish one I have not verified at source. When I have that figure properly, I will publish it, including if it is uncomfortable.

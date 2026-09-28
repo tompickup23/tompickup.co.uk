@@ -9,7 +9,7 @@
     "dev:doge": "bash scripts/parked-dev.sh doge",
     "prebuild": "node scripts/guard-parked.mjs pre",
     "build": "astro build",
-    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post",
+    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs",
     "preview": "astro preview"
   },
   "dependencies": {

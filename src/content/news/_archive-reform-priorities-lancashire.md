@@ -2,7 +2,7 @@
 title: "My Priorities for Padiham and Burnley West"
 date: 2026-02-23
 description: "The key issues I'm fighting for as your Reform UK councillor, from council tax to local services."
-tags: ["priorities", "reform", "padiham"]
+tags: ["priorities", "reform-uk", "padiham"]
 featured: false
 draft: true
 ---

@@ -1,0 +1,65 @@
+---
+/* GitHub Pages serves dist/404.html, with a 404 status, for any URL that does not
+   exist. Without this page it showed GitHub's own. Old /lancs/ and /doge/ links
+   land here too, which is intended: those sections are parked. */
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Page not found | Tom Pickup"
+  description="This page does not exist on tompickup.co.uk. Try the news, projects or about pages."
+>
+  <section class="not-found">
+    <div class="container-narrow">
+      <p class="not-found-code">404</p>
+      <h1>This page does not exist</h1>
+      <p>
+        It may have moved, or the link may be wrong. Some older sections of the site have
+        been retired; their data is on <a href="https://aidoge.co.uk/">AI DOGE</a>.
+      </p>
+      <ul class="not-found-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/news/">News and investigations</a></li>
+        <li><a href="/projects/">Projects</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    padding: 8rem 0 var(--space-2xl);
+  }
+
+  .not-found-code {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .not-found h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 var(--space-md);
+  }
+
+  .not-found p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .not-found a {
+    color: var(--accent);
+  }
+
+  .not-found-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    margin-top: var(--space-lg);
+    padding: 0;
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+/* The numbered source list at the foot of a page. Item n has id source-n, which
+   is where <Cite n={n} /> links. Each item names the publisher, the document, the
+   page where there is one, and the date, so the figure can be checked without
+   the reader having to hunt for it. */
+export interface SourceItem {
+  /* Publisher, document title, page and date, in that order. */
+  text: string;
+  url: string;
+}
+
+interface Props {
+  items: SourceItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="sources" aria-labelledby="sources-heading">
+    <h2 id="sources-heading">Sources</h2>
+    <ol>
+      {items.map((item, i) => (
+        <li id={`source-${i + 1}`}>
+          <a href={item.url}>{item.text}</a>
+        </li>
+      ))}
+    </ol>
+  </section>
+)}
+
+<style>
+  .sources {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .sources h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-sm);
+  }
+
+  .sources ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    list-style: decimal;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .sources li {
+    margin-bottom: 0.25rem;
+    padding-left: 0.25rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .sources a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .sources a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .sources li:target a {
+    color: var(--accent);
+  }
+</style>

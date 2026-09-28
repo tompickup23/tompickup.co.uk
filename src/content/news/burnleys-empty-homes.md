@@ -7,7 +7,7 @@ ogImage: "/images/share/empty-homes.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Housing"
-tags: ["burnley", "housing", "empty homes", "data"]
+tags: ["burnley", "housing", "empty-homes", "data"]
 featured: false
 draft: false
 ---

@@ -1,18 +1,26 @@
 ---
-title: "Lancashire's Crime Divide: Four Times the Crime in One County"
+title: "Lancashire's Crime Divide: Four Times the Recorded Crime Rate in One County"
 date: 2026-06-22T10:00:00
-description: "I ranked all fourteen Lancashire districts by crime rate. A four to one gap that tracks deprivation. Not a high-crime county, a divided one."
+updated: 2026-09-28
+description: "I ranked all fourteen Lancashire districts by recorded crime rate. A four to one gap that follows deprivation. Not a high-crime county, a divided one."
 image: "/images/burnley-panorama.jpg"
 ogImage: "/images/share/lancashire-crime-divide.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Lancashire"
 subcategory: "Crime"
 tags: ["lancashire", "crime", "deprivation", "data"]
+data:
+  links:
+    - label: "ONS, Crime in England and Wales: Police Force Area data tables, year ending December 2025 (Tables C2, C4, P1, P3)"
+      url: "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/policeforceareadatatables"
+    - label: "MHCLG, English Indices of Deprivation 2025 (File 10, district summaries)"
+      url: "https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025"
+  method: "Rates and counts copied cell by cell from the ONS workbook for the 14 Community Safety Partnership areas in the Lancashire police force area; nothing estimated or recalculated. The script, source files and checksums are in the deposit."
 featured: false
 draft: false
 ---
 
-People talk about "crime in Lancashire" as if it were one thing. It is not. I took the official recorded-crime figures for all fourteen of the county's districts and put them in order, and the spread is enormous: the worst-hit town has **four times** the crime rate of the safest. What that league table really shows is not a county out of control, but a county split in two, and the line it splits along is poverty.
+People talk about "crime in Lancashire" as if it were one thing. It is not. I took the official recorded-crime figures for all fourteen of the county's districts and put them in order, and the spread is enormous: the district with the highest recorded crime rate has **four times** the rate of the lowest. What that league table really shows is not a county out of control, but a county split in two, and the split follows deprivation.
 
 <div class="viz-info">
 The honest headline first: Lancashire as a whole is <strong>not</strong> a high-crime county. Its force-area rate is slightly below the England average. The story here is the gap <em>within</em> the county, and what sits behind it.
@@ -22,13 +30,13 @@ The honest headline first: Lancashire as a whole is <strong>not</strong> a high-
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat red">
 <span class="value xl" style="color: #ff453a;">148.7</span>
-<span class="label">Crimes per 1,000 in Blackpool</span>
-<span class="sublabel">The worst in the county</span>
+<span class="label">Recorded crimes per 1,000 in Blackpool</span>
+<span class="sublabel">Highest recorded rate in the county</span>
 </div>
 <div class="viz-stat teal">
 <span class="value xl" style="color: #12b6cf;">37.5</span>
-<span class="label">Crimes per 1,000 in Ribble Valley</span>
-<span class="sublabel">The safest, four times lower</span>
+<span class="label">Recorded crimes per 1,000 in Ribble Valley</span>
+<span class="sublabel">Lowest recorded rate, about a quarter of Blackpool's</span>
 </div>
 <div class="viz-stat orange">
 <span class="value xl" style="color: #ff9f0a;">2nd</span>
@@ -37,7 +45,7 @@ The honest headline first: Lancashire as a whole is <strong>not</strong> a high-
 </div>
 <div class="viz-stat purple">
 <span class="value xl" style="color: #bf5af2;">79.4</span>
-<span class="label">The Lancashire county average</span>
+<span class="label">Lancashire police force area rate</span>
 <span class="sublabel">Below the England average of 83.5</span>
 </div>
 </div>
@@ -73,15 +81,15 @@ Every district, ranked by total recorded crime per 1,000 residents, year ending 
 
 Look at who is at the top and who is at the bottom, and the pattern is impossible to miss.
 
-The five districts above the England line are **Blackpool, Burnley, Preston, Hyndburn and Blackburn with Darwen**. Those are also, almost exactly, the five most deprived places in the county. Blackpool is the most deprived district in England; Burnley is fourth. At the other end sit **Ribble Valley, West Lancashire, Fylde, South Ribble and Chorley**, the most comfortable parts of the county, where crime is a third to a quarter of Blackpool's rate.
+The five districts above the England line are **Blackpool, Burnley, Preston, Hyndburn and Blackburn with Darwen**. Four of them, Blackpool, Burnley, Blackburn with Darwen and Hyndburn, are also among the county's five most deprived districts. Blackpool is the most deprived district in England; Burnley is fourth. The fifth most deprived, Pendle, has a recorded crime rate below the England average. At the other end sit **Ribble Valley, West Lancashire, Fylde, South Ribble and Chorley**, the five least deprived parts of the county, where recorded crime rates are between a quarter and two fifths of Blackpool's.
 
-This is not a coincidence and it is not about the character of the people who live in these towns. Deprivation and crime travel together, everywhere, for the same reasons: where there is poverty, worklessness, addiction and hopelessness, there is more crime, and the people who suffer it most are the poorest residents of the poorest towns. The crime map of Lancashire is, almost line for line, its poverty map.
+This is not a coincidence and it is not about the character of the people who live in these towns. Across these fourteen districts, higher deprivation goes with higher recorded crime. These figures show the pattern, not its causes, and they count offences by where they were recorded, not by who the victims were. The crime map of Lancashire closely follows its deprivation map, with exceptions: Preston and Lancaster rank higher on recorded crime than on deprivation, and Pendle lower.
 
 ## What the county average hides
 
-Here is the part that should change how this is talked about. On the headline number, **Lancashire is not a high-crime county at all**, its force-area rate of 79.4 per 1,000 is slightly below the England average of 83.5. A minister or a chief constable can stand up and say, truthfully, that Lancashire is about average.
+Here is the part that should change how this is talked about. On the headline number, **Lancashire's overall recorded crime rate is below the England average**: its force-area rate of 79.4 per 1,000 against 83.5 for England. A minister or a chief constable can stand up and say, truthfully, that Lancashire is about average.
 
-But that average is meaningless to the people who actually live with crime, because it blends Blackpool and Burnley together with Ribble Valley and Fylde and calls the result "Lancashire." It is like saying a man with his head in the oven and his feet in the freezer is, on average, comfortable. The one figure where the county does sit clearly above England is the one that matters most: **violence**, where Lancashire runs at 34.5 per 1,000 against England's 31.3.
+But that average is meaningless to the people who actually live with crime, because it blends Blackpool and Burnley together with Ribble Valley and Fylde and calls the result "Lancashire." It is like saying a man with his head in the oven and his feet in the freezer is, on average, comfortable. Where the county does sit above England is on **violence**, 34.5 recorded offences against the person per 1,000 against England's 31.3, as it is on criminal damage and arson and on weapons possession. Differences in how police forces record crime mean those comparisons need some care.
 
 ## What I want done
 
@@ -89,7 +97,7 @@ But that average is meaningless to the people who actually live with crime, beca
 - **Treat crime as a symptom.** The lasting way to bring the top of this table down is to attack what drives it: deprivation, worklessness and addiction in the towns that were hollowed out and left behind. Enforcement alone never fixes a poverty problem.
 - **Publish the divide.** This league table should be public and updated every year, so residents can see exactly where their town stands and hold someone to account for it, rather than hiding behind a flattering county average.
 
-I represent part of one of the towns at the top of this table, so I will not pretend the average tells the truth. Lancashire is two counties wearing one name. The people in the half that gets the crime deserve to have that said plainly, and acted on.
+I represent part of one of the towns at the top of this table, so I will not pretend the average tells the truth. Lancashire is two counties wearing one name. The two in five Lancashire residents who live in the districts with the highest recorded crime deserve to have that said plainly, and acted on.
 
 ---
 
@@ -104,9 +112,11 @@ I represent part of one of the towns at the top of this table, so I will not pre
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **All crime rates** are from the [Office for National Statistics](https://www.ons.gov.uk/), *Crime in England and Wales: Police Force Area data tables*, Table C4 (recorded crime per 1,000 population by Community Safety Partnership area), year ending December 2025, published April 2026. Each Community Safety Partnership maps to one local authority district. Figures exclude fraud and are per 1,000 residents.
-- **The England average (83.5) and Lancashire force average (79.4 total, 34.5 violence)** are from the same release, Table P3.
-- **Deprivation rankings** (Blackpool 1st, Burnley 4th most deprived district in England) are from the [Ministry of Housing, Communities and Local Government's English Indices of Deprivation 2025](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025).
+- **All crime rates** are from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/policeforceareadatatables), *Crime in England and Wales: Police Force Area data tables*, Table C4 (recorded crime per 1,000 population by Community Safety Partnership area), year ending December 2025, published April 2026. Each Community Safety Partnership maps to one local authority district. Figures exclude fraud and are per 1,000 residents.
+- **The England average (83.5) and the Lancashire police force area rate (79.4 total, 34.5 violence)** are from the same release, Table P3. The force area rate covers Blackburn with Darwen and Blackpool as well as the twelve districts, and includes offences ONS could not assign to any district.
+- **Deprivation rankings** (Blackpool 1st, Burnley 4th most deprived district in England, on rank of average rank) are from the [Ministry of Housing, Communities and Local Government's English Indices of Deprivation 2025](https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025).
 - The "violence" figures in brackets are violence against the person per 1,000, the same ONS table.
 
-One honest note. Recorded crime depends partly on how much crime is reported and recorded, which can vary between areas, so small differences in the middle of the table should not be over-read. The big picture, a four-to-one gap that lines up with deprivation, is far too large to be an artefact of recording.
+One honest note. Recorded crime depends partly on how much crime is reported and recorded, which can vary between areas, so small differences in the middle of the table should not be over-read. The gap between the top and bottom of the table is large, and recording alone is unlikely to explain it. But ONS cautions that rates for places with many visitors or commuters are calculated on the resident population only, which pushes them up; Blackpool, Preston and Lancaster are where that is most likely to apply.
+
+*Corrected 28 September 2026. An earlier version said violence was the one offence group where Lancashire is clearly above England; it is one of several. It said the five highest-crime districts were almost exactly the five most deprived; four of the five are. Wording on recorded crime and deprivation has been made more precise. No crime rate has changed.*

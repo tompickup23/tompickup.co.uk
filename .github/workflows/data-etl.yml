@@ -1,9 +1,11 @@
 name: Data ETL Pipeline
 
+# Manual only since 28 September 2026. No published page reads these feeds, so
+# they moved to archive/public/data/ (see archive/README.md) and are no longer
+# deployed. The schedule ran twice a day and each commit redeployed the site.
+# Run it by hand to refresh the archive; restore the schedule and the public/
+# path together if a page starts using the data again.
 on:
-  schedule:
-    # Twice daily: 6am and 6pm UTC (roadworks, FixMyStreet, LCC highways, traffic intelligence)
-    - cron: '0 6,18 * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,27 +29,27 @@ jobs:
           python-version: '3.12'
 
       - name: Run roadworks ETL
-        run: python3 scripts/roadworks_etl.py public/data/roadworks.json
+        run: python3 scripts/roadworks_etl.py archive/public/data/roadworks.json
         continue-on-error: true
 
       - name: Run FixMyStreet ETL
-        run: python3 scripts/fixmystreet_etl.py public/data/fixmystreet.json
+        run: python3 scripts/fixmystreet_etl.py archive/public/data/fixmystreet.json
         continue-on-error: true
 
       - name: Run LCC highways ETL
-        run: python3 scripts/lcc_highways_etl.py public/data/lcc_highways.json
+        run: python3 scripts/lcc_highways_etl.py archive/public/data/lcc_highways.json
         continue-on-error: true
 
       - name: Run traffic intelligence ETL
-        run: python3 scripts/traffic_etl.py public/data/traffic.json
+        run: python3 scripts/traffic_etl.py archive/public/data/traffic.json
         continue-on-error: true
 
       - name: Summary
         run: |
           echo "### Data ETL Results" >> $GITHUB_STEP_SUMMARY
           for f in roadworks fixmystreet lcc_highways traffic; do
-            if [ -f "public/data/${f}.json" ]; then
-              SIZE=$(wc -c < "public/data/${f}.json" | tr -d ' ')
+            if [ -f "archive/public/data/${f}.json" ]; then
+              SIZE=$(wc -c < "archive/public/data/${f}.json" | tr -d ' ')
               echo "- **${f}.json**: ${SIZE} bytes" >> $GITHUB_STEP_SUMMARY
             else
               echo "- **${f}.json**: missing" >> $GITHUB_STEP_SUMMARY
@@ -57,13 +59,13 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          if git diff --quiet public/data/; then
+          if git diff --quiet archive/public/data/; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "No changes to data files"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Data files updated:"
-            git diff --stat public/data/
+            git diff --stat archive/public/data/
           fi
 
       - name: Commit and push
@@ -71,6 +73,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/roadworks.json public/data/roadworks_archive.json public/data/roadworks_analytics.json public/data/fixmystreet.json public/data/lcc_highways.json public/data/traffic.json
+          git add archive/public/data/roadworks.json archive/public/data/roadworks_archive.json archive/public/data/roadworks_analytics.json archive/public/data/fixmystreet.json archive/public/data/lcc_highways.json archive/public/data/traffic.json
           git commit -m "data: refresh all feeds $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
           git push

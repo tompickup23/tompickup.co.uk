@@ -1,6 +1,6 @@
 ---
 title: "Questioning how the Lancashire Growth Plan is measured"
-date: 2026-09-27
+date: 2026-09-27T22:47:00Z
 description: "A retrospective video note on my question about measuring the Lancashire Growth Plan against jobs and investment."
 category: "Lancashire"
 subcategory: "Public debates"

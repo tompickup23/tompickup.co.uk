@@ -14,7 +14,7 @@ export const NEWS_TOPICS = [
   { id: 'health-benefits', title: 'Health & benefits' },
   { id: 'crime-policing', title: 'Crime & policing' },
   { id: 'local-government', title: 'Local government' },
-  { id: 'social-care', title: 'Adult social care' },
+  { id: 'adult-social-care', title: 'Adult social care' },
   { id: 'planning-energy', title: 'Planning & energy' },
   { id: 'community-charity', title: 'Community & charity' },
   { id: 'public-debates', title: 'Public debates' },
@@ -36,13 +36,13 @@ export function newsTopic(post: Post): typeof NEWS_TOPICS[number] {
   let id: typeof NEWS_TOPICS[number]['id'] = 'other';
   if (subcategory === 'Public debates' || tags.includes('public-debates')) id = 'public-debates';
   else if (tags.includes('lgr') || tags.includes('local-government')) id = 'local-government';
-  else if (subcategory === 'Adult Social Care') id = 'social-care';
+  else if (subcategory === 'Adult Social Care' || tags.includes('adult-social-care')) id = 'adult-social-care';
   else if (subcategory === 'Housing') id = 'housing';
   else if (subcategory === 'Health' || subcategory === 'Benefits') id = 'health-benefits';
   else if (subcategory === 'Crime') id = 'crime-policing';
   else if (subcategory === 'Planning' || subcategory === 'Energy') id = 'planning-energy';
   else if (subcategory === 'Community & charity' || tags.includes('charity')) id = 'community-charity';
-  else if (subcategory === 'Transparency' || tags.includes('spending')) id = 'public-spending';
+  else if (subcategory === 'Transparency' || tags.includes('public-spending')) id = 'public-spending';
   return NEWS_TOPICS.find(topic => topic.id === id)!;
 }
 

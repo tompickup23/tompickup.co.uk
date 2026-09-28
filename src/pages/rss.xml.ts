@@ -9,6 +9,10 @@ export async function GET(context: APIContext) {
     title: 'Tom Pickup',
     description: 'News and updates from Tom Pickup.',
     site: context.site!,
+    xmlns: {
+      dc: 'http://purl.org/dc/elements/1.1/',
+      atom: 'http://www.w3.org/2005/Atom',
+    },
     items: posts
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
       .map((post) => ({
@@ -17,9 +21,10 @@ export async function GET(context: APIContext) {
         description: post.data.description,
         link: `/news/${post.id}/`,
         categories: post.data.tags || [],
-        author: 'Tom Pickup',
+        customData: '<dc:creator>Tom Pickup</dc:creator>',
       })),
     customData: `<language>en-gb</language>
+<atom:link href="https://tompickup.co.uk/rss.xml" rel="self" type="application/rss+xml" />
 <managingEditor>tom.pickup@lancashire.gov.uk (Tom Pickup)</managingEditor>
 <webMaster>tom.pickup@lancashire.gov.uk (Tom Pickup)</webMaster>
 <copyright>Copyright ${new Date().getFullYear()} Tom Pickup</copyright>

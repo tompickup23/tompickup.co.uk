@@ -1,13 +1,21 @@
 ---
-title: "Where Burnley Council's Money Goes: Every Payment Over £500 in 2025/26"
+title: "Where Burnley Council's Money Goes: Every Payment of £500 or More in 2025/26"
 date: 2026-06-23T10:00:00
+updated: 2026-09-28
 description: "Burnley Borough Council spent £38.06 million in payments of £500 or more last year, across 4,489 transactions to 843 suppliers. Every line, searchable."
 image: "/images/burnley-aerial.jpg"
 ogImage: "/images/share/burnley-spending-2025-26.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
 subcategory: "Transparency"
-tags: ["burnley", "transparency", "spending", "data", "council"]
+tags: ["burnley", "transparency", "public-spending", "data"]
+data:
+  links:
+    - label: "Burnley Borough Council, Council spend over £500, Quarters 1 to 4 2025/26"
+      url: "https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/"
+    - label: "AI DOGE: every Burnley payment, searchable"
+      url: "https://aidoge.co.uk/councils/burnley/"
+  method: "The council's four quarterly files combined into one table of 4,489 payment lines, every value kept as published. Totals match a separate parse by AI DOGE row for row and to the penny."
 featured: false
 draft: false
 ---
@@ -24,13 +32,13 @@ This is not a leak or a scoop. It is the council's own data, which it is legally
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
 <span class="value xl" style="color: #12b6cf;">£38.06m</span>
-<span class="label">Paid out in 2025/26 (over £500)</span>
+<span class="label">Paid out in 2025/26 (£500 or more)</span>
 <span class="sublabel">1 April 2025 to 31 March 2026</span>
 </div>
 <div class="viz-stat orange">
 <span class="value xl" style="color: #ff9f0a;">4,489</span>
 <span class="label">Separate payments</span>
-<span class="sublabel">Every one searchable in the DOGE explorer</span>
+<span class="sublabel">Every one searchable on AI DOGE</span>
 </div>
 <div class="viz-stat purple">
 <span class="value xl" style="color: #bf5af2;">843</span>
@@ -96,7 +104,7 @@ The £38 million splits almost evenly between two very different kinds of money.
 <div><div class="text-white text-bold" style="font-size:1.05rem;">£8.01m</div><div class="text-dim" style="font-size:0.72rem;">Q3 Oct-Dec</div></div>
 <div><div class="text-white text-bold" style="font-size:1.05rem;">£10.14m</div><div class="text-dim" style="font-size:0.72rem;">Q4 Jan-Mar</div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 16px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. A small £11,450 treasury item sits outside the capital/revenue split.</div>
+<div class="text-dim" style="font-size: 0.75rem; margin-top: 16px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. Three treasury payments totalling £11,450 sit outside the capital/revenue split.</div>
 </div>
 
 ## The biggest suppliers
@@ -104,7 +112,7 @@ The £38 million splits almost evenly between two very different kinds of money.
 Of the 843 suppliers paid, a handful take a very large share. These are the ten biggest in 2025/26.
 
 <div class="viz-panel">
-<div class="viz-label teal">Top 10 suppliers by total paid, 2025/26 (over £500)</div>
+<div class="viz-label teal">Top 10 suppliers by total paid, 2025/26 (payments of £500 or more)</div>
 <div style="display: grid; gap: 10px;">
 <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">FCC Environment / Urbaser</span><span class="text-bold" style="color:#12b6cf;">£3.21m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
 <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">Liberata UK</span><span class="text-bold" style="color:#12b6cf;">£3.06m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:95%;"></div></div></div>
@@ -122,9 +130,9 @@ Of the 843 suppliers paid, a handful take a very large share. These are the ten 
 
 Three of those ten names are the same operation. **FCC Environment, FCC Recycling and FCC Waste Management together took £6.3 million**, which makes the company that empties Burnley's bins and cleans its streets the council's single biggest supplier relationship by a distance. That work has been contracted out since 1995; the firm that held it as Urbaser was bought by FCC, and the contract ran to the end of March 2026, which is why the year's two largest single payments, £785,397 and £420,036, are capital fleet payments to FCC Recycling in the final month. A new eight-year waste contract is being let to start in April 2026, so this is precisely the moment that £6 million-a-year relationship should be under the closest scrutiny.
 
-The second giant is **Liberata UK, at £3.06 million**, the outsourcing company that has run the council's revenues and benefits, customer services, IT, payroll and HR since 2016 under a "strategic partnership". That deal is currently due to run to the end of 2027, with an extension to 2030 on the table. Between waste and Liberata, around £9 million a year of Burnley's published spending goes to just two outside contractors. Whether that outsourced model still delivers value is one of the most important questions the council faces, and you cannot ask it without first seeing the numbers.
+The second giant is **Liberata UK, at £3.06 million**, the outsourcing company that has run the council's revenues and benefits, customer services, IT, payroll and HR since 2016 under a "strategic partnership". That deal is currently due to run to the end of 2027, with an extension to 2030 on the table. Between waste and Liberata, £9.4 million a year of Burnley's published spending goes to just two outside contractors. Whether that outsourced model still delivers value is one of the most important questions the council faces, and you cannot ask it without first seeing the numbers.
 
-The rest of the top ten is mostly the capital programme: **Burnley Leisure** takes a £302,499.75 management fee every quarter, £1.21 million a year, to run the town's leisure centres; **Barnfield Investment Properties** and the building firms behind it are the town-centre regeneration; and **Cemplas, Geoffrey Robinson** and the other contractors are the bricks-and-mortar work.
+The rest of the top ten is a mix of running costs and building work. **Burnley Leisure** takes a £302,499.75 management fee every quarter, £1.21 million a year, to run the town's leisure centres, and **Calico** and **EDF Energy** are also paid from the revenue budget. The capital programme accounts for the others: **Barnfield Investment Properties** and the building firms behind it are the town-centre regeneration, and **Cemplas** and **Geoffrey Robinson** are the bricks-and-mortar work.
 
 ## Payments worth a second look
 
@@ -149,7 +157,7 @@ The figures above are the headlines. The complete record, every one of the 4,489
 ## What I want done
 
 - **Publish spending in a form people can use.** I built the table above in an afternoon from the council's own data. There is no excuse for the council not to offer the same as standard: a searchable record of every payment, updated every month, not four raw spreadsheets a year that only an insider can read.
-- **Scrutinise the big contracts as they are signed.** The eight-year waste contract is being let right now, and the Liberata partnership runs to 2030. Together they are roughly £9 million a year. Deals of that size and length should be examined line by line, in public, before the ink is dry, not waved through.
+- **Scrutinise the big contracts as they are signed.** The eight-year waste contract is being let right now, and the Liberata partnership runs to 2030. Together they were £9.4 million in 2025/26. Deals of that size and length should be examined line by line, in public, before the ink is dry, not waved through.
 - **Account for the capital programme.** Nearly half this spending is building work and investment. Every major project should have a clear, public answer on what it cost and what the town got for it.
 - **Treat openness as the default.** Residents own this money. They should never have to rely on one person with a spreadsheet to find out where it went.
 
@@ -159,9 +167,9 @@ I am a Lancashire county councillor, not a member of Burnley Borough Council, so
 
 You do not need this part to follow the story. It is here so the working can be checked, to the penny.
 
-- **Every figure comes from Burnley Borough Council's [own published "spend over £500" data](https://burnley.gov.uk/council-democracy/council-spending/) for 2025/26**, the data the council is required to publish under the Local Government Transparency Code. I downloaded all four quarterly files directly from the council: [Q1, April to June](https://burnley.gov.uk/wp-content/uploads/2025/09/Q1-Spending-of-500-and-over-Apr-Jun-2526.csv), [Q2, July to September](https://burnley.gov.uk/wp-content/uploads/2025/10/Q2-Spending-of-500-and-over-Jul-Sept-2526.csv), [Q3, October to December](https://burnley.gov.uk/wp-content/uploads/2026/01/Q3-Spending-of-500-and-over-Oct-Dec-2526.csv) and [Q4, January to March](https://burnley.gov.uk/wp-content/uploads/2026/04/Q4-Spending-of-500-and-over-Jan-Mar-2526.csv). They sit on the council's [council spending page](https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/). Added together they contain 4,489 payments totalling £38,056,787.31, to 843 distinct suppliers, dated 2 April 2025 to 25 March 2026.
-- **Nothing has been added, removed or reclassified.** The total is the exact sum of the "Net Amount" column across the four files. The category, capital/revenue and service labels are the council's own. The only tidying is cosmetic: the council tags some supplier names " - NET" or " - GROSS" to show whether a figure is shown before or after VAT, and I strip that tag when grouping a supplier's payments together. It does not change a single number.
-- **This is over-£500 payments, not the council's whole budget.** It excludes wages and pensions, housing benefit paid out and largely reclaimed, and all payments under £500. So treat £38.06 million as the published over-£500 total, not total council expenditure. For scale, the council's 2025/26 **gross revenue budget is £64.1 million** and its **net budget requirement £18.7 million** (Burnley Borough Council, 2025/26 Council Tax Statutory Financial Information), with the capital programme funded separately. The £38.06 million here splits into £20,721,932 revenue and £17,323,405 capital (plus an £11,450 treasury item).
+- **Every figure comes from Burnley Borough Council's [own published "spend over £500" data](https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/) for 2025/26**, the data the council is required to publish under the Local Government Transparency Code. I downloaded all four quarterly files directly from the council: [Q1, April to June](https://burnley.gov.uk/wp-content/uploads/2025/09/Q1-Spending-of-500-and-over-Apr-Jun-2526.csv), [Q2, July to September](https://burnley.gov.uk/wp-content/uploads/2025/10/Q2-Spending-of-500-and-over-Jul-Sept-2526.csv), [Q3, October to December](https://burnley.gov.uk/wp-content/uploads/2026/01/Q3-Spending-of-500-and-over-Oct-Dec-2526.csv) and [Q4, January to March](https://burnley.gov.uk/wp-content/uploads/2026/04/Q4-Spending-of-500-and-over-Jan-Mar-2526.csv). They sit on the council's [council spending page](https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/). Added together they contain 4,489 payments totalling £38,056,787.31, to 843 distinct suppliers, dated 2 April 2025 to 25 March 2026.
+- **Nothing has been added, removed or reclassified.** The total is the exact sum of the "Net Amount" column across the four files. The category, capital/revenue and service labels are the council's own. The only tidying is cosmetic: the council tags some supplier names “ - NET” or “ - GROSS” to show whether a figure is shown before or after VAT, and I strip that tag when grouping a supplier's payments together. It does not change a single number.
+- **This is over-£500 payments, not the council's whole budget.** It excludes wages and pensions, housing benefit paid out and largely reclaimed, and all payments under £500. So treat £38.06 million as the published over-£500 total, not total council expenditure. For scale, the council's 2025/26 **gross revenue budget is £64.1 million** and its **total net expenditure £18.7 million** (Burnley Borough Council, 2025/26 Council Tax Statutory Financial Information), with the capital programme funded separately. The £38.06 million here splits into £20,721,932 revenue and £17,323,405 capital (plus three treasury payments totalling £11,450).
 - **The other two published files are kept separate, on purpose.** Burnley also publishes purchase-card transactions (£155,820 across 1,734 small card payments in 2025/26) and a list of contracts and purchase orders over £5,000 (£33.1 million of orders raised). The contracts file records commitments, not payments, and many of those orders are paid through the spend file above, so adding the two together would double-count. I have not done that. The £38.06 million figure is payments only.
 - **An independent check.** I cross-checked the first three quarters of my totals against the separately-built AI DOGE council spending dataset, which processes the same source by a completely different pipeline. The two agree to the penny (£27,917,686.85 for April to December), which is the strongest confirmation that the figures here are read faithfully from the source.
 
@@ -171,3 +179,5 @@ One honest note. The council changed some of its internal service codes part-way
 <div class="viz-info" style="margin-top:2rem;">
 <strong>A note on the figures.</strong> Everything here is reproduced from Burnley Borough Council's own published data for general information and transparency. It is not the official record and may contain errors or omissions, so always verify against the council's source files (linked above) before relying on any figure. No liability is accepted for any use of this page, and naming a supplier is not an allegation of any wrongdoing; it simply reflects a payment recorded in the council's published data.
 </div>
+
+*Corrected 28 September 2026. An earlier version described the rest of the top ten suppliers as mostly the capital programme; three of them, Burnley Leisure, Calico and EDF Energy, are revenue spending. The waste and Liberata total is now given as £9.4 million rather than about £9 million. No total, count or supplier figure has changed.*

@@ -2,6 +2,8 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieNotice from '../components/CookieNotice.astro';
+import { person } from '../data/person';
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_ALT } from '../data/seo';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
@@ -13,6 +15,8 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /* Describes the share image for screen readers on platforms that show it. */
+  ogImageAlt?: string;
   article?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
@@ -27,7 +31,8 @@ interface Props {
 const {
   title,
   description = 'Tom Pickup, Reform UK county councillor for Padiham and Burnley West and Cabinet Member for Adult Social Care. Investigations into how public money is spent in Lancashire.',
-  ogImage = '/images/headshot.jpg',
+  ogImage = DEFAULT_OG_IMAGE,
+  ogImageAlt,
   article = false,
   publishedTime,
   modifiedTime,
@@ -157,6 +162,9 @@ const defaultGraph = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    {ogImage === DEFAULT_OG_IMAGE && <meta property="og:image:width" content="1200" />}
+    {ogImage === DEFAULT_OG_IMAGE && <meta property="og:image:height" content="630" />}
+    <meta property="og:image:alt" content={ogImageAlt ?? (ogImage === DEFAULT_OG_IMAGE ? DEFAULT_OG_IMAGE_ALT : title)} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:site_name" content="Tom Pickup" />
 
@@ -181,6 +189,7 @@ const defaultGraph = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:image:alt" content={ogImageAlt ?? (ogImage === DEFAULT_OG_IMAGE ? DEFAULT_OG_IMAGE_ALT : title)} />
 
     {emitDefaultSchema && (
       <script type="application/ld+json" set:html={JSON.stringify(defaultGraph)} />
@@ -202,40 +211,8 @@ const defaultGraph = {
             url: 'https://tompickup.co.uk/',
             inLanguage: 'en-GB',
             publisher: { '@id': 'https://tompickup.co.uk/#person' },
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: {
-                '@type': 'EntryPoint',
-                urlTemplate: 'https://tompickup.co.uk/news/?q={search_term_string}',
-              },
-              'query-input': 'required name=search_term_string',
-            },
           },
-          {
-            '@type': 'Person',
-            '@id': 'https://tompickup.co.uk/#person',
-            name: 'Tom Pickup',
-            url: 'https://tompickup.co.uk/',
-            image: 'https://tompickup.co.uk/images/headshot.jpg',
-            jobTitle: 'County Councillor for Padiham and Burnley West',
-            worksFor: {
-              '@type': 'GovernmentOrganization',
-              name: 'Lancashire County Council',
-              url: 'https://www.lancashire.gov.uk/',
-            },
-            memberOf: { '@type': 'PoliticalParty', name: 'Reform UK' },
-            knowsAbout: [
-              'Local government finance',
-              'Adult social care',
-              'Public spending transparency',
-              'Lancashire',
-            ],
-            sameAs: [
-              'https://x.com/tompickup',
-              'https://www.facebook.com/tompickupburnley',
-              'https://www.instagram.com/tompickupburnley',
-            ],
-          },
+          person,
         ],
       })} />
     )}
