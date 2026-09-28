@@ -1,0 +1,313 @@
+{
+ "$meta": {
+  "citation": "Pickup, T. (2026). The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions. Working paper, v3.1. Zenodo.",
+  "doi": "10.5281/zenodo.23016761",
+  "doiUrl": "https://doi.org/10.5281/zenodo.23016761",
+  "record": "https://zenodo.org/records/23016761",
+  "file": "zen.zip",
+  "fileMd5": "ec718021205d5f70695caa59fd156bd3",
+  "published": "2026-09-28",
+  "tableSource": "derived/paper_tables.md, Table 8a",
+  "figureSource": "derived/paper_figures.json",
+  "peerReviewed": false,
+  "note": "Working paper, not peer reviewed. Steady-state net annual position and ten-year NPV at 3.5% (2024-25 prices), for 2, 3, 4 and 5 unitaries. Structural effects only: transformation savings are excluded. The author is a Cabinet member of Lancashire County Council, which proposed two unitaries; see the paper's Declaration of Interests."
+ },
+ "configurations": [
+  "2UA",
+  "3UA",
+  "4UA",
+  "5UA"
+ ],
+ "rows": [
+  {
+   "label": "Central case",
+   "paperLabel": "Central: Option 2 overhead, people services estimated",
+   "netAnnual": [
+    "£75.9M",
+    "£31.7M",
+    "−£2.6M",
+    "−£33.3M"
+   ],
+   "tenYearNpv": [
+    "£491.6M",
+    "£135.4M",
+    "−£140.5M",
+    "−£389.1M"
+   ],
+   "payback": [
+    "1.8",
+    "4.2",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Pooled merger slope for the overhead (Option 1)",
+   "paperLabel": "Option 1 overhead (pooled merger slope)",
+   "netAnnual": [
+    "£57.5M",
+    "£15.4M",
+    "−£16.9M",
+    "−£45.8M"
+   ],
+   "tenYearNpv": [
+    "£354.8M",
+    "£14.5M",
+    "−£247.3M",
+    "−£482.3M"
+   ],
+   "payback": [
+    "2.2",
+    "7.6",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Newton's assumption on care placements",
+   "paperLabel": "Newton on its own scope (1% per 200,000 on placement spend)",
+   "netAnnual": [
+    "£69.3M",
+    "£18.8M",
+    "−£18.6M",
+    "−£51.1M"
+   ],
+   "tenYearNpv": [
+    "£433.8M",
+    "£21.6M",
+    "−£282.3M",
+    "−£547.2M"
+   ],
+   "payback": [
+    "2.1",
+    "7.3",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Newton's assumption on all people services",
+   "paperLabel": "Newton on all people-services spend (version 3's treatment)",
+   "netAnnual": [
+    "£62.5M",
+    "£3.3M",
+    "−£38.1M",
+    "−£73.3M"
+   ],
+   "tenYearNpv": [
+    "£372.6M",
+    "−£114.2M",
+    "−£453.0M",
+    "−£741.0M"
+   ],
+   "payback": [
+    "2.3",
+    "none",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Option 1 and Newton's assumption on placements",
+   "paperLabel": "Option 1 and Newton on placements",
+   "netAnnual": [
+    "£50.9M",
+    "£2.5M",
+    "−£33.0M",
+    "−£63.7M"
+   ],
+   "tenYearNpv": [
+    "£297.0M",
+    "−£99.3M",
+    "−£389.1M",
+    "−£640.4M"
+   ],
+   "payback": [
+    "2.5",
+    "none",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Option 1 and Newton's assumption on all people services",
+   "paperLabel": "Option 1 and Newton on all spend",
+   "netAnnual": [
+    "£44.1M",
+    "−£13.0M",
+    "−£52.4M",
+    "−£85.8M"
+   ],
+   "tenYearNpv": [
+    "£235.9M",
+    "−£235.2M",
+    "−£559.8M",
+    "−£834.2M"
+   ],
+   "payback": [
+    "2.9",
+    "none",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Without the SEN transport term",
+   "paperLabel": "SEN transport term excluded",
+   "netAnnual": [
+    "£75.0M",
+    "£26.3M",
+    "−£10.5M",
+    "−£43.7M"
+   ],
+   "tenYearNpv": [
+    "£484.2M",
+    "£91.9M",
+    "−£205.2M",
+    "−£473.6M"
+   ],
+   "payback": [
+    "1.8",
+    "5.0",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "Overhead net of internal recharges (earlier definition)",
+   "paperLabel": "Netted overhead definition (central before session 6), Option 2",
+   "netAnnual": [
+    "£58.1M",
+    "£37.0M",
+    "£20.8M",
+    "£5.3M"
+   ],
+   "tenYearNpv": [
+    "£380.7M",
+    "£210.3M",
+    "£80.1M",
+    "−£46.1M"
+   ],
+   "payback": [
+    "1.7",
+    "2.7",
+    "4.6",
+    "none"
+   ]
+  },
+  {
+   "label": "Earlier overhead definition with Option 1",
+   "paperLabel": "Netted overhead definition, Option 1",
+   "netAnnual": [
+    "£37.9M",
+    "£19.4M",
+    "£5.5M",
+    "−£7.9M"
+   ],
+   "tenYearNpv": [
+    "£230.0M",
+    "£79.7M",
+    "−£33.9M",
+    "−£144.0M"
+   ],
+   "payback": [
+    "2.3",
+    "4.3",
+    "none",
+    "none"
+   ]
+  },
+  {
+   "label": "With the direct-payments term",
+   "paperLabel": "Direct payments term included, 65 and over, at its 2024-25 estimate (central under rule R3a, a sensitivity row under rule R3b)",
+   "netAnnual": [
+    "£75.7M",
+    "£34.2M",
+    "£1.5M",
+    "−£27.8M"
+   ],
+   "tenYearNpv": [
+    "£490.5M",
+    "£158.5M",
+    "−£103.4M",
+    "−£339.6M"
+   ],
+   "payback": [
+    "1.8",
+    "3.8",
+    "none",
+    "none"
+   ]
+  }
+ ],
+ "monteCarlo": [
+  {
+   "paperLabel": "Monte Carlo, Option 2 (central)",
+   "pNetPositive": [
+    "100%",
+    "100%",
+    "46%",
+    "3%"
+   ],
+   "pNpvPositive": [
+    "100%",
+    "88%",
+    "10%",
+    "0%"
+   ]
+  },
+  {
+   "paperLabel": "Monte Carlo, Option 1",
+   "pNetPositive": [
+    "98%",
+    "70%",
+    "29%",
+    "9%"
+   ],
+   "pNpvPositive": [
+    "96%",
+    "49%",
+    "14%",
+    "3%"
+   ]
+  },
+  {
+   "paperLabel": "Monte Carlo, netted definition, Option 2",
+   "pNetPositive": [
+    "100%",
+    "100%",
+    "99%",
+    "74%"
+   ],
+   "pNpvPositive": [
+    "100%",
+    "100%",
+    "85%",
+    "24%"
+   ]
+  },
+  {
+   "paperLabel": "Monte Carlo, netted definition, Option 1",
+   "pNetPositive": [
+    "99%",
+    "87%",
+    "65%",
+    "38%"
+   ],
+   "pNpvPositive": [
+    "94%",
+    "71%",
+    "41%",
+    "18%"
+   ]
+  }
+ ],
+ "headline": {
+  "transitionRange": "£61.4M to £66.5M",
+  "dupPerAuthority4UA": "£25.4M",
+  "dupTotal4UA": "£97.5M",
+  "breakeven4UA": "£24.8M",
+  "net4UA": "−£2.6M",
+  "npv4UA": "−£140.5M"
+ }
+}
