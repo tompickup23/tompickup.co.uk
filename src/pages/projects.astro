@@ -13,6 +13,11 @@ if (groupedProjects.length !== ALL_PROJECTS.length || new Set(groupedProjects).s
   throw new Error('Each portfolio project must appear in exactly one category.');
 }
 const postMap = new Map(posts.map(post => [post.id, post]));
+/* A project leads as a card when it links to writing or a section on this site;
+   the rest are listed as rows beneath, so the page weights each project by how
+   much there is to follow up here. */
+const isPrimary = (p: typeof ALL_PROJECTS[number]) =>
+  Boolean(PROJECT_DETAILS[p.title]?.article || PROJECT_DETAILS[p.title]?.section);
 // A removed or unpublished article must not leave a dead link in the portfolio.
 const readingSlugs = [
   ...Object.values(LOCAL_READING).flat(),
@@ -63,9 +68,21 @@ const schema = {
           <p>{group.description}</p>
         </header>
         <div class:list={['group-content', { 'local-layout': LOCAL_READING[group.id] }]}>
-          <ul class="project-grid">
-            {group.projects.map(project => <li><ProjectCard project={project} /></li>)}
-          </ul>
+          <div class="group-projects">
+            {group.projects.some(isPrimary) && <ul class="project-grid">
+              {group.projects.filter(isPrimary).map(project => <li><ProjectCard project={project} /></li>)}
+            </ul>}
+            {group.projects.some(p => !isPrimary(p)) && <ul class="project-rows">
+              {group.projects.filter(p => !isPrimary(p)).map(p => <li>
+                <span class="row-mark" style={`--project-accent:${p.accent}`} aria-hidden="true">{PROJECT_DETAILS[p.title].mark}</span>
+                <div>
+                  <h3><a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? 'noopener noreferrer' : undefined}>{p.title}<span aria-hidden="true"> {p.external ? '↗' : '→'}</span>{p.external && <span class="sr-only"> (opens in a new tab)</span>}</a></h3>
+                  <p>{p.desc}</p>
+                </div>
+                <span class="row-host">{p.external ? new URL(p.href).hostname : 'tompickup.co.uk'}</span>
+              </li>)}
+            </ul>}
+          </div>
           {LOCAL_READING[group.id] && <aside class="local-reading" aria-label={`${group.title} news and investigations`}>
             <div class="local-reading-heading"><h3>News &amp; investigations</h3><a href={`/news/#${group.id}`}>All {group.title} articles <span aria-hidden="true">↗</span></a></div>
             {LOCAL_READING[group.id].map(slug => {
@@ -109,15 +126,25 @@ const schema = {
   .portfolio-index > a:hover { color: var(--teal); }
   .index-number, .index-count { color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
   .portfolio-index > p { margin-top: 12px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; max-width: 38ch; }
-  .project-section { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 48px; padding: 52px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+  .project-section { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 48px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
   .portfolio-section-heading { padding-top: 4px; }
   .section-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; color: var(--muted); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
   .section-kicker > span:first-child { color: var(--gold); border-right: 1px solid var(--line-strong); padding-right: 12px; }
   .portfolio-section-heading h2 { font-size: 1.75rem; line-height: 1.15; margin-bottom: 12px; }
   .portfolio-section-heading > p { color: var(--muted); font-size: 1rem; line-height: 1.6; max-width: 30ch; }
-  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
   .project-grid > li { min-width: 0; }
   .group-content { min-width: 0; }
+  .group-projects { min-width: 0; }
+  .project-rows { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .project-rows li { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .row-mark { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); box-shadow: inset 0 -3px 0 var(--project-accent); font-size: 12px; font-weight: 700; color: var(--ink); align-self: start; }
+  .project-rows h3 { font-size: 1.125rem; margin: 0; }
+  .project-rows h3 a { color: var(--ink); text-decoration: none; display: inline-flex; min-height: 32px; align-items: center; }
+  .project-rows h3 a span[aria-hidden] { color: var(--teal); margin-left: 6px; }
+  .project-rows h3 a:hover { color: var(--teal); text-decoration: underline; }
+  .project-rows p { color: var(--muted); font-size: 0.9375rem; line-height: 1.5; margin: 0; }
+  .row-host { color: var(--teal); font-size: 0.875rem; white-space: nowrap; }
   .local-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
   .local-layout .project-grid { grid-template-columns: 1fr; }
   .local-reading { min-width: 0; }
@@ -138,5 +165,5 @@ const schema = {
   .more-links a { display: flex; align-items: center; gap: 12px; min-height: var(--touch); color: var(--teal); font-size: 1rem; font-weight: 600; }
   @media (max-width: 1050px) { .portfolio-hero { gap: 35px; } .project-section { grid-template-columns: 205px minmax(0, 1fr); gap: 25px; } }
   @media (max-width: 850px) { .portfolio { padding-top: 20px; } .portfolio-hero { grid-template-columns: 1fr; gap: 32px; padding-bottom: 40px; } .project-section { grid-template-columns: 1fr; gap: 20px; padding: 36px 0; } .portfolio-section-heading > p { max-width: 60ch; } .more-work { align-items: start; flex-direction: column; gap: 14px; } }
-  @media (max-width: 600px) { .portfolio-hero { padding-top: 20px; } h1 { font-size: clamp(2.375rem, 10vw, 3.25rem); } .hero-intro { font-size: 1.0625rem; } .portfolio-index { padding: 18px; } .project-grid, .local-layout { grid-template-columns: 1fr; } .more-links { flex-direction: column; width: 100%; gap: 0; } .more-links a { justify-content: space-between; border-bottom: 1px solid var(--line); } }
+  @media (max-width: 600px) { .project-rows li { grid-template-columns: 32px minmax(0, 1fr); } .row-host { grid-column: 2; } .portfolio-hero { padding-top: 20px; } h1 { font-size: clamp(2.375rem, 10vw, 3.25rem); } .hero-intro { font-size: 1.0625rem; } .portfolio-index { padding: 18px; } .project-grid, .local-layout { grid-template-columns: 1fr; } .more-links { flex-direction: column; width: 100%; gap: 0; } .more-links a { justify-content: space-between; border-bottom: 1px solid var(--line); } }
 </style>
