@@ -2,10 +2,15 @@
 import Layout from '../../layouts/Layout.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import { getCollection } from 'astro:content';
-import { groupNews } from '../../lib/news-categories';
+import { groupNews, newsTopic } from '../../lib/news-categories';
 
 const posts = await getCollection('news', ({ data }) => !data.draft);
 const areas = groupNews(posts);
+const latest = [...posts].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+/* Topics with fewer articles than this are listed as compact rows, not cards,
+   so a one-article topic does not cost a full grid row on a phone. */
+const CARD_MIN = 3;
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 const orderedPosts = areas.flatMap(area => area.topics.flatMap(topic => topic.posts));
 const description =
   'News and investigations by Tom Pickup on Burnley and Padiham, Lancashire and national issues: public spending, housing, health and policing.';
@@ -32,6 +37,19 @@ const schema = {
       <p>Start with a place, then explore the issues. Public records, local decisions and the stories behind them.</p>
     </header>
 
+    <section class="latest" aria-labelledby="latest-title">
+      <h2 id="latest-title" class="latest-heading">Latest</h2>
+      <div class="posts-grid">
+        {latest.map(post => <NewsCard
+          title={post.data.title}
+          date={post.data.date.toISOString()}
+          description={post.data.description}
+          slug={post.id}
+          image={post.data.image}
+        />)}
+      </div>
+    </section>
+
     <nav class="area-nav" aria-label="Browse news by area">
       {areas.map((area, i) => <a href={`#${area.id}`}>
         <span class="area-number">0{i + 1}</span>
@@ -52,16 +70,28 @@ const schema = {
       </nav>
       {area.topics.map(topic => <section class="topic-section" id={`${area.id}-${topic.id}`} aria-labelledby={`${area.id}-${topic.id}-title`}>
         <header class="topic-heading"><h3 id={`${area.id}-${topic.id}-title`}>{topic.title}</h3><span>{topic.posts.length} {topic.posts.length === 1 ? 'article' : 'articles'}</span></header>
-        <div class="posts-grid">
-          {topic.posts.map(post => <NewsCard
-            title={post.data.title}
-            date={post.data.date.toISOString()}
-            description={post.data.description}
-            slug={post.id}
-            image={post.data.image}
-            headingLevel="h4"
-          />)}
-        </div>
+        {topic.posts.length >= CARD_MIN ? (
+          <div class="posts-grid">
+            {topic.posts.map(post => <NewsCard
+              title={post.data.title}
+              date={post.data.date.toISOString()}
+              description={post.data.description}
+              slug={post.id}
+              image={post.data.image}
+              headingLevel="h4"
+            />)}
+          </div>
+        ) : (
+          <ul class="story-rows">
+            {topic.posts.map(post => <li>
+              <a href={`/news/${post.id}/`}>
+                <h4>{post.data.title}</h4>
+                <p>{post.data.description}</p>
+                <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFmt.format(post.data.date)}</time>
+              </a>
+            </li>)}
+          </ul>
+        )}
       </section>)}
     </section>)}
 
@@ -71,39 +101,47 @@ const schema = {
 </Layout>
 
 <style>
-  .news-page { max-width: 1200px; margin: 0 auto; padding: 70px 32px 30px; color: #f2f1ed; }
-  .news-page a { background-image: none; }
-  .news-page a:focus-visible { outline: 2px solid #85d6e1; outline-offset: 5px; }
-  .debates-link { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid #2a2e32; color: #b8d8df; }
-  .debates-link > span { color: #b0bac2; font-size: .85rem; }
-  .news-header { margin-bottom: 36px; }
-  .news-eyebrow { font-size: .67rem; letter-spacing: .13em; text-transform: uppercase; color: #9fbdc5; }
-  h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -.055em; font-weight: 600; margin: 18px 0; }
-  .news-header > p:last-child { color: #b0bac2; font-size: 1rem; max-width: 59ch; }
-  .area-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-bottom: 48px; border-bottom: 1px solid #2a2e32; }
-  .area-nav > a { display: flex; align-items: center; gap: 18px; padding: 23px; border: 1px solid #30383d; border-radius: 12px; color: #edf1f3; background: #101416; }
-  .area-nav > a:hover { border-color: #70a7b3; }
-  .area-number { color: #9eb3bc; font-size: .7rem; }
-  .area-nav strong { display: block; font-size: 1.1rem; font-weight: 600; }
-  .area-nav small { display: block; color: #a9b6be; margin-top: 4px; }
-  .area-arrow { color: #91d4df; margin-left: auto; }
-  .news-area { padding: 50px 0; border-bottom: 1px solid #2a2e32; scroll-margin-top: 90px; }
+  .news-page { max-width: 1200px; margin: 0 auto; padding: 56px var(--gutter) 30px; color: var(--ink); }
+  .debates-link { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 24px; padding: 18px 0; border-bottom: 1px solid var(--line); color: var(--teal); font-weight: 600; }
+  .debates-link > span { color: var(--muted); font-size: 0.9375rem; font-weight: 400; }
+  .news-header { margin-bottom: 32px; }
+  .news-eyebrow { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); }
+  h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); margin: 12px 0 14px; }
+  .news-header > p:last-child { color: var(--muted); font-size: 1.125rem; max-width: 60ch; }
+  .area-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .area-nav > a { display: flex; align-items: center; gap: 16px; min-height: var(--touch); padding: 18px 20px 18px 0; color: var(--ink); text-decoration: none; }
+  .area-nav > a + a { border-left: 1px solid var(--line); padding-left: 20px; }
+  .area-nav > a:hover strong { color: var(--teal); text-decoration: underline; }
+  .area-number { color: var(--gold); font-size: 0.9375rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .area-nav strong { display: block; font-family: var(--font-display); font-size: 1.3125rem; font-weight: 600; }
+  .area-nav small { display: block; color: var(--muted); font-size: 0.9375rem; margin-top: 2px; }
+  .area-arrow { color: var(--teal); margin-left: auto; }
+  .news-area { padding: 44px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
   .area-heading { display: flex; justify-content: space-between; gap: 24px; align-items: end; }
-  .area-heading h2 { font-size: clamp(2rem, 4vw, 2.7rem); font-weight: 600; margin: 12px 0; letter-spacing: -.045em; }
-  .area-heading div > p:last-child { color: #b0bac2; font-size: .9rem; }
-  .back-top { font-size: .75rem; white-space: nowrap; color: #a5cbd4; padding: 8px 0; }
-  .topic-nav { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; }
-  .topic-nav a { display: inline-flex; gap: 12px; align-items: center; padding: 8px 13px; border: 1px solid #39434a; border-radius: 6px; color: #c6d7df; font-size: .75rem; }
-  .topic-nav a:hover { border-color: #8bcbd6; background: #152227; }
-  .topic-nav span { color: #a5b6bf; font-size: .67rem; }
-  .topic-section { padding-top: 35px; scroll-margin-top: 65px; }
-  .topic-heading { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
-  .topic-heading h3 { font-size: 1.08rem; font-weight: 600; }
-  .topic-heading > span { font-size: .68rem; color: #a5b6bf; }
-  .posts-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-  .news-footer { display: flex; justify-content: space-between; gap: 24px; padding: 28px 0; }
-  .news-footer a { color: #b8d8df; font-size: .85rem; }
-  .empty-state { padding: 48px 0; color: #b0bac2; }
-  @media (max-width: 900px) { .posts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .area-nav > a { padding: 20px 16px; gap: 12px; } }
-  @media (max-width: 600px) { .news-page { padding: 40px 20px 20px; } .area-nav { grid-template-columns: 1fr; gap: 10px; padding-bottom: 30px; } .area-nav > a { padding: 18px; } .area-nav strong, .area-nav small { display: inline; } .area-nav small { margin-left: 12px; } .news-area { padding: 35px 0; } .area-heading { align-items: start; flex-direction: column; gap: 12px; } .posts-grid { grid-template-columns: 1fr; } .news-footer { flex-wrap: wrap; } }
+  .area-heading h2 { font-size: clamp(1.875rem, 4vw, 2.5rem); margin: 8px 0; }
+  .area-heading div > p:last-child { color: var(--muted); font-size: 1rem; }
+  .back-top { display: inline-flex; align-items: center; min-height: var(--touch); font-size: 0.9375rem; white-space: nowrap; color: var(--teal); }
+  .topic-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .topic-nav a { display: inline-flex; gap: 10px; align-items: center; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); color: var(--ink); font-size: 0.9375rem; text-decoration: none; }
+  .topic-nav a:hover { border-color: var(--teal); color: var(--teal); }
+  .topic-nav span { color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+  .topic-section { padding-top: 32px; scroll-margin-top: 72px; }
+  .topic-heading { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .topic-heading h3 { font-size: 1.375rem; }
+  .topic-heading > span { font-size: 0.9375rem; color: var(--muted); }
+  .posts-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; }
+  .latest { padding: 8px 0 40px; }
+  .latest-heading { font-size: 1.375rem; padding-bottom: 8px; margin-bottom: 20px; border-bottom: 2px solid var(--ink); }
+  .story-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .story-rows li { border-bottom: 1px solid var(--line); }
+  .story-rows a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 24px; padding: 14px 0; color: var(--ink); text-decoration: none; }
+  .story-rows h4 { grid-column: 1; font-size: 1.1875rem; line-height: 1.35; margin: 0; }
+  .story-rows p { grid-column: 1; color: var(--muted); font-size: 0.9375rem; line-height: 1.5; margin: 0; max-width: 80ch; }
+  .story-rows time { grid-column: 2; grid-row: 1; color: var(--muted); font-size: 0.9375rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .story-rows a:hover h4 { color: var(--teal); text-decoration: underline; }
+  .news-footer { display: flex; justify-content: space-between; gap: 24px; padding: 24px 0; }
+  .news-footer a { color: var(--teal); font-size: 1rem; font-weight: 600; }
+  .empty-state { padding: 48px 0; color: var(--muted); }
+  @media (max-width: 900px) { .posts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .news-page { padding: 32px var(--gutter) 20px; } .area-nav { grid-template-columns: 1fr; } .area-nav > a, .area-nav > a + a { padding: 14px 0; border-left: 0; } .area-nav > a + a { border-top: 1px solid var(--line); } .news-area { padding: 32px 0; } .area-heading { align-items: start; flex-direction: column; gap: 4px; } .posts-grid { grid-template-columns: 1fr; } .story-rows a { grid-template-columns: 1fr; } .story-rows time { grid-column: 1; grid-row: auto; } .news-footer { flex-wrap: wrap; } }
 </style>

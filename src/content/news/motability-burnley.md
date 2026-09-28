@@ -3,6 +3,7 @@ title: "Nearly One in Five New Cars in Britain Now Runs on Benefits"
 date: 2026-06-19T17:00:00
 description: "Motability puts nearly one in five new cars on Britain's roads, holds £3.9 billion in reserves and pays its boss £924,000. What it costs, and who qualifies."
 image: "/images/motability-cars.jpg"
+imageAlt: "Rows of parked cars in a tree-lined car park."
 ogImage: "/images/share/motability-burnley.png"
 imageCredit: "Photo: Bob Harvey / geograph.org.uk (CC BY-SA 2.0)"
 category: "Lancashire"
@@ -21,22 +22,22 @@ A word up front: this is <strong>not</strong> an attack on disabled people. Mota
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">815,000</span>
+<span class="value xl">815,000</span>
 <span class="label">Cars on the Motability scheme</span>
 <span class="sublabel">Up from 614,000 in 2017</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">18.8%</span>
+<span class="value xl">18.8%</span>
 <span class="label">Of all new UK cars, 2024</span>
 <span class="sublabel">Almost one in five</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£3.9bn</span>
+<span class="value xl">£3.9bn</span>
 <span class="label">Reserves the scheme is sitting on</span>
 <span class="sublabel">MPs called it "hoarded"</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">4,540</span>
+<span class="value xl">4,540</span>
 <span class="label">People in Burnley who qualify</span>
 <span class="sublabel">Half of all local PIP claimants</span>
 </div>
@@ -75,25 +76,25 @@ Now the local picture, which nobody has set out before. Using DWP's own figures 
 
 <div class="viz-panel">
 <div class="viz-label teal">Motability-eligible per 1,000 residents, April 2026</div>
-<div style="display: grid; gap: 14px;">
+<div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Blackpool</span><span class="text-teal text-bold">60.5</span></div>
+<div class="viz-row"><span class="text-white text-bold">Blackpool</span><span class="text-teal text-bold">60.5</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">48.0</span></div>
+<div class="viz-row"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">48.0</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:79%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Lancashire-14 average</span><span class="text-muted">41.4</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:68%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Lancashire-14 average</span><span class="text-muted">41.4</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:68%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Ribble Valley</span><span class="text-muted">22.1</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:37%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Ribble Valley</span><span class="text-muted">22.1</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:37%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">The rate tracks deprivation almost exactly: poorest places highest, affluent Ribble Valley lowest.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">The rate tracks deprivation almost exactly: poorest places highest, affluent Ribble Valley lowest.</div>
 </div>
 
 **4,540 people in Burnley** qualify, which is just under half of all the town's PIP claimants. Across the 14 Lancashire authorities the total is **63,320**, about 3% of the entire national caseload. The full breakdown:

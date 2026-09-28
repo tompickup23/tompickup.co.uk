@@ -10,11 +10,11 @@ interface Props {
 
 import Cite from './Cite.astro';
 
-const { icon, value, label, color = '#12b6cf', cite } = Astro.props;
+const { icon, value, label, color = 'var(--chart-1)', cite } = Astro.props;
 ---
 
-<div class="stat-card">
-  <span class="stat-icon" style={`color: ${color};`} set:html={icon} />
+<div class="stat-card" style={`--stat-rule: ${color};`}>
+  <span class="stat-icon" set:html={icon} />
   <span class="stat-value">{value}</span>
   <span class="stat-label">{label}{cite && <Cite n={cite} />}</span>
 </div>
@@ -23,80 +23,39 @@ const { icon, value, label, color = '#12b6cf', cite } = Astro.props;
   .stat-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 6px;
-    padding: 1.25rem 1rem;
-    background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .stat-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 1.1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--stat-rule, var(--teal));
+    border-radius: var(--radius-sm);
   }
 
   .stat-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .stat-card:hover .stat-icon {
-    transform: scale(1.1);
+    display: none;
   }
 
   .stat-value {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
     letter-spacing: -0.02em;
-    color: #fff;
-    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums lining-nums;
     line-height: 1.1;
   }
 
   .stat-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: rgba(235, 235, 245, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    line-height: 1.3;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1.35;
   }
 
   @media (max-width: 768px) {
-    .stat-card {
-      flex-direction: row;
-      gap: 12px;
-      text-align: left;
-      padding: 1rem 1.25rem;
-    }
-
-    .stat-icon {
-      flex-shrink: 0;
-    }
-
     .stat-value {
-      font-size: 1.25rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stat-card {
-      transition: none;
-    }
-
-    .stat-card:hover .stat-icon {
-      transform: none;
+      font-size: 1.5rem;
     }
   }
 </style>

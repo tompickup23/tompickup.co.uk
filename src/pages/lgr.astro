@@ -13,6 +13,33 @@ import '../styles/doge.css';
 // ============================================================
 import model from '../data/lgr/model.json';
 
+/* The model data carries the old dark theme's accents. The page draws each
+   council in the site's validated palette instead, matching the home page
+   (East orange, North teal, South purple, West blue), in the text-safe shades
+   because the explorer also sets headings in the accent colour. */
+const ACCENTS: Record<string, string> = { North: '#17645e', West: '#24509c', East: '#99490b', South: '#8a2f6b' };
+const accentOf = (name: string) => ACCENTS[Object.keys(ACCENTS).find((k) => name.startsWith(k)) ?? 'North'];
+
+/* The working paper this page summarises, as its own structured-data node.
+   Title, version, date and licence as recorded on Zenodo, record 23016761. */
+const PAPER_SCHEMA = {
+  '@type': 'ScholarlyArticle',
+  '@id': 'https://doi.org/10.5281/zenodo.23016761',
+  headline: 'The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions',
+  name: 'The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions',
+  author: { '@id': 'https://tompickup.co.uk/#person' },
+  datePublished: '2026-09-28',
+  version: '3.1',
+  genre: 'Working paper',
+  publisher: { '@type': 'Organization', name: 'Zenodo', url: 'https://zenodo.org/' },
+  identifier: 'https://doi.org/10.5281/zenodo.23016761',
+  url: 'https://doi.org/10.5281/zenodo.23016761',
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  isAccessibleForFree: true,
+  inLanguage: 'en-GB',
+  subjectOf: { '@id': 'https://tompickup.co.uk/lgr/' },
+};
+
 const C = model.county;
 const DEC = model.decision;
 
@@ -20,14 +47,15 @@ const DEC = model.decision;
 const UNITARIES = model.unitaries
   .slice()
   .sort((a, b) => ['North', 'West', 'East', 'South'].findIndex((p) => a.name.startsWith(p))
-                - ['North', 'West', 'East', 'South'].findIndex((p) => b.name.startsWith(p)));
+                - ['North', 'West', 'East', 'South'].findIndex((p) => b.name.startsWith(p)))
+  .map((u) => ({ ...u, accent: accentOf(u.name) }));
 
 const RESERVES = C.reserves.map((r) => ({ year: r.year, total: r.total_m, months: r.monthsCover, rating: r.rating }));
 const RES_MAX = Math.max(...RESERVES.map((r) => r.total));
 
 // Population chart, largest first.
 const POP = model.unitaries.slice().sort((a, b) => b.population - a.population)
-  .map((u) => ({ name: u.name, pop: u.population, accent: u.accent }));
+  .map((u) => ({ name: u.name, pop: u.population, accent: accentOf(u.name) }));
 const POP_TOTAL = model.totalPop;
 const POP_MAX = Math.max(...POP.map((p) => p.pop));
 const fmt = (n: number) => n.toLocaleString('en-GB');
@@ -74,7 +102,7 @@ const MODEL = model.unitaries
   .sort((a, b) => EXPLORER_ORDER.findIndex((p) => a.name.startsWith(p))
                 - EXPLORER_ORDER.findIndex((p) => b.name.startsWith(p)))
   .map((u) => ({
-    name: u.name, accent: u.accent, councils: u.councils, metrics: u.metrics,
+    name: u.name, accent: accentOf(u.name), councils: u.councils, metrics: u.metrics,
     pop: u.population, lccServedPop: u.lccServedPop,
     countyApportioned: u.countyApportioned.population,
     perCapitaCounty: u.perCapitaCounty,
@@ -83,6 +111,9 @@ const MODEL = model.unitaries
     combined: u.combined.population,
     combinedPerCapita: u.combinedPerCapita,
     bandD: u.bandD,
+    // For the balance-sheet cards; left out before, so they printed "£m" with no figure.
+    constituentReserves_m: u.constituentReserves_m,
+    constituentDebt_m: u.constituentDebt_m,
   }));
 const UNITS = MODEL;
 // Per-metric max across unitaries (for bar scaling), padded 15%.
@@ -116,6 +147,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   title="Lancashire council reorganisation: the paused four-council plan | Tom Pickup"
   description="The plan for four new Lancashire councils, paused on 7 September 2026 pending a national review, with an independent assessment of what each option would save or cost."
 >
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...PAPER_SCHEMA })} />
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
@@ -220,7 +252,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
                 <span class="dg-val">{fmt(u.pop)}</span>
               </div>
               <div class="dg-track">
-                <div class="dg-fill" style={`width:${(u.pop / POP_MAX * 100).toFixed(1)}%;background:linear-gradient(90deg, ${u.accent}aa, ${u.accent})`}></div>
+                <div class="dg-fill" style={`width:${(u.pop / POP_MAX * 100).toFixed(1)}%;background:${u.accent}`}></div>
               </div>
             </div>
           ))}
@@ -530,7 +562,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           starts inside a decade of its predecessors' procurement decisions.
         </p>
         <p style="margin-top:1.1rem;">
-          <a href="/lgr/contracts/" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:0.9rem;text-decoration:none;background:rgba(18,182,207,0.12);border:1px solid rgba(18,182,207,0.4);color:#12b6cf;">
+          <a href="/lgr/contracts/" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius: var(--radius-md);font-weight:600;font-size:0.9rem;text-decoration:none;background:rgba(23, 100, 94, 0.12);border:1px solid rgba(23, 100, 94, 0.4);color:var(--teal);">
             Search every public body's contracts, by term and end date &rarr;
           </a>
         </p>
@@ -696,8 +728,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         {MODEL.map((u) => (
           <div class="lgr-prec-card" style={`border-left:3px solid ${u.accent}`}>
             <div class="lgr-prec-name">{u.name}</div>
-            <div class="lgr-prec-row"><span>Constituents' usable reserves</span><b>£{u.constituentReserves_m}m</b></div>
-            <div class="lgr-prec-row"><span>Constituents' external debt</span><b>£{u.constituentDebt_m}m</b></div>
+            <div class="lgr-prec-row"><span>Constituents' usable reserves</span><b>£{u.constituentReserves_m.toFixed(1)}m</b></div>
+            <div class="lgr-prec-row"><span>Constituents' external debt</span><b>£{u.constituentDebt_m.toFixed(1)}m</b></div>
           </div>
         ))}
       </div>
@@ -873,9 +905,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         Precedent figures come from MHCLG decision documents, council business cases, KPMG/CIPFA closure and
         assurance reviews, Hansard and audited accounts. Lower-tier political control is a May 2026 snapshot from
         the elections data platform (indicative at status level). Verify against the primary source before any
-        formal use. The structural model is the working paper: Pickup, T. (2026), <em>The Financial Case for Local
-        Government Reorganisation in Lancashire</em>, working paper v3.1, Zenodo,
-        <a href={PAPER.$meta.doiUrl}>{PAPER.$meta.doiUrl}</a>. <strong>The full model</strong>, every input, its source and its confidence rating, <strong>is published as
+        formal use. The structural model is the working paper: Pickup, T. (2026) <em>The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions</em>.
+        Working paper, version 3.1. Zenodo. Available at: <a href={PAPER.$meta.doiUrl}>{PAPER.$meta.doiUrl}</a>. <strong>The full model</strong>, every input, its source and its confidence rating, <strong>is published as
         open data at <a href="/data/lgr-model.json">/data/lgr-model.json</a>.</strong>
       </p>
     </section>
@@ -908,14 +939,14 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     margin-top: 1.2rem;
   }
   .lgr-uni {
-    background: rgba(14, 18, 28, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-left: 3px solid var(--accent, #12b6cf);
-    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid rgba(27, 48, 53, 0.10);
+    border-left: 3px solid var(--accent, var(--teal));
+    border-radius: var(--radius-md);
     padding: 1.1rem 1.2rem;
   }
   .lgr-uni-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 0.7rem; }
-  .lgr-uni-name { font-size: 1.05rem; font-weight: 700; color: #f4f7fb; letter-spacing: -0.01em; }
+  .lgr-uni-name { font-size: 1.05rem; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
   .lgr-uni-tag {
     font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
     color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
@@ -923,45 +954,45 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   }
   .lgr-uni-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
   .lgr-uni-list li {
-    font-size: 0.88rem; color: #d6dee8; padding-left: 14px; position: relative;
+    font-size: 0.88rem; color: var(--ink); padding-left: 14px; position: relative;
   }
   .lgr-uni-list li::before {
     content: ''; position: absolute; left: 0; top: 0.5em;
     width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
   }
-  .lgr-uni-note { font-size: 0.72rem; color: #99a2ad; line-height: 1.5; margin: 0.7rem 0 0; }
+  .lgr-uni-note { font-size: 0.72rem; color: var(--muted); line-height: 1.5; margin: 0.7rem 0 0; }
   .lgr-gaps { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; }
-  .lgr-gaps li { font-size: 0.85rem; color: #b8c0cb; line-height: 1.55; }
-  .lgr-gaps strong { color: #e9edf2; }
+  .lgr-gaps li { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
+  .lgr-gaps strong { color: var(--ink); }
 
   /* ---- Compare-all table ---- */
-  .lgr-cmp-wrap { overflow-x: auto; margin-top: 1.2rem; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 14px; }
-  .lgr-cmp { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 520px; background: rgba(14, 18, 28, 0.55); }
-  .lgr-cmp th, .lgr-cmp td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-variant-numeric: tabular-nums; color: #e9edf2; }
-  .lgr-cmp thead th { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+  .lgr-cmp-wrap { overflow-x: auto; margin-top: 1.2rem; border: 1px solid rgba(27, 48, 53, 0.11); border-radius: var(--radius-md); }
+  .lgr-cmp { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 520px; background: var(--surface); }
+  .lgr-cmp th, .lgr-cmp td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid rgba(27, 48, 53, 0.08); font-variant-numeric: tabular-nums; color: var(--ink); }
+  .lgr-cmp thead th { border-bottom: 1px solid rgba(27, 48, 53, 0.19); }
   .lgr-cmp-uni { font-weight: 800; color: var(--accent); }
-  .lgr-cmp .lgr-cmp-rowh { text-align: left; color: #99a2ad; font-weight: 500; }
+  .lgr-cmp .lgr-cmp-rowh { text-align: left; color: var(--muted); font-weight: 500; }
   .lgr-cmp tbody tr:last-child td { border-bottom: none; }
-  .lgr-cmp tbody tr:nth-child(2) td { color: #fff; font-weight: 700; }
+  .lgr-cmp tbody tr:nth-child(2) td { color: var(--ink); font-weight: 700; }
   /* the paper's tables: every row with the same weight (equal prominence) */
-  .lgr-cmp-even tbody tr:nth-child(2) td { color: #e9edf2; font-weight: 400; }
-  .lgr-cmp-even tbody tr:nth-child(2) td.lgr-cmp-rowh { color: #99a2ad; font-weight: 500; }
-  .lgr-mx-hint { font-size: 0.8rem; color: #8e8e93; margin: 1rem 0 0.6rem; text-align: center; }
+  .lgr-cmp-even tbody tr:nth-child(2) td { color: var(--ink); font-weight: 400; }
+  .lgr-cmp-even tbody tr:nth-child(2) td.lgr-cmp-rowh { color: var(--muted); font-weight: 500; }
+  .lgr-mx-hint { font-size: 0.8rem; color: var(--muted); margin: 1rem 0 0.6rem; text-align: center; }
 
   /* ---- Interactive model explorer ---- */
   .lgr-mx { margin-top: 1.2rem; }
   .lgr-mx-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.1rem; }
   .lgr-mx-tab {
     display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
-    background: rgba(14, 18, 28, 0.55); border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px; padding: 0.7rem 0.85rem; cursor: pointer; text-align: left;
+    background: var(--surface); border: 1px solid rgba(27, 48, 53, 0.13);
+    border-radius: var(--radius-md); padding: 0.7rem 0.85rem; cursor: pointer; text-align: left;
     font-family: inherit; transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
   }
   .lgr-mx-tab:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
-  .lgr-mx-tab.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, rgba(14,18,28,0.55)); }
+  .lgr-mx-tab.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
   .lgr-mx-tab.active::before { content: ''; }
-  .lgr-mx-tabname { font-size: 0.9rem; font-weight: 700; color: #f4f7fb; }
-  .lgr-mx-tabpop { font-size: 0.72rem; color: #99a2ad; font-variant-numeric: tabular-nums; }
+  .lgr-mx-tabname { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+  .lgr-mx-tabpop { font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .lgr-mx-tab.active .lgr-mx-tabname { color: var(--accent); }
 
   .lgr-mx-panel { display: none; }
@@ -970,56 +1001,56 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
   .lgr-mx-head {
     display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: flex-start;
-    padding: 1rem 1.2rem; border-radius: 14px 14px 0 0;
-    background: color-mix(in srgb, var(--accent) 10%, rgba(14,18,28,0.6));
-    border: 1px solid rgba(255, 255, 255, 0.07); border-bottom: none;
+    padding: 1rem 1.2rem; border-radius: var(--radius-md) 14px 0 0;
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    border: 1px solid rgba(27, 48, 53, 0.11); border-bottom: none;
   }
-  .lgr-mx-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem; color: #fff; }
+  .lgr-mx-title { font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem; color: var(--ink); }
   .lgr-mx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .lgr-mx-chip {
-    font-size: 0.72rem; color: #d6dee8; background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 999px; padding: 3px 9px;
+    font-size: 0.72rem; color: var(--ink); background: rgba(27, 48, 53, 0.08);
+    border: 1px solid rgba(27, 48, 53, 0.14); border-radius: 999px; padding: 3px 9px;
   }
   .lgr-mx-viab { text-align: right; }
   .lgr-mx-viab-v { display: block; font-size: 1.5rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .lgr-mx-viab-l { font-size: 0.7rem; color: #99a2ad; }
+  .lgr-mx-viab-l { font-size: 0.7rem; color: var(--muted); }
 
   .lgr-mx-money {
     display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 1px;
-    background: rgba(255, 255, 255, 0.06);
-    border-left: 1px solid rgba(255,255,255,0.07); border-right: 1px solid rgba(255,255,255,0.07);
+    background: rgba(27, 48, 53, 0.10);
+    border-left: 1px solid rgba(27, 48, 53, 0.11); border-right: 1px solid rgba(27, 48, 53, 0.11);
   }
-  .lgr-mx-stat { background: rgba(10, 14, 22, 0.92); padding: 0.9rem 1.2rem; }
-  .lgr-mx-stat.big { background: color-mix(in srgb, var(--accent) 8%, rgba(10,14,22,0.92)); }
-  .lgr-mx-stat-v { display: block; font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .lgr-mx-stat { background: var(--surface); padding: 0.9rem 1.2rem; }
+  .lgr-mx-stat.big { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+  .lgr-mx-stat-v { display: block; font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
   .lgr-mx-stat.big .lgr-mx-stat-v { color: var(--accent); }
-  .lgr-mx-stat-l { font-size: 0.72rem; color: #99a2ad; margin-top: 3px; line-height: 1.35; }
+  .lgr-mx-stat-l { font-size: 0.72rem; color: var(--muted); margin-top: 3px; line-height: 1.35; }
 
-  .lgr-mx-build { padding: 1rem 1.2rem; background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.07); border-top: none; }
-  .lgr-mx-build-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #8e8e93; font-weight: 700; margin-bottom: 0.6rem; }
-  .lgr-mx-brow { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
-  .lgr-mx-brow.total { border-bottom: none; border-top: 1px solid rgba(255,255,255,0.12); margin-top: 4px; padding-top: 8px; font-weight: 700; }
-  .lgr-mx-bname { color: #c3ccd6; }
-  .lgr-mx-brow.total .lgr-mx-bname { color: #f4f7fb; }
+  .lgr-mx-build { padding: 1rem 1.2rem; background: var(--surface); border: 1px solid rgba(27, 48, 53, 0.11); border-top: none; }
+  .lgr-mx-build-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 700; margin-bottom: 0.6rem; }
+  .lgr-mx-brow { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(27, 48, 53, 0.06); }
+  .lgr-mx-brow.total { border-bottom: none; border-top: 1px solid rgba(27, 48, 53, 0.19); margin-top: 4px; padding-top: 8px; font-weight: 700; }
+  .lgr-mx-bname { color: var(--ink); }
+  .lgr-mx-brow.total .lgr-mx-bname { color: var(--ink); }
   .lgr-mx-bval { color: var(--accent); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  .lgr-mx-needs-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: #f4f7fb; margin: 1.3rem 0 0.7rem; }
-  .lgr-mx-needs-h span { font-size: 0.72rem; font-weight: 500; color: #8e8e93; }
+  .lgr-mx-needs-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; font-weight: 700; color: var(--ink); margin: 1.3rem 0 0.7rem; }
+  .lgr-mx-needs-h span { font-size: 0.72rem; font-weight: 500; color: var(--muted); }
   .lgr-mx-needs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 1.4rem; }
   .lgr-mx-metric { }
   .lgr-mx-mtop { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8rem; }
-  .lgr-mx-mname { color: #d6dee8; }
-  .lgr-mx-mval { color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lgr-mx-mname { color: var(--ink); }
+  .lgr-mx-mval { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .lgr-mx-delta { font-weight: 500; font-size: 0.68rem; margin-left: 6px; }
-  .lgr-mx-delta.high { color: #ff9f0a; }
-  .lgr-mx-delta.low { color: #30d158; }
-  .lgr-mx-delta.flat { color: #8e8e93; }
-  .lgr-mx-track { position: relative; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
-  .lgr-mx-fill { height: 100%; border-radius: 4px; background: #6b7280; }
-  .lgr-mx-fill.high { background: linear-gradient(90deg, #d97a06, #ff9f0a); }
-  .lgr-mx-fill.low { background: linear-gradient(90deg, #1f9d4d, #30d158); }
-  .lgr-mx-fill.flat { background: linear-gradient(90deg, #4b5563, #6b7280); }
-  .lgr-mx-base { position: absolute; top: -2px; width: 2px; height: 11px; background: #e9edf2; opacity: 0.65; }
+  .lgr-mx-delta.high { color: var(--text-orange); }
+  .lgr-mx-delta.low { color: var(--text-green); }
+  .lgr-mx-delta.flat { color: var(--muted); }
+  .lgr-mx-track { position: relative; height: 7px; border-radius: 4px; background: rgba(27, 48, 53, 0.10); overflow: hidden; }
+  .lgr-mx-fill { height: 100%; border-radius: 4px; background: var(--muted); }
+  .lgr-mx-fill.high { background: var(--chart-2); }
+  .lgr-mx-fill.low { background: var(--chart-good); }
+  .lgr-mx-fill.flat { background: var(--chart-neutral); }
+  .lgr-mx-base { position: absolute; top: -2px; width: 2px; height: 11px; background: var(--ink); opacity: 0.65; }
 
   @media (max-width: 640px) {
     .lgr-mx-tabs { grid-template-columns: repeat(2, 1fr); }
@@ -1030,25 +1061,25 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   }
 
   /* Build-table variants + precedent cards */
-  .lgr-mx-brow.alt { border-top: 1px dashed rgba(255,255,255,0.1); margin-top: 2px; padding-top: 7px; }
-  .lgr-mx-brow.alt .lgr-mx-bname, .lgr-mx-brow.alt .lgr-mx-bval { color: #8e8e93; font-weight: 500; font-size: 0.78rem; }
-  .lgr-mx-bnote { font-size: 0.78rem; color: #99a2ad; line-height: 1.5; margin: 0 0 0.6rem; }
+  .lgr-mx-brow.alt { border-top: 1px dashed rgba(27, 48, 53, 0.16); margin-top: 2px; padding-top: 7px; }
+  .lgr-mx-brow.alt .lgr-mx-bname, .lgr-mx-brow.alt .lgr-mx-bval { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
+  .lgr-mx-bnote { font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.6rem; }
   .lgr-prec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; margin-top: 1.1rem; }
-  .lgr-prec-card { background: rgba(14,18,28,0.55); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0.95rem 1.05rem; }
-  .lgr-prec-name { font-size: 0.95rem; font-weight: 700; color: #f4f7fb; margin-bottom: 0.55rem; }
+  .lgr-prec-card { background: var(--surface); border: 1px solid rgba(27, 48, 53, 0.11); border-radius: var(--radius-md); padding: 0.95rem 1.05rem; }
+  .lgr-prec-name { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.55rem; }
   .lgr-prec-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; padding: 3px 0; }
-  .lgr-prec-row span { color: #8e8e93; white-space: nowrap; }
-  .lgr-prec-row b { color: #d6dee8; font-weight: 600; text-align: right; }
-  .lgr-prec-note { font-size: 0.74rem; color: #99a2ad; line-height: 1.45; margin: 0.55rem 0 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.55rem; }
+  .lgr-prec-row span { color: var(--muted); white-space: nowrap; }
+  .lgr-prec-row b { color: var(--ink); font-weight: 600; text-align: right; }
+  .lgr-prec-note { font-size: 0.74rem; color: var(--muted); line-height: 1.45; margin: 0.55rem 0 0; border-top: 1px solid rgba(27, 48, 53, 0.10); padding-top: 0.55rem; }
 
   .lgr-timeline { display: grid; gap: 0; }
   .lgr-tl-item {
     display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: baseline;
-    padding: 0.7rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(27, 48, 53, 0.10);
   }
   .lgr-tl-item:last-child { border-bottom: none; }
-  .lgr-tl-date { font-size: 0.8rem; font-weight: 700; color: #12b6cf; font-variant-numeric: tabular-nums; }
-  .lgr-tl-text { font-size: 0.88rem; color: #c3ccd6; line-height: 1.5; }
+  .lgr-tl-date { font-size: 0.8rem; font-weight: 700; color: var(--teal); font-variant-numeric: tabular-nums; }
+  .lgr-tl-text { font-size: 0.88rem; color: var(--ink); line-height: 1.5; }
 
   @media (max-width: 640px) {
     .doge-statband { grid-template-columns: repeat(2, 1fr); }
@@ -1057,8 +1088,8 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 </style>
 
 <style>
-  .lgr-status-note { padding: 24px; margin: 24px 0; border: 1px solid #d9bd83; border-left-width: 4px; border-radius: 8px; background: #1d1a13; color: #f2eadb; }
+  .lgr-status-note { padding: 24px; margin: 24px 0; border: 1px solid var(--gold); border-left-width: 4px; border-radius: var(--radius-md); background: var(--panel); color: var(--ink); }
   .lgr-status-note h2 { font-size: 1.25rem; margin: 0 0 12px; }
-  .lgr-status-note p { color: #d4cdc0; max-width: 80ch; line-height: 1.7; margin: 10px 0 0; }
-  .lgr-status-note a { color: #f0d7a6; text-decoration: underline; }
+  .lgr-status-note p { color: var(--ink); max-width: 80ch; line-height: 1.7; margin: 10px 0 0; }
+  .lgr-status-note a { color: var(--gold); text-decoration: underline; }
 </style>

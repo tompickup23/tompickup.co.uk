@@ -4,23 +4,33 @@ import Hero from '../components/Hero.astro';
 import AudiencePaths from '../components/AudiencePaths.astro';
 import ComparisonBar from '../components/ComparisonBar.astro';
 import TrustCertificate from '../components/TrustCertificate.astro';
-import NewsCard from '../components/NewsCard.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
 import Sources from '../components/Sources.astro';
 import Cite from '../components/Cite.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { articleImage } from '../lib/images';
+import { newsTopic } from '../lib/news-categories';
 
-const posts = (await getCollection('news', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const allPosts = (await getCollection('news', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/* The one investigation the home page leads with. Change the slug to feature
+   another; the build fails if it is not a published article. */
+const FEATURED_SLUG = 'where-burnley-councils-money-goes';
+const featured = allPosts.find((p) => p.id === FEATURED_SLUG);
+if (!featured) throw new Error(`Featured article is not published: ${FEATURED_SLUG}`);
+const featuredImage = articleImage(featured.data.image);
+const latest = allPosts.filter((p) => p.id !== FEATURED_SLUG).slice(0, 3);
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // The four new unitaries (from the LGR model) for the homepage showcase.
 const LGR_UNITS = [
-  { name: 'East Lancashire', accent: '#ff9f0a', pop: '498,255', councils: 5, home: true },
-  { name: 'North Lancashire', accent: '#12b6cf', pop: '352,338', councils: 3 },
-  { name: 'South Lancashire', accent: '#bf5af2', pop: '346,197', councils: 3 },
-  { name: 'West Lancashire', accent: '#30d158', pop: '334,360', councils: 3 },
+  { name: 'East Lancashire', accent: 'var(--chart-2)', pop: '498,255', councils: 5, home: true },
+  { name: 'North Lancashire', accent: 'var(--chart-1)', pop: '352,338', councils: 3 },
+  { name: 'South Lancashire', accent: 'var(--chart-4)', pop: '346,197', councils: 3 },
+  { name: 'West Lancashire', accent: 'var(--chart-3)', pop: '334,360', councils: 3 },
 ];
 ---
 
@@ -34,6 +44,45 @@ const LGR_UNITS = [
   <!-- Section 1b: Audience paths (resident / press / data) -->
   <AudiencePaths />
 
+  <!-- Section 1c: One featured investigation, then the latest -->
+  <section class="feature-section" aria-labelledby="feature-title">
+    <div class="container">
+      <p class="home-kicker">Featured investigation</p>
+      <article class="feature">
+        {featuredImage && (
+          <a href={`/news/${featured.id}/`} class="feature-image" tabindex="-1" aria-hidden="true">
+            <Image src={featuredImage} alt="" widths={[480, 720, 960]} sizes="(max-width: 800px) calc(100vw - 40px), 560px" format="webp" quality={72} loading="lazy" />
+          </a>
+        )}
+        <div class="feature-copy">
+          <p class="feature-topic">{newsTopic(featured).title}</p>
+          <h2 id="feature-title"><a href={`/news/${featured.id}/`}>{featured.data.title}</a></h2>
+          <p class="feature-desc">{featured.data.description}</p>
+          <p class="feature-date">Published {dateFmt.format(featured.data.date)}{featured.data.imageCredit && <> &middot; {featured.data.imageCredit}</>}</p>
+          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+      <div class="latest">
+        <div class="latest-head">
+          <h2>Latest</h2>
+          <a href="/news/">All writing <span aria-hidden="true">→</span></a>
+        </div>
+        <ul>
+          {latest.map((post) => (
+            <li>
+              <a href={`/news/${post.id}/`}>
+                <span class="latest-topic">{newsTopic(post).title}</span>
+                <span class="latest-title">{post.data.title}</span>
+                <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFmt.format(post.data.date)}</time>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Section 2: What We've Delivered -->
   <section class="achievements-section">
     <div class="container">
@@ -45,30 +94,30 @@ const LGR_UNITS = [
 
         <div class="achievements-grid stagger-children">
           <div class="achievement-card">
-            <div class="achievement-icon" style="color: #30d158; background: rgba(48, 209, 88, 0.08);">
+            <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             </div>
-            <div class="achievement-stat" style="color: #30d158;">3.80%</div>
+            <div class="achievement-stat">3.80%</div>
             <h3 class="achievement-title">Lowest Council Tax Rise Since 2015/16</h3>
             <p class="achievement-desc">Every county council budget from 2016/17 to 2025/26 raised council tax by 3.99% or more, peaking at 5.99% in 2018/19. The 2026/27 budget set 3.80%.<Cite n={2} /><Cite n={3} /></p>
             <span class="achievement-before">2025/26: 4.99%</span>
           </div>
 
           <div class="achievement-card">
-            <div class="achievement-icon" style="color: #12b6cf; background: rgba(18, 182, 207, 0.08);">
+            <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c-1-2-3.5-3-6-3-3.3 0-6 2.7-6 6 0 1.5.5 2.8 1.3 3.8"></path><path d="M4 17h12"></path><path d="M4 13h8"></path><path d="M10 7v14"></path></svg>
             </div>
-            <div class="achievement-stat" style="color: #12b6cf;">&pound;27.9M &rarr; &pound;2.99M</div>
+            <div class="achievement-stat">&pound;27.9M &rarr; &pound;2.99M</div>
             <h3 class="achievement-title">Overspend Nearly Eliminated</h3>
             <p class="achievement-desc">At the first quarter of 2025/26 the council forecast a &pound;27.9 million overspend. The year closed &pound;2.99 million over on a &pound;1.24 billion budget: an 89% reduction, and 0.24% off balance.<Cite n={1} /></p>
             <span class="achievement-before">Quarter 1 forecast: &pound;27.9M overspend</span>
           </div>
 
           <div class="achievement-card">
-            <div class="achievement-icon" style="color: #bf5af2; background: rgba(191, 90, 242, 0.08);">
+            <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </div>
-            <div class="achievement-stat" style="color: #bf5af2;">&pound;350M</div>
+            <div class="achievement-stat">&pound;350M</div>
             <h3 class="achievement-title">The Cost of Selling the Bonds</h3>
             <p class="achievement-desc">The council has &pound;519M invested in government and commercial bonds.<Cite n={5} /> Its 2026/27 treasury strategy says an immediate sale of all of them would realise a loss of some &pound;350M.<Cite n={6} /></p>
             <span class="achievement-before">Treasury Management Strategy 2026/27, para 29</span>
@@ -152,44 +201,6 @@ const LGR_UNITS = [
     </div>
   </section>
 
-  <!-- Section 4: Latest News -->
-  <section class="news-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="section-header">
-          <h2 class="section-heading">Latest News</h2>
-        </div>
-
-        {posts.length > 0 ? (
-          <div class="news-grid stagger-children">
-            {posts.map((post) => (
-              <NewsCard
-                title={post.data.title}
-                date={post.data.date.toISOString()}
-                description={post.data.description}
-                tags={post.data.tags}
-                slug={post.id}
-                image={post.data.image}
-              />
-            ))}
-          </div>
-        ) : (
-          <p class="empty-state text-secondary">No posts yet. Check back soon.</p>
-        )}
-
-        <div class="news-more">
-          <a href="/news/" class="btn-secondary">
-            View all news
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
   <!-- Section 7: Email Signup -->
   <section class="signup-section">
     <div class="container">
@@ -267,9 +278,7 @@ const LGR_UNITS = [
     padding: 0 0 var(--space-2xl);
   }
 
-  /* ---- Section Spacing ---- */
   .achievements-section,
-  .news-section,
   .comparison-section {
     padding: var(--space-2xl) 0;
   }
@@ -282,332 +291,291 @@ const LGR_UNITS = [
     padding: var(--space-xl) 0 var(--space-2xl);
   }
 
-  /* ---- Section Headers ---- */
   .section-header {
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
   }
 
   .section-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.0625rem;
+    color: var(--muted);
+    font-size: 1.125rem;
     margin-top: var(--space-sm);
-    max-width: 520px;
+    max-width: 60ch;
   }
 
-  /* ---- Achievement Cards ---- */
+  /* ---- The first year, in three numbers ---- */
   .achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-  }
-
-  .achievement-card {
-    padding: var(--space-lg);
-    background: rgba(28, 28, 30, 0.5);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
-  }
-
-  .achievement-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
-
-  .achievement-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-md);
-    transition: transform var(--transition-fast);
-  }
-
-  .achievement-card:hover .achievement-icon {
-    transform: scale(1.05);
-  }
-
-  .achievement-stat {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.1;
-    margin-bottom: 6px;
-  }
-
-  .achievement-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 var(--space-sm);
-    line-height: 1.3;
-  }
-
-  .achievement-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: 0 0 var(--space-md);
-  }
-
-  .achievement-before {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    padding: 3px 10px;
-    background: rgba(255, 69, 58, 0.06);
-    border: 1px solid rgba(255, 69, 58, 0.1);
-    border-radius: 9999px;
-    letter-spacing: 0.01em;
-  }
-
-  /* ---- Comparison Section ---- */
-  .comparison-card {
-    background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2) brightness(1.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-left: 3px solid var(--accent);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
-  }
-
-  .comparison-card:hover {
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
-    border-color: rgba(255, 255, 255, 0.1);
-    border-left-color: var(--accent);
-  }
-
-  .comparison-header {
-    margin-bottom: var(--space-xl);
-  }
-
-  .comparison-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin: var(--space-md) 0 var(--space-xs);
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .comparison-subtitle {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    max-width: none;
-  }
-
-  .comparison-bars {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    margin-bottom: var(--space-xl);
-  }
-
-  .comparison-sources {
-    margin: var(--space-sm) 0 0;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-  }
-
-  .comparison-trust {
-    /* full width */
-  }
-
-  /* ---- News Grid ---- */
-  .news-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-lg);
   }
 
-  .news-more {
-    text-align: center;
-    margin-top: var(--space-xl);
+  .achievement-card {
+    padding-top: var(--space-md);
+    border-top: 2px solid var(--ink);
   }
+
+  .achievement-icon {
+    display: none;
+  }
+
+  .achievement-stat {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .achievement-title {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin: 0 0 var(--space-sm);
+    line-height: 1.3;
+  }
+
+  .achievement-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 var(--space-sm);
+  }
+
+  .achievement-before {
+    display: inline-block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  /* ---- Savings agreed, savings missed ---- */
+  .comparison-card {
+    background: var(--panel);
+    border-top: 3px solid var(--teal);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xl);
+  }
+
+  .comparison-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .comparison-title {
+    font-size: clamp(1.625rem, 3vw, 2.125rem);
+    margin: var(--space-sm) 0 var(--space-xs);
+  }
+
+  .comparison-subtitle {
+    font-size: 1.0625rem;
+    color: var(--muted);
+  }
+
+  .comparison-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .comparison-sources {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  /* ---- Featured investigation and latest ---- */
+  .feature-section { padding: var(--space-lg) 0 var(--space-2xl); }
+
+  .home-kicker,
+  .feature-topic,
+  .latest-topic {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .home-kicker { margin: 0 0 var(--space-md); }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .feature-image :global(img) {
+    display: block;
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+
+  .feature h2 {
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    margin: 8px 0 12px;
+  }
+
+  .feature h2 a { color: var(--ink); text-decoration: none; }
+  .feature h2 a:hover { color: var(--teal); text-decoration: underline; }
+
+  .feature-desc { color: var(--muted); font-size: 1.125rem; line-height: 1.6; margin: 0; }
+  .feature-date { color: var(--muted); font-size: 0.875rem; margin: 12px 0 0; }
+
+  .feature-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--touch);
+    margin-top: 8px;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .latest { margin-top: var(--space-xl); }
+
+  .latest-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .latest-head h2 { font-size: 1.375rem; margin: 0; }
+  .latest-head a { color: var(--teal); font-weight: 600; }
+
+  .latest ul { list-style: none; margin: 0; padding: 0; }
+  .latest li { border-bottom: 1px solid var(--line); }
+
+  .latest li a {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr) auto;
+    gap: 4px 24px;
+    align-items: baseline;
+    padding: 14px 0;
+    min-height: var(--touch);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .latest-title { font-family: var(--font-display); font-size: 1.1875rem; font-weight: 600; line-height: 1.35; }
+  .latest li a:hover .latest-title { color: var(--teal); text-decoration: underline; }
+  .latest time { color: var(--muted); font-size: 0.9375rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   .empty-state {
     text-align: center;
     padding: var(--space-2xl) var(--space-lg);
   }
 
-  /* ---- Contact CTA ---- */
+  /* ---- Contact ---- */
   .contact-cta-card {
     position: relative;
-    background:
-      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(18, 182, 207, 0.4) 0%, transparent 50%),
-      linear-gradient(135deg, #0a2a3a 0%, #12b6cf 100%);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
+    background: var(--ink);
+    border-radius: var(--radius-sm);
     padding: var(--space-2xl) var(--space-xl);
-    text-align: center;
   }
 
   .contact-cta-lines {
-    position: absolute;
-    inset: 0;
-    background:
-      repeating-linear-gradient(
-        135deg,
-        transparent,
-        transparent 40px,
-        rgba(255, 255, 255, 0.03) 40px,
-        rgba(255, 255, 255, 0.03) 41px
-      );
-    pointer-events: none;
+    display: none;
   }
 
   .contact-cta-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 560px;
-    margin: 0 auto;
+    max-width: 640px;
   }
 
   .contact-cta-inner h2 {
-    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: #ffffff;
-    margin-bottom: var(--space-md);
+    color: var(--paper);
+    margin-bottom: var(--space-sm);
   }
 
   .contact-cta-inner p {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    margin: 0 auto var(--space-xl);
-    max-width: 480px;
+    color: #c5d1d0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 var(--space-lg);
   }
 
   .contact-cta-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-md);
+    gap: var(--space-sm);
     flex-wrap: wrap;
   }
 
-  .cta-btn-white {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    padding: 0.7rem 1.75rem;
-    background: #ffffff;
-    color: #0a2a3a;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    background-image: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-fast), box-shadow var(--transition-normal);
-  }
-
-  .cta-btn-white:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    background-image: none;
-    background-size: 0;
-  }
-
-  .cta-btn-white:active {
-    transform: scale(0.97) translateY(0);
-  }
-
+  .cta-btn-white,
   .cta-btn-ghost {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    padding: 0.7rem 1.75rem;
-    background: transparent;
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 0.9375rem;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-height: var(--touch);
+    padding: 0 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    background-image: none;
-    transition: transform var(--transition-fast), background-color var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .cta-btn-white {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--paper);
+  }
+
+  .cta-btn-white:hover {
+    background: #e7ece9;
+    color: var(--ink);
+  }
+
+  .cta-btn-ghost {
+    color: var(--paper);
+    border: 1px solid #5b7076;
   }
 
   .cta-btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    background-image: none;
-    background-size: 0;
+    border-color: var(--paper);
+    color: var(--paper);
   }
 
-  .cta-btn-ghost:active {
-    transform: scale(0.97) translateY(0);
-  }
-
-  /* ---- Responsive ---- */
   @media (max-width: 768px) {
-    .achievements-grid {
+    .achievements-grid,
+    .feature {
       grid-template-columns: 1fr;
     }
 
-    .news-grid {
-      grid-template-columns: 1fr;
-    }
+    .feature { gap: 16px; }
+    .feature-image :global(img) { height: 220px; }
+    .latest li a { grid-template-columns: 1fr; }
 
-    .comparison-card {
-      padding: var(--space-lg);
-    }
-
-    .contact-cta-card {
-      padding: var(--space-xl) var(--space-lg);
-    }
-
-    .contact-cta-actions {
-      flex-direction: column;
-    }
-
-    .cta-btn-white,
-    .cta-btn-ghost {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 480px) {
     .achievements-section,
-    .news-section,
     .comparison-section {
       padding: var(--space-xl) 0;
     }
 
-    .contact-cta-card {
-      padding: var(--space-xl) var(--space-md);
-      border-radius: var(--radius-lg);
+    .comparison-card {
+      padding: var(--space-lg) 18px;
     }
 
-    .comparison-card {
-      padding: var(--space-md);
+    .contact-cta-card {
+      padding: var(--space-xl) 18px;
+    }
+
+    .contact-cta-actions {
+      flex-direction: column;
+      align-items: stretch;
     }
 
     .achievement-stat {
-      font-size: 1.5rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .achievement-card {
-      transition: none;
+      font-size: 1.875rem;
     }
   }
 </style>

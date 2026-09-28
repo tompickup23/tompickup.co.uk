@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { Image } from 'astro:assets';
+import { articleImage } from '../lib/images';
 import { newsArea, newsTopic } from '../lib/news-categories';
 import { ALL_PROJECTS, PROJECT_GROUPS, PROJECT_DETAILS, LOCAL_READING } from '../data/projects';
 
@@ -11,6 +13,11 @@ if (groupedProjects.length !== ALL_PROJECTS.length || new Set(groupedProjects).s
   throw new Error('Each portfolio project must appear in exactly one category.');
 }
 const postMap = new Map(posts.map(post => [post.id, post]));
+/* A project leads as a card when it links to writing or a section on this site;
+   the rest are listed as rows beneath, so the page weights each project by how
+   much there is to follow up here. */
+const isPrimary = (p: typeof ALL_PROJECTS[number]) =>
+  Boolean(PROJECT_DETAILS[p.title]?.article || PROJECT_DETAILS[p.title]?.section);
 // A removed or unpublished article must not leave a dead link in the portfolio.
 const readingSlugs = [
   ...Object.values(LOCAL_READING).flat(),
@@ -61,16 +68,30 @@ const schema = {
           <p>{group.description}</p>
         </header>
         <div class:list={['group-content', { 'local-layout': LOCAL_READING[group.id] }]}>
-          <ul class="project-grid">
-            {group.projects.map(project => <li><ProjectCard project={project} /></li>)}
-          </ul>
+          <div class="group-projects">
+            {group.projects.some(isPrimary) && <ul class="project-grid">
+              {group.projects.filter(isPrimary).map(project => <li><ProjectCard project={project} /></li>)}
+            </ul>}
+            {group.projects.some(p => !isPrimary(p)) && <ul class="project-rows">
+              {group.projects.filter(p => !isPrimary(p)).map(p => <li>
+                <span class="row-mark" style={`--project-accent:${p.accent}`} aria-hidden="true">{PROJECT_DETAILS[p.title].mark}</span>
+                <div>
+                  <h3><a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? 'noopener noreferrer' : undefined}>{p.title}<span aria-hidden="true"> {p.external ? '↗' : '→'}</span>{p.external && <span class="sr-only"> (opens in a new tab)</span>}</a></h3>
+                  <p>{p.desc}</p>
+                </div>
+                <span class="row-host">{p.external ? new URL(p.href).hostname : 'tompickup.co.uk'}</span>
+              </li>)}
+            </ul>}
+          </div>
           {LOCAL_READING[group.id] && <aside class="local-reading" aria-label={`${group.title} news and investigations`}>
             <div class="local-reading-heading"><h3>News &amp; investigations</h3><a href={`/news/#${group.id}`}>All {group.title} articles <span aria-hidden="true">↗</span></a></div>
             {LOCAL_READING[group.id].map(slug => {
               const post = postMap.get(slug)!;
               return <article class="local-story">
                 <a href={`/news/${post.id}/`}>
-                  {post.data.image && <img src={post.data.image} alt="" width="104" height="90" loading="lazy" decoding="async" />}
+                  {articleImage(post.data.image)
+                    ? <Image src={articleImage(post.data.image)!} alt="" width={164} densities={[1]} format="webp" quality={70} loading="lazy" decoding="async" />
+                    : post.data.image && <img src={post.data.image} alt="" width="104" height="90" loading="lazy" decoding="async" />}
                   <div><p class="reading-topic">{newsTopic(post).title}</p><h4>{post.data.title}</h4></div>
                   <span class="story-arrow" aria-hidden="true">→</span>
                 </a>
@@ -90,51 +111,59 @@ const schema = {
 </Layout>
 
 <style>
-  .portfolio { --portfolio-ink: #f2f1ed; --portfolio-muted: #b0b7be; --portfolio-line: #2a2e32; max-width: 1200px; margin: 0 auto; padding: 36px 32px 20px; color: var(--portfolio-ink); }
-  .portfolio a { background-image: none; }
-  .portfolio a:focus-visible { outline: 2px solid #68d4df; outline-offset: 6px; border-radius: 3px; }
-  .portfolio-hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: end; padding: 42px 0 70px; border-bottom: 1px solid var(--portfolio-line); }
-  .eyebrow { display: flex; align-items: center; gap: 12px; color: #b6bec5; text-transform: uppercase; letter-spacing: .14em; font-size: .67rem; font-weight: 600; }
-  .small-rule { width: 28px; height: 2px; background: #68d4df; }
-  h1 { font-size: clamp(2.75rem, 5.6vw, 4.6rem); line-height: 1.06; letter-spacing: -.065em; font-weight: 600; margin: 24px 0; text-wrap: initial; }
-  h1 > span { color: #91a6af; }
-  .hero-intro { color: var(--portfolio-muted); font-size: 1.02rem; line-height: 1.8; max-width: 45ch; }
-  .hero-link { display: inline-flex; align-items: center; gap: 30px; margin-top: 30px; font-size: .88rem; font-weight: 600; color: #e5edef; padding: 9px 0; border-bottom: 1px solid #63868d; }
-  .hero-link span { color: #68d4df; }
-  .portfolio-index { padding: 26px; border: 1px solid var(--portfolio-line); border-radius: 13px; background: #0c0f11; }
-  .index-heading { display: flex; justify-content: space-between; gap: 10px; color: #b2bcc4; font-size: .63rem; letter-spacing: .08em; text-transform: uppercase; padding-bottom: 21px; }
-  .portfolio-index > a { display: grid; grid-template-columns: 22px 1fr 16px 12px; align-items: center; gap: 12px; padding: 16px 0; border-top: 1px solid var(--portfolio-line); color: #eee; font-size: .9rem; }
-  .portfolio-index > a:hover { color: #68d4df; }
-  .index-number, .index-count { color: #a2acb5; font-size: .68rem; font-variant-numeric: tabular-nums; }
-  .portfolio-index > p { margin-top: 15px; color: #9aa6ae; font-size: .73rem; line-height: 1.7; max-width: 34ch; }
-  .project-section { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 52px; padding: 58px 0; border-bottom: 1px solid var(--portfolio-line); scroll-margin-top: 95px; }
-  .portfolio-section-heading { padding-top: 6px; }
-  .section-kicker { display: flex; align-items: center; gap: 13px; margin-bottom: 19px; color: #a8b3bb; font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
-  .section-kicker > span:first-child { color: #75cdd7; border-right: 1px solid #40555b; padding-right: 13px; }
-  .portfolio-section-heading h2 { font-size: 1.75rem; font-weight: 600; line-height: 1.15; letter-spacing: -.045em; margin-bottom: 15px; }
-  .portfolio-section-heading > p { color: #a9b2ba; font-size: .87rem; line-height: 1.75; max-width: 29ch; }
-  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; margin: 0; padding: 0; list-style: none; }
+  .portfolio { max-width: 1200px; margin: 0 auto; padding: 32px var(--gutter) 20px; color: var(--ink); }
+  .portfolio-hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 72px; align-items: end; padding: 36px 0 56px; border-bottom: 1px solid var(--line); }
+  .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8125rem; font-weight: 600; }
+  .small-rule { width: 28px; height: 2px; background: var(--gold); }
+  h1 { font-size: clamp(2.5rem, 5.4vw, 4.25rem); line-height: 1.06; margin: 18px 0; text-wrap: initial; }
+  h1 > span { color: var(--muted); }
+  .hero-intro { color: var(--muted); font-size: 1.125rem; line-height: 1.65; max-width: 48ch; }
+  .hero-link { display: inline-flex; align-items: center; gap: 24px; min-height: var(--touch); margin-top: 20px; font-size: 1rem; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--teal); }
+  .hero-link span { color: var(--teal); }
+  .portfolio-index { padding: 22px 24px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+  .index-heading { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding-bottom: 14px; }
+  .portfolio-index > a { display: grid; grid-template-columns: 26px 1fr 20px 12px; align-items: center; gap: 12px; min-height: var(--touch); padding: 8px 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 1rem; text-decoration: none; }
+  .portfolio-index > a:hover { color: var(--teal); }
+  .index-number, .index-count { color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+  .portfolio-index > p { margin-top: 12px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; max-width: 38ch; }
+  .project-section { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 48px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+  .portfolio-section-heading { padding-top: 4px; }
+  .section-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; color: var(--muted); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-kicker > span:first-child { color: var(--gold); border-right: 1px solid var(--line-strong); padding-right: 12px; }
+  .portfolio-section-heading h2 { font-size: 1.75rem; line-height: 1.15; margin-bottom: 12px; }
+  .portfolio-section-heading > p { color: var(--muted); font-size: 1rem; line-height: 1.6; max-width: 30ch; }
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
   .project-grid > li { min-width: 0; }
   .group-content { min-width: 0; }
+  .group-projects { min-width: 0; }
+  .project-rows { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .project-rows li { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .row-mark { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); box-shadow: inset 0 -3px 0 var(--project-accent); font-size: 12px; font-weight: 700; color: var(--ink); align-self: start; }
+  .project-rows h3 { font-size: 1.125rem; margin: 0; }
+  .project-rows h3 a { color: var(--ink); text-decoration: none; display: inline-flex; min-height: 32px; align-items: center; }
+  .project-rows h3 a span[aria-hidden] { color: var(--teal); margin-left: 6px; }
+  .project-rows h3 a:hover { color: var(--teal); text-decoration: underline; }
+  .project-rows p { color: var(--muted); font-size: 0.9375rem; line-height: 1.5; margin: 0; }
+  .row-host { color: var(--teal); font-size: 0.875rem; white-space: nowrap; }
   .local-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
   .local-layout .project-grid { grid-template-columns: 1fr; }
   .local-reading { min-width: 0; }
-  .local-reading-heading { padding: 4px 0 18px; border-bottom: 1px solid var(--portfolio-line); }
-  .local-reading-heading h3 { font-size: 1rem; font-weight: 600; margin-bottom: 7px; }
-  .local-reading-heading > a { color: #9ed2dc; font-size: .75rem; }
-  .local-story { padding: 19px 0; border-bottom: 1px solid var(--portfolio-line); }
-  .local-story > a { display: grid; grid-template-columns: 82px minmax(0, 1fr) 14px; gap: 14px; align-items: start; color: #e4e9ec; }
-  .local-story > a:hover { color: #85d6e1; }
-  .local-story img { width: 82px; height: 82px; object-fit: cover; border-radius: 6px; }
-  .local-story h4 { font-size: .85rem; line-height: 1.55; letter-spacing: -.015em; text-wrap: initial; }
-  .reading-topic { color: #93c9d1; font-size: .6rem; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 7px; }
-  .story-arrow { color: #9ed2dc; }
-  .image-credit { color: #a5afb7; font-size: .58rem; line-height: 1.5; margin-top: 9px; }
-  .more-work { display: flex; justify-content: space-between; align-items: center; gap: 40px; padding: 32px 0; border-top: 1px solid var(--portfolio-line); }
-  .more-work h2 { font-size: 1.4rem; font-weight: 600; margin-top: 10px; }
-  .more-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-  .more-links a { display: flex; align-items: center; gap: 12px; color: #b8cbd1; font-size: .8rem; padding: 10px 0; }
+  .local-reading-heading { padding: 4px 0 14px; border-bottom: 2px solid var(--ink); }
+  .local-reading-heading h3 { font-size: 1.25rem; margin-bottom: 4px; }
+  .local-reading-heading > a { color: var(--teal); font-size: 0.9375rem; font-weight: 600; }
+  .local-story { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .local-story > a { display: grid; grid-template-columns: 82px minmax(0, 1fr) 14px; gap: 14px; align-items: start; color: var(--ink); text-decoration: none; }
+  .local-story > a:hover h4 { color: var(--teal); text-decoration: underline; }
+  .local-story :global(img) { width: 82px; height: 82px; object-fit: cover; border-radius: var(--radius-sm); }
+  .local-story h4 { font-family: var(--font-sans); font-size: 1.0625rem; font-weight: 600; line-height: 1.4; letter-spacing: 0; text-wrap: initial; }
+  .reading-topic { color: var(--teal); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .story-arrow { color: var(--teal); }
+  .image-credit { color: var(--muted); font-size: 0.8125rem; line-height: 1.45; margin-top: 6px; }
+  .more-work { display: flex; justify-content: space-between; align-items: center; gap: 40px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .more-work h2 { font-size: 1.5rem; margin-top: 8px; }
+  .more-links { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+  .more-links a { display: flex; align-items: center; gap: 12px; min-height: var(--touch); color: var(--teal); font-size: 1rem; font-weight: 600; }
   @media (max-width: 1050px) { .portfolio-hero { gap: 35px; } .project-section { grid-template-columns: 205px minmax(0, 1fr); gap: 25px; } }
-  @media (max-width: 850px) { .portfolio { padding-top: 25px; } .portfolio-hero { grid-template-columns: 1fr; gap: 36px; padding-bottom: 42px; } .portfolio-index { max-width: none; } .project-section { grid-template-columns: 1fr; gap: 25px; padding: 38px 0; } .portfolio-section-heading > p { max-width: 60ch; } .portfolio-section-heading h2 { font-size: 1.8rem; } .more-work { align-items: start; flex-direction: column; gap: 18px; } }
-  @media (max-width: 600px) { .portfolio { padding-left: 20px; padding-right: 20px; } .portfolio-hero { padding-top: 26px; } h1 { font-size: clamp(2.65rem, 10vw, 3.5rem); } .hero-intro { font-size: .96rem; } .portfolio-index { padding: 22px; } .project-grid, .local-layout { grid-template-columns: 1fr; } .more-links { flex-direction: column; width: 100%; gap: 0; } .more-links a { justify-content: space-between; border-bottom: 1px solid var(--portfolio-line); padding: 14px 0; } }
+  @media (max-width: 850px) { .portfolio { padding-top: 20px; } .portfolio-hero { grid-template-columns: 1fr; gap: 32px; padding-bottom: 40px; } .project-section { grid-template-columns: 1fr; gap: 20px; padding: 36px 0; } .portfolio-section-heading > p { max-width: 60ch; } .more-work { align-items: start; flex-direction: column; gap: 14px; } }
+  @media (max-width: 600px) { .project-rows li { grid-template-columns: 32px minmax(0, 1fr); } .row-host { grid-column: 2; } .portfolio-hero { padding-top: 20px; } h1 { font-size: clamp(2.375rem, 10vw, 3.25rem); } .hero-intro { font-size: 1.0625rem; } .portfolio-index { padding: 18px; } .project-grid, .local-layout { grid-template-columns: 1fr; } .more-links { flex-direction: column; width: 100%; gap: 0; } .more-links a { justify-content: space-between; border-bottom: 1px solid var(--line); } }
 </style>

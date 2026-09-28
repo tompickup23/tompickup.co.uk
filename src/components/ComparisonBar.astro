@@ -35,7 +35,7 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
       <span class="cbar-value cbar-reform">
         {reformValue}
         {reformWins && (
-          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         )}
       </span>
     </div>
@@ -50,7 +50,7 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
       <span class="cbar-value cbar-con">
         {conValue}
         {!reformWins && (
-          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <svg class="cbar-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         )}
       </span>
     </div>
@@ -63,26 +63,22 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
 </div>
 
 <style>
+  /* Two years of one council, not two parties: the current year is the
+     validated chart teal, the comparison year neutral grey. Values are ink. */
   .cbar {
     padding: var(--space-lg);
-    background: rgba(28, 28, 30, 0.5);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--transition-normal);
-  }
-
-  .cbar:hover {
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
   }
 
   .cbar-title {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    color: var(--muted);
     margin-bottom: var(--space-md);
   }
 
@@ -102,71 +98,52 @@ const reformWins = lowerIsBetter ? reformPercent <= conPercent : reformPercent >
   }
 
   .cbar-label {
-    font-size: 0.8125rem;
+    font-size: 1rem;
     font-weight: 600;
+    color: var(--ink);
   }
 
   .cbar-value {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.9375rem;
-    font-weight: 800;
+    gap: 6px;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ink);
     font-variant-numeric: tabular-nums;
-  }
-
-  .cbar-reform {
-    color: var(--party-reform);
-  }
-
-  .cbar-con {
-    color: var(--party-conservative);
   }
 
   .cbar-check {
     flex-shrink: 0;
+    color: var(--text-green);
   }
 
   .cbar-track {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 4px;
+    height: 14px;
+    background: var(--chart-track);
+    border-radius: 2px;
     overflow: hidden;
   }
 
   .cbar-fill {
     height: 100%;
-    border-radius: 4px;
-    width: 0;
-    animation: barFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    border-radius: 0 2px 2px 0;
+    width: var(--fill-width);
   }
 
   .cbar-fill-reform {
-    background: linear-gradient(90deg, var(--party-reform), #64d2ff);
+    background: var(--chart-1);
   }
 
   .cbar-fill-con {
-    background: linear-gradient(90deg, var(--party-conservative), #4da8e8);
-  }
-
-  @keyframes barFill {
-    to {
-      width: var(--fill-width);
-    }
+    background: var(--chart-neutral);
   }
 
   .cbar-annotation {
     display: block;
     margin-top: var(--space-md);
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    font-style: italic;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cbar-fill {
-      animation: none;
-      width: var(--fill-width);
-    }
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--muted);
   }
 </style>

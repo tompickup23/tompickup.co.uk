@@ -3,6 +3,7 @@ title: "They Want to Work. The System Will Not Let Them."
 date: 2026-06-20T12:00:00
 description: "Most disabled people out of work want a job. A frozen savings limit, a year-long support backlog and a shortage of accessible vehicles stop them."
 image: "/images/accessible-transport.jpg"
+imageAlt: "A black wheelchair-accessible taxi with its side door open and the access ramp lowered to the kerb."
 ogImage: "/images/share/disability-work-trap.png"
 imageCredit: "Photo: Turini2 / Wikimedia Commons (CC BY-SA 4.0)"
 category: "Lancashire"
@@ -23,22 +24,22 @@ To be plain: nothing here is an argument against supporting disabled people, and
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">86%</span>
+<span class="value xl">86%</span>
 <span class="label">With a learning disability want to work</span>
 <span class="sublabel">Barely one in twenty actually has a job</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£16,000</span>
+<span class="value xl">£16,000</span>
 <span class="label">Savings limit, frozen since 2006</span>
 <span class="sublabel">Save for independence, lose your support</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">66,749</span>
+<span class="value xl">66,749</span>
 <span class="label">Waiting for Access to Work</span>
 <span class="sublabel">Up to 38 weeks for the help to start a job</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">39%</span>
+<span class="value xl">39%</span>
 <span class="label">Of taxis outside London take a wheelchair</span>
 <span class="sublabel">And the school run books them at rush hour</span>
 </div>
@@ -78,9 +79,9 @@ This is the one I see most sharply in Lancashire, and it is the link people miss
 To do most jobs you have to physically get to them, and a disabled person who needs a wheelchair-accessible vehicle has very few to choose from. Outside London, only **39% of taxis can take a wheelchair**, against 100% in the capital, and the share is falling. Now add the timing. Local councils, including ours, have a legal duty to get disabled children to school, and that duty soaks up the accessible-vehicle fleet at exactly the wrong moment: the accessible minibuses and taxis are **booked solid between roughly 7:30 and 9:30 in the morning and 2:30 and 4:30 in the afternoon** for the school run. Those are commuting hours.
 
 <div class="viz-callout">
-<span class="value" style="color: #ff9f0a; font-size: 2.6rem; font-weight: 900;">7:30 to 9:30am</span>
-<div class="headline" style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 12px;">When a disabled worker needs an accessible ride, there is none</div>
-<div class="subtext" style="color: #8e8e93; margin-top: 8px;">The same wheelchair-accessible vehicles are tied up taking children to school. The morning commute and the school run are the same two hours.</div>
+<span class="value" style="font-size:2.6rem; font-weight:900;">7:30 to 9:30am</span>
+<div class="headline text-white" style="font-size:1.2rem; font-weight:700; margin-top:12px;">When a disabled worker needs an accessible ride, there is none</div>
+<div class="subtext text-muted" style="margin-top:8px;">The same wheelchair-accessible vehicles are tied up taking children to school. The morning commute and the school run are the same two hours.</div>
 </div>
 
 So a disabled adult who has beaten the savings trap, the reassessment fear and the Access to Work queue can still be stopped at the front door, because there is no accessible vehicle free to take them to work. Worse, the low-margin contracts councils are forced to offer for school transport are driving accessible-vehicle operators out of the wider market altogether. The state has, without meaning to, cornered the supply.

@@ -266,8 +266,8 @@ import { CONTACT_EMAIL } from '../config';
   .form-group select:focus,
   .form-group textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(18, 182, 207, 0.2), 0 0 20px rgba(18, 182, 207, 0.1);
-    outline: none;
+    outline: 2px solid var(--teal);
+    outline-offset: 0;
   }
 
   .form-group input::placeholder,
@@ -328,7 +328,8 @@ import { CONTACT_EMAIL } from '../config';
     width: 44px;
     height: 44px;
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--panel);
+    color: var(--teal);
     flex-shrink: 0;
     margin-bottom: var(--space-xs);
   }

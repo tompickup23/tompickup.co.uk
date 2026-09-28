@@ -18,24 +18,8 @@ function isActive(href: string): boolean {
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="brand" aria-label="Tom Pickup, home">
-      <svg class="brand-logo" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="logo-bg" x1="0" y1="0" x2="32" y2="32">
-            <stop offset="0" stop-color="#0d1117"/>
-            <stop offset="1" stop-color="#161b22"/>
-          </linearGradient>
-          <linearGradient id="logo-teal" x1="0" y1="0" x2="32" y2="32">
-            <stop offset="0" stop-color="#12b6cf"/>
-            <stop offset="1" stop-color="#0d9fb5"/>
-          </linearGradient>
-        </defs>
-        <rect width="32" height="32" rx="7" fill="url(#logo-bg)"/>
-        <rect x=".5" y=".5" width="31" height="31" rx="6.5" fill="none" stroke="url(#logo-teal)" stroke-opacity=".3"/>
-        <text x="3" y="24" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="22" fill="#fff">T</text>
-        <text x="16" y="24" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="22" fill="url(#logo-teal)">P</text>
-        <rect x="4" y="28" width="24" height="1.5" rx=".75" fill="url(#logo-teal)"/>
-      </svg>
-      <span class="brand-text">Tom <span class="brand-accent">Pickup</span></span>
+      <span class="brand-text">Tom Pickup</span>
+      <span class="brand-role">County Councillor, Padiham and Burnley West</span>
     </a>
 
     <nav class="desktop-nav" aria-label="Main navigation">
@@ -133,120 +117,111 @@ function isActive(href: string): boolean {
     left: 0;
     right: 0;
     z-index: 100;
-    background: rgba(9, 9, 11, 0.85);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--blur-bg);
+    border-bottom: 1px solid var(--line);
   }
 
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-lg);
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--space-lg);
-    height: 56px;
+    padding: 0 var(--gutter);
+    height: 64px;
   }
 
-  /* Brand + Logo */
+  /* Wordmark */
   .brand {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    min-height: var(--touch);
     text-decoration: none;
-    background-image: none;
+    color: var(--ink);
     flex-shrink: 0;
   }
 
   .brand:hover {
-    background-image: none;
-    background-size: 0;
-  }
-
-  .brand-logo {
-    flex-shrink: 0;
+    color: var(--ink);
   }
 
   .brand-text {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
   }
 
-  .brand-accent {
-    color: var(--accent);
+  .brand-role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
   }
 
-  /* Desktop Navigation */
+  /* Desktop navigation */
   .desktop-nav {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-lg);
   }
 
   .nav-link {
-    padding: 0.4rem 0.85rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
     text-decoration: none;
-    background-image: none;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    border-bottom: 2px solid transparent;
     white-space: nowrap;
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-    font-family: inherit;
   }
 
   .nav-link:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-    background-image: none;
-    background-size: 0;
+    color: var(--teal);
   }
 
   .nav-link.active {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.08);
+    border-bottom-color: var(--teal);
   }
 
-  /* Header Actions */
+  /* Header actions */
   .header-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
     flex-shrink: 0;
   }
 
-  /* Mobile Toggle */
+  /* Mobile toggle */
   .mobile-toggle {
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
-    width: 44px;
-    height: 44px;
-    padding: 6px;
+    width: var(--touch);
+    height: var(--touch);
+    border: 1px solid var(--line-strong);
     border-radius: var(--radius-sm);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
 
   .mobile-toggle:hover {
-    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--ink);
   }
 
   .hamburger-line {
     display: block;
     width: 20px;
     height: 2px;
-    background: var(--text-secondary);
-    border-radius: 1px;
+    background: var(--ink);
     transition: transform var(--transition-normal), opacity var(--transition-fast);
   }
 
@@ -262,62 +237,59 @@ function isActive(href: string): boolean {
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Mobile Menu */
+  /* Mobile menu */
   .mobile-menu {
     display: none;
     max-height: 0;
     overflow: hidden;
-    background: rgba(9, 9, 11, 0.95);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    transition: max-height 0.35s var(--ease-smooth), padding 0.35s var(--ease-smooth);
-    padding: 0 var(--space-lg);
+    background: var(--paper);
+    transition: max-height 0.3s var(--ease-smooth), padding 0.3s var(--ease-smooth);
+    padding: 0 var(--gutter);
   }
 
   .mobile-menu.is-open {
     max-height: 80vh;
-    padding: var(--space-md) var(--space-lg) var(--space-lg);
+    padding: var(--space-sm) var(--gutter) var(--space-md);
+    border-top: 1px solid var(--line);
     overflow-y: auto;
   }
 
   .mobile-menu nav {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
   }
 
   .mobile-link {
-    display: block;
-    padding: 0.65rem 0.85rem;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ink);
     text-decoration: none;
-    background-image: none;
-    border-radius: var(--radius-sm);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-    width: 100%;
-    text-align: left;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    font-family: inherit;
+    border-bottom: 1px solid var(--line);
   }
 
-  .mobile-link:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-    background-image: none;
-    background-size: 0;
+  .mobile-link:last-child {
+    border-bottom: 0;
+  }
+
+  .mobile-link:hover,
+  .mobile-link.active {
+    color: var(--teal);
   }
 
   .mobile-link.active {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 3px 0 0 var(--teal);
+    padding-left: 12px;
   }
 
-  /* Responsive */
+  @media (max-width: 860px) {
+    .brand-role {
+      display: none;
+    }
+  }
+
   @media (max-width: 768px) {
     .desktop-nav {
       display: none;
@@ -331,18 +303,16 @@ function isActive(href: string): boolean {
       display: block;
     }
 
-    .header-inner {
-      padding: 0 var(--space-md);
+    .brand-role {
+      display: block;
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
     }
   }
 
-  @media (max-width: 480px) {
-    .header-inner {
-      padding: 0 var(--space-sm);
-    }
-
-    .brand-text {
-      font-size: 1rem;
+  @media (max-width: 360px) {
+    .brand-role {
+      display: none;
     }
   }
 </style>

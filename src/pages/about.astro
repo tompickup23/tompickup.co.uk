@@ -27,6 +27,7 @@ const sources = [
   { text: 'Lancashire Combined County Authority, Overview and Scrutiny Committee minutes, p. 1, 28 July 2025', url: `${LCC}/documents/g15778/Printed%20minutes%2028th-Jul-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Overview%20and%20Scrutiny%20C.pdf?T=1` },
   { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 1, 23 January 2026', url: `${LCC}/documents/g16599/Printed%20minutes%2023rd-Jan-2026%2014.00%20Pension%20Fund%20Committee.pdf?T=1` },
   { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 2, 19 June 2026', url: `${LCC}/documents/g16280/Printed%20minutes%2019th-Jun-2026%2010.00%20Pension%20Fund%20Committee.pdf?T=1` },
+  { text: "Pickup, T. (2026) 'The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions', working paper, version 3.1, Zenodo, 28 September 2026, doi:10.5281/zenodo.23016761", url: 'https://doi.org/10.5281/zenodo.23016761' },
 ];
 
 /* Each role links to its council page; `cites` are numbers in the list above. */
@@ -101,8 +102,9 @@ const schema = {
             </p>
             <p>
               Since 2025 I've built a set of open-source public data sites, listed on the
-              <a href="/projects/">projects page</a>, and written an independent working paper on
-              the financial modelling of local government reorganisation in Lancashire.
+              <a href="/projects/">projects page</a>, and written an
+              <a href="https://doi.org/10.5281/zenodo.23016761">independent working paper</a> on
+              the financial modelling of local government reorganisation in Lancashire.<Cite n={14} />
             </p>
           </div>
         </div>
@@ -204,8 +206,7 @@ const schema = {
     width: 280px;
     height: 280px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(18, 182, 207, 0.2) 0%, transparent 70%);
-    filter: blur(40px);
+    display: none;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -55%);
@@ -218,8 +219,7 @@ const schema = {
     height: 240px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(18, 182, 207, 0.3);
-    box-shadow: 0 0 40px rgba(18, 182, 207, 0.15), 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--line);
   }
 
   .bio-photo img {
@@ -232,10 +232,9 @@ const schema = {
   /* Bio text */
   .bio-text h1 {
     font-size: clamp(2.25rem, 5vw, 3.25rem);
-    font-weight: 800;
     line-height: 1.05;
-    letter-spacing: -0.04em;
-    color: #fff;
+    letter-spacing: -0.025em;
+    color: var(--ink);
     margin: 0 0 var(--space-lg);
   }
 

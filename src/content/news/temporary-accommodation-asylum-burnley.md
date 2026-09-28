@@ -3,6 +3,7 @@ title: "The Asylum System Is Dumping Its Bill on Burnley"
 date: 2026-06-23T16:00:00
 description: "I went through every penny Burnley Council spends on temporary accommodation. In one year the asylum share of its homelessness went from 1 in 60 to 1 in 9."
 image: "/images/burnley-aerial.jpg"
+imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
 ogImage: "/images/share/temporary-accommodation.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "DOGE"
@@ -23,22 +24,22 @@ This is a DOGE investigation: built from the council's own published spending an
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">£2.4m</span>
+<span class="value xl">£2.4m</span>
 <span class="label">Spent on temporary accommodation in five years</span>
 <span class="sublabel">Over-£500 payments, 2021/22 to 2025/26</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">1 in 9</span>
+<span class="value xl">1 in 9</span>
 <span class="label">Homelessness cases now from leaving asylum accommodation</span>
 <span class="sublabel">Up from 1 in 60 two years earlier</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">4th</span>
+<span class="value xl">4th</span>
 <span class="label">Most deprived district in England</span>
 <span class="sublabel">And still used as the asylum overflow</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£34k → £288k</span>
+<span class="value xl">£34k → £288k</span>
 <span class="label">The council's hotel bill, 2019/20 vs its recent peak</span>
 <span class="sublabel">Emergency B&B and hotel placements</span>
 </div>
@@ -51,15 +52,15 @@ Temporary accommodation is the housing a council provides when someone becomes h
 
 <div class="viz-panel">
 <div class="viz-label teal">Biggest temporary-accommodation providers, Burnley, 2021/22 to 2025/26</div>
-<div style="display: grid; gap: 10px;">
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">Calico (Gateway &amp; Orchard House supported units)</span><span class="text-bold" style="color:#12b6cf;">£513k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">The Town Mouse (hotel/inn)</span><span class="text-bold" style="color:#ff9f0a;">£476k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:93%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Stepping Stone Project (charity)</span><span style="color:#12b6cf;font-weight:700;">£358k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:70%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Regent Hotel</span><span style="color:#ff9f0a;font-weight:700;">£280k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:55%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">SafeNet (domestic-abuse refuge)</span><span class="text-muted">£195k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:38%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Hill View Hotel</span><span class="text-muted">£125k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:24%;"></div></div></div>
+<div style="display:grid; gap:10px;">
+<div><div class="viz-row"><span class="text-white text-bold">Calico (Gateway &amp; Orchard House supported units)</span><span class="text-bold text-teal">£513k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white text-bold">The Town Mouse (hotel/inn)</span><span class="text-bold text-orange">£476k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:93%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Stepping Stone Project (charity)</span><span class="text-teal" style="font-weight:700;">£358k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:70%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Regent Hotel</span><span class="text-orange" style="font-weight:700;">£280k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:55%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">SafeNet (domestic-abuse refuge)</span><span class="text-muted">£195k</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:38%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Hill View Hotel</span><span class="text-muted">£125k</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:24%;"></div></div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: Burnley Borough Council published spending, "Housing Advice" cost centre, 2021/22 to 2025/26. Hotels in amber, supported housing in teal.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: Burnley Borough Council published spending, "Housing Advice" cost centre, 2021/22 to 2025/26. Hotels in amber, supported housing in teal.</div>
 </div>
 
 Split it by type and it is roughly **£1.0m on hotels and inns, £1.2m on supported-housing charities, and £0.2m on leased private homes**. The hotels are the emergency end: when someone presents as homeless at 5pm with nowhere to go, a B&B is often the only option that night. The council's own figures show how that cost has grown. In 2019/20 it housed 78 applicants in hotels for **£34,037**. By 2024/25 the hotel bill had reached roughly **£288,000** a year. Something changed.
@@ -72,21 +73,21 @@ The official Ministry of Housing data records why each household became homeless
 
 <div class="viz-panel">
 <div class="viz-label teal">Burnley homelessness duties caused by leaving asylum accommodation</div>
-<div style="display: grid; gap: 14px;">
+<div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">2022/23</span><span class="text-muted">10 cases &nbsp;<span style="color:#636366;">(1.6%)</span></span></div>
+<div class="viz-row"><span class="text-muted">2022/23</span><span class="text-muted">10 cases &nbsp;<span class="text-dim">(1.6%)</span></span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:11%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">2023/24</span><span class="text-bold" style="color:#ff453a;">88 cases &nbsp;<span style="color:#8e8e93;font-weight:400;">(11.4%)</span></span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:100%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div>
+<div class="viz-row"><span class="text-white text-bold">2023/24</span><span class="text-bold text-red">88 cases &nbsp;<span class="text-muted" style="font-weight:400;">(11.4%)</span></span></div>
+<div class="viz-reform-bar"><div class="fill red" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">2024/25</span><span class="text-bold" style="color:#ff9f0a;">71 cases &nbsp;<span style="color:#8e8e93;font-weight:400;">(10.3%)</span></span></div>
+<div class="viz-row"><span class="text-white text-bold">2024/25</span><span class="text-bold text-orange">71 cases &nbsp;<span class="text-muted" style="font-weight:400;">(10.3%)</span></span></div>
 <div class="viz-reform-bar"><div class="fill amber" style="width:81%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: MHCLG statutory homelessness (H-CLIC), detailed local authority tables. Share is of all prevention and relief duties owed that year.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: MHCLG statutory homelessness (H-CLIC), detailed local authority tables. Share is of all prevention and relief duties owed that year.</div>
 </div>
 
 In **2022/23 it was 10 households, about 1 in 60** of all the council's homelessness cases. The next year it was **88 households, more than 1 in 9**. That is close to a nine-fold jump in twelve months. It was not a Burnley decision and it was not random: it is the direct, traceable result of the Home Office clearing its asylum backlog in late 2023, granting status to thousands of people at once and starting the 28-day clock on all of them. The country's asylum policy was set in Westminster; the homelessness it produced was paid for in towns like this one. At the sharpest end, the "relief" duty, where the household is already homeless and needs a roof that night, the asylum share hit **13.5%** in 2023/24.

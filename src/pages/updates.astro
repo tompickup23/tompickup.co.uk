@@ -139,15 +139,16 @@ const PROVIDER_ENDPOINT = '';
     padding: 10px 14px;
     font-size: 0.9375rem;
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--separator);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
     border-radius: var(--radius-md, 10px);
   }
 
   .form-field input:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(18, 182, 207, 0.2);
+    outline: 2px solid var(--teal);
+    outline-offset: 0;
   }
 
   .form-lists {
@@ -178,7 +179,7 @@ const PROVIDER_ENDPOINT = '';
   }
 
   .list-option:hover {
-    border-color: rgba(18, 182, 207, 0.4);
+    border-color: var(--teal);
   }
 
   .list-option input {

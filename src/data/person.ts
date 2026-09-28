@@ -13,7 +13,7 @@ const PERSON_ID = 'https://tompickup.co.uk/#person';
    so nothing half-made is published. */
 const TODO_PROFILES = {
   linkedin: '', // TODO(Tom): LinkedIn profile URL
-  orcid: '', // TODO(Tom): ORCID iD URL, https://orcid.org/0000-...
+  orcid: 'https://orcid.org/0009-0004-6726-0744', // as registered on the Zenodo record 23016761
   zenodo: '', // TODO(Tom): Zenodo author or community URL
   wikidata: '', // TODO(Tom): Wikidata item URL, https://www.wikidata.org/wiki/Q...
 };

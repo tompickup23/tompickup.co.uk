@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import { articleImage, imageQuality } from '../lib/images';
+
 interface Props {
   title: string;
   date: string;
@@ -10,6 +13,7 @@ interface Props {
 }
 
 const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3' } = Astro.props;
+const imageMeta = articleImage(image);
 
 function formatDate(dateStr: string): string {
   try {
@@ -30,7 +34,20 @@ function formatDate(dateStr: string): string {
 
   {image && (
     <div class="news-card-image">
-      <img src={image} alt="" loading="lazy" decoding="async" />
+      {imageMeta ? (
+        <Image
+          src={imageMeta}
+          alt=""
+          widths={[400, 640, 800]}
+          sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 380px"
+          format="webp"
+          quality={imageQuality(image)}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <img src={image} alt="" loading="lazy" decoding="async" />
+      )}
     </div>
   )}
 
@@ -69,128 +86,88 @@ function formatDate(dateStr: string): string {
   .news-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 1.5rem;
-    background: rgba(28, 28, 30, 0.7);
-    backdrop-filter: blur(20px) saturate(1.2);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    gap: 8px;
+    padding: 0 0 1.25rem;
+    border-bottom: 1px solid var(--line);
     text-decoration: none;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--ink);
     height: 100%;
     box-sizing: border-box;
   }
 
-  .news-card-image {
-    margin: -1.5rem -1.5rem 0 -1.5rem;
-    overflow: hidden;
-    border-radius: 16px 16px 0 0;
-    aspect-ratio: 16 / 9;
-    position: relative;
-    z-index: 1;
+  .news-card:hover {
+    color: var(--ink);
   }
 
-  .news-card-image img {
+  .news-card:hover .news-title {
+    color: var(--teal);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .news-card-overlay {
+    display: none;
+  }
+
+  .news-card-image {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 4px;
+    background: var(--panel);
+    border-radius: var(--radius-sm);
+  }
+
+  .news-card-image :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center center;
     display: block;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .news-card:hover .news-card-image img {
-    transform: scale(1.04);
-  }
-
-  .has-image .news-tags {
-    margin-top: 4px;
-  }
-
-  .news-card-overlay {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.02) 0%,
-      transparent 50%
-    );
-    pointer-events: none;
-  }
-
-  .news-card:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.12);
-    background-image: none;
   }
 
   .news-tags {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 6px;
-    position: relative;
-    z-index: 1;
+    flex-wrap: wrap;
+    gap: 0 12px;
     overflow: hidden;
-    max-height: 24px;
+    max-height: 1.5em;
   }
 
   .news-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    background: rgba(18, 182, 207, 0.12);
-    color: #12b6cf;
-    border: 1px solid rgba(18, 182, 207, 0.15);
+    letter-spacing: 0.06em;
+    color: var(--teal);
   }
 
   .news-title {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    line-height: 1.35;
+    font-size: 1.3125rem;
+    line-height: 1.25;
     margin: 0;
-    color: #fff;
-    position: relative;
-    z-index: 1;
+    color: var(--ink);
   }
 
   .news-date {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.8125rem;
-    color: #aab4bd;
-    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--muted);
     font-variant-numeric: tabular-nums;
-    position: relative;
-    z-index: 1;
   }
 
   .news-date svg {
-    opacity: 0.5;
+    display: none;
   }
 
   .news-description {
-    font-size: 0.875rem;
-    color: rgba(235, 235, 245, 0.6);
+    font-size: 1rem;
+    color: var(--muted);
     line-height: 1.55;
     margin: 0;
     flex: 1;
-    position: relative;
-    z-index: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -198,50 +175,6 @@ function formatDate(dateStr: string): string {
   }
 
   .read-more {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.875rem;
-    color: #12b6cf;
-    font-weight: 500;
-    transition: gap 0.2s ease;
-    position: relative;
-    z-index: 1;
-    margin-top: auto;
-  }
-
-  .news-card:hover .read-more {
-    gap: 8px;
-  }
-
-  @media (max-width: 768px) {
-    .news-card {
-      padding: 1.25rem;
-    }
-
-    .news-card-image {
-      margin: -1.25rem -1.25rem 0 -1.25rem;
-    }
-
-    .news-title {
-      font-size: 1rem;
-    }
-
-    .news-description {
-      font-size: 0.8125rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .news-card, .news-card-image img {
-      transition: none;
-    }
-    .news-card:hover, .news-card:hover .news-card-image img {
-      transform: none;
-    }
-
-    .read-more {
-      transition: none;
-    }
+    display: none;
   }
 </style>

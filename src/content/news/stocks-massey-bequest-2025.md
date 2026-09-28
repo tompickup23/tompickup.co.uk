@@ -29,9 +29,9 @@ The total includes the student scholarship allocation as well as grants to local
 
 Congratulations to both recipients. It is good to see this longstanding Burnley charity continuing to support young people alongside the organisations that contribute to the town's cultural and community life.
 
-<figure style="margin: 28px 0;">
-<img src="/images/stocks-massey-2025.jpg" alt="Caden Redmond at the 2025 Stocks Massey award presentation" width="1200" height="800" loading="lazy" decoding="async" style="display: block; width: 100%; height: auto; border-radius: 16px;" />
-<figcaption style="margin-top: 10px; color: #b4b4bc; font-size: 0.875rem;">Caden Redmond at the 2025 award presentation.</figcaption>
+<figure style="margin:28px 0;">
+<img src="/images/stocks-massey-2025.jpg" alt="Caden Redmond at the 2025 Stocks Massey award presentation" width="1200" height="800" loading="lazy" decoding="async" / style="display:block; width:100%; height:auto; border-radius:16px;">
+<figcaption class="text-muted" style="margin-top:10px; font-size:0.875rem;">Caden Redmond at the 2025 award presentation.</figcaption>
 </figure>
 
 ## The awards in context

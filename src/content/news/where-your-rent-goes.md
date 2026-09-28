@@ -3,6 +3,7 @@ title: "Where Your Rent Goes in Burnley"
 date: 2026-06-19T16:00:00
 description: "Rents in Burnley are rising, most renters now pay a private landlord, and a large slice of it is public money. Meanwhile the help with rent is frozen."
 image: "/images/burnley-canal.jpg"
+imageAlt: "A canal towpath in Burnley in sunshine, with walkers, a moored narrowboat and houses on the hillside beyond."
 ogImage: "/images/share/where-your-rent-goes.png"
 imageCredit: "Photo: Michael Garlick / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -21,22 +22,22 @@ This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">£622</span>
+<span class="value xl">£622</span>
 <span class="label">Average private rent a month</span>
 <span class="sublabel">Up 3.2% in the last year</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">9,696</span>
+<span class="value xl">9,696</span>
 <span class="label">Households renting privately</span>
 <span class="sublabel">About one in four, most from a private landlord</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">£104</span>
+<span class="value xl">£104</span>
 <span class="label">Most the state pays towards a 2-bed, a week</span>
 <span class="sublabel">The Local Housing Allowance cap, frozen since 2024</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">£126</span>
+<span class="value xl">£126</span>
 <span class="label">A month the tenant has to find</span>
 <span class="sublabel">The gap between that help and a typical 2-bed rent</span>
 </div>
@@ -73,11 +74,11 @@ On a two-bedroom home in the Burnley area, that gap is now about **£126 a month
 
 <div class="viz-panel">
 <div class="viz-label teal">A lower-cost two-bedroom rent, and who covers it (per month)</div>
-<div style="display:flex; height:56px; border-radius:8px; overflow:hidden; margin-top:14px;">
-<div style="width:78%; background:linear-gradient(90deg,#0c8499,#16c5e0); display:flex; align-items:center; padding-left:16px;"><span style="color:#fff; font-weight:700;">£449 covered by support</span></div>
-<div style="width:22%; background:linear-gradient(90deg,#ff9f0a,#ffb340); display:flex; align-items:center; justify-content:center;"><span style="color:#1a1205; font-weight:800;">£126</span></div>
+<div class="viz-stack">
+<div class="viz-seg teal" style="width:78%;"><span class="text-on-fill">£449 covered by support</span></div>
+<div class="viz-seg orange" style="width:22%; justify-content:center;"><span class="text-on-fill">£126</span></div>
 </div>
-<div class="text-dim" style="font-size:0.75rem; margin-top:12px;">The frozen Local Housing Allowance covers about £449 a month of a lower-cost two-bedroom rent. The remaining £126 falls on the tenant, and grows every year rents rise while the support stays still.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">The frozen Local Housing Allowance covers about £449 a month of a lower-cost two-bedroom rent. The remaining £126 falls on the tenant, and grows every year rents rise while the support stays still.</div>
 </div>
 
 ---

@@ -3,6 +3,7 @@ title: "Put the Police Back on Burnley's Streets"
 date: 2026-06-21T16:00:00
 description: "Violent crime in Burnley runs about a third above the national average, yet the neighbourhood officers who prevent it have been cut by more than half."
 image: "/images/burnley-crown-point.jpg"
+imageAlt: "Rough grassland on the high ground at Crown Point, looking out across the valley towards Burnley under a grey sky."
 ogImage: "/images/share/put-police-back.png"
 imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -21,22 +22,22 @@ A word up front. This is about <strong>resourcing</strong>, not blame. It is not
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">+30%</span>
+<span class="value xl">+30%</span>
 <span class="label">Violent crime above the England average</span>
 <span class="sublabel">43.1 per 1,000 here vs 33.1 nationally</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">-57%</span>
+<span class="value xl">-57%</span>
 <span class="label">Cut in Lancashire's community officers</span>
 <span class="sublabel">PCSOs down from 428 in 2010 to 186</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">£292</span>
+<span class="value xl">£292</span>
 <span class="label">Police bill on a Band D home</span>
 <span class="sublabel">Up from £211 in 2020, rising near the cap most years</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">1,111</span>
+<span class="value xl">1,111</span>
 <span class="label">Knives taken off East Lancashire in one week</span>
 <span class="sublabel">Operation Sceptre, November 2025</span>
 </div>
@@ -49,21 +50,21 @@ Start with the thing residents already feel. On the official figures, Burnley's 
 
 <div class="viz-panel">
 <div class="viz-label teal">Violent crime, rate per 1,000 people (year to March 2024)</div>
-<div style="display: grid; gap: 16px;">
+<div style="display:grid; gap:16px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">43.1</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:100%; background:linear-gradient(90deg,#ff453a,#ff6961);"></div></div>
-</div>
-<div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">Lancashire force area</span><span class="text-muted">36.5</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:85%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-white text-bold">Burnley</span><span class="text-teal text-bold">43.1</span></div>
+<div class="viz-reform-bar"><div class="fill red" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-muted">England</span><span class="text-muted">33.1</span></div>
-<div class="viz-reform-bar"><div class="fill" style="width:77%; background:rgba(255,255,255,0.18);"></div></div>
+<div class="viz-row"><span class="text-muted">Lancashire force area</span><span class="text-muted">36.5</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:85%;"></div></div>
+</div>
+<div>
+<div class="viz-row"><span class="text-muted">England</span><span class="text-muted">33.1</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:77%;"></div></div>
 </div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: ONS recorded crime, year ending March 2024. Burnley is consistently around 30% above the England rate.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: ONS recorded crime, year ending March 2024. Burnley is consistently around 30% above the England rate.</div>
 </div>
 
 And it is not just numbers. East Lancashire has seen a run of serious knife attacks. In Colne, a man was jailed for stabbing a neighbour in the neck. In nearby Blackburn, a man was sentenced to **24 years for attempted murder** after a stabbing in the street. There has been a further serious incident in the area in June 2026 which is now before the courts, and which I will not say a word about while it is live. The courts are doing their part. The question is what we are doing to stop these things happening in the first place.

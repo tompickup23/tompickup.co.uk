@@ -1,19 +1,29 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { NEWS_AREAS, newsArea, newsTopic } from '../../lib/news-categories';
+import { nextReads } from '../../lib/next-reads';
 
 export async function getStaticPaths() {
   const posts = await getCollection('news', ({ data }) => !data.draft);
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, posts },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, posts } = Astro.props;
+const { Content, headings } = await render(post);
+const area = NEWS_AREAS.find((a) => a.id === newsArea(post))!;
+const topic = newsTopic(post);
 ---
 
-<BlogPost frontmatter={post.data}>
+<BlogPost
+  frontmatter={post.data}
+  headings={headings.filter((h) => h.depth === 2)}
+  area={{ id: area.id, title: area.title }}
+  topic={{ id: topic.id, title: topic.title }}
+  nextReads={nextReads(post, posts)}
+>
   <Content />
 </BlogPost>

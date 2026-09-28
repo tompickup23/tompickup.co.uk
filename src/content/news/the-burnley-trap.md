@@ -3,6 +3,7 @@ title: "Sick Sooner, Out of Work, Gone Earlier: The Burnley Trap"
 date: 2026-06-20T10:00:00
 description: "Burnley is the 4th most deprived town in England. Its people fall ill younger, are pushed out of work by that illness, and die sooner than almost anywhere."
 image: "/images/burnley-rooftops.jpg"
+imageAlt: "Stone terraced houses and mill chimneys in Burnley, with the town climbing the hillside behind."
 ogImage: "/images/share/the-burnley-trap.png"
 imageCredit: "Photo: Ian Greig / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
@@ -21,22 +22,22 @@ Every number here is from ONS, the Office for Health Improvement and Disparities
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">4th</span>
+<span class="value xl">4th</span>
 <span class="label">Most deprived district in England</span>
 <span class="sublabel">Up from 11th in 2019. Going backwards.</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">76.5</span>
+<span class="value xl">76.5</span>
 <span class="label">A Burnley man's life expectancy</span>
 <span class="sublabel">England is 79.7. Over three years lost.</span>
 </div>
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">38.8%</span>
+<span class="value xl">38.8%</span>
 <span class="label">Of out-of-work Burnley adults are long-term sick</span>
 <span class="sublabel">The Great Britain figure is 28.7%</span>
 </div>
 <div class="viz-stat blue">
-<span class="value xl" style="color: #0087dc;">237</span>
+<span class="value xl">237</span>
 <span class="label">Preventable deaths per 100,000</span>
 <span class="sublabel">England is 146. Deaths that need not happen.</span>
 </div>
@@ -77,11 +78,11 @@ But look at *why* they are out of work:
 
 <div class="viz-comparison">
 <div class="side before">
-<span class="value" style="color: #12b6cf;">38.8%</span>
+<span class="value">38.8%</span>
 <span class="label">of out-of-work Burnley adults are long-term sick</span>
 </div>
 <div class="side after">
-<span class="value" style="color: #8e8e93;">28.7%</span>
+<span class="value">28.7%</span>
 <span class="label">the Great Britain average</span>
 </div>
 </div>
@@ -97,9 +98,9 @@ And it ends early. A man born in Burnley can expect to live to **76.5**, against
 The cruellest part is the gap *inside* the town. Between Burnley's most and least deprived neighbourhoods, male life expectancy differs by **8.7 years**. Two streets, the same town, nearly a decade of life between them.
 
 <div class="viz-callout">
-<span class="value" style="color: #ff453a; font-size: 3.5rem; font-weight: 900;">8.7 years</span>
-<div class="headline" style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 12px;">The life-expectancy gap within Burnley</div>
-<div class="subtext" style="color: #8e8e93; margin-top: 8px;">How much longer a man lives in Burnley's wealthiest neighbourhoods than its poorest. Same town.</div>
+<span class="value" style="font-size:3.5rem; font-weight:900;">8.7 years</span>
+<div class="headline text-white" style="font-size:1.25rem; font-weight:700; margin-top:12px;">The life-expectancy gap within Burnley</div>
+<div class="subtext text-muted" style="margin-top:8px;">How much longer a man lives in Burnley's wealthiest neighbourhoods than its poorest. Same town.</div>
 </div>
 
 ---

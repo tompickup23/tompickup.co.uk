@@ -4,6 +4,7 @@ date: 2026-06-23T10:00:00
 updated: 2026-09-28
 description: "Burnley Borough Council spent £38.06 million in payments of £500 or more last year, across 4,489 transactions to 843 suppliers. Every line, searchable."
 image: "/images/burnley-aerial.jpg"
+imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
 ogImage: "/images/share/burnley-spending-2025-26.png"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
@@ -31,22 +32,22 @@ This is not a leak or a scoop. It is the council's own data, which it is legally
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl" style="color: #12b6cf;">£38.06m</span>
+<span class="value xl">£38.06m</span>
 <span class="label">Paid out in 2025/26 (£500 or more)</span>
 <span class="sublabel">1 April 2025 to 31 March 2026</span>
 </div>
 <div class="viz-stat orange">
-<span class="value xl" style="color: #ff9f0a;">4,489</span>
+<span class="value xl">4,489</span>
 <span class="label">Separate payments</span>
 <span class="sublabel">Every one searchable on AI DOGE</span>
 </div>
 <div class="viz-stat purple">
-<span class="value xl" style="color: #bf5af2;">843</span>
+<span class="value xl">843</span>
 <span class="label">Different suppliers paid</span>
 <span class="sublabel">From global contractors to local firms</span>
 </div>
 <div class="viz-stat red">
-<span class="value xl" style="color: #ff453a;">£785k</span>
+<span class="value xl">£785k</span>
 <span class="label">The single largest payment</span>
 <span class="sublabel">To the council's waste contractor, in March</span>
 </div>
@@ -67,17 +68,17 @@ The cleanest way to see the shape of a year's spending is by the type of thing t
 
 <div class="viz-panel">
 <div class="viz-label teal">Burnley Council over-£500 spending by category, 2025/26</div>
-<div style="display: grid; gap: 11px;">
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">New construction &amp; building works</span><span class="text-bold" style="color:#12b6cf;">£11.26m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">Agency &amp; contracted services</span><span class="text-bold" style="color:#12b6cf;">£11.09m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:99%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Supplies &amp; services</span><span style="color:#12b6cf;font-weight:700;">£6.26m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:56%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Grants</span><span style="color:#ff9f0a;font-weight:700;">£2.64m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:23%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Premises (rent, repairs, energy)</span><span style="color:#ff9f0a;font-weight:700;">£2.53m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:22%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Vehicles, plant &amp; machinery</span><span class="text-muted">£2.41m</span></div><div class="viz-reform-bar"><div class="fill" style="width:21%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Land &amp; building purchases</span><span class="text-muted">£0.99m</span></div><div class="viz-reform-bar"><div class="fill" style="width:9%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Everything else (staff, transport, transfers)</span><span class="text-muted">£0.87m</span></div><div class="viz-reform-bar"><div class="fill" style="width:8%; background:rgba(255,255,255,0.22);"></div></div></div>
+<div style="display:grid; gap:11px;">
+<div><div class="viz-row"><span class="text-white text-bold">New construction &amp; building works</span><span class="text-bold text-teal">£11.26m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white text-bold">Agency &amp; contracted services</span><span class="text-bold text-teal">£11.09m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:99%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Supplies &amp; services</span><span class="text-teal" style="font-weight:700;">£6.26m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:56%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Grants</span><span class="text-orange" style="font-weight:700;">£2.64m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:23%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Premises (rent, repairs, energy)</span><span class="text-orange" style="font-weight:700;">£2.53m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:22%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Vehicles, plant &amp; machinery</span><span class="text-muted">£2.41m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:21%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Land &amp; building purchases</span><span class="text-muted">£0.99m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:9%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Everything else (staff, transport, transfers)</span><span class="text-muted">£0.87m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:8%;"></div></div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: Burnley Borough Council, quarterly "spend over £500" data, 2025/26. Categories as recorded by the council.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: Burnley Borough Council, quarterly "spend over £500" data, 2025/26. Categories as recorded by the council.</div>
 </div>
 
 Two categories tower over the rest, and together they are nearly £22.4 million, almost three pounds in every five. The first is **building work**: the capital programme that puts up and does up physical things. The second is **agency and contracted services**: the money paid to the outside companies that run services the council no longer runs itself, above all waste collection and the back office. Hold on to that second one, because it is the real story of how a modern district council spends.
@@ -90,21 +91,21 @@ The £38 million splits almost evenly between two very different kinds of money.
 <div class="viz-label teal">By type, and by quarter</div>
 <div style="display:grid; gap:14px;">
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Revenue (running services)</span><span class="text-teal text-bold">£20.72m</span></div>
+<div class="viz-row"><span class="text-white text-bold">Revenue (running services)</span><span class="text-teal text-bold">£20.72m</span></div>
 <div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div>
 </div>
 <div>
-<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span class="text-white text-bold">Capital (building &amp; investment)</span><span style="color:#ff9f0a;font-weight:700;">£17.32m</span></div>
+<div class="viz-row"><span class="text-white text-bold">Capital (building &amp; investment)</span><span class="text-orange" style="font-weight:700;">£17.32m</span></div>
 <div class="viz-reform-bar"><div class="fill amber" style="width:84%;"></div></div>
 </div>
 </div>
 <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; text-align:center;">
-<div><div class="text-white text-bold" style="font-size:1.05rem;">£9.14m</div><div class="text-dim" style="font-size:0.72rem;">Q1 Apr-Jun</div></div>
-<div><div class="text-white text-bold" style="font-size:1.05rem;">£10.77m</div><div class="text-dim" style="font-size:0.72rem;">Q2 Jul-Sep</div></div>
-<div><div class="text-white text-bold" style="font-size:1.05rem;">£8.01m</div><div class="text-dim" style="font-size:0.72rem;">Q3 Oct-Dec</div></div>
-<div><div class="text-white text-bold" style="font-size:1.05rem;">£10.14m</div><div class="text-dim" style="font-size:0.72rem;">Q4 Jan-Mar</div></div>
+<div><div class="text-white text-bold" style="font-size:1.05rem;">£9.14m</div><div class="text-dim" style="font-size:0.875rem;">Q1 Apr-Jun</div></div>
+<div><div class="text-white text-bold" style="font-size:1.05rem;">£10.77m</div><div class="text-dim" style="font-size:0.875rem;">Q2 Jul-Sep</div></div>
+<div><div class="text-white text-bold" style="font-size:1.05rem;">£8.01m</div><div class="text-dim" style="font-size:0.875rem;">Q3 Oct-Dec</div></div>
+<div><div class="text-white text-bold" style="font-size:1.05rem;">£10.14m</div><div class="text-dim" style="font-size:0.875rem;">Q4 Jan-Mar</div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 16px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. Three treasury payments totalling £11,450 sit outside the capital/revenue split.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:16px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. Three treasury payments totalling £11,450 sit outside the capital/revenue split.</div>
 </div>
 
 ## The biggest suppliers
@@ -113,19 +114,19 @@ Of the 843 suppliers paid, a handful take a very large share. These are the ten 
 
 <div class="viz-panel">
 <div class="viz-label teal">Top 10 suppliers by total paid, 2025/26 (payments of £500 or more)</div>
-<div style="display: grid; gap: 10px;">
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">FCC Environment / Urbaser</span><span class="text-bold" style="color:#12b6cf;">£3.21m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white text-bold">Liberata UK</span><span class="text-bold" style="color:#12b6cf;">£3.06m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:95%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">FCC Recycling</span><span style="color:#12b6cf;font-weight:700;">£2.44m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:76%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Burnley Leisure</span><span style="color:#ff9f0a;font-weight:700;">£1.89m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:59%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-white">Barnfield Investment Properties</span><span style="color:#ff9f0a;font-weight:700;">£1.58m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:49%;"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Cemplas Waterproofing</span><span class="text-muted">£1.30m</span></div><div class="viz-reform-bar"><div class="fill" style="width:40%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Geoffrey Robinson Ltd</span><span class="text-muted">£0.75m</span></div><div class="viz-reform-bar"><div class="fill" style="width:24%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">Calico Enterprise</span><span class="text-muted">£0.73m</span></div><div class="viz-reform-bar"><div class="fill" style="width:23%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">FCC Waste Management</span><span class="text-muted">£0.67m</span></div><div class="viz-reform-bar"><div class="fill" style="width:21%; background:rgba(255,255,255,0.22);"></div></div></div>
-<div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span class="text-muted">EDF Energy</span><span class="text-muted">£0.67m</span></div><div class="viz-reform-bar"><div class="fill" style="width:21%; background:rgba(255,255,255,0.22);"></div></div></div>
+<div style="display:grid; gap:10px;">
+<div><div class="viz-row"><span class="text-white text-bold">FCC Environment / Urbaser</span><span class="text-bold text-teal">£3.21m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:100%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white text-bold">Liberata UK</span><span class="text-bold text-teal">£3.06m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:95%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">FCC Recycling</span><span class="text-teal" style="font-weight:700;">£2.44m</span></div><div class="viz-reform-bar"><div class="fill teal" style="width:76%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Burnley Leisure</span><span class="text-orange" style="font-weight:700;">£1.89m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:59%;"></div></div></div>
+<div><div class="viz-row"><span class="text-white">Barnfield Investment Properties</span><span class="text-orange" style="font-weight:700;">£1.58m</span></div><div class="viz-reform-bar"><div class="fill amber" style="width:49%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Cemplas Waterproofing</span><span class="text-muted">£1.30m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:40%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Geoffrey Robinson Ltd</span><span class="text-muted">£0.75m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:24%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">Calico Enterprise</span><span class="text-muted">£0.73m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:23%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">FCC Waste Management</span><span class="text-muted">£0.67m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:21%;"></div></div></div>
+<div><div class="viz-row"><span class="text-muted">EDF Energy</span><span class="text-muted">£0.67m</span></div><div class="viz-reform-bar"><div class="fill neutral" style="width:21%;"></div></div></div>
 </div>
-<div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. Supplier totals combine a firm's payments across the year.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:14px;">Source: Burnley Borough Council, "spend over £500" data, 2025/26. Supplier totals combine a firm's payments across the year.</div>
 </div>
 
 Three of those ten names are the same operation. **FCC Environment, FCC Recycling and FCC Waste Management together took £6.3 million**, which makes the company that empties Burnley's bins and cleans its streets the council's single biggest supplier relationship by a distance. That work has been contracted out since 1995; the firm that held it as Urbaser was bought by FCC, and the contract ran to the end of March 2026, which is why the year's two largest single payments, £785,397 and £420,036, are capital fleet payments to FCC Recycling in the final month. A new eight-year waste contract is being let to start in April 2026, so this is precisely the moment that £6 million-a-year relationship should be under the closest scrutiny.
