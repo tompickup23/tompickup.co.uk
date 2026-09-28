@@ -1,10 +1,10 @@
 {
  "$meta": {
   "generated": "by scripts/lgr_build.py from the canonical dataset in src/data/lgr/",
-  "authoritiesNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement) \u2014 see basis per entry.",
+  "authoritiesNote": "Net revenue budget as adopted, per each council's own budget papers; bases differ slightly between councils (net revenue expenditure vs budget requirement); see basis per entry.",
   "bandDNote": "Council's own Band D element only (excl. police \u00a3292.40, fire \u00a394.73, parish precepts). District residents also pay the LCC county precept.",
   "metricsNote": "Population and place indicators: ONS Census 2021 and official statistics via the ukdemographics data platform (extracted 2026-07).",
-  "licence": "Open data \u2014 figures traceable to the cited public sources; verify against the primary source before formal use.",
+  "licence": "Open data: figures traceable to the cited public sources; verify against the primary source before formal use.",
   "site": "https://tompickup.co.uk/lgr/"
  },
  "decision": {
@@ -737,7 +737,7 @@
      "note": "Self-funded from county reserves; ~\u00a36m spent by mid-2023, no consolidated outturn published"
     },
     "savings": {
-     "projected": "\u00a330\u201370m/yr business case",
+     "projected": "\u00a330m to \u00a370m/yr business case",
      "realised": "\u00a33.1m in year one; savings back-loaded, ~\u00a330m year-one shortfall"
     },
     "notable": "Completed pay/job evaluation BEFORE vesting, the only case to avoid legacy terms-and-conditions drift",
@@ -783,7 +783,7 @@
   },
   "equalPay": {
    "birmingham": {
-    "liability": "\u00a3650m\u2013\u00a3760m announced June 2023, accruing \u00a35\u201314m/month, on top of ~\u00a31.1bn already paid; s114 notice 5 Sep 2023",
+    "liability": "\u00a3650m to \u00a3760m announced June 2023, accruing \u00a35m to \u00a314m a month, on top of ~\u00a31.1bn already paid; s114 notice 5 Sep 2023",
     "confidence": "high"
    },
    "cumbriaClaim": {
@@ -1219,6 +1219,319 @@
     ]
    }
   ]
+ },
+ "paper": {
+  "$meta": {
+   "citation": "Pickup, T. (2026). The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions. Working paper, v3.1. Zenodo.",
+   "doi": "10.5281/zenodo.23016761",
+   "doiUrl": "https://doi.org/10.5281/zenodo.23016761",
+   "record": "https://zenodo.org/records/23016761",
+   "file": "zen.zip",
+   "fileMd5": "ec718021205d5f70695caa59fd156bd3",
+   "published": "2026-09-28",
+   "tableSource": "derived/paper_tables.md, Table 8a",
+   "figureSource": "derived/paper_figures.json",
+   "peerReviewed": false,
+   "note": "Working paper, not peer reviewed. Steady-state net annual position and ten-year NPV at 3.5% (2024-25 prices), for 2, 3, 4 and 5 unitaries. Structural effects only: transformation savings are excluded. The author is a Cabinet member of Lancashire County Council, which proposed two unitaries; see the paper's Declaration of Interests."
+  },
+  "configurations": [
+   "2UA",
+   "3UA",
+   "4UA",
+   "5UA"
+  ],
+  "rows": [
+   {
+    "label": "Central case",
+    "paperLabel": "Central: Option 2 overhead, people services estimated",
+    "netAnnual": [
+     "\u00a375.9M",
+     "\u00a331.7M",
+     "\u2212\u00a32.6M",
+     "\u2212\u00a333.3M"
+    ],
+    "tenYearNpv": [
+     "\u00a3491.6M",
+     "\u00a3135.4M",
+     "\u2212\u00a3140.5M",
+     "\u2212\u00a3389.1M"
+    ],
+    "payback": [
+     "1.8",
+     "4.2",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Pooled merger slope for the overhead (Option 1)",
+    "paperLabel": "Option 1 overhead (pooled merger slope)",
+    "netAnnual": [
+     "\u00a357.5M",
+     "\u00a315.4M",
+     "\u2212\u00a316.9M",
+     "\u2212\u00a345.8M"
+    ],
+    "tenYearNpv": [
+     "\u00a3354.8M",
+     "\u00a314.5M",
+     "\u2212\u00a3247.3M",
+     "\u2212\u00a3482.3M"
+    ],
+    "payback": [
+     "2.2",
+     "7.6",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Newton's assumption on care placements",
+    "paperLabel": "Newton on its own scope (1% per 200,000 on placement spend)",
+    "netAnnual": [
+     "\u00a369.3M",
+     "\u00a318.8M",
+     "\u2212\u00a318.6M",
+     "\u2212\u00a351.1M"
+    ],
+    "tenYearNpv": [
+     "\u00a3433.8M",
+     "\u00a321.6M",
+     "\u2212\u00a3282.3M",
+     "\u2212\u00a3547.2M"
+    ],
+    "payback": [
+     "2.1",
+     "7.3",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Newton's assumption on all people services",
+    "paperLabel": "Newton on all people-services spend (version 3's treatment)",
+    "netAnnual": [
+     "\u00a362.5M",
+     "\u00a33.3M",
+     "\u2212\u00a338.1M",
+     "\u2212\u00a373.3M"
+    ],
+    "tenYearNpv": [
+     "\u00a3372.6M",
+     "\u2212\u00a3114.2M",
+     "\u2212\u00a3453.0M",
+     "\u2212\u00a3741.0M"
+    ],
+    "payback": [
+     "2.3",
+     "none",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Option 1 and Newton's assumption on placements",
+    "paperLabel": "Option 1 and Newton on placements",
+    "netAnnual": [
+     "\u00a350.9M",
+     "\u00a32.5M",
+     "\u2212\u00a333.0M",
+     "\u2212\u00a363.7M"
+    ],
+    "tenYearNpv": [
+     "\u00a3297.0M",
+     "\u2212\u00a399.3M",
+     "\u2212\u00a3389.1M",
+     "\u2212\u00a3640.4M"
+    ],
+    "payback": [
+     "2.5",
+     "none",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Option 1 and Newton's assumption on all people services",
+    "paperLabel": "Option 1 and Newton on all spend",
+    "netAnnual": [
+     "\u00a344.1M",
+     "\u2212\u00a313.0M",
+     "\u2212\u00a352.4M",
+     "\u2212\u00a385.8M"
+    ],
+    "tenYearNpv": [
+     "\u00a3235.9M",
+     "\u2212\u00a3235.2M",
+     "\u2212\u00a3559.8M",
+     "\u2212\u00a3834.2M"
+    ],
+    "payback": [
+     "2.9",
+     "none",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Without the SEN transport term",
+    "paperLabel": "SEN transport term excluded",
+    "netAnnual": [
+     "\u00a375.0M",
+     "\u00a326.3M",
+     "\u2212\u00a310.5M",
+     "\u2212\u00a343.7M"
+    ],
+    "tenYearNpv": [
+     "\u00a3484.2M",
+     "\u00a391.9M",
+     "\u2212\u00a3205.2M",
+     "\u2212\u00a3473.6M"
+    ],
+    "payback": [
+     "1.8",
+     "5.0",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "Overhead net of internal recharges (earlier definition)",
+    "paperLabel": "Netted overhead definition (central before session 6), Option 2",
+    "netAnnual": [
+     "\u00a358.1M",
+     "\u00a337.0M",
+     "\u00a320.8M",
+     "\u00a35.3M"
+    ],
+    "tenYearNpv": [
+     "\u00a3380.7M",
+     "\u00a3210.3M",
+     "\u00a380.1M",
+     "\u2212\u00a346.1M"
+    ],
+    "payback": [
+     "1.7",
+     "2.7",
+     "4.6",
+     "none"
+    ]
+   },
+   {
+    "label": "Earlier overhead definition with Option 1",
+    "paperLabel": "Netted overhead definition, Option 1",
+    "netAnnual": [
+     "\u00a337.9M",
+     "\u00a319.4M",
+     "\u00a35.5M",
+     "\u2212\u00a37.9M"
+    ],
+    "tenYearNpv": [
+     "\u00a3230.0M",
+     "\u00a379.7M",
+     "\u2212\u00a333.9M",
+     "\u2212\u00a3144.0M"
+    ],
+    "payback": [
+     "2.3",
+     "4.3",
+     "none",
+     "none"
+    ]
+   },
+   {
+    "label": "With the direct-payments term",
+    "paperLabel": "Direct payments term included, 65 and over, at its 2024-25 estimate (central under rule R3a, a sensitivity row under rule R3b)",
+    "netAnnual": [
+     "\u00a375.7M",
+     "\u00a334.2M",
+     "\u00a31.5M",
+     "\u2212\u00a327.8M"
+    ],
+    "tenYearNpv": [
+     "\u00a3490.5M",
+     "\u00a3158.5M",
+     "\u2212\u00a3103.4M",
+     "\u2212\u00a3339.6M"
+    ],
+    "payback": [
+     "1.8",
+     "3.8",
+     "none",
+     "none"
+    ]
+   }
+  ],
+  "monteCarlo": [
+   {
+    "paperLabel": "Monte Carlo, Option 2 (central)",
+    "pNetPositive": [
+     "100%",
+     "100%",
+     "46%",
+     "3%"
+    ],
+    "pNpvPositive": [
+     "100%",
+     "88%",
+     "10%",
+     "0%"
+    ]
+   },
+   {
+    "paperLabel": "Monte Carlo, Option 1",
+    "pNetPositive": [
+     "98%",
+     "70%",
+     "29%",
+     "9%"
+    ],
+    "pNpvPositive": [
+     "96%",
+     "49%",
+     "14%",
+     "3%"
+    ]
+   },
+   {
+    "paperLabel": "Monte Carlo, netted definition, Option 2",
+    "pNetPositive": [
+     "100%",
+     "100%",
+     "99%",
+     "74%"
+    ],
+    "pNpvPositive": [
+     "100%",
+     "100%",
+     "85%",
+     "24%"
+    ]
+   },
+   {
+    "paperLabel": "Monte Carlo, netted definition, Option 1",
+    "pNetPositive": [
+     "99%",
+     "87%",
+     "65%",
+     "38%"
+    ],
+    "pNpvPositive": [
+     "94%",
+     "71%",
+     "41%",
+     "18%"
+    ]
+   }
+  ],
+  "headline": {
+   "transitionRange": "\u00a361.4M to \u00a366.5M",
+   "dupPerAuthority4UA": "\u00a325.4M",
+   "dupTotal4UA": "\u00a397.5M",
+   "breakeven4UA": "\u00a324.8M",
+   "net4UA": "\u2212\u00a32.6M",
+   "npv4UA": "\u2212\u00a3140.5M"
+  }
  },
  "authorities": {
   "Lancaster": {

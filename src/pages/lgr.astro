@@ -104,6 +104,11 @@ function deltaInfo(key: string, val: number, need: string) {
   return { diff, tone };
 }
 const MODEL_JSON = JSON.stringify(MODEL);
+// The working paper's results (src/data/lgr/paper.json, imported as printed from the Zenodo deposit).
+const PAPER = model.paper;
+const MC_CENTRAL = PAPER.monteCarlo.find((m) => m.paperLabel.startsWith('Monte Carlo, Option 2'));
+const MC_OPT1 = PAPER.monteCarlo.find((m) => m.paperLabel === 'Monte Carlo, Option 1');
+const COLS = ['Two councils', 'Three', 'Four (chosen)', 'Five'];
 const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA });
 ---
 
@@ -561,6 +566,60 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </p>
     </section>
 
+    <!-- The working paper -->
+    <section class="doge-section" id="paper">
+      <h2 class="doge-h2">What an open model of the structural effects finds</h2>
+      <p class="doge-note">
+        A working paper models the lasting effect of each option on council budgets. It uses published data only.
+        Its data and code are open, so anyone can rerun it. It counts structural savings and costs, such as merged
+        back offices and new leadership teams. It leaves out savings from redesigning services, because any
+        structure could make those. It was deposited on 28 September 2026 and has not been peer reviewed
+        (<a href={PAPER.$meta.doiUrl}>doi.org/{PAPER.$meta.doi}</a>).
+      </p>
+      <p class="doge-note">
+        Its central case puts the four-council option at <strong>{PAPER.headline.net4UA} a year</strong> once
+        savings are fully realised. Over ten years, after transition costs, it comes to
+        <strong>{PAPER.headline.npv4UA}</strong>. That is close to break-even. Whether it is above or below zero
+        depends on the method. The tables show every alternative the paper reports, with the same weight as its
+        central case.
+      </p>
+      <h3 class="doge-h2" style="font-size:1.05rem; margin-top:1.5rem;">Net position a year, once savings are fully realised</h3>
+      <div class="lgr-cmp-wrap">
+        <table class="lgr-cmp lgr-cmp-even">
+          <thead><tr><th class="lgr-cmp-rowh">Method</th>{COLS.map((c) => <th>{c}</th>)}</tr></thead>
+          <tbody>
+            {PAPER.rows.map((r) => <tr><td class="lgr-cmp-rowh">{r.label}</td>{r.netAnnual.map((v) => <td>{v}</td>)}</tr>)}
+          </tbody>
+        </table>
+      </div>
+      <h3 class="doge-h2" style="font-size:1.05rem; margin-top:1.5rem;">Value over ten years, after transition costs</h3>
+      <div class="lgr-cmp-wrap">
+        <table class="lgr-cmp lgr-cmp-even">
+          <thead><tr><th class="lgr-cmp-rowh">Method</th>{COLS.map((c) => <th>{c}</th>)}</tr></thead>
+          <tbody>
+            {PAPER.rows.map((r) => <tr><td class="lgr-cmp-rowh">{r.label}</td>{r.tenYearNpv.map((v) => <td>{v}</td>)}</tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p class="doge-note" style="margin-top:0.9rem;">
+        Two councils come out ahead in every row, and five behind in almost every row. The order never changes,
+        but the paper notes that the model partly builds that order in. The estimates themselves are uncertain.
+        Allowing for that, the four-council option is positive in {MC_CENTRAL.pNetPositive[2]} of simulations on
+        the central case, and in {MC_OPT1.pNetPositive[2]} with the pooled slope.
+      </p>
+      <p class="doge-note">
+        This is not directly comparable with the scenarios further down. Those start from the proposers' claimed
+        £{model.costsVsSavings.fullRunRate_m}m a year, most of which is savings from redesigning services. The paper
+        leaves those savings out.
+      </p>
+      <p class="doge-note" style="font-size:0.78rem;">
+        Method: figures are copied as printed from Table 8a of the deposited paper, in 2024-25 prices, with the
+        ten-year value discounted at 3.5%. The author is a Cabinet member of Lancashire County Council, which
+        proposed two councils. The paper declares this interest and publishes its review records. The same
+        figures are in the open data feed.
+      </p>
+    </section>
+
     <!-- Politics -->
     <section class="doge-section">
       <h2 class="doge-h2">The politics of reorganisation</h2>
@@ -814,7 +873,9 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         Precedent figures come from MHCLG decision documents, council business cases, KPMG/CIPFA closure and
         assurance reviews, Hansard and audited accounts. Lower-tier political control is a May 2026 snapshot from
         the elections data platform (indicative at status level). Verify against the primary source before any
-        formal use. <strong>The full model</strong>, every input, its source and its confidence rating, <strong>is published as
+        formal use. The structural model is the working paper: Pickup, T. (2026), <em>The Financial Case for Local
+        Government Reorganisation in Lancashire</em>, working paper v3.1, Zenodo,
+        <a href={PAPER.$meta.doiUrl}>{PAPER.$meta.doiUrl}</a>. <strong>The full model</strong>, every input, its source and its confidence rating, <strong>is published as
         open data at <a href="/data/lgr-model.json">/data/lgr-model.json</a>.</strong>
       </p>
     </section>
@@ -882,6 +943,9 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   .lgr-cmp .lgr-cmp-rowh { text-align: left; color: #99a2ad; font-weight: 500; }
   .lgr-cmp tbody tr:last-child td { border-bottom: none; }
   .lgr-cmp tbody tr:nth-child(2) td { color: #fff; font-weight: 700; }
+  /* the paper's tables: every row with the same weight (equal prominence) */
+  .lgr-cmp-even tbody tr:nth-child(2) td { color: #e9edf2; font-weight: 400; }
+  .lgr-cmp-even tbody tr:nth-child(2) td.lgr-cmp-rowh { color: #99a2ad; font-weight: 500; }
   .lgr-mx-hint { font-size: 0.8rem; color: #8e8e93; margin: 1rem 0 0.6rem; text-align: center; }
 
   /* ---- Interactive model explorer ---- */

@@ -32,6 +32,8 @@ cca = json.loads((DATA / "cca.json").read_text())
 pensions = json.loads((DATA / "pensions.json").read_text())
 government = json.loads((DATA / "government.json").read_text())
 scen_in = json.loads((DATA / "scenarios.json").read_text())
+# The working paper's results, imported as printed from the deposit on Zenodo by scripts/lgr_paper_import.py
+paper = json.loads((DATA / "paper.json").read_text())
 
 A = auth["authorities"]
 LCC_BUDGET = county["netBudget2627_m"]
@@ -73,7 +75,7 @@ for uname, u in decision["unitaries"].items():
     own_total = round(sum(o["m"] for o in owns), 1)
     combined = round(app_pop + own_total, 1)
 
-    # Balance sheet brought by the constituent councils (LCC's excluded — its
+    # Balance sheet brought by the constituent councils (LCC's excluded: its
     # county-wide reserves/debt split across successors is undetermined).
     reserves = round(sum(A[n].get("reserves_m", 0) for n in members), 1)
     debt = round(sum(A[n].get("debt_m_2026", A[n].get("debt_m", 0)) for n in members), 1)
@@ -140,7 +142,7 @@ _dist = sum(A[n]["taxBase2627"] for n in all_names if A[n]["type"] == "district"
 assert abs(_dist - county["taxBase"]) < 5, (
     f"district tax bases sum to {_dist:,.2f}, LCC has {county['taxBase']:,.2f}")
 
-# integrity checks — fail the build rather than publish a bad sum
+# integrity checks: fail the build rather than publish a bad sum
 assert abs(sum(x["countyApportioned"]["population"] for x in unitaries) - LCC_BUDGET) < 0.5
 assert sum(x["population"] for x in unitaries) == sum(A[n]["population"] for n in all_names)
 
@@ -200,10 +202,11 @@ for s in scen_in["scenarios"]:
 model["costsVsSavings"] = {"$meta": scen_in["$meta"], "fullRunRate_m": run_rate,
                            "runRateNote": scen_in["runRateNote"], "scenarios": scen_out}
 
+model["paper"] = paper
 (DATA / "model.json").write_text(json.dumps(model, indent=1))
 
 public = dict(model)
-public["$meta"] = dict(model["$meta"], licence="Open data — figures traceable to the cited public sources; verify against the primary source before formal use.",
+public["$meta"] = dict(model["$meta"], licence="Open data: figures traceable to the cited public sources; verify against the primary source before formal use.",
                        site="https://tompickup.co.uk/lgr/")
 public["authorities"] = A
 pub_path = ROOT / "public" / "data" / "lgr-model.json"
