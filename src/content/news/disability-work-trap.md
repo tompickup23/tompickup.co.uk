@@ -85,7 +85,7 @@ To do most jobs you have to physically get to them, and a disabled person who ne
 
 So a disabled adult who has beaten the savings trap, the reassessment fear and the Access to Work queue can still be stopped at the front door, because there is no accessible vehicle free to take them to work. Worse, the low-margin contracts councils are forced to offer for school transport are driving accessible-vehicle operators out of the wider market altogether. The state has, without meaning to, cornered the supply.
 
-**Let me be clear about school transport itself.** Getting disabled children safely to school is a lifeline and it must be protected. The point is not that we do too much for those children. It is that an inherited, statutory system costs a fortune (the national SEND transport bill is heading toward £2 billion, far more per child than mainstream) *and* has the perverse side-effect of stranding disabled adults who want to work. A better-designed system would serve the children **and** free up vehicles the rest of the day.
+**Let me be clear about school transport itself.** Getting disabled children safely to school is a lifeline and it must be protected. The point is not that we do too much for those children. It is that an inherited, statutory system costs a fortune (the national SEND transport bill is heading towards £2 billion, far more per child than mainstream) *and* has the perverse side-effect of stranding disabled adults who want to work. A better-designed system would serve the children **and** free up vehicles the rest of the day.
 
 ---
 
@@ -121,7 +121,7 @@ My friend does not want sympathy, and he does not want a handout. He wants a job
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **"Want to work" figures:** [DWP](https://www.gov.uk/government/organisations/department-for-work-pensions)'s survey of health and disability benefit claimants (37% held back by fear of losing benefits; 50% fear losing them if work fails). Learning-disability employment (86% want work, 5% have it) is from Mencap, citing ONS. The disability employment gap is from the House of Commons Library.
+- **"Want to work" figures:** [DWP](https://www.gov.uk/government/publications/work-aspirations-and-support-needs-of-health-and-disability-customers-final-findings-report)'s survey of health and disability benefit claimants (37% held back by fear of losing benefits; 50% fear losing them if work fails). Learning-disability employment (86% want work, 5% have it) is from Mencap, citing ONS. The disability employment gap is from the House of Commons Library.
 - **The £16,000 savings limit** and the "one penny more" example are from gov.uk (Universal Credit capital rules) and the Resolution Foundation's 2025 analysis, which confirms the limit has been frozen since 2006. PIP, DLA and contributory ESA are not means-tested.
 - **The Right to Try Guarantee** is government legislation in force from spring 2026.
 - **Access to Work:** 66,749 awaiting a decision (DWP, February 2026), waiting times and the 18-month clearance estimate from the National Audit Office and the Public Accounts Committee (2026).

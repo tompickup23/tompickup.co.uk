@@ -11,7 +11,7 @@ featured: false
 draft: false
 ---
 
-The government published its annual benefit fraud figures last month, and one number jumped out: fraud in PIP, the main disability benefit, has gone from £100 million to **£410 million** in a single year. Take that seriously. Then look at the rest of the page, because the same figures show **£6.8 billion** lost to benefit fraud in twelve months, paid out by a state that writes the cheques and then barely checks who is still entitled. That is the real scandal, and it is not mainly in PIP.
+The government published its annual benefit fraud figures in May 2026, and one number jumped out: fraud in PIP, the main disability benefit, has gone from £100 million to **£410 million** in a single year. Take that seriously. Then look at the rest of the page, because the same figures show **£6.8 billion** lost to benefit fraud in twelve months, paid out by a state that writes the cheques and then barely checks who is still entitled. That is the real scandal, and it is not mainly in PIP.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -109,7 +109,7 @@ Here is the version that holds up. PIP fraud rose, and it should be gripped at t
 
 ## Where these numbers come from
 
-You do not need this part to follow the story. It is here so the working can be checked. Everything is from one official source: the [DWP](https://www.gov.uk/government/organisations/department-for-work-pensions)'s **"Fraud and error in the benefit system, financial year ending 2026"** statistics.
+You do not need this part to follow the story. It is here so the working can be checked. Everything is from one official source: the [DWP](https://www.gov.uk/government/statistics/fraud-and-error-in-the-benefit-system-financial-year-ending-fye-2026-estimates)'s **"Fraud and error in the benefit system, financial year ending 2026"** statistics.
 
 - **PIP fraud £410m (1.4%), up from £100m (0.4%)**, with "functional needs fraud" the main driver, rising to 1.2% from 0.3%.
 - **Universal Credit overpayments 8.5%, of which fraud 6.8% (£5.4bn).**

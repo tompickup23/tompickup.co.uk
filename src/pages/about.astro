@@ -2,13 +2,71 @@
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
+import Cite from '../components/Cite.astro';
+import Sources from '../components/Sources.astro';
+import { person } from '../data/person';
+
+const title = 'About Tom Pickup | Tom Pickup';
+const description =
+  'Tom Pickup, Lancashire County Councillor for Padiham and Burnley West and Cabinet Member for Adult Social Care: career, council roles and sources.';
+
+const LCC = 'https://council.lancashire.gov.uk';
+
+/* Numbered in the order they are first cited on the page. */
+const sources = [
+  { text: "Dunnockshaw Parish Council, 'Your Councillors', parish councillors list, checked 28 September 2026", url: 'https://dunnockshawpc.weebly.com/your-councillors.html' },
+  { text: "Lancashire County Council, 'Change to a Cabinet Appointment', Leader's decision, 20 May 2026", url: `${LCC}/ieDecisionDetails.aspx?ID=29999` },
+  { text: "Ministry of Housing, Communities and Local Government, 'Local authority revenue expenditure and financing England: 2024 to 2025 individual local authority data - outturn', RSX, Adult Social Care Total Expenditure (C3), updated 11 June 2026", url: 'https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-2024-to-2025-individual-local-authority-data-outturn' },
+  { text: "Lancashire County Council, 'Appointment of a Cabinet, Lead Members, Champions and Other Positions', report, p. 3, 22 May 2025", url: `${LCC}/documents/s256315/Report.pdf` },
+  { text: "Lancashire County Council, 'The County Council's Financial Position - 2025/26 Outturn', Cabinet report, p. 1, 2 July 2026", url: `${LCC}/documents/s281026/Report.pdf` },
+  { text: 'Lancashire County Council, Cabinet minutes, p. 1, 4 June 2026', url: `${LCC}/documents/g16271/Printed%20minutes%2004th-Jun-2026%2014.00%20Cabinet.pdf?T=1` },
+  { text: 'Lancashire County Council, Company Member Cabinet Committee minutes, p. 1, 26 June 2025', url: `${LCC}/documents/g15346/Printed%20minutes%2026th-Jun-2025%2011.00%20Company%20Member%20Cabinet%20Committee.pdf?T=1` },
+  { text: 'Lancashire Combined County Authority, Audit and Governance Committee minutes, p. 2, 22 September 2025', url: `${LCC}/documents/g15780/Printed%20minutes%2022nd-Sep-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Audit%20and%20Governance%20Co.pdf?T=1` },
+  { text: "Lancashire County Council, 'Lancashire Health and Wellbeing Board Membership', Full Council, Appendix A, p. 1, 16 July 2026", url: `${LCC}/documents/s282483/Appendix%20A.pdf` },
+  { text: "Lancashire County Council, 'List of Outside Bodies and Appointments', Cabinet, Appendix A, p. 3, 5 June 2025", url: `${LCC}/documents/s256601/Appendix%20A.pdf` },
+  { text: 'Lancashire Combined County Authority, Overview and Scrutiny Committee minutes, p. 1, 28 July 2025', url: `${LCC}/documents/g15778/Printed%20minutes%2028th-Jul-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Overview%20and%20Scrutiny%20C.pdf?T=1` },
+  { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 1, 23 January 2026', url: `${LCC}/documents/g16599/Printed%20minutes%2023rd-Jan-2026%2014.00%20Pension%20Fund%20Committee.pdf?T=1` },
+  { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 2, 19 June 2026', url: `${LCC}/documents/g16280/Printed%20minutes%2019th-Jun-2026%2010.00%20Pension%20Fund%20Committee.pdf?T=1` },
+];
+
+/* Each role links to its council page; `cites` are numbers in the list above. */
+type Role = {
+  name: string;
+  url: string;
+  detail: string;
+  cites?: number[];
+};
+
+const current: Role[] = [
+  { name: 'Cabinet', url: `${LCC}/mgCommitteeDetails.aspx?ID=122`, detail: 'Cabinet Member for Adult Social Care, 2026/27.', cites: [2, 6] },
+  { name: 'Company Member Cabinet Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1876`, detail: 'Member since 2025.', cites: [7] },
+  { name: 'Lancashire Combined County Authority Audit and Governance Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1989`, detail: 'Member since 2025.', cites: [8] },
+  { name: 'Lancashire Health and Wellbeing Board', url: `${LCC}/mgCommitteeDetails.aspx?ID=825`, detail: 'Member, 2026/27.', cites: [9] },
+  { name: 'Local Councillor Decision, Padiham and Burnley West', url: `${LCC}/mgExecPostDetails.aspx?ID=363`, detail: 'Decision maker for the division.' },
+  { name: 'Edward Stocks Massey Bequest Fund Joint Advisory Committee', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=589`, detail: 'Chair.', cites: [10] },
+  { name: 'Arthur Edmondson Quinn Bequest', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=433`, detail: 'Council representative.' },
+  { name: 'Dunnockshaw & Clowbridge Parish Council', url: 'https://burnley.moderngov.co.uk/mgParishCouncilDetails.aspx?ID=181', detail: 'Parish Councillor.', cites: [1] },
+];
+
+const previous: Role[] = [
+  { name: 'Lead Member for Finance and Resources', url: `${LCC}/ieDecisionDetails.aspx?ID=27678`, detail: '2025/26.', cites: [4] },
+  { name: 'Lancashire Combined County Authority Overview and Scrutiny Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1990`, detail: 'Member, 2025/26.', cites: [11] },
+  { name: 'Pension Fund Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=183`, detail: 'Member, 2026.', cites: [12, 13] },
+];
+
+const schema = {
+  '@type': 'ProfilePage',
+  '@id': 'https://tompickup.co.uk/about/',
+  url: 'https://tompickup.co.uk/about/',
+  name: title,
+  description,
+  inLanguage: 'en-GB',
+  isPartOf: { '@id': 'https://tompickup.co.uk/#website' },
+  mainEntity: person,
+};
 ---
 
-<Layout
-  title="About | Tom Pickup"
-  description="About Tom Pickup."
->
-  <!-- Section 1: Page Header + Bio -->
+<Layout title={title} description={description} schema={schema} breadcrumbLabel="About">
   <section class="page-header-section">
     <div class="container">
       <div class="bio-grid">
@@ -24,18 +82,27 @@ import EmailSignup from '../components/EmailSignup.astro';
 
           <div class="bio-body">
             <p>
-              I'm the Reform UK county councillor for <strong>Padiham and Burnley West</strong>,
-              elected to Lancashire County Council in May 2025. Since May 2026 I've served as the
-              council's <strong>Cabinet Member for Adult Social Care</strong>.
+              I'm the Reform UK county councillor for Padiham and Burnley West, elected to
+              Lancashire County Council in 2025, and a parish councillor for Dunnockshaw &amp;
+              Clowbridge.<Cite n={1} /> I'm the council's Cabinet Member for Adult Social Care
+              for 2026/27,<Cite n={2} /> the third-biggest adult social care portfolio in
+              England: in 2024/25 the council's gross spending on adult social care was
+              &pound;829.3 million, behind only Kent and Essex.<Cite n={3} />
             </p>
             <p>
-              I grew up in this area, and I care about transparency, accountability, and getting
-              value out of public money. Before Adult Social Care I led on the council's finances
-              and efficiency. Whatever the brief, the approach stays the same.
+              I was Lead Member for Finance and Resources in 2025/26.<Cite n={4} /> That year
+              the council's forecast overspend fell from &pound;27.9 million at the first quarter
+              to a final outturn of &pound;2.99 million.<Cite n={5} />
             </p>
             <p>
-              I dig into the numbers and I ask the questions that need asking. The people paying
-              the bills have a right to know where their money goes.
+              Before elected office I was a consultant to businesses, helping them cut costs and
+              raise profits through software, energy, procurement and more. I also worked in
+              procurement inside Lancashire County Council, on construction and assets.
+            </p>
+            <p>
+              Since 2025 I've built a set of open-source public data sites, listed on the
+              <a href="/projects/">projects page</a>, and written an independent working paper on
+              the financial modelling of local government reorganisation in Lancashire.
             </p>
           </div>
         </div>
@@ -43,48 +110,40 @@ import EmailSignup from '../components/EmailSignup.astro';
     </div>
   </section>
 
-  <!-- Section 2: Council Roles -->
   <section class="roles-section">
     <div class="container">
       <ScrollReveal>
         <div class="roles-card card">
-          <h2>My Council Work</h2>
+          <h2>Committees and appointments</h2>
           <p class="roles-intro">
-            Alongside the Adult Social Care portfolio, my work at County Hall runs across
-            these committees and appointments.
+            Each entry links to the council's record. My full member profile is on
+            <a href="https://council.lancashire.gov.uk/mgUserInfo.aspx?UID=33781">Lancashire County Council's website</a>.
           </p>
+
+          <h3 class="roles-subhead">Current</h3>
           <ul class="roles-list">
-            <li>
-              <strong>Cabinet</strong>
-              <span>Cabinet Member for Adult Social Care.</span>
-            </li>
-            <li>
-              <strong>Company Member Cabinet Committee</strong>
-              <span>The council's shareholder role in the companies it owns.</span>
-            </li>
-            <li>
-              <strong>Lancashire Health and Wellbeing Board</strong>
-              <span>Where the council and the NHS set shared health priorities.</span>
-            </li>
-            <li>
-              <strong>Edward Stocks Massey Bequest Fund</strong>
-              <span>Joint Advisory Committee, awarding grants for the benefit of Burnley.</span>
-            </li>
-            <li>
-              <strong>Arthur Edmondson Quinn Bequest</strong>
-              <span>A further Burnley charitable trust the council nominates to.</span>
-            </li>
-            <li>
-              <strong>Full Council</strong>
-              <span>County Councillor for the Padiham and Burnley West division.</span>
-            </li>
+            {current.map((role) => (
+              <li>
+                <strong><a href={role.url}>{role.name}</a></strong>
+                <span>{role.detail}{role.cites?.map((n) => <Cite n={n} />)}</span>
+              </li>
+            ))}
+          </ul>
+
+          <h3 class="roles-subhead">Previous</h3>
+          <ul class="roles-list">
+            {previous.map((role) => (
+              <li>
+                <strong><a href={role.url}>{role.name}</a></strong>
+                <span>{role.detail}{role.cites?.map((n) => <Cite n={n} />)}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </ScrollReveal>
     </div>
   </section>
 
-  <!-- Section 2: Accessibility Statement -->
   <section class="accessibility-section" id="accessibility">
     <div class="container-narrow">
       <ScrollReveal>
@@ -106,10 +165,15 @@ import EmailSignup from '../components/EmailSignup.astro';
     </div>
   </section>
 
-  <!-- Section 3: Email signup -->
   <section class="signup-section">
     <div class="container-narrow">
       <EmailSignup variant="inline" />
+    </div>
+  </section>
+
+  <section class="sources-section">
+    <div class="container">
+      <Sources items={sources} />
     </div>
   </section>
 </Layout>
@@ -186,6 +250,17 @@ import EmailSignup from '../components/EmailSignup.astro';
     margin-bottom: 0;
   }
 
+  .bio-body a,
+  .roles-card a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .bio-body a:hover,
+  .roles-card a:hover {
+    text-decoration: underline;
+  }
+
   /* ---- Council Roles ---- */
   .roles-section {
     padding: 0 0 var(--space-xl);
@@ -201,11 +276,20 @@ import EmailSignup from '../components/EmailSignup.astro';
     margin-bottom: var(--space-sm);
   }
 
+  .roles-subhead {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: var(--space-lg) 0 var(--space-md);
+  }
+
   .roles-intro {
     font-size: 0.9375rem;
     color: var(--text-secondary);
     line-height: 1.7;
-    margin-bottom: var(--space-lg);
+    margin-bottom: 0;
   }
 
   .roles-list {
@@ -242,6 +326,10 @@ import EmailSignup from '../components/EmailSignup.astro';
     line-height: 1.4;
   }
 
+  .roles-list strong a {
+    color: var(--text-primary);
+  }
+
   .roles-list span {
     display: block;
     font-size: 0.875rem;
@@ -257,6 +345,10 @@ import EmailSignup from '../components/EmailSignup.astro';
 
   /* ---- Email signup ---- */
   .signup-section {
+    padding: 0 0 var(--space-xl);
+  }
+
+  .sources-section {
     padding: 0 0 var(--space-2xl);
   }
 

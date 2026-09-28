@@ -4,17 +4,12 @@
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
 **Stack**: Astro 5 (static output) | no runtime server
-**Hosting**: GitHub Pages. Verified 27 September 2026 via both repositories' Pages APIs:
-`tompickup23/tompickup.co.uk` owns the custom domain and uses workflow publishing.
-The separate `tompickup23.github.io` repository remains a legacy publishing mirror.
-**Deploying**: `.github/workflows/deploy.yml` now deploys source `main` directly using
-`actions/deploy-pages@v4`; commit `dde8c2e` replaced the expired PAT procedure.
-A source push to main CAN publish. Validate an isolated release tree before pushing.
-When updating the legacy mirror, follow the manual rsync procedure but preserve its
-CLAUDE.md/AGENTS.md symlink and any unrelated mirrored projects. The mirror deliberately
-removed CNAME in commit `0141bb5`; exclude CNAME from rsync to avoid reclaiming the domain.
-Verify public URLs and the workflow result; a push alone does not prove delivery.
-**Automation**: 3 GitHub Actions (deploy, data-etl, observatory-schemas)
+**Hosting**: GitHub Pages, deployed from THIS repo by `.github/workflows/deploy.yml`
+(since `dde8c2e`). Every push to `main` builds, runs the guards and the house-style gate,
+and publishes. **Merging to main is deploying.** Work on a branch; the merge is the release.
+The old `tompickup23/tompickup23.github.io` mirror and the `/publish-tompickup` rsync flow
+are superseded (checked 28 Sep 2026: last three deploy runs succeeded from push).
+**Automation**: 3 GitHub Actions (deploy on push to main; data-etl, manual only since 28 Sep 2026; observatory-schemas)
 **Branch**: main
 
 ## Key Patterns
@@ -64,6 +59,11 @@ content on a domain that carries a councillor's name and journalism. The section
 - Full reasoning, and the outstanding Search Console steps: `docs/parked-sections.md`.
 
 It returns on its own domain, scaled UK-wide — not as a subdirectory here.
+
+## Archive (28 Sep 2026)
+Everything in `public/` ships. Files no page uses live in `archive/public/` (same paths),
+and `scripts/guard-unreferenced.mjs` fails the build if an unlinked file under
+`public/{videos,images,data}` reaches `dist/`. See `archive/README.md`.
 
 ## Rules
 - Never commit .env or secrets

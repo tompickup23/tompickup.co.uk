@@ -66,7 +66,7 @@ Start with the thing residents already feel. On the official figures, Burnley's 
 <div class="text-dim" style="font-size: 0.75rem; margin-top: 14px;">Source: ONS recorded crime, year ending March 2024. Burnley is consistently around 30% above the England rate.</div>
 </div>
 
-And it is not just numbers. East Lancashire has seen a run of serious knife attacks. In Colne, a man was jailed for stabbing a neighbour in the neck. In nearby Blackburn, a man was sentenced to **24 years for attempted murder** after a stabbing in the street. There has been a further serious incident in the area this month which is now before the courts, and which I will not say a word about while it is live. The courts are doing their part. The question is what we are doing to stop these things happening in the first place.
+And it is not just numbers. East Lancashire has seen a run of serious knife attacks. In Colne, a man was jailed for stabbing a neighbour in the neck. In nearby Blackburn, a man was sentenced to **24 years for attempted murder** after a stabbing in the street. There has been a further serious incident in the area in June 2026 which is now before the courts, and which I will not say a word about while it is live. The courts are doing their part. The question is what we are doing to stop these things happening in the first place.
 
 The scale of the problem with weapons alone is sobering. In a single week last November, Lancashire's Operation Sceptre took **1,111 knives** off the streets of the East Division that covers Burnley, and when officers test-checked twelve shops across Burnley and its neighbours, **three sold a knife to an under-age buyer**. That is exactly the patient, visible police work that prevents the next stabbing, and it only happens when there are officers to do it.
 
@@ -90,7 +90,7 @@ But "falling a bit from a high base" is not safety. Burnley still has violence a
 
 This is fixable, and it is not even complicated. It needs the will and the money.
 
-- **Put neighbourhood officers back on Burnley's streets.** Rebuild Lancashire's PCSO numbers toward where they were, and give every part of Burnley a named, visible neighbourhood team people actually recognise, not a phone queue and a website.
+- **Put neighbourhood officers back on Burnley's streets.** Rebuild Lancashire's PCSO numbers towards where they were, and give every part of Burnley a named, visible neighbourhood team people actually recognise, not a phone queue and a website.
 - **Fund it from the grant, not the precept.** Reverse the cut to the central police grant so residents stop paying more council tax every year for fewer officers. Policing a deprived town should not depend on how much more you can squeeze out of local taxpayers.
 - **Back the enforcement that works.** Operation Sceptre took over a thousand knives off our streets in a week. Keep that going all year round, with the officers and the school work to match, not as an occasional campaign.
 - **Make Burnley a priority, not an afterthought.** A town with violence 30% above average and deprivation among the worst in England should be near the front of the queue for police resources, not the back.

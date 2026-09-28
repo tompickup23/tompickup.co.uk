@@ -1,6 +1,6 @@
 ---
 title: "Questioning the Combined Authority's spending scrutiny threshold"
-date: 2026-09-27
+date: 2026-09-27T22:47:00Z
 description: "A retrospective video note on my question about the Combined Authority's £500,000 key-decision threshold."
 category: "Lancashire"
 subcategory: "Public debates"

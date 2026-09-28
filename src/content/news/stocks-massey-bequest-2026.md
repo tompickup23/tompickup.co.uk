@@ -1,6 +1,6 @@
 ---
 title: "Stocks Massey 2026: £34,000 for Burnley groups and students"
-date: 2026-09-27
+date: 2026-09-27T20:11:00Z
 description: "The 2026 Stocks Massey awards allocated £34,000 in total, supporting 18 Burnley organisations and two student scholarships for Charlie Diamond and Jonah Morgan."
 image: "/images/burnley-panorama.jpg"
 imageAlt: "A panoramic view over Burnley towards Pendle Hill and the Yorkshire Dales, photographed in 2010"

@@ -2454,7 +2454,7 @@ def main():
             print(f"    {ev['name']} ({ev['first_date']}, ~{ev['crowd']:,} crowd)")
 
     # 4. Load existing roadworks — full records for intelligent analysis
-    rw_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "roadworks.json")
+    rw_path = os.path.join(SCRIPT_DIR, "..", "archive", "public", "data", "roadworks.json")
     active_roadworks = 0
     roadworks_records = []
     try:
@@ -2484,7 +2484,7 @@ def main():
         print("\n4b. Skipping road infrastructure (--skip-infra)")
 
     # 6. Load FixMyStreet reports for defect proximity
-    fms_path = os.path.join(SCRIPT_DIR, "..", "public", "data", "fixmystreet.json")
+    fms_path = os.path.join(SCRIPT_DIR, "..", "archive", "public", "data", "fixmystreet.json")
     fms_reports = []
     try:
         with open(fms_path) as f:

@@ -7,7 +7,8 @@ import { groupNews } from '../../lib/news-categories';
 const posts = await getCollection('news', ({ data }) => !data.draft);
 const areas = groupNews(posts);
 const orderedPosts = areas.flatMap(area => area.topics.flatMap(topic => topic.posts));
-const description = 'News and investigations by Tom Pickup, organised by Burnley and Padiham, Lancashire and national issues, from public spending and housing to health and policing.';
+const description =
+  'News and investigations by Tom Pickup on Burnley and Padiham, Lancashire and national issues: public spending, housing, health and policing.';
 const schema = {
   '@type': 'CollectionPage', '@id': 'https://tompickup.co.uk/news/',
   url: 'https://tompickup.co.uk/news/', name: 'News & investigations', description,

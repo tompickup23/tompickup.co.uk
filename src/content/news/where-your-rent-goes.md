@@ -32,7 +32,7 @@ This follows my articles on <a href="/news/who-owns-burnley/">who owns Burnley</
 </div>
 <div class="viz-stat purple">
 <span class="value xl" style="color: #bf5af2;">£104</span>
-<span class="label">Most the state pays toward a 2-bed, a week</span>
+<span class="label">Most the state pays towards a 2-bed, a week</span>
 <span class="sublabel">The Local Housing Allowance cap, frozen since 2024</span>
 </div>
 <div class="viz-stat orange">
@@ -57,7 +57,7 @@ About **one household in four** here rents privately, **9,696** of them, and the
 
 Here is the part most people do not realise. A big slice of Burnley's private rent is not paid by tenants out of their wages. It is paid by the taxpayer, through housing benefit and the housing part of Universal Credit, and then handed straight to the landlord.
 
-In a town where **18,581 working-age adults, nearly 30% of them,** are on Universal Credit, that flow is large. The amount the state will pay is capped by the **Local Housing Allowance**. For Burnley, which sits in the West Pennine rental area, the most it will put toward a two-bedroom home is **£103.56 a week**, around £450 a month. That is public money going, via the tenant, straight into a private landlord's account. When the council last broke the figures down, in 2023, far more of Burnley's Universal Credit housing support was going to private landlords than to social housing.
+In a town where **18,581 working-age adults, nearly 30% of them,** are on Universal Credit, that flow is large. The amount the state will pay is capped by the **Local Housing Allowance**. For Burnley, which sits in the West Pennine rental area, the most it will put towards a two-bedroom home is **£103.56 a week**, around £450 a month. That is public money going, via the tenant, straight into a private landlord's account. When the council last broke the figures down, in 2023, far more of Burnley's Universal Credit housing support was going to private landlords than to social housing.
 
 So "where your rent goes" has two answers. For a working renter, it goes from your wages to your landlord. For a great many others, it goes from the taxpayer to the same landlord. Either way, it increasingly ends up with the companies and funds I traced in my earlier articles: the **2,783 companies** that own Burnley property, and the freehold funds that own the ground beneath it.
 

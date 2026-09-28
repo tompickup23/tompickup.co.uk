@@ -1,6 +1,12 @@
 ---
 import Layout from './Layout.astro';
+import { DEFAULT_OG_IMAGE } from '../data/seo';
+import { isoDate } from '../lib/dates';
 import EmailSignup from '../components/EmailSignup.astro';
+import AuthorBox from '../components/AuthorBox.astro';
+import DataBox from '../components/DataBox.astro';
+import Sources from '../components/Sources.astro';
+import { person } from '../data/person';
 
 interface Props {
   frontmatter: {
@@ -17,6 +23,15 @@ interface Props {
     imageCredit?: string;
     category?: string;
     subcategory?: string;
+    sources?: { text: string; url: string }[];
+    data?: {
+      links: { label: string; url: string }[];
+      csv?: string;
+      method?: string;
+      doi?: string;
+      title?: string;
+      year?: number;
+    };
   };
 }
 
@@ -45,6 +60,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
    least useful part of it: the site name is already carried by the WebSite node
    and shown separately in search results. So append it only when it fits, rather
    than pushing a headline out to 104 characters and losing the end of the claim. */
+const shareImage = frontmatter.ogImage || frontmatter.image || DEFAULT_OG_IMAGE;
+
 const BRAND_SUFFIX = ' | Tom Pickup';
 const pageTitle =
   frontmatter.title.length + BRAND_SUFFIX.length <= 60
@@ -56,9 +73,10 @@ const pageTitle =
   title={pageTitle}
   description={frontmatter.description}
   article={true}
-  ogImage={frontmatter.ogImage || frontmatter.image || '/images/headshot.jpg'}
-  publishedTime={frontmatter.date.toISOString()}
-  modifiedTime={(frontmatter.updated || frontmatter.date).toISOString()}
+  ogImage={shareImage}
+  ogImageAlt={frontmatter.imageAlt}
+  publishedTime={isoDate(frontmatter.date)}
+  modifiedTime={isoDate(frontmatter.updated || frontmatter.date)}
   tags={frontmatter.tags}
 >
   <!-- NewsArticle structured data -->
@@ -71,21 +89,23 @@ const pageTitle =
     },
     headline: frontmatter.title,
     description: frontmatter.description,
-    datePublished: frontmatter.date.toISOString(),
-    dateModified: (frontmatter.updated || frontmatter.date).toISOString(),
-    image: (frontmatter.ogImage || frontmatter.image) ? [new URL((frontmatter.ogImage || frontmatter.image)!, Astro.site).href] : [],
+    datePublished: isoDate(frontmatter.date),
+    dateModified: isoDate(frontmatter.updated || frontmatter.date),
+    image: [new URL(shareImage, Astro.site).href],
+    /* The full Person node is on / and /about/ (src/data/person.ts); the @id
+       joins them. Name and url stay inline because Google reads author per page. */
     author: {
       '@type': 'Person',
-      '@id': 'https://tompickup.co.uk/#person',
-      name: 'Tom Pickup',
-      url: 'https://tompickup.co.uk/about/',
-      jobTitle: 'County Councillor for Padiham and Burnley West',
+      '@id': person['@id'],
+      name: person.name,
+      url: person.url,
+      jobTitle: person.jobTitle,
     },
     publisher: {
       '@type': 'Person',
-      '@id': 'https://tompickup.co.uk/#person',
-      name: 'Tom Pickup',
-      url: 'https://tompickup.co.uk/',
+      '@id': person['@id'],
+      name: person.name,
+      url: person.url,
     },
     isAccessibleForFree: true,
     wordCount: wordCount,
@@ -107,6 +127,27 @@ const pageTitle =
     },
   })} />
 
+  {/* A deposited dataset gets its own Dataset node, which Google Dataset Search
+      indexes. Only once it has a DOI: before that there is no stable record to point at. */}
+  {frontmatter.data?.doi && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Dataset',
+      '@id': `https://doi.org/${frontmatter.data.doi}`,
+      name: frontmatter.data.title ?? frontmatter.title,
+      description: frontmatter.data.method ?? frontmatter.description,
+      url: `https://doi.org/${frontmatter.data.doi}`,
+      identifier: `https://doi.org/${frontmatter.data.doi}`,
+      creator: { '@id': person['@id'] },
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      isAccessibleForFree: true,
+      inLanguage: 'en-GB',
+      isBasedOn: frontmatter.data.links.map((link) => link.url),
+      subjectOf: { '@id': new URL(`/news/${Astro.params.slug || ''}/`, Astro.site).href },
+      ...(frontmatter.data.year ? { datePublished: String(frontmatter.data.year) } : {}),
+    })} />
+  )}
+
   <!-- BreadcrumbList structured data -->
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
@@ -118,8 +159,6 @@ const pageTitle =
     ],
   })} />
 
-  <!-- Google News keywords -->
-  <meta name="news_keywords" content={frontmatter.tags.join(', ')} />
   <div class="blog-post">
     <header class="article-header">
       <a href="/news/" class="back-link">
@@ -138,7 +177,7 @@ const pageTitle =
       <h1 class="article-title">{frontmatter.title}</h1>
 
       <div class="article-meta">
-        <time datetime={frontmatter.date.toISOString()}>
+        <time datetime={isoDate(frontmatter.date)}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4.5 1V3M9.5 1V3M1 5.5H13M2 2.5H12C12.5523 2.5 13 2.94772 13 3.5V12C13 12.5523 12.5523 13 12 13H2C1.44772 13 1 12.5523 1 12V3.5C1 2.94772 1.44772 2.5 2 2.5Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -174,7 +213,12 @@ const pageTitle =
       <slot />
     </article>
 
+    {frontmatter.data && <DataBox {...frontmatter.data} />}
+    {frontmatter.sources && <Sources items={frontmatter.sources} />}
+
     <footer class="article-footer">
+      <AuthorBox />
+
       <div class="share-buttons">
         <span class="share-label">Share this post:</span>
         <button class="share-btn" id="copy-link-btn" data-url={currentUrl} aria-label="Copy link to clipboard">
@@ -760,6 +804,22 @@ const pageTitle =
     border-color: rgba(18, 182, 207, 0.25);
     color: #12b6cf;
     background-image: none;
+  }
+
+  .prose :global(sup.cite) {
+    font-size: 0.7em;
+    line-height: 0;
+    margin-left: 0.1em;
+  }
+
+  .prose :global(sup.cite a) {
+    color: var(--text-secondary);
+    text-decoration: none;
+    border: 0;
+  }
+
+  .prose :global(sup.cite a:hover) {
+    color: var(--accent);
   }
 
   .action-box {

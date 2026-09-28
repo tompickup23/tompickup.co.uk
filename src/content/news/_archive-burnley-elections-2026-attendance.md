@@ -3,7 +3,7 @@ title: "Burnley Elections 2026: The Councillors Who Didn't Show Up"
 date: 2026-03-17
 description: "15 wards go to the polls on 7 May after the government's failed attempt to cancel elections. Three defending councillors have attendance records below 75% since being elected in 2022."
 image: "/images/burnley-elections-cover.jpg"
-tags: ["burnley", "reform", "lancashire", "transparency"]
+tags: ["burnley", "reform-uk", "lancashire", "transparency"]
 draft: true
 featured: true
 ---
