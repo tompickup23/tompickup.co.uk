@@ -1,20 +1,13 @@
 ---
-import StatCard from './StatCard.astro';
 import Cite from './Cite.astro';
 ---
 
-<section class="hero">
-  <div class="hero-bg-glow"></div>
+<section class="hero" aria-labelledby="hero-title">
   <div class="hero-content">
     <div class="hero-text">
-      <span class="hero-eyebrow">
-        <span class="pulse-dot"></span>
-        Cabinet Member for Adult Social Care &middot; Reform UK
-      </span>
+      <p class="hero-eyebrow">Cabinet Member for Adult Social Care &middot; Reform UK</p>
 
-      <h1>
-        Tom <span class="gradient">Pickup</span>
-      </h1>
+      <h1 id="hero-title">Tom Pickup</h1>
 
       <p class="hero-role">
         Your councillor for <strong>Padiham &amp; Burnley West</strong>
@@ -28,278 +21,198 @@ import Cite from './Cite.astro';
       </p>
 
       <div class="hero-actions">
-        <a href="/contact/" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          Get in Touch
-        </a>
-        <a href="/about/" class="btn btn-secondary">
-          See the Record
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
+        <a href="/contact/" class="btn btn-primary">Get in touch</a>
+        <a href="/about/" class="text-link">See the record <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
-    <div class="hero-photo-wrap">
-      <div class="hero-photo-glow"></div>
-      <div class="hero-photo">
-        <img
-          src="/images/headshot.jpg"
-          alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West"
-          width="400"
-          height="400"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="hero-photo-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        Elected 2025
-      </div>
-    </div>
+    <figure class="hero-portrait">
+      <img
+        src="/images/headshot.jpg"
+        alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West"
+        width="280"
+        height="320"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>Elected 2025. <a href="/about/">More about me</a></figcaption>
+    </figure>
   </div>
 
-  <div class="hero-stats-wrap">
-    <div class="hero-stats">
-      <StatCard
-        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>'
-        value="3.80%"
-        label="Lowest Council Tax Rise Since 2015/16"
-        cite={3}
-        color="var(--chart-good)"
-      />
-      <StatCard
-        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
-        value="&pound;27.9M&rarr;&pound;2.99M"
-        label="2025/26 Overspend, Forecast to Outturn"
-        cite={1}
-        color="var(--chart-1)"
-      />
-      <StatCard
-        icon='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
-        value="51/84"
-        label="Reform UK Seats at LCC, September 2026"
-        cite={4}
-        color="var(--chart-4)"
-      />
+  <dl class="hero-figures">
+    <div>
+      <dt>Lowest council tax rise since 2015/16</dt>
+      <dd>3.80%<Cite n={3} /></dd>
     </div>
-  </div>
+    <div>
+      <dt>2025/26 overspend, forecast to outturn</dt>
+      <dd>&pound;27.9M&rarr;&pound;2.99M<Cite n={1} /></dd>
+    </div>
+    <div>
+      <dt>Reform UK seats at LCC, September 2026</dt>
+      <dd>51/84<Cite n={4} /></dd>
+    </div>
+  </dl>
 </section>
 
 <style>
   .hero {
-    position: relative;
-    padding: 3.5rem var(--gutter) 2.5rem;
-  }
-
-  .hero-bg-glow,
-  .hero-photo-glow {
-    display: none;
+    /* Aligns with .container, whose 1200px includes its gutters */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem var(--gutter) 1.5rem;
   }
 
   .hero-content {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) 280px;
     align-items: center;
-    gap: var(--space-2xl);
-    /* Aligns with .container, whose 1200px includes its gutters */
-    max-width: calc(1200px - 2 * var(--gutter));
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .hero-text {
-    min-width: 0;
+    gap: 64px;
   }
 
   .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
     font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--teal);
-    margin-bottom: 1rem;
-  }
-
-  .pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-  }
-
-  h1 {
-    font-size: clamp(2.75rem, 6vw, 4.5rem);
-    line-height: 1.02;
-    letter-spacing: -0.025em;
-    color: var(--ink);
     margin: 0 0 0.75rem;
   }
 
-  h1 .gradient {
-    color: inherit;
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 3.75rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
   }
 
   .hero-role {
-    font-size: 1.3125rem;
+    font-size: 1.25rem;
     color: var(--ink);
     margin: 0 0 1rem;
-    max-width: none;
-  }
-
-  .hero-role strong {
-    font-weight: 600;
   }
 
   .hero-subtitle {
     font-size: 1.125rem;
-    color: var(--muted);
-    max-width: 56ch;
-    margin: 0 0 1.75rem;
     line-height: 1.6;
+    color: var(--muted);
+    max-width: 58ch;
+    margin: 0;
   }
 
   .hero-actions {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
     flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    min-height: var(--touch);
-    padding: 0 1.35rem;
-    border-radius: var(--radius-sm);
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    line-height: 1;
+    gap: 12px 28px;
+    margin-top: 1.5rem;
   }
 
   .btn-primary {
-    background: var(--teal);
-    border: 1px solid var(--teal);
-    color: var(--paper);
-  }
-
-  .btn-primary:hover {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--paper);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--ink);
-  }
-
-  .btn-secondary:hover {
-    background: var(--ink);
-    color: var(--paper);
-  }
-
-  .hero-photo-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-photo {
-    width: 240px;
-    height: 240px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 1px solid var(--line);
-  }
-
-  .hero-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .hero-photo-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: var(--space-md);
-    font-size: 0.9375rem;
+    min-height: 48px;
+    padding: 0 22px;
+    background: var(--teal);
+    color: #fff;
     font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-primary:hover { background: var(--ink); color: var(--paper); }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--touch);
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .hero-portrait { margin: 0; }
+
+  .hero-portrait img {
+    display: block;
+    width: 280px;
+    height: 320px;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: var(--radius-sm);
+  }
+
+  .hero-portrait figcaption {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-size: 0.875rem;
     color: var(--muted);
   }
 
-  .hero-photo-badge svg {
-    flex-shrink: 0;
-    color: var(--text-green);
-  }
+  .hero-portrait figcaption a { color: var(--teal); }
 
-  .hero-stats-wrap {
-    max-width: calc(1200px - 2 * var(--gutter));
-    margin: 2.5rem auto 0;
-    width: 100%;
-  }
-
-  .hero-stats {
+  .hero-figures {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
-  @media (max-width: 900px) {
-    .hero {
-      padding: 2rem var(--gutter) 1.5rem;
-    }
+  .hero-figures > div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    padding: 14px 20px 14px 0;
+  }
 
+  .hero-figures > div + div {
+    border-left: 1px solid var(--line);
+    padding-left: 20px;
+  }
+
+  .hero-figures dt {
+    font-size: 0.9375rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .hero-figures dd {
+    margin: 0 0 2px;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 800px) {
+    .hero { padding-top: 1.75rem; }
     .hero-content {
-      grid-template-columns: 1fr;
-      gap: var(--space-lg);
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 20px;
+      align-items: start;
     }
-
-    /* Text first on narrow screens. The photo above the claim pushed every word
-       below the fold on a 375px viewport. */
-    .hero-text {
-      order: 1;
-    }
-
-    .hero-photo-wrap {
-      order: 2;
-      flex-direction: row;
-      gap: var(--space-md);
-      justify-content: flex-start;
-    }
-
-    .hero-photo {
-      width: 96px;
-      height: 96px;
-    }
-
-    .hero-photo-badge {
-      margin-top: 0;
-    }
+    .hero-text { display: contents; }
+    .hero-eyebrow, h1, .hero-role { grid-column: 1; }
+    .hero-portrait { grid-column: 2; grid-row: 1 / span 3; }
+    .hero-portrait img { width: 112px; height: 128px; }
+    .hero-portrait figcaption { font-size: 0.8125rem; }
+    .hero-subtitle, .hero-actions { grid-column: 1 / -1; }
+    .hero-actions { margin-top: 0.25rem; }
+    h1 { font-size: 2.5rem; }
+    .hero-role { font-size: 1.125rem; margin: 0; }
   }
 
-  @media (max-width: 768px) {
-    .hero-stats {
-      grid-template-columns: 1fr;
-      gap: 10px;
+  @media (max-width: 600px) {
+    .hero-figures { grid-template-columns: 1fr; }
+    .hero-figures > div,
+    .hero-figures > div + div {
+      padding: 10px 0;
+      border-left: 0;
     }
-
-    .hero-actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .btn {
-      justify-content: center;
-    }
+    .hero-figures > div + div { border-top: 1px solid var(--line); }
   }
 </style>

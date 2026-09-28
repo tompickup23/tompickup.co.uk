@@ -9,48 +9,40 @@
   <div class="container">
     <div class="paths-grid">
       <div class="path-card">
-        <div class="path-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        </div>
-        <h3 class="path-title">Live in Padiham or Burnley?</h3>
+        <span class="path-num">01</span>
+        <h2 class="path-title"><a href="/contact/">Live in Padiham or Burnley?</a></h2>
         <p class="path-desc">Raise a problem, get help with a council issue, or see what is being spent in your ward.</p>
-        <a href="/contact/" class="path-link">Contact Tom</a>
         <span class="path-secondary">
           Get the <a href="/updates/">weekly update</a> on the area, or
           <a href="https://www.gov.uk/apply-postal-vote" target="_blank" rel="noopener noreferrer">set up a postal vote</a> in about five minutes.
         </span>
       </div>
 
-      <a href="/press/" class="path-card">
-        <div class="path-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-        </div>
-        <h3 class="path-title">Reporting on Lancashire?</h3>
-        <p class="path-desc">Every figure published here traces to a document you can check. Method, data and contact routes for journalists.</p>
-        <span class="path-link">Press and researchers</span>
-      </a>
+      <div class="path-card">
+        <span class="path-num">02</span>
+        <h2 class="path-title"><a href="/news/">Read the investigations</a></h2>
+        <p class="path-desc">Public spending, housing, health and policing in Burnley, Padiham and Lancashire, each piece with its sources.</p>
+        <span class="path-secondary">Reporting on Lancashire? <a href="/press/">Method, data and contact routes for journalists</a>.</span>
+      </div>
 
-      <a href="/projects/" class="path-card">
-        <div class="path-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-        </div>
-        <h3 class="path-title">Want the numbers?</h3>
+      <div class="path-card">
+        <span class="path-num">03</span>
+        <h2 class="path-title"><a href="/projects/">Want the numbers?</a></h2>
         <p class="path-desc">Council spending, population, elections and asylum data. Four open sites, every figure traced to its source.</p>
-        <span class="path-link">See the projects</span>
-      </a>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .audience-paths {
-    padding: var(--space-lg) 0 var(--space-xl);
+    padding: 0 0 var(--space-xl);
   }
 
   .paths-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--line);
+    /* The hero's figures strip above supplies the top rule. */
     border-bottom: 1px solid var(--line);
   }
 
@@ -68,18 +60,11 @@
     padding-left: var(--space-lg);
   }
 
-  .path-card:hover {
-    color: inherit;
-  }
-
-  .path-card:hover .path-title {
-    color: var(--teal);
-  }
-
-  .path-icon {
-    display: inline-flex;
+  .path-num {
     color: var(--gold);
-    margin-bottom: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
   .path-title {
@@ -87,22 +72,28 @@
     margin: 0;
   }
 
+  .path-title a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .path-title a::after {
+    content: '→';
+    margin-left: 10px;
+    color: var(--teal);
+    font-family: var(--font-sans);
+  }
+
+  .path-title a:hover { color: var(--teal); text-decoration: underline; }
+
   .path-desc {
     font-size: 1rem;
     color: var(--muted);
     margin: 0;
     flex-grow: 1;
-  }
-
-  .path-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--touch);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--teal);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
   }
 
   .path-secondary {

@@ -4,16 +4,26 @@ import Hero from '../components/Hero.astro';
 import AudiencePaths from '../components/AudiencePaths.astro';
 import ComparisonBar from '../components/ComparisonBar.astro';
 import TrustCertificate from '../components/TrustCertificate.astro';
-import NewsCard from '../components/NewsCard.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
 import Sources from '../components/Sources.astro';
 import Cite from '../components/Cite.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { articleImage } from '../lib/images';
+import { newsTopic } from '../lib/news-categories';
 
-const posts = (await getCollection('news', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const allPosts = (await getCollection('news', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/* The one investigation the home page leads with. Change the slug to feature
+   another; the build fails if it is not a published article. */
+const FEATURED_SLUG = 'where-burnley-councils-money-goes';
+const featured = allPosts.find((p) => p.id === FEATURED_SLUG);
+if (!featured) throw new Error(`Featured article is not published: ${FEATURED_SLUG}`);
+const featuredImage = articleImage(featured.data.image);
+const latest = allPosts.filter((p) => p.id !== FEATURED_SLUG).slice(0, 3);
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // The four new unitaries (from the LGR model) for the homepage showcase.
 const LGR_UNITS = [
@@ -33,6 +43,45 @@ const LGR_UNITS = [
 
   <!-- Section 1b: Audience paths (resident / press / data) -->
   <AudiencePaths />
+
+  <!-- Section 1c: One featured investigation, then the latest -->
+  <section class="feature-section" aria-labelledby="feature-title">
+    <div class="container">
+      <p class="home-kicker">Featured investigation</p>
+      <article class="feature">
+        {featuredImage && (
+          <a href={`/news/${featured.id}/`} class="feature-image" tabindex="-1" aria-hidden="true">
+            <Image src={featuredImage} alt="" widths={[480, 720, 960]} sizes="(max-width: 800px) calc(100vw - 40px), 560px" format="webp" quality={72} loading="lazy" />
+          </a>
+        )}
+        <div class="feature-copy">
+          <p class="feature-topic">{newsTopic(featured).title}</p>
+          <h2 id="feature-title"><a href={`/news/${featured.id}/`}>{featured.data.title}</a></h2>
+          <p class="feature-desc">{featured.data.description}</p>
+          <p class="feature-date">Published {dateFmt.format(featured.data.date)}{featured.data.imageCredit && <> &middot; {featured.data.imageCredit}</>}</p>
+          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+      <div class="latest">
+        <div class="latest-head">
+          <h2>Latest</h2>
+          <a href="/news/">All writing <span aria-hidden="true">→</span></a>
+        </div>
+        <ul>
+          {latest.map((post) => (
+            <li>
+              <a href={`/news/${post.id}/`}>
+                <span class="latest-topic">{newsTopic(post).title}</span>
+                <span class="latest-title">{post.data.title}</span>
+                <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFmt.format(post.data.date)}</time>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <!-- Section 2: What We've Delivered -->
   <section class="achievements-section">
@@ -152,44 +201,6 @@ const LGR_UNITS = [
     </div>
   </section>
 
-  <!-- Section 4: Latest News -->
-  <section class="news-section">
-    <div class="container">
-      <ScrollReveal>
-        <div class="section-header">
-          <h2 class="section-heading">Latest News</h2>
-        </div>
-
-        {posts.length > 0 ? (
-          <div class="news-grid stagger-children">
-            {posts.map((post) => (
-              <NewsCard
-                title={post.data.title}
-                date={post.data.date.toISOString()}
-                description={post.data.description}
-                tags={post.data.tags}
-                slug={post.id}
-                image={post.data.image}
-              />
-            ))}
-          </div>
-        ) : (
-          <p class="empty-state text-secondary">No posts yet. Check back soon.</p>
-        )}
-
-        <div class="news-more">
-          <a href="/news/" class="btn-secondary">
-            View all news
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-        </div>
-      </ScrollReveal>
-    </div>
-  </section>
-
   <!-- Section 7: Email Signup -->
   <section class="signup-section">
     <div class="container">
@@ -268,7 +279,6 @@ const LGR_UNITS = [
   }
 
   .achievements-section,
-  .news-section,
   .comparison-section {
     padding: var(--space-2xl) 0;
   }
@@ -378,16 +388,89 @@ const LGR_UNITS = [
     color: var(--muted);
   }
 
-  /* ---- Latest news ---- */
-  .news-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-lg);
+  /* ---- Featured investigation and latest ---- */
+  .feature-section { padding: var(--space-lg) 0 var(--space-2xl); }
+
+  .home-kicker,
+  .feature-topic,
+  .latest-topic {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
   }
 
-  .news-more {
-    margin-top: var(--space-lg);
+  .home-kicker { margin: 0 0 var(--space-md); }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
   }
+
+  .feature-image :global(img) {
+    display: block;
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+
+  .feature h2 {
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    margin: 8px 0 12px;
+  }
+
+  .feature h2 a { color: var(--ink); text-decoration: none; }
+  .feature h2 a:hover { color: var(--teal); text-decoration: underline; }
+
+  .feature-desc { color: var(--muted); font-size: 1.125rem; line-height: 1.6; margin: 0; }
+  .feature-date { color: var(--muted); font-size: 0.875rem; margin: 12px 0 0; }
+
+  .feature-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--touch);
+    margin-top: 8px;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .latest { margin-top: var(--space-xl); }
+
+  .latest-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .latest-head h2 { font-size: 1.375rem; margin: 0; }
+  .latest-head a { color: var(--teal); font-weight: 600; }
+
+  .latest ul { list-style: none; margin: 0; padding: 0; }
+  .latest li { border-bottom: 1px solid var(--line); }
+
+  .latest li a {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr) auto;
+    gap: 4px 24px;
+    align-items: baseline;
+    padding: 14px 0;
+    min-height: var(--touch);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .latest-title { font-family: var(--font-display); font-size: 1.1875rem; font-weight: 600; line-height: 1.35; }
+  .latest li a:hover .latest-title { color: var(--teal); text-decoration: underline; }
+  .latest time { color: var(--muted); font-size: 0.9375rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   .empty-state {
     text-align: center;
@@ -465,12 +548,15 @@ const LGR_UNITS = [
 
   @media (max-width: 768px) {
     .achievements-grid,
-    .news-grid {
+    .feature {
       grid-template-columns: 1fr;
     }
 
+    .feature { gap: 16px; }
+    .feature-image :global(img) { height: 220px; }
+    .latest li a { grid-template-columns: 1fr; }
+
     .achievements-section,
-    .news-section,
     .comparison-section {
       padding: var(--space-xl) 0;
     }
