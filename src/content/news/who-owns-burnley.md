@@ -1,6 +1,7 @@
 ---
 title: "Who Owns Burnley? Increasingly, Not the People Who Live Here"
 date: 2026-06-19T12:00:00
+updated: 2026-09-28
 description: "Ten years of public records for my home town. More of Burnley is bought up by landlords, companies and faraway funds while local families are priced out."
 image: "/images/burnley-panorama.jpg"
 imageAlt: "Burnley spread across the valley floor, seen from high ground, with snow on the hills beyond."
@@ -30,7 +31,7 @@ One thing up front. When I say Burnley, I mean the borough: the council area tha
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
 <span class="value xl">27.4%</span>
-<span class="label">Homes bought to rent out, 2025</span>
+<span class="label">Sales flagged as buy-to-let or non-standard, 2025</span>
 <span class="sublabel">More than one in four. The highest in Lancashire.</span>
 </div>
 <div class="viz-stat blue">
@@ -72,7 +73,7 @@ In 2015, the typical Burnley home sold for about **£72,000**. By 2025 it was **
 
 If you already own your home, a higher price feels like good news. If you are trying to buy your first one, it is the opposite. And the cheaper houses, the ones a young couple might just about stretch to, are vanishing fastest.
 
-Back in 2015, a third of all the homes sold in Burnley went for under £50,000. By 2025, only about **one in thirteen** did. Those cheap terraced houses did not disappear. They got bought up to be rented out. There were still **15** homes sold for under £30,000 in Burnley in 2025, and the cheapest changed hands for **£350**. Nobody is buying a £350 house to raise a family in.
+Back in 2015, a third of all the homes sold in Burnley went for under £50,000. By 2025, only about **one in thirteen** did. Those cheap terraced houses did not disappear. They got bought up to be rented out. On Land Registry data as at 28 September 2026, **12** houses sold for under £30,000 in Burnley in 2025, all of them terraced, and the cheapest went for **£15,000**. Nobody is buying a £15,000 house to raise a family in.
 
 ---
 
@@ -202,7 +203,7 @@ I grew up here. A town where local people can no longer afford to buy the house 
 
 <div class="article-data-viz">
 <a href="/images/share/who-owns-burnley.png" download>
-<img src="/images/share/who-owns-burnley.png" alt="Shareable card: 27.4% of Burnley home sales are now buy-to-let, the highest rate in Lancashire" />
+<img src="/images/share/who-owns-burnley.png" alt="Shareable card: 27.4% of Burnley home sales in 2025 were flagged as buy-to-let or non-standard, the highest rate in Lancashire" />
 <span class="download-hint">Download this card to share</span>
 </a>
 </div>
@@ -213,17 +214,19 @@ You do not need this part to follow the story above. It is here so anyone who wa
 
 **A quick word on geography.** When I say Burnley I mean the Borough of Burnley, the council area, not the parliamentary constituency and not only the town centre. It covers the town plus Padiham, Worsthorne, Cliviger, Hapton, Briercliffe and the villages around them. The house sales, prices, street examples, wards, shared-housing figures and the Lancashire comparison all use that borough boundary. The company figures are the one exception. They cover every company whose registered office sits in a Burnley postcode, BB10, BB11 or BB12, which match the borough closely but are drawn by postcode rather than the council line. So where I set companies against sales, like the rough one-property-company-for-every-19-sales figure, read it as an illustration of the trend, not an exact like-for-like.
 
-- **House sales and prices** come from [HM Land Registry](https://www.gov.uk/government/collections/price-paid-data)'s record of every property sold in England, filtered to the Burnley district (the borough). I used every Burnley sale from 2015 to 2025, which is 21,720 of them.
+- **House sales and prices** come from [HM Land Registry](https://www.gov.uk/government/collections/price-paid-data)'s record of every property sold in England, filtered to the Burnley district (the borough). I used every Burnley sale from 2015 to 2025, which is 21,720 of them, in the file as downloaded before publication in June 2026. The Land Registry revises this file every month as late sales are registered, so the figures move. On the file as downloaded on 28 September 2026, Burnley's 2025 Category B share is 29.7% across all property types, or 25.6% leaving out entries classed as "Other" (such as land or mixed parcels), and it is still the highest of Lancashire's 14 districts on either basis. The count of cheap houses above uses that September file and leaves out "Other" entries.
 - **Companies** come from [Companies House](https://find-and-update.company-information.service.gov.uk/), the official register of every UK company. I used all 5,775 companies whose registered office is in a Burnley postcode (BB10, BB11 or BB12), as listed in May 2026.
 - **Shared houses** come from the council's own evidence base: a 2023 study by the Building Research Establishment, an independent housing research body, prepared to support Burnley's Article 4 decision.
 - **The Lancashire comparison** uses the same Land Registry measure applied to each district, so it is a fair like-for-like.
 
 A few plain definitions:
 
-- **"Bought to rent out" / "bought as an investment."** When a home is sold, the Land Registry records whether it was a standard purchase or what it calls a "Category B" sale, which covers buy-to-let, auction and other non-standard purchases. It is the closest public measure of a home being bought as an investment rather than to live in. It is not perfect, but it is recorded the same way across the whole country, so comparing one area with another is fair.
+- **"Bought to rent out" / "bought as an investment."** When a home is sold, the Land Registry records whether it was a standard purchase or what it calls a "Category B" sale, which covers buy-to-let (where a mortgage shows it), auction and repossession sales, sales to companies and other non-private buyers, and entries classed as "Other" property, such as land. It is the closest public measure of a home being bought as an investment rather than to live in. It is not perfect, but it is recorded the same way across the whole country, so comparing one area with another is fair.
 - **"Typical price"** means the median: the middle price when you line every sale up from cheapest to dearest. It is a better guide than a simple average, because a handful of very expensive sales cannot drag it up.
 - **"Property company"** means a company that Companies House lists under real estate (industry code 68): firms set up to buy, own, rent or manage property.
 - **"HMO"** stands for house in multiple occupation: a house rented out room by room to several people who are not one household.
 - **"Article 4 Direction"** is a planning rule a council can bring in so that turning a family home into a shared house needs permission first, instead of happening automatically.
 
 Two honest caveats. The 916 and 516 shared-house figures are estimates from the 2023 study, not an exact count, which is rather the point, because nobody knows the true number. And the company figures describe the public registers as they stand today. Naming the specific companies and people who own Burnley property, street by street, needs a separate Land Registry dataset, and that is the next piece I am working on.
+
+**Correction, 28 September 2026.** An earlier version said 15 homes sold for under £30,000 in Burnley in 2025 and that the cheapest changed hands for £350. The £350 entry is classed by the Land Registry as "Other" property, such as land, not a house, and the count of 15 may have included such entries. On the September 2026 file, 12 houses sold for under £30,000, the cheapest at £15,000. The description of Category B sales has also been made more precise: it covers more than buy-to-let.

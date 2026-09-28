@@ -1,6 +1,7 @@
 ---
 title: "More People, Fewer Homes: The Squeeze Nobody in Burnley Voted For"
 date: 2026-06-19T10:00:00
+updated: 2026-09-28
 description: "In ten years Burnley's population grew almost entirely through immigration, home ownership fell, and the cheap housing was bought up to rent out."
 image: "/images/burnley-aerial.jpg"
 imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
@@ -109,7 +110,7 @@ The cheap end of Burnley's housing market is now being competed for from several
 
 - **Investors** buying terraces to rent out, and funds buying the freeholds underneath them.
 - **A population growing fast, almost all of it from abroad**, that needs somewhere to live and, at first, rents.
-- **The asylum dispersal system.** The Home Office, through private contractors on guaranteed money, rents the same cheap terraces that local families and local landlords are chasing and hands them to asylum seekers. Home Office figures show **464** asylum seekers supported in Burnley, about **4.9 for every thousand residents**: nearly double the rate across the North West as a whole, and many times the rate in the wealthy South. Every one of those houses is a house a Burnley family cannot rent or buy.
+- **The asylum dispersal system.** The Home Office, through private contractors on guaranteed money, rents the same cheap terraces that local families and local landlords are chasing and hands them to asylum seekers. Home Office figures show **464** asylum seekers supported in Burnley at the end of March 2025, about **4.9 for every thousand residents**: nearly double the rate across the North West as a whole, and many times the rate in the wealthy South. Every one of those houses is a house a Burnley family cannot rent or buy.
 
 The UK Demographics projection model, looking at Burnley's mix, reaches a blunt conclusion of its own: high foreign-born population growth "will drive additional housing demand, particularly in the private rented sector." More demand, the same squeezed supply.
 
@@ -154,7 +155,9 @@ Every figure is for the **Borough of Burnley** (local authority area E07000117),
 - **Population and country of birth:** ONS Census 2011 and 2021, for the Borough of Burnley, via the UK Demographics dataset.
 - **New National Insurance numbers issued to overseas nationals:** DWP, by local authority, 2002 to 2025. This is a flow measure (new registrations each year, issued once per person), not a running total, and it undercounts anyone who never registers.
 - **Tenure (who owns and who rents):** [ONS Census 2021](https://www.ons.gov.uk/census). The forward projection of falling home ownership is from the UK Demographics model (Census 2021 tenure by ethnicity combined with population projections), and is an estimate, not a certainty.
-- **Asylum accommodation:** [Home Office](https://www.gov.uk/government/collections/immigration-statistics-quarterly-release) figures for asylum seekers in receipt of support, by local authority (end of 2024). The regional comparison (the North West, and the lower rate in the South) is from the House of Commons Library asylum statistics briefing, which calculates supported asylum seekers per 10,000 population by region: the North West sat at over 26 per 10,000, against Burnley's 49.
+- **Asylum accommodation:** [Home Office](https://www.gov.uk/government/collections/immigration-statistics-quarterly-release) figures for asylum seekers in receipt of support, by local authority (Immigration system statistics, table Asy_D11, Burnley, 31 March 2025: 464 people, set against 94,646 residents at the 2021 Census). The regional comparison (the North West, and the lower rate in the South) is from the House of Commons Library asylum statistics briefing, which calculates supported asylum seekers per 10,000 population by region: the North West sat at over 26 per 10,000, against Burnley's 49. The Library's regional figure is not necessarily for the same date.
 - **House prices and investment-buying:** [HM Land Registry](https://www.gov.uk/government/collections/price-paid-data), as set out in the earlier articles.
 
 Two honest limits. First, these are different measures on slightly different timescales, lined up to show direction, not to prove cause. Second, "born outside the UK" and "arrived recently" are not the same thing: many non-UK-born residents have lived in Burnley for decades. The figures describe a town that is changing and under housing pressure. They do not, on their own, assign blame, and neither do I.
+
+**Correction, 28 September 2026.** An earlier version dated the 464 asylum seekers supported in Burnley to the end of 2024. The Home Office figure of 464 is for 31 March 2025; at 31 December 2024 the figure was 436. The date has been corrected; the number and the rate per thousand residents were calculated from the March 2025 figure and are unchanged.

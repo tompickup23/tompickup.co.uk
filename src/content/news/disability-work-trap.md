@@ -1,6 +1,7 @@
 ---
 title: "They Want to Work. The System Will Not Let Them."
 date: 2026-06-20T12:00:00
+updated: 2026-09-28
 description: "Most disabled people out of work want a job. A frozen savings limit, a year-long support backlog and a shortage of accessible vehicles stop them."
 image: "/images/accessible-transport.jpg"
 imageAlt: "A black wheelchair-accessible taxi with its side door open and the access ramp lowered to the kerb."
@@ -113,7 +114,7 @@ My friend does not want sympathy, and he does not want a handout. He wants a job
 
 <div class="article-data-viz">
 <a href="/images/share/disability-work-trap.png" download>
-<img src="/images/share/disability-work-trap.png" alt="Shareable card: 37% of disabled people want to work but are held back by fear of losing their benefits" />
+<img src="/images/share/disability-work-trap.png" alt="Shareable card: 86% of people with a learning disability want to work. Barely one in twenty has a job" />
 <span class="download-hint">Download this card to share</span>
 </a>
 </div>
@@ -122,10 +123,12 @@ My friend does not want sympathy, and he does not want a handout. He wants a job
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **"Want to work" figures:** [DWP](https://www.gov.uk/government/publications/work-aspirations-and-support-needs-of-health-and-disability-customers-final-findings-report)'s survey of health and disability benefit claimants (37% held back by fear of losing benefits; 50% fear losing them if work fails). Learning-disability employment (86% want work, 5% have it) is from Mencap, citing ONS. The disability employment gap is from the House of Commons Library.
+- **"Want to work" figures:** [DWP](https://www.gov.uk/government/publications/work-aspirations-and-support-needs-of-health-and-disability-customers-final-findings-report)'s survey of health and disability benefit claimants: Work aspirations and support needs of health and disability customers, final findings report, section 5.3, 17 July 2025. Of customers not in work who had not ruled out work, 50% worried they would not get their benefits back if they tried a job that did not work out. Learning-disability employment (86% want work, 5% have it) is from Mencap, citing ONS. The disability employment gap is from the House of Commons Library.
 - **The £16,000 savings limit** and the "one penny more" example are from gov.uk (Universal Credit capital rules) and the Resolution Foundation's 2025 analysis, which confirms the limit has been frozen since 2006. PIP, DLA and contributory ESA are not means-tested.
 - **The Right to Try Guarantee** is government legislation in force from spring 2026.
 - **Access to Work:** 66,749 awaiting a decision (DWP, February 2026), waiting times and the 18-month clearance estimate from the National Audit Office and the Public Accounts Committee (2026).
 - **Accessible vehicles:** the proportion of wheelchair-accessible taxis (39% outside London, 13% of all licensed vehicles) is from [Department for Transport](https://www.gov.uk/government/organisations/department-for-transport) data via Leonard Cheshire. The peak-time "booked for the school run" point reflects how council home-to-school transport, a statutory duty under the Education Act 1996, contracts the accessible-vehicle fleet during morning and afternoon peaks; the national SEND transport cost figures are from the National Audit Office and the Local Government Association.
 
 Two honest notes. The accessible-vehicle figures are national; the Lancashire consequence I describe is the on-the-ground effect of those national facts, not a separate local statistic. And these rules are mostly set nationally: the point of the article is that they should change, not that any one body locally is at fault.
+
+**Correction, 28 September 2026.** An earlier version of the sources said 37% of disabled people are held back from work by fear of losing their benefits, and the share card's description repeated it. In the DWP survey the 37% is one group only: PIP claimants not on Universal Credit's health journey who worried they could lose their benefits if a job did not work out. The survey-wide figure, 50%, is the one used in the article. The card's description now matches the card.

@@ -1,6 +1,7 @@
 ---
 title: "Put the Police Back on Burnley's Streets"
 date: 2026-06-21T16:00:00
+updated: 2026-09-28
 description: "Violent crime in Burnley runs about a third above the national average, yet the neighbourhood officers who prevent it have been cut by more than half."
 image: "/images/burnley-crown-point.jpg"
 imageAlt: "Rough grassland on the high ground at Crown Point, looking out across the valley towards Burnley under a grey sky."
@@ -56,8 +57,8 @@ Start with the thing residents already feel. On the official figures, Burnley's 
 <div class="viz-reform-bar"><div class="fill red" style="width:100%;"></div></div>
 </div>
 <div>
-<div class="viz-row"><span class="text-muted">Lancashire force area</span><span class="text-muted">36.5</span></div>
-<div class="viz-reform-bar"><div class="fill neutral" style="width:85%;"></div></div>
+<div class="viz-row"><span class="text-muted">Lancashire force area</span><span class="text-muted">35.3</span></div>
+<div class="viz-reform-bar"><div class="fill neutral" style="width:82%;"></div></div>
 </div>
 <div>
 <div class="viz-row"><span class="text-muted">England</span><span class="text-muted">33.1</span></div>
@@ -113,7 +114,7 @@ If you agree, say so. Tell the Lancashire Police and Crime Commissioner, tell yo
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **Crime rates (Burnley 107 per 1,000 vs England 89; violence 43.1 vs 33.1; Lancashire 36.5)** are from the [Office for National Statistics](https://www.ons.gov.uk/) recorded-crime tables, year ending March 2024 (the latest editions, to December 2025, show the same gap, with both rates a little lower). Burnley's own figure is for the borough; comparisons use the ONS series so like is compared with like. I have not used the higher numbers quoted by some crime-map websites, which fold in anti-social behaviour and use a smaller population.
+- **Crime rates (Burnley 107 per 1,000 vs England 89; violence 43.1 vs 33.1; Lancashire 35.3)** are from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/policeforceareadatatables) recorded-crime tables, year ending March 2024, released 24 July 2024: Burnley from the Community Safety Partnership tables (Table C5), England and Lancashire from the Police Force Area data tables (Table P3) (the latest editions, to December 2025, show the same gap, with both rates a little lower). Burnley's own figure is for the borough; comparisons use the ONS series so like is compared with like. I have not used the higher numbers quoted by some crime-map websites, which fold in anti-social behaviour and use a smaller population.
 - **Falling trend:** Burnley's Community Safety Partnership reports a 6.2% fall in all crime from 2021 to 2024; national knife crime fell about 10% in the year to December 2025 (ONS).
 - **Hospital admissions for violence "highest in the county"** is from the Burnley Community Safety Partnership 2025 Strategic Assessment.
 - **Police and PCSO numbers** are from the Home Office "[Police workforce, England and Wales](https://www.gov.uk/government/collections/police-workforce-england-and-wales)" statistics (officers FTE: 3,649 in 2010, 2,850 in 2017, 3,560 in 2025; PCSOs: 428 in 2010, 186 in 2025).
@@ -122,3 +123,5 @@ You do not need this part to follow the story. It is here so the working can be 
 - **The Colne and Blackburn cases** are concluded and were reported by Lancashire Constabulary. The recent local incident referred to as before the courts is deliberately left unspecified, as commenting on a live case would be wrong.
 
 One honest note. Policing is run by the Police and Crime Commissioner and the Chief Constable, not by Lancashire County Council, so this is an argument I make as a local representative, not a budget I control. The figures are public; the case for acting on them is the point.
+
+**Correction, 28 September 2026.** An earlier version gave the Lancashire force area's violent crime rate for the year to March 2024 as 36.5 per 1,000. The ONS figure is 35.3 (Police Force Area data tables, Table P3). The chart has been corrected. The Burnley and England figures were right and are unchanged.
