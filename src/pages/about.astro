@@ -14,8 +14,9 @@ const LCC = 'https://council.lancashire.gov.uk';
 
 /* Numbered in the order they are first cited on the page. */
 const sources = [
-  { text: "Lancashire County Council, 'Change to a Cabinet Appointment', Leader's decision, 20 May 2026", url: `${LCC}/ieDecisionDetails.aspx?ID=29999` },
   { text: "Dunnockshaw Parish Council, 'Your Councillors', parish councillors list, checked 28 September 2026", url: 'https://dunnockshawpc.weebly.com/your-councillors.html' },
+  { text: "Lancashire County Council, 'Change to a Cabinet Appointment', Leader's decision, 20 May 2026", url: `${LCC}/ieDecisionDetails.aspx?ID=29999` },
+  { text: "Ministry of Housing, Communities and Local Government, 'Local authority revenue expenditure and financing England: 2024 to 2025 individual local authority data - outturn', RSX, Adult Social Care Total Expenditure (C3), updated 11 June 2026", url: 'https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-2024-to-2025-individual-local-authority-data-outturn' },
   { text: "Lancashire County Council, 'Appointment of a Cabinet, Lead Members, Champions and Other Positions', report, p. 3, 22 May 2025", url: `${LCC}/documents/s256315/Report.pdf` },
   { text: "Lancashire County Council, 'The County Council's Financial Position - 2025/26 Outturn', Cabinet report, p. 1, 2 July 2026", url: `${LCC}/documents/s281026/Report.pdf` },
   { text: 'Lancashire County Council, Cabinet minutes, p. 1, 4 June 2026', url: `${LCC}/documents/g16271/Printed%20minutes%2004th-Jun-2026%2014.00%20Cabinet.pdf?T=1` },
@@ -37,20 +38,20 @@ type Role = {
 };
 
 const current: Role[] = [
-  { name: 'Cabinet', url: `${LCC}/mgCommitteeDetails.aspx?ID=122`, detail: 'Cabinet Member for Adult Social Care, 2026/27.', cites: [1, 5] },
-  { name: 'Company Member Cabinet Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1876`, detail: 'Member since 2025.', cites: [6] },
-  { name: 'Lancashire Combined County Authority Audit and Governance Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1989`, detail: 'Member since 2025.', cites: [7] },
-  { name: 'Lancashire Health and Wellbeing Board', url: `${LCC}/mgCommitteeDetails.aspx?ID=825`, detail: 'Member, 2026/27.', cites: [8] },
+  { name: 'Cabinet', url: `${LCC}/mgCommitteeDetails.aspx?ID=122`, detail: 'Cabinet Member for Adult Social Care, 2026/27.', cites: [2, 6] },
+  { name: 'Company Member Cabinet Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1876`, detail: 'Member since 2025.', cites: [7] },
+  { name: 'Lancashire Combined County Authority Audit and Governance Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1989`, detail: 'Member since 2025.', cites: [8] },
+  { name: 'Lancashire Health and Wellbeing Board', url: `${LCC}/mgCommitteeDetails.aspx?ID=825`, detail: 'Member, 2026/27.', cites: [9] },
   { name: 'Local Councillor Decision, Padiham and Burnley West', url: `${LCC}/mgExecPostDetails.aspx?ID=363`, detail: 'Decision maker for the division.' },
-  { name: 'Edward Stocks Massey Bequest Fund Joint Advisory Committee', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=589`, detail: 'Chair.', cites: [9] },
+  { name: 'Edward Stocks Massey Bequest Fund Joint Advisory Committee', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=589`, detail: 'Chair.', cites: [10] },
   { name: 'Arthur Edmondson Quinn Bequest', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=433`, detail: 'Council representative.' },
-  { name: 'Dunnockshaw & Clowbridge Parish Council', url: 'https://burnley.moderngov.co.uk/mgParishCouncilDetails.aspx?ID=181', detail: 'Parish Councillor.', cites: [2] },
+  { name: 'Dunnockshaw & Clowbridge Parish Council', url: 'https://burnley.moderngov.co.uk/mgParishCouncilDetails.aspx?ID=181', detail: 'Parish Councillor.', cites: [1] },
 ];
 
 const previous: Role[] = [
-  { name: 'Lead Member for Finance and Resources', url: `${LCC}/ieDecisionDetails.aspx?ID=27678`, detail: '2025/26.', cites: [3] },
-  { name: 'Lancashire Combined County Authority Overview and Scrutiny Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1990`, detail: 'Member, 2025/26.', cites: [10] },
-  { name: 'Pension Fund Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=183`, detail: 'Member, 2026.', cites: [11, 12] },
+  { name: 'Lead Member for Finance and Resources', url: `${LCC}/ieDecisionDetails.aspx?ID=27678`, detail: '2025/26.', cites: [4] },
+  { name: 'Lancashire Combined County Authority Overview and Scrutiny Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1990`, detail: 'Member, 2025/26.', cites: [11] },
+  { name: 'Pension Fund Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=183`, detail: 'Member, 2026.', cites: [12, 13] },
 ];
 
 const schema = {
@@ -82,14 +83,16 @@ const schema = {
           <div class="bio-body">
             <p>
               I'm the Reform UK county councillor for Padiham and Burnley West, elected to
-              Lancashire County Council in 2025. I'm the council's Cabinet Member for Adult Social
-              Care for 2026/27,<Cite n={1} /> and a parish councillor for Dunnockshaw &amp;
-              Clowbridge.<Cite n={2} />
+              Lancashire County Council in 2025, and a parish councillor for Dunnockshaw &amp;
+              Clowbridge.<Cite n={1} /> I'm the council's Cabinet Member for Adult Social Care
+              for 2026/27,<Cite n={2} /> the third-biggest adult social care portfolio in
+              England: in 2024/25 the council's gross spending on adult social care was
+              &pound;829.3 million, behind only Kent and Essex.<Cite n={3} />
             </p>
             <p>
-              I was Lead Member for Finance and Resources in 2025/26.<Cite n={3} /> That year
+              I was Lead Member for Finance and Resources in 2025/26.<Cite n={4} /> That year
               the council's forecast overspend fell from &pound;27.9 million at the first quarter
-              to a final outturn of &pound;2.99 million.<Cite n={4} />
+              to a final outturn of &pound;2.99 million.<Cite n={5} />
             </p>
             <p>
               Before elected office I was a consultant to businesses, helping them cut costs and
