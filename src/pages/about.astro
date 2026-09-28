@@ -15,6 +15,7 @@ const LCC = 'https://council.lancashire.gov.uk';
 /* Numbered in the order they are first cited on the page. */
 const sources = [
   { text: "Lancashire County Council, 'Change to a Cabinet Appointment', Leader's decision, 20 May 2026", url: `${LCC}/ieDecisionDetails.aspx?ID=29999` },
+  { text: "Dunnockshaw Parish Council, 'Your Councillors', parish councillors list, checked 28 September 2026", url: 'https://dunnockshawpc.weebly.com/your-councillors.html' },
   { text: "Lancashire County Council, 'Appointment of a Cabinet, Lead Members, Champions and Other Positions', report, p. 3, 22 May 2025", url: `${LCC}/documents/s256315/Report.pdf` },
   { text: "Lancashire County Council, 'The County Council's Financial Position - 2025/26 Outturn', Cabinet report, p. 1, 2 July 2026", url: `${LCC}/documents/s281026/Report.pdf` },
   { text: 'Lancashire County Council, Cabinet minutes, p. 1, 4 June 2026', url: `${LCC}/documents/g16271/Printed%20minutes%2004th-Jun-2026%2014.00%20Cabinet.pdf?T=1` },
@@ -22,10 +23,9 @@ const sources = [
   { text: 'Lancashire Combined County Authority, Audit and Governance Committee minutes, p. 2, 22 September 2025', url: `${LCC}/documents/g15780/Printed%20minutes%2022nd-Sep-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Audit%20and%20Governance%20Co.pdf?T=1` },
   { text: "Lancashire County Council, 'Lancashire Health and Wellbeing Board Membership', Full Council, Appendix A, p. 1, 16 July 2026", url: `${LCC}/documents/s282483/Appendix%20A.pdf` },
   { text: "Lancashire County Council, 'List of Outside Bodies and Appointments', Cabinet, Appendix A, p. 3, 5 June 2025", url: `${LCC}/documents/s256601/Appendix%20A.pdf` },
+  { text: 'Lancashire Combined County Authority, Overview and Scrutiny Committee minutes, p. 1, 28 July 2025', url: `${LCC}/documents/g15778/Printed%20minutes%2028th-Jul-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Overview%20and%20Scrutiny%20C.pdf?T=1` },
   { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 1, 23 January 2026', url: `${LCC}/documents/g16599/Printed%20minutes%2023rd-Jan-2026%2014.00%20Pension%20Fund%20Committee.pdf?T=1` },
   { text: 'Lancashire County Council, Pension Fund Committee minutes, p. 2, 19 June 2026', url: `${LCC}/documents/g16280/Printed%20minutes%2019th-Jun-2026%2010.00%20Pension%20Fund%20Committee.pdf?T=1` },
-  { text: 'Lancashire Combined County Authority, Overview and Scrutiny Committee minutes, p. 1, 28 July 2025', url: `${LCC}/documents/g15778/Printed%20minutes%2028th-Jul-2025%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Overview%20and%20Scrutiny%20C.pdf?T=1` },
-  { text: 'Lancashire Combined County Authority, Overview and Scrutiny Committee minutes, p. 1, 24 July 2026', url: `${LCC}/documents/g17009/Printed%20minutes%2024th-Jul-2026%2015.00%20Lancashire%20Combined%20County%20Authority%20-%20Overview%20and%20Scrutiny%20C.pdf?T=1` },
 ];
 
 /* Each role links to its council page; `cites` are numbers in the list above. */
@@ -37,20 +37,20 @@ type Role = {
 };
 
 const current: Role[] = [
-  { name: 'Cabinet', url: `${LCC}/mgCommitteeDetails.aspx?ID=122`, detail: 'Cabinet Member for Adult Social Care since May 2026.', cites: [1, 4] },
-  { name: 'Full Council', url: `${LCC}/mgCommitteeDetails.aspx?ID=138`, detail: 'County Councillor for Padiham and Burnley West since May 2025.' },
-  { name: 'Company Member Cabinet Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1876`, detail: 'Member since June 2025, replacing Clive Balchin.', cites: [5] },
-  { name: 'Lancashire Combined County Authority Audit and Governance Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1989`, detail: 'Member. Joined in September 2025, replacing Mark Poulton.', cites: [6] },
-  { name: 'Lancashire Health and Wellbeing Board', url: `${LCC}/mgCommitteeDetails.aspx?ID=825`, detail: 'Member as Cabinet Member for Adult Social Care.', cites: [7] },
+  { name: 'Cabinet', url: `${LCC}/mgCommitteeDetails.aspx?ID=122`, detail: 'Cabinet Member for Adult Social Care, 2026/27.', cites: [1, 5] },
+  { name: 'Company Member Cabinet Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1876`, detail: 'Member since 2025.', cites: [6] },
+  { name: 'Lancashire Combined County Authority Audit and Governance Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1989`, detail: 'Member since 2025.', cites: [7] },
+  { name: 'Lancashire Health and Wellbeing Board', url: `${LCC}/mgCommitteeDetails.aspx?ID=825`, detail: 'Member, 2026/27.', cites: [8] },
   { name: 'Local Councillor Decision, Padiham and Burnley West', url: `${LCC}/mgExecPostDetails.aspx?ID=363`, detail: 'Decision maker for the division.' },
-  { name: 'Edward Stocks Massey Bequest Fund Joint Advisory Committee', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=589`, detail: 'Chair. Appointed by Cabinet in June 2025.', cites: [8] },
+  { name: 'Edward Stocks Massey Bequest Fund Joint Advisory Committee', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=589`, detail: 'Chair.', cites: [9] },
   { name: 'Arthur Edmondson Quinn Bequest', url: `${LCC}/mgOutsideBodyDetails.aspx?ID=433`, detail: 'Council representative.' },
+  { name: 'Dunnockshaw & Clowbridge Parish Council', url: 'https://burnley.moderngov.co.uk/mgParishCouncilDetails.aspx?ID=181', detail: 'Parish Councillor.', cites: [2] },
 ];
 
 const previous: Role[] = [
-  { name: 'Lead Member for Finance and Resources', url: `${LCC}/ieDecisionDetails.aspx?ID=27678`, detail: 'During 2025/26.', cites: [2] },
-  { name: 'Pension Fund Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=183`, detail: 'Member until 19 June 2026.', cites: [9, 10] },
-  { name: 'Lancashire Combined County Authority Overview and Scrutiny Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1990`, detail: 'Member from July 2025, later a substitute.', cites: [11, 12] },
+  { name: 'Lead Member for Finance and Resources', url: `${LCC}/ieDecisionDetails.aspx?ID=27678`, detail: '2025/26.', cites: [3] },
+  { name: 'Lancashire Combined County Authority Overview and Scrutiny Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=1990`, detail: 'Member, 2025/26.', cites: [10] },
+  { name: 'Pension Fund Committee', url: `${LCC}/mgCommitteeDetails.aspx?ID=183`, detail: 'Member, 2026.', cites: [11, 12] },
 ];
 
 const schema = {
@@ -82,21 +82,19 @@ const schema = {
           <div class="bio-body">
             <p>
               I'm the Reform UK county councillor for Padiham and Burnley West, elected to
-              Lancashire County Council in May 2025. I've been the council's Cabinet Member for
-              Adult Social Care since May 2026.<Cite n={1} />
+              Lancashire County Council in 2025. I'm the council's Cabinet Member for Adult Social
+              Care for 2026/27,<Cite n={1} /> and a parish councillor for Dunnockshaw &amp;
+              Clowbridge.<Cite n={2} />
             </p>
             <p>
-              I was Lead Member for Finance and Resources during 2025/26.<Cite n={2} /> That year
+              I was Lead Member for Finance and Resources in 2025/26.<Cite n={3} /> That year
               the council's forecast overspend fell from &pound;27.9 million at the first quarter
-              to a final outturn of &pound;2.99 million.<Cite n={3} />
+              to a final outturn of &pound;2.99 million.<Cite n={4} />
             </p>
             <p>
-              Before elected office I worked in energy, first in brokerage and then in battery
-              storage and optimisation, with IoT, smart metering, building management and energy
-              management systems. I have managed construction projects, worked in public sector
-              procurement inside Lancashire County Council on construction and assets, and advised
-              businesses on tax and finance. I have built software for sales teams, including CRM
-              tools, and designed websites. I started in sales.
+              Before elected office I was a consultant to businesses, helping them cut costs and
+              raise profits through software, energy, procurement and more. I also worked in
+              procurement inside Lancashire County Council, on construction and assets.
             </p>
             <p>
               Since 2025 I've built a set of open-source public data sites, listed on the

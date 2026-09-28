@@ -33,10 +33,10 @@ export const person = {
   image: 'https://tompickup.co.uk/images/headshot.jpg',
   jobTitle: 'Cabinet Member for Adult Social Care, Lancashire County Council',
   description:
-    'County Councillor for Padiham and Burnley West on Lancashire County Council since May 2025 and Cabinet Member for Adult Social Care since May 2026. ' +
-    'Lead Member for Finance and Resources during 2025/26. ' +
-    'Before elected office he worked in energy, including battery storage and building management systems; construction project management; ' +
-    'public sector procurement at Lancashire County Council; tax and finance consultancy; and software for sales teams and web design. ' +
+    'County Councillor for Padiham and Burnley West on Lancashire County Council since 2025, Cabinet Member for Adult Social Care for 2026/27, ' +
+    'and a parish councillor for Dunnockshaw & Clowbridge. Lead Member for Finance and Resources in 2025/26. ' +
+    'Before elected office he was a consultant to businesses, helping them cut costs and raise profits through software, energy, procurement and more, ' +
+    'and worked in public sector procurement at Lancashire County Council. ' +
     'He builds open public data sites and has written an independent working paper on the finances of local government reorganisation in Lancashire.',
   worksFor: LCC,
   hasOccupation: [
@@ -51,6 +51,12 @@ export const person = {
       name: 'Cabinet Member for Adult Social Care',
       description: 'Cabinet portfolio holder at Lancashire County Council.',
       occupationLocation: { '@type': 'AdministrativeArea', name: 'Lancashire' },
+    },
+    {
+      '@type': 'Occupation',
+      name: 'Parish Councillor',
+      description: 'Member of Dunnockshaw & Clowbridge Parish Council.',
+      occupationLocation: { '@type': 'AdministrativeArea', name: 'Dunnockshaw & Clowbridge, Burnley' },
     },
   ],
   memberOf: { '@type': 'PoliticalParty', name: 'Reform UK' },
