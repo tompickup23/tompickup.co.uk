@@ -3,6 +3,11 @@ import EmailSignup from './EmailSignup.astro';
 import { FOOTER_PROJECTS } from '../data/projects';
 import { imprint as imp } from '../data/imprint';
 const currentYear = new Date().getFullYear();
+
+/* Articles end with their own signup, so the footer's is left off there:
+   one invitation per page, not two. */
+interface Props { signup?: boolean }
+const { signup = true } = Astro.props;
 ---
 
 <footer class="site-footer">
@@ -13,9 +18,11 @@ const currentYear = new Date().getFullYear();
         <a href="/" class="footer-logo" aria-label="Tom Pickup">
           Tom <span class="footer-logo-accent">Pickup</span>
         </a>
-        <div class="footer-signup">
-          <EmailSignup variant="compact" />
-        </div>
+        {signup && (
+          <div class="footer-signup">
+            <EmailSignup variant="compact" />
+          </div>
+        )}
       </div>
 
       <!-- Quick Links Column -->
