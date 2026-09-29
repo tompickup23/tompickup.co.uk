@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { person } from '../data/person';
+
+/* What AI DOGE is, in the terms its own method page uses
+   (aidoge.co.uk/methodology/, read 29 September 2026). No coverage counts are
+   repeated here: they change with every release, and the coverage page is the
+   record. */
+const schema = {
+  '@type': 'WebApplication',
+  '@id': 'https://aidoge.co.uk/#app',
+  name: 'AI DOGE',
+  url: 'https://aidoge.co.uk/',
+  description: 'Searchable records of what public bodies in England publish about the money they spend, taken from the files those bodies publish themselves.',
+  applicationCategory: 'Public spending data',
+  operatingSystem: 'Web browser',
+  isAccessibleForFree: true,
+  inLanguage: 'en-GB',
+  author: { '@id': person['@id'] },
+  creator: { '@id': person['@id'] },
+  subjectOf: { '@id': 'https://tompickup.co.uk/aidoge/' },
+};
+---
+
+<Layout
+  title="AI DOGE: public spending records | Tom Pickup"
+  description="AI DOGE is an independent public spending transparency platform I built. It publishes what public bodies in England publish about their payments, from their own files, and does not estimate or rank."
+  schema={schema}
+>
+  <section class="legal-page">
+    <div class="container-narrow">
+      <h1>AI DOGE</h1>
+      <p class="legal-updated">Public spending records, from the files public bodies publish themselves</p>
+
+      <div class="legal-content">
+        <h2>What it is</h2>
+        <p>
+          AI DOGE is an independent public spending transparency platform I built. Councils in
+          England are required to publish every payment they make above a threshold, usually
+          &pound;500. AI DOGE collects those files, reads them into one common set of fields, and
+          makes them searchable by public body and by supplier.
+        </p>
+        <p><a href="https://aidoge.co.uk/">Go to aidoge.co.uk</a></p>
+
+        <h2>Where the figures come from</h2>
+        <ul>
+          <li>Each body's own published payment files, taken as they are and read mechanically. No figure is retyped by hand.</li>
+          <li>Budget and outturn figures from the returns councils submit to central government.</li>
+          <li>Every page names the source it used and links to it.</li>
+        </ul>
+
+        <h2>How it is checked</h2>
+        <p>
+          Processed totals are reconciled back to the council's own published outturn return, or
+          to its published budget where the outturn is not yet due. A mis-read column then shows
+          up as a number that does not add up. A council year that does not reconcile shows no
+          total at all.
+        </p>
+
+        <h2>What it will not do</h2>
+        <ul>
+          <li>It does not estimate. A figure that is not in a source document is left out.</li>
+          <li>It does not rank councils by what they spend, because the periods held differ from council to council.</li>
+          <li>It does not name individuals. Payments to individuals are counted in totals and never listed, and redactions in the published files are kept.</li>
+        </ul>
+
+        <h2>What spending data does not show</h2>
+        <p>
+          Payments above the threshold are not a council's whole budget. Staff pay, most small
+          purchases and internal transfers are outside the published files. A total on AI DOGE is
+          a total of what was published, not what the council spends.
+        </p>
+
+        <h2>Coverage and corrections</h2>
+        <p>
+          Coverage is uneven because publication is. The
+          <a href="https://aidoge.co.uk/coverage/">coverage page</a> lists every body and what is
+          held for it. If AI DOGE and a council's own file disagree, the council's file is right.
+          Corrections are recorded on the
+          <a href="https://aidoge.co.uk/methodology/#corrections">method page</a> with the
+          original figure, the corrected figure and the date. Right of reply and complaints are
+          set out in its <a href="https://aidoge.co.uk/policies/">policies</a>.
+        </p>
+
+        <h2>Used on this site</h2>
+        <ul>
+          <li><a href="/news/where-burnley-councils-money-goes/">Where Burnley Council&rsquo;s money goes</a></li>
+          <li><a href="/news/temporary-accommodation-asylum-burnley/">Burnley&rsquo;s temporary accommodation bill</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Layout>
+<style>
+  .legal-page {
+    padding: 7rem 0 var(--space-2xl);
+  }
+
+  .legal-page h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-updated {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .legal-content h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--separator);
+  }
+
+  .legal-content h2:first-child {
+    margin-top: 0;
+  }
+
+  .legal-content p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: var(--space-md);
+  }
+
+  .legal-content ul li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-sm);
+  }
+
+  .legal-content ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  .legal-content a {
+    color: var(--accent);
+  }
+
+  .legal-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .legal-page {
+      padding: 6rem 0 var(--space-xl);
+    }
+  }
+</style>
