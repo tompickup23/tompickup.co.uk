@@ -10,6 +10,19 @@ imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "empty-homes", "data"]
+data:
+  links:
+    - label: "MHCLG, Council Taxbase 2025 in England (Line 16, long-term empty homes)"
+      url: "https://www.gov.uk/government/statistics/council-taxbase-2025-in-england"
+    - label: "MHCLG, Council Taxbase 2024 in England"
+      url: "https://www.gov.uk/government/statistics/council-taxbase-2024-in-england"
+    - label: "MHCLG, Council Taxbase 2023 in England"
+      url: "https://www.gov.uk/government/statistics/council-taxbase-2023-in-england"
+    - label: "MHCLG, Live tables on rents, lettings and tenancies (Table 600, housing waiting lists)"
+      url: "https://www.gov.uk/government/statistical-data-sets/live-tables-on-rents-lettings-and-tenancies"
+    - label: "MHCLG, Rough sleeping snapshot in England: autumn 2025 (Table 1)"
+      url: "https://www.gov.uk/government/statistics/rough-sleeping-snapshot-in-england-autumn-2025"
+  method: "Long-term empty homes are Council Taxbase Line 16 for Burnley at each October snapshot: 727 (2023), 638 (2024), 646 (2025). Waiting-list and rough-sleeping counts are copied from the tables named, for the Borough of Burnley."
 featured: false
 draft: false
 ---

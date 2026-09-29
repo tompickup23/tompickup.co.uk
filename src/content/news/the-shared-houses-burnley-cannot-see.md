@@ -9,6 +9,11 @@ imageCredit: "Photo: Len Williams / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "hmo", "data"]
+data:
+  links:
+    - label: "ONS, Census 2021 houses in multiple occupation by local authority (RM192)"
+      url: "https://www.nomisweb.co.uk/datasets/c2021rm192"
+  method: "The official count of 65 is the Census figure for Burnley (E07000117). The 916 estimate and the ward figures are from Burnley Borough Council's HMO Article 4 Background Document, October 2023, Tables 4 and 5, and are modelled, not counted."
 featured: false
 draft: false
 ---

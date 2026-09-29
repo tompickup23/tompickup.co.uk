@@ -9,6 +9,11 @@ imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "data", "transparency"]
+data:
+  links:
+    - label: "HM Land Registry, UK companies that own property in England and Wales (CCOD), June 2026"
+      url: "https://use-land-property-data.service.gov.uk/datasets/ccod"
+  method: "The June 2026 CCOD file filtered to the Burnley district and counted by registered proprietor. Counts are of titles, not homes. Property owned by overseas companies (the separate OCOD file) is not included."
 featured: false
 draft: false
 ---

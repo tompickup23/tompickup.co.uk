@@ -10,6 +10,19 @@ imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "immigration", "data"]
+data:
+  links:
+    - label: "Home Office, Immigration system statistics: asylum and resettlement datasets (Asy_D11, supported asylum seekers by local authority)"
+      url: "https://www.gov.uk/government/statistical-data-sets/asylum-and-resettlement-datasets"
+    - label: "Asylum Stats: Burnley, supported asylum by quarter"
+      url: "https://asylumstats.co.uk/places/burnley/"
+    - label: "DWP, National Insurance number allocations to adult overseas nationals, by local authority"
+      url: "https://www.gov.uk/government/collections/national-insurance-number-allocations-to-adult-overseas-nationals-entering-the-uk"
+    - label: "ONS, Census 2021 tables for Burnley (Nomis)"
+      url: "https://www.nomisweb.co.uk/sources/census_2021"
+    - label: "HM Land Registry, Price Paid Data downloads (Burnley district, 2015 to 2025)"
+      url: "https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+  method: "Each measure is taken as published for the Borough of Burnley (E07000117). The asylum figure is the Home Office count at 31 March 2025 (464), divided by the 2021 Census population. The measures cover different dates and are lined up to show direction, not cause."
 featured: false
 draft: false
 ---
