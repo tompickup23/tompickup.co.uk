@@ -10,6 +10,15 @@ imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "data", "transparency"]
+data:
+  links:
+    - label: "HM Land Registry, Price Paid Data downloads (Burnley district, 2015 to 2025)"
+      url: "https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+    - label: "Companies House, free company data product (registered offices in BB10, BB11 and BB12, May 2026)"
+      url: "https://download.companieshouse.gov.uk/en_output.html"
+    - label: "ONS, Census 2021 houses in multiple occupation by local authority (RM192)"
+      url: "https://www.nomisweb.co.uk/datasets/c2021rm192"
+  method: "Every Burnley sale in the Price Paid file from 2015 to 2025 (21,720 sales), with Category B sales used as the measure of investment buying. The Land Registry revises the file monthly, so counts move; the correction note gives the September 2026 figures. The shared-house estimates (916 and 516) are from the council's 2023 Article 4 evidence, not from these files."
 featured: true
 draft: false
 ---

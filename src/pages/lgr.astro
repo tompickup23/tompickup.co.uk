@@ -40,6 +40,35 @@ const PAPER_SCHEMA = {
   subjectOf: { '@id': 'https://tompickup.co.uk/lgr/' },
 };
 
+/* The data and code deposited with the paper, as a Dataset node for dataset search.
+   It describes the Zenodo package only (CC BY 4.0, with Crown copyright fields under the
+   Open Government Licence v3.0, per the package LICENSE.md). The site's own feed at
+   /data/lgr-model.json is not described here: it also carries the page's scenario model
+   and has no declared licence. */
+const DATASET_SCHEMA = {
+  '@type': 'Dataset',
+  '@id': 'https://doi.org/10.5281/zenodo.23016761#data',
+  name: 'Lancashire local government reorganisation: data and code for the working paper, version 3.1',
+  description: 'Finance, population and service data for the fifteen Lancashire councils, with comparison data for other English councils, the derived tables used by the working paper, and the scripts that reproduce its model results. Sources include MHCLG revenue outturn and budget returns, ONS Census and population estimates, and councils\' published transparency data.',
+  creator: { '@id': 'https://tompickup.co.uk/#person' },
+  datePublished: '2026-09-28',
+  version: '3.1',
+  identifier: 'https://doi.org/10.5281/zenodo.23016761',
+  url: 'https://doi.org/10.5281/zenodo.23016761',
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  isAccessibleForFree: true,
+  inLanguage: 'en-GB',
+  spatialCoverage: { '@type': 'Place', name: 'Lancashire, England' },
+  publisher: { '@type': 'Organization', name: 'Zenodo', url: 'https://zenodo.org/' },
+  distribution: [{
+    '@type': 'DataDownload',
+    encodingFormat: 'application/zip',
+    contentUrl: 'https://zenodo.org/records/23016761/files/LGR_Lancashire_Zenodo_Package_v3.1.zip?download=1',
+  }],
+  citation: { '@id': 'https://doi.org/10.5281/zenodo.23016761' },
+  subjectOf: { '@id': 'https://tompickup.co.uk/lgr/' },
+};
+
 const C = model.county;
 const DEC = model.decision;
 
@@ -148,6 +177,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
   description="The plan for four new Lancashire councils, paused on 7 September 2026 pending a national review, with an independent assessment of what each option would save or cost."
 >
   <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...PAPER_SCHEMA })} />
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...DATASET_SCHEMA })} />
   <div class="doge-page">
     <nav class="doge-crumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>

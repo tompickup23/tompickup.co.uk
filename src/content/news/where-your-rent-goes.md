@@ -9,6 +9,19 @@ imageCredit: "Photo: Michael Garlick / geograph.org.uk (CC BY-SA 2.0)"
 category: "Burnley"
 subcategory: "Housing"
 tags: ["burnley", "housing", "rent", "data"]
+data:
+  links:
+    - label: "ONS, Private rent and house prices, UK: May 2026"
+      url: "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/privaterentandhousepricesuk/may2026"
+    - label: "ONS, Census 2021 tenure by local authority (TS054)"
+      url: "https://www.nomisweb.co.uk/datasets/c2021ts054"
+    - label: "DWP Stat-Xplore, Universal Credit claimants"
+      url: "https://stat-xplore.dwp.gov.uk/"
+    - label: "Valuation Office Agency, Local Housing Allowance rates, April 2025 to March 2026"
+      url: "https://www.gov.uk/government/publications/local-housing-allowance-lha-rates-applicable-from-april-2025-to-march-2026"
+    - label: "HM Land Registry, Price Paid Data downloads (Burnley district, 2015 to 2025)"
+      url: "https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+  method: "Each figure is copied from the source named for Burnley or, for Local Housing Allowance, the West Pennine area. No total for housing-support spending in Burnley is published, so none is calculated."
 featured: false
 draft: false
 ---

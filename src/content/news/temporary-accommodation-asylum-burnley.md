@@ -10,6 +10,15 @@ imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "DOGE"
 subcategory: "Burnley"
 tags: ["doge", "burnley", "homelessness", "asylum", "public-spending", "data"]
+data:
+  links:
+    - label: "Burnley Borough Council, payments over £500 (quarterly files, April 2021 to December 2025)"
+      url: "https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/"
+    - label: "AI DOGE: every Burnley payment, searchable"
+      url: "https://aidoge.co.uk/councils/burnley/"
+    - label: "MHCLG, Statutory homelessness in England: financial year 2024/25 (detailed local authority tables)"
+      url: "https://www.gov.uk/government/statistics/statutory-homelessness-in-england-financial-year-2024-25"
+  method: "Payments in the Housing Advice cost centre from April 2021 to December 2025: 735 lines totalling £2,474,737.92, matched by a separate AI DOGE extract. The asylum share is the caseload split from the homelessness tables, because immigration status is not recorded on payments."
 featured: false
 draft: false
 ---
