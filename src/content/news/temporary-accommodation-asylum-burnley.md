@@ -1,6 +1,7 @@
 ---
 title: "The Asylum System Is Dumping Its Bill on Burnley"
 date: 2026-06-23T16:00:00
+updated: 2026-09-28
 description: "I went through every penny Burnley Council spends on temporary accommodation. In one year the asylum share of its homelessness went from 1 in 60 to 1 in 9."
 image: "/images/burnley-aerial.jpg"
 imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
@@ -13,7 +14,7 @@ featured: false
 draft: false
 ---
 
-I went through every penny Burnley Borough Council has spent on temporary accommodation over five years, then set it against the official government homelessness figures, to put a number on something nobody around here had: what the asylum system is really costing this town.
+I went through every penny Burnley Borough Council has spent on temporary accommodation from April 2021 to December 2025, then set it against the official government homelessness figures, to put a number on something nobody around here had: what the asylum system is really costing this town.
 
 The cost is not where most people look for it. Asylum accommodation itself is run and paid for by the Home Office, through a contractor called Serco, and it does not touch the council's budget. But Burnley is one of the towns the system leans on hardest, because its housing is cheap, and nobody stays in that accommodation forever. The moment the Home Office grants someone status, a 28-day clock starts, and when it runs out the place they turn up is the council's homelessness desk. That is how a policy written in Westminster keeps arriving in Burnley as a homelessness bill, and in the space of a single year the share of local homelessness caused by people leaving asylum accommodation jumped from **1 in 60 to 1 in 9**.
 
@@ -24,8 +25,8 @@ This is a DOGE investigation: built from the council's own published spending an
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
 <div class="viz-stat teal">
-<span class="value xl">£2.4m</span>
-<span class="label">Spent on temporary accommodation in five years</span>
+<span class="value xl">£2.47m</span>
+<span class="label">Spent on temporary accommodation, April 2021 to December 2025</span>
 <span class="sublabel">Over-£500 payments, 2021/22 to 2025/26</span>
 </div>
 <div class="viz-stat red">
@@ -48,7 +49,7 @@ This is a DOGE investigation: built from the council's own published spending an
 
 ## What the council actually spends
 
-Temporary accommodation is the housing a council provides when someone becomes homeless and it has a legal duty to help, while a longer-term solution is found. In Burnley it nearly all runs through one budget line, "Housing Advice", which over five years has paid out **£2.47 million across 735 payments**, almost all of it on accommodation. It goes to two kinds of place: local hotels used for emergencies, and supported-housing charities.
+Temporary accommodation is the housing a council provides when someone becomes homeless and it has a legal duty to help, while a longer-term solution is found. In Burnley it nearly all runs through one budget line, "Housing Advice", which from April 2021 to December 2025 paid out **£2.47 million across 735 payments**, almost all of it on accommodation. It goes to two kinds of place: local hotels used for emergencies, and supported-housing charities.
 
 <div class="viz-panel">
 <div class="viz-label teal">Biggest temporary-accommodation providers, Burnley, 2021/22 to 2025/26</div>
@@ -94,7 +95,7 @@ In **2022/23 it was 10 households, about 1 in 60** of all the council's homeless
 
 ## The honest split
 
-So can I tell you exactly how many pounds of that £2.4 million went on people from the asylum system versus everyone else? No, and I am not going to pretend otherwise. The spending data does not record anyone's immigration status, and the client names are redacted, as they should be. What the official figures let me say is this: by **caseload**, roughly **9 in 10 of Burnley's homelessness cases are ordinary local homelessness**, the end of a private tenancy, a family no longer able to cope, domestic abuse, and about **1 in 10 is now someone coming out of the asylum system**. Two years ago that second figure was almost nothing.
+So can I tell you exactly how many pounds of that £2.47 million went on people from the asylum system versus everyone else? No, and I am not going to pretend otherwise. The spending data does not record anyone's immigration status, and the client names are redacted, as they should be. What the official figures let me say is this: by **caseload**, roughly **9 in 10 of Burnley's homelessness cases are ordinary local homelessness**, the end of a private tenancy, a family no longer able to cope, domestic abuse, and about **1 in 10 is now someone coming out of the asylum system**. Two years ago that second figure was almost nothing.
 
 If the money tracked the cases, the asylum-driven share would be something like £40,000 to £50,000 a year of the bill. It might be more, it might be less, because these households can need accommodation for longer or shorter than average. But the direction is not in doubt, and it lines up exactly with the years the hotel costs climbed.
 
@@ -126,8 +127,10 @@ I will not pretend that the people caught in this are the villains, because most
 
 You do not need this part to follow the story. It is here so the working can be checked.
 
-- **The spending** is from Burnley Borough Council's [published "payments over £500" data](https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/), 2021/22 to 2025/26, in the "Housing Advice" cost centre. The £2.47m total, the provider amounts, and the hotel-vs-supported split are all sums of that data. The same payments are searchable on [AI DOGE](https://aidoge.co.uk/councils/burnley/). This is over-£500 payments only, so it excludes sub-£500 placements and is **gross** of the Housing Benefit subsidy the council reclaims, meaning the net cost to the council is lower than the headline.
+- **The spending** is from Burnley Borough Council's [published "payments over £500" data](https://burnley.gov.uk/council-democracy/finance-performance/transparency/council-spending/), April 2021 to December 2025, in the "Housing Advice" cost centre. The council has since published January to March 2026, which is not included here. The £2.47m total, the provider amounts, and the hotel-vs-supported split are all sums of that data. The same payments are searchable on [AI DOGE](https://aidoge.co.uk/councils/burnley/). This is over-£500 payments only, so it excludes sub-£500 placements and is **gross** of the Housing Benefit subsidy the council reclaims, meaning the net cost to the council is lower than the headline.
 - **The 2019/20 hotel figure** (78 applicants, £34,037) and the providers (Calico's Gateway and Orchard House, the "A Bed Every Night" scheme) are from Burnley Council's own "Temporary Accommodation for Homeless Households" report to Executive, 7 July 2020, and its Homelessness and Rough Sleeping Strategy 2021-26.
 - **The asylum split** is from the Ministry of Housing, Communities and Local Government's [statutory homelessness statistics (H-CLIC)](https://www.gov.uk/government/statistics/statutory-homelessness-in-england-financial-year-2024-25), detailed local authority tables for 2022/23, 2023/24 and 2024/25. The figures count households owed a prevention or relief duty whose reason for homelessness was "required to leave accommodation provided by the Home Office as asylum support": 10 (1.6%), 88 (11.4%) and 71 (10.3%) respectively. A further 51 households in 2024/25 were recorded as living in asylum (NASS) accommodation immediately before applying.
 - **That asylum-seeker accommodation is a Home Office responsibility delivered by Serco, not the council**, is a matter of public record (the Home Office Asylum Accommodation and Support Contracts). Burnley's status as a dispersal area is covered, with the per-head figures, in my earlier piece [More People, Fewer Homes](/news/more-people-fewer-homes/).
 - **Immigration status is not recorded** on council payments and applicant names are redacted, so the pound split between asylum-background and other homelessness cannot be calculated from the spending data. The caseload split is the honest measure, and it is the one used here.
+
+**Correction, 28 September 2026.** An earlier version said the spending figures covered 2021/22 to 2025/26. They cover April 2021 to December 2025: the council's January to March 2026 file was not in the data used. Every figure is unchanged; the period has been corrected, and the headline figure now reads £2.47m rather than £2.4m. Including January to March 2026, the Housing Advice total is £2.62m across 788 payments.
