@@ -177,7 +177,7 @@ export const PROJECT_DETAILS: Record<string, {
   section?: { href: string; label: string };
 }> = {
   'Stocks Massey': { mark: 'SM', subject: 'History & charitable legacy', section: { href: '/stocks-massey/#articles', label: 'Read the award articles' } },
-  'AI DOGE': { mark: 'DG', subject: 'Public spending', article: { slug: 'where-burnley-councils-money-goes', label: 'Where Burnley Council’s money goes' } },
+  'AI DOGE': { mark: 'DG', subject: 'Public spending', article: { slug: 'where-burnley-councils-money-goes', label: 'Where Burnley Council’s money goes' }, section: { href: '/aidoge/', label: 'How AI DOGE works' } },
   'UK Councils': { mark: 'UC', subject: 'Local government' },
   'UK Elections': { mark: 'UE', subject: 'Elections & forecasts' },
   'Asylum Stats': { mark: 'AS', subject: 'Asylum & accommodation', article: { slug: 'temporary-accommodation-asylum-burnley', label: 'Burnley’s temporary accommodation bill' } },
