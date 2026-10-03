@@ -9,13 +9,38 @@ const posts = (await getCollection('news', ({ data }) => !data.draft && data.tag
    one in the article's address; the publication date is shown separately. */
 const awardYear = (post: typeof posts[number]) => post.id.match(/(\d{4})$/)?.[1] ?? String(post.data.date.getFullYear());
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-const description = 'A short history of the Edward Stocks Massey Bequest Fund, with articles about its support for Burnley organisations and students.';
+const description = 'A short history of the Edward Stocks Massey Bequest Fund, a working paper on how a brewer’s bequest became a public resource, and articles about its awards.';
+/* The working paper is deposited on Zenodo; the copies under public/research/
+   are the same files (SHA-256 checked at release). Change the DOI and files
+   together, never one without the other. */
+const paper = {
+  title: 'The Price of a Civic Legacy: Edward Stocks Massey, brewing wealth and the making of public culture in Burnley',
+  version: '1.0',
+  date: '2026-10-03',
+  doi: '10.5281/zenodo.23124513',
+  record: 'https://zenodo.org/records/23124513',
+  pdf: '/research/stocks-massey/stocks-massey-v1.0.pdf',
+  zip: '/research/stocks-massey/stocks-massey-v1.0-supplementary.zip',
+};
 const schema = {
   '@type': 'CollectionPage',
   '@id': 'https://tompickup.co.uk/stocks-massey/',
   url: 'https://tompickup.co.uk/stocks-massey/',
   name: 'Stocks Massey: history and awards', description,
   inLanguage: 'en-GB',
+  hasPart: {
+    '@type': 'ScholarlyArticle',
+    '@id': `https://doi.org/${paper.doi}`,
+    headline: paper.title, name: paper.title,
+    author: { '@type': 'Person', name: 'Tom Pickup', url: 'https://tompickup.co.uk/about/', sameAs: 'https://orcid.org/0009-0004-6726-0744' },
+    datePublished: paper.date, version: paper.version,
+    creativeWorkStatus: 'Unreviewed working paper',
+    identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: paper.doi },
+    url: `https://doi.org/${paper.doi}`, sameAs: paper.record,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true, inLanguage: 'en-GB',
+    encoding: { '@type': 'MediaObject', contentUrl: `https://tompickup.co.uk${paper.pdf}`, encodingFormat: 'application/pdf' },
+  },
   mainEntity: {
     '@type': 'ItemList', numberOfItems: posts.length,
     itemListElement: posts.map((post, i) => ({
@@ -26,7 +51,7 @@ const schema = {
 };
 ---
 
-<Layout title="Stocks Massey: history & awards | Tom Pickup" description={description} schema={schema}>
+<Layout title="Stocks Massey: history, research & awards | Tom Pickup" description={description} schema={schema}>
   <div class="bequest-page">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/projects/#burnley">Burnley projects</a> <span aria-hidden="true">/</span> Stocks Massey</nav>
     <header class="bequest-hero">
@@ -41,6 +66,7 @@ const schema = {
       <nav class="contents" aria-labelledby="contents-heading">
         <p id="contents-heading" class="contents-heading">On this page</p>
         <a href="#history">A short history</a>
+        <a href="#paper">Working paper</a>
         <a href="#articles">Awards &amp; articles</a>
       </nav>
 
@@ -49,21 +75,41 @@ const schema = {
           <p class="eyebrow">01 / The beginnings</p>
           <h2 id="history-title">A short history</h2>
           <div class="history-copy">
-            <p>Edward Stocks Massey was born in Brierfield in 1850. He made his fortune in Burnley’s brewing industry, becoming a partner in Massey’s Brewery alongside his brother Charles in 1883. Music was also part of his life: he served as choirmaster at St Luke’s Church in Brierfield.</p>
-            <p>When he died in 1909, he left £135,000 to benefit the people of Burnley. The bequest fund was established in 1910. The town’s corporation invested the gift, and trustees have maintained it over the years so it can continue to provide grants.</p>
+            <p>Edward Stocks Massey was a brewer from Brierfield. Burnley Borough Council dates his life from 1850 to 1909, and a birth-registration index entry from late 1850 supports that year. He became a partner in the family brewery in 1883. The council also records that he was choirmaster at St Luke’s Church in Brierfield.</p>
+            <p>He died in 1909, and his will was proved in 1910. The size of the gift is not settled. Later council histories give £135,000. A report of the will in the <em>Auckland Star</em> of 30 April 1910 gave a gross estate of £123,563. It said about £90,000 would be left for Burnley after his widow and other legacies. These figures measure different things, and the sum that reached the fund has not yet been checked against the executors’ accounts.</p>
+            <p>The same report said part of the gift depended on the brewery’s pub licences. If a listed pub lost its licence between the will and his death, its value would go to Manchester University instead. Income from the bequest was reported as reaching Towneley’s gallery in 1921.</p>
             <ol class="timeline" aria-label="Key dates">
               <li><strong>1850</strong><span>Born in Brierfield</span></li>
-              <li><strong>1883</strong><span>A partner in Massey’s Brewery</span></li>
-              <li><strong>1909</strong><span>Leaves £135,000 to Burnley</span></li>
-              <li><strong>1910</strong><span>The bequest fund established</span></li>
+              <li><strong>1883</strong><span>A partner in the family brewery</span></li>
+              <li><strong>1909</strong><span>Dies, leaving a residual gift to Burnley</span></li>
+              <li><strong>1910</strong><span>Will proved</span></li>
+              <li><strong>1921</strong><span>Income reported available to the gallery</span></li>
             </ol>
-            <p>Its purpose spans education, science, learning, music and the arts. The Edward Stocks Massey Gallery at Towneley Hall and the Massey Music Library at Burnley Central Library are part of that legacy. Today, the fund supports local organisations and student scholarships.</p>
-            <p class="history-source">Sources: <a href="https://burnley.gov.uk/council-democracy/stocks-massey/">Burnley Borough Council’s history of the bequest</a> and <a href="https://council.lancashire.gov.uk/documents/s258695/Report.pdf">Lancashire County Council’s account of the fund’s origins and purpose (PDF)</a>.</p>
+            <p>Its purposes span education, science, learning, music and the arts. Later custodians used the fund, sometimes with other funders, to buy works for Towneley Hall, including Johann Zoffany’s painting of Charles Townley and his friends. The Edward Stocks Massey Gallery at Towneley is part of that legacy. So is the Stocks Massey Music Library, an older collection given a new room at Burnley Central Library in February 2026. Today a joint advisory committee of county and borough councillors recommends grants to local organisations and student scholarships each year.</p>
+            <p class="history-source">Sources: <a href="https://burnley.gov.uk/council-democracy/stocks-massey/">Burnley Borough Council’s history of the bequest</a>, <a href="https://council.lancashire.gov.uk/documents/s258695/Report.pdf">Lancashire County Council’s account of the fund’s origins and purpose (PDF)</a>, <a href="https://paperspast.natlib.govt.nz/newspapers/AS19100430.2.93">“Brewer’s £90,000 Bequest”, <em>Auckland Star</em>, 30 April 1910, p. 15</a>, and the <a href="#paper">working paper</a> below, which gives every source and its limits.</p>
           </div>
         </section>
 
+        <section class="paper-section" id="paper" aria-labelledby="paper-title">
+          <p class="eyebrow">02 / Research</p>
+          <h2 id="paper-title">Working paper</h2>
+          <p class="paper-status">Unreviewed working paper. Not peer reviewed.</p>
+          <article class="paper-card" aria-labelledby="paper-name">
+            <h3 id="paper-name"><a href={`https://doi.org/${paper.doi}`}>The Price of a Civic Legacy</a><span>Edward Stocks Massey, brewing wealth and the making of public culture in Burnley</span></h3>
+            <p class="paper-meta">Tom Pickup · Version {paper.version} · <time datetime={paper.date}>3 October 2026</time> · DOI <a href={`https://doi.org/${paper.doi}`}>{paper.doi}</a></p>
+            <p>How did a brewer’s private wealth become a lasting public resource? The paper follows the bequest from a 1910 newspaper account of the will to purchases for Towneley, the music library and recent grant schedules. It keeps the disputed figures apart rather than choosing between them. It also says where the original will, the 1977 scheme and the executors’ accounts are still unread.</p>
+            <ul class="paper-downloads">
+              <li><a href={paper.pdf}>Read the paper<span>PDF, 16 pages, 97 KB</span></a></li>
+              <li><a href={paper.zip} download>Supplementary data<span>ZIP, 168 KB: allocations 2023/24 to 2026/27, sources, fact-check record</span></a></li>
+              <li><a href={paper.record}>Zenodo record<span>Permanent copy and citation</span></a></li>
+            </ul>
+            <p class="paper-note">I chair the bequest’s Joint Advisory Committee, on which I am a Lancashire County Council representative. This is personal research, not a publication of the committee, the trustees or either council. It was prepared with AI assistance for searching, transcription comparison, drafting and editing. The text and original data are free to reuse under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
+            <p class="paper-cite">Cite as: Pickup, T. (2026) <em>The Price of a Civic Legacy: Edward Stocks Massey, brewing wealth and the making of public culture in Burnley</em>. Working paper, version 1.0. Zenodo. DOI: <a href={`https://doi.org/${paper.doi}`}>{paper.doi}</a>.</p>
+          </article>
+        </section>
+
         <section class="articles-section" id="articles" aria-labelledby="articles-title">
-          <p class="eyebrow">02 / The continuing legacy</p>
+          <p class="eyebrow">03 / The continuing legacy</p>
           <h2 id="articles-title">Awards &amp; articles</h2>
           <p class="articles-intro">Reports on the people and organisations supported by the fund.</p>
           <ul class="award-rows">
@@ -111,10 +157,25 @@ const schema = {
   .history-copy > p { color: var(--ink); font-size: 1.125rem; line-height: 1.7; margin: 0 0 18px; }
   .history-copy .history-source { font-size: 0.9375rem; color: var(--muted); margin-bottom: 0; }
   .history-source a { color: var(--gold); }
-  .timeline { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 8px 0 26px; padding: 0; }
+  .timeline { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 8px 0 26px; padding: 0; }
   .timeline li { border-top: 2px solid var(--gold); padding-top: 10px; }
   .timeline strong { display: block; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; font-variant-numeric: tabular-nums lining-nums; }
   .timeline span { display: block; color: var(--muted); font-size: 0.9375rem; line-height: 1.45; margin-top: 4px; }
+  .paper-section { padding: 36px 0; border-bottom: 1px solid var(--line); }
+  .paper-status { color: var(--ink); font-size: 0.9375rem; font-weight: 600; border-left: 3px solid var(--gold); padding-left: 12px; margin: 0 0 18px; }
+  .paper-card h3 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 8px; }
+  .paper-card h3 a { color: var(--ink); }
+  .paper-card h3 a:hover { color: var(--gold); }
+  .paper-card h3 span { display: block; font-size: 0.75em; font-weight: 400; color: var(--muted); margin-top: 4px; }
+  .paper-card > p { color: var(--ink); font-size: 1.0625rem; line-height: 1.7; margin: 0 0 16px; }
+  .paper-card > .paper-meta { color: var(--muted); font-size: 0.9375rem; overflow-wrap: anywhere; }
+  .paper-card > .paper-note, .paper-card > .paper-cite { color: var(--muted); font-size: 0.9375rem; line-height: 1.6; overflow-wrap: anywhere; }
+  .paper-meta a, .paper-note a, .paper-cite a { color: var(--gold); }
+  .paper-downloads { list-style: none; margin: 20px 0; padding: 0; border-top: 1px solid var(--line); }
+  .paper-downloads li { border-bottom: 1px solid var(--line); }
+  .paper-downloads a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; min-height: var(--touch); padding: 12px 0; color: var(--ink); font-weight: 600; text-decoration: none; }
+  .paper-downloads a:hover { color: var(--gold); text-decoration: underline; }
+  .paper-downloads span { color: var(--muted); font-size: 0.9375rem; font-weight: 400; }
   .articles-section { padding: 36px 0 40px; }
   .articles-intro { color: var(--muted); font-size: 1rem; margin: 0 0 16px; }
   .award-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
@@ -136,6 +197,7 @@ const schema = {
   @media (max-width: 600px) {
     h1 { font-size: clamp(2.375rem, 10vw, 3.25rem); }
     .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .paper-card h3 { font-size: 1.3125rem; }
     .award-rows a { grid-template-columns: minmax(0, 1fr) 20px; gap: 6px 12px; }
     .award-year { grid-column: 1 / -1; font-size: 1.375rem; }
   }
