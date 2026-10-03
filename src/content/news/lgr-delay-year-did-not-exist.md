@@ -1,6 +1,7 @@
 ---
 title: "The year the pause handed back to Lancashire's councils"
 date: 2026-10-03
+updated: 2026-10-04
 description: "The Government paused Lancashire's reorganisation on 7 September and set no new date. Seven councils, the county among them, had budgeted to stop existing in March 2028. All fifteen must now plan for 2028/29, a year the July timetable gave to their successors."
 category: "Lancashire"
 subcategory: "Local government reorganisation"
@@ -87,6 +88,8 @@ Councillors elected next May will serve four years "unless a Structural Changes 
 ## The savings that were or were not there
 
 Deferred savings are the one cost that depends on whose figures you believe. The six councils that proposed four unitaries claimed £82.1M a year of benefit at steady state. If you believe that, a year's delay forgoes up to £82.1M, and when the Government slipped Northamptonshire's vesting day by a year in 2019, the Minister accepted that savings would be "not realised for another year". My own published model of the same configuration, which counts only effects that follow from structure, puts four unitaries at minus £2.6M a year, so a year's delay saves a little and defers a £64.3M transition bill. If Lancashire realised savings only at the rates Buckinghamshire and Northamptonshire have actually reported, four unitaries would cost more each year than they save, and a year's delay avoids between £43.9M and £56.2M.
+
+The same model finds that two unitaries would save about £75.9M a year, so its finding is about the configuration the Government chose, not about reorganisation as such. The county council, on which I sit, proposed two.
 
 <div class="viz-panel">
 <div class="viz-label">What a one-year slip does to the recurring figure, on each basis</div>
