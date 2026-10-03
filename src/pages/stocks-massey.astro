@@ -1,6 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import { articleImage } from '../lib/images';
+import {
+  ALLOCATIONS_CSV, SUMMARY_CSV, CATEGORIES, EVIDENCE, CHRONO_START, CHRONO_END,
+  allocationYears, bequestFigures, chronology, chronologyLanes, gbp,
+} from '../data/stocks-massey';
 
 const posts = (await getCollection('news', ({ data }) => !data.draft && data.tags.includes('stocks-massey')))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -9,6 +15,21 @@ const posts = (await getCollection('news', ({ data }) => !data.draft && data.tag
    one in the article's address; the publication date is shown separately. */
 const awardYear = (post: typeof posts[number]) => post.id.match(/(\d{4})$/)?.[1] ?? String(post.data.date.getFullYear());
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const isoFmt = (iso: string) => dateFmt.format(new Date(iso + 'T12:00:00Z'));
+
+/* Grants chart: each bar is drawn to the same scale, the largest year's total. */
+const maxTotal = Math.max(...allocationYears.map((y) => y.total));
+const latest = allocationYears[allocationYears.length - 1];
+const lowest = allocationYears.reduce((a, b) => (b.total < a.total ? b : a));
+
+/* Chronology strip: a true time scale from 1850 to 2026. */
+const placed = chronologyLanes(chronology);
+const laneCount = Math.max(...placed.map((e) => e.lane)) + 1;
+const ticks = [1850, 1900, 1950, 2000, 2026];
+const tickX = (y: number) => ((y - CHRONO_START) / (CHRONO_END - CHRONO_START)) * 100;
+
+/* The 2025 presentation photograph, resized by astro:assets. */
+const awardPhoto = articleImage('/images/stocks-massey-2025-main.jpg');
 const description = 'A short history of the Edward Stocks Massey Bequest Fund, a working paper on how a brewer’s bequest became a public resource, and articles about its awards.';
 /* The working paper is deposited on Zenodo; the copies under public/research/
    are the same files (SHA-256 checked at release). Change the DOI and files
@@ -66,6 +87,7 @@ const schema = {
       <nav class="contents" aria-labelledby="contents-heading">
         <p id="contents-heading" class="contents-heading">On this page</p>
         <a href="#history">A short history</a>
+        <a href="#grants">Grants since 2023</a>
         <a href="#paper">Working paper</a>
         <a href="#articles">Awards &amp; articles</a>
       </nav>
@@ -76,22 +98,87 @@ const schema = {
           <h2 id="history-title">A short history</h2>
           <div class="history-copy">
             <p>Edward Stocks Massey was a brewer from Brierfield. Burnley Borough Council dates his life from 1850 to 1909, and a birth-registration index entry from late 1850 supports that year. He became a partner in the family brewery in 1883. The council also records that he was choirmaster at St Luke’s Church in Brierfield.</p>
-            <p>He died in 1909, and his will was proved in 1910. The size of the gift is not settled. Later council histories give £135,000. A report of the will in the <em>Auckland Star</em> of 30 April 1910 gave a gross estate of £123,563. It said about £90,000 would be left for Burnley after his widow and other legacies. These figures measure different things, and the sum that reached the fund has not yet been checked against the executors’ accounts.</p>
-            <p>The same report said part of the gift depended on the brewery’s pub licences. If a listed pub lost its licence between the will and his death, its value would go to Manchester University instead. Income from the bequest was reported as reaching Towneley’s gallery in 1921.</p>
-            <ol class="timeline" aria-label="Key dates">
-              <li><strong>1850</strong><span>Born in Brierfield</span></li>
-              <li><strong>1883</strong><span>A partner in the family brewery</span></li>
-              <li><strong>1909</strong><span>Dies, leaving a residual gift to Burnley</span></li>
-              <li><strong>1910</strong><span>Will proved</span></li>
-              <li><strong>1921</strong><span>Income reported available to the gallery</span></li>
-            </ol>
+            <p>He died in 1909, and his will was proved in 1910. How much he left Burnley is not settled. The sources give three figures, and they measure different things.</p>
+            <figure class="figures-block" aria-labelledby="figures-title">
+              <figcaption id="figures-title" class="block-title">One gift, three figures</figcaption>
+              <ul class="figure-cards">
+                {bequestFigures.map((f) => <li>
+                  <strong>{f.value}</strong>
+                  <span class="figure-measure">{f.measure}</span>
+                  <a class="figure-source" href={f.url}>{f.source}</a>
+                </li>)}
+              </ul>
+              <p class="block-note">Not reconciled. The executors’ account books for 1909 to 1925 (Lancashire Archives, DDX1101/74/12) are the best place to test them, and have not yet been read.</p>
+            </figure>
+            <p>The 1910 report also said part of the gift depended on the brewery’s pub licences. If a listed pub lost its licence between the will and his death, its value would go to Manchester University instead. Income from the bequest was reported as reaching Towneley’s gallery in 1921.</p>
             <p>Its purposes span education, science, learning, music and the arts. Later custodians used the fund, sometimes with other funders, to buy works for Towneley Hall, including Johann Zoffany’s painting of Charles Townley and his friends. The Edward Stocks Massey Gallery at Towneley is part of that legacy. So is the Stocks Massey Music Library, an older collection given a new room at Burnley Central Library in February 2026. Today a joint advisory committee of county and borough councillors recommends grants to local organisations and student scholarships each year.</p>
+            <div class="chronology" aria-labelledby="chronology-title">
+              <h3 id="chronology-title" class="block-title">Key dates, and the evidence for each</h3>
+              <ul class="evidence-key" aria-label="Kinds of evidence">
+                {Object.entries(EVIDENCE).map(([kind, e]) => <li><span class={`mark mark-${e.shape}`} style={`--mark:${e.colour}`} aria-hidden="true"></span>{e.label}</li>)}
+              </ul>
+              <div class="chrono-strip" style={`--lanes:${laneCount}`} aria-hidden="true">
+                <div class="chrono-axis"></div>
+                {ticks.map((t) => <span class="chrono-tick" style={`left:${tickX(t)}%`}>{t}</span>)}
+                {placed.map((e) => <a class="chrono-dot" href={`#date-${e.index}`} tabindex="-1" style={`left:${e.x}%;--lane:${e.lane};--mark:${EVIDENCE[e.kind].colour}`} data-tip={`${e.year}: ${EVIDENCE[e.kind].label}`}><span class={`mark mark-${EVIDENCE[e.kind].shape}`}></span></a>)}
+              </div>
+              <ol class="chrono-list">
+                {placed.map((e) => <li id={`date-${e.index}`}>
+                  <strong class="chrono-year">{e.year}</strong>
+                  <span class="chrono-body">
+                    <span class="chrono-text">{e.text}</span>
+                    <span class="chrono-meta"><span class={`mark mark-${EVIDENCE[e.kind].shape}`} style={`--mark:${EVIDENCE[e.kind].colour}`} aria-hidden="true"></span><span class="visually-hidden">{EVIDENCE[e.kind].label}: </span><a href={e.url}>{e.source}</a></span>
+                  </span>
+                </li>)}
+              </ol>
+            </div>
             <p class="history-source">Sources: <a href="https://burnley.gov.uk/council-democracy/stocks-massey/">Burnley Borough Council’s history of the bequest</a>, <a href="https://council.lancashire.gov.uk/documents/s258695/Report.pdf">Lancashire County Council’s account of the fund’s origins and purpose (PDF)</a>, <a href="https://paperspast.natlib.govt.nz/newspapers/AS19100430.2.93">“Brewer’s £90,000 Bequest”, <em>Auckland Star</em>, 30 April 1910, p. 15</a>, and the <a href="#paper">working paper</a> below, which gives every source and its limits.</p>
           </div>
         </section>
 
+        <section class="grants-section" id="grants" aria-labelledby="grants-title">
+          <p class="eyebrow">02 / The fund today</p>
+          <h2 id="grants-title">Grants since 2023</h2>
+          <p class="grants-intro">Each year the joint advisory committee recommends how the fund’s income is shared. Over the last four years the amount approved fell from {gbp(allocationYears[0].total)} to {gbp(lowest.total)} in {lowest.year}, and was {gbp(latest.total)} in {latest.year}. These are approved allocations, not payments.</p>
+          <figure class="grants-chart" aria-labelledby="grants-chart-title">
+            <figcaption id="grants-chart-title" class="block-title">Approved allocations by year, 2023/24 to 2026/27</figcaption>
+            <ul class="chart-legend" aria-label="Categories">
+              {CATEGORIES.map((c) => <li><span class="swatch" style={`--mark:${c.colour}`} aria-hidden="true"></span>{c.label}</li>)}
+            </ul>
+            <ol class="bars">
+              {allocationYears.map((y) => <li class="bar-row">
+                <span class="bar-year">{y.year}</span>
+                <span class="bar-track" role="img" aria-label={`${y.year}: ${gbp(y.total)} in total. ` + CATEGORIES.map((c) => `${c.label} ${gbp(y.amounts[c.key])}`).join('; ') + '.'}>
+                  <span class="bar-fill" style={`width:${(y.total / maxTotal) * 100}%`}>
+                    {CATEGORIES.filter((c) => y.amounts[c.key] > 0).map((c) => <span class="seg" style={`flex:${y.amounts[c.key]};--mark:${c.colour}`} data-tip={`${c.label}: ${gbp(y.amounts[c.key])}`}></span>)}
+                  </span>
+                  <span class="bar-total">{gbp(y.total)}</span>
+                </span>
+              </li>)}
+            </ol>
+            <details class="chart-table">
+              <summary>Show the figures as a table</summary>
+              <div class="table-wrap">
+                <table>
+                  <caption class="visually-hidden">Approved Stocks Massey allocations by category, 2023/24 to 2026/27, in pounds</caption>
+                  <thead><tr><th scope="col">Category</th>{allocationYears.map((y) => <th scope="col" class="num">{y.year}</th>)}</tr></thead>
+                  <tbody>
+                    {CATEGORIES.map((c) => <tr><th scope="row"><span class="swatch" style={`--mark:${c.colour}`} aria-hidden="true"></span>{c.label}</th>{allocationYears.map((y) => <td class="num">{gbp(y.amounts[c.key])}</td>)}</tr>)}
+                    <tr class="total-row"><th scope="row">Total</th>{allocationYears.map((y) => <td class="num">{gbp(y.total)}</td>)}</tr>
+                    <tr><th scope="row">Applicants allocated funding</th>{allocationYears.map((y) => <td class="num">{y.funded}</td>)}</tr>
+                    <tr><th scope="row">Applicants allocated nothing</th>{allocationYears.map((y) => <td class="num">{y.notFunded}</td>)}</tr>
+                    <tr><th scope="row">Approved</th>{allocationYears.map((y) => <td class="num">{y.approvedBy}, {isoFmt(y.approvalDate)}</td>)}</tr>
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <p class="block-note">Counts are applicant entries in the schedule, not necessarily distinct organisations. Scholarships are chosen separately and the published papers do not split new awards from continuing ones.</p>
+            <p class="block-note">Sources: Lancashire County Council allocation schedules (Appendix A) and approval records for <a href="https://council.lancashire.gov.uk/documents/s214690/Appendix%20A.pdf">2023/24</a>, <a href="https://council.lancashire.gov.uk/documents/s236221/Appendix%20A.pdf">2024/25</a>, <a href="https://council.lancashire.gov.uk/documents/s258696/Appendix%20A.pdf">2025/26</a> and <a href="https://council.lancashire.gov.uk/documents/s281915/Appendix%20A.pdf">2026/27</a>. Data: <a href={ALLOCATIONS_CSV}>every applicant row (CSV)</a> and <a href={SUMMARY_CSV}>yearly summary (CSV)</a>, as deposited with the <a href="#paper">working paper</a>.</p>
+          </figure>
+        </section>
+
         <section class="paper-section" id="paper" aria-labelledby="paper-title">
-          <p class="eyebrow">02 / Research</p>
+          <p class="eyebrow">03 / Research</p>
           <h2 id="paper-title">Working paper</h2>
           <p class="paper-status">Unreviewed working paper. Not peer reviewed.</p>
           <article class="paper-card" aria-labelledby="paper-name">
@@ -109,9 +196,13 @@ const schema = {
         </section>
 
         <section class="articles-section" id="articles" aria-labelledby="articles-title">
-          <p class="eyebrow">03 / The continuing legacy</p>
+          <p class="eyebrow">04 / The continuing legacy</p>
           <h2 id="articles-title">Awards &amp; articles</h2>
           <p class="articles-intro">Reports on the people and organisations supported by the fund.</p>
+          {awardPhoto && <figure class="award-photo">
+            <Image src={awardPhoto} alt="A 2025 Stocks Massey scholar holding the award, standing with Tom Pickup and two other guests" widths={[480, 720, 1080]} sizes="(max-width: 900px) calc(100vw - 40px), 720px" format="webp" quality={72} loading="lazy" />
+            <figcaption>The 2025 award presentation. The scholars and the grants are reported in the articles below.</figcaption>
+          </figure>}
           <ul class="award-rows">
             {posts.map(post => <li>
               <a href={`/news/${post.id}/`}>
@@ -157,10 +248,79 @@ const schema = {
   .history-copy > p { color: var(--ink); font-size: 1.125rem; line-height: 1.7; margin: 0 0 18px; }
   .history-copy .history-source { font-size: 0.9375rem; color: var(--muted); margin-bottom: 0; }
   .history-source a { color: var(--gold); }
-  .timeline { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 8px 0 26px; padding: 0; }
-  .timeline li { border-top: 2px solid var(--gold); padding-top: 10px; }
-  .timeline strong { display: block; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; font-variant-numeric: tabular-nums lining-nums; }
-  .timeline span { display: block; color: var(--muted); font-size: 0.9375rem; line-height: 1.45; margin-top: 4px; }
+  .block-title { display: block; font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+  .block-note { color: var(--muted); font-size: 0.9375rem; line-height: 1.6; margin: 12px 0 0; }
+  .block-note a, .figure-source, .chrono-meta a { color: var(--gold); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+  /* One gift, three figures: side by side, never as bars, because the three
+     measure different things and a bar chart would invite comparing them. */
+  .figures-block { margin: 8px 0 28px; padding: 20px 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
+  .figure-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .figure-cards li { display: flex; flex-direction: column; gap: 6px; padding-left: 14px; border-left: 3px solid var(--gold); }
+  .figure-cards strong { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; line-height: 1.1; font-variant-numeric: lining-nums; }
+  .figure-measure { color: var(--ink); font-size: 0.9375rem; line-height: 1.45; }
+  .figure-source { font-size: 0.875rem; line-height: 1.4; }
+
+  /* Chronology: a dot strip on a true time scale, then the dated list it indexes.
+     Evidence kind is shape plus colour, never colour alone. */
+  .chronology { margin: 28px 0 22px; padding-top: 20px; border-top: 2px solid var(--ink); }
+  .evidence-key { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; color: var(--muted); font-size: 0.875rem; }
+  .evidence-key li { display: inline-flex; align-items: center; gap: 8px; }
+  .mark { display: inline-block; flex: none; width: 10px; height: 10px; background: var(--mark); }
+  .mark-circle { border-radius: 50%; }
+  .mark-square { border-radius: 1px; }
+  .mark-ring { border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 2.5px var(--mark); }
+  .mark-diamond { width: 9px; height: 9px; transform: rotate(45deg); border-radius: 1px; }
+  .chrono-strip { position: relative; height: calc(var(--lanes) * 16px + 38px); margin: 0 6px 18px; }
+  .chrono-axis { position: absolute; left: 0; right: 0; bottom: 22px; height: 2px; background: var(--line-strong); }
+  .chrono-tick { position: absolute; bottom: 0; transform: translateX(-50%); color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+  .chrono-tick::before { content: ''; position: absolute; left: 50%; top: -8px; width: 1px; height: 6px; background: var(--line-strong); }
+  .chrono-dot { position: absolute; bottom: calc(30px + var(--lane) * 16px); transform: translateX(-50%); display: grid; place-items: center; width: 16px; height: 16px; text-decoration: none; }
+  .chrono-dot .mark { box-shadow: 0 0 0 2px var(--paper); }
+  .chrono-dot .mark-ring { box-shadow: inset 0 0 0 2.5px var(--mark), 0 0 0 2px var(--paper); }
+  .seg { position: relative; }
+  .seg:hover::after, .chrono-dot:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); z-index: 2; white-space: nowrap; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 0.8125rem; font-weight: 600; line-height: 1.3; border-radius: var(--radius-md); pointer-events: none; }
+  .chrono-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .chrono-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 96px; }
+  .chrono-list li:target { background: var(--panel); }
+  .chrono-year { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--gold); line-height: 1.3; font-variant-numeric: tabular-nums lining-nums; }
+  .chrono-body { display: flex; flex-direction: column; gap: 4px; }
+  .chrono-text { font-size: 1rem; line-height: 1.55; }
+  .chrono-meta { display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; line-height: 1.4; }
+
+  /* Grants chart: horizontal stacked bars on one shared scale, 2px gaps between
+     segments, the total labelled at the end of each bar. Exact values are in
+     the hover tip and the table. */
+  .grants-section { padding: 36px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 88px; }
+  .grants-intro { font-size: 1.125rem; line-height: 1.7; margin: 0 0 20px; }
+  .grants-chart { margin: 0; padding-top: 20px; border-top: 2px solid var(--ink); }
+  .chart-legend { list-style: none; margin: 0 0 18px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 0.875rem; color: var(--ink); }
+  .chart-legend li, .chart-table th[scope="row"] { display: flex; align-items: center; gap: 8px; }
+  .swatch { display: inline-block; flex: none; width: 12px; height: 12px; border-radius: 2px; background: var(--mark); }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .bar-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .bar-year { font-size: 0.9375rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bar-track { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .bar-fill { display: flex; gap: 2px; height: 28px; min-width: 0; }
+  .seg { min-width: 2px; background: var(--mark); }
+  .seg:first-child { border-radius: 4px 0 0 4px; }
+  .seg:last-child { border-radius: 0 4px 4px 0; }
+  .seg:hover { filter: brightness(0.88); }
+  .bar-total { flex: none; font-size: 0.9375rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .chart-table { margin-top: 18px; }
+  .chart-table summary { cursor: pointer; min-height: var(--touch); display: flex; align-items: center; color: var(--teal); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  .chart-table table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+  .chart-table th, .chart-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .chart-table thead th { border-bottom: 2px solid var(--ink); font-weight: 600; }
+  .chart-table .num { text-align: right; }
+  .chart-table th[scope="row"] { font-weight: 400; }
+  .chart-table .total-row th, .chart-table .total-row td { font-weight: 600; border-top: 2px solid var(--ink); }
+
+  .award-photo { margin: 0 0 24px; }
+  .award-photo :global(img) { display: block; width: 100%; height: auto; border-radius: var(--radius-xl); }
+  .award-photo figcaption { color: var(--muted); font-size: 0.9375rem; margin-top: 8px; }
   .paper-section { padding: 36px 0; border-bottom: 1px solid var(--line); }
   .paper-status { color: var(--ink); font-size: 0.9375rem; font-weight: 600; border-left: 3px solid var(--gold); padding-left: 12px; margin: 0 0 18px; }
   .paper-card h3 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 8px; }
@@ -196,7 +356,9 @@ const schema = {
   }
   @media (max-width: 600px) {
     h1 { font-size: clamp(2.375rem, 10vw, 3.25rem); }
-    .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .figure-cards { grid-template-columns: 1fr; gap: 16px; }
+    .bar-row { grid-template-columns: 1fr; gap: 4px; }
+    .chrono-list li { grid-template-columns: 52px minmax(0, 1fr); }
     .paper-card h3 { font-size: 1.3125rem; }
     .award-rows a { grid-template-columns: minmax(0, 1fr) 20px; gap: 6px 12px; }
     .award-year { grid-column: 1 / -1; font-size: 1.375rem; }

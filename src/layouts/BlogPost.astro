@@ -1058,6 +1058,26 @@ const pageTitle =
   .prose :global(.viz-seg) { display: flex; align-items: center; padding: 0 12px; min-width: 0; }
   .prose :global(.viz-seg.teal) { background: var(--chart-1); }
   .prose :global(.viz-seg.orange) { background: var(--chart-2); }
+  .prose :global(.viz-seg.blue) { background: var(--chart-3); }
+  .prose :global(.viz-seg.purple) { background: var(--chart-4); }
+  .prose :global(.viz-seg.neutral) { background: var(--chart-neutral); }
+
+  /* Thin stacked bar with a legend that carries the values (Stocks Massey
+     allocations). Segments hold no text; each legend row names its category and
+     amount, so identity never rests on colour alone. */
+  .prose :global(.viz-stack.thin) { height: 28px; margin-top: 4px; }
+  .prose :global(.viz-stack.thin .viz-seg) { padding: 0; min-width: 2px; }
+  .prose :global(.viz-stack.thin .viz-seg:first-child) { border-radius: 4px 0 0 4px; }
+  .prose :global(.viz-stack.thin .viz-seg:last-child) { border-radius: 0 4px 4px 0; }
+  .prose :global(.viz-legend) { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 6px 24px; font-size: 0.9375rem; }
+  .prose :global(.viz-legend li) { list-style: none; display: flex; align-items: center; gap: 8px; margin: 0; padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .prose :global(.viz-legend .swatch) { flex: none; width: 12px; height: 12px; border-radius: 2px; }
+  .prose :global(.viz-legend .amount) { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .prose :global(.swatch.teal) { background: var(--chart-1); }
+  .prose :global(.swatch.orange) { background: var(--chart-2); }
+  .prose :global(.swatch.blue) { background: var(--chart-3); }
+  .prose :global(.swatch.purple) { background: var(--chart-4); }
+  .prose :global(.swatch.neutral) { background: var(--chart-neutral); }
   .prose :global(.text-on-fill) { color: #ffffff; font-weight: 700; }
 
   /* Column chart: columns carry no printed values, so each is at least 3:1
