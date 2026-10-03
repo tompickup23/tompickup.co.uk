@@ -50,7 +50,7 @@ The fund supports education, science, learning, music and the arts for the peopl
 
 ## The 2026 scholars
 
-**Charlie Diamond and Jonah Morgan** received the 2026 Stocks Massey scholarships, recognised at Burnley College's Awards for Excellence ceremony.
+**Charlie Diamond and Jonah Morgan** received the 2026 Stocks Massey scholarships. [Burnley College announced them](https://www.burnley.ac.uk/video-gallery-celebrating-student-success-at-inspiring-awards-for-excellence-ceremony/) at its Awards for Excellence ceremony.
 
 Congratulations to both of them. It is good to see this longstanding Burnley charity continuing to support young people alongside the organisations that contribute to the town's cultural and community life.
 
