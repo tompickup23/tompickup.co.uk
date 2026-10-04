@@ -7,7 +7,8 @@ downloads + funzip-filters it (same method as etl_register.py: ONSPD pcds->lad25
 lookup, keep only the 14 Lancashire LADs) and regenerates:
   lancs_register.csv(.gz), register_index.tsv.gz, lancs_crns.txt, register_summary.json
 
-Disk guard: abort the download if free space < 40 GB. Deletes the zip after use.
+Disk guard: abort the download if free space < 40 GB. Keeps the zip for the
+warehouse bronze step and prunes zips bronze already holds (prune_landed).
 Exit codes: 0 refreshed, 3 already fresh (skipped), 2 error.
 """
 import csv, subprocess, sys, gzip, os, json, io, shutil, re, glob, urllib.request, time
@@ -18,6 +19,7 @@ ONSPD_DIR = "/opt/observatory/onspd"
 INDEX_URL = "http://download.companieshouse.gov.uk/en_output.html"
 BASE_URL = "http://download.companieshouse.gov.uk/"
 MIN_FREE_GB = 40
+BRONZE_CH = "/opt/observatory/bronze/source=ch_register"
 
 TARGET_LADS = {
     "E07000121": "Lancaster", "E07000123": "Preston", "E07000124": "Ribble Valley",
@@ -150,8 +152,37 @@ def build(zip_path, snapshot_date, pc2lad):
     log(f"DONE register {snapshot_date}: {lancs:,} lancs / {total:,} UK")
 
 
+def prune_landed():
+    """Delete register zips in WORK that bronze already holds byte for byte.
+
+    A zip is only removed when the bronze partition for its snapshot has a file
+    of the same name, size and sha256, so nothing is lost if bronze never ran.
+    """
+    import hashlib
+
+    def sha(path):
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                h.update(chunk)
+        return h.hexdigest()
+
+    for z in sorted(glob.glob(os.path.join(WORK, "BasicCompanyDataAsOneFile-*.zip"))):
+        m = re.search(r"(\d{4}-\d{2}-\d{2})\.zip$", z)
+        if not m:
+            continue
+        landed = os.path.join(BRONZE_CH, f"snapshot_date={m.group(1)}", os.path.basename(z))
+        if (os.path.exists(landed) and os.path.getsize(landed) == os.path.getsize(z)
+                and sha(landed) == sha(z)):
+            os.remove(z)
+            log(f"pruned {os.path.basename(z)}: identical copy in bronze")
+        else:
+            log(f"kept {os.path.basename(z)}: not yet in bronze")
+
+
 def main():
     os.makedirs(WORK, exist_ok=True)
+    prune_landed()
     latest = latest_snapshot()
     if not latest:
         log("ERROR could not resolve latest snapshot from CH index")
@@ -173,11 +204,12 @@ def main():
             sys.exit(2)
     pc2lad = load_onspd()
     build(zip_path, latest, pc2lad)
-    try:
-        os.remove(zip_path)
-        log(f"removed zip, free {free_gb():.1f}GB")
-    except OSError:
-        pass
+    # Keep the zip. The warehouse bronze step runs later in the same monthly
+    # job and lands it from WORK; deleting it here left bronze on the previous
+    # month while register_summary.json moved on, which failed the marts frame
+    # assertion on 8 September 2026. prune_landed() removes it next month,
+    # once bronze holds an identical copy.
+    log(f"kept {os.path.basename(zip_path)} for bronze, free {free_gb():.1f}GB")
     sys.exit(0)
 
 
