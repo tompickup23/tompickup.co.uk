@@ -1,6 +1,6 @@
 ---
 title: "Scout Moor II Is Cut to 12 Turbines. The Area That Could See Both Barely Shrinks"
-date: 2026-10-04T18:00:00
+date: 2026-10-04T12:30:00
 description: "Scout Moor II is down to 12 turbines, and the applicant's own map of both wind farms is now public. I was wrong to say no assessment existed. The area that could see both is barely smaller."
 image: "/images/scout-moor-cumulative-ztv-v2.png"
 imageAlt: "Map of where turbines of Scout Moor II, now 12 turbines, and Calderdale Energy Park, 34 turbines, would theoretically be visible. Blue areas see both, shaded by how many turbines; 699 square kilometres would see both."
@@ -14,13 +14,13 @@ featured: true
 draft: false
 ---
 
-Scout Moor II has been cut from 17 turbines to 12. And the company behind it has now published its own map of where it and Calderdale Energy Park, up to 34 turbines above Hebden Bridge, could be seen together.
+Scout Moor II has been cut from 17 turbines to 12. And the applicant's own map of where it and Calderdale Energy Park, up to 34 turbines above Hebden Bridge, could be seen together is now public.
 
 That map is the thing I said did not exist. In August I wrote that there was no assessment of the two schemes together. I was wrong about that, and I have said so in [a correction to that article](/news/two-wind-farms-one-view/).
 
 ## What I got wrong
 
-The applicant, Cubico, sent both councils further environmental information, a revision of its environmental statement, under a letter of 1 July 2026. It already included a written cumulative assessment of Calderdale Energy Park and a combined map. The 12-turbine layout was in the same submission.
+The applicant, a company backed by Cubico Sustainable Investments, sent both councils further environmental information, a revision of its environmental statement, under a letter of 1 July 2026. It already included a written cumulative assessment of Calderdale Energy Park and a combined map. The 12-turbine layout was in the same submission.
 
 None of it was on the public planning portal when I wrote. By my count on 20 August the Rossendale file listed 333 documents and none of them was part of the revision; on 4 September the case officer told me the documents would be viewable once the re-consultation went live; the councils' letters are dated 25 September and the portal gives 28 September. So it was true that nothing had been published. But my headline and my objection both said that no assessment existed, and that was wrong.
 
@@ -74,13 +74,13 @@ I have sent a fresh representation to Rossendale and Rochdale. It asks the counc
 - require a combined night-time assessment;
 - publish their own landscape consultant's review;
 - confirm the dates the new documents went public and the earliest date each council can now decide. The councils' letters say 23 October, Rochdale's newspaper notice says 22 October and Rossendale's says 1 November;
-- send the application to committee, not decide it under delegated powers. The national scheme of delegation starts on 31 October, has no exemption for applications already made, and leaves it to one councillor and one officer to agree that this one goes to committee.
+- send the application to committee, not decide it under delegated powers. The national scheme of delegation starts on 31 October, makes no transitional provision for applications already made, and leaves it to one councillor and one officer to agree that this one goes to committee.
 
 Rossendale's newspaper notice of 2 October gives 1 November for comments on the revised environmental statement, and I have asked both councils to accept comments until then. Do not rely on that: Rochdale's own notice gives 22 October, so send yours by **22 October 2026**. The documents are on Rossendale's planning portal under 2025/0267 and Rochdale's under 25/00680/FUL. Rossendale takes comments at planning@rossendalebc.gov.uk and Rochdale at development.management@rochdale.gov.uk. Say which application you are commenting on, and ask for it to be logged on both.
 
 ## Read it yourself
 
-The representation runs to 12 pages, with three appendices: the method, the full list of places with their counts for 17 and 12 turbines, and the comparison with the applicant's map. It corrects my August objection in its own section 3 rather than quietly.
+The representation runs to 12 pages, with three appendices: the method, the full list of places with their counts for 17 and 12 turbines, and the comparison with the applicant's map. Its section 3 sets out, openly, where my August objection was wrong.
 
 <div class="viz-info">
 <strong><a href="/documents/scout-moor-ii-representation-t-pickup-4-oct-2026.pdf">Download the representation and appendices (PDF, 29 pages)</a></strong>
