@@ -1,7 +1,8 @@
 ---
-title: "Two Wind Farms, One View, and No Assessment of Either Together"
+title: "Two Wind Farms, One View, and No Published Assessment of Either Together"
 date: 2026-08-24T10:00:00
-description: "Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. Neither applicant has assessed the combined view. So I mapped it."
+updated: 2026-10-04T18:00:00
+description: "Corrected 4 October 2026: an assessment of the two schemes together did exist, though it was not yet public. Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. So I mapped them."
 image: "/images/scout-moor-cumulative-ztv.png"
 imageAlt: "Map of where turbines of the proposed Scout Moor II and Calderdale Energy Park wind farms would be visible. Shaded areas show one scheme, the other, or both; 702 square kilometres would see both."
 ogImage: "/images/share/two-wind-farms-one-view.png"
@@ -12,6 +13,12 @@ tags: ["lancashire", "planning", "wind", "data", "transparency"]
 featured: true
 draft: false
 ---
+
+<div class="viz-info">
+
+**Correction, 4 October 2026.** An assessment of Scout Moor II and Calderdale Energy Park together, with a map of the combined view, did exist when this article was published. The original headline ("No Assessment of Either Together"), the description, the sentence "There is no map of it in either applicant's documents", the heading "The map that did not exist" and my objection of the same day all said or implied that it did not. That was wrong. The second paragraph's first sentence, that neither applicant had published one, was right. Cubico had already sent the councils Further Environmental Information under a covering letter of 1 July 2026. It includes a written cumulative assessment of Calderdale Energy Park and a combined map (Figure 11.16), and it reduces the scheme from 17 turbines to 12. Those documents were not on the public planning portal when this article was written; the councils' re-consultation letters are dated 25 September 2026 and the documents were public by 28 September. This article also said that no independent review of the landscape chapter had been commissioned. The applicant records that the councils had commissioned one, from LUC, in draft in February 2026. It has not been published. The figure of 560 km² "with both inside one photomontage frame" measured the angle between the centres of the two arrays; requiring every turbine of both schemes to fit one frame gives 492.6 km². The headline now says "No Published Assessment". [A second article](/news/scout-moor-ii-round-two/) covers the revised scheme and the applicant's own assessment.
+
+</div>
 
 There are two wind farms proposed on the South Pennine moors, one on the Rossendale and Rochdale boundary and one above Hebden Bridge. Between them they are 51 turbines. Their nearest machines stand 15.7 kilometres apart.
 
