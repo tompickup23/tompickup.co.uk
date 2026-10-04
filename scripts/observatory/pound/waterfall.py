@@ -97,6 +97,22 @@ FUND FUNDS PENSION PENSIONS AND THE OF FOR
 """.split())
 
 
+LEGAL_END = re.compile(r"\b(LTD|LIMITED|PLC|LLP|CIC|CIO)\.?$")
+
+
+def extra_variants(raw):
+    """Waterfall variant rule W1 (new in Phase 1, not in supplier_variants,
+    which stays unchanged because it defines today's matches): where a name
+    has a legal suffix followed by " - " and a tail (a site, a ledger note or a
+    truncated GROSS), also try the part up to the suffix. Tried after every
+    supplier_variants key."""
+    out = []
+    head = raw.split(" - ")[0].strip() if " - " in raw else ""
+    if head and LEGAL_END.search(head.upper()):
+        out.append(head)
+    return out
+
+
 def now():
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -137,6 +153,13 @@ def load_keys(path):
                 if v not in seen:
                     seen.add(v)
                     variants.append(v)
+        for n in names:
+            for x in extra_variants(n):
+                for v in supplier_variants(x):
+                    if v not in seen:
+                        seen.add(v)
+                        variants.append(v)
+                        e.setdefault("w1_variants", []).append(v)
         e["variants"] = variants
     return keys
 
@@ -567,7 +590,7 @@ def main():
         want = set(a.bodies.split(","))
         keys = {k: v for k, v in keys.items() if k[0] in want}
     con = duckdb.connect()
-    con.execute("SET memory_limit='12GB'")
+    con.execute("SET memory_limit='8GB'")
     allv = sorted({v for e in keys.values() for v in e["variants"]})
     R = Registers(con, allv)
     counts = Counter()
@@ -644,6 +667,8 @@ def main():
             # first step in waterfall order that resolved it
             order = list(STEP_OF)
             res["proposal"] = min(real, key=lambda c: order.index(c["method"]))
+            if res["proposal"]["evidence"].get("matched_variant") in e.get("w1_variants", []):
+                res["proposal"]["evidence"]["w1_variant"] = True
             if amb_pool:
                 res["evidence_extra"]["name_pool_also_ambiguous"] = amb_pool
         else:

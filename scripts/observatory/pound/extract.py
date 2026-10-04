@@ -88,30 +88,32 @@ def ex_register(con):
              reg_postcode_norm, snapshot_date, incorporation_date
       FROM (SELECT *, unnest(previous_names) AS pn FROM r)
     """
-    raw = con.execute(q).fetchall()
-    print(f"  register name rows read: {len(raw)}")
-    cache = {}
-    best = {}
-    for crn, name, kind, status, cat, pc, snap, inc in raw:
-        if not name:
-            continue
-        k = cache.get(name)
-        if k is None:
-            k = cache[name] = normalise(name)
-        if not k:
-            continue
-        key = (k, crn, kind)
-        cur = best.get(key)
-        if cur is None or str(snap) > str(cur[3]):
-            best[key] = (name, status, pc, snap, cat, inc)
-    lancs_set = {r[0] for r in con.execute("SELECT company_number FROM lancs").fetchall()}
-    rows = [(k, crn, kind, v[0], v[1], v[1] == "Active", v[2], str(v[3]), v[4],
-             crn in lancs_set) for (k, crn, kind), v in best.items()]
-    write(con, "reg_names", rows,
-          [("name_norm", "VARCHAR"), ("company_number", "VARCHAR"), ("kind", "VARCHAR"),
-           ("name", "VARCHAR"), ("status", "VARCHAR"), ("active", "BOOLEAN"),
-           ("postcode_norm", "VARCHAR"), ("snapshot_date", "VARCHAR"),
-           ("category", "VARCHAR"), ("in_lancs_frame", "BOOLEAN")])
+    con.execute(f"CREATE OR REPLACE TEMP TABLE regall AS {q}")
+    print(f"  register name rows read: {con.execute('SELECT count(*) FROM regall').fetchone()[0]}")
+    # normalise each distinct name once, in Python, then join back in DuckDB
+    import pyarrow as pa
+    names = [r[0] for r in con.execute("SELECT DISTINCT name FROM regall WHERE name IS NOT NULL").fetchall()]
+    norms = [normalise(n) for n in names]
+    con.register("_nm", pa.table({"name": pa.array(names, type=pa.string()),
+                                  "name_norm": pa.array(norms, type=pa.string())}))
+    del names, norms
+    out = EXTRACT / "reg_names.parquet"
+    con.execute(f"""COPY (
+        SELECT name_norm, company_number, kind, arg_max(r.name, snapshot_date) AS name,
+               arg_max(company_status, snapshot_date) AS status,
+               arg_max(company_status, snapshot_date) = 'Active' AS active,
+               arg_max(reg_postcode_norm, snapshot_date) AS postcode_norm,
+               max(snapshot_date)::VARCHAR AS snapshot_date,
+               arg_max(company_category, snapshot_date) AS category,
+               company_number IN (SELECT company_number FROM lancs) AS in_lancs_frame
+        FROM regall r JOIN _nm USING (name)
+        WHERE name_norm <> ''
+        GROUP BY name_norm, company_number, kind) TO '{out}' (FORMAT parquet)""")
+    con.unregister("_nm")
+    con.execute("DROP TABLE regall")
+    MANIFEST["extracts"]["reg_names"] = {
+        "rows": con.execute(f"SELECT count(*) FROM '{out}'").fetchone()[0], "sha256": sha256_file(out)}
+    print(f"  reg_names: {MANIFEST['extracts']['reg_names']['rows']} rows")
     con.execute(f"""COPY (SELECT company_number, max(snapshot_date)::VARCHAR AS last_snapshot,
                          count(DISTINCT snapshot_date) AS snapshots
                   FROM read_parquet({parts!r}) GROUP BY 1)
@@ -414,7 +416,7 @@ def main():
     ap.add_argument("--only", default=",".join(STEPS))
     a = ap.parse_args()
     con = duckdb.connect()
-    con.execute("SET memory_limit='12GB'")
+    con.execute("SET memory_limit='8GB'")
     mf = EXTRACT / "extract_manifest.json"
     if mf.exists():
         old = json.loads(mf.read_text())

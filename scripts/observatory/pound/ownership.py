@@ -283,7 +283,7 @@ def main():
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect(str(WORK / "ownership.duckdb"))
-    con.execute("SET memory_limit='14GB'")
+    con.execute("SET memory_limit='8GB'")
     man = {"pipelineGitSha": git_sha(), "bodsAsAt": BODS_AS_AT}
     if a.build or not EDGES.exists():
         man["bods"] = build_edges(con)
