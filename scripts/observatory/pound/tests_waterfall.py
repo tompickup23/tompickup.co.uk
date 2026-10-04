@@ -11,7 +11,8 @@ test1_replay_differences.csv; exits 1 on any failure.
   3. Every GB-COH id in the resolver is in a register snapshot.
   4. Value conservation: resolved plus unclassified equals the spend input's
      supplier total per body and year, to the penny.
-  5. No person name appears in any output table (checked against the
+  5. No person name appears in any output table, the gold and recall
+     samples and the coverage table included (checked against the
      individual PSC names in gold mart_psc_lancs). Hits inside a register
      company name (an eponymous company) are listed for the gate, not
      failed; a hit anywhere else fails.
@@ -248,7 +249,9 @@ def test5(con):
     names, mart = person_names(con)
     fails, epon = [], []
     files = [OUT / "resolver_proposed.csv", OUT / "queue.csv"] + sorted(OUT.glob("verify_*.csv")) + \
-        sorted(OUT.glob("ownership_walk*.csv"))
+        sorted(OUT.glob("ownership_walk*.csv")) + \
+        [OUT / n for n in ("gold_set_pairs.csv", "recall_sample.csv", "gold_population.csv", "recall_population.csv",
+                           "coverage.csv", "test1_replay_differences.csv", "test5b_seed.csv")]
     org_fields = {"payee_key", "register_name", "register_names", "name", "proposed_name",
                   "matched_variant", "supplier_group", "payee_keys", "register_name_norm"}
     for p in files:
@@ -323,9 +326,10 @@ def test_5b_seed(con):
 def main():
     rows = load_resolver()
     con = duckdb.connect()
-    results = {"test2": test2(rows), "test3": test3(rows, con), "test4": test4(rows),
-               "test5": test5(con), "test1": test1(rows)}
+    # test 1 and the 5b seed check write files that test 5 then reads
+    results = {"test2": test2(rows), "test3": test3(rows, con), "test4": test4(rows), "test1": test1(rows)}
     test_5b_seed(con)
+    results["test5"] = test5(con)
     REPORT["all_pass"] = all(results.values())
     write_json(OUT / "tests_report.json", REPORT)
     print(json.dumps({k: v.get("pass") if isinstance(v, dict) else v for k, v in REPORT.items()}, indent=1))

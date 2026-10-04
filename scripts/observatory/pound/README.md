@@ -15,12 +15,13 @@ scripts/observatory/pound/run_vps.sh extract.py            # register extracts, 
 scripts/observatory/pound/run_vps.sh waterfall.py          # resolver_proposed.csv, queue.csv, payee_key_values.csv
 scripts/observatory/pound/run_vps.sh ownership.py --build  # bods_edges.parquet, ownership_walk.csv
 scripts/observatory/pound/run_vps.sh verify.py             # verify_<body>.csv, verify_suppliers.csv
-scripts/observatory/pound/run_vps.sh tests_waterfall.py    # the five WATERFALL.md s5 tests; exit 1 on failure
 scripts/observatory/pound/run_vps.sh gold_set.py           # gold_set_manifest.json, then the unlabelled pairs
 scripts/observatory/pound/run_vps.sh coverage.py           # coverage.json, coverage.csv
+scripts/observatory/pound/run_vps.sh page_data.py          # pound_pages.json (classes and sums for the draft pages)
+scripts/observatory/pound/run_vps.sh tests_waterfall.py    # the five WATERFALL.md s5 tests; exit 1 on failure
 ```
 
-No result is read before `tests_waterfall.py` passes. `--bodies burnley` runs the pilot.
+No result is read before `tests_waterfall.py` passes. It runs last so that test 5 also covers the gold and recall samples and the coverage table. `--bodies burnley` runs the pilot.
 
 ## Files
 
@@ -34,6 +35,7 @@ No result is read before `tests_waterfall.py` passes. `--bodies burnley` runs th
 | `tests_waterfall.py` | WATERFALL.md s5 tests 1 to 5, plus step 5b against the council-company seed list |
 | `gold_set.py` | Stratified clerical sample and recall sample, manifest first |
 | `coverage.py` | Rule 2.4 coverage per body and year |
+| `page_data.py` | Class and sum aggregates for the draft UK Councils pages; no names |
 
 ## Privacy
 
