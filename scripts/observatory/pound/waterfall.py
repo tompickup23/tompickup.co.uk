@@ -59,6 +59,7 @@ STEP_OF = {"id-bank-inferred": "1", "id-council": "1b", "name-postcode": "2",
 
 # Hand-verified bad prefix matches, carried from build_pound.PREFIX_DENY.
 PSC_NAMES = set()
+PSC_FORENAMES = set()
 PREFIX_DENY = {"BROTHERS OF CHARITY SERVICES", "RED ROSE SCHOOL", "QUEENS LODGE"}
 
 # Payee keys that name a payment route (an account, clearing line or
@@ -114,7 +115,31 @@ def extra_variants(raw):
     head = raw.split(" - ")[0].strip() if " - " in raw else ""
     if head and LEGAL_END.search(head.upper()):
         out.append(head)
+    # W1b: words after the first legal suffix ("GELDARDS LLP CARDIFF",
+    # "HUGGG LTD TOP UP ACCOUNT", "CALICO HOMES LIMITED-ELECTIONS")
+    m = re.match(r"^(.*?\b(?:LTD|LIMITED|LLP|PLC)\b\.?)[\s\-]+\S.*$", raw.upper())
+    if m and len(m.group(1).split()) >= 2:
+        out.append(m.group(1))
     return out
+
+
+COUNCIL_ABBREV = [(re.compile(r"\bMBC$"), "METROPOLITAN BOROUGH COUNCIL"),
+                  (re.compile(r"\bCC$"), "COUNTY COUNCIL"), (re.compile(r"\bBC$"), "BOROUGH COUNCIL"),
+                  (re.compile(r"\bDC$"), "DISTRICT COUNCIL")]
+
+
+def public_variants(raw):
+    """W2, for step 5 only: the part before " - ", and a trailing council
+    abbreviation (CC, BC, MBC, DC) written out ("LANCASHIRE CC - PRESTON
+    COUNTY HALL" also tries "LANCASHIRE COUNTY COUNCIL")."""
+    out = []
+    for part in {raw, raw.split(" - ")[0]}:
+        n = normalise(re.sub(r"[\(\[].*?[\)\]]", " ", part))
+        for rx, full in COUNCIL_ABBREV:
+            if rx.search(n):
+                out.append(rx.sub(full, n))
+        out.append(n)
+    return [v for v in dict.fromkeys(out) if v]
 
 
 def now():
@@ -165,6 +190,10 @@ def load_keys(path):
                         variants.append(v)
                         e.setdefault("w1_variants", []).append(v)
         e["variants"] = variants
+        pv = []
+        for n in names[:3]:
+            pv += [v for v in public_variants(n) if v not in seen and v not in pv]
+        e["public_variants"] = pv
     return keys
 
 
@@ -402,7 +431,7 @@ def step4(e, R):
 
 
 def step5(e, R):
-    for v in e["variants"]:
+    for v in e["variants"] + e.get("public_variants", []):
         rows = R.tables["public_bodies"].get(v, [])
         if rows:
             rows2, ids = unique_by(rows, "body_id", lambda r: r["status"] in ("open", "active", "ACTIVE", "Open", "live", ""))
@@ -461,9 +490,14 @@ def step6(e, R):
               "name_kind": r["kind"], "ra_id": r["ra_id"], "ra_entity_id": r["ra_entity_id"],
               "jurisdiction": r["jurisdiction"], "registration_status": r["registration_status"],
               "source": "GLEIF Level 1 golden copy 2026-10-04 08:00"}
-        if r["ra_id"] in GLEIF_CH_RA and r["ra_entity_id"]:
+        if r["ra_entity_id"]:
             cn, ok = norm_crn(r["ra_entity_id"])
-            if ok and cn in R.numbers:
+            # RA000585 is Companies House; under another authority code the
+            # number is taken only if one of the company's register names is
+            # the GLEIF name, so that a foreign number is never read as a CRN
+            if ok and cn in R.numbers and (r["ra_id"] in GLEIF_CH_RA or
+                                           any(nn == r["name_norm"] for nn, _, _ in R.names_for(cn))):
+                ev["ra_entity_id_as_crn"] = cn
                 return cand("GB-COH", cn, "gleif", ev, [f"XI-LEI-{r['lei']}"])
         return cand("XI-LEI", r["lei"], "gleif", ev)
     return None
@@ -530,19 +564,32 @@ def contains_person_name(text, names):
     return False
 
 
+LEGAL_ANY = re.compile(r"\b(LTD|LIMITED|PLC|LLP|LP|CIC|CIO|INC|CO|COMPANY|GROUP|HOLDINGS|TRUST|& SONS|AND SONS)\b|&")
+
+
+def has_legal_form(raw):
+    return bool(LEGAL_ANY.search((raw or "").upper()))
+
+
 def looks_individual(e):
+    """A title (MR, MRS and so on) or a barrister marker; or two or three
+    alphabetic words, none organisational, with no legal form on any raw
+    name, whose first word is a forename in the individual PSC list (used as
+    a word list only)."""
+    raws = [e["payee_key"]] + list(e["raw"])
+    if any(has_legal_form(x) for x in raws):
+        return False
     k = normalise(e["payee_key"])
     if not k:
         return False
     if TITLE_RE.search(k) or PERSON_MARKER_RE.search(k):
         return True
     toks = k.split()
-    if not 2 <= len(toks) <= 4:
+    if not 2 <= len(toks) <= 3:
         return False
-    if any(t in ORG_WORDS or any(ch.isdigit() for ch in t) for t in toks):
+    if any(t in ORG_WORDS or not t.isalpha() for t in toks):
         return False
-    return all(t.isalpha() and len(t) >= 2 for t in toks) or (
-        len(toks[0]) == 1 and all(t.isalpha() for t in toks))
+    return toks[0] in PSC_FORENAMES or (len(toks[0]) == 1 and toks[1] in PSC_FORENAMES)
 
 
 # ------------------------------------------------------------------- 5b --
@@ -637,10 +684,11 @@ def main():
         keys = {k: v for k, v in keys.items() if k[0] in want}
     con = duckdb.connect()
     con.execute("SET memory_limit='8GB'")
-    allv = sorted({v for e in keys.values() for v in e["variants"]})
+    allv = sorted({v for e in keys.values() for v in e["variants"] + e["public_variants"]})
     R = Registers(con, allv)
-    global PSC_NAMES
+    global PSC_NAMES, PSC_FORENAMES
     PSC_NAMES = psc_person_names(con)
+    PSC_FORENAMES = {n.split()[0] for n in PSC_NAMES if len(n.split()[0]) >= 3}
     counts = Counter()
     results = {}
     for k, e in keys.items():
@@ -731,7 +779,8 @@ def main():
                 res["reason"], res["detail"] = "invalid-identifier", "bank company number not in any register snapshot held"
             elif looks_individual(e):
                 res["reason"], res["detail"] = "individual-payee", "no organisational token and no register match"
-            elif any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"])):
+            elif not any(has_legal_form(x) for x in [pk] + list(e["raw"])) and \
+                    any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"])):
                 res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (proposed rule P1)"
             elif any(c.get("ambiguous_ids") for c in found):
                 res["reason"], res["detail"] = "ambiguous", "name carries several identifiers in notices or grants"

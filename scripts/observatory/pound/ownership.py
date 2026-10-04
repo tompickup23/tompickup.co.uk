@@ -102,7 +102,7 @@ def build_edges(con):
                   ELSE 'entity' END AS party_kind,
              CASE WHEN r.party LIKE 'GB-COH-PER-%' THEN NULL
                   ELSE coalesce(ent.coh, CASE WHEN r.party LIKE 'GB-COH-%' AND r.party NOT LIKE 'GB-COH-ENT-%'
-                                              THEN replace(r.party, 'GB-COH-', '') END) END AS parent_crn,
+                                              THEN replace(r.party, 'GB-COH-', '') END) END AS parent_crn_raw,
              ent.other_scheme AS parent_scheme, ent.other_id AS parent_id,
              ent.jurisdiction AS parent_jurisdiction, ent.listed AS parent_listed,
              ent.entity_type AS parent_entity_type,
@@ -115,7 +115,22 @@ def build_edges(con):
       LEFT JOIN vr ON vr.rl = r._link
       LEFT JOIN ent ON ent.recordId = r.party
       LEFT JOIN per ON per.recordId = r.party
-    ) TO '{EDGES}' (FORMAT parquet)""")
+    ) TO '{EDGES}.tmp.parquet' (FORMAT parquet)""")
+    # Normalise the parent number (upper case, digits padded to 8) and keep it
+    # only when it has a Companies House shape; otherwise it is an entity
+    # without a usable register number (BODS carries some foreign numbers
+    # under GB-COH, for example C0800-01-012662).
+    con.execute(f"""COPY (
+        SELECT * EXCLUDE (parent_crn_raw, n),
+               CASE WHEN regexp_full_match(n, '^(\\d{{8}}|(SC|NI|OC|SO|NC|NF|FC|SL|SF|LP|R0|IP|RS|SP|CE|CS|GE|GS)\\d{{6}})$')
+                    THEN n END AS parent_crn,
+               parent_crn_raw
+        FROM (SELECT *, CASE WHEN regexp_full_match(upper(trim(parent_crn_raw)), '\\d{{6,7}}')
+                             THEN lpad(upper(trim(parent_crn_raw)), 8, '0')
+                             ELSE upper(trim(parent_crn_raw)) END AS n
+              FROM '{EDGES}.tmp.parquet')
+        ) TO '{EDGES}' (FORMAT parquet)""")
+    Path(f"{EDGES}.tmp.parquet").unlink()
     n = con.execute(f"SELECT count(*) FROM '{EDGES}'").fetchone()[0]
     return {"bods_zip": z, "bods_zip_sha256": sha256_file(z), "edges": n,
             "edges_sha256": sha256_file(EDGES)}
@@ -263,6 +278,13 @@ def classify_top(top, above, con):
         if a[3] and a[3] != "GB":
             return "foreign entity", a[3], f"parent registered in {a[3]}", evid
         return "corporate parent without a register number", a[3] or "", "", evid
+    sh = [a for a in persons + ents if a[8] is None and a[12] is not None and a[12] >= 50]
+    if sh:
+        a = sh[0]
+        who = (f"individual ({a[6] or 'unknown'})" if a[0] == "person" else
+               f"company {a[1]}" if a[1] else f"entity registered in {a[3] or 'unknown'}")
+        return ("more than 50% of shares, voting rights not filed", a[6] if a[0] == "person" else (a[3] or ""),
+                f"held by {who}; rule 2.1 needs voting power, so the walk stops here (proposed rule P2)", evid)
     if any(a[10] for a in above):
         return "trust or trustee", "", "trustee interest filed", evid
     reasons = {a[7] for a in stm if a[7]}

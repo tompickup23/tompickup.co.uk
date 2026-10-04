@@ -223,7 +223,8 @@ def test5(con):
                         if not hit:
                             continue
                         leaf = c2.split(".")[-1]
-                        if leaf in org_fields and (resolved or leaf != "payee_key"):
+                        from waterfall import has_legal_form
+                        if leaf in org_fields and (resolved or leaf != "payee_key" or has_legal_form(t)):
                             epon.append({"file": p.name, "field": c2})
                         else:
                             fails.append({"file": p.name, "field": c2, "body_id": r.get("body_id", "")})
