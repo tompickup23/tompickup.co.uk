@@ -94,10 +94,20 @@ def test1(rows):
         if r["org_scheme"] == "GB-COH" and crn in ids:
             same += 1
             continue
+        ev = json.loads(r["evidence"]) if r["evidence"] else {}
+        others = ev.get("other_steps", [])
         if how == "alias":
             reason = "curated alias in build_pound.ALIASES: a hand decision, not a pipeline step; it goes to step 9 for a named person"
         elif r["method"] == "queue":
             reason = f"waterfall sends it to the step 9 queue: {r['reason_detail']}"
+        elif how == "ocds" and any(o["method"] == "ocds" and not o["org"] for o in others):
+            reason = ("the OCP Find a Tender file carries more than one company number for this name, so step 7 links "
+                      "it to nothing (17 August crosswalk rule); today's matcher read ocds_supplier_ids.json alone")
+        elif ev.get("name_kind") == "previous" or (ev.get("snapshot") and ev.get("snapshot") < "2026-10-01"):
+            reason = ("the waterfall's exact match is on a name today's register index does not hold "
+                      f"(a {ev.get('name_kind')} name, snapshot {ev.get('snapshot')})")
+        elif how == "prefix-unique" and r["method"] in ("name-exact", "name-exact-out"):
+            reason = "the waterfall finds an exact name in the silver snapshots before any prefix test"
         elif r["org_scheme"] == "GB-COH" and r["method"] in ("id-bank-inferred", "id-council"):
             reason = f"an earlier step ({r['method']}) proposes {r['org_id']}; today's matcher has no step 1"
         elif r["org_scheme"] != "GB-COH" and r["org_id"]:
@@ -191,13 +201,14 @@ def test5(con):
     fails, epon = [], []
     files = [OUT / "resolver_proposed.csv", OUT / "queue.csv"] + sorted(OUT.glob("verify_*.csv")) + \
         sorted(OUT.glob("ownership_walk*.csv"))
-    org_fields = {"payee_key", "register_name", "register_names", "name", "proposed_name"}
+    org_fields = {"payee_key", "register_name", "register_names", "name", "proposed_name",
+                  "matched_variant", "supplier_group", "payee_keys", "register_name_norm"}
     for p in files:
         if not p.exists():
             continue
         with open(p, newline="") as f:
             for r in csv.DictReader(f):
-                resolved = bool(r.get("org_id"))
+                resolved = bool(r.get("org_id")) or r.get("payee_class") in ("public body", "council company")
                 for col, val in r.items():
                     if not val or col in ("decision_id", "decided_by", "decided_at"):
                         continue

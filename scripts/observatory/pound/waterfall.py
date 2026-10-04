@@ -58,6 +58,7 @@ STEP_OF = {"id-bank-inferred": "1", "id-council": "1b", "name-postcode": "2",
            "gleif": "6", "ocds": "7", "ggis": "7"}
 
 # Hand-verified bad prefix matches, carried from build_pound.PREFIX_DENY.
+PSC_NAMES = set()
 PREFIX_DENY = {"BROTHERS OF CHARITY SERVICES", "RED ROSE SCHOOL", "QUEENS LODGE"}
 
 # Payee keys that name a payment route (an account, clearing line or
@@ -72,6 +73,9 @@ NO_PAYEE_RE = re.compile(r"^(UNKNOWN|VARIOUS|SUNDRY|MISCELLANEOUS|NOT KNOWN|N A|
 REDACT_RE = re.compile(r"^REDACT|^CONFIDENTIAL|^NAME (WITHHELD|REDACTED)|^PERSONAL\b|"
                        r"^WITHHELD\b|^PRIVATE INDIVIDUAL|^PERSONAL DATA")
 TITLE_RE = re.compile(r"^(MR|MRS|MISS|MS|DR|MSTR|MASTER|REV|PROF)\b")
+# Self-employed professionals named in person: a barrister is an individual
+# even when the payee line names the chambers.
+PERSON_MARKER_RE = re.compile(r"\bBARRISTERS? AT LAW\b|\bBARRISTER\b|\b(KC|QC)$|\bOF COUNSEL\b")
 # Words that make a name an organisation's, for the individual-payee test
 # (WATERFALL.md s2: no organisational token and no register match).
 ORG_WORDS = set("""
@@ -501,11 +505,36 @@ def same_org(a, b):
     return bool(ida & idb)
 
 
+def psc_person_names(con):
+    """Forename and surname pairs of individual PSCs in gold mart_psc_lancs,
+    used only to WITHHOLD an unresolved payee name that contains one (proposed
+    rule P1). No payee is matched to a PSC record and no PSC name is written."""
+    mart = sorted((GOLD / "mart_psc_lancs").glob("snapshot_date=*/part.parquet"))[-1]
+    out = set()
+    for f, m, s_ in con.execute(f"""SELECT name_forename, name_middle, name_surname FROM read_parquet('{mart}')
+                                    WHERE is_individual AND name_surname IS NOT NULL""").fetchall():
+        f, s_ = normalise(f or ""), normalise(s_ or "")
+        if f and s_ and len(f) > 1:
+            out.add(f"{f} {s_}")
+            if m:
+                out.add(f"{f} {normalise(m)} {s_}")
+    return out
+
+
+def contains_person_name(text, names):
+    t = normalise(text or "").split()
+    for n in (2, 3):
+        for i in range(len(t) - n + 1):
+            if " ".join(t[i:i + n]) in names:
+                return True
+    return False
+
+
 def looks_individual(e):
     k = normalise(e["payee_key"])
     if not k:
         return False
-    if TITLE_RE.search(k):
+    if TITLE_RE.search(k) or PERSON_MARKER_RE.search(k):
         return True
     toks = k.split()
     if not 2 <= len(toks) <= 4:
@@ -538,6 +567,22 @@ def council_companies(con, crns, R):
     for n, t in allpb:
         if t.startswith("council"):
             la_names.add(n)
+    # council area names ("BLACKBURN WITH DARWEN"), so that a PSC filed as
+    # "Blackburn With Darwen Council" is recognised whatever words surround it
+    areas = set()
+    with open(INPUTS / "public_bodies.csv", newline="") as fh:
+        for r in csv.DictReader(fh):
+            if r["body_type"].startswith("council") and r.get("area_name"):
+                areas.add(normalise(r["area_name"]))
+    COUNCIL_WORDS = {"THE", "COUNCIL", "OF", "BOROUGH", "COUNTY", "CITY", "DISTRICT", "METROPOLITAN"}
+
+    def is_council(nn):
+        if nn in la_names:
+            return True
+        if not re.search(r"\bCOUNCIL\b", nn):
+            return False
+        core = " ".join(t for t in nn.split() if t not in COUNCIL_WORDS)
+        return core in areas
 
     def band_ok(natures):
         for n in natures or []:
@@ -553,10 +598,11 @@ def council_companies(con, crns, R):
         b = band_ok(natures)
         if not b:
             continue
-        if nn in la_names or re.search(r"\b(BOROUGH|COUNTY|CITY|DISTRICT|METROPOLITAN) COUNCIL\b|"
-                                            r"\bCOUNCIL OF THE (BOROUGH|CITY|COUNTY|DISTRICT)\b|"
-                                            r"\bCOMBINED (COUNTY )?AUTHORITY\b", nn):
+        if is_council(nn) or re.search(r"\b(BOROUGH|COUNTY|CITY|DISTRICT|METROPOLITAN) COUNCIL\b|"
+                                         r"\bCOUNCIL OF THE (BOROUGH|CITY|COUNTY|DISTRICT)\b|"
+                                         r"\bCOMBINED (COUNTY )?AUTHORITY\b", nn):
             direct[crn] = {"psc": name, "band": b, "route": "direct",
+                           "as_at": "current corporate PSC on the register extract; earlier holders are in the ownership walk",
                            "source": f"gold mart_psc_lancs {mart.parent.name}"}
         corp_edges[crn].append((nn, name, b))
     out = dict(direct)
@@ -593,6 +639,8 @@ def main():
     con.execute("SET memory_limit='8GB'")
     allv = sorted({v for e in keys.values() for v in e["variants"]})
     R = Registers(con, allv)
+    global PSC_NAMES
+    PSC_NAMES = psc_person_names(con)
     counts = Counter()
     results = {}
     for k, e in keys.items():
@@ -667,6 +715,11 @@ def main():
             # first step in waterfall order that resolved it
             order = list(STEP_OF)
             res["proposal"] = min(real, key=lambda c: order.index(c["method"]))
+            others = [{"method": c["method"], "org": f"{c['org_scheme']}-{c['org_id']}" if c["org_id"] else None,
+                       "note": c["evidence"].get("note") or c["evidence"].get("conflict")}
+                      for c in found if c is not res["proposal"]]
+            if others:
+                res["evidence_extra"]["other_steps"] = others
             if res["proposal"]["evidence"].get("matched_variant") in e.get("w1_variants", []):
                 res["proposal"]["evidence"]["w1_variant"] = True
             if amb_pool:
@@ -678,6 +731,8 @@ def main():
                 res["reason"], res["detail"] = "invalid-identifier", "bank company number not in any register snapshot held"
             elif looks_individual(e):
                 res["reason"], res["detail"] = "individual-payee", "no organisational token and no register match"
+            elif any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"])):
+                res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (proposed rule P1)"
             elif any(c.get("ambiguous_ids") for c in found):
                 res["reason"], res["detail"] = "ambiguous", "name carries several identifiers in notices or grants"
             else:
