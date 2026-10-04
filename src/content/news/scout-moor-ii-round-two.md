@@ -11,6 +11,18 @@ imageCredit: "Analysis by Tom Pickup. Contains OS data © Crown copyright and da
 category: "Lancashire"
 subcategory: "Planning"
 tags: ["lancashire", "planning", "wind", "data", "transparency"]
+data:
+  links:
+    - label: "Rossendale Borough Council planning file 2025/0267: Scout Moor II Further Environmental Information"
+      url: "https://publicaccess.rossendale.gov.uk/online-applications/applicationDetails.do?activeTab=documents&keyVal=SZ0U9GND05V00"
+    - label: "Calderdale Energy Park document library: preliminary environmental information report"
+      url: "https://www.calderdaleenergypark.co.uk/document-library/"
+    - label: "Ordnance Survey, OS Terrain 50 and OS Open Names (Open Government Licence)"
+      url: "https://osdatahub.os.uk/downloads/open/Terrain50"
+  method: "Cumulative zone of theoretical visibility on OS Terrain 50 (50 m cells, eye 2 m, refraction 0.075, 45 km per turbine, blade tip), checked against the applicant's Figure 11.16, its own QGIS software and the Environment Agency's LIDAR surface. The paper, model, every output and the checks that rebuild every figure in this article are in the deposit."
+  doi: "10.5281/zenodo.23138011"
+  title: "A reproducible audit of a cumulative zone of theoretical visibility with open data: Scout Moor II and Calderdale Energy Park"
+  year: 2026
 featured: true
 draft: false
 ---
