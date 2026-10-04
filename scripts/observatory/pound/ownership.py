@@ -201,7 +201,9 @@ def walk(con, start_crns, years):
             cur = by_start.get(s)
             if cyc:
                 by_start.setdefault(("cyc", s), True)
-            if cur is None or depth > cur[1]:
+            # the deepest chain wins; between chains of equal depth (more than
+            # one controlling parent) the lowest path, so reruns agree
+            if cur is None or depth > cur[1] or (depth == cur[1] and list(path) < list(cur[2])):
                 by_start[s] = (crn, depth, path)
         ncyc = sum(1 for k in by_start if isinstance(k, tuple))
         cycles_total += ncyc
@@ -239,7 +241,9 @@ def walk(con, start_crns, years):
                     ceased[(a, b)] = str(c)
         for s in sorted(start_crns):
             top, depth, path = tops[s]
-            klass, where, detail, evid = classify_top(top, above_all.get(top, []), con)
+            # statements in a fixed order: classify_top takes the first match
+            above = sorted(above_all.get(top, []), key=lambda a: tuple("" if x is None else str(x) for x in a))
+            klass, where, detail, evid = classify_top(top, above, con)
             gl = gl_all.get(top) if klass in ("foreign entity", "no unit over 50%", "no PSC data held",
                                               "corporate parent without a register number",
                                               "corporate parent, no further PSC data") else None
