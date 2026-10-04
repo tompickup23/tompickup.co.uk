@@ -83,7 +83,7 @@ def main():
         for fy in YEARS:
             tot = sum(vals[k][fy] for k in keys)
             cum, n = 0, 0
-            for k in sorted(keys, key=lambda k: -vals[k][fy]):
+            for k in sorted(keys, key=lambda k: (-vals[k][fy], k)):  # ties by key, so reruns agree
                 if cum >= a.share * tot or vals[k][fy] <= 0:
                     break
                 cum += vals[k][fy]
@@ -91,7 +91,7 @@ def main():
                 n += 1
             stats[fy] = {"supplier_total_pence": tot, "keys_to_80pc": n, "value_covered_pence": cum}
         rows = []
-        for k in sorted(chosen, key=lambda k: -sum(vals[k].values())):
+        for k in sorted(chosen, key=lambda k: (-sum(vals[k].values()), k)):
             r = res[k]
             ev = json.loads(r["evidence"]) if r["evidence"] else {}
             crn = r["org_id"] if r["org_scheme"] == "GB-COH" else next(
@@ -139,7 +139,7 @@ def main():
                                           "evidence")},
                     "decision_ids": "|".join(r["decision_id"] for r in s["rows"]),
                     **{c: "" for c in REVIEW_COLS}})
-    out.sort(key=lambda r: -float(r["value_total"]))
+    out.sort(key=lambda r: (-float(r["value_total"]), r["supplier_group"]))
     name = "verify_suppliers.csv" if want is None else f"verify_suppliers_{'_'.join(sorted(want))}.csv"
     with open(OUT / name, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(out[0]) if out else ["supplier_group"])
