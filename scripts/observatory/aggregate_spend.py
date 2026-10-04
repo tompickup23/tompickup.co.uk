@@ -578,10 +578,15 @@ def main():
     print("written", a.out)
     if a.payee_keys_out:
         a.payee_keys_out.parent.mkdir(parents=True, exist_ok=True)
-        opener = gzip.open if a.payee_keys_out.suffix == ".gz" else open
-        with opener(a.payee_keys_out, "wt") as fh:
-            for line in key_lines:
-                fh.write(json.dumps(line, ensure_ascii=False) + "\n")
+        text = "".join(json.dumps(line, ensure_ascii=False) + "\n"
+                       for line in key_lines).encode()
+        if a.payee_keys_out.suffix == ".gz":
+            # mtime 0 so the same rows always give the same bytes and sha256.
+            with open(a.payee_keys_out, "wb") as raw, gzip.GzipFile(
+                    fileobj=raw, mode="wb", mtime=0) as fh:
+                fh.write(text)
+        else:
+            a.payee_keys_out.write_bytes(text)
         print("written", a.payee_keys_out, f"({len(key_lines)} lines)")
 
 
