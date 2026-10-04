@@ -11,7 +11,7 @@ prints the `audio:` frontmatter block to paste into the article.
 Offline pre-processing only. Uses Kokoro (Apache 2.0) and mlx-whisper from
 ~/clawd/.venv-video, and the Kokoro model files in ~/clawd/models/kokoro.
 """
-import argparse, datetime, hashlib, re, subprocess, sys, tempfile
+import argparse, datetime, hashlib, json, re, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -41,14 +41,17 @@ def synthesise(script, voice, tmp):
     import numpy as np, soundfile as sf
     from kokoro_onnx import Kokoro
     k = Kokoro(str(MODELS / "kokoro-v1.0.int8.onnx"), str(MODELS / "voices-v1.0.bin"))
-    chunks, paras, sr = [], [], 24000
+    chunks, paras, timings, sr, t = [], [], [], 24000, 0.0
     for i, p in enumerate(x.strip() for x in script.split("\n\n") if x.strip()):
         samples, sr = k.create(p, voice=voice, speed=1.0, lang="en-gb")
         paras.append(f"{tmp}/p{i:03}.wav")
         sf.write(paras[-1], samples, sr)
-        chunks += [samples, np.zeros(int(sr * (0.9 if len(p) < 80 else 0.6)), dtype=samples.dtype)]
+        gap = 0.9 if len(p) < 80 else 0.6
+        timings.append({"start": round(t, 3), "end": round(t + len(samples) / sr, 3), "text": p})
+        t += len(samples) / sr + gap
+        chunks += [samples, np.zeros(int(sr * gap), dtype=samples.dtype)]
     sf.write(f"{tmp}/raw.wav", np.concatenate(chunks), sr)
-    return sum(len(c) for c in chunks) / sr, paras
+    return t, paras, timings
 
 
 def main():
@@ -60,13 +63,15 @@ def main():
     mp3 = ROOT / f"public/audio/news/{a.slug}.mp3"
     import mlx_whisper
     with tempfile.TemporaryDirectory() as tmp:
-        seconds, paras = synthesise(script, a.voice, tmp)
+        seconds, paras, timings = synthesise(script, a.voice, tmp)
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", f"{tmp}/raw.wav", "-af",
                         "loudnorm=I=-16:TP=-1.5:LRA=11", "-ac", "1", "-ar", "44100",
                         "-c:a", "libmp3lame", "-b:a", "96k", str(mp3)], check=True)
         heard = "\n".join(mlx_whisper.transcribe(w, path_or_hf_repo="mlx-community/whisper-large-v3-turbo",
                                                   language="en")["text"].strip() for w in paras)
     (ROOT / f"scripts/audio/scripts/{a.slug}.heard.txt").write_text(heard)
+    # Paragraph timings, for captions, chapters and video scenes.
+    (ROOT / f"scripts/audio/scripts/{a.slug}.timings.json").write_text(json.dumps(timings, indent=1))
     body = article_body(a.slug)
     # <slug>.unread.txt lists figures deliberately not read out (photo credit,
     # link text, file names), with the reason after a #.
