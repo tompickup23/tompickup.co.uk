@@ -14,7 +14,7 @@ org-id.guide register commit), the age falls back to the snapshot date and the
 report says `measuredOn: snapshotDate` so nobody reads a fetch date as a
 publication date.
 
-**Four modes, because "stale" does not mean one thing.**
+**Five modes, because "stale" does not mean one thing.**
 
   fail    a live or monthly feed. WARN at budget, FAIL at 2x budget. This is
           V-R1 proper.
@@ -26,6 +26,13 @@ publication date.
           label is mandatory on any use.
   pinned  pinned to an upstream commit or a superseded list on purpose. Ageing
           is the intent, not a defect.
+  oneoff  a capture run once, by hand, that nothing in the monthly run
+          refreshes and that no later run is meant to refresh (the July 2026
+          accounts API backfill). No age budget, because its age grows by
+          design; but unlike vintage and pinned, a CONSUMED oneoff source with
+          no bronze partition is still MISSING, because a builder reads it.
+          The reason for each oneoff row is written in its rulebookRow and in
+          the source's registry notes.
 
 A source in `fail` mode with no bronze partition at all on this host is a
 FAILURE, not a zero. That distinction is the whole lesson of the OCDS incident
@@ -60,7 +67,18 @@ BUDGETS = {
     "ch_psc": ("fail", 45, "monthly", "CH snapshot, PSC"),
     "ch_psc_extract": ("fail", 45, "monthly", "CH snapshot, PSC (derived extract)"),
     "ch_accounts_ixbrl": ("fail", 45, "monthly", "CH snapshot, PSC (accounts archive)"),
-    "ch_accounts_api_backfill": ("fail", 45, "live API", "CH API (dossier status checks)"),
+    # One-off, not a feed (decided 4 Oct 2026, Public Pound Phase 1; evidence
+    # in the registry notes for this source in sources.py). It carried the
+    # "CH API (dossier status checks)" row before, but that s4 row is the
+    # 7-day liveness check at publish, a different use of the API. A 45-day
+    # fail budget on a capture nobody reruns reaches warn on 9 Sep 2026 and
+    # FAIL on 24 Oct 2026, and pointblank's V-R1 step fails the run at warn,
+    # so every monthly run from October onwards would stop on it.
+    "ch_accounts_api_backfill": ("oneoff", None, "one-off capture, 26 Jul 2026",
+                                 "not in s4; one-off backfill_accounts.py run "
+                                 "over a fixed list of 866 companies, not "
+                                 "scheduled; new filings arrive through the "
+                                 "monthly archive feed (ch_accounts_ixbrl)"),
     "gazette_notices": ("fail", 45, "monthly feed", "Gazette, strike-offs"),
     # --- geography ------------------------------------------------------
     "onspd": ("fail", 120, "quarterly", "ONSPD / Code-Point"),
@@ -93,6 +111,23 @@ BUDGETS = {
     # --- money in ---------------------------------------------------------
     "innovate_uk": ("fail", 60, "~monthly", "Innovate UK xlsx"),
     "gleif_lei": ("fail", 30, "daily", "not in s4; ODS class (daily file)"),
+    # Registered on main on 17 Aug 2026 (8eddb65, 396b0a5) with no budget row,
+    # which makes this script exit 1 as unbudgeted on main. Added here so the
+    # merged registry carries one. Mac-only and not consumed, so these rows
+    # report and never gate.
+    "fca_register": ("fail", 45, "live register, per-firm lookup",
+                     "not in s4; EA waste carriers class (live register), as "
+                     "gambling_commission"),
+    "ch_disqualified_officers": ("fail", 45, "live API, swept against dossier "
+                                 "officers",
+                                 "not in s4; CH snapshot class, because the "
+                                 "candidates are only as current as the dossier "
+                                 "officer list they were swept against"),
+    "ukfinance_postcode_lending": ("watch", None, "half-yearly editions, six "
+                                   "months in arrears",
+                                   "NOMIS/ONS/HMRC/NNDR3/insolvency stats class: "
+                                   "an edition-dated statistic, the half-year "
+                                   "label goes on any use"),
     # Public Pound Phase 0 (4 Oct 2026). Landed by hand; no fetcher yet, so
     # "watch" until Phase 1 adds one, rather than a fail budget that would
     # trip with nobody able to refresh it.
@@ -218,6 +253,12 @@ RESTRICTED_LICENCE = {
     "sport_england_grants": "OGL with a mandatory attribution string",
     "hmrc_nmw_naming_round23": "OGL, but a named-employer register held for "
                                "internal evidence only per LEGAL.md amber",
+    # Main's 17 August sources whose registry licence is not OGL.
+    "ukfinance_postcode_lending": "NOT an open licence: UK Finance website "
+                                  "terms, no republication without written "
+                                  "consent; internal evidence only",
+    "fca_register": "FCA register terms, not OGL: attribution to the FCA "
+                    "required on any use",
 }
 
 
@@ -294,7 +335,7 @@ def collect(host=None, as_of=None):
             "restricted": RESTRICTED_LICENCE.get(sid),
         }
         if not parts:
-            if sid in CONSUMED and mode == "fail":
+            if sid in CONSUMED and mode in ("fail", "oneoff"):
                 status, note = "MISSING", (
                     "a builder reads this source and it has no bronze "
                     "partition on this host. An absent input is not a zero "
