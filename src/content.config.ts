@@ -38,6 +38,17 @@ const news = defineCollection({
         year: z.number().int().optional(),
       })
       .optional(),
+    /* Narrated version. Written by scripts/audio/narrate.py; textHash ties it to
+       the article text, and the player is withheld if the text changes. */
+    audio: z
+      .object({
+        src: z.string().startsWith('/audio/'),
+        duration: z.number().int().positive(),
+        voice: z.string(),
+        generated: z.date(),
+        textHash: z.string().regex(/^[0-9a-f]{64}$/),
+      })
+      .optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
