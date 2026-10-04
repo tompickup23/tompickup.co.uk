@@ -96,6 +96,8 @@ def main():
                     a["corroborated"] += v
                 if k in agent:
                     a["agent_reviewed"] += v
+                if x["corroborated"] == "True" or k in agent:
+                    a["corroborated_or_agent_reviewed"] += v
             if r["payee_key_out"] in verified[r["body_id"]]:
                 a["hand_verified"] += v
     rows, out = [], {}
@@ -119,6 +121,8 @@ def main():
              "supplier_spend_corroborated_pct": pct(a["corroborated"]),
              "supplier_spend_agent_reviewed": a["agent_reviewed"] / 100,
              "supplier_spend_agent_reviewed_pct": pct(a["agent_reviewed"]),
+             "supplier_spend_corroborated_or_agent_reviewed": a["corroborated_or_agent_reviewed"] / 100,
+             "supplier_spend_corroborated_or_agent_reviewed_pct": pct(a["corroborated_or_agent_reviewed"]),
              "hand_verified": a["hand_verified"] / 100, "hand_verified_pct": pct(a["hand_verified"]),
              "threshold_pounds": e["threshold"]["pounds"], "threshold_stated": e["threshold"]["stated"],
              "vat_basis": e["vatBasis"]["basis"],
@@ -147,7 +151,9 @@ def main():
     flat = ["body_id", "financial_year", "supplier_total", "line_supplier_spend", "line_public_bodies",
             "line_council_companies_own", "line_council_companies_other", "supplier_spend_resolved",
             "supplier_spend_resolved_pct", "supplier_spend_corroborated", "supplier_spend_corroborated_pct",
-            "supplier_spend_agent_reviewed", "supplier_spend_agent_reviewed_pct", "hand_verified",
+            "supplier_spend_agent_reviewed", "supplier_spend_agent_reviewed_pct",
+            "supplier_spend_corroborated_or_agent_reviewed", "supplier_spend_corroborated_or_agent_reviewed_pct",
+            "hand_verified",
             "hand_verified_pct", "threshold_pounds", "threshold_stated", "vat_basis", "below_threshold_spend",
             "rc03_accrual_payments_rows", "rc03_accrual_payments_value", "withheld_individuals_rows",
             "withheld_individuals_value"]

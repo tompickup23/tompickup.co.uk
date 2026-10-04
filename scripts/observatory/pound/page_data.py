@@ -111,6 +111,21 @@ def main():
         if sum(o.values()) != bodies[b]["years"][fy]["byClassPence"].get("supplier", 0):
             raise SystemExit(f"{b} {fy}: ownership lines {sum(o.values())} != supplier class "
                              f"{bodies[b]['years'][fy]['byClassPence'].get('supplier', 0)}")
+    # owner-level concentration (method rule 2.7), from measures.py
+    conc = {}
+    if (OUT / "concentration.csv").exists():
+        with open(OUT / "concentration.csv", newline="") as f:
+            for r in csv.DictReader(f):
+                conc[(r["body_id"], r["financial_year"])] = {
+                    "owners": int(r["owners"]), "hhi": int(r["hhi"]) if r["hhi"] else None,
+                    "hhiAbove1800": r["hhi_above_1800"] == "True",
+                    "topOwnerSharePct": float(r["top_owner_share_pct"]) if r["top_owner_share_pct"] else None}
+    for b, v in bodies.items():
+        for fy, y in v["years"].items():
+            y["ownerConcentration"] = conc.get((b, fy))
+            y["supplierSpendCorroboratedOrAgentReviewedPence"] = round(
+                cov["bodies"][f"{b} {fy}"]["supplier_spend_corroborated_or_agent_reviewed"] * 100)
+    measures = json.loads((OUT / "agent_measures.json").read_text()) if (OUT / "agent_measures.json").exists() else {}
     walk_man = json.loads((OUT / "ownership_manifest.json").read_text())
     out = {"$meta": {
         "status": "DRAFT. Not verified, not published. Machine proposals from the Phase 1 waterfall; "
@@ -122,6 +137,19 @@ def main():
         "inputs": [{"file": p, "sha256": sha256_file(OUT / p)} for p in ("coverage.json", "resolver_proposed.csv",
                                                                          "payee_key_values.csv", "ownership_walk.csv")],
         "bodsAsAt": walk_man.get("bodsAsAt"),
+        # agent-labelled measures, never called verification (decisions 12 and 13); classes and figures only
+        "agentReview": {"status": (measures.get("$meta") or {}).get("status"),
+                        "agreement": measures.get("agreement"),
+                        "precision": None if not measures.get("precision") else {
+                            "label": measures["precision"]["label"],
+                            "byStratum": {s: {k: d[k] for k in ("population", "drawn", "labelled_same_or_different",
+                                                                  "agent_same", "cannot_tell", "row_precision_wilson",
+                                                                  "pound_precision", "pound_precision_bootstrap_95")}
+                                          for s, d in measures["precision"]["by_stratum"].items()},
+                            "allStrata": measures["precision"]["all_strata"]},
+                        "recall": None if not measures.get("recall") else {
+                            k: measures["recall"][k] for k in ("label", "rows", "pounds", "note")}},
+        "scottishDefinition": measures.get("scottish_definition"),
         "notCovered": cov["$meta"].get("notCovered"),
         "note": "Pence. The supplier total (bank net less internal transfers, settlement noise and purchase cards) "
                 "is shown on three lines (decision 14); resolved, corroborated, agent-reviewed and hand-verified "
