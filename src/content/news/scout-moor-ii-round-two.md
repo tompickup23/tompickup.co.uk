@@ -1,6 +1,7 @@
 ---
 title: "Scout Moor II Is Cut to 12 Turbines. The Area That Could See Both Barely Shrinks"
 date: 2026-10-04T12:30:00
+updated: 2026-10-04T16:00:00
 description: "Scout Moor II is down to 12 turbines, and the applicant's own map of both wind farms is now public. I was wrong to say no assessment existed. The area that could see both is barely smaller."
 image: "/images/scout-moor-cumulative-ztv-v2.png"
 imageAlt: "Map of where turbines of Scout Moor II, now 12 turbines, and Calderdale Energy Park, 34 turbines, would theoretically be visible. Blue areas see both, shaded by how many turbines; 699 square kilometres would see both."
@@ -14,6 +15,8 @@ featured: true
 draft: false
 ---
 
+**Correction, 4 October 2026.** This article first said that 17 of the 51 highest-scoring places keep the combined view "within 100 metres" of their map point. The 17 come from a small grid of observers 100 metres apart, the furthest about 140 metres from the point. Counting only observers within 100 metres, it is 12 of the 51, 9 of them with 20 or more turbines in view. The sentence now says so. Appendix A of the representation, linked below, uses the same wording, and its section A6 says the first site considered for proposed viewpoint A kept the 12 Scout Moor II turbines on the surface model; it kept 12 Calderdale turbines. No other figure changes.
+
 Scout Moor II has been cut from 17 turbines to 12. And the applicant's own map of where it and Calderdale Energy Park, up to 34 turbines above Hebden Bridge, could be seen together is now public. On my model, the area that could theoretically see turbines of both barely shrinks: from 700.8 square kilometres to 698.9.
 
 That map is the thing I said did not exist. In August I wrote that there was no assessment of the two schemes together. I was wrong about that, and I have said so in [a correction to that article](/news/two-wind-farms-one-view/).
@@ -22,7 +25,7 @@ That map is the thing I said did not exist. In August I wrote that there was no 
 
 **It assessed no settlement for the combined view.** The applicant's assessment says its combined map "rules out settlements within the assessment". That is true of the fourteen settlements it assessed, all within about 10 kilometres of the site: none of them can see Calderdale. But within its own 20 kilometre cumulative radius, 69 named places could see both wind farms on bare ground, 62 of them inside its own "both may be visible" colour, and none of them was assessed. Across the whole overlap I count 206 places, 198 of them in that colour, 60 of those in Lancashire.
 
-Those are bare-earth figures at the map point for each place, and I tested them against the Environment Agency's laser-scanned surface model, which includes buildings and trees. At the map point itself, which is usually a street, the surface takes the combined view away at 49 of the 51 highest-scoring places. Within 100 metres of the point, on a recreation ground or a higher street, 17 of the 51 keep it, 14 of them with 20 or more turbines in view. So the question is not whether every street would see both wind farms. It is why the applicant did not pick a single settlement to find out.
+Those are bare-earth figures at the map point for each place, and I tested them against the Environment Agency's laser-scanned surface model, which includes buildings and trees. At the map point itself, which is usually a street, the surface takes the combined view away at 49 of the 51 highest-scoring places. From a small grid of observers 100 metres apart around the point, the furthest about 140 metres from it, on a recreation ground or a higher street, 17 of the 51 keep it, 14 of them with 20 or more turbines in view. So the question is not whether every street would see both wind farms. It is why the applicant did not pick a single settlement to find out.
 
 <figure style="margin:28px 0;">
 <a href="/images/scout-moor-wireline-newchurch-in-pendle.png"><img src="/images/scout-moor-wireline-newchurch-in-pendle.png" alt="Wireline drawing of the view from just outside Newchurch in Pendle. Calderdale Energy Park's turbines sit on the skyline to the left and Scout Moor II's to the right, about 71 degrees apart, with every turbine numbered." width="2400" height="823" loading="lazy" decoding="async" style="display:block; width:100%; height:auto;" /></a>
