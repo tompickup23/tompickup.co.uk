@@ -100,6 +100,13 @@ def test1(rows):
             reason = "curated alias in build_pound.ALIASES: a hand decision, not a pipeline step; it goes to step 9 for a named person"
         elif r["method"] == "queue":
             reason = f"waterfall sends it to the step 9 queue: {r['reason_detail']}"
+        elif ev.get("name_pool_also_ambiguous"):
+            reason = ("the silver snapshots hold more than one company for the exact name (a renamed company keeps the "
+                      f"name in an earlier snapshot), so step 2b does not decide it; {r['method']} resolves it and the pool "
+                      "is kept in the evidence")
+        elif how == "ocds" and r["method"] in ("ocds", "name-exact", "name-exact-out"):
+            reason = ("variant order: today's matcher tries every name variant against the OCDS map before any exact "
+                      "name, so it matched a shorter variant; the waterfall takes the full name first")
         elif how == "ocds" and any(o["method"] == "ocds" and not o["org"] for o in others):
             reason = ("the OCP Find a Tender file carries more than one company number for this name, so step 7 links "
                       "it to nothing (17 August crosswalk rule); today's matcher read ocds_supplier_ids.json alone")

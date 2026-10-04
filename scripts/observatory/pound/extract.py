@@ -105,6 +105,7 @@ def ex_register(con):
                arg_max(reg_postcode_norm, snapshot_date) AS postcode_norm,
                max(snapshot_date)::VARCHAR AS snapshot_date,
                arg_max(company_category, snapshot_date) AS category,
+               min(incorporation_date)::VARCHAR AS incorporation_date,
                company_number IN (SELECT company_number FROM lancs) AS in_lancs_frame
         FROM regall r JOIN _nm USING (name)
         WHERE name_norm <> ''

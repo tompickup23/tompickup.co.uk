@@ -60,6 +60,7 @@ STEP_OF = {"id-bank-inferred": "1", "id-council": "1b", "name-postcode": "2",
 # Hand-verified bad prefix matches, carried from build_pound.PREFIX_DENY.
 PSC_NAMES = set()
 PSC_FORENAMES = set()
+WINDOW_END = "2026-03-31"
 PREFIX_DENY = {"BROTHERS OF CHARITY SERVICES", "RED ROSE SCHOOL", "QUEENS LODGE"}
 
 # Payee keys that name a payment route (an account, clearing line or
@@ -206,10 +207,14 @@ class Registers:
         con.execute("CREATE TEMP TABLE v AS SELECT * FROM _v")
         self.reg = defaultdict(list)
         for r in con.execute(f"""SELECT r.name_norm, company_number, kind, name, status, active,
-                                        postcode_norm, snapshot_date, in_lancs_frame
+                                        postcode_norm, snapshot_date, in_lancs_frame, incorporation_date
                                  FROM '{EXTRACT}/reg_names.parquet' r JOIN v USING (name_norm)""").fetchall():
+            # A company incorporated after the window closed (31 March 2026)
+            # cannot be a payee in it; renamed names pass to new companies.
+            if r[9] and r[9] > WINDOW_END:
+                continue
             self.reg[r[0]].append(dict(crn=r[1], kind=r[2], name=r[3], status=r[4], active=r[5],
-                                       pc=r[6], snap=r[7], lancs=r[8]))
+                                       pc=r[6], snap=r[7], lancs=r[8], inc=r[9]))
         self.numbers = {r[0]: r[1] for r in con.execute(
             f"SELECT company_number, last_snapshot FROM '{EXTRACT}/reg_numbers.parquet'").fetchall()}
         self.sorted_current = None
@@ -568,7 +573,11 @@ LEGAL_ANY = re.compile(r"\b(LTD|LIMITED|PLC|LLP|LP|CIC|CIO|INC|CO|COMPANY|GROUP|
 
 
 def has_legal_form(raw):
-    return bool(LEGAL_ANY.search((raw or "").upper()))
+    """A legal form, or any organisational word other than AND, THE, OF, FOR."""
+    u = (raw or "").upper()
+    if LEGAL_ANY.search(u):
+        return True
+    return any(t in ORG_WORDS - {"AND", "THE", "OF", "FOR"} for t in normalise(u).split())
 
 
 def looks_individual(e):
@@ -748,7 +757,13 @@ def main():
         for c in real:
             if not any(same_org(c, d) for d in distinct):
                 distinct.append(c)
-        if conflicts or len(distinct) > 1 or (amb_pool and not distinct):
+        p1 = not any(has_legal_form(x) for x in [pk] + list(e["raw"])) and \
+            any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"]))
+        if p1 and (conflicts or len(distinct) != 1):
+            res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (proposed rule P1)"
+            res["cands"] = []
+            counts["p1_withheld_unresolved"] += 1
+        elif conflicts or len(distinct) > 1 or (amb_pool and not distinct):
             why = []
             if conflicts:
                 why.append("identifier and name conflict")
