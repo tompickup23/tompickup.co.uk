@@ -90,8 +90,9 @@ def main():
         "pipelineGitSha": git_sha(),
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "years": YEARS,
-        "inputs": {p: sha256_file(OUT / p) for p in ("coverage.json", "resolver_proposed.csv",
-                                                     "payee_key_values.csv", "ownership_walk.csv")},
+        # a list of {file, sha256}: a hash stored under a file name with "key" in it reads to gitleaks as a secret
+        "inputs": [{"file": p, "sha256": sha256_file(OUT / p)} for p in ("coverage.json", "resolver_proposed.csv",
+                                                                         "payee_key_values.csv", "ownership_walk.csv")],
         "bodsAsAt": walk_man.get("bodsAsAt"),
         "notCovered": cov["$meta"].get("notCovered"),
         "note": "Pence. Shares are of each body's supplier total (bank net less internal transfers, settlement "
