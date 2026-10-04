@@ -111,7 +111,7 @@ for uname, u in decision["unitaries"].items():
 
     unitaries.append({
         "name": uname, "accent": u["accent"], "home": u.get("home", False),
-        "note": u.get("note"), "councils": members,
+        "note": u.get("note"), "legacyLabel": u.get("legacyLabel"), "councils": members,
         "population": pop, "lccServedPop": served,
         "chargeableDwellings": wsum,
         "metrics": {k: wavg(members, k) for k in WEIGHTED_METRICS},

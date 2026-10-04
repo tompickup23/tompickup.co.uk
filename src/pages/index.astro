@@ -25,12 +25,13 @@ const featuredImage = articleImage(featured.data.image);
 const latest = allPosts.filter((p) => p.id !== FEATURED_SLUG).slice(0, 3);
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-// The four new unitaries (from the LGR model) for the homepage showcase.
+// The four new unitaries (from the LGR model) for the homepage showcase. Names from the
+// government's letters of 16 and 20 July 2026; populations are 2021 Census (see /lgr/).
 const LGR_UNITS = [
-  { name: 'East Lancashire', accent: 'var(--chart-2)', pop: '498,255', councils: 5, home: true },
+  { name: 'Pennine Lancashire', accent: 'var(--chart-2)', pop: '498,255', councils: 5, home: true },
   { name: 'North Lancashire', accent: 'var(--chart-1)', pop: '352,338', councils: 3 },
   { name: 'South Lancashire', accent: 'var(--chart-4)', pop: '346,197', councils: 3 },
-  { name: 'West Lancashire', accent: 'var(--chart-3)', pop: '334,360', councils: 3 },
+  { name: 'Fylde Coast', accent: 'var(--chart-3)', pop: '334,360', councils: 3 },
 ];
 ---
 
@@ -173,7 +174,8 @@ const LGR_UNITS = [
               <p class="lgr-teaser-copy">
                 On 16 July 2026 the government decided Lancashire's 15 councils would be replaced by four new unitary
                 authorities from April 2028. The programme was paused for review on 7 September 2026. I've built an interactive model of what each one would be: who it
-                merges, the budget it would run and how its places compare. Every figure sourced.
+                merges, the budget it would run and how its places compare. Every figure sourced; populations
+                are from the 2021 Census.
               </p>
             </div>
             <div class="lgr-teaser-stats">
