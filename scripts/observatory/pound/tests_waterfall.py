@@ -234,11 +234,38 @@ def flatten(o, pre=""):
         yield pre, o
 
 
+def test_5b_seed(con):
+    """Step 5b against sources/council_company_seed.csv (23 companies)."""
+    from waterfall import Registers, council_companies
+    seed = list(csv.DictReader(open(INPUTS / "council_company_seed.csv", newline="")))
+    R = Registers(con, sorted({normalise(r["name"]) for r in seed}))
+    cc, mart = council_companies(con, set(), R)
+    rows, agree = [], 0
+    for r in seed:
+        exp = r["rule_2_1_expectation"]
+        exp_pass = exp.startswith("passes")
+        got = r["company_number"] in cc
+        ok = got == exp_pass
+        agree += ok
+        rows.append({"company_number": r["company_number"], "name": r["name"], "expectation": exp,
+                     "step5b": "council company" if got else "not council company",
+                     "route": cc.get(r["company_number"], {}).get("route", ""), "agrees": ok})
+    with open(OUT / "test5b_seed.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    REPORT["test5b_seed"] = {"seed": len(seed), "agree": agree, "disagree": len(seed) - agree,
+                             "council_companies_in_mart": len(cc), "mart": str(mart),
+                             "note": "informational: each disagreement is explained in BUILD notes, not forced"}
+    return True
+
+
 def main():
     rows = load_resolver()
     con = duckdb.connect()
     results = {"test2": test2(rows), "test3": test3(rows, con), "test4": test4(rows),
                "test5": test5(con), "test1": test1(rows)}
+    test_5b_seed(con)
     REPORT["all_pass"] = all(results.values())
     write_json(OUT / "tests_report.json", REPORT)
     print(json.dumps({k: v.get("pass") if isinstance(v, dict) else v for k, v in REPORT.items()}, indent=1))

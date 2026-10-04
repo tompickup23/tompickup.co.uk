@@ -37,18 +37,23 @@ def note_input(path, role):
                                "sha256": sha256_file(p)})
 
 
+PA_TYPES = {"VARCHAR": "string", "BOOLEAN": "bool_", "INTEGER": "int64"}
+
+
 def write(con, name, rows, schema):
-    """rows: list of tuples matching schema [(col, duckdb type)]."""
+    """rows: list of tuples matching schema [(col, duckdb type)], written
+    through an Arrow table (DuckDB's executemany is row by row and slow)."""
+    import pyarrow as pa
     EXTRACT.mkdir(parents=True, exist_ok=True)
     out = EXTRACT / f"{name}.parquet"
-    cols = ", ".join(f'"{c}" {t}' for c, t in schema)
-    con.execute(f"CREATE OR REPLACE TEMP TABLE _x ({cols})")
-    if rows:
-        con.executemany(f"INSERT INTO _x VALUES ({', '.join('?' * len(schema))})", rows)
-    con.execute(f"COPY _x TO '{out}' (FORMAT parquet)")
-    n = con.execute("SELECT count(*) FROM _x").fetchone()[0]
-    MANIFEST["extracts"][name] = {"rows": n, "sha256": sha256_file(out)}
-    print(f"  {name}: {n} rows")
+    cols = list(zip(*rows)) if rows else [[] for _ in schema]
+    tbl = pa.table({c: pa.array(list(v), type=getattr(pa, PA_TYPES[t])())
+                    for (c, t), v in zip(schema, cols)})
+    con.register("_x", tbl)
+    con.execute(f"COPY (SELECT * FROM _x) TO '{out}' (FORMAT parquet)")
+    con.unregister("_x")
+    MANIFEST["extracts"][name] = {"rows": len(rows), "sha256": sha256_file(out)}
+    print(f"  {name}: {len(rows)} rows")
 
 
 def bronze_files(source, pattern="*"):

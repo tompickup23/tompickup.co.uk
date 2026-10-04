@@ -151,8 +151,9 @@ def gleif_l2(con):
 
 def walk(con, start_crns, years):
     """Recursive walk per financial year. Returns rows for ownership_walk.csv."""
-    con.execute("CREATE OR REPLACE TEMP TABLE starts (crn VARCHAR)")
-    con.executemany("INSERT INTO starts VALUES (?)", [(c,) for c in sorted(start_crns)])
+    import pyarrow as pa
+    con.register("_starts", pa.table({"crn": pa.array(sorted(start_crns), type=pa.string())}))
+    con.execute("CREATE OR REPLACE TEMP TABLE starts AS SELECT * FROM _starts")
     mart = sorted((GOLD / "mart_psc_corporate").glob("snapshot_date=*/part.parquet"))[-1]
     con.execute(f"""CREATE OR REPLACE TEMP TABLE psc_now AS
         SELECT company_number, registration_number, ceased_on, active FROM read_parquet('{mart}')""")
@@ -190,8 +191,8 @@ def walk(con, start_crns, years):
         ncyc = sum(1 for k in by_start if isinstance(k, tuple))
         cycles_total += ncyc
         tops = {s: by_start.get(s, (s, 0, [s])) for s in start_crns}
-        con.execute("CREATE OR REPLACE TEMP TABLE tops (crn VARCHAR)")
-        con.executemany("INSERT INTO tops VALUES (?)", [(t,) for t in {v[0] for v in tops.values()}])
+        con.register("_tops", pa.table({"crn": pa.array(sorted({v[0] for v in tops.values()}), type=pa.string())}))
+        con.execute("CREATE OR REPLACE TEMP TABLE tops AS SELECT * FROM _tops")
         above_all = {}
         for r in con.execute("""SELECT e.subject_crn, party_kind, parent_crn, parent_scheme, parent_jurisdiction,
                                        parent_listed, parent_entity_type, person_residence, reason, voting_min,
@@ -210,8 +211,10 @@ def walk(con, start_crns, years):
         ceased = {}
         if fy == "2025/26":
             pairs = {(a, b) for (t, d, path) in tops.values() for a, b in zip(path[:-1], path[1:])}
-            con.execute("CREATE OR REPLACE TEMP TABLE pairs (a VARCHAR, b VARCHAR)")
-            con.executemany("INSERT INTO pairs VALUES (?, ?)", list(pairs))
+            pl = sorted(pairs)
+            con.register("_pairs", pa.table({"a": pa.array([x[0] for x in pl], type=pa.string()),
+                                             "b": pa.array([x[1] for x in pl], type=pa.string())}))
+            con.execute("CREATE OR REPLACE TEMP TABLE pairs AS SELECT * FROM _pairs")
             for a, b, c in con.execute("""SELECT pairs.a, pairs.b, min(ceased_on) FROM pairs JOIN psc_now p
                                           ON p.company_number = pairs.a
                                           AND regexp_replace(upper(p.registration_number), '\\s', '', 'g')

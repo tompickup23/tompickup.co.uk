@@ -145,8 +145,9 @@ def load_keys(path):
 class Registers:
     def __init__(self, con, variants):
         self.con = con
-        con.execute("CREATE TEMP TABLE v (name_norm VARCHAR)")
-        con.executemany("INSERT INTO v VALUES (?)", [(x,) for x in variants])
+        import pyarrow as pa
+        con.register("_v", pa.table({"name_norm": pa.array(variants, type=pa.string())}))
+        con.execute("CREATE TEMP TABLE v AS SELECT * FROM _v")
         self.reg = defaultdict(list)
         for r in con.execute(f"""SELECT r.name_norm, company_number, kind, name, status, active,
                                         postcode_norm, snapshot_date, in_lancs_frame
@@ -529,7 +530,9 @@ def council_companies(con, crns, R):
         b = band_ok(natures)
         if not b:
             continue
-        if nn in la_names or re.search(r"\b(BOROUGH|COUNTY|CITY|DISTRICT) COUNCIL\b|^COUNCIL OF\b", nn):
+        if nn in la_names or re.search(r"\b(BOROUGH|COUNTY|CITY|DISTRICT|METROPOLITAN) COUNCIL\b|"
+                                            r"\bCOUNCIL OF THE (BOROUGH|CITY|COUNTY|DISTRICT)\b|"
+                                            r"\bCOMBINED (COUNTY )?AUTHORITY\b", nn):
             direct[crn] = {"psc": name, "band": b, "route": "direct",
                            "source": f"gold mart_psc_lancs {mart.parent.name}"}
         corp_edges[crn].append((nn, name, b))
