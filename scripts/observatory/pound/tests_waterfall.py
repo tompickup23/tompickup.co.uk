@@ -65,11 +65,42 @@ def today_matcher():
     ns = {"by_name": by_name, "lancs_crn": lancs, "supplier_variants": supplier_variants,
           "OCDS_IDS": json.loads(OCDS.read_text()).get("byName", {}), "defaultdict": defaultdict}
     exec(compile(ast.Module(body=keep, type_ignores=[]), "build_pound.py", "exec"), ns)
-    return ns["match_entry"], by_name
+    # The same matcher over the same index without companies incorporated
+    # after the window closed, which the waterfall excludes (no such company
+    # can be a payee in 2024/25 or 2025/26). Used only to give a reason.
+    late = late_companies()
+    ns2 = {**ns, "by_name": WithoutLate(by_name, late)}
+    exec(compile(ast.Module(body=keep, type_ignores=[]), "build_pound.py", "exec"), ns2)
+    return ns["match_entry"], by_name, ns2["match_entry"], late
+
+
+def late_companies():
+    """Company number -> incorporation date, for companies incorporated
+    after WINDOW_END (31 March 2026) in the register extract."""
+    from waterfall import WINDOW_END
+    con = duckdb.connect()
+    return dict(con.execute(f"""SELECT company_number, min(incorporation_date) FROM '{EXTRACT}/reg_names.parquet'
+                                WHERE incorporation_date > '{WINDOW_END}' GROUP BY 1""").fetchall())
+
+
+class WithoutLate:
+    """Read-only view of today's register index with late companies removed."""
+    def __init__(self, d, late):
+        self.d, self.late = d, late
+
+    def get(self, k, default=None):
+        v = self.d.get(k)
+        return [c for c in v if c[0] not in self.late] if v else default
+
+    def __getitem__(self, k):
+        return [c for c in self.d[k] if c[0] not in self.late]
+
+    def __iter__(self):
+        return iter(self.d)
 
 
 def test1(rows):
-    match_entry, by_name = today_matcher()
+    match_entry, by_name, match_entry_no_late, late = today_matcher()
     keys = {}
     for line in gzip.open(INPUTS / "payee_keys.jsonl.gz", "rt"):
         d = json.loads(line)
@@ -125,6 +156,16 @@ def test1(rows):
                       f"holds a candidate the silver snapshots resolve differently; waterfall reason: {r['reason']}")
         else:
             reason = "unexplained"
+            crn2 = match_entry_no_late({"names": names})[0]
+            pool_late = sorted({c[0] for v in supplier_variants(names[0]) for c in (by_name.get(v) or [])
+                                if c[0] in late})
+            if crn in late or (pool_late and crn2 in ids):
+                involved = sorted(set(pool_late) | ({crn} if crn in late else set()))
+                reason = ("today's register index holds a company whose register date (incorporation, or registration for an overseas entity) is after 31 March 2026 ("
+                          + ", ".join(f"{c} on {late[c]}" for c in involved)
+                          + "), which cannot be a payee in the window and which the waterfall excludes; replayed "
+                          f"without such companies today's matcher gives {crn2 or 'no match'}, and the waterfall "
+                          f"resolves {r['org_scheme']} {r['org_id']} by {r['method']}")
         diffs.append({"body_id": k[0], "payee_key": k[1], "today_crn": crn, "today_how": how,
                       "waterfall_scheme": r["org_scheme"], "waterfall_id": r["org_id"],
                       "waterfall_method": r["method"], "reason": reason})
