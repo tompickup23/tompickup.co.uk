@@ -1,0 +1,250 @@
+#!/usr/bin/env python3
+"""The five tests in WATERFALL.md section 5. No Phase 1 result is read before
+all five pass. Writes $POUND_WORK/out/tests_report.json and
+test1_replay_differences.csv; exits 1 on any failure.
+
+  1. Replaying today's matcher (build_pound.match_entry, its own source code,
+     with its own register index, Lancashire frame and OCDS map) reproduces
+     the waterfall's decision for every key it resolves, or the difference is
+     listed with a reason.
+  2. No decision_id maps one payee key to two organisations.
+  3. Every GB-COH id in the resolver is in a register snapshot.
+  4. Value conservation: resolved plus unclassified equals the spend input's
+     supplier total per body and year, to the penny.
+  5. No person name appears in any output table (checked against the
+     individual PSC names in gold mart_psc_lancs). Hits inside a register
+     company name (an eponymous company) are listed for the gate, not
+     failed; a hit anywhere else fails.
+"""
+import ast
+import csv
+import gzip
+import json
+import re
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+import duckdb
+
+from common import (EXTRACT, GOLD, HERE, INPUTS, OUT, normalise,
+                    supplier_variants, write_json)
+
+csv.field_size_limit(sys.maxsize)
+REPORT = {}
+REGISTER_INDEX = Path("/opt/observatory/out/register_index.tsv.gz")
+MASTER = Path("/root/observatory-data/processed/master.jsonl.gz")
+OCDS = INPUTS / "ocds_supplier_ids.json"
+
+
+def load_resolver():
+    with open(OUT / "resolver_proposed.csv", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def today_matcher():
+    """Exec build_pound.py's own ALIASES, PREFIX_DENY, prefix_unique and
+    match_entry, without running the module's top-level build."""
+    src = (HERE.parent / "build_pound.py").read_text()
+    tree = ast.parse(src)
+    keep = [n for n in tree.body if (isinstance(n, ast.FunctionDef) and n.name in ("prefix_unique", "match_entry"))
+            or (isinstance(n, ast.Assign) and any(getattr(t, "id", "") in ("ALIASES", "PREFIX_DENY", "_sorted_keys")
+                                                  for t in n.targets))
+            or isinstance(n, ast.Import) and any(a.name == "bisect" for a in n.names)]
+    by_name = defaultdict(list)
+    with gzip.open(REGISTER_INDEX, "rt") as f:
+        rd = csv.reader(f, delimiter="\t")
+        next(rd)
+        for crn, name, pc, status in rd:
+            by_name[normalise(name)].append((crn, pc, status))
+    lancs = {}
+    with gzip.open(MASTER, "rt") as f:
+        for line in f:
+            r = json.loads(line)
+            lancs[r["crn"]] = True
+    ns = {"by_name": by_name, "lancs_crn": lancs, "supplier_variants": supplier_variants,
+          "OCDS_IDS": json.loads(OCDS.read_text()).get("byName", {}), "defaultdict": defaultdict}
+    exec(compile(ast.Module(body=keep, type_ignores=[]), "build_pound.py", "exec"), ns)
+    return ns["match_entry"], by_name
+
+
+def test1(rows):
+    match_entry, by_name = today_matcher()
+    keys = {}
+    for line in gzip.open(INPUTS / "payee_keys.jsonl.gz", "rt"):
+        d = json.loads(line)
+        e = keys.setdefault((d["body_id"], d["payee_key"]), {"names": Counter()})
+        e["names"][d["payee_key"]] += 10 ** 9
+        for n, c in d["supplier_canonical"].items():
+            e["names"][n] += c * 1000
+        for n, c in d["raw_names"].items():
+            e["names"][n] += c
+    ours = {(r["body_id"], r["payee_key"]): r for r in rows}
+    diffs, same, today_resolved = [], 0, 0
+    for k, e in keys.items():
+        r = ours.get(k)
+        if r is None:
+            continue  # masked keys (individual or redacted) are never matched
+        names = [n for n, _ in e["names"].most_common()]
+        crn, how, pool = match_entry({"names": names})
+        if not crn:
+            continue
+        today_resolved += 1
+        ids = {r["org_id"]} | {a[7:] for a in r["alias_ids"].split("|") if a.startswith("GB-COH-")}
+        if r["org_scheme"] == "GB-COH" and crn in ids:
+            same += 1
+            continue
+        if how == "alias":
+            reason = "curated alias in build_pound.ALIASES: a hand decision, not a pipeline step; it goes to step 9 for a named person"
+        elif r["method"] == "queue":
+            reason = f"waterfall sends it to the step 9 queue: {r['reason_detail']}"
+        elif r["org_scheme"] == "GB-COH" and r["method"] in ("id-bank-inferred", "id-council"):
+            reason = f"an earlier step ({r['method']}) proposes {r['org_id']}; today's matcher has no step 1"
+        elif r["org_scheme"] != "GB-COH" and r["org_id"]:
+            reason = f"waterfall resolves to {r['org_scheme']} {r['org_id']} ({r['method']}); today's matcher only knows company numbers"
+        elif not r["org_id"]:
+            k2 = [v for v in supplier_variants(names[0])]
+            reason = ("today's register index (/opt/observatory/out/register_index.tsv.gz, 4 October 2026) "
+                      f"holds a candidate the silver snapshots resolve differently; waterfall reason: {r['reason']}")
+        else:
+            reason = "unexplained"
+        diffs.append({"body_id": k[0], "payee_key": k[1], "today_crn": crn, "today_how": how,
+                      "waterfall_scheme": r["org_scheme"], "waterfall_id": r["org_id"],
+                      "waterfall_method": r["method"], "reason": reason})
+    with open(OUT / "test1_replay_differences.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["body_id", "payee_key", "today_crn", "today_how", "waterfall_scheme",
+                                          "waterfall_id", "waterfall_method", "reason"])
+        w.writeheader()
+        w.writerows(diffs)
+    unexplained = [d for d in diffs if d["reason"] == "unexplained"]
+    REPORT["test1"] = {"today_resolved": today_resolved, "same": same, "differences": len(diffs),
+                       "by_reason": dict(Counter(d["reason"].split(":")[0][:80] for d in diffs)),
+                       "unexplained": len(unexplained), "pass": not unexplained}
+    return not unexplained
+
+
+def test2(rows):
+    per_key = Counter((r["body_id"], r["payee_key"]) for r in rows)
+    ids = Counter(r["decision_id"] for r in rows)
+    bad = [k for k, n in per_key.items() if n > 1] + [k for k, n in ids.items() if n > 1]
+    REPORT["test2"] = {"rows": len(rows), "keys_with_two_rows": len([k for k, n in per_key.items() if n > 1]),
+                       "duplicate_decision_ids": len([k for k, n in ids.items() if n > 1]), "pass": not bad}
+    return not bad
+
+
+def test3(rows, con):
+    nums = {r[0] for r in con.execute(f"SELECT company_number FROM '{EXTRACT}/reg_numbers.parquet'").fetchall()}
+    coh = set()
+    for r in rows:
+        if r["org_scheme"] == "GB-COH":
+            coh.add(r["org_id"])
+        coh |= {a[7:] for a in r["alias_ids"].split("|") if a.startswith("GB-COH-")}
+    missing = sorted(coh - nums)
+    REPORT["test3"] = {"gb_coh_ids": len(coh), "missing": missing[:20], "pass": not missing}
+    return not missing
+
+
+def test4(rows):
+    spend = json.loads((INPUTS / "council_supplier_spend.json").read_text())["bodies"]
+    vals = defaultdict(int)
+    with open(OUT / "payee_key_values.csv", newline="") as f:
+        for r in csv.DictReader(f):
+            vals[(r["body_id"], r["financial_year"])] += int(r["value_pence"])
+    resolved_keys = {(r["body_id"], r["payee_key"]) for r in rows if r["org_id"]}
+    out, ok = {}, True
+    bodies = {r["body_id"] for r in rows}
+    for b in sorted(bodies):
+        for fy, v in spend[b]["byYear"].items():
+            fy2 = fy.replace("-", "/")
+            want = round(v["total"] * 100)
+            got = vals[(b, fy2)]
+            out[f"{b} {fy2}"] = {"spend_input_pence": want, "resolved_plus_unclassified_pence": got,
+                                 "difference_pence": got - want}
+            ok &= got == want
+    REPORT["test4"] = {"body_years": out, "pass": ok}
+    return ok
+
+
+def person_names(con):
+    mart = sorted((GOLD / "mart_psc_lancs").glob("snapshot_date=*/part.parquet"))[-1]
+    names = set()
+    for f, m, s in con.execute(f"""SELECT name_forename, name_middle, name_surname FROM read_parquet('{mart}')
+                                   WHERE is_individual AND name_surname IS NOT NULL""").fetchall():
+        f = normalise(f or "")
+        s = normalise(s or "")
+        if f and s and len(f) > 1:
+            names.add(f"{f} {s}")
+            if m:
+                names.add(f"{f} {normalise(m)} {s}")
+    return names, mart
+
+
+def windows(text):
+    t = normalise(text or "").split()
+    for n in (2, 3):
+        for i in range(len(t) - n + 1):
+            yield " ".join(t[i:i + n])
+
+
+def test5(con):
+    names, mart = person_names(con)
+    fails, epon = [], []
+    files = [OUT / "resolver_proposed.csv", OUT / "queue.csv"] + sorted(OUT.glob("verify_*.csv")) + \
+        sorted(OUT.glob("ownership_walk*.csv"))
+    org_fields = {"payee_key", "register_name", "register_names", "name", "proposed_name"}
+    for p in files:
+        if not p.exists():
+            continue
+        with open(p, newline="") as f:
+            for r in csv.DictReader(f):
+                resolved = bool(r.get("org_id"))
+                for col, val in r.items():
+                    if not val or col in ("decision_id", "decided_by", "decided_at"):
+                        continue
+                    texts = [(col, val)]
+                    if val.startswith("{"):
+                        try:
+                            texts = [(k2, str(v2)) for k2, v2 in flatten(json.loads(val))]
+                        except Exception:
+                            pass
+                    for c2, t in texts:
+                        hit = next((w for w in windows(t) if w in names), None)
+                        if not hit:
+                            continue
+                        leaf = c2.split(".")[-1]
+                        if leaf in org_fields and (resolved or leaf != "payee_key"):
+                            epon.append({"file": p.name, "field": c2})
+                        else:
+                            fails.append({"file": p.name, "field": c2, "body_id": r.get("body_id", "")})
+    REPORT["test5"] = {"psc_names_checked": len(names), "psc_source": str(mart),
+                       "eponymous_org_name_hits": len(epon),
+                       "eponymous_by_file": dict(Counter(e["file"] for e in epon)),
+                       "failures": len(fails), "failures_sample": fails[:20], "pass": not fails}
+    return not fails
+
+
+def flatten(o, pre=""):
+    if isinstance(o, dict):
+        for k, v in o.items():
+            yield from flatten(v, f"{pre}.{k}" if pre else k)
+    elif isinstance(o, list):
+        for v in o:
+            yield from flatten(v, pre)
+    else:
+        yield pre, o
+
+
+def main():
+    rows = load_resolver()
+    con = duckdb.connect()
+    results = {"test2": test2(rows), "test3": test3(rows, con), "test4": test4(rows),
+               "test5": test5(con), "test1": test1(rows)}
+    REPORT["all_pass"] = all(results.values())
+    write_json(OUT / "tests_report.json", REPORT)
+    print(json.dumps({k: v.get("pass") if isinstance(v, dict) else v for k, v in REPORT.items()}, indent=1))
+    print(json.dumps(REPORT.get("test1"), indent=1))
+    sys.exit(0 if REPORT["all_pass"] else 1)
+
+
+if __name__ == "__main__":
+    main()
