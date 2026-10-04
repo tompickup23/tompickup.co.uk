@@ -14,29 +14,9 @@ featured: true
 draft: false
 ---
 
-Scout Moor II has been cut from 17 turbines to 12. And the applicant's own map of where it and Calderdale Energy Park, up to 34 turbines above Hebden Bridge, could be seen together is now public.
+Scout Moor II has been cut from 17 turbines to 12. And the applicant's own map of where it and Calderdale Energy Park, up to 34 turbines above Hebden Bridge, could be seen together is now public. On my model, the area that could theoretically see turbines of both barely shrinks: from 700.8 square kilometres to 698.9.
 
 That map is the thing I said did not exist. In August I wrote that there was no assessment of the two schemes together. I was wrong about that, and I have said so in [a correction to that article](/news/two-wind-farms-one-view/).
-
-## What I got wrong
-
-The applicant, a company backed by Cubico Sustainable Investments, sent both councils further environmental information, a revision of its environmental statement, under a letter of 1 July 2026. It already included a written cumulative assessment of Calderdale Energy Park and a combined map. The 12-turbine layout was in the same submission.
-
-None of it was on the public planning portal when I wrote. By my count on 20 August the Rossendale file listed 333 documents and none of them was part of the revision; on 4 September the case officer told me the documents would be viewable once the re-consultation went live; the councils' letters are dated 25 September and the portal gives 28 September. So it was true that nothing had been published. But my headline and my objection both said that no assessment existed, and that was wrong.
-
-I also said no independent review of the landscape chapter had been commissioned. The applicant records that the councils had commissioned one, from the consultancy LUC, and dates LUC's draft to February 2026. It has not been published either, and I am asking for it.
-
-## What changed, and what did not
-
-Removing five turbines is a real change and I welcome it. On the applicant's own figures the scheme would now be at least 68.4 megawatts and up to 84, which it says is enough to power 84,552 typical homes a year. Eight of the 12 turbines would carry a red aviation light, where before it was eight of 17.
-
-What barely changed is the area that could see both.
-
-**About 700 square kilometres of land would theoretically see turbines of both schemes.** On my model it was 700.8 with 17 turbines and is 698.9 with 12. That is a change of 0.3 per cent. The August article gave 702 for 17 turbines; 700.8 is the same model re-run with one rule for setting every turbine's ground level, bilinear interpolation of the Ordnance Survey terrain at each turbine, so that the two layouts are compared like for like. The method note sets it out. In the applicant's own mapping software, given the same inputs, it is 685.
-
-The overlap is set by the shape of the land and the distance between the two sites, not by how many turbines there are.
-
-These are theoretical figures. They assume bare earth, with no buildings, walls or trees in the way, and count a single blade tip as visible. They show where the turbines could be seen, not what you would see on a given day.
 
 ## What the applicant's assessment leaves out
 
@@ -77,6 +57,26 @@ I have sent a fresh representation to Rossendale and Rochdale. It asks the counc
 - send the application to committee, not decide it under delegated powers. The national scheme of delegation starts on 31 October, makes no transitional provision for applications already made, and leaves it to one councillor and one officer to agree that this one goes to committee.
 
 Rossendale's newspaper notice of 2 October gives 1 November for comments on the revised environmental statement, and I have asked both councils to accept comments until then. Do not rely on that: Rochdale's own notice gives 22 October, so send yours by **22 October 2026**. The documents are on Rossendale's planning portal under 2025/0267 and Rochdale's under 25/00680/FUL. Rossendale takes comments at planning@rossendalebc.gov.uk and Rochdale at development.management@rochdale.gov.uk. Say which application you are commenting on, and ask for it to be logged on both.
+
+## What changed, and what did not
+
+Removing five turbines is a real change and I welcome it. On the applicant's own figures the scheme would now be at least 68.4 megawatts and up to 84, which it says is enough to power 84,552 typical homes a year. Eight of the 12 turbines would carry a red aviation light, where before it was eight of 17.
+
+What barely changed is the area that could see both.
+
+**About 700 square kilometres of land would theoretically see turbines of both schemes.** On my model it was 700.8 with 17 turbines and is 698.9 with 12. That is a change of 0.3 per cent. The August article gave 702 for 17 turbines; 700.8 is the same model re-run with one rule for setting every turbine's ground level, bilinear interpolation of the Ordnance Survey terrain at each turbine, so that the two layouts are compared like for like. The method note sets it out. In the applicant's own mapping software, given the same inputs, it is 685.
+
+The overlap is set by the shape of the land and the distance between the two sites, not by how many turbines there are.
+
+These are theoretical figures. They assume bare earth, with no buildings, walls or trees in the way, and count a single blade tip as visible. They show where the turbines could be seen, not what you would see on a given day.
+
+## What I got wrong
+
+The applicant, a company backed by Cubico Sustainable Investments, sent both councils further environmental information, a revision of its environmental statement, under a letter of 1 July 2026. It already included a written cumulative assessment of Calderdale Energy Park and a combined map. The 12-turbine layout was in the same submission.
+
+None of it was on the public planning portal when I wrote. By my count on 20 August the Rossendale file listed 333 documents and none of them was part of the revision; on 4 September the case officer told me the documents would be viewable once the re-consultation went live; the councils' letters are dated 25 September and the portal gives 28 September. So it was true that nothing had been published. But my headline and my objection both said that no assessment existed, and that was wrong.
+
+I also said no independent review of the landscape chapter had been commissioned. The applicant records that the councils had commissioned one, from the consultancy LUC, and dates LUC's draft to February 2026. It has not been published either, and I am asking for it.
 
 ## Read it yourself
 
