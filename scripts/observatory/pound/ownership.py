@@ -211,7 +211,7 @@ def walk(con, start_crns, years):
         above_all = {}
         for r in con.execute("""SELECT e.subject_crn, party_kind, parent_crn, parent_scheme, parent_jurisdiction,
                                        parent_listed, parent_entity_type, person_residence, reason, voting_min,
-                                       voting_max, trustee, statement_id
+                                       voting_max, trustee, statement_id, shares_min, appoints_board
                                 FROM e JOIN tops ON e.subject_crn = tops.crn""").fetchall():
             above_all.setdefault(r[0], []).append(r[1:])
         nparents = dict(con.execute("""SELECT subject_crn, count(DISTINCT parent_crn) FROM ctl
