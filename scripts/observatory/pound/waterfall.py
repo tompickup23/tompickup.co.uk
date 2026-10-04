@@ -206,9 +206,12 @@ class Registers:
         con.register("_v", pa.table({"name_norm": pa.array(variants, type=pa.string())}))
         con.execute("CREATE TEMP TABLE v AS SELECT * FROM _v")
         self.reg = defaultdict(list)
+        # ORDER BY ALL here and below: rows come back from a join in no fixed
+        # order, and the evidence shows the first matching row, so reruns agree
         for r in con.execute(f"""SELECT r.name_norm, company_number, kind, name, status, active,
                                         postcode_norm, snapshot_date, in_lancs_frame, incorporation_date
-                                 FROM '{EXTRACT}/reg_names.parquet' r JOIN v USING (name_norm)""").fetchall():
+                                 FROM '{EXTRACT}/reg_names.parquet' r JOIN v USING (name_norm)
+                                 ORDER BY ALL""").fetchall():
             # A company incorporated after the window closed (31 March 2026)
             # cannot be a payee in it; renamed names pass to new companies.
             if r[9] and r[9] > WINDOW_END:
@@ -223,7 +226,7 @@ class Registers:
         for t in ("charity", "cqc", "public_bodies", "gias_groups", "gleif", "ocds", "ggis", "rsh_oscr"):
             cols = [c[0] for c in con.execute(f"DESCRIBE SELECT * FROM '{EXTRACT}/{t}.parquet'").fetchall()]
             d = defaultdict(list)
-            for r in con.execute(f"SELECT t.* FROM '{EXTRACT}/{t}.parquet' t JOIN v USING (name_norm)").fetchall():
+            for r in con.execute(f"SELECT t.* FROM '{EXTRACT}/{t}.parquet' t JOIN v USING (name_norm) ORDER BY ALL").fetchall():
                 d[r[0]].append(dict(zip(cols, r)))
             self.tables[t] = d
 
@@ -233,7 +236,7 @@ class Registers:
             self._names_cache = {}
         if crn not in self._names_cache:
             rows = self.con.execute(f"""SELECT DISTINCT name_norm, name, kind FROM '{EXTRACT}/reg_names.parquet'
-                                        WHERE company_number = ?""", [crn]).fetchall()
+                                        WHERE company_number = ? ORDER BY ALL""", [crn]).fetchall()
             self._names_cache[crn] = rows
         return self._names_cache[crn]
 
