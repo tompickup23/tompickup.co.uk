@@ -7,7 +7,10 @@ group, then two value bands split at the stratum's median value per key.
 Size per stratum n = n0 / (1 + (n0 - 1) / N), rounded up, the whole stratum
 when N is smaller; n0 = 48 for identifier and register-specific methods,
 139 for exact name, prefix and OCDS or GGIS. Each value band takes half of
-n (rounded up, capped at the band). Simple random sampling, seeded.
+n (rounded up, capped at the band). Simple random sampling, seeded. Keys
+matched only through a waterfall variant (W1, W1b or W2, flagged in the
+evidence) form their own stratum, whatever their method (RULES.md decision
+18), with n0 = 139.
 
 Recall sample: 200 keys ending at step 10 with reason no-candidate or
 ambiguous, outside the verified set: 100 drawn with probability
@@ -36,8 +39,11 @@ GROUPS = {"id-bank-inferred": ("step 1 and 1b, identifier", 48), "id-council": (
           "name-exact": ("step 2b, exact name", 139), "name-exact-out": ("step 2b, exact name", 139),
           "name-prefix": ("step 2c, prefix", 139),
           "charity": ("step 3, charity", 48), "cqc-provider": ("step 4, CQC provider", 48),
-          "public-body": ("step 5, public body", 48), "gleif": ("step 6, GLEIF", 48),
+          "public-body": ("step 5, public body", 48), "public-body-superseded": ("step 5, public body", 48),
+          "gleif": ("step 6, GLEIF", 48),
           "ocds": ("step 7, OCDS and GGIS", 139), "ggis": ("step 7, OCDS and GGIS", 139)}
+VARIANT = ("variant only (W1, W1b, W2)", 139)
+N0 = dict(list(GROUPS.values()) + [VARIANT])
 
 
 def size(n0, N):
@@ -68,8 +74,10 @@ def main():
             if k in verified:
                 continue
             if r["method"] in GROUPS:
+                ev = json.loads(r["evidence"]) if r["evidence"] else {}
+                st = VARIANT[0] if ev.get("w1_variant") or ev.get("w2_variant") else GROUPS[r["method"]][0]
                 pop.append({"decision_id": r["decision_id"], "body_id": k[0], "payee_key": k[1],
-                            "method": r["method"], "stratum": GROUPS[r["method"]][0],
+                            "method": r["method"], "stratum": st,
                             "value_pence": vals[k], "org_scheme": r["org_scheme"], "org_id": r["org_id"]})
             elif r["reason"] in ("no-candidate", "ambiguous"):
                 recall_pop.append({"decision_id": r["decision_id"], "body_id": k[0], "payee_key": k[1],
@@ -90,7 +98,7 @@ def main():
     draws = []
     for st in sorted(by):
         rows = sorted(by[st], key=lambda r: (r["value_pence"], r["decision_id"]))
-        n0 = next(v[1] for v in GROUPS.values() if v[0] == st)
+        n0 = N0[st]
         N = len(rows)
         n = size(n0, N)
         med = rows[(N - 1) // 2]["value_pence"] if N else 0

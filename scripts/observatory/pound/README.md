@@ -1,6 +1,8 @@
 # Public Pound: resolution waterfall (Phase 1)
 
-Code for the Lancashire Public Pound's payee resolution, ownership walk, verification tables, gold-set draw and coverage. The specification is in the private Reports repo: `Public_Pound_work/phase0/WATERFALL.md`, `GOLD_SET.md` and `RULES.md` (decisions 7 to 11, 4 October 2026). Nothing here publishes, deploys or writes to the warehouse. Claude never writes `resolver.csv`: the pipeline writes `resolver_proposed.csv`, and only rows a named person accepts become the resolver.
+Code for the Lancashire Public Pound's payee resolution, ownership walk, verification tables, gold-set draw and coverage. The specification is in the private Reports repo: `Public_Pound_work/phase0/WATERFALL.md`, `GOLD_SET.md` and `RULES.md` (decisions 7 to 22, 4 October 2026). Nothing here publishes, deploys or writes to the warehouse. Claude never writes `resolver.csv`: the pipeline writes `resolver_proposed.csv`, and only rows a named person accepts become the resolver. No person will verify rows (decision 12), so hand-verified coverage is 0% and two other measures are published beside it, never called verification: **corroborated** (the `corroborated` column: two or more independent registers name the same organisation) and **agent-reviewed** (two independent model passes agree on `same`; labels in `agent_labels.csv`, never in the resolver).
+
+Gate decisions in code: three lines on the supplier total, with coverage, the 80% sets, tiers and concentration on supplier spend only (14); closed GOV.UK organisations resolved through GOV.UK's superseding links, method `public-body-superseded` (15); P1 (16); a shares sensitivity line, `class_if_shares_counted`, never the class (17); a variant-only gold-set stratum (18); the class "more than one controlling parent filed", tested at every unit of the chain (19); the individual class in aggregate only, with no country (20); GLEIF reporting exceptions as evidence beside the class (22).
 
 ## Where it runs
 
@@ -30,11 +32,11 @@ No result is read before `tests_waterfall.py` passes. It runs last so that test 
 | `common.py` | Paths, company-number normaliser, distinctive-token test, sha256 |
 | `extract.py` | Register extracts: CH names (current and previous, three silver snapshots), Charity Commission, CQC HSCA, public bodies, GIAS trusts, GLEIF Level 1, OCDS (OCP Find a Tender, `ocds_supplier_ids.json`, `procurement_finder.json`), GGIS, RSH and OSCR |
 | `waterfall.py` | Steps 1, 1b, 2, 2b, 2c, 3, 4, 5, 5b, 6, 7; the step 9 queue; step 10 reasons including `payment-route`. Step 8 (Splink) is not built in Phase 1 |
-| `ownership.py` | BODS UK edges as time intervals; GLEIF Level 2 and exceptions; recursive walk over edges with a voting band of more than 50%; rule 2.2 classes; cycle count |
+| `ownership.py` | BODS UK edges as time intervals; GLEIF Level 2 and exceptions (evidence only); recursive walk over edges with a voting band of more than 50%; rule 2.2 classes; more than one controlling parent; shares sensitivity walk; cycle count |
 | `verify.py` | Per-body verification sets (top 80% by value per year) and a supplier-level deduplicated table |
 | `tests_waterfall.py` | WATERFALL.md s5 tests 1 to 5, plus step 5b against the council-company seed list |
 | `gold_set.py` | Stratified clerical sample and recall sample, manifest first |
-| `coverage.py` | Rule 2.4 coverage per body and year |
+| `coverage.py` | Rule 2.4 coverage per body and year: three lines, and resolved, corroborated, agent-reviewed and hand-verified shares of supplier spend |
 | `page_data.py` | Class and sum aggregates for the draft UK Councils pages; no names |
 
 ## Privacy

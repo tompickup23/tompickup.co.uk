@@ -51,11 +51,32 @@ from common import (EXTRACT, GOLD, INPUTS, NAMELESS_KEY, OUT, WITHHELD_KEY,
 CONF = {"id-bank-inferred": 0.90, "id-council": 0.99, "name-postcode": 0.97,
         "name-exact": 0.93, "name-exact-out": 0.90, "name-prefix": 0.85,
         "charity": 0.95, "cqc-provider": 0.95, "public-body": 0.95,
-        "gleif": 0.93, "ocds": 0.92, "ggis": 0.92}
+        "public-body-superseded": 0.95, "gleif": 0.93, "ocds": 0.92, "ggis": 0.92}
 STEP_OF = {"id-bank-inferred": "1", "id-council": "1b", "name-postcode": "2",
            "name-exact": "2b", "name-exact-out": "2b", "name-prefix": "2c",
            "charity": "3", "cqc-provider": "4", "public-body": "5",
-           "gleif": "6", "ocds": "7", "ggis": "7"}
+           "public-body-superseded": "5", "gleif": "6", "ocds": "7", "ggis": "7"}
+# The register each method reads, for "corroborated" (RULES.md decision 12:
+# two or more independent registers name the same organisation). Methods that
+# read the same register count once: a bank number checked against Companies
+# House and an exact Companies House name are one register, not two. Find a
+# Tender, Contracts Finder and GGIS identifiers count as one (procurement and
+# grant notices), as the decision lists them together.
+REGISTER_OF = {"id-bank-inferred": "Companies House", "name-postcode": "Companies House",
+               "name-exact": "Companies House", "name-exact-out": "Companies House",
+               "name-prefix": "Companies House", "id-council": "Charity Commission",
+               "charity": "Charity Commission", "cqc-provider": "CQC",
+               "public-body": "public-body lists", "public-body-superseded": "public-body lists",
+               "gleif": "GLEIF", "ocds": "Find a Tender, Contracts Finder or GGIS",
+               "ggis": "Find a Tender, Contracts Finder or GGIS"}
+# Area names of the fourteen bodies, to tell a body's own council company
+# from another council's (RULES.md decision 14).
+BODY_AREA = {"blackburn": "BLACKBURN WITH DARWEN", "blackpool": "BLACKPOOL", "burnley": "BURNLEY",
+             "fylde": "FYLDE", "hyndburn": "HYNDBURN", "lancashire_cc": "LANCASHIRE",
+             "lancaster": "LANCASTER", "pendle": "PENDLE", "preston": "PRESTON",
+             "ribble_valley": "RIBBLE VALLEY", "rossendale": "ROSSENDALE", "south_ribble": "SOUTH RIBBLE",
+             "west_lancashire": "WEST LANCASHIRE", "wyre": "WYRE"}
+COUNCIL_WORDS = {"THE", "COUNCIL", "OF", "BOROUGH", "COUNTY", "CITY", "DISTRICT", "METROPOLITAN"}
 
 # Hand-verified bad prefix matches, carried from build_pound.PREFIX_DENY.
 PSC_NAMES = set()
@@ -449,8 +470,22 @@ def step5(e, R):
                       "body_type": r["body_type"], "matched_variant": v, "register_name": r["name"],
                       "step5_class_proposed": r["step5_class_proposed"], "gss_code": r["gss_code"],
                       "source": "public_bodies.csv (Reports, 4 October 2026)"}
+                if v in e.get("public_variants", []):
+                    ev["w2_variant"] = True
                 klass = r["step5_class_proposed"]
                 alias = [a for a in (r["alias_ids"] or "").split("|") if a]
+                succ = [a for a in alias if a.startswith("GB-GOVUK-")] \
+                    if r["org_scheme"] == "GB-GOVUK" and (r["status"] or "").lower() == "closed" else []
+                if klass == "public body" and succ:
+                    # RULES.md decision 15: a closed GOV.UK organisation resolves to
+                    # the live body GOV.UK's own superseding links lead to (followed
+                    # through renames when central_government_bodies.csv was built)
+                    live = succ[0][len("GB-GOVUK-"):]
+                    ev["superseded"] = {"closed_record": r["org_id"], "live_successor": live,
+                                        "source": "GOV.UK organisations API, superseding_organisations, 4 October 2026"}
+                    return cand("GB-GOVUK", live, "public-body-superseded", ev,
+                                [f"GB-GOVUK-{r['org_id']}"] + [a for a in alias if a != succ[0]],
+                                payee_class="public body")
                 if klass == "public body":
                     return cand(r["org_scheme"] or "UNRESOLVED", r["org_id"] or r["body_id"], "public-body",
                                 ev, alias, payee_class="public body")
@@ -549,7 +584,7 @@ def lei_alias(real):
     the public body's register name, in a GB jurisdiction, the LEI is added to
     the public body's alias_ids, so the two steps agree instead of queueing
     the key. Anything else that differs still goes to the step 9 queue."""
-    pbs = [c for c in real if c["method"] == "public-body" and c["org_id"]]
+    pbs = [c for c in real if c["method"] in ("public-body", "public-body-superseded") and c["org_id"]]
     for g in [c for c in real if c["method"] == "gleif" and c["org_scheme"] == "XI-LEI"]:
         ev = g["evidence"]
         if not (ev.get("jurisdiction") or "").upper().startswith("GB"):
@@ -570,8 +605,8 @@ def same_org(a, b):
 
 def psc_person_names(con):
     """Forename and surname pairs of individual PSCs in gold mart_psc_lancs,
-    used only to WITHHOLD an unresolved payee name that contains one (proposed
-    rule P1). No payee is matched to a PSC record and no PSC name is written."""
+    used only to WITHHOLD an unresolved payee name that contains one (rule P1,
+    RULES.md decision 16). No payee is matched to a PSC record and no PSC name is written."""
     mart = sorted((GOLD / "mart_psc_lancs").glob("snapshot_date=*/part.parquet"))[-1]
     out = set()
     for f, m, s_ in con.execute(f"""SELECT name_forename, name_middle, name_surname FROM read_parquet('{mart}')
@@ -626,6 +661,13 @@ def looks_individual(e):
 
 
 # ------------------------------------------------------------------- 5b --
+def council_area(nn):
+    """The area name of a council PSC ("BLACKPOOL BOROUGH COUNCIL" gives
+    BLACKPOOL), council words removed; the comparison with BODY_AREA decides
+    whether a council company is the paying body's own."""
+    return " ".join(t for t in nn.split() if t not in COUNCIL_WORDS)
+
+
 def council_companies(con, crns, R):
     """Method rule 2.1 over gold mart_psc_lancs: a company is a council
     company when an active corporate PSC that is a local authority holds a
@@ -654,8 +696,6 @@ def council_companies(con, crns, R):
         for r in csv.DictReader(fh):
             if r["body_type"].startswith("council") and r.get("area_name"):
                 areas.add(normalise(r["area_name"]))
-    COUNCIL_WORDS = {"THE", "COUNCIL", "OF", "BOROUGH", "COUNTY", "CITY", "DISTRICT", "METROPOLITAN"}
-
     def is_council(nn):
         if nn in la_names:
             return True
@@ -681,7 +721,7 @@ def council_companies(con, crns, R):
         if is_council(nn) or re.search(r"\b(BOROUGH|COUNTY|CITY|DISTRICT|METROPOLITAN) COUNCIL\b|"
                                          r"\bCOUNCIL OF THE (BOROUGH|CITY|COUNTY|DISTRICT)\b|"
                                          r"\bCOMBINED (COUNTY )?AUTHORITY\b", nn):
-            direct[crn] = {"psc": name, "band": b, "route": "direct",
+            direct[crn] = {"psc": name, "band": b, "route": "direct", "owner_area": council_area(nn),
                            "as_at": "current corporate PSC on the register extract; earlier holders are in the ownership walk",
                            "source": f"gold mart_psc_lancs {mart.parent.name}"}
         corp_edges[crn].append((nn, name, b))
@@ -697,6 +737,7 @@ def council_companies(con, crns, R):
         for nn, name, b in edges:
             if nn in name_to_crn:
                 out[crn] = {"psc": name, "band": b, "route": f"through {name_to_crn[nn]}",
+                            "owner_area": direct[name_to_crn[nn]]["owner_area"],
                             "source": f"gold mart_psc_lancs {mart.parent.name}"}
                 break
     return out, mart
@@ -727,7 +768,8 @@ def main():
     for k, e in keys.items():
         pk = e["payee_key"]
         nk = normalise(pk)
-        res = {"cands": [], "queue": None, "reason": None, "detail": None, "evidence_extra": {}}
+        res = {"cands": [], "queue": None, "reason": None, "detail": None, "evidence_extra": {},
+               "body_id": e["body_id"]}
         if pk == WITHHELD_KEY or (nk and REDACT_RE.search(nk)) or pk.strip().upper() in ("REDACTED", "REDACT"):
             res["reason"], res["detail"] = "redacted", "withheld or redacted by the council"
             results[k] = res
@@ -785,7 +827,7 @@ def main():
         p1 = not any(has_legal_form(x) for x in [pk] + list(e["raw"])) and \
             any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"]))
         if p1 and (conflicts or len(distinct) != 1):
-            res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (proposed rule P1)"
+            res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (rule P1, RULES.md decision 16)"
             res["cands"] = []
             counts["p1_withheld_unresolved"] += 1
         elif conflicts or len(distinct) > 1 or (amb_pool and not distinct):
@@ -810,6 +852,8 @@ def main():
                 res["evidence_extra"]["other_steps"] = others
             if res["proposal"]["evidence"].get("matched_variant") in e.get("w1_variants", []):
                 res["proposal"]["evidence"]["w1_variant"] = True
+            # decision 12: the registers whose step proposes the same organisation
+            res["registers"] = sorted({REGISTER_OF[c["method"]] for c in real if same_org(c, res["proposal"])})
             if amb_pool:
                 res["evidence_extra"]["name_pool_also_ambiguous"] = amb_pool
         else:
@@ -821,7 +865,7 @@ def main():
                 res["reason"], res["detail"] = "individual-payee", "no organisational token and no register match"
             elif not any(has_legal_form(x) for x in [pk] + list(e["raw"])) and \
                     any(contains_person_name(n, PSC_NAMES) for n in [pk] + list(e["raw"])):
-                res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (proposed rule P1)"
+                res["reason"], res["detail"] = "individual-payee", "unresolved name contains a personal name; withheld (rule P1, RULES.md decision 16)"
             elif any(c.get("ambiguous_ids") for c in found):
                 res["reason"], res["detail"] = "ambiguous", "name carries several identifiers in notices or grants"
             else:
@@ -836,7 +880,10 @@ def main():
         p = r.get("proposal")
         if p and p["org_scheme"] == "GB-COH" and p["org_id"] in cc:
             p["payee_class"] = "council company"
-            p["evidence"]["council_company"] = cc[p["org_id"]]
+            body = r["body_id"]
+            own = cc[p["org_id"]]["owner_area"] == BODY_AREA.get(body)
+            p["evidence"]["council_company"] = dict(cc[p["org_id"]], owner=(
+                "the paying body's own company" if own else "another council's company"))
 
     # ---- write
     inputs = [{"role": "payee keys (spend input)", "path": a.keys, "sha256": sha256_file(a.keys)},
@@ -846,8 +893,8 @@ def main():
     em = json.loads((EXTRACT / "extract_manifest.json").read_text())
     at = now()
     fields = ["decision_id", "body_id", "payee_key", "payee_class", "org_scheme", "org_id", "alias_ids",
-              "step", "method", "confidence", "match_weight", "evidence", "reason", "reason_detail",
-              "decided_by", "decided_at", "status", "supersedes"]
+              "step", "method", "confidence", "match_weight", "corroborated", "corroborating_registers",
+              "evidence", "reason", "reason_detail", "decided_by", "decided_at", "status", "supersedes"]
     vf = open(OUT / "payee_key_values.csv", "w", newline="")
     vw = csv.writer(vf)
     vw.writerow(["body_id", "payee_key_out", "financial_year", "value_pence", "rows"])
@@ -872,9 +919,11 @@ def main():
                        "org_scheme": p["org_scheme"], "org_id": p["org_id"],
                        "alias_ids": "|".join(p["alias_ids"]), "step": STEP_OF[p["method"]],
                        "method": p["method"], "confidence": CONF[p["method"]], "match_weight": "",
+                       "corroborated": len(r["registers"]) >= 2, "corroborating_registers": "|".join(r["registers"]),
                        "evidence": json.dumps(ev, ensure_ascii=False, sort_keys=True),
                        "reason": "", "reason_detail": ""}
                 counts[f"resolved:{p['method']}"] += 1
+                counts[f"corroborated:{len(r['registers']) >= 2}"] += 1
             else:
                 cls = "individual" if r["reason"] == "individual-payee" else "unclassified"
                 ev = {} if masked else {"candidates": [
@@ -884,7 +933,7 @@ def main():
                        "org_scheme": "INDIVIDUAL" if cls == "individual" else "UNRESOLVED", "org_id": "",
                        "alias_ids": "", "step": "9" if r["queue"] else "10",
                        "method": "queue" if r["queue"] else "unclassified", "confidence": "",
-                       "match_weight": "", "evidence": json.dumps(ev, ensure_ascii=False, sort_keys=True) if ev else "",
+                       "match_weight": "", "corroborated": "", "corroborating_registers": "", "evidence": json.dumps(ev, ensure_ascii=False, sort_keys=True) if ev else "",
                        "reason": r["reason"], "reason_detail": r["detail"] or ""}
                 counts[f"unclassified:{r['reason']}"] += 1
                 if r["queue"]:

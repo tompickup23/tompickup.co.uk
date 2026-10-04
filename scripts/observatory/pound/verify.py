@@ -2,8 +2,12 @@
 """Hand-verification tables (WATERFALL.md s3) for Tom.
 
 Per body and financial year, payee keys are sorted by value; the keys that
-together reach 80% of the body's supplier total for that year form the
+together reach 80% of the body's supplier spend for that year form the
 verification set. A body's set is the union over 2024/25 and 2025/26.
+Supplier spend is the supplier total less the keys resolved to a public body
+or a council company, which are shown on their own lines (RULES.md decision
+14). No person will complete these tables (decision 12): they remain the
+evidence for each key and the frame the agent review reads.
 
   verify_<body>.csv    one row per key in the body's set, ranked by value
   verify_suppliers.csv the same keys deduplicated across bodies on the
@@ -74,10 +78,12 @@ def main():
             for r in csv.DictReader(f):
                 walk[r["company_number"]][r["financial_year"]] = r
     bodies = sorted({k[0] for k in res})
+    # decision 14: the 80% target is measured on supplier spend only
+    on_line = {k for k, r in res.items() if r["payee_class"] in ("public body", "council company")}
     summary = {}
     sup = defaultdict(lambda: {"bodies": {}, "rows": []})
     for b in bodies:
-        keys = [k for k in res if k[0] == b]
+        keys = [k for k in res if k[0] == b and k not in on_line]
         chosen = set()
         stats = {}
         for fy in YEARS:
@@ -89,7 +95,7 @@ def main():
                 cum += vals[k][fy]
                 chosen.add(k)
                 n += 1
-            stats[fy] = {"supplier_total_pence": tot, "keys_to_80pc": n, "value_covered_pence": cum}
+            stats[fy] = {"supplier_spend_pence": tot, "keys_to_80pc": n, "value_covered_pence": cum}
         rows = []
         for k in sorted(chosen, key=lambda k: (-sum(vals[k].values()), k)):
             r = res[k]
@@ -110,7 +116,9 @@ def main():
             for fy, col in (("2024/25", "ownership_2024_25"), ("2025/26", "ownership_2025_26")):
                 w = walk.get(crn, {}).get(fy)
                 if w:
-                    row[col] = f"{w['class']}" + (f" ({w['where']})" if w["where"] else "") + \
+                    # decision 20: the individual class is aggregate only, so no
+                    # country is shown against a company in these tables
+                    row[col] = f"{w['class']}" + (f" ({w['where']})" if w["where"] and w["class"] != "individual" else "") + \
                         (f"; ultimate {w['ultimate_company']}" if w["chain_length"] != "0" else "") + \
                         (f"; {w['flag_2025_26']}" if w.get("flag_2025_26") else "")
             row.update({c: "" for c in REVIEW_COLS})

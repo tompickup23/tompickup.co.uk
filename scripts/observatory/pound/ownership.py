@@ -20,6 +20,15 @@ lower bound of 50% or more (the Companies House bands are "more than 25% to
 payment year, to a unit nobody controls. Where no unit passes 50% the pound
 goes to an explicit class (rule 2.2). Cycles are counted, never followed.
 
+Where any unit in the chain has two or more parents (persons or entities)
+each filed above 50% of votes in the year, the walk stops at that unit with
+the class "more than one controlling parent filed" (RULES.md decision 19):
+no tie-break picks one. A second walk counts a shares band above 50% as
+control where no voting rights are filed; its class is written beside the
+main one as a sensitivity line, never in its place (decision 17). GLEIF
+reporting exceptions are written as evidence beside the class, never used
+to set it (decision 22).
+
 The BODS edition ends on 11 March 2025. For 2025/26 the walk uses edges open
 on that date and says so; each parent edge is checked against the 8 September
 2026 corporate PSC list (gold mart_psc_corporate), and an edge ceased there
@@ -100,6 +109,7 @@ def build_edges(con):
              CASE WHEN r.party IS NULL THEN 'statement'
                   WHEN r.party LIKE 'GB-COH-PER-%' THEN 'person'
                   ELSE 'entity' END AS party_kind,
+             r.party AS party_id,
              CASE WHEN r.party LIKE 'GB-COH-PER-%' THEN NULL
                   ELSE coalesce(ent.coh, CASE WHEN r.party LIKE 'GB-COH-%' AND r.party NOT LIKE 'GB-COH-ENT-%'
                                               THEN replace(r.party, 'GB-COH-', '') END) END AS parent_crn_raw,
@@ -164,8 +174,13 @@ def gleif_l2(con):
             "gleif_repex": rx, "gleif_repex_sha256": sha256_file(rx)}
 
 
-def walk(con, start_crns, years):
-    """Recursive walk per financial year. Returns rows for ownership_walk.csv."""
+MULTI = "more than one controlling parent filed"
+
+
+def walk(con, start_crns, years, shares=False):
+    """Recursive walk per financial year. Returns rows for ownership_walk.csv.
+    shares=True is the decision 17 sensitivity: a shares band above 50% with
+    no voting rights filed counts as control."""
     import pyarrow as pa
     con.register("_starts", pa.table({"crn": pa.array(sorted(start_crns), type=pa.string())}))
     con.execute("CREATE OR REPLACE TEMP TABLE starts AS SELECT * FROM _starts")
@@ -174,6 +189,9 @@ def walk(con, start_crns, years):
         SELECT company_number, registration_number, ceased_on, active FROM read_parquet('{mart}')""")
     out = []
     cycles_total = 0
+    grx_all = {}
+    for lei, c, r_ in con.execute("SELECT lei, category, reason FROM grx ORDER BY ALL").fetchall():
+        grx_all.setdefault(lei, []).append((c or "", r_ or ""))
     for fy in years:
         fs, fe = FY_DATES[fy]
         # The edition ends 11 March 2025: an edge counts for the year when its
@@ -183,10 +201,11 @@ def walk(con, start_crns, years):
             SELECT * FROM '{EDGES}'
             WHERE (start_date IS NULL OR start_date <= DATE '{view_end}')
               AND (end_date IS NULL OR end_date >= DATE '{fs}')""")
-        con.execute("""CREATE OR REPLACE TEMP TABLE ctl AS
+        measure = "coalesce(voting_min, shares_min)" if shares else "voting_min"
+        con.execute(f"""CREATE OR REPLACE TEMP TABLE ctl AS
             SELECT subject_crn, parent_crn, voting_min, voting_max, statement_id
             FROM e WHERE party_kind = 'entity' AND parent_crn IS NOT NULL
-                     AND voting_min >= 50 AND parent_crn <> subject_crn""")
+                     AND {measure} >= 50 AND parent_crn <> subject_crn""")
         rows = con.execute("""
             WITH RECURSIVE w(start_crn, crn, depth, path, cyc) AS (
               SELECT crn, crn, 0, [crn], false FROM starts
@@ -208,6 +227,31 @@ def walk(con, start_crns, years):
         ncyc = sum(1 for k in by_start if isinstance(k, tuple))
         cycles_total += ncyc
         tops = {s: by_start.get(s, (s, 0, [s])) for s in start_crns}
+        # decision 19: every unit in a chain, the top included, is tested for two
+        # or more parents each filed above 50% of votes in the year
+        nodes = sorted({n for (_, _, path) in tops.values() for n in path})
+        con.register("_nodes", pa.table({"crn": pa.array(nodes, type=pa.string())}))
+        con.execute("CREATE OR REPLACE TEMP TABLE nodes AS SELECT * FROM _nodes")
+        parents = {}
+        for subj, who, st, en in con.execute(f"""
+                SELECT subject_crn,
+                       coalesce(parent_crn, parent_scheme || ':' || parent_id, party_id) AS who,
+                       min(coalesce(start_date, DATE '1900-01-01')), max(coalesce(end_date, DATE '2999-12-31'))
+                FROM e JOIN nodes ON e.subject_crn = nodes.crn
+                WHERE party_kind IN ('person', 'entity') AND {measure} >= 50
+                  AND coalesce(parent_crn, '') <> subject_crn
+                GROUP BY 1, 2 ORDER BY 1, 2""").fetchall():
+            parents.setdefault(subj, []).append((str(st), str(en)))
+        multi = {}
+        for subj, iv in parents.items():
+            if len(iv) > 1:
+                together = any(a[0] <= b[1] and b[0] <= a[1] for i, a in enumerate(iv) for b in iv[i + 1:])
+                multi[subj] = (len(iv), together)
+        for s_ in list(tops):
+            top, depth, path = tops[s_]
+            cut = next((i for i, n in enumerate(path) if n in multi), None)
+            if cut is not None:
+                tops[s_] = (path[cut], cut, path[:cut + 1], True)
         con.register("_tops", pa.table({"crn": pa.array(sorted({v[0] for v in tops.values()}), type=pa.string())}))
         con.execute("CREATE OR REPLACE TEMP TABLE tops AS SELECT * FROM _tops")
         above_all = {}
@@ -216,8 +260,9 @@ def walk(con, start_crns, years):
                                        voting_max, trustee, statement_id, shares_min, appoints_board
                                 FROM e JOIN tops ON e.subject_crn = tops.crn""").fetchall():
             above_all.setdefault(r[0], []).append(r[1:])
-        nparents = dict(con.execute("""SELECT subject_crn, count(DISTINCT parent_crn) FROM ctl
-                                       JOIN tops ON ctl.subject_crn = tops.crn GROUP BY 1""").fetchall())
+        lei_of = dict(con.execute("""SELECT gl.ra_entity_id, min(gl.lei) FROM glei gl
+                                     JOIN tops ON gl.ra_entity_id = tops.crn AND gl.ra_id = 'RA000585'
+                                     GROUP BY 1""").fetchall())
         gl_all = dict((r[0], r[1:]) for r in con.execute("""
             SELECT gl.ra_entity_id, g2.parent_lei, p.jurisdiction
             FROM glei gl JOIN tops ON gl.ra_entity_id = tops.crn AND gl.ra_id = 'RA000585'
@@ -227,7 +272,7 @@ def walk(con, start_crns, years):
                    ON p.lei = g2.parent_lei""").fetchall())
         ceased = {}
         if fy == "2025/26":
-            pairs = {(a, b) for (t, d, path) in tops.values() for a, b in zip(path[:-1], path[1:])}
+            pairs = {(a, b) for (t, d, path, *_) in tops.values() for a, b in zip(path[:-1], path[1:])}
             pl = sorted(pairs)
             con.register("_pairs", pa.table({"a": pa.array([x[0] for x in pl], type=pa.string()),
                                              "b": pa.array([x[1] for x in pl], type=pa.string())}))
@@ -240,38 +285,53 @@ def walk(con, start_crns, years):
                 if str(c) >= fs:
                     ceased[(a, b)] = str(c)
         for s in sorted(start_crns):
-            top, depth, path = tops[s]
+            top, depth, path, *cut = tops[s]
             # statements in a fixed order: classify_top takes the first match
             above = sorted(above_all.get(top, []), key=lambda a: tuple("" if x is None else str(x) for x in a))
-            klass, where, detail, evid = classify_top(top, above, con)
+            if cut:
+                n, together = multi[top]
+                klass, where, evid = MULTI, "", [a[11] for a in above]
+                detail = (f"{n} parents each filed above 50% of {'votes or shares' if shares else 'votes'} in the year, "
+                          + ("held at the same time" if together else "one after another (a change of control in the year)"))
+            else:
+                klass, where, detail, evid = classify_top(top, above, con, shares)
             gl = gl_all.get(top) if klass in ("foreign entity", "no unit over 50%", "no PSC data held",
                                               "corporate parent without a register number",
                                               "corporate parent, no further PSC data") else None
             flag = "; ".join(f"edge {a} to {b} ceased {ceased[(a, b)]} (PSC list 8 September 2026)"
                              for a, b in zip(path[:-1], path[1:]) if (a, b) in ceased)
+            # decision 22: GLEIF reporting exceptions, for the top company's own LEI
+            # and the GLEIF ultimate parent's, as evidence only
+            rx = [f"{lei} {c} {r_}" for lei in filter(None, (lei_of.get(top), gl[0] if gl else None))
+                  for c, r_ in grx_all.get(lei, [])]
             out.append({
                 "company_number": s, "financial_year": fy, "ultimate_company": top, "chain_length": depth,
                 "chain": ">".join(path), "class": klass, "where": where, "detail": detail,
                 "gleif_ultimate_parent_lei": gl[0] if gl else "",
                 "gleif_ultimate_parent_jurisdiction": (gl[1] or "") if gl else "",
-                "multiple_controlling_parents": nparents.get(top, 0) > 1, "cycle": ("cyc", s) in by_start,
+                "gleif_reporting_exceptions": "|".join(sorted(set(rx))),
+                "multiple_controlling_parents": bool(cut), "cycle": ("cyc", s) in by_start,
                 "flag_2025_26": flag, "bods_view_end": view_end, "evidence_statements": "|".join(evid[:4])})
     return out, cycles_total
 
 
-def classify_top(top, above, con):
-    """Rule 2.2 classes at the unit nobody (above 50%) controls."""
+def classify_top(top, above, con, shares=False):
+    """Rule 2.2 classes at the unit nobody (above 50%) controls. With
+    shares=True (decision 17 sensitivity) a shares band above 50% counts as
+    control where no voting rights are filed."""
+    def ctl(a):
+        return a[8] if a[8] is not None else (a[12] if shares else None)
     if not above:
         return "no PSC data held", "", "no BODS statement for this company", []
     persons = [a for a in above if a[0] == "person"]
     ents = [a for a in above if a[0] == "entity"]
     stm = [a for a in above if a[0] == "statement"]
     evid = [a[11] for a in above]
-    ctl_p = [a for a in persons if a[8] is not None and a[8] >= 50]
+    ctl_p = [a for a in persons if ctl(a) is not None and ctl(a) >= 50]
     if ctl_p:
         res = sorted({a[6] or "unknown" for a in ctl_p})
         return "individual", ",".join(res), "an individual holds more than 50% of votes (country of residence only)", evid
-    ctl_e = [a for a in ents if a[8] is not None and a[8] >= 50]
+    ctl_e = [a for a in ents if ctl(a) is not None and ctl(a) >= 50]
     if ctl_e:
         a = ctl_e[0]
         if a[1]:
@@ -288,7 +348,8 @@ def classify_top(top, above, con):
         who = (f"individual ({a[6] or 'unknown'})" if a[0] == "person" else
                f"company {a[1]}" if a[1] else f"entity registered in {a[3] or 'unknown'}")
         return ("more than 50% of shares, voting rights not filed", a[6] if a[0] == "person" else (a[3] or ""),
-                f"held by {who}; rule 2.1 needs voting power, so the walk stops here (proposed rule P2)", evid)
+                f"held by {who}; rule 2.1 needs voting power, so the walk stops here (P2 rejected as a control "
+                f"rule, RULES.md decision 17; see class_if_shares_counted)", evid)
     if any(a[10] for a in above):
         return "trust or trustee", "", "trustee interest filed", evid
     reasons = {a[7] for a in stm if a[7]}
@@ -328,6 +389,12 @@ def main():
                 if al.startswith("GB-COH-"):
                     crns.add(al[7:])
     rows, cycles = walk(con, crns, ["2024/25", "2025/26"])
+    sens, _ = walk(con, crns, ["2024/25", "2025/26"], shares=True)
+    sk = {(r["company_number"], r["financial_year"]): r for r in sens}
+    for r in rows:
+        x = sk[(r["company_number"], r["financial_year"])]
+        r["class_if_shares_counted"] = "cycle" if x["cycle"] else x["class"]
+        r["ultimate_company_if_shares_counted"] = x["ultimate_company"]
     path = OUT / ("ownership_walk.csv" if not want else f"ownership_walk_{'_'.join(sorted(want))}.csv")
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]) if rows else ["company_number"])
@@ -336,6 +403,9 @@ def main():
     from collections import Counter
     man.update(companies=len(crns), rows=len(rows), cycles=cycles,
                classes={fy: dict(Counter(r["class"] for r in rows if r["financial_year"] == fy)) for fy in ("2024/25", "2025/26")},
+               classes_if_shares_counted={fy: dict(Counter(r["class_if_shares_counted"] for r in rows
+                                                           if r["financial_year"] == fy)) for fy in ("2024/25", "2025/26")},
+               with_gleif_reporting_exceptions=sum(1 for r in rows if r["gleif_reporting_exceptions"]),
                output=str(path), output_sha256=sha256_file(path))
     write_json(OUT / ("ownership_manifest.json" if not want else f"ownership_manifest_{'_'.join(sorted(want))}.json"), man)
     print(json.dumps(man, indent=1, default=str))
