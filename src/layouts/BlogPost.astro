@@ -6,6 +6,8 @@ import EmailSignup from '../components/EmailSignup.astro';
 import AuthorBox from '../components/AuthorBox.astro';
 import DataBox from '../components/DataBox.astro';
 import Sources from '../components/Sources.astro';
+import ListenToArticle from '../components/ListenToArticle.astro';
+import { isoDuration } from '../lib/audio';
 import { person } from '../data/person';
 import { Image } from 'astro:assets';
 import { articleImage, imageQuality, shareImageUrl } from '../lib/images';
@@ -41,9 +43,11 @@ interface Props {
   area?: { id: string; title: string };
   topic?: { id: string; title: string };
   nextReads?: NextRead[];
+  /* Set only when the narration still matches the text (see pages/news/[...slug].astro). */
+  audio?: { src: string; duration: number; voice: string; generated: Date };
 }
 
-const { frontmatter, headings = [], area, topic, nextReads = [] } = Astro.props;
+const { frontmatter, headings = [], area, topic, nextReads = [], audio } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -123,6 +127,15 @@ const pageTitle =
       url: person.url,
     },
     isAccessibleForFree: true,
+    ...(audio ? { audio: {
+      '@type': 'AudioObject',
+      name: `Audio version: ${frontmatter.title}`,
+      contentUrl: new URL(audio.src, Astro.site).href,
+      encodingFormat: 'audio/mpeg',
+      duration: isoDuration(audio.duration),
+      uploadDate: isoDate(audio.generated),
+      inLanguage: 'en-GB',
+    } } : {}),
     wordCount: wordCount,
     keywords: frontmatter.tags.join(', '),
     inLanguage: 'en-GB',
@@ -194,6 +207,8 @@ const pageTitle =
           <span>{readingTime} min read</span>
         </p>
       </header>
+
+      {audio && <ListenToArticle audio={audio} />}
 
       {frontmatter.image && (
         <figure class:list={['article-hero-image', { 'hero-uncropped': frontmatter.imageUncropped }]}>
