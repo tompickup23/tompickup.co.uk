@@ -1,7 +1,7 @@
 ---
 title: "Four Councils, One Decision: I Modelled What Lancashire's Reorganisation Actually Means"
 date: 2026-07-18T21:30:00
-updated: 2026-09-27
+updated: 2026-10-04
 description: "The July 2026 plan to replace Lancashire's 15 councils with 4, now paused for review: a sourced model of the new councils' budgets, balance sheets and costs."
 tags: ["lancashire", "lgr", "burnley", "local-government", "transparency"]
 featured: true
@@ -9,7 +9,7 @@ featured: true
 
 *Status, 27 September 2026: on 7 September 2026 the government paused the programme for review, and confirmed that the May 2027 local elections will go ahead on existing council boundaries ([government announcement](https://www.gov.uk/government/news/review-of-local-government-reorganisation-launched)). This article and the [model](/lgr/) describe the July 2026 decision; they are not a confirmed timetable.*
 
-On 16 July the government decided Lancashire's 15 councils will be abolished and replaced by four new unitary authorities from 1 April 2028. Padiham & Burnley West lands in the new **East Lancashire**, the largest of the four, merging Blackburn with Darwen, Hyndburn, Rossendale, Pendle and Burnley.
+On 16 July the government decided Lancashire's 15 councils will be abolished and replaced by four new unitary authorities from 1 April 2028. Padiham & Burnley West lands in the new **Pennine Lancashire**, the largest of the four, merging Blackburn with Darwen, Hyndburn, Rossendale, Pendle and Burnley.
 
 Announcements tell you the map. They don't tell you what the new councils actually inherit. So I built a model that does, with every figure traceable to a published source, and the whole dataset downloadable.
 
@@ -17,7 +17,7 @@ Announcements tell you the map. They don't tell you what the new councils actual
 
 ## What it shows
 
-**East Lancashire is the biggest and the poorest.** 498,255 residents, the closest of the four to the government's 500,000 guideline, which all four miss. Its employment rate (44.6%) is the lowest of any new unitary.
+**Pennine Lancashire is the biggest and the poorest.** It had 498,255 residents at the 2021 Census, just under the government's 500,000 guideline. On the mid-2024 estimate in the four-unitary business case it has 520,653, the only one of the four above the guideline; the government's decision letter says three of the four would be below it. Its employment rate (44.6%) is the lowest of any new unitary.
 
 **The balance sheets are wildly unequal.** Blackpool brings **£607m of debt against £35m of reserves** into the smallest unitary. Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. The county's own £345m of reserves and £953m of borrowing have no agreed split, the same issue that took Northamptonshire's councils four years of dispute to settle.
 
@@ -38,3 +38,5 @@ Every assumption, every source and every confidence rating is published as open 
 [**See the full model →**](/lgr/)
 
 *Correction, 27 September 2026: an earlier version of this article and of the model gave each new council a "social-care demand" score and a needs-weighted split of county spending, including a figure of about £41m a year for East Lancashire. The score came from a data extract that turned out to be built from employment and qualification rates by ethnic group, weighted by ethnic composition, with no health or age content. It is not a measure of care need, and it has been removed from the article, the model and the data feed.*
+
+*Correction, 4 October 2026: an earlier version of this article called two of the new councils East Lancashire and West Lancashire. Those were the labels in the councils' joint announcement of 16 July; the government's decision letter and its implementation letter of 20 July name them Pennine Lancashire and Fylde Coast, and the model page had wrongly described West Lancashire as the government's label. The article also said 498,255 residents was a figure "which all four miss" against the 500,000 guideline without saying it is a 2021 Census count. On the mid-2024 estimates the government assessed, Pennine Lancashire is above 500,000 and the other three are below, as the decision letter (p. 4) says. Sources: [decision letter, 16 July 2026](https://assets.publishing.service.gov.uk/media/6a58d21c24d4d0ad06d945c0/Local_government_reorganisation_-_decision_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_council_leaders.pdf), pp. 2 and 4; [implementation letter, 20 July 2026](https://assets.publishing.service.gov.uk/media/6a69bd5e0825cc51a6c37c7c/Local_government_reorganisation_-_implementation_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_chief_executives.pdf), p. 2; Four Lancashire, [*Strategic business case for a four unitary model*](https://forms.chorleysouthribble.gov.uk/lancashireLGR/downloads/file/1/four-lancashire-proposal-document) (November 2025), p. 84.*

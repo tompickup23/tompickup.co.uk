@@ -15,9 +15,9 @@ import model from '../data/lgr/model.json';
 
 /* The model data carries the old dark theme's accents. The page draws each
    council in the site's validated palette instead, matching the home page
-   (East orange, North teal, South purple, West blue), in the text-safe shades
+   (Pennine orange, North teal, South purple, Fylde Coast blue), in the text-safe shades
    because the explorer also sets headings in the accent colour. */
-const ACCENTS: Record<string, string> = { North: '#17645e', West: '#24509c', East: '#99490b', South: '#8a2f6b' };
+const ACCENTS: Record<string, string> = { North: '#17645e', Fylde: '#24509c', Pennine: '#99490b', South: '#8a2f6b' };
 const accentOf = (name: string) => ACCENTS[Object.keys(ACCENTS).find((k) => name.startsWith(k)) ?? 'North'];
 
 /* The working paper this page summarises, as its own structured-data node.
@@ -72,11 +72,11 @@ const DATASET_SCHEMA = {
 const C = model.county;
 const DEC = model.decision;
 
-// Map cards, in decision order (North, West, East, South).
+// Map cards: North, Fylde Coast, Pennine, South (the order this page has always used).
 const UNITARIES = model.unitaries
   .slice()
-  .sort((a, b) => ['North', 'West', 'East', 'South'].findIndex((p) => a.name.startsWith(p))
-                - ['North', 'West', 'East', 'South'].findIndex((p) => b.name.startsWith(p)))
+  .sort((a, b) => ['North', 'Fylde', 'Pennine', 'South'].findIndex((p) => a.name.startsWith(p))
+                - ['North', 'Fylde', 'Pennine', 'South'].findIndex((p) => b.name.startsWith(p)))
   .map((u) => ({ ...u, accent: accentOf(u.name) }));
 
 const RESERVES = C.reserves.map((r) => ({ year: r.year, total: r.total_m, months: r.monthsCover, rating: r.rating }));
@@ -124,8 +124,8 @@ const METRICS = [
   { key: 'hmoPer1k', label: 'HMOs per 1,000', suffix: '', need: 'neutral', help: 'Houses in multiple occupation' },
 ];
 
-// Explorer order: East first (home unitary), then South, North, West.
-const EXPLORER_ORDER = ['East', 'South', 'North', 'West'];
+// Explorer order: Pennine first (home unitary), then South, North, Fylde Coast.
+const EXPLORER_ORDER = ['Pennine', 'South', 'North', 'Fylde'];
 const MODEL = model.unitaries
   .slice()
   .sort((a, b) => EXPLORER_ORDER.findIndex((p) => a.name.startsWith(p))
@@ -269,12 +269,14 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
 
     <!-- Scale of the new councils -->
     <section class="doge-section">
-      <h2 class="doge-h2">All four new councils fall below the 500,000 guideline</h2>
+      <h2 class="doge-h2">How the four compare with the 500,000 guideline</h2>
       <p class="doge-note">
-        Resident population of each new unitary, summed from its constituent authorities (ONS Census 2021). Together
-        the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. Notably, <strong>all four fall below the
-        ~500,000 population the government has used as a working guideline</strong> for new unitaries. East
-        Lancashire comes closest at {fmt(498255)}, while the other three sit between 334,000 and 353,000.
+        Resident population of each new unitary at the 2021 Census, summed from its constituent authorities (ONS
+        Census 2021). Together the four cover <strong>{fmt(POP_TOTAL)}</strong> residents. On this 2021 basis all
+        four sit below the 500,000 population the government treats as a guiding principle: Pennine Lancashire is
+        closest at {fmt(498255)}, and the other three sit between 334,000 and 353,000. On the mid-2024 estimates in
+        the four-unitary business case (November 2025, p. 84), Pennine Lancashire is above it at 520,653, and the government's decision
+        letter of 16 July 2026 (p. 4) says that <strong>three of the four</strong> would be below it.
       </p>
       <div class="doge-panel">
         <div class="doge-bars">
@@ -351,7 +353,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
               </div>
               <div class="lgr-mx-viab">
                 <span class="lgr-mx-viab-v">{fmt(u.pop)}</span>
-                <span class="lgr-mx-viab-l">residents · {fmt(500000 - u.pop)} below the 500k guideline</span>
+                <span class="lgr-mx-viab-l">residents (2021 Census) · {fmt(500000 - u.pop)} below the 500k guideline on that basis</span>
               </div>
             </div>
 
@@ -463,9 +465,10 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
     <section class="doge-section">
       <h2 class="doge-h2">Where Padiham &amp; Burnley West land</h2>
       <p class="doge-note">
-        The division I represent falls inside the new <strong>East Lancashire</strong> unitary, the largest of
-        the four by number of constituent councils, pulling together Blackburn with Darwen, Hyndburn, Rossendale,
-        Pendle and Burnley. From April 2028 a single East Lancashire authority would run everything from adult
+        The division I represent falls inside the new <strong>Pennine Lancashire</strong> unitary (shown on this
+        site until October 2026 as East Lancashire), the largest of the four by number of constituent councils,
+        pulling together Blackburn with Darwen, Hyndburn, Rossendale, Pendle and Burnley. From April 2028 a single
+        Pennine Lancashire authority would run everything from adult
         social care and highways (today county responsibilities) to bins and planning (today borough
         responsibilities) across the whole of east Lancashire.
       </p>
@@ -533,7 +536,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
         The property register is compiled from the council's own Local Authority Land List with title, address and
-        ownership enrichment, so the successor East, North, West and South Lancashire authorities will each inherit
+        ownership enrichment, so the successor North Lancashire, South Lancashire, Pennine Lancashire and Fylde Coast authorities will each inherit
         the assets that sit within their new boundaries.
       </p>
     </section>
@@ -591,7 +594,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           £{fmt(Math.round(C.contractsBeyondVesting.straddleValue_m))}m have end dates beyond vesting day</strong>:
           they transfer to the successor councils mid-term. The longest-running include a £204.3m public-health
           nursing contract to 2032, county-wide energy supply to September 2028, waste-recovery services to 2030 and
-          an agency-staffing framework to 2029. A new East Lancashire council does not start with a blank page; it
+          an agency-staffing framework to 2029. A new Pennine Lancashire council does not start with a blank page; it
           starts inside a decade of its predecessors' procurement decisions.
         </p>
         <p style="margin-top:1.1rem;">
@@ -707,7 +710,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
           </div>
           <div class="lgr-tl-item">
             <span class="lgr-tl-date">May 2027</span>
-            <span class="lgr-tl-text">Paused plan: all-out elections to the four new <strong>shadow authorities</strong>, the first time voters would choose who runs North, West, East and South Lancashire.</span>
+            <span class="lgr-tl-text">Paused plan: all-out elections to the four new <strong>shadow authorities</strong>, the first time voters would choose who runs North Lancashire, South Lancashire, Pennine Lancashire and the Fylde Coast.</span>
           </div>
           <div class="lgr-tl-item">
             <span class="lgr-tl-date">2027 to 2028</span>
@@ -771,7 +774,7 @@ const META_JSON = JSON.stringify({ BASELINE, METRICS, LCC_BUDGET, LCC_PER_CAPITA
         ))}
       </div>
       <p class="doge-note" style="margin-top:0.9rem;">
-        The standout risk sits in the new West Lancashire: <strong>Blackpool brings £606.8m of external debt against
+        The standout risk sits in the new Fylde Coast unitary: <strong>Blackpool brings £606.8m of external debt against
         £34.7m of reserves</strong>, by far the weakest balance sheet of any merging council, and it lands in the
         smallest unitary. By contrast Ribble Valley, Fylde, Wyre and South Ribble arrive debt-free. West Lancashire
         district's figures include council-housing (HRA) debt, which transfers with the housing stock.

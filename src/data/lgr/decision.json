@@ -1,10 +1,13 @@
 {
  "$meta": {
   "sources": [
+   "https://assets.publishing.service.gov.uk/media/6a58d21c24d4d0ad06d945c0/Local_government_reorganisation_-_decision_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_council_leaders.pdf",
+   "https://assets.publishing.service.gov.uk/media/6a69bd5e0825cc51a6c37c7c/Local_government_reorganisation_-_implementation_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_chief_executives.pdf",
    "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire",
    "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
   ],
-  "verified": "two independent official sources, identical groupings"
+  "verified": "Groupings: the decision letter of 16 July 2026 (p. 2) and the councils' joint announcement of the same day agree. Names: the decision letter (p. 2) gives North Lancashire, South Lancashire, Pennine Lancashire and Fylde Coast as the proposal's names, and the MHCLG implementation letter of 20 July 2026 (p. 2) sets them as the names of the new councils. Checked 4 October 2026.",
+  "labelsNote": "Until October 2026 this site used East Lancashire and West Lancashire, the labels in the councils' joint announcement of 16 July 2026, and wrongly called West Lancashire the government's label. The government's letters use Pennine Lancashire and Fylde Coast. legacyLabel keeps the old label so existing links and readers can still match it."
  },
  "announced": "2026-07-16",
  "decidedBy": "Secretary of State for Housing, Communities and Local Government",
@@ -21,17 +24,17 @@
     "Ribble Valley"
    ]
   },
-  "West Lancashire": {
+  "Fylde Coast": {
    "accent": "#30d158",
    "councils": [
     "Fylde",
     "Wyre",
     "Blackpool"
    ],
-   "note": "\"West Lancashire\" is the government's own working label for the Blackpool, Fylde and Wyre unitary in its 16 July decision. The bid name, used in the AI DOGE LGR tracker and internal modelling, is \"Fylde Coast\". Final names are not yet agreed, and this is not the current West Lancashire district, which joins South Lancashire.",
-   "altName": "Fylde Coast"
+   "note": "Named Fylde Coast in the government's letters of 16 and 20 July 2026. Shown on this site until October 2026 as West Lancashire, the label in the councils' joint announcement; not the current West Lancashire district, which joins South Lancashire.",
+   "legacyLabel": "West Lancashire"
   },
-  "East Lancashire": {
+  "Pennine Lancashire": {
    "accent": "#ff9f0a",
    "councils": [
     "Blackburn with Darwen",
@@ -40,7 +43,9 @@
     "Pendle",
     "Burnley"
    ],
-   "home": true
+   "home": true,
+   "note": "Named Pennine Lancashire in the government's letters of 16 and 20 July 2026. Shown on this site until October 2026 as East Lancashire, the label in the councils' joint announcement.",
+   "legacyLabel": "East Lancashire"
   },
   "South Lancashire": {
    "accent": "#bf5af2",
