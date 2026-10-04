@@ -538,6 +538,27 @@ def step7(e, R, table, method):
     return None
 
 
+def lei_alias(real):
+    """Interpretation A1 (Phase 1 Part C session 2, for Tom): a public body
+    and a GLEIF record under the identical name are one organisation with two
+    identifiers, not two organisations. Where step 5 proposes a public body
+    and step 6 an LEI (not a company number) whose normalised legal name equals
+    the public body's register name, in a GB jurisdiction, the LEI is added to
+    the public body's alias_ids, so the two steps agree instead of queueing
+    the key. Anything else that differs still goes to the step 9 queue."""
+    pbs = [c for c in real if c["method"] == "public-body" and c["org_id"]]
+    for g in [c for c in real if c["method"] == "gleif" and c["org_scheme"] == "XI-LEI"]:
+        ev = g["evidence"]
+        if not (ev.get("jurisdiction") or "").upper().startswith("GB"):
+            continue
+        for pb in pbs:
+            if normalise(pb["evidence"].get("register_name") or "") == normalise(ev.get("register_name") or ""):
+                lei = f"XI-LEI-{g['org_id']}"
+                if lei not in pb["alias_ids"]:
+                    pb["alias_ids"] = pb["alias_ids"] + [lei]
+                pb["evidence"]["a1_lei_alias"] = g["org_id"]
+
+
 def same_org(a, b):
     ida = {f"{a['org_scheme']}-{a['org_id']}"} | set(a["alias_ids"])
     idb = {f"{b['org_scheme']}-{b['org_id']}"} | set(b["alias_ids"])
@@ -753,6 +774,7 @@ def main():
                 and not c.get("out_of_scope")]
         res["cands"] = found
         conflicts = [c for c in found if c.get("conflict")]
+        lei_alias(real)
         distinct = []
         for c in real:
             if not any(same_org(c, d) for d in distinct):
