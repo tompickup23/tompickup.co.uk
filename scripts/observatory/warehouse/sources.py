@@ -525,7 +525,7 @@ SOURCES = [
         hosts=["mac", "vps"],
         globs=["raw/rsh_registered_providers_*.xlsx"],
         snapshot_date=_from_name(r"rsh_registered_providers_(\d{4}-\d{2}-\d{2})"),
-        as_at="24 July 2026 edition",
+        as_at=_from_name(r"rsh_registered_providers_(\d{4}-\d{2}-\d{2})"),
         licence=OGL,
         source_url="https://www.gov.uk/government/publications/registered-providers-of-social-housing",
         notes=(
@@ -590,7 +590,7 @@ SOURCES = [
         id="oscr_register",
         name="OSCR Scottish Charity Register, full download",
         hosts=["mac", "vps"],
-        globs=["raw/oscr_register_*.csv.gz"],
+        globs=["raw/oscr_register_*.csv.gz", "raw/oscr_register_*.zip"],
         snapshot_date=_from_name(r"oscr_register_(\d{4}-\d{2}-\d{2})"),
         as_at=_from_name(r"oscr_register_(\d{4}-\d{2}-\d{2})"),
         licence=OGL + " (OSCR, with attribution required, see notes)",
@@ -1305,6 +1305,121 @@ SOURCES = [
         notes=(
             "Waterfall step 5: academy trusts and their company numbers. "
             "Academy trusts are exempt charities, absent from the CC register."
+        ),
+    ),
+    # --- Public Pound Phase 1 (4 Oct 2026) ----------------------------------
+    # Fetched by hand into the scratchpad and landed into the raw cache; no
+    # fetcher runs these yet. Licences quoted from each publisher's page in
+    # Reports Public_Pound_work/phase1/sources/SOURCES.md.
+    dict(
+        id="cqc_hsca_active",
+        name="CQC HSCA Active Locations (care directory with filters), monthly ODS",
+        hosts=["vps"],
+        globs=["raw/cqc_hsca_active_locations_*.ods"],
+        snapshot_date=_mtime,
+        as_at=_from_name(r"cqc_hsca_active_locations_(\d{4}-\d{2}-\d{2})"),
+        licence=OGL + " (acknowledge CQC as the source)",
+        source_url="https://www.cqc.org.uk/about-us/transparency/using-cqc-data",
+        notes=(
+            "Waterfall step 4. Carries Provider Companies House Number, "
+            "Provider Charity Number and Provider ID, which cqc_directory does "
+            "not. README: Source: CQC database as at 01 October 2026. Sheets "
+            "README, HSCA_Active_Locations (57,097 rows, 122 columns), "
+            "Dual_Registration_Locations (852). Location Local Authority is the "
+            "upper tier (the twelve districts read Lancashire). Personal data: "
+            "Registered manager, Provider Nominated Individual Name, Provider "
+            "Main Partner Name, and Provider Name where Provider Ownership Type "
+            "is Individual: never carried past silver (RULES.md 1.2). Identity "
+            "only: no rating or service type is joined to tiers."
+        ),
+    ),
+    dict(
+        id="cqc_hsca_deactivated",
+        name="CQC Deactivated Locations, monthly ODS",
+        hosts=["vps"],
+        globs=["raw/cqc_deactivated_locations_*.ods"],
+        snapshot_date=_mtime,
+        as_at=_from_name(r"cqc_deactivated_locations_(\d{4}-\d{2}-\d{2})"),
+        licence=OGL + " (acknowledge CQC as the source)",
+        source_url="https://www.cqc.org.uk/about-us/transparency/using-cqc-data",
+        notes=(
+            "Waterfall step 4, for providers whose locations closed before the "
+            "payment year. README: Source: CQC database 02 October 2026. 65,645 "
+            "rows, 118 columns, with Provider Companies House Number. Personal "
+            "data: Provider NI Name, and Provider Name for individual providers."
+        ),
+    ),
+    dict(
+        id="nhs_ods_dse",
+        name="NHS ODS Data Search and Export predefined reports (trusts, ICBs, sub-ICB, GP practices, national bodies)",
+        hosts=["vps"],
+        globs=["raw/nhs_ods_*_????-??-??.csv"],
+        snapshot_date=_from_name(r"nhs_ods_[a-z]+_(\d{4}-\d{2}-\d{2})"),
+        as_at=None,
+        licence=OGL,
+        source_url="https://digital.nhs.uk/services/organisation-data-service/data-search-and-export/csv-downloads",
+        notes=(
+            "Waterfall step 5 (public_bodies.csv). Reports etr, ect, eccg, "
+            "eother (ICBs only are used), epraccur, espha, ensa, ecsu used; "
+            "ehospice, epcn, eauth, lauth landed but not used. No header row; "
+            "27-column legacy layout per the ODS Reference Data Catalogue. DSE "
+            "reports are dynamic (nightly) and state no edition date, so asAt "
+            "is null and the snapshot date is the retrieval date in the name."
+        ),
+    ),
+    dict(
+        id="ocp_fts_bulk",
+        name="OCP data registry, United Kingdom: Find a Tender Service, full OCDS JSON lines",
+        hosts=["vps"],
+        globs=["raw/ocp_fts_full_*.jsonl.gz"],
+        snapshot_date=_mtime,
+        as_at=_from_name(r"ocp_fts_full_(\d{4}-\d{2}-\d{2})"),
+        licence=OGL,
+        source_url="https://data.open-contracting.org/en/publication/41",
+        notes=(
+            "Waterfall step 7. One download replaces the three Find a Tender "
+            "harvesters. as_at is OCP's last retrieval (Oct 3, 2026; collection "
+            "4255). 208,903 compiled releases dated 2021-01-01 to 2026-10-01; "
+            "671,392 parties, 206,094 with an identifier (GB-PPON 148,328, "
+            "GB-COH 86,976). Party contactPoint holds names, emails and phone "
+            "numbers: never carried past silver."
+        ),
+    ),
+    dict(
+        id="ons_lad_names_codes",
+        name="ONS Local Authority Districts (April 2025) Names and Codes in the UK (V2)",
+        hosts=["vps"],
+        globs=["raw/ons_lad_apr_2025_uk_nc_v2.json"],
+        snapshot_date=_mtime,
+        as_at="April 2025 edition",
+        licence=OGL + " (Source: Office for National Statistics licensed under the Open Government Licence v.3.0)",
+        source_url="https://www.arcgis.com/home/item.html?id=5779a9578f0e48ccacef6af41546b56b",
+        notes="Waterfall step 5: English councils (E06 to E09). 361 rows UK, 296 England. ArcGIS feature service JSON, no geometry.",
+    ),
+    dict(
+        id="ons_cty_names_codes",
+        name="ONS Counties (December 2025) Names and Codes in EN",
+        hosts=["vps"],
+        globs=["raw/ons_cty_dec_2025_en_nc.json"],
+        snapshot_date=_mtime,
+        as_at="December 2025 edition",
+        licence=OGL + " (Source: Office for National Statistics licensed under the Open Government Licence v.3.0)",
+        source_url="https://www.arcgis.com/home/item.html?id=646a11ad90574e949fd0e9b12199f35f",
+        notes="Waterfall step 5: the 21 county councils (E10).",
+    ),
+    dict(
+        id="gb_lae_register_archive",
+        name="GOV.UK local-authority-eng register (GB-LAE codes), archived copy",
+        hosts=["vps"],
+        globs=["raw/gb_lae_local_authorities_*.tsv", "raw/gb_lae_gss_*.tsv"],
+        snapshot_date=_mtime,
+        as_at="2018-02-23 (last push to the archived repository)",
+        licence=OGL + " (register data; repository code MIT)",
+        source_url="https://github.com/openregister/local-authority-data",
+        notes=(
+            "org-id.guide GB-LAE codes for councils. The live register no "
+            "longer resolves; this copy is frozen at February 2018, so 13 "
+            "current English councils have no code and resolve by GSS code."
         ),
     ),
 ]

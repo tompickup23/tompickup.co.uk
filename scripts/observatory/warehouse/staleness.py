@@ -139,6 +139,16 @@ BUDGETS = {
                 "2025 and ages by design; the PSC snapshot carries later changes"),
     "ggis_grants_register": ("watch", None, "annual", "not in s4; Public Pound Phase 0"),
     "gias_groups": ("watch", None, "daily (hand-landed)", "not in s4; Public Pound Phase 0"),
+    # Public Pound Phase 1 (4 Oct 2026). Hand-landed, no fetcher yet: "watch"
+    # until one exists, as for the Phase 0 sources.
+    "cqc_hsca_active": ("watch", None, "monthly (hand-landed)", "not in s4; Public Pound Phase 1"),
+    "cqc_hsca_deactivated": ("watch", None, "monthly (hand-landed)", "not in s4; Public Pound Phase 1"),
+    "nhs_ods_dse": ("watch", None, "nightly (hand-landed)", "not in s4; ODS class, no fetcher"),
+    "ocp_fts_bulk": ("watch", None, "weekly at OCP (hand-landed)", "not in s4; Public Pound Phase 1"),
+    "ons_lad_names_codes": ("watch", None, "annual", "not in s4; ONS edition, year label mandatory"),
+    "ons_cty_names_codes": ("watch", None, "annual", "not in s4; ONS edition, year label mandatory"),
+    "gb_lae_register_archive": ("pinned", None, "frozen 2018",
+                                "not in s4; the register was retired and the copy ages by design"),
     "payment_practices": ("fail", 60, "rolling filings",
                           "not in s4; FHRS class (rolling filings)"),
     "ocds": ("fail", 45, "rolling", "not in s4; Gazette class (rolling feed)"),
