@@ -360,11 +360,30 @@ def main():
         edges.append(edge("GB-COH", crn, "ocds", name, snap, sha,
                           decision_id=did,
                           extra_evidence=f"GB-COH id on {notices} award notice(s)"))
-        edges.append(edge("LBO-SUPPLIER", norm, "ocds", name,
-                          snap, sha,
-                          decision_id=(did if len(ocds_name_crns[norm]) == 1
+    # One LBO-SUPPLIER node per distinct supplier name, exactly as D2 does it
+    # for the pound tier. Emitting this inside the loop above emits one
+    # IDENTICAL edge per company number, so an ambiguous name, which by
+    # definition carries more than one, emits the same edge twice and trips the
+    # double-load gate. Latent until now because the OCDS map was empty on this
+    # host (F2, s11.2): clearing that fault landed 648 names, three of which
+    # are ambiguous (COMPUTACENTER, MAVEN PUBLIC SECTOR, TREBBI CONTINUUM),
+    # and the gate caught it on the first run that had them.
+    ocds_keys_by_name = {}
+    for k in ocds_seen:
+        ocds_keys_by_name.setdefault(X.normalise(k[0]), []).append(k)
+    for norm, crns in ocds_name_crns.items():
+        key = sorted(ocds_keys_by_name[norm])[0]
+        name, crn = key
+        snap, sha, notices = ocds_seen[key]
+        single = len(crns) == 1
+        edges.append(edge("LBO-SUPPLIER", norm, "ocds", name, snap, sha,
+                          decision_id=(f"ocds:{norm}" if single
                                        else f"ocds-ambiguous-name:{norm}"),
-                          extra_evidence=f"award notice supplier name for {crn}"))
+                          extra_evidence=(
+                              f"award notice supplier name for {crn}" if single else
+                              f"award notice supplier name carrying {len(crns)} "
+                              "different company numbers across award notices, "
+                              "not linked")))
     inputs.extend(ocds_inputs)
     SV.log(f"D3 OCDS: {len(ocds_seen):,} name-to-GB-COH identifications "
            f"across {len(ocds_inputs)} snapshot(s)")
