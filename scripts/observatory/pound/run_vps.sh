@@ -23,4 +23,4 @@ rsync -a "$REPO/scripts/observatory/resolve_suppliers.py" "$REPO/scripts/observa
       "$REPO/scripts/observatory/build_pound.py" "$HOST:$WORKDIR/code/"
 rsync -a --exclude __pycache__ "$SRC/" "$HOST:$WORKDIR/code/pound/"
 ssh "$HOST" "export PATH=/root/.local/bin:\$PATH POUND_GIT_SHA=$SHA; cd $WORKDIR/code/pound && \
-  uv run -q --no-project --with 'duckdb>=1.4,<1.5' --with python-calamine --with pyarrow python -u $*"
+  uv run -q --no-project --with 'duckdb>=1.4,<1.5' --with python-calamine --with pyarrow --with 'anthropic>=0.70' python -u $*"

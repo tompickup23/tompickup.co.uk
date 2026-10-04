@@ -12,7 +12,7 @@ test1_replay_differences.csv; exits 1 on any failure.
   4. Value conservation: resolved plus unclassified equals the spend input's
      supplier total per body and year, to the penny.
   5. No person name appears in any output table, the gold and recall
-     samples and the coverage table included (checked against the
+     samples, the coverage table and the agent labels included (checked against the
      individual PSC names in gold mart_psc_lancs). Hits inside a register
      company name (an eponymous company) are listed for the gate, not
      failed; a hit anywhere else fails.
@@ -251,7 +251,8 @@ def test5(con):
     files = [OUT / "resolver_proposed.csv", OUT / "queue.csv"] + sorted(OUT.glob("verify_*.csv")) + \
         sorted(OUT.glob("ownership_walk*.csv")) + \
         [OUT / n for n in ("gold_set_pairs.csv", "recall_sample.csv", "gold_population.csv", "recall_population.csv",
-                           "coverage.csv", "test1_replay_differences.csv", "test5b_seed.csv")]
+                           "coverage.csv", "test1_replay_differences.csv", "test5b_seed.csv",
+                           "agent_labels.csv", "agent_labels_pilot.csv", "precision.csv", "concentration.csv")]
     org_fields = {"payee_key", "register_name", "register_names", "name", "proposed_name",
                   "matched_variant", "supplier_group", "payee_keys", "register_name_norm"}
     for p in files:

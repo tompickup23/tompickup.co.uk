@@ -23,6 +23,15 @@ scripts/observatory/pound/run_vps.sh page_data.py          # pound_pages.json (c
 scripts/observatory/pound/run_vps.sh tests_waterfall.py    # the five WATERFALL.md s5 tests; exit 1 on failure
 ```
 
+Then the agent review and the measures (RULES.md decisions 12 and 13), after `descriptions.py` has run on the Mac and its output is in `inputs/`:
+
+```
+scripts/observatory/pound/run_vps.sh agent_review.py build                       # agent_items.jsonl
+scripts/observatory/pound/run_vps.sh agent_review.py submit --key-file <env file> # two Message Batches
+scripts/observatory/pound/run_vps.sh agent_review.py collect --key-file <env file> # agent_labels.csv, cost
+scripts/observatory/pound/run_vps.sh coverage.py && run_vps.sh measures.py && run_vps.sh page_data.py && run_vps.sh tests_waterfall.py
+```
+
 No result is read before `tests_waterfall.py` passes. It runs last so that test 5 also covers the gold and recall samples and the coverage table. `--bodies burnley` runs the pilot.
 
 ## Files
@@ -38,6 +47,8 @@ No result is read before `tests_waterfall.py` passes. It runs last so that test 
 | `gold_set.py` | Stratified clerical sample and recall sample, manifest first |
 | `coverage.py` | Rule 2.4 coverage per body and year: three lines, and resolved, corroborated, agent-reviewed and hand-verified shares of supplier spend |
 | `page_data.py` | Class and sum aggregates for the draft UK Councils pages; no names |
+| `descriptions.py` | On the Mac: the council's department, service area and expenditure category per payee key, from the pinned bank files (never the free-text description) |
+| `agent_review.py` | Evidence blocks from the register extracts; two independent Sonnet passes through the Message Batches API; `agent_labels.csv` with model id, prompt hash and batch id per row |
 
 ## Privacy
 
