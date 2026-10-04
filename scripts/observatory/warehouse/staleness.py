@@ -93,6 +93,17 @@ BUDGETS = {
     # --- money in ---------------------------------------------------------
     "innovate_uk": ("fail", 60, "~monthly", "Innovate UK xlsx"),
     "gleif_lei": ("fail", 30, "daily", "not in s4; ODS class (daily file)"),
+    # Public Pound Phase 0 (4 Oct 2026). Landed by hand; no fetcher yet, so
+    # "watch" until Phase 1 adds one, rather than a fail budget that would
+    # trip with nobody able to refresh it.
+    "gleif_lei2_full": ("watch", None, "daily (hand-landed)", "not in s4; Public Pound Phase 0"),
+    "gleif_rr": ("watch", None, "daily (hand-landed)", "not in s4; Public Pound Phase 0"),
+    "gleif_repex": ("watch", None, "daily (hand-landed)", "not in s4; Public Pound Phase 0"),
+    "bods_uk": ("pinned", None, "irregular",
+                "not in s4; Open Ownership's published file is dated 11 Mar "
+                "2025 and ages by design; the PSC snapshot carries later changes"),
+    "ggis_grants_register": ("watch", None, "annual", "not in s4; Public Pound Phase 0"),
+    "gias_groups": ("watch", None, "daily (hand-landed)", "not in s4; Public Pound Phase 0"),
     "payment_practices": ("fail", 60, "rolling filings",
                           "not in s4; FHRS class (rolling filings)"),
     "ocds": ("fail", 45, "rolling", "not in s4; Gazette class (rolling feed)"),

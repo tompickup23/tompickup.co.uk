@@ -85,6 +85,13 @@ def _mtime(p):
 # glob is relative to the host's data root. as_at may be a literal string, a
 # callable taking the Path, or None where the source states no reference date.
 
+
+def _gleif_date(p):
+    """GLEIF golden copy names start YYYYMMDD-HHMM; return YYYY-MM-DD."""
+    m = re.match(r"(\d{4})(\d{2})(\d{2})-\d{4}-gleif", p.name)
+    return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else None
+
+
 SOURCES = [
     # --- Companies House family (vps: the bulk files are 0.5GB each) -------
     dict(
@@ -1191,6 +1198,92 @@ SOURCES = [
             "notices. Those blocks already carry org-id scheme codes, which "
             "is why they drop into the crosswalk unchanged rather than being "
             "re-derived."
+        ),
+    ),
+    # --- Public Pound Phase 0 (4 Oct 2026) ----------------------------------
+    # Landed for the resolution waterfall (Reports Public_Pound_work/phase0/
+    # WATERFALL.md) and the ownership seed. Licences confirmed at the source
+    # page on 4 Oct 2026 before landing. Fetched by hand into the VPS raw
+    # cache; no fetcher runs these yet.
+    dict(
+        id="gleif_lei2_full",
+        name="GLEIF LEI golden copy, Level 1, full global file",
+        hosts=["vps"],
+        globs=["raw/*-gleif-goldencopy-lei2-golden-copy.csv.zip"],
+        snapshot_date=_gleif_date,
+        as_at=_from_name(r"^(\d{8}-\d{4})"),
+        licence="CC0 1.0",
+        source_url="https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy",
+        notes=(
+            "Waterfall step 6. The full global file, not the UK slice that "
+            "gleif_lei carries. Companies House rows carry the company number "
+            "in Entity.RegistrationAuthority.RegistrationAuthorityEntityID."
+        ),
+    ),
+    dict(
+        id="gleif_rr",
+        name="GLEIF golden copy, Level 2 relationship records",
+        hosts=["vps"],
+        globs=["raw/*-gleif-goldencopy-rr-golden-copy.csv.zip"],
+        snapshot_date=_gleif_date,
+        as_at=_from_name(r"^(\d{8}-\d{4})"),
+        licence="CC0 1.0",
+        source_url="https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy",
+        notes="Direct and ultimate accounting parents (plan s5.2).",
+    ),
+    dict(
+        id="gleif_repex",
+        name="GLEIF golden copy, Level 2 reporting exceptions",
+        hosts=["vps"],
+        globs=["raw/*-gleif-goldencopy-repex-golden-copy.csv.zip"],
+        snapshot_date=_gleif_date,
+        as_at=_from_name(r"^(\d{8}-\d{4})"),
+        licence="CC0 1.0",
+        source_url="https://www.gleif.org/en/lei-data/gleif-golden-copy/download-the-golden-copy",
+        notes=(
+            "Why an entity reports no parent; NATURAL_PERSONS marks "
+            "owner-managed firms without naming anyone."
+        ),
+    ),
+    dict(
+        id="bods_uk",
+        name="Open Ownership BODS 0.4, UK PSC register, Parquet",
+        hosts=["vps"],
+        globs=["raw/bods_uk_version_0_4_parquet.zip"],
+        snapshot_date=_mtime,
+        as_at="2025-03-11 (S3 Last-Modified of the published file)",
+        licence="CC0 1.0",
+        source_url="https://bods-data.openownership.org/source/uk_version_0_4/",
+        notes=(
+            "Seeds ownership chains with their history (method rule 2.6). The "
+            "published file stops at 11 March 2025; the PSC snapshot and "
+            "stream carry later changes. Contains PSC names: internal layer "
+            "only, never carried past silver (Public Pound RULES.md 1.2)."
+        ),
+    ),
+    dict(
+        id="ggis_grants_register",
+        name="Government Grants Register 2024 to 2025, scheme and award data",
+        hosts=["vps"],
+        globs=["raw/*_Government_Grants_Register_*.ods"],
+        snapshot_date=_mtime,
+        as_at="2024 to 2025, published 23 March 2026",
+        licence=OGL,
+        source_url="https://www.gov.uk/government/statistics/government-grants-statistics-2024-to-2025",
+        notes="Waterfall step 7: recipient name to identifier pairs, and Splink training labels.",
+    ),
+    dict(
+        id="gias_groups",
+        name="Get Information About Schools, all groups and links",
+        hosts=["vps"],
+        globs=["raw/gias_allgroupsdata.csv", "raw/gias_alllinksdata.csv"],
+        snapshot_date=_mtime,
+        as_at=None,
+        licence=OGL,
+        source_url="https://get-information-schools.service.gov.uk/Downloads",
+        notes=(
+            "Waterfall step 5: academy trusts and their company numbers. "
+            "Academy trusts are exempt charities, absent from the CC register."
         ),
     ),
 ]
