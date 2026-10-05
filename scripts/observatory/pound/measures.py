@@ -174,13 +174,17 @@ def main():
     rpop = list(csv.DictReader(open(OUT / "recall_population.csv", newline="")))
     N = len(rpop)
     Vpos = sum(max(0, int(r["value_pence"])) for r in rpop)
-    rl = {(r["body_id"], r["payee_key"]): r["agreed_label"] for r in labels if r["item_set"] == "recall"}
+    # a key the blocked search found no candidate for is not missed against the
+    # registers searched: it counts in the denominator as "no candidate found"
+    rl = {(r["body_id"], r["payee_key"]): ("no candidate found" if r["pass_a_reason"] == "no register record to show"
+                                          else r["agreed_label"]) for r in labels if r["item_set"] == "recall"}
     draws = list(csv.DictReader(open(OUT / "recall_sample.csv", newline="")))
 
     def tally(kind):
         ls = [rl.get((d["body_id"], d["payee_key"]), "not reviewed") for d in draws if d["draw"] == kind]
         return {"draws": len(ls), "missed": ls.count("same"), "not_in_candidates": ls.count("different"),
-                "cannot_tell": ls.count("cannot tell"), "not_reviewed": ls.count("not reviewed")}
+                "no_candidate_found": ls.count("no candidate found"), "cannot_tell": ls.count("cannot tell"),
+                "not_reviewed": ls.count("not reviewed")}
     srs, pps = tally("srs"), tally("pps")
     verified = set()
     for p in OUT.glob("verify_*.csv"):
@@ -196,7 +200,7 @@ def main():
     R_n, R_v = len(R_keys), sum(max(0, val[k]) for k in R_keys)
 
     def recall_est(t, scale, resolved):
-        n = t["missed"] + t["not_in_candidates"]
+        n = t["missed"] + t["not_in_candidates"] + t["no_candidate_found"]
         p, lo, hi = wilson(t["missed"], n)
         if p is None:
             return None
@@ -210,8 +214,10 @@ def main():
                      "srs": srs, "pps": pps,
                      "rows": recall_est(srs, N, R_n), "pounds": recall_est(pps, Vpos, R_v),
                      "note": "Missed: both passes matched the key to the same candidate record from a blocked search "
-                             "of the Companies House, Charity Commission, CQC, public-body and GLEIF extracts. Not in "
-                             "candidates is not the same as absent from every register. Interval columns are the "
+                             "of the Companies House, Charity Commission, CQC, public-body and GLEIF extracts. Not missed: "
+                             "both passes said none of the candidates is the payee, or the search found no candidate. "
+                             "Cannot tell is left out of the denominator. Not missed is not the same as absent from "
+                             "every register. Interval columns are the "
                              "point, then the low and high ends."}
     out.update(shared_measures())
     write_json(OUT / "agent_measures.json", out)
