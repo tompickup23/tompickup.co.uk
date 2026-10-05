@@ -28,13 +28,24 @@ Sonnet model, with different prompts and one fixed JSON schema: label
 A pass's "same" counts only if it cites a record id from the block. The
 agreed label is "same" or "different" only when both passes give it (for
 recall, citing the same record); otherwise "cannot tell" (decision 13).
-Every row carries the model id, prompt hash and batch id of each pass.
+Every row carries the model id, prompt hash and run id (the batch id, or the subagent id) of each pass.
 
   agent_review.py build                 agent_items.jsonl, agent_review_manifest.json
   agent_review.py submit [--pilot N]    two batches (N items each for a pilot)
   agent_review.py collect               waits, then agent_labels.csv and costs
 The API key is read from ANTHROPIC_API_KEY or, with --key-file, from the
 ANTHROPIC_API_KEY line of that file; it is never printed or written.
+
+Without an API key the same two passes run as Claude Code subagents on the
+current Sonnet model (Agent tool, model sonnet), one subagent per chunk and
+pass, each seeing only its own pass's prompt and chunk:
+  agent_review.py export --dir D [--chunk N]   D/pass_<P>_chunk_<i>.txt, D/chunks.json
+  (each subagent writes D/labels_<P>_<i>.jsonl and reports its model id)
+  agent_review.py collect --local D            agent_labels.csv; D/runs.json gives
+                                               each chunk's subagent run id and model
+The answers are checked here against the same schema (a label from the three,
+record ids from the item's own evidence); a missing or malformed answer is
+"not reviewed" until its chunk is rerun.
 """
 import argparse
 import csv
@@ -442,11 +453,74 @@ def parse(result):
     return d, m.usage
 
 
+CHUNK_HEAD = """You are pass {p} of an independent two-pass review. {system}
+
+The items below are payee keys from Lancashire council spending files, each with an evidence block of
+register records. For each item answer the question given with it, using only that item's evidence.
+Answer every item. Do not use any tool except reading this file and writing your answers. Do not
+search the web. Do not look at any other file.
+
+Write your answers to {out} as JSON Lines, one line per item, in the order given, each exactly:
+{{"item_id": "<the item id>", "label": "same" | "different" | "cannot tell", "record_ids": ["<record_id>", ...], "reason": "<one plain sentence>"}}
+record_ids may only contain record_id values from that item's evidence. Never name a person.
+
+"""
+
+
+def export(a):
+    from pathlib import Path
+    d = Path(a.dir)
+    d.mkdir(parents=True, exist_ok=True)
+    items = [it for it in load_items() if not it["withheld"] and it["records"]]
+    items.sort(key=lambda it: it["item_id"])
+    chunks = [items[i:i + a.chunk] for i in range(0, len(items), a.chunk)]
+    man = {"prompt_hashes": {p: prompt_hash(p) for p in PROMPTS}, "chunk_size": a.chunk, "chunks": len(chunks),
+           "items": len(items), "files": {}}
+    for p in PROMPTS:
+        for i, ch in enumerate(chunks):
+            name = f"pass_{p}_chunk_{i:02d}.txt"
+            with open(d / name, "w") as f:
+                f.write(CHUNK_HEAD.format(p=p, system=PROMPTS[p]["system"], out=f"labels_{p}_{i:02d}.jsonl"))
+                for it in ch:
+                    q = PROMPTS[p]["recall" if it["item_set"] == "recall" else "resolved"]
+                    f.write(f"=== ITEM {it['item_id']}\nQuestion: {q}\nEvidence:\n"
+                            + json.dumps(evidence(it), ensure_ascii=False, indent=1) + "\n\n")
+            man["files"][name] = {"pass": p, "chunk": i, "items": [it["item_id"] for it in ch],
+                                  "sha256": sha256_file(d / name)}
+    write_json(d / "chunks.json", man)
+    print(json.dumps({k: v for k, v in man.items() if k != "files"}, indent=1))
+
+
+def local_answers(d):
+    """Answers from the subagents' files, keyed like batch custom ids."""
+    from pathlib import Path
+    d = Path(d)
+    got = {}
+    for p in PROMPTS:
+        for f in sorted(d.glob(f"labels_{p}_*.jsonl")):
+            for line in open(f):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    x = json.loads(line)
+                except ValueError:
+                    continue
+                if (isinstance(x, dict) and x.get("label") in SCHEMA["properties"]["label"]["enum"]
+                        and isinstance(x.get("record_ids"), list) and isinstance(x.get("reason"), str)
+                        and isinstance(x.get("item_id"), str)):
+                    got[f"{p}-{x['item_id']}"] = {"label": x["label"], "record_ids": [str(r) for r in x["record_ids"]],
+                                                  "reason": x["reason"]}
+    return got
+
+
 def collect(a):
     from waterfall import contains_person_name, psc_person_names
     persons = psc_person_names(duckdb.connect())
-    c = client(a.key_file)
     man = json.loads(MANIFEST.read_text())
+    if a.local:
+        return collect_rows(a, man, persons, local_answers(a.local), None)
+    c = client(a.key_file)
     tag = "pilot" if a.pilot else "full"
     got, usage = {}, {}
     for p, b in man["batches"][tag].items():
@@ -465,22 +539,43 @@ def collect(a):
     man["usage"][tag]["total_cost_usd"] = round(sum(u["cost_usd"] for u in usage.values()), 2)
     man["usage"][tag]["price_basis"] = (f"{MODEL} Message Batches: ${PRICE_IN} input and ${PRICE_OUT} output per "
                                         "million tokens (half the standard rate)")
+    return collect_rows(a, man, persons, got, tag)
+
+
+def collect_rows(a, man, persons, got, tag):
+    from waterfall import contains_person_name
+    runs = {}
+    if a.local:
+        from pathlib import Path
+        runs = json.loads((Path(a.local) / "runs.json").read_text())
+        chunks = json.loads((Path(a.local) / "chunks.json").read_text())
+        chunk_of = {(f["pass"], iid): name for name, f in chunks["files"].items() for iid in f["items"]}
+        man["local_run"] = {"dir": str(a.local), "chunks": chunks["chunks"], "chunk_size": chunks["chunk_size"],
+                            "runs": runs, "cost": "no API charge: Claude Code subagents"}
     rows = []
     for it in load_items():
         recs = {r["record_id"] for r in it["records"]}
         row = {k: it[k] for k in ("item_set", "body_id", "payee_key", "decision_id", "org_scheme", "org_id",
                                   "method", "reason", "corroborated")}
         row.update(stratum=it.get("stratum", ""), value_band=it.get("value_band", ""),
-                   evidence_sha256=it["evidence_sha256"], model=MODEL, effort=EFFORT)
+                   evidence_sha256=it["evidence_sha256"],
+                   route="Claude Code subagents" if a.local else f"Message Batches, effort {EFFORT}")
         labels = []
         for p in PROMPTS:
             d = got.get(f"{p}-{it['item_id']}")
-            b = man["batches"][tag][p]
-            row[f"batch_id_{p.lower()}"] = b["batch_id"]
-            row[f"prompt_hash_{p.lower()}"] = b["prompt_hash"]
+            if a.local:
+                run = runs.get(chunk_of.get((p, it["item_id"]), ""), {})
+                row[f"run_id_{p.lower()}"] = f"claude-code-subagent:{run.get('agent_id', '')}"
+                row[f"model_{p.lower()}"] = run.get("model", "")
+                row[f"prompt_hash_{p.lower()}"] = prompt_hash(p)
+            else:
+                b = man["batches"][tag][p]
+                row[f"run_id_{p.lower()}"] = b["batch_id"]
+                row[f"model_{p.lower()}"] = MODEL
+                row[f"prompt_hash_{p.lower()}"] = b["prompt_hash"]
             if it["withheld"] or not it["records"] or d is None:
                 lab, cited, why = "", [], ("withheld: name contains a personal name" if it["withheld"] else
-                                           "no register record to show" if not it["records"] else "not in this batch")
+                                           "no register record to show" if not it["records"] else "no valid answer")
             else:
                 cited = [x for x in d["record_ids"] if x in recs]
                 lab, why = d["label"], d["reason"]
@@ -503,6 +598,7 @@ def collect(a):
         row["labelled_at"] = now()
         if not a.pilot or any(row[f"pass_{p.lower()}_label"] for p in PROMPTS):
             rows.append(row)
+    tag = tag or "local"
     path = LABELS if not a.pilot else OUT / "agent_labels_pilot.csv"
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))
@@ -512,7 +608,7 @@ def collect(a):
                            "agreed": {k: sum(1 for r in rows if r["agreed_label"] == k)
                                       for k in ("same", "different", "cannot tell", "not reviewed")}}}
     write_json(MANIFEST, man)
-    print(json.dumps({"usage": man["usage"][tag], "labels": man["labels"][tag]}, indent=1))
+    print(json.dumps({"usage": (man.get("usage") or {}).get(tag), "labels": man["labels"][tag]}, indent=1))
 
 
 def now():
@@ -521,7 +617,10 @@ def now():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("action", choices=["build", "submit", "collect"])
+    ap.add_argument("action", choices=["build", "submit", "collect", "export"])
+    ap.add_argument("--dir", default=str(OUT / "agent_local"))
+    ap.add_argument("--chunk", type=int, default=150)
+    ap.add_argument("--local", default="")
     ap.add_argument("--pilot", type=int, default=0)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--key-file", default="")
@@ -530,6 +629,8 @@ def main():
         build()
     elif a.action == "submit":
         submit(a)
+    elif a.action == "export":
+        export(a)
     else:
         collect(a)
 
