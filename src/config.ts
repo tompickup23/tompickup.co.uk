@@ -1,2 +1,2 @@
-// Swap to tom@tompickup.co.uk once mailbox routing is live; every surface imports from here.
-export const CONTACT_EMAIL = 'tom.pickup@lancashire.gov.uk';
+// Every surface imports from here. Migadu mailbox, switched 7 October 2026 on Tom's say-so.
+export const CONTACT_EMAIL = 'tom@tompickup.co.uk';

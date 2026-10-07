@@ -1,24 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../config';
 ---
 
 <Layout
-  title="Privacy Policy | Tom Pickup"
+  title="Privacy policy | Tom Pickup"
   description="Privacy policy for tompickup.co.uk. How your personal data is handled when you visit this website or contact Tom Pickup."
 >
   <section class="legal-page">
     <div class="container-narrow">
       <h1>Privacy policy</h1>
-      <p class="legal-updated">Last updated: 29 July 2026</p>
+      <p class="legal-updated">Last updated: 7 October 2026</p>
 
       <div class="legal-content">
-        <h2>Who I Am</h2>
+        <h2>Who I am</h2>
         <p>
           This website is operated by Tom Pickup. For the purposes of UK data protection
           law (UK GDPR and the Data Protection Act 2018), I am the data controller.
         </p>
         <p>
-          <strong>Contact:</strong> <a href="mailto:tom.pickup@lancashire.gov.uk">tom.pickup@lancashire.gov.uk</a>
+          <strong>Contact:</strong> <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
         </p>
 
         <h2>What data I collect</h2>
@@ -30,9 +31,9 @@ import Layout from '../layouts/Layout.astro';
             client. No data is stored on this website's servers.
           </li>
           <li>
-            <strong>Email signup:</strong> If you request to join the mailing list, you send
-            an email from your own email client. Your email address is then stored in my
-            personal email account for the purpose of sending you updates.
+            <strong>No mailing list:</strong> This website does not run a mailing list. Until
+            7 October 2026 a form let you ask by email to join one; if you sent such a request
+            you can ask for it to be deleted.
           </li>
           <li>
             <strong>Server logs:</strong> This site is hosted on GitHub Pages. GitHub may
@@ -48,10 +49,6 @@ import Layout from '../layouts/Layout.astro';
           <li>
             <strong>Legitimate interests</strong> (Article 6(1)(f) UK GDPR) for responding
             to your enquiries.
-          </li>
-          <li>
-            <strong>Consent</strong> (Article 6(1)(a) UK GDPR) for adding you to the mailing
-            list, which you can withdraw at any time by emailing me.
           </li>
         </ul>
 
@@ -91,10 +88,6 @@ import Layout from '../layouts/Layout.astro';
         <h2>Data retention</h2>
         <ul>
           <li>
-            <strong>Mailing list:</strong> Your email address is retained until you ask to
-            be removed.
-          </li>
-          <li>
             <strong>Correspondence:</strong> Emails sent via the contact form are retained
             for as long as necessary to deal with your enquiry, and may be retained longer
             if related to ongoing casework.
@@ -113,11 +106,10 @@ import Layout from '../layouts/Layout.astro';
           <li>Erase your data (where there is no overriding reason to retain it)</li>
           <li>Restrict or object to processing</li>
           <li>Data portability</li>
-          <li>Withdraw consent at any time (for mailing list)</li>
         </ul>
         <p>
           To exercise any of these rights, email
-          <a href="mailto:tom.pickup@lancashire.gov.uk">tom.pickup@lancashire.gov.uk</a>.
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
         </p>
 
         <h2>Complaints</h2>

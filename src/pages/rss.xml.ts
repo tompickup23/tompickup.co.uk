@@ -1,3 +1,4 @@
+import { CONTACT_EMAIL } from '../config';
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
@@ -25,8 +26,8 @@ export async function GET(context: APIContext) {
       })),
     customData: `<language>en-gb</language>
 <atom:link href="https://tompickup.co.uk/rss.xml" rel="self" type="application/rss+xml" />
-<managingEditor>tom.pickup@lancashire.gov.uk (Tom Pickup)</managingEditor>
-<webMaster>tom.pickup@lancashire.gov.uk (Tom Pickup)</webMaster>
+<managingEditor>${CONTACT_EMAIL} (Tom Pickup)</managingEditor>
+<webMaster>${CONTACT_EMAIL} (Tom Pickup)</webMaster>
 <copyright>Copyright ${new Date().getFullYear()} Tom Pickup</copyright>
 <image>
   <url>https://tompickup.co.uk/images/headshot.jpg</url>

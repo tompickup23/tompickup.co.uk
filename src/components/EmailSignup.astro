@@ -11,18 +11,19 @@ const { variant = 'inline' } = Astro.props;
     {variant === 'inline' ? (
       <>
         <h3 class="email-signup-heading">The council decisions that never make the local news</h3>
-        <p class="email-signup-desc">A weekly email on Padiham, Burnley and the council: what it decided, what it spent, and what I&rsquo;m doing about it.</p>
+        <p class="email-signup-desc">New investigations and council decisions on Padiham, Burnley and Lancashire, each with its sources. Follow by RSS, on Substack or on X.</p>
       </>
     ) : (
-      <p class="email-signup-desc">Stay updated on Burnley spending</p>
+      <p class="email-signup-desc">Follow new posts by RSS, on Substack or on X</p>
     )}
   </div>
   <a href="/updates/" class="email-signup-btn">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-      <polyline points="22,6 12,13 2,6"></polyline>
+      <path d="M4 11a9 9 0 0 1 9 9"></path>
+      <path d="M4 4a16 16 0 0 1 16 16"></path>
+      <circle cx="5" cy="19" r="1"></circle>
     </svg>
-    Subscribe for updates
+    Ways to follow
   </a>
 </div>
 

@@ -46,7 +46,7 @@ export const ON_THIS_SITE: Project[] = [
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
-    desc: 'An interactive model of Lancashire’s council reorganisation, exploring the budgets, needs and obligations in the July 2026 four-council proposal.',
+    desc: 'An interactive model of Lancashire’s council reorganisation, exploring the budgets, needs and obligations of the four councils the government chose in July 2026, a plan paused in September.',
     figure: '15→4',
     unit: 'councils in the July proposal',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
@@ -66,7 +66,7 @@ export const DATA_PROJECTS: Project[] = [
     figure: '22m',
     unit: 'spending transactions',
     source: 'The files those bodies publish themselves',
-    inFooter: true,
+    inFooter: false,
   },
   {
     href: 'https://ukdemographics.co.uk',
@@ -99,7 +99,7 @@ export const DATA_PROJECTS: Project[] = [
     figure: '£2.1bn',
     unit: 'on hotels in 2024/25',
     source: 'Home Office statistics, Companies House, council evidence',
-    inFooter: true,
+    inFooter: false,
   },
   {
     href: 'https://ukcouncils.co.uk',
@@ -146,7 +146,7 @@ export const WEBSITE_PROJECTS: Project[] = [
     accent: '#12b6cf',
     title: 'Reform UK Burnley',
     desc: 'The Burnley and Padiham branch website, bringing together councillor profiles, local news, priorities and ways to get involved.',
-    inFooter: true,
+    inFooter: false,
   },
 ];
 

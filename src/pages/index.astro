@@ -17,7 +17,7 @@ const allPosts = (await getCollection('news', ({ data }) => !data.draft))
 
 /* The one investigation the home page leads with. Change the slug to feature
    another; the build fails if it is not a published article. */
-const FEATURED_SLUG = 'where-burnley-councils-money-goes';
+const FEATURED_SLUG = 'scout-moor-ii-round-two';
 const featured = allPosts.find((p) => p.id === FEATURED_SLUG);
 if (!featured) throw new Error(`Featured article is not published: ${FEATURED_SLUG}`);
 const featuredImage = articleImage(featured.data.image);
@@ -88,8 +88,8 @@ const LGR_UNITS = [
     <div class="container">
       <ScrollReveal>
         <div class="section-header">
-          <h2 class="section-heading">The first year, in three numbers</h2>
-          <p class="section-subtitle">Reform took control of Lancashire County Council in May 2025. Each figure below traces to a published council document.</p>
+          <h2 class="section-heading">The council's money, in three numbers</h2>
+          <p class="section-subtitle">Reform took control of Lancashire County Council in May 2025. Two figures show its first full year; the third is what selling the council's bonds would cost. Each traces to a published council document.</p>
         </div>
 
         <div class="achievements-grid stagger-children">

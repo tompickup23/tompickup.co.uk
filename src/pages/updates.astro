@@ -1,96 +1,69 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Mailing-list signup. PROVIDER_ENDPOINT is empty until a list provider is
-// chosen (MailerLite / Brevo / Buttondown all take a plain form POST). While
-// empty, the form falls back to composing an email in the visitor's own mail
-// client, which the privacy policy already covers. Set the endpoint and the
-// same form posts straight to the provider.
-const PROVIDER_ENDPOINT = '';
+// Ways to follow new posts. There is no mailing list: this page collects no
+// personal data. It replaced a signup form on 7 October 2026.
+const ROUTES = [
+  {
+    name: 'RSS feed',
+    href: '/rss.xml',
+    note: 'Every new post on this site, in any feed reader. Nothing to sign up to.',
+    external: false,
+  },
+  {
+    name: 'Substack',
+    href: 'https://tompickup.substack.com/',
+    note: 'Shorter versions of the main investigations, published on the web.',
+    external: true,
+  },
+  {
+    name: 'X',
+    href: 'https://x.com/tompickup',
+    note: 'New posts and council business as it happens. @tompickup',
+    external: true,
+  },
+  {
+    name: 'Facebook',
+    href: 'https://www.facebook.com/tompickupburnley',
+    note: 'Local news for Padiham and Burnley.',
+    external: true,
+  },
+];
 ---
 
 <Layout
-  title="Get the weekly update | Tom Pickup"
-  description="A weekly email on Padiham, Burnley and Lancashire: what the council decided, what it spent, and what I am doing about it. Plus an occasional national newsletter."
+  title="Follow new posts | Tom Pickup"
+  description="Follow new investigations and council decisions on Padiham, Burnley and Lancashire by RSS, on Substack or on social media."
 >
   <section class="updates-page">
     <div class="container-narrow">
-      <h1>Get the weekly update</h1>
+      <h1>Follow new posts</h1>
       <p class="updates-intro">
-        One email a week on what is actually happening here: what the council decided,
-        what it spent, and what I am doing about it. No spin, sources included, unsubscribe
-        any time.
+        New investigations and council decisions on Padiham, Burnley and Lancashire, each with
+        its sources. There is no mailing list; follow whichever way suits you.
       </p>
 
-      <form
-        id="signup-form"
-        class="signup-form"
-        method="POST"
-        action={PROVIDER_ENDPOINT || undefined}
-        data-endpoint={PROVIDER_ENDPOINT}
-      >
-        <div class="form-field">
-          <label for="su-name">First name</label>
-          <input type="text" id="su-name" name="name" autocomplete="given-name" placeholder="Your first name" />
-        </div>
+      <ul class="follow-list">
+        {ROUTES.map((r) => (
+          <li>
+            <a
+              href={r.href}
+              target={r.external ? '_blank' : undefined}
+              rel={r.external ? 'noopener noreferrer' : undefined}
+            >
+              {r.name}{r.external && <span aria-hidden="true"> &#8599;</span>}
+            </a>
+            <p>{r.note}</p>
+          </li>
+        ))}
+      </ul>
 
-        <div class="form-field">
-          <label for="su-email">Email address</label>
-          <input type="email" id="su-email" name="email" autocomplete="email" required placeholder="you@example.com" />
-        </div>
-
-        <fieldset class="form-lists">
-          <legend>What would you like?</legend>
-          <label class="list-option">
-            <input type="checkbox" name="list-local" value="yes" checked />
-            <span>
-              <strong>Padiham &amp; Burnley weekly</strong>
-              <small>The area, the council, the money. Once a week.</small>
-            </span>
-          </label>
-          <label class="list-option">
-            <input type="checkbox" name="list-national" value="yes" />
-            <span>
-              <strong>Council spending nationally</strong>
-              <small>The bigger investigations and the AI DOGE findings. Occasional.</small>
-            </span>
-          </label>
-        </fieldset>
-
-        <button type="submit" class="btn btn-primary signup-submit">Sign Up</button>
-
-        <p class="signup-consent">
-          By signing up you agree to receive the emails you tick above. Your details are
-          never shared or sold, and every email has an unsubscribe link. See the
-          <a href="/privacy/">privacy policy</a>.
-        </p>
-      </form>
+      <p class="updates-help">
+        Need help with a council issue rather than news? <a href="/contact/">Get in touch</a>.
+      </p>
     </div>
   </section>
 </Layout>
-
-<script>
-  import { CONTACT_EMAIL } from '../config';
-
-  const form = document.getElementById('signup-form') as HTMLFormElement | null;
-  if (form && !form.dataset.endpoint) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const name = (data.get('name') as string) || '';
-      const email = (data.get('email') as string) || '';
-      const lists = [
-        data.get('list-local') ? 'Padiham & Burnley weekly' : null,
-        data.get('list-national') ? 'National spending newsletter' : null,
-      ].filter(Boolean).join(', ') || 'Padiham & Burnley weekly';
-      const subject = encodeURIComponent('Mailing list signup');
-      const body = encodeURIComponent(
-        `Please add me to: ${lists}\n\nName: ${name}\nEmail: ${email}\n\n(Sent from tompickup.co.uk/updates)`
-      );
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-    });
-  }
-</script>
 
 <style>
   .updates-page {
@@ -98,133 +71,38 @@ const PROVIDER_ENDPOINT = '';
   }
 
   .updates-page h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: var(--space-sm);
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    margin-bottom: var(--space-md);
   }
 
   .updates-intro {
-    font-size: 0.9375rem;
-    color: var(--text-secondary);
-    line-height: 1.75;
+    font-size: 1.125rem;
+    color: var(--muted);
     margin-bottom: var(--space-xl);
-    max-width: 560px;
   }
 
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    max-width: 480px;
-    padding: var(--space-xl);
-    background: var(--bg-secondary, rgba(255, 255, 255, 0.03));
-    border: 1px solid var(--separator);
-    border-radius: var(--radius-lg);
+  .follow-list {
+    border-top: 1px solid var(--line);
+    margin-bottom: var(--space-xl);
   }
 
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .follow-list li {
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--line);
   }
 
-  .form-field label {
-    font-size: 0.8125rem;
+  .follow-list a {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-secondary);
   }
 
-  .form-field input {
-    padding: 10px 14px;
-    font-size: 0.9375rem;
-    color: var(--text-primary);
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-md, 10px);
+  .follow-list p {
+    margin-top: var(--space-xs);
+    color: var(--muted);
   }
 
-  .form-field input:focus {
-    outline: none;
-    border-color: var(--accent);
-    outline: 2px solid var(--teal);
-    outline-offset: 0;
-  }
-
-  .form-lists {
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .form-lists legend {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-sm);
-  }
-
-  .list-option {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--separator);
-    border-radius: var(--radius-md, 10px);
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  .list-option:hover {
-    border-color: var(--teal);
-  }
-
-  .list-option input {
-    margin-top: 4px;
-    accent-color: var(--accent);
-  }
-
-  .list-option strong {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-  }
-
-  .list-option small {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-  }
-
-  .signup-submit {
-    align-self: flex-start;
-  }
-
-  .signup-consent {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  .signup-consent a {
-    color: var(--accent);
-  }
-
-  @media (max-width: 768px) {
-    .updates-page {
-      padding: 6rem 0 var(--space-xl);
-    }
-
-    .signup-form {
-      max-width: none;
-    }
-
-    .signup-submit {
-      align-self: stretch;
-      text-align: center;
-    }
+  .updates-help {
+    color: var(--muted);
   }
 </style>
