@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { STUDIES } from '../data/studies';
+
+const fmtDate = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const schema = {
+  '@type': 'CollectionPage',
+  '@id': 'https://tompickup.co.uk/studies/#page',
+  url: 'https://tompickup.co.uk/studies/',
+  name: 'Studies and working papers',
+  author: { '@id': 'https://tompickup.co.uk/#person' },
+  hasPart: STUDIES.map((s) => ({
+    '@type': 'ScholarlyArticle',
+    '@id': `https://doi.org/${s.doi}`,
+    headline: s.title,
+    name: s.title,
+    datePublished: s.date,
+    version: s.version,
+    author: { '@id': 'https://tompickup.co.uk/#person' },
+    sameAs: `https://doi.org/${s.doi}`,
+    url: `https://doi.org/${s.doi}`,
+  })),
+};
+---
+
+<Layout
+  title="Studies and working papers | Tom Pickup"
+  description="Working papers by Tom Pickup, each deposited on Zenodo with its data and the code that rebuilds every figure, and an article that explains it."
+  schema={schema}
+>
+  <section class="studies-page">
+    <div class="container-narrow">
+      <p class="studies-eyebrow">Research</p>
+      <h1>Studies and working papers</h1>
+      <p class="studies-lede">
+        Each paper is deposited on Zenodo with a DOI, its data, and a script that rebuilds every
+        figure from that data. None has been peer reviewed. Each one sets out its own declaration of
+        interests and how AI assistance was used.
+      </p>
+
+      <ol class="studies-list">
+        {STUDIES.map((s) => (
+          <li class="study">
+            <p class="study-meta">
+              <time datetime={s.date}>{fmtDate(s.date)}</time>
+              <span aria-hidden="true">·</span>
+              <span>Working paper, version {s.version}</span>
+            </p>
+            <h2 class="study-title"><a href={`https://doi.org/${s.doi}`}>{s.title}</a></h2>
+            <p class="study-summary">{s.summary}</p>
+            <p class="study-interest"><strong>Interest.</strong> {s.interest}</p>
+            <ul class="study-links">
+              <li><a href={`https://doi.org/${s.doi}`}>Paper, data and code</a> <span class="study-doi">doi:{s.doi}</span></li>
+              <li><a href={s.article.href}>Read the article: {s.article.label}</a></li>
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .studies-page { padding: 7rem 0 var(--space-2xl); }
+  .studies-eyebrow {
+    font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--teal); margin-bottom: var(--space-sm);
+  }
+  .studies-page h1 { font-size: clamp(2rem, 4.5vw, 2.75rem); margin-bottom: var(--space-md); }
+  .studies-lede { font-size: 1.125rem; color: var(--muted); margin-bottom: var(--space-2xl); }
+  .studies-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .study { padding: var(--space-xl) 0; border-bottom: 1px solid var(--line); }
+  .study-meta {
+    display: flex; flex-wrap: wrap; gap: 0 0.5rem; font-size: 0.875rem; color: var(--muted);
+    margin-bottom: var(--space-sm);
+  }
+  .study-title { font-size: clamp(1.25rem, 2.6vw, 1.5rem); line-height: 1.25; margin-bottom: var(--space-md); }
+  .study-title a { color: var(--ink); text-decoration: none; }
+  .study-title a:hover { color: var(--teal); text-decoration: underline; }
+  .study-summary { margin-bottom: var(--space-md); }
+  .study-interest { font-size: 0.9375rem; color: var(--muted); margin-bottom: var(--space-md); }
+  .study-interest strong { color: var(--ink); }
+  .study-links { display: grid; gap: 0.35rem; font-size: 1rem; }
+  .study-doi { color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; margin-left: 0.35rem; }
+</style>

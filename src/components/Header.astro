@@ -4,6 +4,8 @@ const pathname = Astro.url.pathname;
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/news/', label: 'News' },
+  { href: '/lgr/', label: 'Reorganisation' },
+  { href: '/studies/', label: 'Studies' },
   { href: '/projects/', label: 'Projects' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
@@ -284,7 +286,8 @@ function isActive(href: string): boolean {
     padding-left: 12px;
   }
 
-  @media (max-width: 860px) {
+  /* Seven links leave no room for the role line until the viewport is wide. */
+  @media (max-width: 1040px) {
     .brand-role {
       display: none;
     }
