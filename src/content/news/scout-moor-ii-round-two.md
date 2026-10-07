@@ -3,6 +3,8 @@ title: "Scout Moor II Is Cut to 12 Turbines. The Area That Could See Both Barely
 date: 2026-10-04T12:30:00
 updated: 2026-10-04T16:00:00
 description: "Scout Moor II is down to 12 turbines, and the applicant's own map of both wind farms is now public. I was wrong to say no assessment existed. The area that could see both is barely smaller."
+seoTitle: "Scout Moor II cut to 12 turbines; shared view barely shrinks"
+seoDescription: "Scout Moor II is down to 12 turbines and the applicant's own map of both wind farms is now public. The area that could see both is barely smaller."
 image: "/images/scout-moor-cumulative-ztv-v2.png"
 imageAlt: "Map of where turbines of Scout Moor II, now 12 turbines, and Calderdale Energy Park, 34 turbines, would theoretically be visible. Blue areas see both, shaded by how many turbines; 699 square kilometres would see both."
 imageUncropped: true

@@ -2,6 +2,7 @@
 title: "Swimathon 2025: a triple 5km for Cancer Research UK and Marie Curie"
 date: 2025-04-01
 description: "Three 5km Swimathon swims in spring 2025, starting at Burnley Leisure & Culture on 29 March, raising awareness and funds for Cancer Research UK and Marie Curie."
+seoTitle: "Swimathon 2025: a triple 5km for two cancer charities"
 image: "/images/swimathon-2025/pool-hero.jpg"
 imageAlt: "Tom Pickup in a Burnley Leisure & Culture pool after a 5km Swimathon swim, holding up his medal"
 imageCredit: "Photo: Burnley Leisure & Culture"

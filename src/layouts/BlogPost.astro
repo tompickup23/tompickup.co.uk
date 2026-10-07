@@ -16,6 +16,8 @@ interface Props {
     title: string;
     date: Date;
     description: string;
+    seoTitle?: string;
+    seoDescription?: string;
     tags: string[];
     featured?: boolean;
     updated?: Date;
@@ -78,15 +80,16 @@ const shareImage =
   frontmatter.ogImage || (await shareImageUrl(frontmatter.image)) || DEFAULT_OG_IMAGE;
 
 const BRAND_SUFFIX = ' | Tom Pickup';
+const baseTitle = frontmatter.seoTitle ?? frontmatter.title;
 const pageTitle =
-  frontmatter.title.length + BRAND_SUFFIX.length <= 60
-    ? frontmatter.title + BRAND_SUFFIX
-    : frontmatter.title;
+  baseTitle.length + BRAND_SUFFIX.length <= 60
+    ? baseTitle + BRAND_SUFFIX
+    : baseTitle;
 ---
 
 <Layout
   title={pageTitle}
-  description={frontmatter.description}
+  description={frontmatter.seoDescription ?? frontmatter.description}
   article={true}
   ogImage={shareImage}
   ogImageAlt={frontmatter.ogImage ? undefined : frontmatter.imageAlt}

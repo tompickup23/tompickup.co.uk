@@ -3,6 +3,7 @@ title: "Where Burnley Council's Money Goes: Every Payment of £500 or More in 20
 date: 2026-06-23T10:00:00
 updated: 2026-09-28
 description: "Burnley Borough Council spent £38.06 million in payments of £500 or more last year, across 4,489 transactions to 843 suppliers. Every line, searchable."
+seoTitle: "Every Burnley Council payment of £500 or more in 2025/26"
 image: "/images/burnley-aerial.jpg"
 imageAlt: "Burnley's terraced streets and industrial units across the valley, with moorland and snow-capped hills behind."
 ogImage: "/images/share/burnley-spending-2025-26.png"

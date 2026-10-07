@@ -3,6 +3,7 @@ title: "Four Councils, One Decision: I Modelled What Lancashire's Reorganisation
 date: 2026-07-18T21:30:00
 updated: 2026-10-04
 description: "The July 2026 plan to replace Lancashire's 15 councils with 4, now paused for review: a sourced model of the new councils' budgets, balance sheets and costs."
+seoTitle: "Lancashire's four new councils, modelled"
 tags: ["lancashire", "lgr", "burnley", "local-government", "transparency"]
 featured: true
 ---
