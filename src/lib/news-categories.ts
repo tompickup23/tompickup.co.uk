@@ -18,6 +18,7 @@ export const NEWS_TOPICS = [
   { id: 'planning-energy', title: 'Planning & energy' },
   { id: 'community-charity', title: 'Community & charity' },
   { id: 'public-debates', title: 'Public debates' },
+  { id: 'releases', title: 'Data releases' },
   { id: 'other', title: 'Other news' },
 ] as const;
 
@@ -34,7 +35,8 @@ export function newsArea(post: Post): typeof NEWS_AREAS[number]['id'] {
 export function newsTopic(post: Post): typeof NEWS_TOPICS[number] {
   const { subcategory, tags } = post.data;
   let id: typeof NEWS_TOPICS[number]['id'] = 'other';
-  if (subcategory === 'Public debates' || tags.includes('public-debates')) id = 'public-debates';
+  if (tags.includes('releases')) id = 'releases';
+  else if (subcategory === 'Public debates' || tags.includes('public-debates')) id = 'public-debates';
   else if (tags.includes('lgr') || tags.includes('local-government')) id = 'local-government';
   else if (subcategory === 'Adult Social Care' || tags.includes('adult-social-care')) id = 'adult-social-care';
   else if (subcategory === 'Housing') id = 'housing';
