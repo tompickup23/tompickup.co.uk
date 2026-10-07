@@ -40,7 +40,8 @@ const schema = {
     <section class="latest" aria-labelledby="latest-title">
       <h2 id="latest-title" class="latest-heading">Latest</h2>
       <div class="posts-grid">
-        {latest.map(post => <NewsCard
+        {latest.map((post, i) => <NewsCard
+          eager={i === 0}
           title={post.data.title}
           date={post.data.date.toISOString()}
           description={post.data.description}

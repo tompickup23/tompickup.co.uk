@@ -10,9 +10,11 @@ interface Props {
   tags?: string[];
   image?: string;
   headingLevel?: 'h3' | 'h4';
+  /* The first card on a page sits above the fold: load its image straight away. */
+  eager?: boolean;
 }
 
-const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3', eager = false } = Astro.props;
 const imageMeta = articleImage(image);
 
 function formatDate(dateStr: string): string {
@@ -42,11 +44,12 @@ function formatDate(dateStr: string): string {
           sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 380px"
           format="webp"
           quality={imageQuality(image)}
-          loading="lazy"
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
           decoding="async"
         />
       ) : (
-        <img src={image} alt="" loading="lazy" decoding="async" />
+        <img src={image} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" />
       )}
     </div>
   )}

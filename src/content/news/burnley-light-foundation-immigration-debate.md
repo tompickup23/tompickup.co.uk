@@ -2,6 +2,7 @@
 title: "Burnley immigration debate with Adnan Hussain MP and Gordon Birtwistle"
 date: 2025-11-14
 description: "The Light Foundation's November 2025 immigration debate at Burnley Boys and Girls Club, with Adnan Hussain MP and Gordon Birtwistle."
+seoTitle: "The Light Foundation's Burnley immigration debate"
 image: "/images/debates/burnley-2025/debate.webp"
 imageAlt: "Two panellists at the table, one speaking into a microphone while the other gestures towards the room."
 imageUncropped: true

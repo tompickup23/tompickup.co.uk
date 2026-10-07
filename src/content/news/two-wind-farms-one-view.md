@@ -3,6 +3,8 @@ title: "Two Wind Farms, One View, and No Published Assessment of Either Together
 date: 2026-08-24T10:00:00
 updated: 2026-10-04T12:30:00
 description: "Corrected 4 October 2026: an assessment of the two schemes together did exist, though it was not yet public. Fifty-one turbines are proposed on the South Pennine moors, 15.7 kilometres apart. So I mapped them."
+seoTitle: "Two wind farms, one view: Scout Moor II and Calderdale"
+seoDescription: "Corrected 4 October 2026: a combined assessment did exist, though it was not yet public. Fifty-one turbines on the South Pennine moors, mapped."
 image: "/images/scout-moor-cumulative-ztv.png"
 imageAlt: "Map of where turbines of the proposed Scout Moor II and Calderdale Energy Park wind farms would be visible. Shaded areas show one scheme, the other, or both; 702 square kilometres would see both."
 ogImage: "/images/share/two-wind-farms-one-view.png"

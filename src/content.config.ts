@@ -9,6 +9,10 @@ const news = defineCollection({
     // Set when an article is materially revised. Feeds dateModified + article:modified_time.
     updated: z.date().optional(),
     description: z.string(),
+    /* Search-result title and snippet, when the headline or standfirst is too long for
+       them. Meta tags only: the page still shows the headline and standfirst. */
+    seoTitle: z.string().max(60).optional(),
+    seoDescription: z.string().max(160).optional(),
     tags: z.array(z.string()).default([]),
     image: z.string().optional(),
     imageAlt: z.string().optional(),

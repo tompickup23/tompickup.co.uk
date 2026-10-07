@@ -3,6 +3,7 @@ title: "Lancashire's Crime Divide: Four Times the Recorded Crime Rate in One Cou
 date: 2026-06-22T10:00:00
 updated: 2026-09-28
 description: "I ranked all fourteen Lancashire districts by recorded crime rate. A four to one gap that follows deprivation. Not a high-crime county, a divided one."
+seoTitle: "Lancashire's crime divide: four times the rate in one county"
 image: "/images/burnley-panorama.jpg"
 imageAlt: "Burnley spread across the valley floor, seen from high ground, with snow on the hills beyond."
 ogImage: "/images/share/lancashire-crime-divide.png"

@@ -2,6 +2,7 @@
 title: "Ten Thousand People in Burnley Are on PIP. This Is the Bill for Managed Decline."
 date: 2026-06-19T14:00:00
 description: "More than ten thousand people in Burnley claim the disability benefit PIP, the 47th highest of 543 seats in England. This is why."
+seoTitle: "Ten thousand on PIP in Burnley: the bill for managed decline"
 image: "/images/burnley-singing-ringing-tree.jpg"
 imageAlt: "The Singing Ringing Tree, the steel pipe wind sculpture on the moor above Burnley."
 ogImage: "/images/share/pip-burnley.png"

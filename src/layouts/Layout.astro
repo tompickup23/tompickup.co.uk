@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CookieNotice from '../components/CookieNotice.astro';
 import { person } from '../data/person';
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_ALT } from '../data/seo';
 import '@fontsource/source-sans-3/400.css';
@@ -233,7 +232,6 @@ const defaultGraph = {
     </main>
 
     <Footer signup={!article} />
-    <CookieNotice />
 
     <!-- Scroll reveal observer -->
     <script>
