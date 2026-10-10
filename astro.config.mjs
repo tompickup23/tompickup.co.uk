@@ -35,6 +35,8 @@ export default defineConfig({
   site: 'https://tompickup.co.uk',
   integrations: [
     sitemap({
+      // The budget game is a noindex working version; keep it out of the sitemap too.
+      filter: (page) => !page.includes('/lcc-budget-game/'),
       serialize(item) {
         const lastmod = LASTMOD.get(item.url);
         if (lastmod) item.lastmod = lastmod;

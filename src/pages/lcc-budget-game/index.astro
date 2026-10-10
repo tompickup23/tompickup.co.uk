@@ -1,0 +1,38 @@
+---
+// Lancashire Budget Challenge: a standalone game page.
+// The game itself is generated in the Reports repo (LCC_Budget_Game/build.py --site <this repo>)
+// from the LCC budget model and copied to src/data/lcc-budget-game/game.html. Do not edit that file by hand.
+// The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
+import { imprint as imp } from '../../data/imprint';
+import game from '../../data/lcc-budget-game/game.html?raw';
+
+const title = 'Lancashire Budget Challenge';
+const description = "Where Lancashire County Council's money goes, what has changed since May 2025, and whether you can balance next year's budget.";
+const imprintLine = imp.show
+  ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
+  : '';
+const body = game.replace(/<title>[\s\S]*?<\/title>/, '').replace(
+  '<!--IMPRINT-->',
+  `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : ''),
+);
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {/* Working version shared with colleagues: kept out of search until the budget model is complete. */}
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://tompickup.co.uk/lcc-budget-game/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://tompickup.co.uk/lcc-budget-game/" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <Fragment set:html={body} />
+  </body>
+</html>
