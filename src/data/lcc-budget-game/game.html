@@ -1,0 +1,682 @@
+<title>Lancashire Budget Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a civic signboard. One step at a time, a stepper across the top, a gap meter pinned to the foot once money starts moving. */
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --sunk:#E6EAEE; --ink:#15202B; --muted:#55626F; --line:#CBD2DA;
+  --rose:#B3122E; --rose-soft:#F6DDE1;
+  --good:#256B4A; --good-soft:#DCEFE4; --warn:#9A6212; --warn-soft:#F7EAD2; --bad:#B3122E;
+  --b-rose:#B3122E; --b-blue:#2C5F9E; --b-green:#2E7D57; --b-ochre:#A8741A; --b-slate:#5E6B78;
+  --card-back:#15202B;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --rose:#F0607A; --rose-soft:#3A1C24; --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; --bad:#F0607A;
+  --b-rose:#E8566F; --b-blue:#6A9BDB; --b-green:#55B985; --b-ochre:#D9A445; --b-slate:#93A1AF; --card-back:#E7ECF1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --rose:#F0607A; --rose-soft:#3A1C24; --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; --bad:#F0607A;
+  --b-rose:#E8566F; --b-blue:#6A9BDB; --b-green:#55B985; --b-ochre:#D9A445; --b-slate:#93A1AF; --card-back:#E7ECF1; color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:0 120px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.02;letter-spacing:.005em}
+h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:900;text-transform:uppercase}
+h2{font-size:clamp(2rem,5vw,3rem);font-weight:800;text-transform:uppercase}
+h3{font-size:1.45rem;font-weight:800;text-transform:uppercase}
+p{margin:0;max-width:65ch}
+.mono,.num{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 .75rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+button{font:inherit;cursor:pointer}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--bg);font:700 1rem/1 var(--f-body);padding:14px 22px;border-radius:var(--r);letter-spacing:.02em}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:focus-visible,.chip:focus-visible,input:focus-visible,summary:focus-visible,.pcard:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+
+/* top */
+.test{background:var(--warn-soft);color:var(--warn);font-size:.82rem;padding:8px 16px;text-align:center}
+.top{display:grid;gap:14px;padding-block:28px 18px;border-bottom:3px solid var(--ink)}
+.top .rose{color:var(--rose)}
+.stepper{display:flex;gap:4px;overflow-x:auto;padding-block:14px 4px}
+.stepper button{flex:1 0 auto;background:none;border:0;border-top:4px solid var(--line);padding:8px 6px 0;text-align:left;color:var(--muted);font:600 .8rem/1.2 var(--f-body)}
+.stepper button b{display:block;font:800 1.15rem/1 var(--f-display);text-transform:uppercase;color:inherit}
+.stepper button.on{border-color:var(--rose);color:var(--ink)}
+.stepper button.done{border-color:var(--ink);color:var(--ink)}
+
+section.step{padding-block:34px 10px}
+.lede{font-size:1.12rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px}
+.grid2>*{min-width:0}
+.nav{display:flex;justify-content:space-between;gap:12px;padding-block:26px 0;border-top:1px solid var(--line);margin-top:30px}
+
+/* guess */
+.gslider{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;padding-block:8px;border-bottom:1px solid var(--line)}
+.gslider label{font-weight:600}
+.gslider input{grid-column:1 / -1;width:100%;accent-color:var(--ink)}
+.sw{width:14px;height:14px;border-radius:3px}
+.gval{font:600 1.2rem/1 var(--f-data)}
+.cmp{display:grid;gap:10px}
+.cmprow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.bars{display:grid;gap:3px}
+.bar{height:16px;border-radius:2px;transition:width .6s ease}
+.bar.g{opacity:.35}
+.score{font:900 4rem/1 var(--f-display);color:var(--rose)}
+
+/* bill */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;font:700 .95rem/1 var(--f-body)}
+.chip.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.bignum{font:900 clamp(3.4rem,10vw,6rem)/.9 var(--f-display);letter-spacing:-.01em}
+.stackbar{display:flex;height:56px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.stackbar>div{display:flex;align-items:flex-end;padding:4px 6px;color:#fff;font:600 .75rem/1.1 var(--f-body);min-width:0;overflow:hidden;transition:flex-grow .5s}
+.receipt{font-family:var(--f-data);font-size:.92rem;background:var(--surface);border:1px dashed var(--muted);padding:18px;border-radius:2px}
+.receipt .rl{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;padding-block:6px;border-bottom:1px dotted var(--line);align-items:baseline}
+.receipt .rl span:first-child{font-family:var(--f-body);min-width:0}
+.receipt .tot{font-weight:600;border-bottom:0;border-top:2px solid var(--ink);margin-top:6px}
+.receipt details summary{cursor:pointer;list-style:none}
+.receipt details summary::-webkit-details-marker{display:none}
+.receipt .sub{padding-left:14px;font-size:.84rem;color:var(--muted)}
+.fact{border-left:4px solid var(--rose);padding:6px 0 6px 14px}
+.fact b{font:800 1.6rem/1 var(--f-display);display:block}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:18px}
+
+/* waterfall */
+.wf{display:grid;gap:6px}
+.wfrow{display:grid;grid-template-columns:minmax(120px,240px) 1fr 84px;gap:10px;align-items:center;font-size:.9rem}
+.wfrow .lab{min-width:0}
+.wftrack{position:relative;height:22px;background:var(--sunk);border-radius:2px}
+.wftrack i{position:absolute;top:0;bottom:0;border-radius:2px}
+.up{background:var(--rose)} .down{background:var(--good)} .tot{background:var(--ink)}
+.wfrow .v{text-align:right;font-family:var(--f-data)}
+
+/* cards */
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:14px}
+.pcard{perspective:900px;height:230px;border:0;background:none;padding:0;text-align:left}
+.pcard .in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.pcard.flip .in{transform:rotateY(180deg)}
+.pcard .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.pcard .back{background:var(--card-back);color:var(--bg);align-items:center;justify-content:center;background-image:repeating-linear-gradient(45deg,transparent 0 10px,rgba(127,127,127,.18) 10px 12px)}
+.pcard .back span{font:900 2rem/1 var(--f-display);letter-spacing:.06em}
+.pcard .front{transform:rotateY(180deg);background:var(--surface);border:2px solid var(--line)}
+.pcard.bad .front{border-color:var(--rose)}
+.pcard.good .front{border-color:var(--good)}
+.pcard .tag{font:700 .7rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase}
+.pcard.bad .tag{color:var(--rose)} .pcard.good .tag{color:var(--good)}
+.pcard h4{margin:0;font:800 1.3rem/1.05 var(--f-display);text-transform:uppercase}
+.pcard p{font-size:.86rem}
+.pcard .cost{margin-top:auto;font:600 1.3rem/1 var(--f-data)}
+.pcard.bad .cost{color:var(--rose)} .pcard.good .cost{color:var(--good)}
+@media (prefers-reduced-motion: reduce){.pcard .in,.bar,.stackbar>div{transition:none}}
+
+/* dials and levers */
+.dgroup{display:grid;gap:2px}
+.dial{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.dial input{grid-column:1 / -1;width:100%;accent-color:var(--rose)}
+.dial .eff{font:600 .95rem/1.2 var(--f-data);text-align:right}
+.dial .meta{grid-column:1 / -1;font-size:.78rem;color:var(--muted)}
+.lever{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lever input{grid-column:1 / -1;width:100%;accent-color:var(--ink)}
+.lever .meta{grid-column:1 / -1;font-size:.8rem;color:var(--muted)}
+.lever .duty{color:var(--warn)}
+.pos{color:var(--rose)} .neg{color:var(--good)}
+details.blk{border-top:3px solid var(--ink);padding-block:10px}
+details.blk>summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+details.blk>summary h3{display:inline}
+.flag{display:inline-block;font:700 .72rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:3px}
+.flag.warn{background:var(--warn-soft);color:var(--warn)}
+.flag.bad{background:var(--rose-soft);color:var(--rose)}
+.flag.good{background:var(--good-soft);color:var(--good)}
+
+/* meter */
+.meter{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:5}
+.meter .in{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.meter .gap{font:900 2rem/1 var(--f-display);white-space:nowrap}
+.meter .gtrack{height:10px;background:rgba(127,127,127,.35);border-radius:5px;overflow:hidden}
+.meter .gtrack i{display:block;height:100%;background:var(--good);transition:width .3s}
+.meter .lbl{font-size:.78rem;opacity:.8}
+@media (max-width:560px){.meter .in{grid-template-columns:1fr auto}.meter .gtrack{grid-column:1 / -1;order:3}}
+
+/* result */
+.stamp{display:inline-block;border:5px solid currentColor;padding:10px 18px;font:900 clamp(2rem,6vw,3.2rem)/1 var(--f-display);text-transform:uppercase;transform:rotate(-3deg);letter-spacing:.04em}
+.stamp.ok{color:var(--good)} .stamp.no{color:var(--rose)}
+table.t{width:100%;border-collapse:collapse;font-size:.92rem}
+table.t td,table.t th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--f-data);white-space:nowrap}
+.tscroll{overflow-x:auto}
+.src{font-size:.76rem;color:var(--muted)}
+footer{border-top:3px solid var(--ink);margin-top:40px;padding-block:24px;display:grid;gap:14px;font-size:.86rem}
+.status{display:grid;gap:6px}
+.status div{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+</style>
+
+<div class="test">Working version. Figures update as the budget model is built. <span id="runid"></span></div>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Lancashire County Council &middot; revenue budget <span class="py"></span></div>
+    <h1>Can you balance <span class="rose">Lancashire?</span></h1>
+    <p class="lede">The county spends <b class="num" id="hdrReq"></b> a year on services across the county. Find out where it goes, then try to set next year's budget when the economy turns against you.</p>
+    <nav class="stepper" id="stepper" aria-label="Steps"></nav>
+  </header>
+
+  <!-- 1 GUESS -->
+  <section class="step" data-step="1">
+    <div class="stack">
+      <div class="eyebrow">Step 1 &middot; Warm up</div>
+      <h2>Out of every £100 the county spends, where does it go?</h2>
+      <p class="lede">Make your guess first. Move the sliders; they always add up to £100.</p>
+      <div class="grid2">
+        <div class="panel" id="guessPanel"></div>
+        <div class="panel stack" id="revealPanel">
+          <div class="eyebrow">Your guess against the budget</div>
+          <div id="cmp" class="cmp"></div>
+          <div id="scoreBox" hidden>
+            <div class="row"><div class="score" id="score"></div><p id="scoreTxt"></p></div>
+          </div>
+          <div class="row"><button class="btn" id="revealBtn">Reveal the real split</button></div>
+          <p class="src" id="guessSrc"></p>
+        </div>
+      </div>
+    </div>
+    <div class="nav"><span></span><button class="btn" data-go="2">Next: your bill</button></div>
+  </section>
+
+  <!-- 2 BILL -->
+  <section class="step" data-step="2" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 2 &middot; Your council tax</div>
+      <h2>Where your bill goes</h2>
+      <p class="lede">Pick your council tax band. This is only the county council's part of your bill for <span class="by"></span>. Your full bill also includes your district or borough council, the police, fire and rescue, and in some areas a parish or town council. Those are set separately and are not shown here.</p>
+      <div class="chips" id="bands" role="group" aria-label="Council tax band"></div>
+      <div class="grid2">
+        <div class="stack">
+          <div><div class="eyebrow">County share of your bill, <span class="by"></span></div><div class="bignum num" id="billBig"></div><div class="muted" id="billWeek"></div></div>
+          <div class="stackbar" id="billBar"></div>
+          <div class="facts" id="facts"></div>
+        </div>
+        <div class="receipt" id="receipt"></div>
+      </div>
+      <div class="panel stack">
+        <h3>Your bill pays for about half of it</h3>
+        <p>Council tax raises <b class="num" id="ctCash"></b>. The rest of the <span class="num" id="reqB"></span> comes from business rates and government grants.</p>
+        <div class="stackbar" id="fundBar"></div>
+        <p class="src" id="fundSrc"></p>
+      </div>
+      <div class="panel stack" style="border-color:var(--warn)">
+        <h3>Off the books: the SEND deficit</h3>
+        <p id="dsgTxt"></p>
+        <p class="src" id="dsgSrc"></p>
+      </div>
+      <p class="src">How the bill is split: each service's share of the county's net budget, applied to your bill. Council tax is not ring-fenced to services, so this is a way of picturing the budget, not an invoice.</p>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="1">Back</button><button class="btn" data-go="3">Next: what's coming</button></div>
+  </section>
+
+  <!-- 3 NEXT YEAR -->
+  <section class="step" data-step="3" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 3 &middot; The plan for <span class="py"></span></div>
+      <h2>Pay, prices and demand add <span id="growth"></span> next year</h2>
+      <p class="lede">That is before anyone decides anything. The plan agreed in February 2026 covers it with a council tax rise, some grant growth and new savings, so the budget ends up <span id="netGrowth"></span> bigger.</p>
+      <div class="grid2">
+        <div class="panel stack"><div class="eyebrow">What changes in the cost, <span class="by"></span> to <span class="py"></span></div><div class="wf" id="wfCost"></div><p class="src" id="wfSrc"></p></div>
+        <div class="panel stack"><div class="eyebrow">How the plan pays for it</div><div class="wf" id="wfFund"></div><p class="src" id="wfFundSrc"></p></div>
+      </div>
+      <div class="facts" id="planFacts"></div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="2">Back</button><button class="btn" data-go="4">Next: since May 2025</button></div>
+  </section>
+
+  <!-- 4 SINCE MAY 2025 -->
+  <section class="step" data-step="4" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 4 &middot; Since May 2025</div>
+      <h2>From <span id="h24"></span> of savings delivered to <span id="h25"></span></h2>
+      <p class="lede">Reform UK has run Lancashire County Council since the May 2025 elections. The council's own reports show what has changed since then.</p>
+      <div class="panel stack">
+        <div class="eyebrow">Savings delivered against savings agreed, by year</div>
+        <div id="delChart" class="stack" style="gap:10px"></div>
+        <p class="src" id="delNote"></p>
+      </div>
+      <div class="facts" id="reformFacts"></div>
+      <div class="grid2">
+        <div class="panel stack"><h3>Council tax below the maximum</h3><p id="ctTxt"></p><p class="src" id="ctSrc"></p></div>
+        <div class="panel stack"><h3>Efficiency Review</h3><p id="erTxt"></p><div class="tscroll"><table class="t" id="erTable"></table></div><p class="src" id="erSrc"></p></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="3">Back</button><button class="btn" data-go="5">Next: the economy turns</button></div>
+  </section>
+
+  <!-- 5 ECONOMY -->
+  <section class="step" data-step="5" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 5 &middot; The economy</div>
+      <h2>Draw four cards</h2>
+      <p class="lede">The plan balances on paper. Then the year happens. Each card is a change the budget did not plan for, costed with the council's own figures.</p>
+      <div class="row"><button class="btn" id="drawBtn">Draw four cards</button><button class="btn ghost" id="redrawBtn" hidden>Redraw (once)</button><button class="btn ghost" id="stormBtn">Play the storm</button><span class="muted small" id="shockTxt"></span></div>
+      <div class="deck" id="deck"></div>
+      <details class="panel" id="dialsBox">
+        <summary><b>Set the economy yourself</b> <span class="muted small">Every dial, what one step costs, and where the figure comes from</span></summary>
+        <div class="grid2" id="dials" style="margin-top:14px"></div>
+        <p class="src" style="margin-top:12px">Each dial is costed on its own base, so adding many large moves together will overstate the total a little. These are sensitivities from the budget model, not forecasts.</p>
+      </details>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="4">Back</button><button class="btn" data-go="6">Next: close the gap</button></div>
+  </section>
+
+  <!-- 5 LEVERS -->
+  <section class="step" data-step="6" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 6 &middot; Your budget</div>
+      <h2>Close the gap</h2>
+      <p class="lede">By law the council must set a balanced budget. You have three tools: cut spending, raise council tax, or use reserves. Watch the meter at the bottom.</p>
+      <div class="grid2">
+        <div class="panel stack">
+          <h3>Council tax</h3>
+          <div class="lever">
+            <label for="ct"><b>Band D rise in <span class="py"></span></b></label><span class="num" id="ctVal"></span>
+            <input type="range" id="ct" min="0" max="10" step="0.25">
+            <div class="meta" id="ctMeta"></div>
+          </div>
+        </div>
+        <div class="panel stack">
+          <h3>Reserves</h3>
+          <div id="resLevers"></div>
+          <p class="src">Reserves pay once. Whatever you take this year comes back as a gap next year, because the spending it covers is still there.</p>
+        </div>
+      </div>
+      <div class="stack">
+        <h3>Spending</h3>
+        <p class="muted">Each slider cuts a service line's net budget for <span class="py"></span>. Planned savings do not always arrive, so each cut counts at the rate that directorate has actually delivered. Choose which record to use:</p>
+        <div class="chips" id="recChips" role="group" aria-label="Savings delivery record">
+          <button class="chip on" data-rec="pooled" aria-pressed="true">Last three years, 2023/24 to 2025/26</button>
+          <button class="chip" data-rec="reform" aria-pressed="false">Under Reform, 2025/26</button>
+        </div>
+        <div id="levers"></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="5">Back</button><button class="btn" data-go="7">See your result</button></div>
+  </section>
+
+  <!-- 6 RESULT -->
+  <section class="step" data-step="7" hidden>
+    <div class="stack" id="result"></div>
+    <div class="nav"><button class="btn ghost" data-go="6">Back to your budget</button><button class="btn" id="againBtn">Play again</button></div>
+  </section>
+
+  <footer>
+    <div class="eyebrow">About the figures</div>
+    <div class="status" id="status"></div>
+    <details><summary>Documents</summary><ul id="docs" class="small"></ul></details>
+    <p class="src">Built from the published budget papers and our Lancashire County Council budget model, which is still being built. Figures will change as it is completed. This is a game: it shows the size of the choices, not what the council will decide.</p>
+    <!--IMPRINT-->
+  </footer>
+</div>
+
+<div class="meter" id="meter" hidden>
+  <div class="in">
+    <div><div class="lbl" id="mLbl">Gap to close</div><div class="gap num" id="mGap"></div></div>
+    <div class="gtrack" aria-hidden="true"><i id="mBar"></i></div>
+    <div class="lbl" id="mSub" style="text-align:right"></div>
+  </div>
+</div>
+
+<script>
+const D = {"meta": {"model_run_id": "20261010T084648Z-493854267c1e4aac", "model_generated_at": "2026-10-10T08:46:49+00:00", "built_at": "2026-10-10T09:26Z", "play_year": "2027/28", "base_year": "2026/27", "next_year": "2028/29", "stages": [{"part": "Spending by service, funding, pressures", "status": "published", "note": "Full Council budget, 26 February 2026 (MTFS Table 3 and Annex 5)."}, {"part": "Economy dials and cards", "status": "model", "note": "Budget model B3 sensitivities, complete 10 October 2026. Linear: each dial is costed on its own base."}, {"part": "Savings delivery record", "status": "model", "note": "Budget model B2, from the outturn reports 2023/24 to 2025/26."}, {"part": "Council tax and funding", "status": "pending", "note": "B4 not built. The game uses the plan's own council tax and grant figures and the published 1% yield."}, {"part": "Reserves and SEND deficit", "status": "pending", "note": "B5 not built. Balances are the forecasts made at budget setting."}], "docs": {"s272627": {"title": "Revenue Budget 2026/27, report to Full Council, 26 February 2026", "url": "https://council.lancashire.gov.uk/documents/s272627/Report.pdf"}, "s272628": {"title": "Medium Term Financial Strategy, Appendix A to the Revenue Budget report, Full Council, 26 February 2026", "url": "https://council.lancashire.gov.uk/documents/s272628/Appendix%20A.pdf"}, "s281140": {"title": "Budget Framework 2027/28, Budget and Finance Scrutiny Committee, 29 June 2026", "url": "https://council.lancashire.gov.uk/documents/s281140/Report.pdf"}, "s236207": {"title": "Revenue Outturn 2023/24, Appendix A, Cabinet, 11 July 2024", "url": "https://council.lancashire.gov.uk/documents/s236207/Appendix%20A.pdf"}, "s259172": {"title": "Revenue Outturn 2024/25, Appendix A, Cabinet, 10 July 2025", "url": "https://council.lancashire.gov.uk/documents/s259172/Appendix%20A.pdf"}, "s281027": {"title": "Revenue Outturn 2025/26, Appendix A, Cabinet, 2 July 2026", "url": "https://council.lancashire.gov.uk/documents/s281027/Appendix%20A.pdf"}, "s285136": {"title": "Quarter 1 2026/27 Financial Monitoring, report to Cabinet, 3 September 2026", "url": "https://council.lancashire.gov.uk/documents/s285136/Report.pdf"}, "s285137": {"title": "Quarter 1 2026/27 Financial Monitoring, Appendix A, Cabinet, 3 September 2026", "url": "https://council.lancashire.gov.uk/documents/s285137/Appendix%20A.pdf"}, "s285195": {"title": "Efficiency Review Phase 2, Appendix A, Budget and Finance Scrutiny Committee, 2 September 2026", "url": "https://council.lancashire.gov.uk/documents/s285195/Appendix%20A.pdf"}}}, "band_d": {"value": 1801.75, "prior": 1735.79, "increase_pct": 3.8, "tax_base": 397989.95, "src": "s272627 Table 7 The Council Tax Requirement, p22"}, "ct_one_pct": {"value": 7.2, "src": "s272627 para 74, p27"}, "ct_plan_pct": {"value": 4.99, "src": "s272628 foreword, p3", "quote": "For modelling purposes in 2027/28, the increase in Council Tax remains at 4.99% but this decision will lie with Full Council when it meets in February 2027"}, "savings_required": {"value": 90.98, "src": "s281140 para 18, p6"}, "requirement": {"2026/27": 1329.312, "2027/28": 1383.641, "2028/29": 1469.425}, "requirement_src": "s272628 Table 3, p22", "plan_gap": {"2026/27": 0.0, "2027/28": 0.0, "2028/29": 17.32}, "plan_gap_src": "s272628 Table 3, p22", "steps": [{"id": "pay", "label": "Pay and Pensions", "change": 17.938, "src": "s272628 Table 3, p22"}, {"id": "inflation", "label": "Inflation and Cost Changes", "change": 32.71, "src": "s272628 Table 3, p22"}, {"id": "demand", "label": "Service Demand and Volume Pressures", "change": 23.244, "src": "s272628 Table 3, p22"}, {"id": "add_grant", "label": "Additional Grant", "change": 0.278, "src": "s272628 Table 3, p22"}, {"id": "savings", "label": "Savings", "change": 2.644, "src": "s272628 Table 3, p22"}, {"id": "reprofiled", "label": "Reprofiled Savings", "change": -5.288, "src": "s272628 Table 3, p22"}, {"id": "add_savings", "label": "Additional Savings", "change": -26.407, "src": "s272628 Table 3, p22"}, {"id": "sav_cont", "label": "Savings Contingency", "change": 2.62, "src": "s272628 Table 3, p22"}, {"id": "cap_fin", "label": "Capital financing", "change": 3.976, "src": "s272628 Table 3, p22"}, {"id": "other", "label": "Other", "change": 4.571, "src": "s272628 Table 3, p22"}, {"id": "strat_cont", "label": "Strategic Contingency", "change": -1.957, "src": "s272628 Table 3, p22"}], "funding": [{"id": "council_tax", "label": "Council Tax", "values": {"2026/27": 717.078, "2027/28": 761.895, "2028/29": 809.512}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "business_rates", "label": "Business Rates", "values": {"2026/27": 280.178, "2027/28": 285.669, "2028/29": 290.745}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "rsg", "label": "Revenue Support Grant", "values": {"2026/27": 235.293, "2027/28": 249.092, "2028/29": 264.863}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "better_care_grant", "label": "Better Care Grant", "values": {"2026/27": 67.786, "2027/28": 67.786, "2028/29": 67.786}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "epr_income", "label": "Extended Producer Responsibilities Income", "values": {"2026/27": 11.234, "2027/28": 11.234, "2028/29": 11.234}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "recovery_grant", "label": "Recovery Grant", "values": {"2026/27": 4.965, "2027/28": 4.965, "2028/29": 4.965}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "collection_fund", "label": "Collection Fund", "values": {"2026/27": 6.278, "2027/28": 3.0, "2028/29": 3.0}, "src": "s272628 Annex 5 continued (Funding), p93"}, {"id": "capital_receipts", "label": "Capital Receipts", "values": {"2026/27": 6.5, "2027/28": null, "2028/29": null}, "src": "s272628 Annex 5 continued (Funding), p93"}], "blocks": [{"id": "adults", "label": "Adult social care and public health", "directorates": ["Adults Health and Wellbeing Services"], "colour": "rose", "blurb": "Care and support for older and disabled adults: care homes, home care, supported living, direct payments. Public Health is shown as a net income line because it is funded by a ring-fenced grant."}, {"id": "children", "label": "Children, schools and families", "directorates": ["Education and Children's Services"], "colour": "blue", "blurb": "Children's social care, including children in care and children's homes, support to schools, and cultural services including museums and libraries. School budgets themselves are paid from a separate grant and are not in this total."}, {"id": "place", "label": "Roads, transport, waste and environment", "directorates": ["Place"], "colour": "green", "blurb": "Highways, street lighting, public transport, waste disposal, environment and economic growth."}, {"id": "backoffice", "label": "Running the council", "directorates": ["Resources", "Chief Executive Services"], "colour": "ochre", "blurb": "IT, finance, legal and democratic services, HR, property support and the chief executive's office."}, {"id": "corporate", "label": "Borrowing, pensions and central budgets", "directorates": ["Corporate Budgets"], "colour": "slate", "blurb": "Interest and repayment on past borrowing, past pension costs, the apprenticeship levy and central funding lines. Most of this cannot be cut in a single year."}], "lines": [{"name": "Adult Operations A", "directorate": "Adults Health and Wellbeing Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 294.755, "2027/28": 300.456, "2028/29": 314.531}, "cuttable": true, "max_cut": 15, "duty": "Statutory: Care Act 2014 duty to meet eligible needs.", "short": "Adult social care operations (published line A)", "delivery": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "adults"}, {"name": "Adult Operations B", "directorate": "Adults Health and Wellbeing Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 266.234, "2027/28": 280.286, "2028/29": 296.293}, "cuttable": true, "max_cut": 15, "duty": "Statutory: Care Act 2014 duty to meet eligible needs.", "short": "Adult social care operations (published line B)", "delivery": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "adults"}, {"name": "Leadership Team and Central Costs", "directorate": "Adults Health and Wellbeing Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 0.272, "2027/28": 2.727, "2028/29": 8.453}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Adult services leadership and central costs", "delivery": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "adults"}, {"name": "Public Health", "directorate": "Adults Health and Wellbeing Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": -9.058, "2027/28": -11.052, "2028/29": -11.531}, "cuttable": false, "duty": "Ring-fenced grant; shown as net income.", "short": "Public health (net of grant)", "delivery": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "adults"}, {"name": "Strategic and Integrated Commissioning", "directorate": "Adults Health and Wellbeing Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 6.298, "2027/28": 6.319, "2028/29": 6.34}, "cuttable": true, "max_cut": 25, "duty": "Supports statutory duties.", "short": "Buying and planning care with the NHS", "delivery": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "adults"}, {"name": "Children's Social Care", "directorate": "Education and Children's Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 216.493, "2027/28": 218.739, "2028/29": 221.978}, "cuttable": true, "max_cut": 15, "duty": "Statutory: Children Act 1989 duties to children in need and in care.", "short": "Children in care, fostering, children's homes, safeguarding", "delivery": {"pct": 96.7, "agreed": -30.041, "delivered": -29.061, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "children"}, {"name": "Education and Children's Services", "directorate": "Education and Children's Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 14.223, "2027/28": 14.311, "2028/29": 14.398}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Directorate leadership and central costs", "delivery": {"pct": 96.7, "agreed": -30.041, "delivered": -29.061, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "children"}, {"name": "Education Culture and Skills", "directorate": "Education and Children's Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 32.518, "2027/28": 30.927, "2028/29": 31.077}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Education support, culture and skills", "delivery": {"pct": 96.7, "agreed": -30.041, "delivered": -29.061, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "children"}, {"name": "Policy Commissioning and Children's Health", "directorate": "Education and Children's Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 2.492, "2027/28": 2.526, "2028/29": 2.558}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Children's commissioning and health", "delivery": {"pct": 96.7, "agreed": -30.041, "delivered": -29.061, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "children"}, {"name": "Communities and Engagement", "directorate": "Place", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 18.555, "2027/28": 18.54, "2028/29": 18.629}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Community services and engagement", "delivery": {"pct": 89.3, "agreed": -21.623, "delivered": -19.31, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "place"}, {"name": "Environment and Regulatory", "directorate": "Place", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 97.27, "2027/28": 97.382, "2028/29": 106.495}, "cuttable": true, "max_cut": 15, "duty": "Statutory: the county is the waste disposal authority.", "short": "Waste disposal, environment and regulatory services", "delivery": {"pct": 89.3, "agreed": -21.623, "delivered": -19.31, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "place"}, {"name": "Growth and Property", "directorate": "Place", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 23.618, "2027/28": 21.438, "2028/29": 20.433}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Economic growth and the council's buildings", "delivery": {"pct": 89.3, "agreed": -21.623, "delivered": -19.31, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "place"}, {"name": "Highways and Transport", "directorate": "Place", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 122.455, "2027/28": 125.891, "2028/29": 135.938}, "cuttable": true, "max_cut": 15, "duty": "Statutory: Highways Act 1980 duty to maintain the highway.", "short": "Roads, street lighting and transport", "delivery": {"pct": 89.3, "agreed": -21.623, "delivered": -19.31, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "place"}, {"name": "Digital Service", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 43.644, "2027/28": 43.059, "2028/29": 41.865}, "cuttable": true, "max_cut": 25, "duty": "", "short": "IT and digital services", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Finance and Commerce", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 12.643, "2027/28": 12.656, "2028/29": 12.663}, "cuttable": true, "max_cut": 25, "duty": "Includes the statutory chief finance officer.", "short": "Finance, procurement, commercial", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Law and Governance", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 21.725, "2027/28": 21.628, "2028/29": 21.3}, "cuttable": true, "max_cut": 20, "duty": "Includes the statutory monitoring officer.", "short": "Legal and democratic services", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "People Services", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 5.172, "2027/28": 4.983, "2028/29": 4.844}, "cuttable": true, "max_cut": 25, "duty": "", "short": "HR and workforce", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Resources", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 4.067, "2027/28": 4.072, "2028/29": 4.076}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Resources directorate central costs", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Strategy and Innovation", "directorate": "Resources", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 4.542, "2027/28": 4.364, "2028/29": 4.385}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Strategy, policy and performance", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Chief Executive Services", "directorate": "Chief Executive Services", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 1.297, "2027/28": 1.299, "2028/29": 1.301}, "cuttable": true, "max_cut": 25, "duty": "", "short": "Chief executive's office", "delivery": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "block": "backoffice"}, {"name": "Corporate Budgets (Funding and Grants)", "directorate": "Corporate Budgets", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 57.251, "2027/28": 81.242, "2028/29": 100.366}, "cuttable": false, "duty": "Central funding lines.", "short": "Central funding and grant lines", "delivery": null, "block": "corporate"}, {"name": "Corporate Budgets (Pensions and Apprenticeship Levy)", "directorate": "Corporate Budgets", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 13.775, "2027/28": 13.852, "2028/29": 13.932}, "cuttable": false, "duty": "Fixed by past service and national rules.", "short": "Past pension costs and the apprenticeship levy", "delivery": null, "block": "corporate"}, {"name": "Corporate Budgets (Treasury Management)", "directorate": "Corporate Budgets", "src": "s272628 Annex 5 Budget Summary by Service, p92", "values": {"2026/27": 79.071, "2027/28": 87.996, "2028/29": 99.101}, "cuttable": false, "duty": "Contractual: interest and repayment on borrowing.", "short": "Interest and repayment on borrowing", "delivery": null, "block": "corporate"}], "reserves": [{"name": "General Fund Unearmarked Reserve", "balance": 66.3, "measure": "forecast at budget setting", "src": "s272628 Table 1 Reserves (and Annex 11), p15"}, {"name": "Transitional reserve", "balance": 103.7, "measure": "forecast at budget setting", "src": "s272628 Table 1 Reserves (and Annex 11), p15"}], "delivery": {"Adults Health and Wellbeing Services": {"pct": 62.8, "agreed": -100.452, "delivered": -63.103, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "Education and Children's Services": {"pct": 96.7, "agreed": -30.041, "delivered": -29.061, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "Place": {"pct": 89.3, "agreed": -21.623, "delivered": -19.31, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "Resources": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}, "Chief Executive Services": {"pct": 97.3, "agreed": -38.372, "delivered": -37.317, "src": "s236207 Table 9; s259172 Table 2; s281027 Table 2", "basis": "savings delivered against savings agreed, 2023/24 to 2025/26 outturns pooled"}}, "delivery_2425": {"pct": 47.9, "src": "s259172 Table 2 p4"}, "delivery_q1": {"pct": 87.4, "src": "s285136 Table 2 p4"}, "dials": [{"id": "pay", "label": "Staff pay award", "unit_label": "points above plan", "min": -2, "max": 3, "step": 0.5, "group": "People", "per_unit": 5.4, "per_unit_alt": 4.476, "src": "LCC budget model B3, out/one_percent_table.csv (pay award), from s272627 Table 12 p27 (gross column); RO v4 2025/26 non-education employees (second column); survey 05 section 8"}, {"id": "lgps", "label": "Pension employer rate", "unit_label": "points above plan", "min": -2, "max": 3, "step": 0.5, "group": "People", "per_unit": 3.029, "per_unit_alt": null, "src": "LCC budget model B3, out/one_percent_table.csv (LGPS employer contribution rate), from Mercer valuations via survey 05; s272628 Annex 4 p90"}, {"id": "care_fees", "label": "Care fees paid to providers", "unit_label": "points above plan", "min": -2, "max": 4, "step": 0.5, "group": "Care", "per_unit": 6.446, "per_unit_alt": 5.031, "src": "LCC budget model B3, out/one_percent_table.csv (fee uplift, ALL), from data/ledger/asc_fee_cards.csv; data/ledger/q1_asc_client_groups.csv"}, {"id": "care_numbers", "label": "Adults in long-term care", "unit_label": "% above plan", "min": -3, "max": 5, "step": 0.5, "group": "Care", "per_unit": 6.446, "per_unit_alt": 5.031, "src": "LCC budget model B3, out/one_percent_table.csv (client numbers, ALL), from s285137 paras 1.02 to 1.07"}, {"id": "child_price", "label": "Children's placement prices", "unit_label": "points above plan", "min": -2, "max": 5, "step": 0.5, "group": "Care", "per_unit": 1.903, "per_unit_alt": 1.36, "src": "LCC budget model B3, out/one_percent_table.csv (placement unit cost, all children looked after), from RO 2025/26 children looked after gross (primary) and residential plus fostering (alternative); data/raw/children/s251_children_placements_2020_2025.csv"}, {"id": "child_homes", "label": "Children in children's homes", "unit_label": "children above plan", "min": -20, "max": 40, "step": 1, "group": "Care", "per_unit": 0.283, "per_unit_alt": null, "src": "LCC budget model B3, out/one_percent_table.csv (one child in a children's home for a year), from derived residential cost per child (S251 3.1.1 2024/25 over the average count); s285137 paras 2.02 to 2.03"}, {"id": "ehcp", "label": "EHC plans (school transport effect)", "unit_label": "% above plan", "min": -5, "max": 15, "step": 1, "group": "Care", "per_unit": 0.591, "per_unit_alt": 0.473, "src": "LCC budget model B3, out/one_percent_table.csv (EHC plans, number (SEN share of transport)), from data/raw/send/ehc_plans_caseload_legacy_2019_2026.csv; SEN share from S251 2024/25"}, {"id": "htst_price", "label": "School transport contract prices", "unit_label": "points above plan", "min": -3, "max": 8, "step": 0.5, "group": "Prices", "per_unit": 0.82, "per_unit_alt": 0.656, "src": "LCC budget model B3, out/one_percent_table.csv (home to school transport price index), from s285137 Table 2 p6 (2026/27 line) and s281027 p11 (2025/26 budget); survey 03 section 2"}, {"id": "waste_price", "label": "Waste contract prices", "unit_label": "points above plan", "min": -3, "max": 8, "step": 0.5, "group": "Prices", "per_unit": 0.863, "per_unit_alt": 0.909, "src": "LCC budget model B3, out/one_percent_table.csv (waste price index), from s285137 Table 3 p9 (Quarter 1 line) and s281027 p15 (2025/26 budget); RO v4"}, {"id": "energy", "label": "Gas and electricity", "unit_label": "pence per kWh", "min": -5, "max": 15, "step": 0.5, "group": "Prices", "per_unit": 1.269, "per_unit_alt": 0.44, "src": "LCC budget model B3, out/one_percent_table.csv (delivered energy price, both fuels), from data/raw/energy/EXPOSURE_METRICS.csv and EXPOSURE_PARAMETERS.csv (alternative column: electricity only)"}, {"id": "diesel", "label": "Diesel", "unit_label": "pence per litre", "min": -30, "max": 60, "step": 5, "group": "Prices", "per_unit": 0.087, "per_unit_alt": 0.102, "src": "LCC budget model B3, out/one_percent_table.csv (diesel price (ex VAT), contracted transport and own fuel), from arithmetic on data/raw/fuel/model_lcc_exposure.csv (county_extra_pounds_excl_lrl over delta_rise_to_date)"}, {"id": "interest", "label": "Interest on borrowing", "unit_label": "points above plan", "min": -1, "max": 2, "step": 0.25, "group": "Money", "per_unit": 10.7, "per_unit_alt": null, "src": "s272627 Table 12 Illustrative of 1% Variation in Key Input Variables, p28: Interest on borrowing plus or minus 1%"}, {"id": "slip", "label": "New 2027/28 savings that slip", "unit_label": "% of the new savings", "min": 0, "max": 60, "step": 5, "group": "Money", "per_unit": 0.26407, "per_unit_alt": null, "src": "s272628 Table 3, p22: Additional Savings rise from 21.608 to 48.015, so 26.407 new in 2027/28"}], "cards": [{"id": "pay1", "kind": "bad", "title": "Pay award beats the plan", "body": "The national pay award lands one point above what the budget allowed for.", "set": {"pay": 1}}, {"id": "fees1", "kind": "bad", "title": "Care market squeeze", "body": "Providers need one point more on fees than planned to keep beds and home care hours open.", "set": {"care_fees": 1}}, {"id": "carenum2", "kind": "bad", "title": "More people need care", "body": "Two per cent more adults in long-term care than the plan assumed.", "set": {"care_numbers": 2}}, {"id": "homes10", "kind": "bad", "title": "Ten more children in children's homes", "body": "Ten more children than planned need a children's home place for the year.", "set": {"child_homes": 10}}, {"id": "ehcp5", "kind": "bad", "title": "EHC plans keep rising", "body": "Five per cent more EHC plans than planned, and more children eligible for school transport.", "set": {"ehcp": 5}}, {"id": "taxi3", "kind": "bad", "title": "Taxi contracts re-let dearer", "body": "School transport routes come back three points dearer than planned.", "set": {"htst_price": 3}}, {"id": "energy5", "kind": "bad", "title": "Energy prices jump", "body": "Gas and electricity go up 5p per kWh across the council's buildings and street lights.", "set": {"energy": 5}}, {"id": "diesel20", "kind": "bad", "title": "Diesel up 20p a litre", "body": "Gritters, buses, school taxis and the council's own fleet all pay more at the pump.", "set": {"diesel": 20}}, {"id": "rates05", "kind": "bad", "title": "Interest rates rise", "body": "Borrowing costs half a point more than the plan assumed.", "set": {"interest": 0.5}}, {"id": "lgps1", "kind": "bad", "title": "Pension rate goes up", "body": "The employer pension contribution rate rises by one point.", "set": {"lgps": 1}}, {"id": "waste2", "kind": "bad", "title": "Waste contracts cost more", "body": "Waste disposal contract prices run two points above plan.", "set": {"waste_price": 2}}, {"id": "slip50", "kind": "bad", "title": "Savings slip", "body": "Half of the new savings planned for 2027/28 are not delivered on time. In 2024/25 the council delivered 48% of its savings.", "set": {"slip": 50}}, {"id": "energydown", "kind": "good", "title": "Energy prices fall", "body": "Gas and electricity come in 3p per kWh cheaper than planned.", "set": {"energy": -3}}, {"id": "ratesdown", "kind": "good", "title": "Rates come down", "body": "Borrowing costs half a point less than planned.", "set": {"interest": -0.5}}, {"id": "paydown", "kind": "good", "title": "Lower pay award", "body": "The pay award settles half a point below plan.", "set": {"pay": -0.5}}, {"id": "dieseldown", "kind": "good", "title": "Diesel eases", "body": "Diesel comes in 10p a litre cheaper than planned.", "set": {"diesel": -10}}, {"id": "homesdown", "kind": "good", "title": "Fewer children in residential care", "body": "Five fewer children need a children's home place, because more are placed with foster families.", "set": {"child_homes": -5}}], "dsg": {"2026/27": {"total": -171.41, "borrowing": -11.5, "src": "s272627 Table 6 The Forecast DSG Deficit 2026/27 to 2028/29, p12"}, "2027/28": {"total": -296.52, "borrowing": -17.5, "src": "s272627 Table 6 The Forecast DSG Deficit 2026/27 to 2028/29, p12"}, "2028/29": {"total": -419.9, "borrowing": -25.6, "src": "s272627 Table 6 The Forecast DSG Deficit 2026/27 to 2028/29, p12"}}, "new_savings": {"value": 26.407, "src": "s272628 Table 3, p22"}, "delivery_2526": {"Adults Health and Wellbeing Services": {"pct": 101.9, "agreed": -28.391, "delivered": -28.937, "src": "s281027 Table 2 p4", "basis": "savings delivered against savings agreed in 2025/26, including mitigations"}, "Education and Children's Services": {"pct": 98.1, "agreed": -11.398, "delivered": -11.182, "src": "s281027 Table 2 p4", "basis": "savings delivered against savings agreed in 2025/26, including mitigations"}, "Place": {"pct": 100.0, "agreed": -7.875, "delivered": -7.872, "src": "s281027 Table 2 p4", "basis": "savings delivered against savings agreed in 2025/26, including mitigations"}, "Resources": {"pct": 83.4, "agreed": -6.46, "delivered": -5.387, "src": "s281027 Table 2 p4", "basis": "savings delivered against savings agreed in 2025/26, including mitigations"}, "Chief Executive Services": {"pct": 83.4, "agreed": -6.46, "delivered": -5.387, "src": "s281027 Table 2 p4", "basis": "savings delivered against savings agreed in 2025/26, including mitigations"}}, "reform": {"since": "May 2025", "delivery_years": [{"fy": "2023/24", "point": "outturn", "agreed": 80.34, "delivered": 73.523, "pct": 91.5, "measure": "outturn", "src": "s236207 Annex A Table 9 p30", "era": "Before May 2025"}, {"fy": "2024/25", "point": "outturn", "agreed": 68.669, "delivered": 32.863, "pct": 47.9, "measure": "outturn", "src": "s259172 Table 2 p4", "era": "Before May 2025"}, {"fy": "2025/26", "point": "outturn", "agreed": 59.69, "delivered": 58.718, "pct": 98.4, "measure": "outturn including mitigations", "src": "s281027 Table 2 p4", "era": "Under Reform"}, {"fy": "2026/27", "point": "Q1", "agreed": 73.9, "delivered": 64.555, "pct": 87.4, "measure": "forecast", "src": "s285136 Table 2 p4", "era": "Under Reform"}], "ct_chosen": 3.8, "ct_max": 4.99, "band_d_at_max": 1822.41, "efficiency": {"themes": [{"theme": "Commissioning market shaping and contracts", "values": [2.167, 8.63, 8.856]}, {"theme": "Grants and Income", "values": [2.8, 2.93, 3.13]}, {"theme": "Workforce capacity and skills", "values": [0.923, 6.641, 6.945]}, {"theme": "Estates and Property", "values": [0.502, 1.686, 2.386]}, {"theme": "Pathways processes and productivity", "values": [-0.0, -0.0, 0.35]}], "totals": [6.392, 19.887, 21.667], "src": "s285195 section 2.3 table, p3"}, "unearmarked": {"name": "General Fund Unearmarked Reserve", "balance": 66.3, "measure": "forecast at budget setting", "src": "s272628 Table 1 Reserves (and Annex 11), p15"}}, "facts": {"ct_max_2026_27": {"value": "4.99", "src": "s272627 para 50, p21", "quote": "This means that the Council could raise Council Tax by a total of 4.99% in 2026/27 without breaching the referendum limit."}, "ct_cpi_reason": {"value": "3.80", "src": "s272627 summary viii, p2", "quote": "Proposing a Council Tax increase overall of 3.80% reflecting the September 2025 Consumer Price Index (CPI) increase published by Government"}, "ct_band_a_week": {"value": "0.85", "src": "s272627 summary viii, p2", "quote": "This is an additional charge representing 85p per week for a Band A property and 99p per week for a Band B property."}, "reserve_5pct": {"value": "5", "src": "s272627 summary vi, p2", "quote": "Maintaining the level of the General Fund Unearmarked Reserve for the Council at 5% of Net Expenditure in line with good practice in the Sector."}, "er_phase1_realised": {"value": "2.5", "src": "s285195 section 2.3, p3", "quote": "Phase 1 of the Efficiency Review contributed £6.4m of identified opportunities, with £2.5m already realised."}, "er_2026_27_delivered": {"value": "23", "src": "s285195 section 2.3, p3", "quote": "it is estimated that over £23m of the total savings requirement for 2026/27 has already been delivered"}, "dsg_override_end": {"value": "2028/29", "src": "s272627 section 25 statement item iv, p20", "quote": "expected to apply from 2028/29 when the statutory override expires"}, "outturn_2526_recurrent": {"value": "47.681", "src": "s281027 Table 2 note, p4", "quote": "Recurrent delivery totals £47.681m (80%) with a roll forward to 2026/27 of £12.009m."}}};
+const PY = D.meta.play_year, BY = D.meta.base_year, NY = D.meta.next_year;
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const BCOL = {rose:'var(--b-rose)', blue:'var(--b-blue)', green:'var(--b-green)', ochre:'var(--b-ochre)', slate:'var(--b-slate)'};
+const BANDS = {A:6/9,B:7/9,C:8/9,D:1,E:11/9,F:13/9,G:15/9,H:18/9};
+const nf = (x, dp) => Math.abs(x).toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const m = (x, dp=1) => (x<0?'-':'') + '£' + nf(x,dp) + 'm';
+const sm = (x, dp=1) => (x>0?'+':x<0?'-':'') + '£' + nf(x,dp) + 'm';
+const gbp = (x, dp=2) => '£' + x.toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtU = (v, d) => (v>0?'+':'') + v + ' ' + d.unit_label;
+
+const S = {rec:'pooled', step:1, guess:{}, revealed:false, band:'D', dials:{}, cards:[], redraws:1, cuts:{}, ct:D.ct_plan_pct.value, res:{}};
+D.blocks.forEach(b => S.guess[b.id] = 20);
+D.dials.forEach(d => S.dials[d.id] = 0);
+D.reserves.forEach(r => S.res[r.name] = 0);
+
+// derived
+const req = D.requirement[BY];
+const blockVal = id => D.lines.filter(l => l.block===id).reduce((a,l)=>a+l.values[BY],0);
+const blocks = D.blocks.map(b => ({...b, val: blockVal(b.id)}));
+const fund = id => D.funding.find(f => f.id===id);
+
+/* ---------- stepper ---------- */
+const STEPS = ['Guess','Your bill','Next year','Since May 2025','The economy','Your budget','Result'];
+function renderStepper(){
+  $('#stepper').innerHTML = STEPS.map((s,i)=>`<button data-go="${i+1}" class="${S.step===i+1?'on':S.step>i+1?'done':''}" ${S.step===i+1?'aria-current="step"':''}>${i+1}<b>${s}</b></button>`).join('');
+}
+function go(n){
+  S.step = n; $$('section.step').forEach(s => s.hidden = +s.dataset.step !== n);
+  $('#meter').hidden = n < 5; renderStepper();
+  if (n===7) renderResult();
+  window.scrollTo({top: $('#stepper').offsetTop - 10, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(+g.dataset.go); });
+
+/* ---------- 1 guess ---------- */
+function renderGuess(){
+  $('#guessPanel').innerHTML = blocks.map(b => `
+    <div class="gslider">
+      <span class="sw" style="background:${BCOL[b.colour]}"></span>
+      <label for="g_${b.id}">${esc(b.label)}</label>
+      <span class="gval" id="gv_${b.id}">£${S.guess[b.id]}</span>
+      <input type="range" min="0" max="100" step="1" id="g_${b.id}" value="${S.guess[b.id]}" aria-label="${esc(b.label)}">
+    </div>`).join('');
+  blocks.forEach(b => $('#g_'+b.id).addEventListener('input', e => rebalance(b.id, +e.target.value)));
+  renderCmp();
+}
+function rebalance(id, v){
+  const others = blocks.filter(b => b.id!==id);
+  const rest = 100 - v, cur = others.reduce((a,b)=>a+S.guess[b.id],0);
+  S.guess[id] = v;
+  let acc = 0;
+  others.forEach((b,i) => {
+    let nv = i===others.length-1 ? rest-acc : Math.round(cur ? S.guess[b.id]*rest/cur : rest/others.length);
+    nv = Math.max(0, nv); S.guess[b.id] = nv; acc += nv;
+  });
+  const tot = blocks.reduce((a,b)=>a+S.guess[b.id],0);
+  if (tot !== 100) { const fix = others.find(b => S.guess[b.id] + (100-tot) >= 0); if (fix) S.guess[fix.id] += 100-tot; }
+  blocks.forEach(b => { $('#g_'+b.id).value = S.guess[b.id]; $('#gv_'+b.id).textContent = '£'+S.guess[b.id]; });
+  renderCmp();
+}
+function renderCmp(){
+  $('#cmp').innerHTML = blocks.map(b => {
+    const real = b.val/req*100;
+    return `<div class="cmprow"><div class="row small" style="justify-content:space-between"><span>${esc(b.label)}</span><span class="num">you £${S.guess[b.id]}${S.revealed?` &middot; <b>actual £${real.toFixed(2)}</b>`:''}</span></div>
+      <div class="bars"><div class="bar g" style="width:${S.guess[b.id]}%;background:${BCOL[b.colour]}"></div>
+      <div class="bar" style="width:${S.revealed?real:0}%;background:${BCOL[b.colour]}"></div></div></div>`;
+  }).join('');
+  if (S.revealed){
+    const err = blocks.reduce((a,b)=>a+Math.abs(S.guess[b.id]-b.val/req*100),0)/2;
+    const sc = Math.max(0, Math.round(100-err*2));
+    $('#scoreBox').hidden = false; $('#score').textContent = sc + '%';
+    const big = blocks.reduce((a,b)=> Math.abs(S.guess[b.id]-b.val/req*100) > Math.abs(S.guess[a.id]-a.val/req*100) ? b : a);
+    const diff = S.guess[big.id] - big.val/req*100;
+    $('#scoreTxt').innerHTML = `Your biggest miss was <b>${esc(big.label.toLowerCase())}</b>: you ${diff>0?'over':'under'}estimated it by £${Math.abs(diff).toFixed(0)} in every £100. Adult social care alone takes <b>£${(blockVal('adults')/req*100).toFixed(0)}</b> of every £100.`;
+    $('#revealBtn').textContent = 'Revealed';
+    $('#revealBtn').disabled = true;
+  }
+  $('#guessSrc').textContent = `Actual split: net budget ${BY} by directorate, ${D.lines[0].src.split(',')[0]} Annex 5. Total ${m(req)}.`;
+}
+$('#revealBtn').addEventListener('click', () => { S.revealed = true; renderCmp(); });
+
+/* ---------- 2 bill ---------- */
+function renderBill(){
+  $('#bands').innerHTML = Object.keys(BANDS).map(k => `<button class="chip ${k===S.band?'on':''}" data-band="${k}" aria-pressed="${k===S.band}">Band ${k}</button>`).join('');
+  const bill = D.band_d.value * BANDS[S.band];
+  $('#billBig').textContent = gbp(bill);
+  $('#billWeek').textContent = `${gbp(bill/52)} a week. Band D is ${gbp(D.band_d.value)}, up ${D.band_d.increase_pct.toFixed(2)}% on last year.`;
+  $('#billBar').innerHTML = blocks.filter(b=>b.val>0).map(b => `<div style="flex-grow:${b.val};background:${BCOL[b.colour]}" title="${esc(b.label)}">${b.val/req>0.12?esc(b.label.split(',')[0]):''}</div>`).join('');
+  let html = `<div class="eyebrow" style="margin-bottom:8px">Your county council bill, itemised (Band ${S.band}). District, police, fire and parish charges not included.</div>`;
+  blocks.forEach(b => {
+    const share = b.val/req*bill;
+    const sub = D.lines.filter(l=>l.block===b.id).sort((a,c)=>c.values[BY]-a.values[BY]).map(l => `<div class="rl sub"><span>${esc(l.short||l.name)}</span><span>${gbp(l.values[BY]/req*bill)}</span><span>${m(l.values[BY])}</span></div>`).join('');
+    html += `<details><summary class="rl"><span><span class="sw" style="display:inline-block;vertical-align:-1px;margin-right:6px;background:${BCOL[b.colour]}"></span>${esc(b.label)}</span><span>${gbp(share)}</span><span>${gbp(share/52)}/wk</span></summary>
+      <p class="small muted" style="padding:6px 0 4px">${esc(b.blurb)}</p>${sub}</details>`;
+  });
+  html += `<div class="rl tot"><span>Total</span><span>${gbp(bill)}</span><span>${gbp(bill/52)}/wk</span></div><p class="src" style="margin-top:8px">Tap a line to open it. Right column in the detail is the whole service budget. Band D ${gbp(D.band_d.value)}: ${esc(D.band_d.src)}.</p>`;
+  $('#receipt').innerHTML = html;
+  const adults = blockVal('adults');
+  const perDay = req/365;
+  const homesD = D.dials.find(d=>d.id==='child_homes');
+  $('#facts').innerHTML = [
+    [`${m(perDay,2)}`, `spent every day of the year across the county`],
+    [`${m(adults/365,2)}`, `a day on adult social care and public health`],
+    homesD ? [`£${Math.round(homesD.per_unit*1000)}k`, `a year for one child in a children's home (budget model figure)`] : null,
+    [`${m(D.lines.find(l=>l.name==='Corporate Budgets (Treasury Management)').values[BY])}`, `a year on interest and repayment of past borrowing`],
+  ].filter(Boolean).map(([a,b]) => `<div class="fact"><b class="num">${a}</b><span class="small">${b}</span></div>`).join('');
+  $$('#bands .chip').forEach(c => c.addEventListener('click', () => { S.band = c.dataset.band; renderBill(); }));
+}
+function renderFunding(){
+  const cols = {council_tax:'var(--rose)', business_rates:'var(--b-blue)', rsg:'var(--b-green)', better_care_grant:'var(--b-ochre)'};
+  const ct = fund('council_tax').values[BY];
+  $('#ctCash').textContent = m(ct) + ` (${(ct/req*100).toFixed(0)}%)`;
+  $('#reqB').textContent = m(req);
+  $('#fundBar').innerHTML = D.funding.filter(f => (f.values[BY]||0) > 0).map(f => `<div style="flex-grow:${f.values[BY]};background:${cols[f.id]||'var(--b-slate)'}" title="${esc(f.label)} ${m(f.values[BY])}">${f.values[BY]/req>0.1?esc(f.label)+' '+m(f.values[BY],0):''}</div>`).join('');
+  $('#fundSrc').textContent = `Funding ${BY}: ${fund('council_tax').src}. Smaller pieces: ` + D.funding.filter(f=>(f.values[BY]||0)>0 && f.values[BY]/req<=0.1).map(f=>`${f.label} ${m(f.values[BY])}`).join(', ') + '.';
+  const d = D.dsg;
+  $('#dsgTxt').innerHTML = `Spending on children with special educational needs runs ahead of the government grant for it. The shortfall is held off the main budget under a national statutory override, which the council expects to end from ${D.facts.dsg_override_end.value}. The council forecasts it reaching <b class="num">${m(-d[PY].total,0)}</b> by the end of ${PY} and <b class="num">${m(-d[NY].total,0)}</b> by the end of ${NY}. Borrowing to carry it costs <b class="num">${m(-d[PY].borrowing)}</b> in ${PY}, and that cost does land on the main budget.`;
+  $('#dsgSrc').textContent = `Sources: ${d[PY].src}; ${D.facts.dsg_override_end.src}.`;
+}
+
+/* ---------- 3 next year ---------- */
+function wf(el, start, startLbl, items, endLbl){
+  let run = start; const all = [start];
+  items.forEach(i => { run += i.change; all.push(run); });
+  const lo = Math.min(...all)*0.985, hi = Math.max(...all)*1.003, sc = v => (v-lo)/(hi-lo)*100;
+  let html = `<div class="wfrow"><span class="lab"><b>${esc(startLbl)}</b></span><div class="wftrack"><i class="tot" style="left:0;width:${sc(start)}%"></i></div><span class="v">${m(start)}</span></div>`;
+  run = start;
+  items.forEach(i => {
+    const a = run, b = run + i.change; run = b;
+    html += `<div class="wfrow"><span class="lab">${esc(i.label)}</span><div class="wftrack"><i class="${i.change>0?'up':'down'}" style="left:${sc(Math.min(a,b))}%;width:${Math.max(.6,Math.abs(sc(b)-sc(a)))}%"></i></div><span class="v ${i.change>0?'pos':'neg'}">${sm(i.change)}</span></div>`;
+  });
+  html += `<div class="wfrow"><span class="lab"><b>${esc(endLbl)}</b></span><div class="wftrack"><i class="tot" style="left:0;width:${sc(run)}%"></i></div><span class="v">${m(run)}</span></div>`;
+  el.innerHTML = html;
+}
+function renderPlan(){
+  const growth = D.requirement[PY]-D.requirement[BY];
+  $('#growth').textContent = m(D.steps.filter(s=>['pay','inflation','demand'].includes(s.id)).reduce((a,s)=>a+s.change,0));
+  $('#netGrowth').textContent = m(growth);
+  const steps = [...D.steps].sort((a,b)=>b.change-a.change);
+  wf($('#wfCost'), D.requirement[BY], `Budget ${BY}`, steps, `Budget ${PY}`);
+  $('#wfSrc').textContent = `Each line is the change in MTFS Table 3 between the two years. ${D.requirement_src}.`;
+  const fsteps = D.funding.map(f => ({label: f.label + (f.id==='council_tax' ? ` (assumes ${D.ct_plan_pct.value}% rise)` : ''), change: (f.values[PY]||0) - (f.values[BY]||0)})).filter(f => Math.abs(f.change) > 0.0005).sort((a,b)=>b.change-a.change);
+  wf($('#wfFund'), D.requirement[BY], `Funding ${BY}`, fsteps, `Funding ${PY}`);
+  $('#wfFundSrc').textContent = `${D.funding[0].src}. Council tax rise for modelling: ${D.ct_plan_pct.src}. Council tax cash also grows with new homes.`;
+  $('#planFacts').innerHTML = [
+    [m(D.savings_required.value), `of savings the existing plan needs in ${PY} (${D.savings_required.src})`],
+    [`${D.ct_plan_pct.value}%`, `council tax rise already assumed in the plan for ${PY}`],
+    [m(D.plan_gap[NY]), `gap the plan has not yet closed in ${NY} (${D.plan_gap_src})`],
+    [`${D.delivery_2425.pct.toFixed(0)}%`, `of planned savings delivered in 2024/25 (${D.delivery_2425.src})`],
+  ].map(([a,b]) => `<div class="fact"><b class="num">${a}</b><span class="small">${esc(b)}</span></div>`).join('');
+}
+
+/* ---------- 4 since May 2025 ---------- */
+function renderReform(){
+  const R = D.reform, F = D.facts;
+  $('#delChart').innerHTML = R.delivery_years.map(y => `
+    <div class="cmprow">
+      <div class="row small" style="justify-content:space-between"><span><b>${y.fy}</b>${y.point==='Q1'?' (forecast at Quarter 1)':''} <span class="flag ${y.era==='Under Reform'?'good':'warn'}">${y.era}</span></span>
+      <span class="num">${m(y.delivered)} of ${m(y.agreed)} &middot; <b>${y.pct.toFixed(1)}%</b></span></div>
+      <div class="wftrack" style="height:26px"><i class="${y.era==='Under Reform'?'down':'tot'}" style="left:0;width:${Math.min(100,y.pct)}%;${y.era==='Under Reform'?'':'opacity:.45'}"></i></div>
+    </div>`).join('');
+  const y25 = R.delivery_years.find(y=>y.fy==='2025/26'), y24 = R.delivery_years.find(y=>y.fy==='2024/25'), q1 = R.delivery_years.find(y=>y.point==='Q1');
+  $('#delNote').textContent = `The 2025/26 savings were agreed in the February 2025 budget, before the election; Reform ran the council for almost all of that year. The ${y25.pct.toFixed(1)}% includes replacement savings found during the year; £${(+F.outturn_2526_recurrent.value).toFixed(1)}m of it is recurrent (${F.outturn_2526_recurrent.src}). The 2026/27 figure is a forecast. Sources: ` + R.delivery_years.map(y=>`${y.fy} ${y.src}`).join('; ') + '.';
+  $('#h24').textContent = y24.pct.toFixed(0)+'%'; $('#h25').textContent = y25.pct.toFixed(0)+'%';
+  const ctGap = (R.ct_max - R.ct_chosen) * D.ct_one_pct.value;
+  $('#reformFacts').innerHTML = [
+    [`${y24.pct.toFixed(0)}% to ${y25.pct.toFixed(0)}%`, `share of agreed savings delivered, 2024/25 to 2025/26`],
+    [m(y25.delivered), `of savings delivered in 2025/26, against ${m(y25.agreed)} agreed`],
+    [`${q1.pct.toFixed(0)}%`, `of the ${m(q1.agreed)} of 2026/27 savings forecast to be delivered at Quarter 1`],
+    [m(R.efficiency.totals[2]), `a year of Efficiency Review savings by 2028/29, built into the budget`],
+  ].map(([a,b]) => `<div class="fact"><b class="num">${a}</b><span class="small">${esc(b)}</span></div>`).join('');
+  $('#ctTxt').innerHTML = `Reform's first budget, in February 2026, raised the county's council tax by <b>${R.ct_chosen.toFixed(2)}%</b>, in line with September 2025 inflation. The council could have raised it by <b>${R.ct_max}%</b> without a referendum. At the maximum, Band D would be <b class="num">${gbp(R.band_d_at_max)}</b>; it is <b class="num">${gbp(D.band_d.value)}</b>, <b class="num">${gbp(R.band_d_at_max - D.band_d.value)}</b> a year less. Across the county that leaves about <b class="num">${m(ctGap)}</b> with households. The general reserve is kept at ${F.reserve_5pct.value}% of net spending: <b class="num">${m(R.unearmarked.balance)}</b>.`;
+  $('#ctSrc').textContent = `Sources: ${F.ct_cpi_reason.src}; ${F.ct_max_2026_27.src}; ${D.band_d.src}; ${F.reserve_5pct.src}; ${R.unearmarked.src}. Band D at the maximum and the county total are our arithmetic: last year's Band D raised by ${R.ct_max}%, and the gap of ${(R.ct_max-R.ct_chosen).toFixed(2)} points times the council's figure of about ${m(D.ct_one_pct.value)} per 1% (${D.ct_one_pct.src}).`;
+  $('#erTxt').innerHTML = `Phase 1 of the Efficiency Review found savings across contracts, grants and income, the workforce and the council's buildings. They are in the budget. By the September 2026 scrutiny report, <b>£${F.er_phase1_realised.value}m</b> of the 2026/27 amount had already been realised, and over <b>£${F.er_2026_27_delivered.value}m</b> of all 2026/27 savings had been delivered. Phase 2 is due in November 2026.`;
+  $('#erTable').innerHTML = `<thead><tr><th>Theme</th><th class="n">${BY}</th><th class="n">${PY}</th><th class="n">${NY}</th></tr></thead><tbody>` +
+    R.efficiency.themes.map(t => `<tr><td>${esc(t.theme)}</td>${t.values.map(v=>`<td class="n">${m(v)}</td>`).join('')}</tr>`).join('') +
+    `<tr><th>Total</th>${R.efficiency.totals.map(v=>`<th class="n">${m(v)}</th>`).join('')}</tr></tbody>`;
+  $('#erSrc').textContent = `Annual savings against the pre-review budget. Sources: ${R.efficiency.src}; ${F.er_phase1_realised.src}. The over £${F.er_2026_27_delivered.value}m is the council's own estimate.`;
+}
+
+/* ---------- 5 economy ---------- */
+const dialCost = id => { const d = D.dials.find(x=>x.id===id); return (S.dials[id]||0) * d.per_unit; };
+const shock = () => D.dials.reduce((a,d)=>a+dialCost(d.id),0);
+function cardCost(c){ return Object.entries(c.set).reduce((a,[k,v]) => a + v * D.dials.find(d=>d.id===k).per_unit, 0); }
+function shuffle(a){ a = [...a]; for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function applyCards(){
+  D.dials.forEach(d => S.dials[d.id] = 0);
+  S.cards.forEach(c => Object.entries(c.set).forEach(([k,v]) => S.dials[k] += v));
+  renderDials(); update();
+}
+function deal(cards){
+  S.cards = cards;
+  $('#deck').innerHTML = cards.map((c,i) => `
+    <button class="pcard ${c.kind}" id="pc${i}" aria-label="${esc(c.title)}">
+      <div class="in"><div class="face back"><span>LCC</span></div>
+      <div class="face front"><span class="tag">${c.kind==='bad'?'Pressure':'Relief'}</span><h4>${esc(c.title)}</h4><p>${esc(c.body)}</p><div class="cost">${sm(cardCost(c))}</div></div></div>
+    </button>`).join('');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  cards.forEach((c,i) => setTimeout(() => $('#pc'+i).classList.add('flip'), reduce ? 0 : 250 + i*380));
+  applyCards();
+}
+$('#drawBtn').addEventListener('click', () => { deal(shuffle(D.cards).slice(0,4)); $('#drawBtn').textContent = 'Draw again'; $('#redrawBtn').hidden = S.redraws < 1; });
+$('#redrawBtn').addEventListener('click', () => { if (S.redraws-- > 0) deal(shuffle(D.cards).slice(0,4)); $('#redrawBtn').hidden = true; });
+$('#stormBtn').addEventListener('click', () => deal(D.cards.filter(c => ['pay1','fees1','energy5','rates05','slip50'].includes(c.id))));
+function renderDials(){
+  const groups = [...new Set(D.dials.map(d=>d.group))];
+  $('#dials').innerHTML = groups.map(g => `<div class="dgroup"><div class="eyebrow">${esc(g)}</div>` + D.dials.filter(d=>d.group===g).map(d => `
+    <div class="dial">
+      <label for="d_${d.id}"><b>${esc(d.label)}</b> <span class="num muted small" id="dv_${d.id}">${fmtU(S.dials[d.id],d)}</span></label>
+      <span class="eff ${dialCost(d.id)>0?'pos':dialCost(d.id)<0?'neg':''}" id="de_${d.id}">${sm(dialCost(d.id),2)}</span>
+      <input type="range" id="d_${d.id}" min="${d.min}" max="${d.max}" step="${d.step}" value="${S.dials[d.id]}">
+      <div class="meta">Each 1 on this dial (${esc(d.unit_label)}) costs ${m(d.per_unit,3)} a year${d.per_unit_alt?` (alternative basis ${m(d.per_unit_alt,3)})`:''}. ${esc(d.src)}</div>
+    </div>`).join('') + '</div>').join('');
+  D.dials.forEach(d => $('#d_'+d.id).addEventListener('input', e => {
+    S.dials[d.id] = +e.target.value;
+    $('#dv_'+d.id).textContent = fmtU(S.dials[d.id], d);
+    const c = dialCost(d.id), el = $('#de_'+d.id); el.textContent = sm(c,2); el.className = 'eff ' + (c>0?'pos':c<0?'neg':'');
+    update();
+  }));
+}
+
+/* ---------- 5 levers ---------- */
+const rec = l => S.rec === 'reform' ? D.delivery_2526[l.directorate] : l.delivery;
+const delivered = l => (S.cuts[l.name]||0)/100 * l.values[PY] * Math.min(1, (rec(l)?.pct ?? 100)/100);
+const planned = l => (S.cuts[l.name]||0)/100 * l.values[PY];
+const ctDelta = () => (S.ct - D.ct_plan_pct.value) * D.ct_one_pct.value;
+const resUsed = () => Object.values(S.res).reduce((a,b)=>a+b,0);
+function closed(){ return D.lines.reduce((a,l)=>a+delivered(l),0) + ctDelta() + resUsed(); }
+function renderLevers(){
+  $('#ct').value = S.ct;
+  $('#resLevers').innerHTML = D.reserves.map((r,i) => `
+    <div class="lever"><label for="r${i}"><b>${esc(r.name)}</b><br><span class="small muted">Forecast balance ${m(r.balance)}</span></label><span class="num" id="rv${i}">${m(S.res[r.name])}</span>
+    <input type="range" id="r${i}" min="0" max="${r.balance}" step="0.5" value="${S.res[r.name]}"><div class="meta">${esc(r.measure)}, 31 March 2027. ${esc(r.src)}.</div></div>`).join('');
+  D.reserves.forEach((r,i) => $('#r'+i).addEventListener('input', e => { S.res[r.name] = +e.target.value; $('#rv'+i).textContent = m(S.res[r.name]); update(); }));
+  $('#levers').innerHTML = blocks.map(b => {
+    const ls = D.lines.filter(l => l.block===b.id).sort((a,c)=>c.values[PY]-a.values[PY]);
+    const dl = ls.find(l=>l.delivery) ? rec(ls.find(l=>l.delivery)) : null;
+    return `<details class="blk" ${b.id==='adults'?'open':''}><summary><h3 style="color:${BCOL[b.colour]}">${esc(b.label)}</h3><span class="num small">${m(blockVal(b.id))} in ${BY} &middot; <span id="bs_${b.id}"></span></span></summary>
+      ${dl?`<p class="small muted" style="margin-top:8px">Savings delivery record: <b>${dl.pct.toFixed(1)}%</b>${dl.pct>100?' (counted as 100%)':''} (${m(-dl.delivered)} of ${m(-dl.agreed)} agreed, ${esc(dl.basis)}; ${esc(dl.src)}).</p>`:''}
+      ${ls.map((l,i) => l.cuttable ? `
+        <div class="lever">
+          <label for="L_${b.id}_${i}"><b>${esc(l.short||l.name)}</b> <span class="muted small">${esc(l.name)} &middot; ${m(l.values[PY])}</span></label>
+          <span class="num" id="Lv_${b.id}_${i}"></span>
+          <input type="range" id="L_${b.id}_${i}" min="0" max="${l.max_cut}" step="1" value="${S.cuts[l.name]||0}" data-line="${esc(l.name)}">
+          <div class="meta">${l.duty?`<span class="duty">${esc(l.duty)}</span> `:''}Cut up to ${l.max_cut}%.</div>
+        </div>` : `<div class="lever"><span><b>${esc(l.short||l.name)}</b> <span class="muted small">${m(l.values[PY])}</span></span><span class="flag warn">Fixed</span><div class="meta">${esc(l.duty)}</div></div>`).join('')}
+    </details>`;
+  }).join('');
+  $$('#levers input[type=range]').forEach(inp => inp.addEventListener('input', e => { S.cuts[inp.dataset.line] = +e.target.value; update(); }));
+  update();
+}
+$('#ct').addEventListener('input', e => { S.ct = +e.target.value; update(); });
+$$('#recChips .chip').forEach(c => c.addEventListener('click', () => {
+  S.rec = c.dataset.rec; $$('#recChips .chip').forEach(x => { x.classList.toggle('on', x===c); x.setAttribute('aria-pressed', x===c); });
+  renderLevers();
+}));
+
+function update(){
+  const sh = shock(), cl = closed(), gap = sh - cl;
+  $('#shockTxt').textContent = S.cards.length || sh ? `Unplanned change to ${PY}: ${sm(sh)}` : '';
+  // ct
+  $('#ctVal').textContent = S.ct.toFixed(2) + '%';
+  const over = S.ct > D.ct_plan_pct.value + 1e-9;
+  $('#ctMeta').innerHTML = `Plan assumes ${D.ct_plan_pct.value}%. Each 1% raises about ${m(D.ct_one_pct.value)} (${esc(D.ct_one_pct.src)}). Your choice: <b class="${ctDelta()>=0?'neg':'pos'}">${sm(ctDelta())}</b> against plan. Band D becomes <b class="num">${gbp(D.band_d.value*(1+S.ct/100))}</b>.` +
+    (over ? ` <span class="flag bad">Referendum risk</span> Rises above a limit set by government each year need a local referendum. The limit for ${PY} is not yet set.` : '');
+  // lines
+  D.lines.forEach(l => {
+    const b = l.block, i = D.lines.filter(x=>x.block===b).sort((a,c)=>c.values[PY]-a.values[PY]).indexOf(l), el = $(`#Lv_${b}_${i}`);
+    if (el) el.innerHTML = (S.cuts[l.name]||0) ? `-${S.cuts[l.name]}% &middot; ${m(planned(l))} planned, <b>${m(delivered(l))}</b> likely` : '0%';
+  });
+  blocks.forEach(b => { const el = $('#bs_'+b.id); if (el) { const v = D.lines.filter(l=>l.block===b.id).reduce((a,l)=>a+delivered(l),0); el.textContent = v ? `you save ${m(v)}` : 'no change'; } });
+  // meter
+  $('#mGap').textContent = gap > 0.05 ? m(gap) : gap < -0.05 ? m(-gap) + ' spare' : 'Balanced';
+  $('#mLbl').textContent = gap > 0.05 ? 'Gap still to close' : 'Your budget';
+  $('#mBar').style.width = (sh > 0 ? Math.min(100, Math.max(0, cl/sh*100)) : 100) + '%';
+  $('#mBar').style.background = gap > 0.05 ? 'var(--rose)' : 'var(--good)';
+  $('#mSub').textContent = `Shock ${sm(sh)} · closed ${m(cl)}`;
+}
+
+/* ---------- 6 result ---------- */
+function renderResult(){
+  const sh = shock(), cl = closed(), gap = sh - cl;
+  const cuts = D.lines.filter(l => S.cuts[l.name]);
+  const cutP = cuts.reduce((a,l)=>a+planned(l),0), cutD = cuts.reduce((a,l)=>a+delivered(l),0);
+  const ok = gap <= 0.05;
+  const r = resUsed(), ny = D.plan_gap[NY] + r;
+  const bandD = D.band_d.value*(1+S.ct/100), bandDplan = D.band_d.value*(1+D.ct_plan_pct.value/100);
+  const flags = [];
+  if (S.ct > D.ct_plan_pct.value + 1e-9) flags.push(['bad','Referendum risk']);
+  if (r > 0) flags.push(['warn', `Reserves used: ${m(r)}`]);
+  if (cutP - cutD > 0.5) flags.push(['warn', `${m(cutP-cutD)} of your cuts at risk`]);
+  if (!sh) flags.push(['warn','No cards drawn']);
+  const statutory = cuts.filter(l => /Statutory/.test(l.duty||''));
+  if (statutory.length) flags.push(['warn', `Cuts to ${statutory.length} statutory service line${statutory.length>1?'s':''}`]);
+  const share = `Lancashire Budget Challenge, ${PY}: shock ${sm(sh)}; I closed ${m(cl)} (cuts ${m(cutD)} likely, council tax ${S.ct.toFixed(2)}%, reserves ${m(r)}). ${ok?'Budget balanced.':'Gap left: '+m(gap)+'.'} Next year starts ${m(ny)} short.`;
+  $('#result').innerHTML = `
+    <div class="eyebrow">Step 7 &middot; Result</div>
+    <div class="row" style="gap:24px"><span class="stamp ${ok?'ok':'no'}">${ok?'Budget set':'Not balanced'}</span>
+      <p class="lede">${ok ? `You balanced ${PY}. ${r>0?`But ${m(r)} of it came from reserves, which only pay once.`:'Without touching reserves.'}` : `You are ${m(gap)} short. The council is legally required to set a balanced budget, so this one could not go to Full Council.`}</p></div>
+    <div class="row">${flags.map(([k,t])=>`<span class="flag ${k}">${esc(t)}</span>`).join('')}</div>
+    <div class="grid2">
+      <div class="panel stack"><h3>Where the gap came from</h3>
+        <div class="tscroll"><table class="t"><tbody>
+        ${D.dials.filter(d=>S.dials[d.id]).map(d=>`<tr><td>${esc(d.label)} <span class="muted small">${fmtU(S.dials[d.id],d)}</span></td><td class="n ${dialCost(d.id)>0?'pos':'neg'}">${sm(dialCost(d.id),2)}</td></tr>`).join('') || '<tr><td class="muted">Nothing drawn</td><td></td></tr>'}
+        <tr><th>Total shock</th><th class="n">${sm(sh)}</th></tr></tbody></table></div></div>
+      <div class="panel stack"><h3>How you closed it</h3>
+        <div class="tscroll"><table class="t"><tbody>
+        ${cuts.sort((a,b)=>planned(b)-planned(a)).map(l=>`<tr><td>${esc(l.short||l.name)} <span class="muted small">-${S.cuts[l.name]}%</span></td><td class="n">${m(planned(l))} planned</td><td class="n"><b>${m(delivered(l))}</b></td></tr>`).join('')}
+        <tr><td>Council tax at ${S.ct.toFixed(2)}%</td><td></td><td class="n">${sm(ctDelta())}</td></tr>
+        <tr><td>Reserves</td><td></td><td class="n">${m(r)}</td></tr>
+        <tr><td colspan="3" class="src">Cuts counted at the ${S.rec==='reform'?'2025/26 (under Reform)':'2023/24 to 2025/26'} delivery record.</td></tr>
+        <tr><th>Total closed</th><th></th><th class="n">${m(cl)}</th></tr></tbody></table></div></div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b class="num">${gbp(bandD)}</b><span class="small">Band D county bill in ${PY}, ${bandD>=bandDplan?'+':'-'}${gbp(Math.abs(bandD-bandDplan))} a year against the plan</span></div>
+      <div class="fact"><b class="num">${gbp((bandD-D.band_d.value)/52)}</b><span class="small">a week more than ${BY} at Band D</span></div>
+      <div class="fact"><b class="num">${m(ny)}</b><span class="small">gap waiting in ${NY}: the plan's own ${m(D.plan_gap[NY])} plus the reserves you used</span></div>
+      <div class="fact"><b class="num">${m(cutP-cutD)}</b><span class="small">of your planned cuts the delivery record says will not arrive</span></div>
+    </div>
+    <div class="panel stack"><h3>Share your budget</h3><p class="mono small" id="shareTxt">${esc(share)}</p><div class="row"><button class="btn ghost" id="copyBtn">Copy</button><span class="small muted" id="copyMsg"></span></div></div>
+    <p class="src">This is a game built on the council's published plan and a budget model still under construction. It shows the size of the choices, not what the council will decide.</p>`;
+  $('#copyBtn').addEventListener('click', () => {
+    navigator.clipboard?.writeText(share).then(() => $('#copyMsg').textContent = 'Copied', () => { getSelection().selectAllChildren($('#shareTxt')); $('#copyMsg').textContent = 'Selected: press copy'; })
+      ?? (getSelection().selectAllChildren($('#shareTxt')), $('#copyMsg').textContent = 'Selected: press copy');
+  });
+}
+$('#againBtn').addEventListener('click', () => {
+  S.cuts = {}; S.ct = D.ct_plan_pct.value; D.reserves.forEach(r => S.res[r.name] = 0); S.cards = []; S.redraws = 1;
+  D.dials.forEach(d => S.dials[d.id] = 0); $('#deck').innerHTML = ''; $('#drawBtn').textContent = 'Draw four cards'; $('#redrawBtn').hidden = true;
+  renderDials(); renderLevers(); go(5);
+});
+
+/* ---------- footer ---------- */
+function renderFooter(){
+  $('#runid').textContent = `Last built ${D.meta.built_at.slice(0,10)}.`;
+  const k = {published:'good', model:'warn', pending:'bad'}, t = {published:'Council figures', model:'Our model', pending:'Coming next'};
+  $('#status').innerHTML = D.meta.stages.map(s => `<div><span class="flag ${k[s.status]}">${t[s.status]}</span><span><b>${esc(s.part)}.</b> ${esc(s.note)}</span></div>`).join('');
+  $('#docs').innerHTML = Object.entries(D.meta.docs).map(([id,d]) => `<li><span class="mono">${id}</span>: Lancashire County Council (2026). <a href="${d.url}" target="_blank" rel="noopener">${esc(d.title)}</a>.</li>`).join('');
+}
+
+$$('.py').forEach(e => e.textContent = PY); $$('.by').forEach(e => e.textContent = BY);
+$('#hdrReq').textContent = '£' + (req/1000).toFixed(3) + ' billion';
+renderStepper(); renderReform(); renderGuess(); renderBill(); renderFunding(); renderPlan(); renderDials(); renderLevers(); renderFooter();
+</script>
