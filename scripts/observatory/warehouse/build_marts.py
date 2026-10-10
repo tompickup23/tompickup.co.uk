@@ -188,6 +188,20 @@ def build_register_lancs(con, h, args):
     # noise, so this is asserted before anything else runs.
     baseline = _production_register_summary()
     if baseline:
+        # The counts below only mean something when both sides read the same
+        # register month. On 8 September 2026 they did not: Stage 1 built the
+        # baseline from 2026-09-01 and deleted the zip before bronze could land
+        # it, so the mart fell back to 2026-08-01 and the frame check failed by
+        # one row between two different months. Check the month first, so a
+        # snapshot gap is named as one and never read as a rule fault.
+        if baseline.get("snapshot_date") != snap:
+            raise SystemExit(
+                f"FATAL: register snapshot mismatch: the mart reads silver "
+                f"ch_register {snap}, the production register_summary is "
+                f"{baseline.get('snapshot_date')}. Land the "
+                f"{baseline.get('snapshot_date')} BasicCompanyData zip in bronze "
+                f"(it is kept in /opt/observatory/work until bronze has it) "
+                f"and rerun; the frame counts are not comparable until then.")
         SV.assert_equal("lancs frame vs production register_summary",
                         rows, baseline["lancs_companies"])
         SV.assert_equal("CIC count vs production register_summary",
