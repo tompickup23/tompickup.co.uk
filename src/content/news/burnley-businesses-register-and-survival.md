@@ -1,9 +1,9 @@
 ---
 title: "Burnley's businesses: fewer failing than the register suggests, but new firms do not last"
 date: 2026-10-27
-description: "Strip out two addresses used by company formation agents and Burnley's register looks healthier. The weakness is elsewhere: new businesses in Burnley are less likely to survive five years than in any nearby area. The official figures."
+description: "Strip out two insolvency practitioners' addresses and Burnley's register looks healthier. The weakness is elsewhere: new businesses in Burnley are less likely to survive five years than in any nearby area. The official figures."
 seoTitle: "Burnley's businesses: the register, survival and premises"
-seoDescription: "Remove two formation agent addresses and Burnley's company register looks healthier. New firms are less likely to last five years. The official figures."
+seoDescription: "Remove two insolvency practitioners' addresses and Burnley's register looks healthier. New firms are less likely to last five years. The official figures."
 category: "Burnley"
 subcategory: "Economy"
 tags: ["burnley", "economy", "business", "data", "burnley-economy"]
@@ -26,14 +26,14 @@ data:
       url: "https://download.companieshouse.gov.uk/en_output.html"
     - label: "VOA stock of properties, March 2026"
       url: "https://www.gov.uk/government/statistics/non-domestic-rating-stock-of-properties-march-2026"
-  method: "Every figure is for Burnley borough, the fifteen wards, unless it says otherwise. Company counts use the registered office, which is not always where a business trades. Each figure is logged in a register with its source, period and arithmetic. No company is named. Nothing is estimated."
+  method: "Every figure is for Burnley borough, the fifteen wards, unless it says otherwise. Company counts use the registered office, which is not always where a business trades. Each figure is logged in a register with its source, period and arithmetic. Companies are named only with the headcount in their own filed accounts. Nothing is estimated."
 featured: false
 draft: false
 ---
 
 *By Tom Pickup, Lancashire county councillor and Cabinet Member for Adult Social Care.*
 
-Burnley's company register makes more of its companies look like failures than the figures support. Two addresses used by company formation agents hold hundreds of companies that are no longer active. They almost double the share that look like failures. Take them out and Burnley looks much like the rest of Lancashire. The real weakness is somewhere else: new businesses in Burnley are less likely to last.
+Burnley's company register makes more of its companies look like failures than the figures support. Two addresses used by insolvency practitioners hold hundreds of companies that are no longer active. They almost double the share that look like failures. Take them out and Burnley looks much like the rest of Lancashire. The real weakness is somewhere else: new businesses in Burnley are less likely to last.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
@@ -44,7 +44,7 @@ Burnley's company register makes more of its companies look like failures than t
 </div>
 <div class="viz-stat teal">
 <span class="value xl">8.9%</span>
-<span class="label">Companies not active, without the two formation agent postcodes</span>
+<span class="label">Companies not active, without the two insolvency practitioner addresses</span>
 <span class="sublabel">17.3% on the register as published. 1 July 2026</span>
 </div>
 <div class="viz-stat orange">
@@ -66,12 +66,16 @@ Burnley's company register makes more of its companies look like failures than t
 
 On the Companies House register of 1 July 2026, 5,263 companies had their registered office in Burnley. 17.3% of them, 909 companies, were not active: awaiting strike off, in liquidation, in administration or similar.<sup class="cite"><a href="#source-2">2</a></sup>
 
-Two postcodes in the borough are used by company formation agents. Between them they hold 504 of those companies, and 487 of the 909 that are not active: more than half. Both addresses are registered offices, not trading premises. Take those two postcodes out and Burnley has 4,759 companies, of which 8.9% are not active. Across the fourteen Lancashire council areas, with the same kind of addresses removed, the figure is 8.2%.
+Two postcodes in the borough are the offices of insolvency practitioners. When a company is wound up, its registered address is usually moved to its liquidator's office, wherever it traded. Between them the two addresses hold 504 of Burnley's companies, and 487 of the 909 that are not active: more than half.
+
+I checked a sample at Companies House. Of 52 companies in liquidation at the two postcodes, 46 had their liquidator at the same address. At the larger of the two, all 26 checked had been registered outside the BB postcode area, which covers Blackburn, Burnley and the towns around them, before they were wound up. Their registered offices had been elsewhere in the country.
+
+Take the two postcodes out, which also removes any of their companies that did trade in Burnley, and Burnley has 4,759 companies, of which 8.9% are not active. Across the fourteen Lancashire council areas, with the known clusters of such addresses removed, the figure is 8.2%.
 
 Every sector looks healthier once the two postcodes are removed. In accommodation and food the share not active falls from 30.7% to 19.6%; in manufacturing from 19.0% to 7.3%.
 
 <div class="viz-panel">
-<div class="viz-label teal">Share of Burnley's companies that are not active, with and without the two formation agent postcodes</div>
+<div class="viz-label teal">Share of Burnley's companies that are not active, with and without the two insolvency practitioner addresses</div>
 <div style="margin-top:10px; font-size:0.875rem; font-weight:600;">All companies</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Register as published</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:49.4%; background:#8b928d;"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">17.3%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Without the two postcodes</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:25.4%; background:var(--chart-1);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">8.9%</div></div><div style="margin-top:10px; font-size:0.875rem; font-weight:600;">Accommodation and food</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Register as published</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:87.7%; background:#8b928d;"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">30.7%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Without the two postcodes</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:56.0%; background:var(--chart-1);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">19.6%</div></div><div style="margin-top:10px; font-size:0.875rem; font-weight:600;">Construction</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Register as published</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:68.0%; background:#8b928d;"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">23.8%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Without the two postcodes</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:26.9%; background:var(--chart-1);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">9.4%</div></div><div style="margin-top:10px; font-size:0.875rem; font-weight:600;">Wholesale and retail</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Register as published</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:47.4%; background:#8b928d;"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">16.6%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Without the two postcodes</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:27.4%; background:var(--chart-1);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">9.6%</div></div><div style="margin-top:10px; font-size:0.875rem; font-weight:600;">Manufacturing</div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Register as published</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:54.3%; background:#8b928d;"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">19.0%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Without the two postcodes</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:20.9%; background:var(--chart-1);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">7.3%</div></div>
 <div class="text-dim" style="font-size:0.875rem; margin-top:12px;">Companies with a registered office in Burnley on the Companies House register of 1 July 2026. Not active means struck off pending, in liquidation, in administration or similar. Source: Companies House, Free Company Data Product, 1 July 2026, as analysed for the growth plan.</div>
 </div>
@@ -102,7 +106,9 @@ These survival figures come from the ONS's 2024 edition. The 2025 edition is due
 
 Most of Burnley's companies are small. Of the 4,759 outside the two postcodes, 1,385 file micro entity accounts and 1,472 small company accounts. Four file medium sized accounts and 100 file full or group accounts. Most of the rest have filed no accounts yet or file as dormant.<sup class="cite"><a href="#source-2">2</a></sup>
 
-The largest employers in the town are not all in these numbers. Companies registered outside the borough are not counted here, even where their plant is in Burnley, and public bodies such as the hospital trust and the council are not companies. A count of local companies will understate the largest employers.
+Measured by the average headcount in their latest accounts filed by July 2026, counting staff wherever they work and not jobs in Burnley, the companies registered here that report the most employees are Nuestra Familia Restaurants (1,119), 0404 Investments (491), Burnley Football and Athletic Company (408), Crow Wood Leisure (408), James Hargreaves (Plumbers' Merchants) (376) and What More UK (289). Each was checked against the company's own accounts at Companies House.
+
+The largest employers in the town are not all in these numbers. Companies registered outside the borough are not counted here, even where their plant is in Burnley, and public bodies such as the hospital trust and the council are not companies. A count of local companies will miss some of the largest employers.
 
 ---
 
@@ -136,4 +142,4 @@ Among hospitality companies (accommodation, food, arts and recreation), 16.5% ar
 
 The business base is not collapsing. It is small, its register is cluttered, and its new firms close more often than England's. A plan for Burnley's economy has to help new businesses survive their first five years, not only attract new ones.
 
-The evidence behind this article, with every source file and the arithmetic, is on the [business page](/burnley-economy/business/) of the Burnley's economy collection on this site. Every figure here is for Burnley borough unless it says otherwise. Each one is logged in a register with its source and period. No company is named. Nothing is estimated.
+The evidence behind this article, with every source file and the arithmetic, is on the [business page](/burnley-economy/business/) of the Burnley's economy collection on this site. Every figure here is for Burnley borough unless it says otherwise. Each one is logged in a register with its source and period. Nothing is estimated.
