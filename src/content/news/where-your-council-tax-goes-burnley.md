@@ -39,15 +39,20 @@ data:
       url: "https://tompickup.co.uk/lcc-budget-game/"
   method: "Every figure is for 2026/27, the bills now being paid, and is copied from the source named or worked out from it. Council tax is not earmarked to services, apart from the adult social care precept, so the amounts per service share out each body's part of your bill in proportion to its net budget. They picture the budget; they are not an invoice. The adult social care groups are at Quarter 1 2026/27, a later point than the February budget."
 featured: false
-draft: true
+draft: false
 ---
 
 Lancashire County Council is asking residents what matters most in next year's budget. The survey is open until **2 December 2026**. Before you answer it, here is where the council tax you pay now actually goes, from a home in Burnley.
 
 <div class="viz-info">
-<!-- VIDEO: add the YouTube embed here once the 16:9 version is uploaded, then set draft: false. -->
 The short film below covers the same ground in under two minutes. Its voiceover is a synthetic voice, including the lines spoken for me.
 </div>
+
+<div style="position:relative;aspect-ratio:16/9;width:100%;margin:1.5rem 0;">
+<iframe src="https://www.youtube-nocookie.com/embed/Yveb3YoXdYc" title="Where does your council tax money go in Burnley?" style="position:absolute;inset:0;width:100%;height:100%;border:0;" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+[Watch on YouTube](https://youtu.be/Yveb3YoXdYc)
 
 ## Most Burnley homes are Band A
 
