@@ -1,6 +1,6 @@
 ---
 title: "Burnley's businesses: fewer failing than the register suggests, but new firms do not last"
-date: 2026-10-27
+date: 2026-10-25
 description: "Strip out two insolvency practitioners' addresses and Burnley's register looks healthier. The weakness is elsewhere: new businesses in Burnley are less likely to survive five years than in any nearby area. The official figures."
 seoTitle: "Burnley's businesses: the register, survival and premises"
 seoDescription: "Remove two insolvency practitioners' addresses and Burnley's register looks healthier. New firms are less likely to last five years. The official figures."
