@@ -146,7 +146,7 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
   <section aria-labelledby="pr-title">
     <h2 id="pr-title">Premises and business rates reliefs</h2>
     <div class="prose">
-      <p>The Valuation Office Agency counted {num(pv('all', 'hereditaments_count', dates[dates.length - 1]))} rated business premises in Burnley at {dates[dates.length - 1]}. Retail premises held steady in number while their rateable value fell. The industrial count more than doubled between the 2017 and 2023 lists. The research traced that to a large number of very small storage units, not new factory floor space.</p>
+      <p>The Valuation Office Agency counted {num(pv('all', 'hereditaments_count', dates[dates.length - 1]))} rated business premises in Burnley at {dates[dates.length - 1]}. Retail premises held steady in number while their rateable value fell. The industrial count more than doubled between 31 March 2017 and 31 March 2023; the growth plan research traced that to a large number of very small storage units on the 2017 list, not new factory floor space.</p>
       <p>The council's ratepayer file of 27 July 2026 has {num(accounts.value)} accounts. The chart counts the accounts carrying each relief; an account can carry more than one, and {num(empty.value)} accounts are flagged empty.</p>
     </div>
     <Panel c={pr}>
