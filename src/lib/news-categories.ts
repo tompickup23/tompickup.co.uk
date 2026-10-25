@@ -10,6 +10,7 @@ export const NEWS_AREAS = [
 
 export const NEWS_TOPICS = [
   { id: 'public-spending', title: 'Public spending' },
+  { id: 'economy', title: 'Economy & jobs' },
   { id: 'housing', title: 'Housing & ownership' },
   { id: 'health-benefits', title: 'Health & benefits' },
   { id: 'crime-policing', title: 'Crime & policing' },
@@ -39,6 +40,7 @@ export function newsTopic(post: Post): typeof NEWS_TOPICS[number] {
   else if (subcategory === 'Public debates' || tags.includes('public-debates')) id = 'public-debates';
   else if (tags.includes('lgr') || tags.includes('local-government')) id = 'local-government';
   else if (subcategory === 'Adult Social Care' || tags.includes('adult-social-care')) id = 'adult-social-care';
+  else if (subcategory === 'Economy' || subcategory === 'Jobs') id = 'economy';
   else if (subcategory === 'Housing') id = 'housing';
   else if (subcategory === 'Health' || subcategory === 'Benefits') id = 'health-benefits';
   else if (subcategory === 'Crime') id = 'crime-policing';

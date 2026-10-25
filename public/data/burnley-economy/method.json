@@ -1,0 +1,1192 @@
+{
+ "$meta": {
+  "panel": "method",
+  "title": "Method, codebook, sources and revision log",
+  "page": "/burnley-economy/method/",
+  "measures": [],
+  "publisher": "this collection",
+  "table": "contracts and their sources",
+  "edition": "contracts of 2026-10-25",
+  "access_date": "2026-10-25",
+  "citation": "this collection",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/neighbours.csv",
+    "sha256": "3fc8cad47eacbef68c43b29aee888a61d37cb345f537dd82a3a8210d53cb553e"
+   },
+   {
+    "file": "Burnley_Growth_work/H_collection/revision_log.csv",
+    "sha256": "58051c4753cc5ba90e568b800c99c119384f9bc4094707578d99ce107f345f54"
+   }
+  ],
+  "vintage": "",
+  "caveat": "Every panel's file carries the SHA-256 of each file it was built from; each official source row carries the SHA-256 of the file downloaded from the publisher.",
+  "next_release": "",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
+ },
+ "rows": [],
+ "codebook": [
+  {
+   "measure": "li01_employment_rate_16_64",
+   "definition": "People aged 16 to 64 in employment as a percentage of all residents aged 16 to 64, APS",
+   "unit": "percent",
+   "panel": "tile-employment",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "els_employment_rate_great_britain",
+   "definition": "ONS Explore Local Statistics indicator, employment rate",
+   "unit": "%",
+   "panel": "tile-employment",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "li01_inactivity_rate_16_64",
+   "definition": "Economically inactive residents aged 16 to 64 as a percentage of all residents aged 16 to 64, APS",
+   "unit": "percent",
+   "panel": "tile-inactivity",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "definition": "ONS Explore Local Statistics indicator, economic inactivity rate",
+   "unit": "%",
+   "panel": "tile-inactivity",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "claimant_count_people_first_published",
+   "definition": "People claiming Jobseeker's Allowance plus Universal Credit claimants required to search for work, on the second Thursday of the month, by place of residence, rounded to the nearest 5 (CC01 notes)",
+   "unit": "persons",
+   "panel": "tile-claimant",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "els_claimant_count",
+   "definition": "ONS Explore Local Statistics indicator, claimant count as a percentage of residents aged 16 to 64",
+   "unit": "%",
+   "panel": "tile-claimant",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+   "definition": "ASHE gross weekly pay, median of full time employees on adult rates whose pay was not affected by absence, April, employee jobs located in the area (place of work)",
+   "unit": "GBP per week",
+   "panel": "tile-pay",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "ashe_resident_ft_weekly_pay_gross_median",
+   "definition": "ASHE gross weekly pay, median of full time employees on adult rates whose pay was not affected by absence, April, employees living in the area (place of residence)",
+   "unit": "GBP per week",
+   "panel": "tile-pay",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "active_enterprises",
+   "definition": "Active enterprises (turnover or employment at any time in the year; note 1)",
+   "unit": "enterprises",
+   "panel": "tile-enterprises",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "li01_population_16_64",
+   "definition": "Residents aged 16 to 64 (the denominator ONS gives for the employment and inactivity rates)",
+   "unit": "persons",
+   "panel": "tile-enterprises",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "definition": "Gross domestic product per head of population at current market prices, by workplace output and resident population (ONS regional GDP, as republished by Explore Local Statistics)",
+   "unit": "GBP",
+   "panel": "tile-gdp-per-head",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "li01_jobs_density",
+   "definition": "Jobs located in the area per resident aged 16 to 64",
+   "unit": "ratio",
+   "panel": "overview-gaps",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "rti_payrolled_employees",
+   "definition": "People receiving pay through PAYE in the month (average of daily counts), by the employee's place of residence, all industries, not seasonally adjusted; people, not jobs",
+   "unit": "persons",
+   "panel": "jp-payroll",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "online_job_adverts_new",
+   "definition": "New online job adverts first seen in the calendar month with a work location assigned to the area (Textkernel), all occupations; a flow of new adverts, not a stock of vacancies",
+   "unit": "adverts",
+   "panel": "jp-adverts",
+   "codebook": "A_labour_pay/measures.csv"
+  },
+  {
+   "measure": "births",
+   "definition": "Enterprises present in the year and absent in the two years before",
+   "unit": "enterprises",
+   "panel": "bu-demography",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "deaths",
+   "definition": "Enterprises that ceased trading in the year",
+   "unit": "enterprises",
+   "panel": "bu-demography",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "high_growth_enterprises",
+   "definition": "Enterprises with average employment growth above 20% a year over three years and 10 or more employees at the start",
+   "unit": "enterprises",
+   "panel": "bu-demography",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "survival_5yr_pct",
+   "definition": "Share of the year's births still active five years later",
+   "unit": "%",
+   "panel": "bu-demography",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "companies_live",
+   "definition": "Companies on the live register with a registered office in the borough",
+   "unit": "companies",
+   "panel": "bu-register",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "companies_not_active",
+   "definition": "Live register companies whose status is not Active (proposal to strike off, liquidation, administration or similar)",
+   "unit": "companies",
+   "panel": "bu-register",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "companies_not_active_pct",
+   "definition": "Not active as a share of live companies",
+   "unit": "%",
+   "panel": "bu-register",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "filers_reporting_<band>_employees",
+   "definition": "Of the largest companies in a sector that file iXBRL accounts with a registered office in Burnley, the number reporting average employees in the band",
+   "unit": "companies",
+   "panel": "bu-largest-filers",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "hereditaments_count",
+   "definition": "Rated non domestic properties on the list",
+   "unit": "count",
+   "panel": "bu-premises",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "rateable_value_total",
+   "definition": "Total rateable value of those properties",
+   "unit": "GBP thousand",
+   "panel": "bu-premises",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "accounts_with_relief",
+   "definition": "Ratepayer accounts carrying the named relief in the council's ratepayer file",
+   "unit": "count",
+   "panel": "bu-premises",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "nndr3_*",
+   "definition": "Relief granted in the year as recorded in the council's NNDR3 return (negative: income forgone)",
+   "unit": "GBP",
+   "panel": "bu-premises",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "fsa_establishments",
+   "definition": "Establishments on the Food Hygiene Rating Scheme register, by FSA business type",
+   "unit": "establishments",
+   "panel": "bu-food-premises",
+   "codebook": "defined in this contract"
+  },
+  {
+   "measure": "inactive_long_term_sick_or_disabled",
+   "definition": "Inactive: long term sick or disabled",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "inactive_looking_after_home_or_family",
+   "definition": "Inactive: looking after home or family",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "inactive_student",
+   "definition": "Inactive: student",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "inactive_retired",
+   "definition": "Inactive: retired",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "inactive_other",
+   "definition": "Inactive: other",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "level4_plus",
+   "definition": "Level 4 qualifications and above",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "no_qualifications",
+   "definition": "No qualifications",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "health_bad_or_very_bad",
+   "definition": "General health bad or very bad",
+   "unit": "%",
+   "panel": "ps-wards",
+   "codebook": "C_people_skills/wards.csv"
+  },
+  {
+   "measure": "apprenticeship_starts",
+   "definition": "apprenticeship starts",
+   "unit": "learners",
+   "panel": "ps-skills",
+   "codebook": "C_people_skills/series_education.csv"
+  },
+  {
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "definition": "apprenticeship starts level advanced apprenticeship",
+   "unit": "learners",
+   "panel": "ps-skills",
+   "codebook": "C_people_skills/series_education.csv"
+  },
+  {
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "definition": "apprenticeship starts level higher apprenticeship",
+   "unit": "learners",
+   "panel": "ps-skills",
+   "codebook": "C_people_skills/series_education.csv"
+  },
+  {
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "definition": "apprenticeship starts level intermediate apprenticeship",
+   "unit": "learners",
+   "panel": "ps-skills",
+   "codebook": "C_people_skills/series_education.csv"
+  },
+  {
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "definition": "fe skills participation rate per 100000 population",
+   "unit": "per 100,000",
+   "panel": "ps-skills",
+   "codebook": "C_people_skills/series_education.csv"
+  },
+  {
+   "measure": "ons_mean_probability",
+   "definition": "Mean ONS (2019) probability of automation, weighted by residents' occupations",
+   "unit": "probability",
+   "panel": "ps-automation",
+   "codebook": "C_people_skills/automation.csv"
+  },
+  {
+   "measure": "dfe_aioe_mean",
+   "definition": "Mean DfE (2023) AI occupational exposure score, all AI, standardised",
+   "unit": "score",
+   "panel": "ps-automation",
+   "codebook": "C_people_skills/automation.csv"
+  },
+  {
+   "measure": "gla_genai_share_l1_4",
+   "definition": "Share of employed residents in occupations at GLA (2026) generative AI exposure levels 1 to 4",
+   "unit": "%",
+   "panel": "ps-automation",
+   "codebook": "C_people_skills/automation.csv"
+  },
+  {
+   "measure": "score",
+   "definition": "Likelihood (1 to 5) times impact (1 to 5); 15 and above red, 8 to 14 amber, below 8 green",
+   "unit": "score",
+   "panel": "risk-register",
+   "codebook": "Burnley_Growth_work/STATE.md, risk register scales"
+  }
+ ],
+ "workstream_files": [
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+   "sha256": "e386183903b47f25dc38d4639e5ec3b8d3fdddeb7e6ebe105ebdd26182c0788f"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/ashe_1.csv",
+   "sha256": "aac00952206b740672085b0031dda1e76b1a677d925dd7aad783d2d85863560c"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/ashe_2.csv",
+   "sha256": "dc2ff63a172556fd2d6fd0a60cee5dfd34fd5a90782d4740b9a30b3d67d42533"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
+   "sha256": "019fbc476b55206d188b50395c4654a93baa580c2fd64898a68d0aa9e1919d4a"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/claimant_2.csv",
+   "sha256": "7eb755ca91e5b5669aa494e149f856685e4cf4719c77e84e2c4cc1bfbfa408b5"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+   "sha256": "0596e7f281ec3436a0d609df8bb2eecd10867d3c1e1d11a0fadcef3c58d6eafb"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+   "sha256": "c850200ea72e892eb47765ecad78b7f8a4b2d1edb5c3f1bfcbbd0a51d4d3606f"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+   "sha256": "e13a1849706a8161f94ec42b515e84d8ba95b563fe988367d40a3386d0ed89be"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_4.csv",
+   "sha256": "b4d33349cbde5628127852f15d76e359c90cf1f53e684fddcd32e9876c5f9097"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_5.csv",
+   "sha256": "d47fca625b03acdb070bb163cd08c0e55456bb1c19da5a09ae5b11b07c345687"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/els_6.csv",
+   "sha256": "4a0e87b9e89c0340049c7d0c307c50159585d6d1b78188847c99f9c432aab1e6"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+   "sha256": "bfb90669f479ca2624f2f8c88e1447a6852885b42d7dd218d0a170658f00afb8"
+  },
+  {
+   "file": "Burnley_Growth_work/A_labour_pay/series/rti_2.csv",
+   "sha256": "b4334f588ae643e68566de39c5ab3be762fca3d544109b6c63acf896105a1872"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/INPUTS.csv",
+   "sha256": "2abf72c2854d97bf8cb2c3de983d61daada13dca46451ff0201ac42220ae3efd"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+   "sha256": "b7962824753520f4bf9ff8c4425dd56724e147f9d7050a86d8b7c34f58e1690e"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/firms.csv",
+   "sha256": "41758b0dbd43eb8bdd3a6e0009d32baeca099ff90cf3e95563486268fd71bb78"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+   "sha256": "85afcae5eff46454ac3d37b747317051b403a4306e7d781990e02e67e4c9edb1"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/largest_companies.csv",
+   "sha256": "e4e26ae591e0b8967bd336cddfdfe94b97a22628fcc43e5b72a93d225fa7dfee"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/premises.csv",
+   "sha256": "ebbce3d9f57a8dbf8a822993151a8b3a954302f03a2b278751ca3070fd19ee5f"
+  },
+  {
+   "file": "Burnley_Growth_work/C_people_skills/INPUTS.csv",
+   "sha256": "7ea5ecf422939323333a77a95b8b47dfee5475cf70608a808204a4f67ed5042f"
+  },
+  {
+   "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+   "sha256": "079b87c10e93722d38878dfd88a47c6686c691721e8d521e27b4ae74b5ef9e4e"
+  },
+  {
+   "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+   "sha256": "683e43c8f76de2296c572a07cff8b5fab2179573c8a2d620623411913c9da580"
+  },
+  {
+   "file": "Burnley_Growth_work/C_people_skills/wards.csv",
+   "sha256": "3402f701c9ee0066355c199535d08f2728ddf36e29803e11765c4094bc9437bb"
+  },
+  {
+   "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",
+   "sha256": "1c2a436b1ccbfaf01bc669dac4fa58abfc1bcb8d7e833ab3e5afb9a10402257f"
+  },
+  {
+   "file": "Burnley_Growth_work/H_collection/ch_postcode_check.csv",
+   "sha256": "6d317933341943c5bd580eeba5aaed138187d59bca7edea865551c73bae62749"
+  },
+  {
+   "file": "Burnley_Growth_work/H_collection/named_companies_check.csv",
+   "sha256": "ea5f0750b825fb11c66f83685d691ed2103b766e6b3058e09c283d11746ed659"
+  }
+ ],
+ "official_sources": [
+  {
+   "publisher": "DfE",
+   "title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "DfE",
+   "title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "edition": "academic year 2024/25 release",
+   "url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "ASHE Table 7.1a, place of work by local authority, weekly pay gross (extracted from the zip)",
+   "edition": "2026 provisional, released 22 October 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2026provisional/ashetable72026provisional.zip",
+   "sha256": "4b61c06ef3cb6efbbcd99b3579fd773a70e534edbc6f49e5e61392987484c95e",
+   "access_date": "2026-10-24"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "ASHE Table 8.1a, place of residence by local authority, weekly pay gross (extracted from the zip)",
+   "edition": "2026 provisional, released 22 October 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2026provisional/ashetable82026provisional.zip",
+   "sha256": "4ca270ad2d73a1f68571f425c6b75193d16514de1a73a16a6a03835046093703",
+   "access_date": "2026-10-24"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Business demography, UK: reference tables",
+   "edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2024.xlsx",
+   "sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "CC01 Regional labour market: Claimant Count by unitary and local authority (experimental)",
+   "edition": "current edition (October 2026)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/unemployment/datasets/claimantcountbyunitaryandlocalauthorityexperimental/current/lmregtabcc01october2026.xls",
+   "sha256": "bf57fb86e304658b0b7483ac6e7843ec9ece9e1a93edbe6a05602a6a4633420b",
+   "access_date": "2026-10-24"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2016 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2016revised/table82016revised.zip",
+   "sha256": "c02abae1a93c654bd107e588d25436318c4e479cbac90bed31dfd3e9e45aa130",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2017 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2017revised/table82017revised.zip",
+   "sha256": "f324aaa029b35b190022a27f5e563eaaf4327771c79b8088441d0933729b8cd0",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2018 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2018revised/table82018revised.zip",
+   "sha256": "2b06cf710947adb8c1ebd9d5bb0c26aa35acd4d104b62583333873339828c0ff",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2019 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2019revised/table82019revised.zip",
+   "sha256": "a2c8fd525a57c7dc8c712de4a8d2ef06b18f4874ea3aeed1eb40352303b77983",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2020 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2020revised/table82020revised.zip",
+   "sha256": "993af05b0fdcb42a1920f3293fe36cf0a12d059cb8783799eb3fef416ca4ff32",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2021 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2021revised/ashetable82021revised.zip",
+   "sha256": "254aca113b88599386a4c46847ba3eb94bf077f678ebfb71ba5f71f5fa9f7f7a",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2022 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2022revised/ashetable82022revised.zip",
+   "sha256": "c9b823b2e6baf36a372dfc058b2bc7095caad9d577a35a5f413e4b6f89adf8db",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2023 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2023revised/ashetable82023revised.zip",
+   "sha256": "e70cd07f7339e7187b62b86090699b81577fae9887a88ffc35cdb6e2edc3b878",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2024 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2024revised/ashetable82024revised.zip",
+   "sha256": "3e0702c4060c8cd3a5802f809af893b198003570dfc86d201b0bbc88fd9e85a4",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of residence by local authority: ASHE Table 8",
+   "edition": "2025 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2025revised/ashetable82025revised.zip",
+   "sha256": "bb7d01146f926364867a4f33d635b267dd10e40e2450020445b1a79cf7ef3c85",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2016 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2016revised/table72016revised.zip",
+   "sha256": "a966d3207c39316f6cda6231a6158929aee95c464e5c5a2d2a363128302ed253",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2017 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2017revised/table72017revised.zip",
+   "sha256": "bc247f1719b5ff83ef822d510d2a1ae21b0b81df5f09d9139265099e38033e5d",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2018 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2018revised/table72018revised.zip",
+   "sha256": "fdb24623ad8ee6e843c6922b811db62f39bc55c3f57429f6bc0d390c9d89c681",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2019 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2019revised/table72019revised.zip",
+   "sha256": "daf7a5f14d2b7456c311dfd92fedeadbdfbc010079fac9035d4ad0b1567e0410",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2020 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2020revised/table72020revised.zip",
+   "sha256": "5614f0f45521426b4f4dc9a0d255f2b1277257fbac24f4c8a172d91659911df2",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2021 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2021revised/ashetable72021revised.zip",
+   "sha256": "3b0d58d106d7c3e350edf2bbae0de88f7cfba6f330348c106874f7064f2319fc",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2022 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2022revised/ashetable72022revised.zip",
+   "sha256": "ee01e68dceacbdc2450c7c9a3acf9e1db0df76c4c5257bad277c3aadc478db0e",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2023 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2023revised/ashetable72023revised.zip",
+   "sha256": "084c5671fa2e733340708d66dcea9b2d4a7abff59f506c6a3062d6bcd54e314e",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2024 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2024revised/ashetable72024revised.zip",
+   "sha256": "3594a1696c9b92da33e6f1b345b54f26d5b5a428e1634622f4f4974987bcd4df",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Earnings and hours worked, place of work by local authority: ASHE Table 7",
+   "edition": "2025 revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2025revised/ashetable72025revised.zip",
+   "sha256": "250fb6a5184743cb01818fb4b87c4627ab0c9058011110b057ca121ce679a599",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "edition": "as downloaded 2026-10-25",
+   "url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2016 edition (v8)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2017 edition (v12)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2018 edition (v16)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2019 edition (v20)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2020 edition (v25)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2021 edition (v33)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2022 edition (latest version of that edition)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2023 edition",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2024 edition",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2025 edition",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "edition": "October 2026 edition, released 20 October 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24"
+  },
+  {
+   "publisher": "Office for National Statistics",
+   "title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24"
+  },
+  {
+   "publisher": "Office for National Statistics and HM Revenue and Customs",
+   "title": "Earnings and employment from Pay As You Earn Real Time Information, non-seasonally adjusted",
+   "edition": "September 2026 edition (v88), the latest with local authority tables (quarterly; next 15 December 2026)",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/realtimeinformationstatisticsreferencetablenonseasonallyadjusted/current/previous/v88/rtinsasep2026.xlsx",
+   "sha256": "a63dfc1d1560c9256fa83497b06591a5fc46e461aba7bba165e25852950bc25d",
+   "access_date": "2026-10-25"
+  }
+ ],
+ "neighbours": [
+  {
+   "rank": 1,
+   "name": "Tameside",
+   "codes": "E08000008"
+  },
+  {
+   "rank": 2,
+   "name": "Kirklees",
+   "codes": "E08000034"
+  },
+  {
+   "rank": 3,
+   "name": "Stoke-on-Trent",
+   "codes": "E06000021"
+  },
+  {
+   "rank": 4,
+   "name": "Walsall",
+   "codes": "E08000030"
+  },
+  {
+   "rank": 5,
+   "name": "Rochdale",
+   "codes": "E08000005"
+  },
+  {
+   "rank": 6,
+   "name": "Derby",
+   "codes": "E06000015"
+  },
+  {
+   "rank": 7,
+   "name": "Bolton",
+   "codes": "E08000001"
+  },
+  {
+   "rank": 8,
+   "name": "Bury",
+   "codes": "E08000002"
+  },
+  {
+   "rank": 9,
+   "name": "Dudley",
+   "codes": "E08000027"
+  },
+  {
+   "rank": 10,
+   "name": "Doncaster",
+   "codes": "E08000017"
+  },
+  {
+   "rank": 11,
+   "name": "Newport",
+   "codes": "W06000022"
+  },
+  {
+   "rank": 12,
+   "name": "Coventry",
+   "codes": "E08000026"
+  },
+  {
+   "rank": 13,
+   "name": "Wakefield",
+   "codes": "E08000036"
+  },
+  {
+   "rank": 14,
+   "name": "Barnsley",
+   "codes": "E08000016 E08000038"
+  },
+  {
+   "rank": 15,
+   "name": "Peterborough",
+   "codes": "E06000031"
+  },
+  {
+   "rank": 16,
+   "name": "Oldham",
+   "codes": "E08000004"
+  },
+  {
+   "rank": 17,
+   "name": "Bradford",
+   "codes": "E08000032"
+  },
+  {
+   "rank": 18,
+   "name": "Wolverhampton",
+   "codes": "E08000031"
+  },
+  {
+   "rank": 19,
+   "name": "Blackburn with Darwen",
+   "codes": "E06000008"
+  },
+  {
+   "rank": 20,
+   "name": "Rotherham",
+   "codes": "E08000018"
+  }
+ ],
+ "comparators": [
+  {
+   "code": "E07000117",
+   "name": "Burnley"
+  },
+  {
+   "code": "E07000122",
+   "name": "Pendle"
+  },
+  {
+   "code": "E07000120",
+   "name": "Hyndburn"
+  },
+  {
+   "code": "E07000125",
+   "name": "Rossendale"
+  },
+  {
+   "code": "E06000008",
+   "name": "Blackburn with Darwen"
+  },
+  {
+   "code": "E10000017",
+   "name": "Lancashire county (twelve districts)"
+  },
+  {
+   "code": "E12000002",
+   "name": "North West"
+  },
+  {
+   "code": "E92000001",
+   "name": "England"
+  }
+ ],
+ "held_inputs": [
+  {
+   "workstream": "B",
+   "file": "lancs_register.csv.gz",
+   "sha256": "fbb742ce19d1b1293ade4c386189132656411fe314af5b9bbc86772be076d1ae",
+   "used_for": "firms, shell_clusters, largest_companies, bics_sic, grants_contracts (location and SIC)"
+  },
+  {
+   "workstream": "B",
+   "file": "lancs_accounts.jsonl.gz",
+   "sha256": "2fd64823ac60b7df7e07269a32592349a55b485a2fcb3798f0bb8527296b3ada",
+   "used_for": "largest_companies, bics_sic (employees)"
+  },
+  {
+   "workstream": "B",
+   "file": "lancs_accounts_backfill.jsonl",
+   "sha256": "10d240adc89d941a8733ae0ce87c0a012a444614a7952345fbe50fcc0f04a915",
+   "used_for": "largest_companies, bics_sic (employees, API backfill rows)"
+  },
+  {
+   "workstream": "B",
+   "file": "gazette_lancs.json",
+   "sha256": "1f60e09a4a586aa5b8e247eb12a3f6008ecaa6189f64369b68e0cad1394b4c46",
+   "used_for": "firms (insolvency notices 2024 to 26 Jul 2026)"
+  },
+  {
+   "workstream": "B",
+   "file": "business_demography_2024.xlsx",
+   "sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "used_for": "demography"
+  },
+  {
+   "workstream": "B",
+   "file": "voa_stock_of_properties_2026.zip",
+   "sha256": "722d59ae5894ba77e08f5eea39f7eb8cf69285b2ef93bf5e2c7b6a21ff643961",
+   "used_for": "premises (VOA stock)"
+  },
+  {
+   "workstream": "B",
+   "file": "voa_lancs.json",
+   "sha256": "d1d035b12e0a11cd6d3d1c048a9fb7966ea02a5e78de5e9b688072ab8f1dbbd0",
+   "used_for": "premises (2023 list entries, medians)"
+  },
+  {
+   "workstream": "B",
+   "file": "burnley.csv",
+   "sha256": "a7ddbcfd5acfb5d85f23f9acbc79e085dfbf7f3c07171fd77dc956192a52729e",
+   "used_for": "premises (Burnley reliefs)"
+  },
+  {
+   "workstream": "B",
+   "file": "nndr3_2025-26_consolidated_values.csv",
+   "sha256": "e324ea01a8f7d2c0bf6898c6b9358cd49f217d3498761411e438067080919f35",
+   "used_for": "premises (NNDR3 relief amounts)"
+  },
+  {
+   "workstream": "B",
+   "file": "fhrs_196.xml",
+   "sha256": "e0e6b43bdd953a000f53a76e996c0d8d61aea4970b4af0dfcd793751e46c34af",
+   "used_for": "hospitality (Burnley FSA extract)"
+  },
+  {
+   "workstream": "B",
+   "file": "fhrs_201.xml",
+   "sha256": "a35300be700d375b779746fa4cd4fffe2637a009b19c38ce5781229c275b9374",
+   "used_for": "hospitality (Pendle FSA extract)"
+  },
+  {
+   "workstream": "B",
+   "file": "burnley.json",
+   "sha256": "02440a41f60c8a037c97f4475384f70751f3038148c1acfc614bd5730cbb1681",
+   "used_for": "hospitality (27 Sep 2026)"
+  },
+  {
+   "workstream": "B",
+   "file": "pendle.json",
+   "sha256": "2b6b612fe5c34da8a62daaba206524f0a02d166c88416422606f23ff6869b301",
+   "used_for": "hospitality (27 Sep 2026)"
+  },
+  {
+   "workstream": "B",
+   "file": "burnley.json",
+   "sha256": "94ef5cc04b82d8244af2f4b9e2a8dc8cda844469a85e6ce0ad4c2c942d6094db",
+   "used_for": "hospitality (27 Sep 2026)"
+  },
+  {
+   "workstream": "B",
+   "file": "burnley-pendle.json",
+   "sha256": "6bcb545acfa6fbeefd9efa05064bd1f8b7f0b29effe8261b1b27eddfde662c1a",
+   "used_for": "hospitality (27 Sep 2026)"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS007_age_single_year.csv",
+   "sha256": "1d2e2011fdbfe1ef70577ae971a287ee0cb07d42fcd91ab4005064cb4840493e",
+   "used_for": "wards.csv population and working age 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS037_general_health.csv",
+   "sha256": "3d3125dece47337969d86ede129668c61b6e5da8ad842832ae5e95778d9efa0b",
+   "used_for": "wards.csv health 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS038_disability.csv",
+   "sha256": "52c2653b34b5dcf25d3b4ecc5690e351a3d943f815b8e934178d14b7bf5bb2e8",
+   "used_for": "wards.csv disability 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS045_car_availability.csv",
+   "sha256": "052cc10e6d664707b4228badd0081f306aff86c7a08803b42fda40e4869d055c",
+   "used_for": "wards.csv no car households 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS061_travel_to_work.csv",
+   "sha256": "c035f9129d2a3d1602ba558eca310da35e2c0c07f2a9ff4b9ecfc8173d3f3b61",
+   "used_for": "wards.csv travel to work 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS062_ns_sec.csv",
+   "sha256": "94d208d975f09c0cf40065be81beb94f1be505f627725d284437973e3442b527",
+   "used_for": "wards.csv NS-SEC 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS066_economic_activity.csv",
+   "sha256": "26fc9412ef693d0e840bc62b8e2a8f20aa149fa9785d2234f086021505fb7592",
+   "used_for": "wards.csv economic activity 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS067_qualifications.csv",
+   "sha256": "33d5b5f014208ff75868174a6b66426dbede0e25e66cd1f523550409d81fd456",
+   "used_for": "wards.csv qualifications 2021"
+  },
+  {
+   "workstream": "C",
+   "file": "ward_TS054_tenure.csv",
+   "sha256": "b2a4e83aa73f2acc02f2e0ad40efcd0f8415379550dffa90a8d77e16adad222e",
+   "used_for": "read for structure; tenure not reported in wards.csv"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS102EW_age_structure.csv",
+   "sha256": "e27fb30a89a9dca22086ed79ed1073513e93b5baba7f50623dfabae2bc64cae7",
+   "used_for": "wards.csv population and working age 2011"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS402EW_tenure.csv",
+   "sha256": "948da35a9a6f96d97a3a28bfee34598d89c25865e822f740be3e748a3423f984",
+   "used_for": "read for structure; tenure not reported in wards.csv"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS404EW_car_availability.csv",
+   "sha256": "8700ce6b09f0dcab964c7bf4fad4d28ece5b438f4166b7e5c03d89a2931c8bac",
+   "used_for": "wards.csv no car households 2011"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS501EW_qualifications.csv",
+   "sha256": "12954609dc858b55cf210265cdf49a9013b8eaa6285980dbcb570c545849fef2",
+   "used_for": "wards.csv qualifications 2011"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS601EW_economic_activity.csv",
+   "sha256": "22fc8fed7e4be09898621576e7e761413d9cf12cc9442ae6c3973fffe176fef1",
+   "used_for": "wards.csv economic activity 2011"
+  },
+  {
+   "workstream": "C",
+   "file": "ward2011_KS611EW_ns_sec.csv",
+   "sha256": "199a22ab621740ee0fbe8f6a2950f956f268b48f5540785aabc36bc9ca46b1fb",
+   "used_for": "wards.csv NS-SEC 2011"
+  },
+  {
+   "workstream": "C",
+   "file": "automation_dataset_page.html",
+   "sha256": "aafea34ec8d32dee06f4126ecfd0ce919e19cc5ad1ed91f915e7e78c1c459ff2",
+   "used_for": "Dataset page: probability of automation in England"
+  },
+  {
+   "workstream": "C",
+   "file": "automationreferencetables.xls",
+   "sha256": "53a4801e7961459f4b91e366e84745763d821736078cae64c2cadacd132c4713",
+   "used_for": "Probability of automation in England, 2011 and 2017: reference tables"
+  },
+  {
+   "workstream": "C",
+   "file": "fe_geography_participation_2019-20_to_2024-25.csv",
+   "sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "used_for": "Further education and skills: Geography Region, LA, LAD, PCON participation and achievement"
+  },
+  {
+   "workstream": "C",
+   "file": "neet_16_17_by_characteristics_2019_to_2026.csv",
+   "sha256": "d66eb5beeedc64cfa0fe1a5ed60dfe31740b82c5cb8d80843939c7bb45d5ecd8",
+   "used_for": "Participation in education, training and NEET age 16 to 17 by local authority: NEET by characteristics"
+  }
+ ],
+ "revisions": [
+  {
+   "date": "2026-10-25",
+   "panel": "all",
+   "change": "First build: six headline tiles and twelve panels.",
+   "reason": "The collection's fixed set of indicators.",
+   "source": "build_contracts.py; check_contracts.py PASS"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "tile-gdp-per-head",
+   "change": "The sixth tile shows GDP per head at current market prices, not GVA per head as designed.",
+   "reason": "No table held publishes GVA per head for a district; ONS regional GDP per head is published and is carried by Explore Local Statistics.",
+   "source": "A series els_3.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "ps-automation",
+   "change": "The ONS high risk share is left out; the panel shows the mean ONS probability, the DfE index and the GLA share.",
+   "reason": "The published ONS high risk cell for Burnley is suppressed, so no figure is shown.",
+   "source": "C automation.csv; collection design section 5"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "tile-pay, tile-enterprises",
+   "change": "No neighbour comparison on these two tiles.",
+   "reason": "The held Explore Local Statistics pay measure is a different cut whose definition was not fetched; enterprise counts depend on size and the held files carry no neighbour population.",
+   "source": "A findings section 12"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-food-premises",
+   "change": "Two FSA releases shown (24 July and 27 September 2026), not a monthly history.",
+   "reason": "The longer history is not yet copied into this collection.",
+   "source": "B hospitality.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-largest-filers",
+   "change": "Counts by headcount band only; no company named.",
+   "reason": "Naming companies beside figures is outside this release.",
+   "source": "B largest_companies.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "risk-register",
+   "change": "Row R08 (the review of PIP assessments) is held out of the contract and the page.",
+   "reason": "The collection does not comment on the PIP review while it is undecided, and a scored row on it would read as comment. The two reorganisation rows are shown as fact, as the collection's brief sets.",
+   "source": "E risk_register.csv R08"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "overview-gaps",
+   "change": "A data file for the gap statement on the overview: jobs density and the two conversions into residents.",
+   "reason": "The gap statement needs figures no tile carries; it is overview text, not one of the twelve panels.",
+   "source": "A series li01.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-register",
+   "change": "The two addresses removed from the company counts are now described as insolvency practitioners' offices, not formation agents; the counts are unchanged.",
+   "reason": "A Companies House check of 52 companies in liquidation at the two postcodes found the liquidator's office at the same postcode for 46; at the larger address all 26 sampled had been registered outside the BB postcode area before.",
+   "source": "H_collection/ch_postcode_check.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-largest-filers",
+   "change": "Companies reporting 50 or more employees are named, 33 of them, with their headcount and accounts year end.",
+   "reason": "Naming companies beside figures was approved on 25 October 2026. Each headcount was checked against the company's own filed accounts; one company is not named because its filing is internally inconsistent.",
+   "source": "H_collection/named_companies_check.csv"
+  }
+ ],
+ "derived": []
+}

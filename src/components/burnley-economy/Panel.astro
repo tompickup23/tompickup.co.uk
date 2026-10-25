@@ -1,0 +1,40 @@
+---
+/* One panel of the collection: a chart (the default slot), an optional table
+   view (slot "table"), and the lines every panel prints from its contract's
+   $meta: source, edition, vintage, caveat, next release and the downloads. */
+import type { Contract } from '../../lib/burnley-economy';
+import { csvUrl, jsonUrl, longDate } from '../../lib/burnley-economy';
+
+interface Props { c: Contract; title?: string; id?: string; lead?: string }
+const { c, title = c.$meta.title, id = c.$meta.panel, lead } = Astro.props;
+const m = c.$meta;
+const hasTable = Astro.slots.has('table');
+---
+
+<figure class="econ-panel" id={id} aria-labelledby={`${id}-title`}>
+  <figcaption id={`${id}-title`} class="panel-title">{title}</figcaption>
+  {lead && <p class="panel-lead">{lead}</p>}
+  <div class="panel-body"><slot /></div>
+  {hasTable && <details class="panel-table">
+    <summary>Show the figures as a table</summary>
+    <div class="table-wrap"><slot name="table" /></div>
+  </details>}
+  <div class="panel-notes">
+    <p class="caveat">{m.caveat}</p>
+    <p class="source"><strong>Source:</strong> {m.publisher}, {m.table}, {m.edition}. Accessed {longDate(m.access_date)}. {m.vintage && <>Vintage: {m.vintage}. </>}{m.next_release && <>Next release: {m.next_release}.</>}</p>
+    <p class="downloads">Data behind this panel: <a href={csvUrl(m.panel)} download>CSV</a> · <a href={jsonUrl(m.panel)}>JSON with sources and hashes</a></p>
+  </div>
+</figure>
+
+<style is:global>
+  .econ-panel { margin: 20px 0 8px; padding-top: 16px; border-top: 2px solid var(--ink); }
+  .econ-panel .panel-title { display: block; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .econ-panel .panel-lead { font-size: 1rem; line-height: 1.6; margin: 0 0 12px; }
+  .econ-panel .panel-body { margin: 6px 0 4px; }
+  .econ-panel .panel-notes { margin-top: 12px; }
+  .econ-panel .panel-notes p { color: var(--muted); font-size: 0.875rem; line-height: 1.55; margin: 0 0 6px; }
+  .econ-panel .panel-notes .caveat { color: var(--ink); }
+  .econ-panel .panel-notes a { color: var(--teal); font-weight: 600; }
+  .panel-table { margin-top: 12px; }
+  .panel-table summary { cursor: pointer; min-height: var(--touch); display: flex; align-items: center; color: var(--teal); font-weight: 600; }
+</style>

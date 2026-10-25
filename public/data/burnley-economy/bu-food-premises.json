@@ -1,0 +1,1019 @@
+{
+ "$meta": {
+  "panel": "bu-food-premises",
+  "title": "Food premises by type, Food Standards Agency",
+  "page": "/burnley-economy/business/",
+  "measures": [
+   {
+    "measure": "fsa_establishments",
+    "definition": "Establishments on the Food Hygiene Rating Scheme register, by FSA business type",
+    "unit": "establishments",
+    "decimals": 0,
+    "codebook": "defined in this contract",
+    "notes_common_to_every_row": ""
+   }
+  ],
+  "publisher": "Food Standards Agency",
+  "table": "FHRS open data XML, Burnley council area",
+  "edition": "releases of 2026-07-24 and 2026-09-27",
+  "access_date": "2026-09-27",
+  "citation": "Food Standards Agency (2026) Food Hygiene Rating Scheme open data",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "sha256": "85afcae5eff46454ac3d37b747317051b403a4306e7d781990e02e67e4c9edb1"
+   }
+  ],
+  "vintage": "two releases (2026-07-24 and 2026-09-27)",
+  "caveat": "FSA business types, not industries: a premises count, not jobs. Two releases are shown; a longer daily history exists and is not yet shown here.",
+  "next_release": "the next FSA release",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 8,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Distributors/Transporters"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Distributors/Transporters",
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 1,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Farmers/growers"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Farmers/growers",
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 77,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Hospitals/Childcare/Caring Premises"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Hospitals/Childcare/Caring Premises",
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 5,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Hotel/bed & breakfast/guest house"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Hotel/bed & breakfast/guest house",
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 1,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Importers/Exporters"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Importers/Exporters",
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 11,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Manufacturers/packers"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Manufacturers/packers",
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 28,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Mobile caterer"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Mobile caterer",
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 76,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Other catering premises"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Other catering premises",
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 71,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Pub/bar/nightclub"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Pub/bar/nightclub",
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 162,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Restaurant/Cafe/Canteen"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Restaurant/Cafe/Canteen",
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 228,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Retailers - other"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Retailers, other",
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 16,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Retailers - supermarkets/hypermarkets"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Retailers, supermarkets/hypermarkets",
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 48,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "School/college/university"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "School/college/university",
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 151,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "Takeaway/sandwich shop"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Takeaway/sandwich shop",
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-07-24",
+   "period_type": "FSA open data release",
+   "value": 883,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "FSA FHRS open data XML, fhrs_196.xml, held 26 Jul 2026",
+   "source_edition": "2026-07-24",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-07-24",
+     "fsa_business_type": "ALL"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "ALL",
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 77,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Caring Premises"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Caring Premises",
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 8,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Distributors/Transporters"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Distributors/Transporters",
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 1,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Farmers/growers"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Farmers/growers",
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 5,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Hotel/bed & breakfast/guest house"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Hotel/bed & breakfast/guest house",
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 1,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Importers/Exporters"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Importers/Exporters",
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 10,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Manufacturers/packers"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Manufacturers/packers",
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 29,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Mobile caterer"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Mobile caterer",
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 73,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Other catering premises"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Other catering premises",
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 72,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Pub/bar/nightclub"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Pub/bar/nightclub",
+   "rid": "r23"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 165,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Restaurant/Cafe/Canteen"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Restaurant/Cafe/Canteen",
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 230,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Retailers - other"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Retailers, other",
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 16,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Retailers - supermarkets/hypermarkets"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Retailers, supermarkets/hypermarkets",
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 47,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "School/college/university"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "School/college/university",
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 148,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "Takeaway/sandwich shop"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "Takeaway/sandwich shop",
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley (council area)",
+   "geography_type": "FSA local authority",
+   "measure": "fsa_establishments",
+   "period": "2026-09-27",
+   "period_type": "FSA open data release",
+   "value": 882,
+   "unit": "establishments",
+   "source_publisher": "Food Standards Agency",
+   "source_title": "Food Hygiene Rating Scheme open data",
+   "source_table": "UK Food Hygiene site data councils/burnley.json (from FSA open data)",
+   "source_edition": "2026-09-27",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "establishments listed in the council file; the file's own total field reads 882",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/hospitality.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "release_date": "2026-09-27",
+     "fsa_business_type": "ALL"
+    },
+    "column": "establishments"
+   },
+   "fsa_business_type": "ALL",
+   "rid": "r29"
+  }
+ ],
+ "derived": [
+  {
+   "id": "total_2026-07-24",
+   "label": "Sum of the business types, release of 2026-07-24 (equals the source's ALL row)",
+   "value": 883,
+   "decimals": 0,
+   "unit": "establishments",
+   "arithmetic": "sum(8, 1, 77, 5, 1, 11, 28, 76, 71, 162, 228, 16, 48, 151)",
+   "inputs": [
+    "r0",
+    "r1",
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13"
+   ],
+   "note": ""
+  },
+  {
+   "id": "total_2026-09-27",
+   "label": "Sum of the business types, release of 2026-09-27 (equals the source's ALL row)",
+   "value": 882,
+   "decimals": 0,
+   "unit": "establishments",
+   "arithmetic": "sum(77, 8, 1, 5, 1, 10, 29, 73, 72, 165, 230, 16, 47, 148)",
+   "inputs": [
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r22",
+    "r23",
+    "r24",
+    "r25",
+    "r26",
+    "r27",
+    "r28"
+   ],
+   "note": ""
+  }
+ ]
+}

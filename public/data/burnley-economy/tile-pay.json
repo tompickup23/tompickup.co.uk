@@ -1,0 +1,277 @@
+{
+ "$meta": {
+  "panel": "tile-pay",
+  "title": "Median full time weekly pay, jobs in Burnley and Burnley residents",
+  "page": "/burnley-economy/",
+  "measures": [
+   {
+    "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+    "definition": "ASHE gross weekly pay, median of full time employees on adult rates whose pay was not affected by absence, April, employee jobs located in the area (place of work)",
+    "unit": "GBP per week",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": ""
+   },
+   {
+    "measure": "ashe_resident_ft_weekly_pay_gross_median",
+    "definition": "ASHE gross weekly pay, median of full time employees on adult rates whose pay was not affected by absence, April, employees living in the area (place of residence)",
+    "unit": "GBP per week",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": ""
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "ASHE Tables 7.1a and 8.1a, sheet Full-Time",
+  "edition": "2026 provisional, released 22 October 2026",
+  "access_date": "2026-10-24",
+  "citation": "ONS (2017 to 2026) Annual Survey of Hours and Earnings, Tables 7 and 8",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_1.csv",
+    "sha256": "aac00952206b740672085b0031dda1e76b1a677d925dd7aad783d2d85863560c"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_2.csv",
+    "sha256": "dc2ff63a172556fd2d6fd0a60cee5dfd34fd5a90782d4740b9a30b3d67d42533"
+   }
+  ],
+  "vintage": "2026 provisional; revised in October 2027",
+  "caveat": "A sample estimate with its coefficient of variation; full time employees on adult rates. No neighbour comparison: the pay measure in the held Explore Local Statistics file is a different cut whose definition was not fetched.",
+  "next_release": "October 2027 (2026 revised)",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2026"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 656.8,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 7.1a, place of work by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 7.1a, sheet Full-Time, cell D45",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2026provisional/ashetable72026provisional.zip",
+   "source_sha256": "4b61c06ef3cb6efbbcd99b3579fd773a70e534edbc6f49e5e61392987484c95e",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 6.7%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_2.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 6.7,
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 764.8,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 7.1a, place of work by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 7.1a, sheet Full-Time, cell D24",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2026provisional/ashetable72026provisional.zip",
+   "source_sha256": "4b61c06ef3cb6efbbcd99b3579fd773a70e534edbc6f49e5e61392987484c95e",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 0.5%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_2.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 0.5,
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 817,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 7.1a, place of work by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 7.1a, sheet Full-Time, cell D9",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7/2026provisional/ashetable72026provisional.zip",
+   "source_sha256": "4b61c06ef3cb6efbbcd99b3579fd773a70e534edbc6f49e5e61392987484c95e",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 0.3%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_2.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "ashe_workplace_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 0.3,
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "ashe_resident_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 716.3,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 8.1a, place of residence by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 8.1a, sheet Full-Time, cell D45",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2026provisional/ashetable82026provisional.zip",
+   "source_sha256": "4ca270ad2d73a1f68571f425c6b75193d16514de1a73a16a6a03835046093703",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 6.1%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_1.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "ashe_resident_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 6.1,
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "ashe_resident_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 765.8,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 8.1a, place of residence by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 8.1a, sheet Full-Time, cell D24",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2026provisional/ashetable82026provisional.zip",
+   "source_sha256": "4ca270ad2d73a1f68571f425c6b75193d16514de1a73a16a6a03835046093703",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 0.6%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_1.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "ashe_resident_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 0.6,
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "ashe_resident_ft_weekly_pay_gross_median",
+   "period": "2026",
+   "period_type": "April survey",
+   "value": 815.5,
+   "unit": "GBP per week",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "ASHE Table 8.1a, place of residence by local authority, weekly pay gross (extracted from the zip)",
+   "source_table": "ASHE Table 8.1a, sheet Full-Time, cell D9",
+   "source_edition": "2026 provisional, released 22 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofresidencebylocalauthorityashetable8/2026provisional/ashetable82026provisional.zip",
+   "source_sha256": "4ca270ad2d73a1f68571f425c6b75193d16514de1a73a16a6a03835046093703",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "provisional estimate; coefficient of variation 0.3%",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/ashe_1.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "ashe_resident_ft_weekly_pay_gross_median",
+     "period": "2026"
+    },
+    "column": "value"
+   },
+   "cv_pct": 0.3,
+   "rid": "r5"
+  }
+ ],
+ "derived": [
+  {
+   "id": "workplace_ratio_england",
+   "label": "Burnley workplace median as a share of England's",
+   "value": 80.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "656.8 / 817 * 100",
+   "inputs": [
+    "r0",
+    "r2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "resident_ratio_england",
+   "label": "Burnley resident median as a share of England's",
+   "value": 87.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "716.3 / 815.5 * 100",
+   "inputs": [
+    "r3",
+    "r5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "workplace_gap_england",
+   "label": "England workplace median minus Burnley's, a week",
+   "value": 160.2,
+   "decimals": 1,
+   "unit": "GBP per week",
+   "arithmetic": "817 minus 656.8",
+   "inputs": [
+    "r0",
+    "r2"
+   ],
+   "note": ""
+  }
+ ]
+}

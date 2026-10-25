@@ -1,0 +1,40 @@
+---
+/* Horizontal bars on one shared scale from zero, the value at each bar's tip,
+   and an optional comparator line (England, say) drawn across every bar. */
+interface Item { label: string; value: number | null; display: string; tip?: string; strong?: boolean; color?: string }
+interface Props { items: Item[]; max: number; marker?: { value: number; label: string }; label: string; labelWidth?: string }
+const { items, max, marker, label, labelWidth = '42%' } = Astro.props;
+const pct = (v: number) => Math.max(0, Math.min(100, (v / max) * 100));
+---
+
+<div class="bl" role="img" aria-label={label} style={`--lw:${labelWidth}`}>
+  {marker && <p class="bl-key" aria-hidden="true"><span class="bl-mark-key"></span>{marker.label}</p>}
+  <ul class="bl-rows" aria-hidden="true">
+    {items.map((it) => <li class:list={{ strong: it.strong }}>
+      <span class="bl-label">{it.label}</span>
+      <span class="bl-track" data-tip={it.tip ?? `${it.label}: ${it.display}`}>
+        {it.value !== null && <span class="bl-fill" style={`width:${pct(it.value)}%;${it.color ? `background:${it.color}` : ''}`}></span>}
+        {marker && <span class="bl-marker" style={`left:${pct(marker.value)}%`}></span>}
+        <span class="bl-value" style={`left:${it.value !== null ? pct(it.value) : 0}%`}>{it.display || 'not published'}</span>
+      </span>
+    </li>)}
+  </ul>
+</div>
+
+<style>
+  .bl-key { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--muted); margin: 0 0 8px; }
+  .bl-mark-key { display: inline-block; width: 2px; height: 14px; background: var(--ink); }
+  .bl-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .bl-rows li { display: grid; grid-template-columns: var(--lw) minmax(0, 1fr); align-items: center; gap: 10px; }
+  .bl-label { font-size: 0.875rem; text-align: right; line-height: 1.25; }
+  .strong .bl-label { font-weight: 600; }
+  .bl-track { position: relative; height: 18px; margin-right: 64px; }
+  .bl-fill { position: absolute; left: 0; top: 2px; bottom: 2px; background: var(--chart-neutral); border-radius: 0 4px 4px 0; min-width: 2px; }
+  .strong .bl-fill { background: var(--chart-1); }
+  .bl-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); }
+  .bl-value { position: absolute; top: 50%; transform: translateY(-50%); padding-left: 6px; font-size: 0.8125rem; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ink); }
+  .strong .bl-value { font-weight: 600; }
+  .bl-track:hover .bl-fill { filter: brightness(0.9); }
+  .bl-track:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 0; z-index: 3; white-space: nowrap; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-md); pointer-events: none; }
+  @media (max-width: 600px) { .bl-rows li { grid-template-columns: 1fr; gap: 2px; } .bl-label { text-align: left; } }
+</style>

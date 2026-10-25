@@ -1,0 +1,3549 @@
+{
+ "$meta": {
+  "panel": "jp-adverts",
+  "title": "New online job adverts with a Burnley work location, monthly",
+  "page": "/burnley-economy/jobs-and-pay/",
+  "measures": [
+   {
+    "measure": "online_job_adverts_new",
+    "definition": "New online job adverts first seen in the calendar month with a work location assigned to the area (Textkernel), all occupations; a flow of new adverts, not a stock of vacancies",
+    "unit": "adverts",
+    "decimals": 0,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "no annual totals are given because months are suppressed; official statistics in development"
+   }
+  ],
+  "publisher": "Office for National Statistics (Textkernel data)",
+  "table": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK, Table 2",
+  "edition": "January 2017 to September 2026 edition, released 23 October 2026",
+  "access_date": "2026-10-24",
+  "citation": "ONS (2026) Labour demand volumes by SOC 2020, UK, 23 October 2026",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "sha256": "e386183903b47f25dc38d4639e5ec3b8d3fdddeb7e6ebe105ebdd26182c0788f"
+   }
+  ],
+  "vintage": "official statistics in development; each edition revises earlier months",
+  "caveat": "A flow of new adverts, not a count of vacancies: one job can be advertised more than once. Suppressed months are gaps. Several months since October 2025 are partly imputed by the ONS.",
+  "next_release": "November 2026",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2026-09"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-01",
+   "period_type": "month",
+   "value": 861,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell E116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "January 2017 is low because adverts posted before 2017 are absent (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-01"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-02",
+   "period_type": "month",
+   "value": 860,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell F116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-02"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-03",
+   "period_type": "month",
+   "value": 1049,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell G116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-03"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-04",
+   "period_type": "month",
+   "value": 861,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell H116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-04"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-05",
+   "period_type": "month",
+   "value": 905,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell I116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-05"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-06",
+   "period_type": "month",
+   "value": 1417,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell J116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-07",
+   "period_type": "month",
+   "value": 1067,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell K116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-07"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-08",
+   "period_type": "month",
+   "value": 988,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell L116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-08"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-09",
+   "period_type": "month",
+   "value": 928,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell M116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-09"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-10",
+   "period_type": "month",
+   "value": 958,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell N116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-10"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-11",
+   "period_type": "month",
+   "value": 829,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell O116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-11"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2017-12",
+   "period_type": "month",
+   "value": 524,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell P116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2017-12"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-01",
+   "period_type": "month",
+   "value": 1172,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell Q116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-01"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-02",
+   "period_type": "month",
+   "value": 876,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell R116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-02"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-03",
+   "period_type": "month",
+   "value": 911,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell S116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-03"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-04",
+   "period_type": "month",
+   "value": 887,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell T116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-04"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-05",
+   "period_type": "month",
+   "value": 898,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell U116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-05"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-06",
+   "period_type": "month",
+   "value": 959,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell V116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-07",
+   "period_type": "month",
+   "value": 817,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell W116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-07"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-08",
+   "period_type": "month",
+   "value": 713,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell X116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-08"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-09",
+   "period_type": "month",
+   "value": 829,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell Y116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-09"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-10",
+   "period_type": "month",
+   "value": 748,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell Z116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-10"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-11",
+   "period_type": "month",
+   "value": 769,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AA116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-11"
+    },
+    "column": "value"
+   },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2018-12",
+   "period_type": "month",
+   "value": 500,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AB116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2018-12"
+    },
+    "column": "value"
+   },
+   "rid": "r23"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-01",
+   "period_type": "month",
+   "value": 855,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AC116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-01"
+    },
+    "column": "value"
+   },
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-02",
+   "period_type": "month",
+   "value": 996,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AD116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-02"
+    },
+    "column": "value"
+   },
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-03",
+   "period_type": "month",
+   "value": 1049,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AE116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-03"
+    },
+    "column": "value"
+   },
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-04",
+   "period_type": "month",
+   "value": 698,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AF116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-04"
+    },
+    "column": "value"
+   },
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-05",
+   "period_type": "month",
+   "value": 1173,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AG116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-05"
+    },
+    "column": "value"
+   },
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-06",
+   "period_type": "month",
+   "value": 1074,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AH116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r29"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-07",
+   "period_type": "month",
+   "value": 1101,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AI116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-07"
+    },
+    "column": "value"
+   },
+   "rid": "r30"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-08",
+   "period_type": "month",
+   "value": 902,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AJ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-08"
+    },
+    "column": "value"
+   },
+   "rid": "r31"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-09",
+   "period_type": "month",
+   "value": 936,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AK116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-09"
+    },
+    "column": "value"
+   },
+   "rid": "r32"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-10",
+   "period_type": "month",
+   "value": 921,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AL116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-10"
+    },
+    "column": "value"
+   },
+   "rid": "r33"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-11",
+   "period_type": "month",
+   "value": 924,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AM116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-11"
+    },
+    "column": "value"
+   },
+   "rid": "r34"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2019-12",
+   "period_type": "month",
+   "value": 674,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AN116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2019-12"
+    },
+    "column": "value"
+   },
+   "rid": "r35"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-01",
+   "period_type": "month",
+   "value": 1019,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AO116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-01"
+    },
+    "column": "value"
+   },
+   "rid": "r36"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-02",
+   "period_type": "month",
+   "value": 1150,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AP116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-02"
+    },
+    "column": "value"
+   },
+   "rid": "r37"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-03",
+   "period_type": "month",
+   "value": 853,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AQ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-03"
+    },
+    "column": "value"
+   },
+   "rid": "r38"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-04",
+   "period_type": "month",
+   "value": 525,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AR116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-04"
+    },
+    "column": "value"
+   },
+   "rid": "r39"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-05",
+   "period_type": "month",
+   "value": 481,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AS116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-05"
+    },
+    "column": "value"
+   },
+   "rid": "r40"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-06",
+   "period_type": "month",
+   "value": 529,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AT116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r41"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-07",
+   "period_type": "month",
+   "value": 584,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AU116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-07"
+    },
+    "column": "value"
+   },
+   "rid": "r42"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-08",
+   "period_type": "month",
+   "value": 685,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AV116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-08"
+    },
+    "column": "value"
+   },
+   "rid": "r43"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-09",
+   "period_type": "month",
+   "value": 837,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AW116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-09"
+    },
+    "column": "value"
+   },
+   "rid": "r44"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-10",
+   "period_type": "month",
+   "value": 949,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AX116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-10"
+    },
+    "column": "value"
+   },
+   "rid": "r45"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-11",
+   "period_type": "month",
+   "value": 709,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AY116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-11"
+    },
+    "column": "value"
+   },
+   "rid": "r46"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2020-12",
+   "period_type": "month",
+   "value": 709,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell AZ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2020-12"
+    },
+    "column": "value"
+   },
+   "rid": "r47"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-01",
+   "period_type": "month",
+   "value": 822,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BA116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-01"
+    },
+    "column": "value"
+   },
+   "rid": "r48"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-02",
+   "period_type": "month",
+   "value": 763,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BB116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-02"
+    },
+    "column": "value"
+   },
+   "rid": "r49"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-03",
+   "period_type": "month",
+   "value": 1110,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BC116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-03"
+    },
+    "column": "value"
+   },
+   "rid": "r50"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-04",
+   "period_type": "month",
+   "value": 947,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BD116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-04"
+    },
+    "column": "value"
+   },
+   "rid": "r51"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-05",
+   "period_type": "month",
+   "value": 1139,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BE116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-05"
+    },
+    "column": "value"
+   },
+   "rid": "r52"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-06",
+   "period_type": "month",
+   "value": 1052,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BF116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r53"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-07",
+   "period_type": "month",
+   "value": 1186,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BG116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-07"
+    },
+    "column": "value"
+   },
+   "rid": "r54"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-08",
+   "period_type": "month",
+   "value": 1037,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BH116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-08"
+    },
+    "column": "value"
+   },
+   "rid": "r55"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-09",
+   "period_type": "month",
+   "value": 1180,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BI116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-09"
+    },
+    "column": "value"
+   },
+   "rid": "r56"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-10",
+   "period_type": "month",
+   "value": 1245,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BJ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-10"
+    },
+    "column": "value"
+   },
+   "rid": "r57"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-11",
+   "period_type": "month",
+   "value": 1185,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BK116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-11"
+    },
+    "column": "value"
+   },
+   "rid": "r58"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2021-12",
+   "period_type": "month",
+   "value": 1104,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BL116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2021-12"
+    },
+    "column": "value"
+   },
+   "rid": "r59"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-01",
+   "period_type": "month",
+   "value": 1403,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BM116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-01"
+    },
+    "column": "value"
+   },
+   "rid": "r60"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-02",
+   "period_type": "month",
+   "value": 1050,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BN116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-02"
+    },
+    "column": "value"
+   },
+   "rid": "r61"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-03",
+   "period_type": "month",
+   "value": 1226,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BO116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-03"
+    },
+    "column": "value"
+   },
+   "rid": "r62"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-04",
+   "period_type": "month",
+   "value": 998,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BP116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-04"
+    },
+    "column": "value"
+   },
+   "rid": "r63"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-05",
+   "period_type": "month",
+   "value": 1240,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BQ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-05"
+    },
+    "column": "value"
+   },
+   "rid": "r64"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-06",
+   "period_type": "month",
+   "value": 1113,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BR116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r65"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-07",
+   "period_type": "month",
+   "value": 1151,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BS116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-07"
+    },
+    "column": "value"
+   },
+   "rid": "r66"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-08",
+   "period_type": "month",
+   "value": 1110,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BT116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-08"
+    },
+    "column": "value"
+   },
+   "rid": "r67"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-09",
+   "period_type": "month",
+   "value": 1127,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BU116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-09"
+    },
+    "column": "value"
+   },
+   "rid": "r68"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-10",
+   "period_type": "month",
+   "value": 1074,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BV116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-10"
+    },
+    "column": "value"
+   },
+   "rid": "r69"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-11",
+   "period_type": "month",
+   "value": 1059,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BW116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-11"
+    },
+    "column": "value"
+   },
+   "rid": "r70"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2022-12",
+   "period_type": "month",
+   "value": 884,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BX116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2022-12"
+    },
+    "column": "value"
+   },
+   "rid": "r71"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-01",
+   "period_type": "month",
+   "value": 1157,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BY116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-01"
+    },
+    "column": "value"
+   },
+   "rid": "r72"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-02",
+   "period_type": "month",
+   "value": 905,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell BZ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-02"
+    },
+    "column": "value"
+   },
+   "rid": "r73"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-03",
+   "period_type": "month",
+   "value": 1046,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CA116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-03"
+    },
+    "column": "value"
+   },
+   "rid": "r74"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-04",
+   "period_type": "month",
+   "value": 900,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CB116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-04"
+    },
+    "column": "value"
+   },
+   "rid": "r75"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-05",
+   "period_type": "month",
+   "value": 1082,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CC116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-05"
+    },
+    "column": "value"
+   },
+   "rid": "r76"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-06",
+   "period_type": "month",
+   "value": 1111,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CD116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r77"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-07",
+   "period_type": "month",
+   "value": 751,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CE116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-07"
+    },
+    "column": "value"
+   },
+   "rid": "r78"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-08",
+   "period_type": "month",
+   "value": 643,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CF116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-08"
+    },
+    "column": "value"
+   },
+   "rid": "r79"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-09",
+   "period_type": "month",
+   "value": 576,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CG116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-09"
+    },
+    "column": "value"
+   },
+   "rid": "r80"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-10",
+   "period_type": "month",
+   "value": 557,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CH116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-10"
+    },
+    "column": "value"
+   },
+   "rid": "r81"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-11",
+   "period_type": "month",
+   "value": 572,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CI116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-11"
+    },
+    "column": "value"
+   },
+   "rid": "r82"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2023-12",
+   "period_type": "month",
+   "value": 546,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CJ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2023-12"
+    },
+    "column": "value"
+   },
+   "rid": "r83"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-01",
+   "period_type": "month",
+   "value": 898,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CK116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-01"
+    },
+    "column": "value"
+   },
+   "rid": "r84"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-02",
+   "period_type": "month",
+   "value": 806,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CL116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-02"
+    },
+    "column": "value"
+   },
+   "rid": "r85"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-03",
+   "period_type": "month",
+   "value": 784,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CM116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-03"
+    },
+    "column": "value"
+   },
+   "rid": "r86"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-04",
+   "period_type": "month",
+   "value": 915,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CN116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-04"
+    },
+    "column": "value"
+   },
+   "rid": "r87"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-05",
+   "period_type": "month",
+   "value": 1012,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CO116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-05"
+    },
+    "column": "value"
+   },
+   "rid": "r88"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-06",
+   "period_type": "month",
+   "value": 887,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CP116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r89"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-07",
+   "period_type": "month",
+   "value": 736,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CQ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-07"
+    },
+    "column": "value"
+   },
+   "rid": "r90"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-08",
+   "period_type": "month",
+   "value": 629,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CR116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-08"
+    },
+    "column": "value"
+   },
+   "rid": "r91"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-09",
+   "period_type": "month",
+   "value": 657,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CS116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-09"
+    },
+    "column": "value"
+   },
+   "rid": "r92"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-10",
+   "period_type": "month",
+   "value": 536,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CT116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-10"
+    },
+    "column": "value"
+   },
+   "rid": "r93"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-11",
+   "period_type": "month",
+   "value": 522,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CU116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-11"
+    },
+    "column": "value"
+   },
+   "rid": "r94"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2024-12",
+   "period_type": "month",
+   "value": 385,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CV116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2024-12"
+    },
+    "column": "value"
+   },
+   "rid": "r95"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-01",
+   "period_type": "month",
+   "value": 570,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CW116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-01"
+    },
+    "column": "value"
+   },
+   "rid": "r96"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-02",
+   "period_type": "month",
+   "value": 624,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CX116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-02"
+    },
+    "column": "value"
+   },
+   "rid": "r97"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-03",
+   "period_type": "month",
+   "value": 674,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CY116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-03"
+    },
+    "column": "value"
+   },
+   "rid": "r98"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-04",
+   "period_type": "month",
+   "value": 556,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell CZ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-04"
+    },
+    "column": "value"
+   },
+   "rid": "r99"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-05",
+   "period_type": "month",
+   "value": 683,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DA116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-05"
+    },
+    "column": "value"
+   },
+   "rid": "r100"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-06",
+   "period_type": "month",
+   "value": null,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DB116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "suppressed [x] in the source; shown as a gap, not a zero",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r101"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-07",
+   "period_type": "month",
+   "value": null,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DC116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "suppressed [x] in the source; shown as a gap, not a zero",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-07"
+    },
+    "column": "value"
+   },
+   "rid": "r102"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-08",
+   "period_type": "month",
+   "value": 690,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DD116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-08"
+    },
+    "column": "value"
+   },
+   "rid": "r103"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-09",
+   "period_type": "month",
+   "value": 750,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DE116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-09"
+    },
+    "column": "value"
+   },
+   "rid": "r104"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-10",
+   "period_type": "month",
+   "value": 686,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DF116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-10"
+    },
+    "column": "value"
+   },
+   "rid": "r105"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-11",
+   "period_type": "month",
+   "value": 712,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DG116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-11"
+    },
+    "column": "value"
+   },
+   "rid": "r106"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2025-12",
+   "period_type": "month",
+   "value": 316,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DH116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2025-12"
+    },
+    "column": "value"
+   },
+   "rid": "r107"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-01",
+   "period_type": "month",
+   "value": 652,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DI116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-01"
+    },
+    "column": "value"
+   },
+   "rid": "r108"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-02",
+   "period_type": "month",
+   "value": 574,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DJ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-02"
+    },
+    "column": "value"
+   },
+   "rid": "r109"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-03",
+   "period_type": "month",
+   "value": null,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DK116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "suppressed [x] in the source; shown as a gap, not a zero",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-03"
+    },
+    "column": "value"
+   },
+   "rid": "r110"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-04",
+   "period_type": "month",
+   "value": 652,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DL116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-04"
+    },
+    "column": "value"
+   },
+   "rid": "r111"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-05",
+   "period_type": "month",
+   "value": 572,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DM116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-05"
+    },
+    "column": "value"
+   },
+   "rid": "r112"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-06",
+   "period_type": "month",
+   "value": null,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DN116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "suppressed [x] in the source; shown as a gap, not a zero",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r113"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-07",
+   "period_type": "month",
+   "value": null,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DO116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "suppressed [x] in the source; shown as a gap, not a zero",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-07"
+    },
+    "column": "value"
+   },
+   "rid": "r114"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-08",
+   "period_type": "month",
+   "value": 586,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DP116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-08"
+    },
+    "column": "value"
+   },
+   "rid": "r115"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "online_job_adverts_new",
+   "period": "2026-09",
+   "period_type": "month",
+   "value": 702,
+   "unit": "adverts",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Labour demand volumes by Standard Occupation Classification (SOC 2020), UK",
+   "source_table": "Table 2, cell DQ116",
+   "source_edition": "January 2017 to September 2026 edition, released 23 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk/january2017toseptember2026/labourdemandbyoccupation.xlsx",
+   "source_sha256": "df0bf25b8b50f6f19f54da3a7779aab20fc741e2c0d365c2df0754e5c3a2a7c3",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "partially imputed by ONS (cover sheet, data issue October 2025 to September 2026); a large source rose to its correct level in September 2026 (cover sheet; note 15); increased uncertainty since November 2025 (cover sheet)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/adverts.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "online_job_adverts_new",
+     "period": "2026-09"
+    },
+    "column": "value"
+   },
+   "rid": "r116"
+  }
+ ],
+ "derived": []
+}

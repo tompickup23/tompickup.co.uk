@@ -1,0 +1,865 @@
+{
+ "$meta": {
+  "panel": "tile-gdp-per-head",
+  "title": "GDP per head, current market prices",
+  "page": "/burnley-economy/",
+  "measures": [
+   {
+    "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+    "definition": "Gross domestic product per head of population at current market prices, by workplace output and resident population (ONS regional GDP, as republished by Explore Local Statistics)",
+    "unit": "GBP",
+    "decimals": 0,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "ELS republishes other ONS and government releases; the original table is the citable source"
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "Explore Local Statistics, all datasets CSV (republishing ONS regional economic activity by GDP)",
+  "edition": "as downloaded 2026-10-25",
+  "access_date": "2026-10-25",
+  "citation": "ONS (2026g) Explore Local Statistics",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "sha256": "0596e7f281ec3436a0d609df8bb2eecd10867d3c1e1d11a0fadcef3c58d6eafb"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "sha256": "c850200ea72e892eb47765ecad78b7f8a4b2d1edb5c3f1bfcbbd0a51d4d3606f"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "sha256": "e13a1849706a8161f94ec42b515e84d8ba95b563fe988367d40a3386d0ed89be"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_4.csv",
+    "sha256": "b4d33349cbde5628127852f15d76e359c90cf1f53e684fddcd32e9876c5f9097"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_5.csv",
+    "sha256": "d47fca625b03acdb070bb163cd08c0e55456bb1c19da5a09ae5b11b07c345687"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_6.csv",
+    "sha256": "4a0e87b9e89c0340049c7d0c307c50159585d6d1b78188847c99f9c432aab1e6"
+   }
+  ],
+  "vintage": "calendar year 2024",
+  "caveat": "Output is counted where it is produced and divided by residents, so commuting lowers it for a town whose residents work elsewhere. The panel was planned as GVA per head; no held table publishes GVA per head for a district, so the published GDP measure is used (revision log, 25 October 2026).",
+  "next_release": "",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2024-01-01/P1Y",
+  "neighbour_period": "2024-01-01/P1Y"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 28423,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 936399",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "fixed comparator (STATE.md)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 36926,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 940746",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "fixed comparator (STATE.md)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 42171,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 941421",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "fixed comparator (STATE.md)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E08000008",
+   "geography_name": "Tameside",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 21518,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939045",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 1 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000008",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E08000034",
+   "geography_name": "Kirklees",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 25042,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939720",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 2 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000034",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E06000021",
+   "geography_name": "Stoke-on-Trent",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 31358,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 933267",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 3 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E06000021",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E08000030",
+   "geography_name": "Walsall",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22207,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939612",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 4 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000030",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E08000005",
+   "geography_name": "Rochdale",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23482,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 938964",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 5 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000005",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E06000015",
+   "geography_name": "Derby",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 37814,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 933105",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 6 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E06000015",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E08000001",
+   "geography_name": "Bolton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 28931,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 938856",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 7 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000001",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E08000002",
+   "geography_name": "Bury",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 25743,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 938883",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 8 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000002",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E08000027",
+   "geography_name": "Dudley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22347,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939531",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 9 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000027",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E08000017",
+   "geography_name": "Doncaster",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 27945,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939288",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 10 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000017",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E08000026",
+   "geography_name": "Coventry",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 37650,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939504",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 12 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000026",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E08000036",
+   "geography_name": "Wakefield",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 33706,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939774",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 13 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000036",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E08000016",
+   "geography_name": "Barnsley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23945,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939261",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 14 of 20 (ONS Explore Local Statistics, global model); ELS data carries 2 codes for Barnsley: E08000016 E08000038",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000016",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E06000031",
+   "geography_name": "Peterborough",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 40357,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 933483",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 15 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E06000031",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E08000004",
+   "geography_name": "Oldham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22920,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 938937",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 16 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000004",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E08000032",
+   "geography_name": "Bradford",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 26053,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939666",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 17 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000032",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E08000031",
+   "geography_name": "Wolverhampton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 28110,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939639",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 18 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000031",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "unitary authority",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 31161,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 932916",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 19 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E06000008",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E08000018",
+   "geography_name": "Rotherham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+   "period": "2024-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 25366,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 939315",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 20 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "key": {
+     "geography_code": "E08000018",
+     "measure": "els_gross_domestic_product_per_head_at_current_market_prices",
+     "period": "2024-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  }
+ ],
+ "derived": [
+  {
+   "id": "gdp_ratio_england",
+   "label": "Burnley as a share of England",
+   "value": 67.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "28423 / 42171 * 100",
+   "inputs": [
+    "r0",
+    "r2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_gross_domestic_product_per_head_at_current_market_prices_neighbour_median",
+   "label": "Median of the 19 nearest neighbours, GDP per head at current market prices",
+   "value": 26053,
+   "decimals": 0,
+   "unit": "GBP",
+   "arithmetic": "median(21518, 25042, 31358, 22207, 23482, 37814, 28931, 25743, 22347, 27945, 37650, 33706, 23945, 40357, 22920, 26053, 28110, 31161, 25366)",
+   "inputs": [
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_gross_domestic_product_per_head_at_current_market_prices_neighbour_mad",
+   "label": "Median absolute deviation of the 19 nearest neighbours",
+   "value": 3133,
+   "decimals": 1,
+   "unit": "GBP",
+   "arithmetic": "mad(21518, 25042, 31358, 22207, 23482, 37814, 28931, 25743, 22347, 27945, 37650, 33706, 23945, 40357, 22920, 26053, 28110, 31161, 25366)",
+   "inputs": [
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_gross_domestic_product_per_head_at_current_market_prices_neighbours_above_burnley",
+   "label": "Nearest neighbours with a higher value than Burnley",
+   "value": 7,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "countabove(28423, 21518, 25042, 31358, 22207, 23482, 37814, 28931, 25743, 22347, 27945, 37650, 33706, 23945, 40357, 22920, 26053, 28110, 31161, 25366)",
+   "inputs": [
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r0"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_gross_domestic_product_per_head_at_current_market_prices_neighbour_count",
+   "label": "Nearest neighbours with a value in the period",
+   "value": 19,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "count(21518, 25042, 31358, 22207, 23482, 37814, 28931, 25743, 22347, 27945, 37650, 33706, 23945, 40357, 22920, 26053, 28110, 31161, 25366)",
+   "inputs": [
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_gross_domestic_product_per_head_at_current_market_prices_neighbour_test",
+   "label": "Burnley against the neighbour median, by one median absolute deviation",
+   "value": "similar",
+   "decimals": null,
+   "unit": "",
+   "arithmetic": "test(28423, 26053, 3133)",
+   "inputs": [],
+   "note": "The ONS rule (higher or lower when one or more median absolute deviations away, otherwise similar) applied to the neighbour set held, not the ONS service's own statement, which uses every area at the same level"
+  }
+ ]
+}

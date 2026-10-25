@@ -1,0 +1,117 @@
+---
+/* Method: which Burnley, the comparators and their test, the codebook, every
+   source with its hash, and the revision log, all from the method contract. */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import { contract, jsonUrl, longDate } from '../../lib/burnley-economy';
+
+const m = contract('method') as ReturnType<typeof contract> & {
+  codebook: { measure: string; definition: string; unit: string; panel: string; codebook: string }[];
+  workstream_files: { file: string; sha256: string }[];
+  official_sources: { publisher: string; title: string; edition: string; url: string; sha256: string; access_date: string }[];
+  held_inputs: { workstream: string; file: string; sha256: string; used_for: string }[];
+  neighbours: { rank: number; name: string; codes: string }[];
+  comparators: { code: string; name: string }[];
+  revisions: { date: string; panel: string; change: string; reason: string; source: string }[];
+};
+const short = (h: string) => `${h.slice(0, 12)}…`;
+---
+
+<EconomyPage
+  title="Method"
+  seoTitle="Burnley's economy: method, sources and revision log | Tom Pickup"
+  description="How the Burnley's economy pages are built: which Burnley, the comparators and the test used against them, the codebook, every source file with its SHA-256 hash, and the dated revision log."
+  eyebrow="Burnley's economy · Method"
+  intro="Every number in this collection is read from a data file built from the publishers' own tables. This page says which area each figure covers, what it is compared with, where each file came from, and what has changed."
+  path="/burnley-economy/method/"
+>
+  <section id="which" aria-labelledby="which-title">
+    <h2 id="which-title">Which Burnley</h2>
+    <div class="prose">
+      <p>Every figure is for Burnley borough (E07000117), the fifteen wards, unless the panel says otherwise. Some sources give only a wider area, and the panel then names it. Examples are East Lancashire for productivity (Burnley, Hyndburn, Pendle and Rossendale) and the Burnley travel to work area. Company figures count a registered office in the borough, which is not always where a business trades.</p>
+    </div>
+  </section>
+
+  <section id="comparators" aria-labelledby="comp-title">
+    <h2 id="comp-title">Comparators and the test</h2>
+    <div class="prose">
+      <p>The fixed comparators are {m.comparators.filter((c) => c.code !== 'E07000117').map((c) => c.name).join(', ')}. They are Burnley's neighbours, its county, its region and England.</p>
+      <p>The statistical comparators are the 20 areas the ONS names as most similar to Burnley in Explore Local Statistics (ONS, 2026g). The ONS builds the list from many indicators by clustering, and orders it by distance. In order: {m.neighbours.map((n) => n.name).join(', ')}.</p>
+      <p>Against the neighbours, Burnley is called higher or lower only when it is at least one median absolute deviation from their median, and similar otherwise. That is the rule the ONS uses in Explore Local Statistics (ONS, 2025c). The ONS applies it across every area at the same level. The files held here carry only these areas, so the rule is applied to the neighbour set. The median, the deviation and the result are in each tile's data file. No ranking of Burnley against every council in the country is made.</p>
+    </div>
+  </section>
+
+  <section id="contracts" aria-labelledby="contracts-title">
+    <h2 id="contracts-title">How the pages are built</h2>
+    <div class="prose">
+      <p>The research behind these pages keeps each official series in a long table, one row per area, measure and period. Each row names the publisher, table, edition and access date, and the SHA-256 hash of the file downloaded. A script turns those tables into one data file per panel. A second script checks every value in those files against the row it came from. It recomputes every derived figure from its stated arithmetic, and fails if any source file has changed since. The pages read the data files when the site is built; no number on them is typed by hand. Each panel offers its rows as a CSV, and its full file with sources and hashes as JSON.</p>
+      <p>A figure published here changes only with a new release or a primary source plus one corroboration. Every change is logged below with its date and reason. Figures carrying an earlier vintage say so on their panel, with the date of the release that replaces them.</p>
+      <p>Two things are never shown: an estimate presented as fact, and any measure by ethnicity, religion, country of birth or nationality. No person is named beside a figure. Companies are named only in the business page's list of the largest filers, each headcount checked against the company's own accounts at Companies House. The site does not generate a page per company, ward or sector.</p>
+    </div>
+  </section>
+
+  <section id="codebook" aria-labelledby="codebook-title">
+    <h2 id="codebook-title">Codebook</h2>
+    <div class="table-wrap">
+      <table class="econ-table">
+        <thead><tr><th scope="col">Measure</th><th scope="col">Definition</th><th scope="col">Unit</th><th scope="col">Panel</th></tr></thead>
+        <tbody>{m.codebook.map((c) => <tr><th scope="row"><code>{c.measure}</code></th><td>{c.definition}</td><td>{c.unit}</td><td><a href={jsonUrl(c.panel)}>{c.panel}</a></td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sources" aria-labelledby="sources-title">
+    <h2 id="sources-title">Sources and hashes</h2>
+    <div class="prose"><p>Official files downloaded from the publisher, with the SHA-256 hash of each file as downloaded. The full hash is in the <a href={jsonUrl('method')}>method data file</a>.</p></div>
+    <div class="table-wrap">
+      <table class="econ-table">
+        <thead><tr><th scope="col">Publisher</th><th scope="col">Title</th><th scope="col">Edition</th><th scope="col">Accessed</th><th scope="col">SHA-256</th></tr></thead>
+        <tbody>{m.official_sources.map((s) => <tr><td>{s.publisher}</td><td><a href={s.url}>{s.title}</a></td><td>{s.edition}</td><td class="num">{longDate(s.access_date)}</td><td><code>{short(s.sha256)}</code></td></tr>)}</tbody>
+      </table>
+    </div>
+    <h3>Files held by the research and used by the business and people panels</h3>
+    <div class="table-wrap">
+      <table class="econ-table">
+        <thead><tr><th scope="col">File</th><th scope="col">Used for</th><th scope="col">SHA-256</th></tr></thead>
+        <tbody>{m.held_inputs.map((h) => <tr><td><code>{h.file}</code></td><td>{h.used_for}</td><td><code>{short(h.sha256)}</code></td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="revisions" aria-labelledby="revisions-title">
+    <h2 id="revisions-title">Revision log</h2>
+    <ol class="revisions">
+      {m.revisions.map((r) => <li><time datetime={r.date}>{longDate(r.date)}</time> <strong>{r.panel}.</strong> {r.change} <span class="why">{r.reason}</span></li>)}
+    </ol>
+  </section>
+
+  <section id="references" aria-labelledby="refs-title">
+    <h2 id="refs-title">References</h2>
+    <ul class="refs">
+      <li>Companies House (2026) <em>Free Company Data Product</em>, snapshot of 1 July 2026. Available at: https://download.companieshouse.gov.uk/en_output.html (Accessed 26 July 2026).</li>
+      <li>Department for Education (2025) <em>Apprenticeships</em> and <em>Further education and skills</em>, academic year 2024/25, 27 November 2025. Available at: https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94 (Accessed 25 October 2026).</li>
+      <li>Food Standards Agency (2026) <em>Food Hygiene Rating Scheme open data</em>, Burnley, releases of 24 July and 27 September 2026. Available at: https://ratings.food.gov.uk/open-data (Accessed 27 September 2026).</li>
+      <li>ONS (2015 to 2026a) <em>LI01 Regional labour market: local indicators for counties, local and unitary authorities</em>, November 2015 and October 2016 to 2026 editions. Available at: https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities (Accessed 25 October 2026).</li>
+      <li>ONS (2015 to 2026b) <em>CC01 Regional labour market: Claimant Count by unitary and local authority</em>. Available at: https://www.ons.gov.uk/employmentandlabourmarket/peoplenotinwork/unemployment/datasets/claimantcountbyunitaryandlocalauthorityexperimental (Accessed 24 and 25 October 2026).</li>
+      <li>ONS (2017 to 2026) <em>Annual Survey of Hours and Earnings</em>, Tables 7 and 8, 2016 to 2025 revised and 2026 provisional. Available at: https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/placeofworkbylocalauthorityashetable7 (Accessed 24 and 25 October 2026).</li>
+      <li>ONS (2025b) <em>Business demography, UK: reference tables</em>, 2024 edition, 20 November 2025. Available at: https://www.ons.gov.uk/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable (Accessed 25 October 2026).</li>
+      <li>ONS (2025c) <em>Explore local statistics service QMI</em>, section 7, last revised 25 April 2025. Available at: https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/healthandwellbeing/methodologies/explorelocalstatisticsserviceqmi (Accessed 25 October 2026).</li>
+      <li>ONS (2026) <em>Labour demand volumes by Standard Occupation Classification (SOC 2020), UK</em>, January 2017 to September 2026, 23 October 2026. Available at: https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourdemandvolumesbystandardoccupationclassificationsoc2020uk (Accessed 24 October 2026).</li>
+      <li>ONS (2026g) <em>Explore local statistics: all datasets for all areas</em> (CSV) and the Burnley indicators page. Available at: https://www.ons.gov.uk/explore-local-statistics/areas/E07000117-burnley/indicators (Accessed 25 October 2026).</li>
+      <li>ONS and HMRC (2026) <em>Earnings and employment from Pay As You Earn Real Time Information, non-seasonally adjusted</em>, September 2026 edition. Available at: https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/realtimeinformationstatisticsreferencetablenonseasonallyadjusted (Accessed 25 October 2026).</li>
+      <li>ONS Census 2021 and Census 2011, ward tables TS037, TS066, TS067, KS501EW and KS601EW. Available at: https://www.ons.gov.uk/census (Accessed 25 October 2026).</li>
+      <li>ONS (2019), Department for Education (2023) and GLA Economics (2026) occupational exposure measures, as listed in the people and skills data file.</li>
+      <li>Valuation Office Agency (2026) <em>Non-domestic rating: stock of properties</em>, 31 March 2026. Available at: https://www.gov.uk/government/statistics/non-domestic-rating-stock-of-properties-march-2026 (Accessed 17 August 2026).</li>
+    </ul>
+  </section>
+</EconomyPage>
+
+<style>
+  .econ-table code, .refs code { font-size: 0.8125rem; }
+  .econ-table a { color: var(--teal); }
+  .prose a { color: var(--teal); }
+  .revisions { margin: 0; padding-left: 1.25rem; display: grid; gap: 10px; }
+  .revisions li { font-size: 0.9375rem !important; line-height: 1.55 !important; }
+  .revisions .why { color: var(--muted); }
+  .refs { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; }
+  .refs li { font-size: 0.9375rem !important; line-height: 1.55 !important; overflow-wrap: anywhere; }
+</style>

@@ -1,0 +1,2214 @@
+{
+ "$meta": {
+  "panel": "ps-automation",
+  "title": "Three exposure measures, side by side and never combined",
+  "page": "/burnley-economy/people-and-skills/",
+  "measures": [
+   {
+    "measure": "ons_mean_probability",
+    "definition": "Mean ONS (2019) probability of automation, weighted by residents' occupations",
+    "unit": "probability",
+    "decimals": 2,
+    "codebook": "C_people_skills/automation.csv",
+    "notes_common_to_every_row": "central value, with the lower and upper bounds from the occupation crosswalk"
+   },
+   {
+    "measure": "dfe_aioe_mean",
+    "definition": "Mean DfE (2023) AI occupational exposure score, all AI, standardised",
+    "unit": "score",
+    "decimals": 2,
+    "codebook": "C_people_skills/automation.csv",
+    "notes_common_to_every_row": "central value, with the lower and upper bounds from the occupation crosswalk"
+   },
+   {
+    "measure": "gla_genai_share_l1_4",
+    "definition": "Share of employed residents in occupations at GLA (2026) generative AI exposure levels 1 to 4",
+    "unit": "%",
+    "decimals": 1,
+    "codebook": "C_people_skills/automation.csv",
+    "notes_common_to_every_row": "central value, with the lower and upper bounds from the occupation crosswalk"
+   }
+  ],
+  "publisher": "Office for National Statistics; Department for Education; GLA Economics",
+  "table": "ONS (2019) probability of automation, Table 9; DfE (2023) AI occupational exposure, Annex 1 Table 1; GLA Economics (2026) Working Paper 103, Table A5.1; Census 2021 occupation",
+  "edition": "measures of 2019, 2023 and 2026 applied to Census 2021 occupations",
+  "access_date": "2026-10-25",
+  "citation": "Workstream C automation.csv, from ONS (2019), DfE (2023) and GLA Economics (2026)",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "sha256": "079b87c10e93722d38878dfd88a47c6686c691721e8d521e27b4ae74b5ef9e4e"
+   }
+  ],
+  "vintage": "Census 2021 occupations (lockdown); scores carried across classifications",
+  "caveat": "Exposure is technical potential, not forecast job loss. The three measures answer different questions and are not combined. The ONS high risk share for Burnley is not quoted: the published cell is suppressed.",
+  "next_release": "when any of the three measures is revised",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.49,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.44,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.53,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.49,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.44,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.53,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.49,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.44,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.53,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.45,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.41,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.5,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.48,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.43,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.52,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.46,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.41,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.5,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.46,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.41,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.5,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.45,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.41,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "ons_mean_probability_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.5,
+   "unit": "probability",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean ONS probability of automation (probability)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean ONS probability of automation (probability)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r23"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.11,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.52,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.3,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.1,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.53,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.33,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r29"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.07,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r30"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.5,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r31"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.36,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r32"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.07,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r33"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.37,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r34"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.47,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r35"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.01,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r36"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.44,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r37"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.41,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r38"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.05,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r39"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.38,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r40"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.46,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r41"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.09,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r42"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.35,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r43"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.5,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r44"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.13,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r45"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": -0.32,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r46"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "dfe_aioe_mean_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 0.53,
+   "unit": "score",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Employment-weighted mean DfE AIOE (All AI), standardised score (score)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r47"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 29.34,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r48"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 22.26,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r49"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 40.88,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000117",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r50"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 29.95,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r51"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 22.36,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r52"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 43.22,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000122",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r53"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 30.91,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r54"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 23.36,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r55"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 43.62,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000120",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r56"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 31.47,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r57"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 22.95,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r58"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 45.49,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E07000125",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r59"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 33.01,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r60"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 25.62,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r61"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 45.14,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E06000008",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r62"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 32.61,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r63"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 24.26,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r64"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire (county, twelve districts)",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 46.36,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E10000017",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r65"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 34.76,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r66"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 25.78,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r67"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 48.91,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E12000002",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r68"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_central",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 35.68,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "yes",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_central"
+   },
+   "rid": "r69"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_lower",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 25.87,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_lower"
+   },
+   "rid": "r70"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "gla_genai_share_l1_4_upper",
+   "period": "Census 2021 occupations",
+   "period_type": "census day",
+   "value": 50.74,
+   "unit": "%",
+   "source_publisher": "workstream C, from ONS, DfE and GLA measures",
+   "source_title": "automation.csv",
+   "source_table": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)",
+   "source_edition": "25 October 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "C scripts/build_automation.py: employment weighted mean (or share) of occupation scores over Census 2021 occupations, carried across classifications with stated weights",
+   "note": "Derived, grade M. Exposure is technical potential, not forecast job loss.",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/automation.csv",
+    "key": {
+     "row_type": "summary",
+     "geography_code": "E92000001",
+     "metric": "Share of employed residents in occupations at GLA generative AI exposure levels 1 to 4 (%)"
+    },
+    "column": "value_upper"
+   },
+   "rid": "r71"
+  }
+ ],
+ "derived": []
+}

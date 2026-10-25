@@ -1,0 +1,168 @@
+---
+/* Jobs and pay: four panels, each read from its contract. */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import Panel from '../../components/burnley-economy/Panel.astro';
+import LineChart from '../../components/burnley-economy/LineChart.astro';
+import { contract, rows, row, derived, latestRow, fmt, num, periodText, shortMonth } from '../../lib/burnley-economy';
+
+const BOR = 'E07000117', ENG = 'E92000001', UK = 'K02000001';
+const endYear = (p: string) => p.split('/')[1]?.slice(0, 4) ?? p;
+
+/* 1. employment and inactivity: single years faint, three year means solid */
+const ei = contract('jp-employment-inactivity');
+function rateChart(measure: string) {
+  const b = rows(ei, { geography_code: BOR, measure }).sort((x, y) => x.period.localeCompare(y.period));
+  const e = rows(ei, { geography_code: ENG, measure }).sort((x, y) => x.period.localeCompare(y.period));
+  const xs = b.map((r) => r.period);
+  const pooledB = xs.map((p) => {
+    const d = ei.derived.find((x) => x.id === `pooled_${measure}_${BOR}_${p}`);
+    return { x: p, y: d ? (d.value as number) : null, tip: d ? `Burnley, three years to ${endYear(p)}: ${fmt(d.value as number, '%', 1)}` : undefined };
+  });
+  const pooledE = xs.map((p) => {
+    const d = ei.derived.find((x) => x.id === `pooled_${measure}_${ENG}_${p}`);
+    return { x: p, y: d ? (d.value as number) : null, tip: d ? `England, three years to ${endYear(p)}: ${fmt(d.value as number, '%', 1)}` : undefined };
+  });
+  const last = (pts: { y: number | null }[]) => [...pts].reverse().find((p) => p.y !== null)?.y ?? null;
+  return {
+    xs,
+    series: [
+      { key: 'b1', label: 'Burnley, single year', color: 'var(--chart-1)', faint: true, dots: true, points: b.map((r) => ({ x: r.period, y: r.value, tip: `Burnley, year to June ${endYear(r.period)}: ${fmt(r.value, '%', 1)}` })) },
+      { key: 'b3', label: 'Burnley, three year mean', color: 'var(--chart-1)', points: pooledB, endLabel: `Burnley ${fmt(last(pooledB), '%', 1)}` },
+      { key: 'e3', label: 'England, three year mean', color: 'var(--chart-neutral)', points: pooledE, endLabel: `England ${fmt(last(pooledE), '%', 1)}` },
+    ],
+    b, e,
+  };
+}
+const emp = rateChart('li01_employment_rate_16_64');
+const ina = rateChart('li01_inactivity_rate_16_64');
+const latestP = emp.xs[emp.xs.length - 1];
+const pooledLatest = (m: string, geo: string) => derived(ei, `pooled_${m}_${geo}_${latestP}`).value as number;
+const singles = emp.b.map((r) => r.value as number);
+
+/* 2. payroll */
+const pay = contract('jp-payroll');
+const pb = rows(pay, { geography_code: BOR }).sort((a, b) => a.period.localeCompare(b.period));
+const pbLast = latestRow(pay, { geography_code: BOR });
+const pbFirst = pb[0];
+const pMin = Math.floor(Math.min(...pb.map((r) => r.value as number)) / 2000) * 2000;
+const pMax = Math.ceil(Math.max(...pb.map((r) => r.value as number)) / 2000) * 2000;
+
+/* 3. pay against England */
+const ap = contract('jp-pay');
+const WM = 'ashe_workplace_ft_weekly_pay_gross_median', RM = 'ashe_resident_ft_weekly_pay_gross_median';
+const years = Array.from(new Set(rows(ap, { geography_code: BOR, measure: WM }).map((r) => r.period))).sort();
+const ratio = (m: string, y: string) => ap.derived.find((d) => d.id === `ratio_${m}_${y}`);
+const ratioSeries = (m: string, label: string, color: string) => ({
+  key: m, label, color, dots: true,
+  points: years.map((y) => { const d = ratio(m, y); return { x: y, y: d ? (d.value as number) : null, tip: d ? `${label}, ${y}: ${num(d.value as number, 1)}% of England` : undefined }; }),
+});
+const wSeries = ratioSeries(WM, 'Jobs located in Burnley', 'var(--chart-1)');
+const rSeries = ratioSeries(RM, 'Burnley residents', 'var(--chart-2)');
+const lastY = years[years.length - 1];
+wSeries.points.length && Object.assign(wSeries, { endLabel: `Jobs ${num(ratio(WM, lastY)!.value as number, 1)}` });
+rSeries.points.length && Object.assign(rSeries, { endLabel: `Residents ${num(ratio(RM, lastY)!.value as number, 1)}` });
+const wRatios = years.map((y) => ratio(WM, y)?.value as number).filter((v) => v !== undefined);
+const cell = (m: string, geo: string, y: string) => rows(ap, { geography_code: geo, measure: m, period: y })[0];
+
+/* 4. adverts */
+const ad = contract('jp-adverts');
+const adr = rows(ad, { geography_code: BOR }).sort((a, b) => a.period.localeCompare(b.period));
+const adLast = latestRow(ad, { geography_code: BOR });
+const suppressed = adr.filter((r) => r.value === null).map((r) => periodText(r.period));
+const adMax = Math.ceil(Math.max(...adr.filter((r) => r.value !== null).map((r) => r.value as number)) / 500) * 500;
+const yearTick = (x: string) => (x.endsWith('-01') ? x.slice(0, 4) : '');
+---
+
+<EconomyPage
+  title="Jobs and pay"
+  seoTitle="Burnley jobs and pay: employment, payroll, wages | Tom Pickup"
+  description="Burnley's employment and inactivity over three year means, payrolled employees each month, pay against England for ten years, and online job adverts, from ONS and HMRC data."
+  eyebrow="Burnley's economy · Jobs and pay"
+  intro="How many Burnley residents work, what Burnley's jobs pay, and how both have moved. The figures come from the ONS labour market tables, HMRC payroll data and the annual pay survey."
+  path="/burnley-economy/jobs-and-pay/"
+>
+  <section aria-labelledby="ei-title">
+    <h2 id="ei-title">Employment and inactivity</h2>
+    <div class="prose">
+      <p>The survey behind these rates samples too few Burnley residents for one year to mean much on its own. Burnley's single year employment readings range from {fmt(Math.min(...singles), '%', 1)} to {fmt(Math.max(...singles), '%', 1)}. So the solid line is the mean of each three consecutive years, and the single years are faint. On the three years to June {endYear(latestP)}, Burnley's employment rate is {fmt(pooledLatest('li01_employment_rate_16_64', BOR), '%', 1)} against England's {fmt(pooledLatest('li01_employment_rate_16_64', ENG), '%', 1)}, and its inactivity rate {fmt(pooledLatest('li01_inactivity_rate_16_64', BOR), '%', 1)} against {fmt(pooledLatest('li01_inactivity_rate_16_64', ENG), '%', 1)}.</p>
+    </div>
+    <Panel c={ei}>
+      <h3 class="chart-h">Employment rate, residents aged 16 to 64</h3>
+      <LineChart series={emp.series} xs={emp.xs} xLabel={(x) => endYear(x).slice(2)} yMin={55} yMax={85} yTicks={[55, 65, 75, 85]} yFormat={(v) => `${num(v, 0)}%`} label={`Employment rate, Burnley and England, twelve months to June, ${endYear(emp.xs[0])} to ${endYear(latestP)}`} />
+      <h3 class="chart-h">Economic inactivity rate, residents aged 16 to 64</h3>
+      <LineChart series={ina.series} xs={ina.xs} xLabel={(x) => endYear(x).slice(2)} yMin={10} yMax={35} yTicks={[10, 15, 20, 25, 30, 35]} yFormat={(v) => `${num(v, 0)}%`} label={`Economic inactivity rate, Burnley and England, twelve months to June, ${endYear(ina.xs[0])} to ${endYear(latestP)}`} />
+      <table class="econ-table" slot="table">
+        <caption>Twelve months to June, one edition a year; three year means derived here</caption>
+        <thead><tr><th scope="col">Year to June</th><th scope="col" class="num">Burnley employment</th><th scope="col" class="num">England employment</th><th scope="col" class="num">Burnley inactivity</th><th scope="col" class="num">England inactivity</th><th scope="col" class="num">Burnley inactivity, three year mean</th></tr></thead>
+        <tbody>{emp.xs.map((p, i) => <tr>
+          <th scope="row">{endYear(p)}</th>
+          <td class="num">{fmt(emp.b[i].value, '%', 1)}</td><td class="num">{fmt(emp.e[i]?.value, '%', 1)}</td>
+          <td class="num">{fmt(ina.b[i].value, '%', 1)}</td><td class="num">{fmt(ina.e[i]?.value, '%', 1)}</td>
+          <td class="num">{fmt(ina.series[1].points[i].y, '%', 1)}</td>
+        </tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="pay-roll-title">
+    <h2 id="pay-roll-title">Payrolled employees, every month</h2>
+    <div class="prose">
+      <p>HMRC's payroll data counts every Burnley resident paid through PAYE, so it has no sampling error. It counted {num(pbLast.value)} in {periodText(pbLast.period)}, an early estimate, against {num(pbFirst.value)} in {periodText(pbFirst.period)}. That is a rise of {num(derived(pay, 'payroll_change_burnley').value as number, 1)}%, against {num(derived(pay, 'payroll_change_uk').value as number, 1)}% for the UK.</p>
+    </div>
+    <Panel c={pay}>
+      <LineChart series={[{ key: 'p', label: 'Burnley residents on a payroll', color: 'var(--chart-1)', points: pb.map((r) => ({ x: r.period, y: r.value, tip: `${shortMonth(r.period)}: ${num(r.value)}` })), endLabel: num(pbLast.value) }]}
+        xs={pb.map((r) => r.period)} xLabel={(x) => (x.endsWith('-01') && +x.slice(0, 4) % 2 === 0 ? x.slice(0, 4) : '')}
+        yMin={pMin} yMax={pMax} yTicks={Array.from({ length: (pMax - pMin) / 2000 + 1 }, (_, i) => pMin + i * 2000)} yFormat={(v) => `${num(v / 1000, 0)}k`}
+        label={`Payrolled employees living in Burnley, monthly, ${periodText(pbFirst.period)} to ${periodText(pbLast.period)}`} />
+      <table class="econ-table" slot="table">
+        <caption>Payrolled employees living in Burnley, each July and the latest month</caption>
+        <thead><tr><th scope="col">Month</th><th scope="col" class="num">Burnley</th><th scope="col" class="num">UK</th></tr></thead>
+        <tbody>{pb.filter((r) => r.period.endsWith('-07') || r === pbLast).map((r) => <tr><th scope="row">{periodText(r.period)}</th><td class="num">{num(r.value)}</td><td class="num">{num(rows(pay, { geography_code: UK, period: r.period })[0]?.value)}</td></tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="pay-title">
+    <h2 id="pay-title">Pay against England, ten years</h2>
+    <div class="prose">
+      <p>The pay survey measures pay two ways: by where the job is and by where the worker lives. Measured by where the job is, Burnley's median has stayed between {num(Math.min(...wRatios), 1)}% and {num(Math.max(...wRatios), 1)}% of England's since {years[0]}. Burnley's residents earn more than Burnley's jobs pay. That would fit some residents working in better paid jobs outside the borough; the survey does not say where they work.</p>
+    </div>
+    <Panel c={ap} title="Median full time weekly pay as a share of England's, workplace and resident">
+      <LineChart series={[wSeries, rSeries]} xs={years} xLabel={(x) => x.slice(2)} yMin={70} yMax={100} yTicks={[70, 80, 90, 100]} yFormat={(v) => `${v}`}
+        label={`Burnley median full time weekly pay as a share of England's, by workplace and by residence, ${years[0]} to ${lastY}`} />
+      <p class="chart-note">England = 100. Hover a point for the year's value; the table gives the pounds and the coefficient of variation.</p>
+      <table class="econ-table" slot="table">
+        <caption>Median gross weekly pay, full time, pounds; CV is the coefficient of variation of Burnley's median</caption>
+        <thead><tr><th scope="col">April</th><th scope="col" class="num">Burnley jobs</th><th scope="col" class="num">CV</th><th scope="col" class="num">England jobs</th><th scope="col" class="num">Burnley residents</th><th scope="col" class="num">CV</th><th scope="col" class="num">England residents</th></tr></thead>
+        <tbody>{years.map((y) => { const bw = cell(WM, BOR, y), ew = cell(WM, ENG, y), br = cell(RM, BOR, y), er = cell(RM, ENG, y); return <tr>
+          <th scope="row">{y}{y === lastY ? ' (provisional)' : ''}</th>
+          <td class="num">{fmt(bw?.value, 'GBP', 1)}</td><td class="num">{bw?.cv_pct ? `${bw.cv_pct}%` : ''}</td><td class="num">{fmt(ew?.value, 'GBP', 1)}</td>
+          <td class="num">{fmt(br?.value, 'GBP', 1)}</td><td class="num">{br?.cv_pct ? `${br.cv_pct}%` : ''}</td><td class="num">{fmt(er?.value, 'GBP', 1)}</td>
+        </tr>; })}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="ads-title">
+    <h2 id="ads-title">New job adverts</h2>
+    <div class="prose">
+      <p>New online job adverts with a work location in Burnley numbered {num(adLast.value)} in {periodText(adLast.period)}. The ONS suppressed the Burnley figure in some months: {suppressed.join(', ')}. They are gaps in the line, not zeros.</p>
+    </div>
+    <Panel c={ad}>
+      <LineChart series={[{ key: 'a', label: 'New adverts', color: 'var(--chart-1)', points: adr.map((r) => ({ x: r.period, y: r.value, tip: `${shortMonth(r.period)}: ${num(r.value)}` })), endLabel: num(adLast.value) }]}
+        xs={adr.map((r) => r.period)} xLabel={(x) => (x.endsWith('-01') && +x.slice(0, 4) % 2 === 1 ? x.slice(0, 4) : '')}
+        yMin={0} yMax={adMax} yTicks={Array.from({ length: adMax / 500 + 1 }, (_, i) => i * 500)} yFormat={(v) => num(v)}
+        label={`New online job adverts in Burnley each month, ${periodText(adr[0].period)} to ${periodText(adLast.period)}, with suppressed months as gaps`} />
+      <table class="econ-table" slot="table">
+        <caption>New online job adverts with a Burnley work location, the last twelve months</caption>
+        <thead><tr><th scope="col">Month</th><th scope="col" class="num">Adverts</th><th scope="col">Note</th></tr></thead>
+        <tbody>{adr.slice(-12).map((r) => <tr><th scope="row">{periodText(r.period)}</th><td class="num">{r.value === null ? 'suppressed' : num(r.value)}</td><td>{r.note}</td></tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+</EconomyPage>
+
+<style>
+  .chart-h { font-family: var(--font-sans); font-size: 1rem !important; font-weight: 600; margin: 14px 0 0 !important; }
+  .chart-note { color: var(--muted); font-size: 0.8125rem !important; margin: 4px 0 0; }
+</style>

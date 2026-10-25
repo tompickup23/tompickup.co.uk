@@ -1,0 +1,186 @@
+---
+/* The overview of the "Burnley's economy" collection: the three gaps, six
+   tiles and the pages and articles beneath. Every number is read from a
+   contract in public/data/burnley-economy/; nothing here is typed. */
+import { getCollection } from 'astro:content';
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import { contract, row, derived, fmt, num, periodText, csvUrl, PAGES } from '../../lib/burnley-economy';
+
+const posts = (await getCollection('news', ({ data }) => !data.draft && data.tags.includes('burnley-economy')))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const BOR = 'E07000117', NW = 'E12000002', ENG = 'E92000001';
+const gaps = contract('overview-gaps');
+const g = (geo: string, m: string) => row(gaps, { geography_code: geo, measure: m });
+const gd = (id: string) => derived(gaps, id);
+const inact = { b: g(BOR, 'li01_inactivity_rate_16_64'), e: g(ENG, 'li01_inactivity_rate_16_64') };
+const emp = { b: g(BOR, 'li01_employment_rate_16_64'), e: g(ENG, 'li01_employment_rate_16_64') };
+const jd = { b: g(BOR, 'li01_jobs_density'), e: g(ENG, 'li01_jobs_density') };
+const ei = contract('jp-employment-inactivity');
+const pooled = (m: string, geo: string) => ei.derived.find((d) => d.id === `pooled_${m}_${geo}_${emp.b.period}`)!.value as number;
+const pay = contract('tile-pay');
+const pw = (geo: string) => row(pay, { geography_code: geo, measure: 'ashe_workplace_ft_weekly_pay_gross_median' });
+const pr = (geo: string) => row(pay, { geography_code: geo, measure: 'ashe_resident_ft_weekly_pay_gross_median' });
+
+/* One tile per contract: the Burnley value, the region and England, the
+   neighbour comparison where the contract has one, and the stamp. */
+interface Tile { panel: string; label: string; value: string; when: string; compare: string[]; neighbours?: string; href: string }
+function rateTile(panel: string, measure: string, label: string, els: string, href: string): Tile {
+  const c = contract(panel);
+  const r = (geo: string) => row(c, { geography_code: geo, measure });
+  const nb = row(c, { geography_code: BOR, measure: els });
+  const med = derived(c, `${els}_neighbour_median`), test = derived(c, `${els}_neighbour_test`), n = derived(c, `${els}_neighbour_count`);
+  return {
+    panel, label, value: fmt(r(BOR).value, '%', 1), when: periodText(r(BOR).period),
+    compare: [`North West ${fmt(r(NW).value, '%', 1)}`, `England ${fmt(r(ENG).value, '%', 1)}`],
+    neighbours: `Against its ${n.value} ONS nearest neighbours in ${periodText(nb.period)}: Burnley ${fmt(nb.value, '%', 1)}, neighbour median ${fmt(med.value as number, '%', 1)}, ${test.value}.`,
+    href,
+  };
+}
+const claim = contract('tile-claimant');
+const cb = row(claim, { geography_code: BOR, measure: 'claimant_count_people_first_published' });
+const cn = row(claim, { geography_code: BOR, measure: 'els_claimant_count' });
+const ent = contract('tile-enterprises');
+const eb = row(ent, { geography_code: BOR, measure: 'active_enterprises' });
+const gdp = contract('tile-gdp-per-head');
+const gm = 'els_gross_domestic_product_per_head_at_current_market_prices';
+const gb = row(gdp, { geography_code: BOR, measure: gm });
+const tiles: Tile[] = [
+  rateTile('tile-employment', 'li01_employment_rate_16_64', 'Residents aged 16 to 64 in work', 'els_employment_rate_great_britain', '/burnley-economy/jobs-and-pay/#jp-employment-inactivity'),
+  rateTile('tile-inactivity', 'li01_inactivity_rate_16_64', 'Residents aged 16 to 64 outside the labour market', 'els_economic_inactivity_rate_great_britain', '/burnley-economy/jobs-and-pay/#jp-employment-inactivity'),
+  {
+    panel: 'tile-claimant', label: 'People on the claimant count', value: num(cb.value, 0), when: periodText(cb.period),
+    compare: ['A count, so not set against the region or England'],
+    neighbours: `As a share of residents aged 16 to 64 in ${periodText(cn.period)}: Burnley ${fmt(cn.value, '%', 1)}, median of its ${derived(claim, 'els_claimant_count_neighbour_count').value} nearest neighbours ${fmt(derived(claim, 'els_claimant_count_neighbour_median').value as number, '%', 1)}, ${derived(claim, 'els_claimant_count_neighbour_test').value}.`,
+    href: '/burnley-economy/jobs-and-pay/',
+  },
+  {
+    panel: 'tile-pay', label: 'Median full time weekly pay of a job located in Burnley', value: fmt(pw(BOR).value, 'GBP', 1), when: 'April 2026, provisional',
+    compare: [`North West ${fmt(pw(NW).value, 'GBP', 1)}`, `England ${fmt(pw(ENG).value, 'GBP', 1)}`, `Burnley residents ${fmt(pr(BOR).value, 'GBP', 1)}`],
+    href: '/burnley-economy/jobs-and-pay/#jp-pay',
+  },
+  {
+    panel: 'tile-enterprises', label: 'Active enterprises', value: num(eb.value, 0), when: periodText(eb.period),
+    compare: [`Per 1,000 residents aged 16 to 64: Burnley ${num(derived(ent, `density_${BOR}`).value as number, 1)}`, `North West ${num(derived(ent, `density_${NW}`).value as number, 1)}`, `England ${num(derived(ent, `density_${ENG}`).value as number, 1)}`],
+    href: '/burnley-economy/business/#bu-demography',
+  },
+  {
+    panel: 'tile-gdp-per-head', label: 'GDP per head, current market prices', value: fmt(gb.value, 'GBP', 0), when: periodText(gb.period),
+    compare: [`North West ${fmt(row(gdp, { geography_code: NW, measure: gm }).value, 'GBP', 0)}`, `England ${fmt(row(gdp, { geography_code: ENG, measure: gm }).value, 'GBP', 0)}`],
+    neighbours: `Against its ${derived(gdp, `${gm}_neighbour_count`).value} ONS nearest neighbours with a value: median ${fmt(derived(gdp, `${gm}_neighbour_median`).value as number, 'GBP', 0)}, ${derived(gdp, `${gm}_neighbour_test`).value}.`,
+    href: '/burnley-economy/method/#comparators',
+  },
+];
+
+const description = "Burnley's economy in published data: employment, inactivity, pay, jobs, business and skills, each against the North West, England and Burnley's ONS nearest neighbours, with every source, date and caveat.";
+const schema = {
+  '@type': 'CollectionPage',
+  '@id': 'https://tompickup.co.uk/burnley-economy/',
+  url: 'https://tompickup.co.uk/burnley-economy/',
+  name: "Burnley's economy", description, inLanguage: 'en-GB',
+  author: { '@type': 'Person', name: 'Tom Pickup', url: 'https://tompickup.co.uk/about/' },
+  hasPart: PAGES.slice(1).map((p) => ({ '@type': 'WebPage', name: p.label, url: `https://tompickup.co.uk${p.href}` })),
+  mainEntity: {
+    '@type': 'ItemList', numberOfItems: posts.length,
+    itemListElement: posts.map((post, i) => ({ '@type': 'ListItem', position: i + 1, name: post.data.title, url: `https://tompickup.co.uk/news/${post.id}/` })),
+  },
+};
+const pageCards = [
+  { href: '/burnley-economy/jobs-and-pay/', title: 'Jobs and pay', text: 'Employment and inactivity over three year means, payroll each month, pay against England for ten years, and job adverts.' },
+  { href: '/burnley-economy/business/', title: 'Business', text: 'Firms born and surviving, the company register with insolvency practitioner addresses removed, the largest employers by name, premises, reliefs and food premises.' },
+  { href: '/burnley-economy/people-and-skills/', title: 'People and skills', text: 'The fifteen wards on inactivity, qualifications and health, the skills pipeline, and three exposure measures kept apart.' },
+  { href: '/burnley-economy/risks/', title: 'Risks', text: 'The threats register: each indicator, its latest reading and trend, who owns it and when it is next reviewed.' },
+  { href: '/burnley-economy/method/', title: 'Method', text: 'Which Burnley, the comparators and their test, the codebook, every source file with its hash, and the revision log.' },
+];
+---
+
+<EconomyPage
+  title="Burnley's economy"
+  seoTitle="Burnley's economy: jobs, pay and business in data | Tom Pickup"
+  description={description}
+  eyebrow="Burnley · Economy and jobs"
+  intro="Where Burnley's economy stands, from the official statistics. Six headline measures, each set against the North West, England and the areas the ONS finds most like Burnley, then the evidence behind them."
+  path="/burnley-economy/"
+  schema={schema}
+>
+  <section id="gaps" aria-labelledby="gaps-title">
+    <p class="eyebrow">01 / The gaps</p>
+    <h2 id="gaps-title">Three gaps with England</h2>
+    <div class="prose">
+      <p>Burnley's distance from England shows most clearly in three places.</p>
+      <ol class="gap-list">
+        <li><strong>People outside the labour market.</strong> In the year to {periodText(inact.b.period).split(' to ')[1]}, {fmt(inact.b.value, '%', 1)} of Burnley residents aged 16 to 64 were neither working nor looking for work. For England it was {fmt(inact.e.value, '%', 1)}. At England's rate, about {num(gd('fewer_inactive_at_england_rate').value as number)} fewer residents would be outside the labour market. At England's employment rate of {fmt(emp.e.value, '%', 1)}, against Burnley's {fmt(emp.b.value, '%', 1)}, about {num(gd('residents_in_work_at_england_rate').value as number)} more would be in work. These conversions use the latest single year of a survey rate. On three year means, Burnley's employment rate is {fmt(pooled('li01_employment_rate_16_64', BOR), '%', 1)} against England's {fmt(pooled('li01_employment_rate_16_64', ENG), '%', 1)}, so that gap almost disappears, while its inactivity rate is {fmt(pooled('li01_inactivity_rate_16_64', BOR), '%', 1)} against {fmt(pooled('li01_inactivity_rate_16_64', ENG), '%', 1)} (<a href="/burnley-economy/jobs-and-pay/#jp-employment-inactivity">jobs and pay</a>). The Census records why people are outside the labour market; long term sickness or disability is set out <a href="/burnley-economy/people-and-skills/#ps-wards">by ward</a>.</li>
+        <li><strong>What the jobs pay.</strong> A full time job located in Burnley paid a median of {fmt(pw(BOR).value, 'GBP', 1)} a week in April 2026, {num(derived(pay, 'workplace_ratio_england').value as number, 1)}% of England's {fmt(pw(ENG).value, 'GBP', 1)}. Burnley's residents do better than its jobs: {fmt(pr(BOR).value, 'GBP', 1)}, {num(derived(pay, 'resident_ratio_england').value as number, 1)}% of England's (<a href="/burnley-economy/jobs-and-pay/#jp-pay">ten years of it</a>).</li>
+        <li><strong>How many jobs there are.</strong> Burnley has {num(jd.b.value, 2)} jobs for each resident aged 16 to 64, against {num(jd.e.value, 2)} for England ({jd.b.period}). At England's ratio there would be about {num(gd('jobs_short_at_england_density').value as number)} more jobs located in the borough.</li>
+      </ol>
+      <p class="note">Each conversion is arithmetic on the published rates, shown in the <a href={csvUrl('overview-gaps')} download>data file</a>, not a forecast or a target. {gaps.$meta.caveat.split('. ').slice(1).join('. ')}</p>
+    </div>
+  </section>
+
+  <section id="measures" aria-labelledby="measures-title">
+    <p class="eyebrow">02 / Six measures</p>
+    <h2 id="measures-title">The headline measures</h2>
+    <ul class="tiles">
+      {tiles.map((t) => { const m = contract(t.panel).$meta; return <li class="tile">
+        <span class="tile-label">{t.label}</span>
+        <span class="tile-value">{t.value}</span>
+        <span class="tile-when">{t.when}</span>
+        <ul class="tile-compare">{t.compare.map((x) => <li>{x}</li>)}</ul>
+        {t.neighbours && <p class="tile-neighbours">{t.neighbours}</p>}
+        <p class="tile-source">{m.publisher}, {m.table.split(';')[0]}, {m.edition}. <a href={csvUrl(t.panel)} download>Data</a> · <a href={t.href}>More</a></p>
+      </li>; })}
+    </ul>
+    <p class="note">"Similar", "higher" and "lower" against the neighbours follow the ONS rule of one median absolute deviation, applied here to the neighbour set (<a href="/burnley-economy/method/#comparators">method</a>). The neighbour readings come from ONS Explore Local Statistics and can be older than the headline figure. Survey rates for an area of Burnley's size swing from year to year; the jobs and pay page shows the run of years.</p>
+  </section>
+
+  <section id="pages" aria-labelledby="pages-title">
+    <p class="eyebrow">03 / The evidence</p>
+    <h2 id="pages-title">The pages</h2>
+    <ul class="page-cards">
+      {pageCards.map((p) => <li><a href={p.href}><strong>{p.title}</strong><span>{p.text}</span></a></li>)}
+    </ul>
+  </section>
+
+  <section id="articles" aria-labelledby="articles-title">
+    <p class="eyebrow">04 / Articles</p>
+    <h2 id="articles-title">Articles</h2>
+    {posts.length ? <ul class="article-rows">
+      {posts.map((post) => <li><a href={`/news/${post.id}/`}>
+        <span class="article-title">{post.data.title}</span>
+        <span class="article-desc">{post.data.description}</span>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>Published {dateFmt.format(post.data.date)}</time>
+      </a></li>)}
+    </ul> : <p>The articles on Burnley's economy will be listed here as they are published.</p>}
+  </section>
+</EconomyPage>
+
+<style>
+  .gap-list { margin: 0 0 16px; padding-left: 1.25rem; display: grid; gap: 12px; }
+  .note { color: var(--muted); font-size: 0.9375rem !important; line-height: 1.6; }
+  .note a, .gap-list a { color: var(--teal); }
+  .tiles { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .tile { display: flex; flex-direction: column; gap: 4px; padding: 14px 14px 12px; border-top: 3px solid var(--teal); background: var(--panel); border-radius: 0 0 var(--radius-md) var(--radius-md); }
+  .tile-label { font-size: 0.9375rem; font-weight: 600; line-height: 1.35; }
+  .tile-value { font-family: var(--font-display); font-size: 2.25rem; font-weight: 600; line-height: 1.1; font-variant-numeric: lining-nums tabular-nums; margin-top: 4px; }
+  .tile-when { color: var(--muted); font-size: 0.875rem; }
+  .tile-compare { list-style: none; margin: 6px 0 0; padding: 0; font-size: 0.875rem; line-height: 1.5; }
+  .tile-compare li { font-size: 0.875rem !important; line-height: 1.5 !important; }
+  .tile-neighbours { font-size: 0.8125rem !important; line-height: 1.5 !important; color: var(--ink); margin: 6px 0 0; }
+  .tile-source { font-size: 0.8125rem !important; line-height: 1.45 !important; color: var(--muted); margin: auto 0 0; padding-top: 8px; }
+  .tile-source a { color: var(--teal); font-weight: 600; }
+  .page-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .page-cards a { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-md); color: var(--ink); text-decoration: none; }
+  .page-cards a:hover { border-color: var(--teal); }
+  .page-cards strong { color: var(--teal); font-size: 1.0625rem; }
+  .page-cards span { font-size: 0.9375rem; line-height: 1.5; color: var(--muted); }
+  .article-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .article-rows li { border-bottom: 1px solid var(--line); }
+  .article-rows a { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; color: var(--ink); text-decoration: none; }
+  .article-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+  .article-rows a:hover .article-title { color: var(--teal); text-decoration: underline; }
+  .article-desc { color: var(--muted); font-size: 1rem; line-height: 1.55; }
+  .article-rows time { color: var(--muted); font-size: 0.875rem; }
+  @media (max-width: 900px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .tiles, .page-cards { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,941 @@
+{
+ "$meta": {
+  "panel": "tile-inactivity",
+  "title": "Economic inactivity rate, residents aged 16 to 64",
+  "page": "/burnley-economy/",
+  "measures": [
+   {
+    "measure": "li01_inactivity_rate_16_64",
+    "definition": "Economically inactive residents aged 16 to 64 as a percentage of all residents aged 16 to 64, APS",
+    "unit": "percent",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": ""
+   },
+   {
+    "measure": "els_economic_inactivity_rate_great_britain",
+    "definition": "ONS Explore Local Statistics indicator, economic inactivity rate",
+    "unit": "%",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "ELS republishes other ONS and government releases; the original table is the citable source"
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "LI01, sheet LI01; Explore Local Statistics, all datasets CSV",
+  "edition": "October 2026 edition, released 20 October 2026",
+  "access_date": "2026-10-24",
+  "citation": "ONS (2015 to 2026a) LI01; ONS (2026g) Explore Local Statistics",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "sha256": "bfb90669f479ca2624f2f8c88e1447a6852885b42d7dd218d0a170658f00afb8"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "sha256": "0596e7f281ec3436a0d609df8bb2eecd10867d3c1e1d11a0fadcef3c58d6eafb"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "sha256": "c850200ea72e892eb47765ecad78b7f8a4b2d1edb5c3f1bfcbbd0a51d4d3606f"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "sha256": "e13a1849706a8161f94ec42b515e84d8ba95b563fe988367d40a3386d0ed89be"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_4.csv",
+    "sha256": "b4d33349cbde5628127852f15d76e359c90cf1f53e684fddcd32e9876c5f9097"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_5.csv",
+    "sha256": "d47fca625b03acdb070bb163cd08c0e55456bb1c19da5a09ae5b11b07c345687"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_6.csv",
+    "sha256": "4a0e87b9e89c0340049c7d0c307c50159585d6d1b78188847c99f9c432aab1e6"
+   }
+  ],
+  "vintage": "APS official statistics in development",
+  "caveat": "A survey rate: single years swing widely. The neighbour comparison uses the ONS Explore Local Statistics series, whose latest period is older than LI01's.",
+  "next_release": "October 2027 (the next October edition read for this series)",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2025-07/2026-06",
+  "neighbour_period": "2023-01-01/P1Y"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 26.5883719188,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I44",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 22.3866022145,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 20.4919374865,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23.3,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 850528",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "fixed comparator (STATE.md); 95% interval 10.700000000000001 to 35.9",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E08000008",
+   "geography_name": "Tameside",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 24.8,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852488",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 1 of 20 (ONS Explore Local Statistics, global model); 95% interval 20 to 29.6",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000008",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E08000034",
+   "geography_name": "Kirklees",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22.8,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852988",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 2 of 20 (ONS Explore Local Statistics, global model); 95% interval 18.8 to 26.8",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000034",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E06000021",
+   "geography_name": "Stoke-on-Trent",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 21.9,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 848208",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 3 of 20 (ONS Explore Local Statistics, global model); 95% interval 17.2 to 26.599999999999998",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000021",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E08000030",
+   "geography_name": "Walsall",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 21,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852908",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 4 of 20 (ONS Explore Local Statistics, global model); 95% interval 15.6 to 26.4",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000030",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E08000005",
+   "geography_name": "Rochdale",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 27.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852428",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 5 of 20 (ONS Explore Local Statistics, global model); 95% interval 22.3 to 32.7",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000005",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E06000015",
+   "geography_name": "Derby",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 17.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 848088",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 6 of 20 (ONS Explore Local Statistics, global model); 95% interval 13.6 to 20.8",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000015",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E08000001",
+   "geography_name": "Bolton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 30.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852348",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 7 of 20 (ONS Explore Local Statistics, global model); 95% interval 24.299999999999997 to 36.1",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000001",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E08000002",
+   "geography_name": "Bury",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852368",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 8 of 20 (ONS Explore Local Statistics, global model); 95% interval 19 to 28.4",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000002",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E08000027",
+   "geography_name": "Dudley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 17.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852848",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 9 of 20 (ONS Explore Local Statistics, global model); 95% interval 13.1 to 22.299999999999997",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000027",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E08000017",
+   "geography_name": "Doncaster",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23.1,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852668",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 10 of 20 (ONS Explore Local Statistics, global model); 95% interval 18.6 to 27.6",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000017",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "W06000022",
+   "geography_name": "Newport",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 855768",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 11 of 20 (ONS Explore Local Statistics, global model); 95% interval 19.299999999999997 to 27.5",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "W06000022",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E08000026",
+   "geography_name": "Coventry",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852828",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 12 of 20 (ONS Explore Local Statistics, global model); 95% interval 18.7 to 26.099999999999998",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000026",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E08000036",
+   "geography_name": "Wakefield",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 22.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 853028",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 13 of 20 (ONS Explore Local Statistics, global model); 95% interval 18 to 26.799999999999997",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000036",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E08000016",
+   "geography_name": "Barnsley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 27.1,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852648",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 14 of 20 (ONS Explore Local Statistics, global model); ELS data carries 2 codes for Barnsley: E08000016 E08000038; 95% interval 22.900000000000002 to 31.3",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000016",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E06000031",
+   "geography_name": "Peterborough",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 17.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 848368",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 15 of 20 (ONS Explore Local Statistics, global model); 95% interval 12.899999999999999 to 21.5",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000031",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E08000004",
+   "geography_name": "Oldham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 20.8,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852408",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 16 of 20 (ONS Explore Local Statistics, global model); 95% interval 16.5 to 25.1",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000004",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E08000032",
+   "geography_name": "Bradford",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 24.9,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852948",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 17 of 20 (ONS Explore Local Statistics, global model); 95% interval 20.2 to 29.599999999999998",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000032",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E08000031",
+   "geography_name": "Wolverhampton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 23.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852928",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 18 of 20 (ONS Explore Local Statistics, global model); 95% interval 17.9 to 28.9",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "key": {
+     "geography_code": "E08000031",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "unitary authority",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 29.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 847948",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 19 of 20 (ONS Explore Local Statistics, global model); 95% interval 24.2 to 34.8",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000008",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E08000018",
+   "geography_name": "Rotherham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_economic_inactivity_rate_great_britain",
+   "period": "2023-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 28.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 852688",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 20 of 20 (ONS Explore Local Statistics, global model); 95% interval 23.7 to 33.7",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000018",
+     "measure": "els_economic_inactivity_rate_great_britain",
+     "period": "2023-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r23"
+  }
+ ],
+ "derived": [
+  {
+   "id": "tile-inactivity_gap_england",
+   "label": "Burnley minus England, percentage points",
+   "value": 6.1,
+   "decimals": 1,
+   "unit": "percentage points",
+   "arithmetic": "26.5883719188 minus 20.4919374865",
+   "inputs": [
+    "r0",
+    "r2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_economic_inactivity_rate_great_britain_neighbour_median",
+   "label": "Median of the 20 nearest neighbours, economic inactivity rate",
+   "value": 23.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "median(24.8, 22.8, 21.9, 21, 27.5, 17.2, 30.2, 23.7, 17.7, 23.1, 23.4, 22.4, 22.4, 27.1, 17.2, 20.8, 24.9, 23.4, 29.5, 28.7)",
+   "inputs": [
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r22",
+    "r23"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_economic_inactivity_rate_great_britain_neighbour_mad",
+   "label": "Median absolute deviation of the 20 nearest neighbours",
+   "value": 1.95,
+   "decimals": 2,
+   "unit": "%",
+   "arithmetic": "mad(24.8, 22.8, 21.9, 21, 27.5, 17.2, 30.2, 23.7, 17.7, 23.1, 23.4, 22.4, 22.4, 27.1, 17.2, 20.8, 24.9, 23.4, 29.5, 28.7)",
+   "inputs": [
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r22",
+    "r23"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_economic_inactivity_rate_great_britain_neighbours_above_burnley",
+   "label": "Nearest neighbours with a higher value than Burnley",
+   "value": 10,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "countabove(23.3, 24.8, 22.8, 21.9, 21, 27.5, 17.2, 30.2, 23.7, 17.7, 23.1, 23.4, 22.4, 22.4, 27.1, 17.2, 20.8, 24.9, 23.4, 29.5, 28.7)",
+   "inputs": [
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r22",
+    "r23",
+    "r3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_economic_inactivity_rate_great_britain_neighbour_count",
+   "label": "Nearest neighbours with a value in the period",
+   "value": 20,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "count(24.8, 22.8, 21.9, 21, 27.5, 17.2, 30.2, 23.7, 17.7, 23.1, 23.4, 22.4, 22.4, 27.1, 17.2, 20.8, 24.9, 23.4, 29.5, 28.7)",
+   "inputs": [
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r22",
+    "r23"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_economic_inactivity_rate_great_britain_neighbour_test",
+   "label": "Burnley against the neighbour median, by one median absolute deviation",
+   "value": "similar",
+   "decimals": null,
+   "unit": "",
+   "arithmetic": "test(23.3, 23.2, 1.95)",
+   "inputs": [],
+   "note": "The ONS rule (higher or lower when one or more median absolute deviations away, otherwise similar) applied to the neighbour set held, not the ONS service's own statement, which uses every area at the same level"
+  }
+ ]
+}
