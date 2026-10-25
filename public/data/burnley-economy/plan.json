@@ -1,0 +1,738 @@
+{
+ "$meta": {
+  "panel": "plan",
+  "title": "The plan: objectives, targets and levers",
+  "page": "/burnley-economy/plan/",
+  "measures": [],
+  "publisher": "Burnley targeted growth plan, part B",
+  "table": "Burnley_Growth_Plan_2026-10.md sections 1, 2.2 and 4; workstream D levers.csv",
+  "edition": "evidence document of October 2026",
+  "access_date": "2026-10-25",
+  "citation": "Burnley targeted growth plan, part B, October 2026",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "sha256": "62a406e25ea3a8cdaf427e115d28260448f066b82c0893c647712ac7ea80d7b1"
+   },
+   {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "sha256": "1deacd72b3f3191e65352b5e4e14a6f4803c0e5cb39af390ae0c0d717518f1ef"
+   },
+   {
+    "file": "Burnley_Growth_Plan_2026-10.md",
+    "sha256": "f0dbc81cedc5d3493c0ecd2e6675cfccbefe555e85d698cf24ec2fcf2ae9b368"
+   }
+  ],
+  "vintage": "targets set on the baselines of October 2026",
+  "caveat": "Each target is a range from a named baseline towards a named comparator, with the arithmetic shown. No target is a forecast. Levers are listed with their evidence status; a nil employment weight means no measured effect on jobs, not no effect.",
+  "next_release": "reviewed after the November 2026 releases",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "objectives": [
+   {
+    "title": "Employment",
+    "text": "Bring more working age residents into sustained work. The gap is inactivity, mostly ill health, not unemployment."
+   },
+   {
+    "title": "Pay",
+    "text": "Raise the pay of jobs located in Burnley towards England's. Workplace pay has stayed at about 80% of England's for ten years."
+   },
+   {
+    "title": "Resilience",
+    "text": "Widen and steady the business base. Firms in Burnley survive badly, retail output is falling, and one sector carries a large share of output."
+   }
+  ]
+ },
+ "rows": [
+  {
+   "id": "T1",
+   "title": "Long term sickness",
+   "target": "Reduce the excess of residents inactive through long term sickness or disability by a quarter to a half by the 2031 Census, and hold the gain to 2036.",
+   "baseline": "5,046 residents, 6.7% of those aged 16 and over (Census 2021)",
+   "comparator": "England 4.1%",
+   "arithmetic": "At England's 4.1% Burnley would have about 3,083 of its 75,205 residents aged 16 and over in this group, so the excess is about 1,960. A quarter to a half is about 490 to 980.",
+   "indicator": "Census 2031; in between, the Universal Credit health caseload and PIP cases as exposure counts",
+   "kind": "target",
+   "src": {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "key": {
+     "id": "T1"
+    },
+    "columns": [
+     "id",
+     "title",
+     "target",
+     "baseline",
+     "comparator",
+     "arithmetic",
+     "indicator"
+    ],
+    "text_source": "Burnley_Growth_Plan_2026-10.md"
+   },
+   "rid": "r0"
+  },
+  {
+   "id": "T2",
+   "title": "Employment",
+   "target": "Close a third to a half of the inactivity gap to England by 2036.",
+   "baseline": "Inactivity 26.6% (July 2025 to June 2026)",
+   "comparator": "England 20.5%",
+   "arithmetic": "A third to a half of about 3,720 residents is about 1,240 to 1,860.",
+   "indicator": "Pooled survey years; payroll each month as the check",
+   "kind": "target",
+   "src": {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "key": {
+     "id": "T2"
+    },
+    "columns": [
+     "id",
+     "title",
+     "target",
+     "baseline",
+     "comparator",
+     "arithmetic",
+     "indicator"
+    ],
+    "text_source": "Burnley_Growth_Plan_2026-10.md"
+   },
+   "rid": "r1"
+  },
+  {
+   "id": "T3",
+   "title": "Workplace pay",
+   "target": "Raise Burnley's workplace median full time pay from 80.4% of England's to between 82% and 85% by 2036.",
+   "baseline": "£656.8 against £817.0 (April 2026, provisional)",
+   "comparator": "England's median",
+   "arithmetic": "82% of £817.0 is £669.9; 85% is £694.5. That closes about 8% to 24% of the £160.2 gap.",
+   "indicator": "ASHE Table 7 each October",
+   "kind": "target",
+   "src": {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "key": {
+     "id": "T3"
+    },
+    "columns": [
+     "id",
+     "title",
+     "target",
+     "baseline",
+     "comparator",
+     "arithmetic",
+     "indicator"
+    ],
+    "text_source": "Burnley_Growth_Plan_2026-10.md"
+   },
+   "rid": "r2"
+  },
+  {
+   "id": "T4",
+   "title": "Jobs",
+   "target": "Raise jobs density from 0.72 to between 0.75 and 0.78 by 2036.",
+   "baseline": "0.72 jobs per resident aged 16 to 64 (2024)",
+   "comparator": "Lancashire 0.75, England 0.86",
+   "arithmetic": "0.03 to 0.06 more jobs per resident, about 1,830 to 3,660 jobs on today's residents.",
+   "indicator": "Jobs density in the ONS labour market tables each October",
+   "kind": "target",
+   "src": {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "key": {
+     "id": "T4"
+    },
+    "columns": [
+     "id",
+     "title",
+     "target",
+     "baseline",
+     "comparator",
+     "arithmetic",
+     "indicator"
+    ],
+    "text_source": "Burnley_Growth_Plan_2026-10.md"
+   },
+   "rid": "r3"
+  },
+  {
+   "id": "T5",
+   "title": "Business resilience",
+   "target": "Raise five year survival from 27.5% (2019 cohort) to between 33% and 38% for the 2031 birth cohort, and hold wholesale and retail output at or above its 2024 level of £523m.",
+   "baseline": "27.5% five year survival (2019 cohort)",
+   "comparator": "England 38.3%; the fourteen Lancashire areas 40.2%",
+   "arithmetic": "",
+   "indicator": "ONS business demography each November; regional GVA each autumn",
+   "kind": "target",
+   "src": {
+    "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
+    "key": {
+     "id": "T5"
+    },
+    "columns": [
+     "id",
+     "title",
+     "target",
+     "baseline",
+     "comparator",
+     "arithmetic",
+     "indicator"
+    ],
+    "text_source": "Burnley_Growth_Plan_2026-10.md"
+   },
+   "rid": "r4"
+  },
+  {
+   "id": "L01",
+   "lever": "Employer designed in work training and Level 3 and above apprenticeships, including apprenticeship units and foundation apprenticeships",
+   "who_can_pull_it": "Employers; Burnley College and Themis; national government (levy rules)",
+   "evidence_status": "evaluated (WWG reviews)",
+   "timescale_to_effect": "Two to three years (Card, Kluve and Weber, 2017, via file 03)",
+   "burnley_reach": "Direct: Burnley providers and employers",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L01"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r5"
+  },
+  {
+   "id": "L02",
+   "lever": "Commission the devolved Adult Skills Fund to the LSIP's seven priority sectors with Burnley providers",
+   "who_can_pull_it": "Lancashire Combined County Authority",
+   "evidence_status": "evaluated (WWG employment training)",
+   "timescale_to_effect": "Two to three years",
+   "burnley_reach": "Indirect: no district key",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L02"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r6"
+  },
+  {
+   "id": "L03",
+   "lever": "Health linked supported employment (Connect to Work, IPS style)",
+   "who_can_pull_it": "LCCA (contract owner); DWP (funder); ICB and GPs as referrers",
+   "evidence_status": "evaluated (RCT and matched comparison)",
+   "timescale_to_effect": "One to two years for sustainment",
+   "burnley_reach": "Direct: Burnley is in the east lot",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L03"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r7"
+  },
+  {
+   "id": "L04",
+   "lever": "Jobs Guarantee national rollout for 18 to 21 year olds on Universal Credit",
+   "who_can_pull_it": "DWP (national); LCCA and Jobcentre Plus locally once rolled out",
+   "evidence_status": "no review",
+   "timescale_to_effect": "Within a year for placement; earnings unknown",
+   "burnley_reach": "Pending national rollout 'later in 2026'",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L04"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r8"
+  },
+  {
+   "id": "L05",
+   "lever": "Business advice and managed brokerage (Growth Hub successor, Boost)",
+   "who_can_pull_it": "LCC and LCCA (Growth Hub review named in the Growth Plan); Burnley Council's own offer not read",
+   "evidence_status": "evaluated (mixed)",
+   "timescale_to_effect": "Slow; two years or more",
+   "burnley_reach": "Indirect",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L05"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r9"
+  },
+  {
+   "id": "L06",
+   "lever": "Digital and automation adoption in manufacturing (Made Smarter, AMRC North West, Additive Manufacturing Forum)",
+   "who_can_pull_it": "The Growth Company and DBT; AMRC North West; LCCA",
+   "evidence_status": "unevaluated (interim and programme reported only)",
+   "timescale_to_effect": "Two years or more",
+   "burnley_reach": "Direct: eligible Burnley SMEs",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L06"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r10"
+  },
+  {
+   "id": "L07",
+   "lever": "Help eligible Burnley manufacturers apply to BICS",
+   "who_can_pull_it": "DBT (scheme owner); applications are the firms'; signposting by Burnley Council, LCC or LCCA business support",
+   "evidence_status": "no review",
+   "timescale_to_effect": "From April 2027",
+   "burnley_reach": "Direct for aerospace (3030, 3316), machining (2562) and metal products",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L07"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r11"
+  },
+  {
+   "id": "L08",
+   "lever": "Innovation grants and R&D (Innovate UK, ATI SME grants up to £1.5m, Local Innovation Partnerships Fund)",
+   "who_can_pull_it": "UKRI, DBT and ATI (national); LCCA for the LIPF bid",
+   "evidence_status": "evaluated",
+   "timescale_to_effect": "Three years or more",
+   "burnley_reach": "Indirect; competitive",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L08"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r12"
+  },
+  {
+   "id": "L09",
+   "lever": "Access to finance (Northern Powerhouse Investment Fund II, Lancashire Investment Fund)",
+   "who_can_pull_it": "British Business Bank; LCCA",
+   "evidence_status": "evaluated (weak on outcomes)",
+   "timescale_to_effect": "Unknown",
+   "burnley_reach": "Indirect",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L09"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r13"
+  },
+  {
+   "id": "L10",
+   "lever": "Anchor institution procurement (community wealth building)",
+   "who_can_pull_it": "Burnley Borough Council; Lancashire County Council; East Lancashire Hospitals NHS Trust; University of Lancashire; Burnley College; Calico Homes",
+   "evidence_status": "evaluated (one quasi experimental study)",
+   "timescale_to_effect": "Two to four years",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L10"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r14"
+  },
+  {
+   "id": "L11",
+   "lever": "Real Living Wage accreditation and decent work standards at anchors and their suppliers",
+   "who_can_pull_it": "The same anchors as L10",
+   "evidence_status": "no review",
+   "timescale_to_effect": "Immediate for covered staff",
+   "burnley_reach": "Direct for anchor staff",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L11"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r15"
+  },
+  {
+   "id": "L12",
+   "lever": "Town Centre and Canalside Masterplan and Pioneer Place",
+   "who_can_pull_it": "Burnley Borough Council; private developers",
+   "evidence_status": "evaluated: nil employment weight until measured",
+   "timescale_to_effect": "Footfall within one to three years; jobs not established",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L12"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r16"
+  },
+  {
+   "id": "L13",
+   "lever": "University of Lancashire Burnley campus",
+   "who_can_pull_it": "University of Lancashire; Burnley College University Courses",
+   "evidence_status": "evaluated at regional scale only",
+   "timescale_to_effect": "Decades for GDP effects; years for enrolment",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L13"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r17"
+  },
+  {
+   "id": "L14",
+   "lever": "Town centre and street transport works (LUF round 2 in Burnley)",
+   "who_can_pull_it": "LCC and LCCA",
+   "evidence_status": "evaluated (mixed)",
+   "timescale_to_effect": "One to two years for use; jobs not established",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L14"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r18"
+  },
+  {
+   "id": "L15",
+   "lever": "East to West rail and Colne to Skipton",
+   "who_can_pull_it": "LCCA with Great British Railways and DfT",
+   "evidence_status": "no evaluated effect",
+   "timescale_to_effect": "More than ten years",
+   "burnley_reach": "Direct if delivered",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L15"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r19"
+  },
+  {
+   "id": "L16",
+   "lever": "Step free access at Burnley Manchester Road station",
+   "who_can_pull_it": "LCCA with the rail industry; DfT Access for All",
+   "evidence_status": "no review",
+   "timescale_to_effect": "Zero to two years if funded",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L16"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r20"
+  },
+  {
+   "id": "L17",
+   "lever": "Employment land and site readiness",
+   "who_can_pull_it": "Burnley Borough Council (local planning authority); MHCLG Office for Investment",
+   "evidence_status": "evaluated (weak, displacement)",
+   "timescale_to_effect": "Three to ten years",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L17"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r21"
+  },
+  {
+   "id": "L18",
+   "lever": "Gigabit and mobile coverage",
+   "who_can_pull_it": "BDUK and operators",
+   "evidence_status": "evaluated",
+   "timescale_to_effect": "Already largely delivered",
+   "burnley_reach": "Low priority: coverage already high",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L18"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r22"
+  },
+  {
+   "id": "L19",
+   "lever": "Pride in Place programme",
+   "who_can_pull_it": "Burnley Neighbourhood Board with Burnley Borough Council as accountable body",
+   "evidence_status": "evaluated: nil employment weight",
+   "timescale_to_effect": "Ten years",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L19"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r23"
+  },
+  {
+   "id": "L20",
+   "lever": "Culture and visitor economy via the Culture Priority Places list",
+   "who_can_pull_it": "Arts Council England; Burnley's cultural bodies",
+   "evidence_status": "evaluated: near zero on jobs and wages",
+   "timescale_to_effect": "Years",
+   "burnley_reach": "Direct",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L20"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r24"
+  },
+  {
+   "id": "L21",
+   "lever": "A mayoral deal for Lancashire (as fact, no position)",
+   "who_can_pull_it": "The three constituent councils, the LCCA and government",
+   "evidence_status": "no review",
+   "timescale_to_effect": "Not before 2028 on any source read",
+   "burnley_reach": "Structural",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L21"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r25"
+  },
+  {
+   "id": "L22",
+   "lever": "Rapid matching of displaced workers to incumbent employers after a large closure",
+   "who_can_pull_it": "DWP Jobcentre Plus; employers",
+   "evidence_status": "evaluated (Spanish evidence)",
+   "timescale_to_effect": "Months",
+   "burnley_reach": "Direct when a closure happens",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L22"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r26"
+  },
+  {
+   "id": "L23",
+   "lever": "Skills Bootcamps (Wave 7)",
+   "who_can_pull_it": "Lancashire Skills and Employment Hub; DfE",
+   "evidence_status": "unevaluated (no counterfactual)",
+   "timescale_to_effect": "Within a year",
+   "burnley_reach": "Direct: Burnley providers deliver",
+   "kind": "lever",
+   "src": {
+    "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
+    "key": {
+     "id": "L23"
+    },
+    "columns": [
+     "id",
+     "lever",
+     "who_can_pull_it",
+     "evidence_status",
+     "timescale_to_effect",
+     "burnley_reach"
+    ]
+   },
+   "rid": "r27"
+  }
+ ],
+ "derived": []
+}

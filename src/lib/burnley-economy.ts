@@ -175,5 +175,6 @@ export const PAGES = [
   { href: '/burnley-economy/business/', label: 'Business' },
   { href: '/burnley-economy/people-and-skills/', label: 'People and skills' },
   { href: '/burnley-economy/risks/', label: 'Risks' },
+  { href: '/burnley-economy/plan/', label: 'The plan' },
   { href: '/burnley-economy/method/', label: 'Method' },
 ];

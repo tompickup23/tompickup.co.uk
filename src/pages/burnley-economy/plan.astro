@@ -1,0 +1,71 @@
+---
+/* The plan: part B's objectives, targets and levers as an evidence page, read
+   from the plan contract. Held out of the collection's first release until
+   Tom decides to publish it. No political framing. */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import { contract, csvUrl, jsonUrl } from '../../lib/burnley-economy';
+
+const c = contract('plan');
+const objectives = (c.$meta as unknown as { objectives: { title: string; text: string }[] }).objectives;
+const targets = (c.rows as unknown as Record<string, string>[]).filter((r) => r.kind === 'target');
+const levers = (c.rows as unknown as Record<string, string>[]).filter((r) => r.kind === 'lever');
+---
+
+<EconomyPage
+  title="The plan"
+  seoTitle="Burnley's economy: objectives, targets and levers | Tom Pickup"
+  description="The evidence based growth plan for Burnley: three objectives, five targets set as ranges with their arithmetic, and the levers in the order the evidence supports them."
+  eyebrow="Burnley's economy · The plan"
+  intro="Three objectives, five targets and the levers that could reach them. Each target is a range from a named starting point towards a named comparator, with the arithmetic shown. None is a forecast."
+  path="/burnley-economy/plan/"
+>
+  <section aria-labelledby="obj-title">
+    <h2 id="obj-title">Objectives</h2>
+    <ol class="objectives">{objectives.map((o) => <li><strong>{o.title}.</strong> {o.text}</li>)}</ol>
+  </section>
+
+  <section aria-labelledby="t-title">
+    <h2 id="t-title">Targets, 2026 to 2036</h2>
+    <p class="note">{c.$meta.caveat}</p>
+    <ol class="targets">
+      {targets.map((t) => <li class="target">
+        <span class="t-id">{t.id}</span>
+        <h3>{t.title}</h3>
+        <p class="t-text">{t.target}</p>
+        <dl>
+          <div><dt>Starting point</dt><dd>{t.baseline}</dd></div>
+          <div><dt>Comparator</dt><dd>{t.comparator}</dd></div>
+          {t.arithmetic && <div class="wide"><dt>Arithmetic</dt><dd>{t.arithmetic}</dd></div>}
+          <div class="wide"><dt>How it is measured</dt><dd>{t.indicator}</dd></div>
+        </dl>
+      </li>)}
+    </ol>
+  </section>
+
+  <section aria-labelledby="l-title">
+    <h2 id="l-title">The levers and their evidence</h2>
+    <div class="table-wrap">
+      <table class="econ-table">
+        <thead><tr><th scope="col">Lever</th><th scope="col">Who can pull it</th><th scope="col">Evidence</th><th scope="col">Time to effect</th><th scope="col">Reaches Burnley</th></tr></thead>
+        <tbody>{levers.map((l) => <tr><th scope="row">{l.lever}</th><td>{l.who_can_pull_it}</td><td>{l.evidence_status}</td><td>{l.timescale_to_effect}</td><td>{l.burnley_reach}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="note">Source: {c.$meta.citation}. Data: <a href={csvUrl('plan')} download>CSV</a> · <a href={jsonUrl('plan')}>JSON</a>.</p>
+  </section>
+</EconomyPage>
+
+<style>
+  .objectives { margin: 0; padding-left: 1.25rem; display: grid; gap: 10px; }
+  .note { color: var(--muted); font-size: 0.9375rem !important; }
+  .note a { color: var(--teal); }
+  .targets { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .target { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .t-id { color: var(--teal); font-weight: 600; font-size: 0.875rem; }
+  .target h3 { margin: 2px 0 6px !important; }
+  .t-text { margin: 0 0 10px; }
+  .target dl { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin: 0; }
+  .target dl .wide { grid-column: 1 / -1; }
+  .target dt { color: var(--muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .target dd { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+  @media (max-width: 600px) { .target dl { grid-template-columns: 1fr; } }
+</style>
