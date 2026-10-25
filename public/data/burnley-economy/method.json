@@ -16,7 +16,7 @@
    },
    {
     "file": "Burnley_Growth_work/H_collection/revision_log.csv",
-    "sha256": "717305280d49fea371a34dbc9cb74a12ec210f7839d1dfc572186a8a11103b96"
+    "sha256": "58051c4753cc5ba90e568b800c99c119384f9bc4094707578d99ce107f345f54"
    }
   ],
   "vintage": "",
@@ -25,7 +25,7 @@
   "generated": "2026-10-25",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
   "methodologyVersion": "1.0",
-  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic."
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
  },
  "rows": [],
  "codebook": [
@@ -434,6 +434,14 @@
   {
    "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",
    "sha256": "1c2a436b1ccbfaf01bc669dac4fa58abfc1bcb8d7e833ab3e5afb9a10402257f"
+  },
+  {
+   "file": "Burnley_Growth_work/H_collection/ch_postcode_check.csv",
+   "sha256": "6d317933341943c5bd580eeba5aaed138187d59bca7edea865551c73bae62749"
+  },
+  {
+   "file": "Burnley_Growth_work/H_collection/named_companies_check.csv",
+   "sha256": "ea5f0750b825fb11c66f83685d691ed2103b766e6b3058e09c283d11746ed659"
   }
  ],
  "official_sources": [
@@ -1164,6 +1172,20 @@
    "change": "A data file for the gap statement on the overview: jobs density and the two conversions into residents.",
    "reason": "The gap statement needs figures no tile carries; it is overview text, not one of the twelve panels.",
    "source": "A series li01.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-register",
+   "change": "The two addresses removed from the company counts are now described as insolvency practitioners' offices, not formation agents; the counts are unchanged.",
+   "reason": "A Companies House check of 52 companies in liquidation at the two postcodes found the liquidator's office at the same postcode for 46; at the larger address all 26 sampled had been registered outside the BB postcode area before.",
+   "source": "H_collection/ch_postcode_check.csv"
+  },
+  {
+   "date": "2026-10-25",
+   "panel": "bu-largest-filers",
+   "change": "Companies reporting 50 or more employees are named, 33 of them, with their headcount and accounts year end.",
+   "reason": "Naming companies beside figures was approved on 25 October 2026. Each headcount was checked against the company's own filed accounts; one company is not named because its filing is internally inconsistent.",
+   "source": "H_collection/named_companies_check.csv"
   }
  ],
  "derived": []

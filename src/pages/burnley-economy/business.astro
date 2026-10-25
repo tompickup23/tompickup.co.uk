@@ -1,10 +1,11 @@
 ---
-/* Business: five panels, each read from its contract. No company is named. */
+/* Business: five panels, each read from its contract. Companies are named only in the largest filers panel,
+   from their own filed accounts; no person is named. */
 import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
 import Panel from '../../components/burnley-economy/Panel.astro';
 import LineChart from '../../components/burnley-economy/LineChart.astro';
 import BarList from '../../components/burnley-economy/BarList.astro';
-import { contract, rows, row, derived, fmt, num, longDate } from '../../lib/burnley-economy';
+import { contract, rows, row, derived, fmt, num, longDate, shortMonth } from '../../lib/burnley-economy';
 
 const BOR = 'E07000117', ENG = 'E92000001';
 
@@ -28,11 +29,14 @@ const reg = contract('bu-register');
 const rv = (code: string, variant: string, m: string) => row(reg, { sector_code: code, variant, measure: m }).value as number;
 const sections = rows(reg, { variant: 'excl_known_shells', measure: 'companies_live' }).filter((r) => r.sector_code !== 'ALL');
 const stripped = derived(reg, 'shell_companies_stripped').value as number;
+const ch = (m: string) => row(reg, { measure: m }).value as number;
 
 /* 3. largest filers: counts by band */
 const lf = contract('bu-largest-filers');
 const lfSectors = Array.from(new Map(lf.rows.map((r) => [r.sector_code as string, r.sector_name as string])).entries());
 const band = (code: string, b: string) => row(lf, { sector_code: code, measure: `filers_reporting_${b}_employees` });
+const namedBy = (code: string) => rows(lf, { sector_code: code, measure: 'reported_average_employees' }).sort((a, b) => (b.value as number) - (a.value as number));
+const yearEnd = (iso: string) => shortMonth(iso.slice(0, 7));
 
 /* 4. premises and reliefs */
 const pr = contract('bu-premises');
@@ -77,9 +81,9 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
 <EconomyPage
   title="Business"
   seoTitle="Burnley business: firms, survival, premises and reliefs | Tom Pickup"
-  description="Burnley's business base from official data: firms born and surviving, the company register with formation agent clusters stripped out, the largest filers by sector, business premises, rates reliefs and food premises."
+  description="Burnley's business base from official data: firms born and surviving, the company register with insolvency practitioner addresses removed, the largest filers by sector, business premises, rates reliefs and food premises."
   eyebrow="Burnley's economy · Business"
-  intro="How many businesses Burnley has, how long new ones last, and what premises they use. The company register is shown twice, with and without the addresses used by formation agents, because those addresses distort it."
+  intro="How many businesses Burnley has, how long new ones last, and what premises they use. The company register is shown twice, with and without two insolvency practitioners' addresses, because those addresses distort it."
   path="/burnley-economy/business/"
 >
   <section aria-labelledby="dem-title">
@@ -103,18 +107,18 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
   </section>
 
   <section aria-labelledby="reg-title">
-    <h2 id="reg-title">The company register, with formation agent addresses removed</h2>
+    <h2 id="reg-title">The company register, with insolvency practitioner addresses removed</h2>
     <div class="prose">
-      <p>On the register of 1 July 2026, {num(rv('ALL', 'all', 'companies_live'))} companies had a registered office in Burnley, and {fmt(rv('ALL', 'all', 'companies_not_active_pct'), '%', 1)} of them were not active. Two postcodes used by company formation agents hold {num(stripped)} of those companies, almost all of them not active. Without them the borough has {num(rv('ALL', 'excl_known_shells', 'companies_live'))} companies and {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active. Counts that include the clusters overstate the share of Burnley's companies that are not active.</p>
+      <p>On the register of 1 July 2026, {num(rv('ALL', 'all', 'companies_live'))} companies had a registered office in Burnley, and {fmt(rv('ALL', 'all', 'companies_not_active_pct'), '%', 1)} of them were not active. Two postcodes in the borough are the offices of insolvency practitioners. A company being wound up takes its liquidator's office as its registered address, wherever it traded. The two addresses hold {num(stripped)} of those companies, almost all of them not active. A Companies House check of {num(ch('ch_sampled_in_liquidation'))} companies in liquidation there found the liquidator at the same postcode for {num(ch('ch_liquidator_at_same_address'))}. At the larger address, {ch('ch_larger_previously_outside_bb') === ch('ch_sampled_larger_postcode') ? 'all' : `${num(ch('ch_larger_previously_outside_bb'))} of the`} {num(ch('ch_sampled_larger_postcode'))} checked had previously been registered outside the BB postcode area, which covers Blackburn, Burnley and the towns around them. Without them the borough has {num(rv('ALL', 'excl_known_shells', 'companies_live'))} companies and {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active. Counts that include the clusters overstate the share of Burnley's companies that are not active.</p>
     </div>
     <Panel c={reg}>
       <div class="pair">
         <div><span class="pair-v">{num(rv('ALL', 'all', 'companies_live'))}</span><span class="pair-l">companies on the register, {fmt(rv('ALL', 'all', 'companies_not_active_pct'), '%', 1)} not active</span></div>
-        <div class="strong"><span class="pair-v">{num(rv('ALL', 'excl_known_shells', 'companies_live'))}</span><span class="pair-l">without the two formation agent postcodes, {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active</span></div>
+        <div class="strong"><span class="pair-v">{num(rv('ALL', 'excl_known_shells', 'companies_live'))}</span><span class="pair-l">without the two insolvency practitioner postcodes, {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active</span></div>
       </div>
       <h3 class="chart-h">Companies by industry section, without the clusters</h3>
       <BarList items={sections.sort((a, b) => (b.value as number) - (a.value as number)).map((r) => ({ label: r.sector_name as string, value: r.value, display: num(r.value), tip: `${r.sector_name}: ${num(r.value)} companies, ${fmt(rv(r.sector_code as string, 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active` }))}
-        max={Math.max(...sections.map((r) => r.value as number))} label="Companies registered in Burnley by industry section, formation agent postcodes excluded" labelWidth="50%" />
+        max={Math.max(...sections.map((r) => r.value as number))} label="Companies registered in Burnley by industry section, insolvency practitioner postcodes excluded" labelWidth="50%" />
       <table class="econ-table" slot="table">
         <thead><tr><th scope="col">Section</th><th scope="col" class="num">All companies</th><th scope="col" class="num">Not active</th><th scope="col" class="num">Without clusters</th><th scope="col" class="num">Not active</th></tr></thead>
         <tbody>{rows(reg, { variant: 'all', measure: 'companies_live' }).map((r) => { const c = r.sector_code as string; return <tr class:list={{ 'is-burnley': c === 'ALL' }}>
@@ -128,7 +132,7 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
   <section aria-labelledby="lf-title">
     <h2 id="lf-title">The largest filers in each sector</h2>
     <div class="prose">
-      <p>The growth plan looks at nine sectors. For each, its research listed the largest companies registered in Burnley that report a headcount in their accounts. The table counts them by size. It names none of them, and it misses the large employers registered elsewhere, among them the aerospace plants and the public bodies.</p>
+      <p>The growth plan looks at nine sectors. For each, its research listed the largest companies registered in Burnley that report a headcount in their accounts. The companies reporting 50 or more employees are named below, each figure checked against the company's own accounts at Companies House. A headcount is the company's average wherever it works, not its jobs in Burnley. Large employers registered elsewhere, and public bodies such as the hospital trust and the council, are not in this list.</p>
     </div>
     <Panel c={lf} title="The largest filers in each sector, by reported average employees">
       <div class="table-wrap">
@@ -140,13 +144,24 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
           </tr>)}</tbody>
         </table>
       </div>
+      <h3 class="chart-h">Companies reporting 50 or more employees, by sector</h3>
+      {lfSectors.filter(([code]) => namedBy(code).length).map(([code, name]) => <>
+        <p class="sector-name">{name}</p>
+        <div class="table-wrap">
+          <table class="econ-table named">
+            <thead><tr><th scope="col">Company (as registered)</th><th scope="col" class="num">Employees</th><th scope="col" class="num">Year end</th></tr></thead>
+            <tbody>{namedBy(code).map((r) => <tr><th scope="row"><a href={r.source_url as string}>{r.company_name as string}</a></th><td class="num">{num(r.value)}</td><td class="num">{yearEnd(r.period)}</td></tr>)}</tbody>
+          </table>
+        </div>
+      </>)}
+      <p class="chart-note">Some of these companies have filed newer accounts since July 2026; the panel's data file lists them, and the figures move to the newer accounts at the November refresh.</p>
     </Panel>
   </section>
 
   <section aria-labelledby="pr-title">
     <h2 id="pr-title">Premises and business rates reliefs</h2>
     <div class="prose">
-      <p>The Valuation Office Agency counted {num(pv('all', 'hereditaments_count', dates[dates.length - 1]))} rated business premises in Burnley at {dates[dates.length - 1]}. Retail premises held steady in number while their rateable value fell. The industrial count more than doubled between 31 March 2017 and 31 March 2023; the growth plan research traced that to a large number of very small storage units, not new factory floor space.</p>
+      <p>The Valuation Office Agency counted {num(pv('all', 'hereditaments_count', dates[dates.length - 1]))} rated business premises in Burnley at {dates[dates.length - 1]}. Retail premises held steady in number while their rateable value fell. The industrial count more than doubled between 31 March 2017 and 31 March 2023. The growth plan research traced that to a large number of very small storage units, not new factory floor space.</p>
       <p>The council's ratepayer file of 27 July 2026 has {num(accounts.value)} accounts. The chart counts the accounts carrying each relief; an account can carry more than one, and {num(empty.value)} accounts are flagged empty.</p>
     </div>
     <Panel c={pr}>
@@ -185,6 +200,12 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
 <style>
   .chart-h { font-family: var(--font-sans); font-size: 1rem !important; font-weight: 600; margin: 18px 0 8px !important; }
   .chart-note { color: var(--muted); font-size: 0.875rem !important; line-height: 1.55 !important; margin: 10px 0 0; }
+  .sector-name { font-weight: 600; font-size: 0.9375rem !important; margin: 14px 0 4px !important; }
+  .named th a { color: var(--teal); }
+  .named th { font-weight: 400; }
+  .named { table-layout: fixed; }
+  .named thead th:first-child { width: 62%; }
+  .named th[scope="row"] { overflow-wrap: anywhere; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0 8px; }
   .pair > div { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; background: var(--panel); border-top: 3px solid var(--chart-neutral); }
   .pair > div.strong { border-top-color: var(--chart-1); }
