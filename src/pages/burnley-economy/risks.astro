@@ -1,0 +1,87 @@
+---
+/* Risks: workstream E's register as a living table, read from its contract.
+   Scores are shown as bands with the scale printed. Row R08 (the PIP review)
+   is held back while that review is undecided: the collection does not
+   comment on it (revision log, 25 October 2026). */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import Panel from '../../components/burnley-economy/Panel.astro';
+import { contract, derived } from '../../lib/burnley-economy';
+
+const HELD = new Set(['R08']);
+const reg = contract('risk-register');
+const all = reg.rows as unknown as Record<string, string | number>[];
+const shown = all.filter((r) => !HELD.has(r.id as string)).sort((a, b) => (b.score as number) - (a.score as number) || String(a.id).localeCompare(String(b.id)));
+const BANDS = [
+  { id: 'red', label: 'Red', range: '15 to 25' },
+  { id: 'amber', label: 'Amber', range: '8 to 14' },
+  { id: 'green', label: 'Green', range: '1 to 7' },
+];
+const count = (b: string) => derived(reg, `rows_${b}`).value;
+const total = derived(reg, 'rows_shown').value;
+---
+
+<EconomyPage
+  title="Risks"
+  seoTitle="Threats to Burnley's economy: the risk register | Tom Pickup"
+  description="The threats to Burnley's economy as a register: each risk's indicator, latest reading, trend, owner and review date, scored on a printed scale of likelihood and impact."
+  eyebrow="Burnley's economy · Risks"
+  intro="The things that could push Burnley's economy back. Each is tied to an indicator that can be watched, with who owns the response and when the row is next reviewed."
+  path="/burnley-economy/risks/"
+>
+  <section aria-labelledby="scale-title">
+    <h2 id="scale-title">How to read it</h2>
+    <div class="prose">
+      <p>Each risk is scored for likelihood and for impact on a scale of 1 to 5, and the two are multiplied. The score is a reading aid, not a decision. Of the {total} rows shown, {count('red')} are red, {count('amber')} amber and {count('green')} green.</p>
+    </div>
+    <ul class="scale">
+      {BANDS.map((b) => <li><span class={`band band-${b.id}`}><span class="band-shape" aria-hidden="true"></span>{b.label}</span> score {b.range}</li>)}
+    </ul>
+    <p class="scale-note">{reg.$meta.caveat} Direction says whether the risk is rising, stable or falling, judged from the indicator's last three readings. Evidence grade: A an official statistic with a named table; B published administrative or company data; C data held by the research, not yet verified to a published standard; M modelled or derived, with the method shown.</p>
+  </section>
+
+  <section aria-labelledby="reg-title">
+    <h2 id="reg-title">The register</h2>
+    <Panel c={reg} title={`${total} risks, highest score first`}>
+      <ol class="risks">
+        {shown.map((r) => <li class="risk">
+          <div class="risk-head">
+            <span class={`band band-${r.band}`}><span class="band-shape" aria-hidden="true"></span>{String(r.band).replace(/^./, (c) => c.toUpperCase())}, {r.score}</span>
+            <span class="risk-id">{r.id}</span>
+            <h3>{r.title}</h3>
+          </div>
+          <dl>
+            <div><dt>Indicator</dt><dd>{r.indicator}</dd></div>
+            <div><dt>Latest reading</dt><dd>{r.indicator_latest_value}{r.indicator_date ? ` (${r.indicator_date})` : ''}</dd></div>
+            <div><dt>Direction of the risk</dt><dd>{r.trend}</dd></div>
+            <div><dt>Likelihood × impact</dt><dd>{r.likelihood} × {r.impact} over {r.horizon}</dd></div>
+            <div><dt>Owner</dt><dd>{r.owner}</dd></div>
+            <div><dt>Review</dt><dd>{r.review_due}</dd></div>
+            <div><dt>Evidence grade</dt><dd>{r.evidence_grade}</dd></div>
+          </dl>
+        </li>)}
+      </ol>
+      <p class="held">One row of the draft register, on the review of Personal Independence Payment assessments, is not shown while that review is undecided. The two rows on local government reorganisation record the decision and the delay as fact.</p>
+    </Panel>
+  </section>
+</EconomyPage>
+
+<style>
+  .scale { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.9375rem; }
+  .scale li { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9375rem !important; }
+  .scale-note, .held { color: var(--muted); font-size: 0.875rem !important; line-height: 1.55 !important; }
+  .band { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: var(--ink); background: var(--panel); white-space: nowrap; }
+  .band-shape { display: inline-block; width: 10px; height: 10px; }
+  .band-red .band-shape { background: var(--chart-bad); border-radius: 1px; transform: rotate(45deg); }
+  .band-amber .band-shape { background: #a86a00; border-radius: 50%; }
+  .band-green .band-shape { background: var(--chart-good); border-radius: 1px; }
+  .risks { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .risk { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .risk-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+  .risk-head h3 { flex-basis: 100%; font-size: 1.125rem !important; margin: 4px 0 6px !important; line-height: 1.35; }
+  .risk-id { color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+  .risk dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 20px; margin: 0; }
+  .risk dl div { min-width: 0; }
+  .risk dt { color: var(--muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .risk dd { margin: 0; font-size: 0.9375rem; line-height: 1.45; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .risk dl { grid-template-columns: 1fr; } }
+</style>

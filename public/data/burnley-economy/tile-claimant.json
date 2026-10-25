@@ -1,0 +1,868 @@
+{
+ "$meta": {
+  "panel": "tile-claimant",
+  "title": "Claimant count",
+  "page": "/burnley-economy/",
+  "measures": [
+   {
+    "measure": "claimant_count_people_first_published",
+    "definition": "People claiming Jobseeker's Allowance plus Universal Credit claimants required to search for work, on the second Thursday of the month, by place of residence, rounded to the nearest 5 (CC01 notes)",
+    "unit": "persons",
+    "decimals": 0,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "first published: the count in the edition that first carried this month; not consistent over time: Universal Credit widened the group required to look for work, and DWP administrative earnings threshold rises in September 2022, January 2023 and May 2024 add discontinuities"
+   },
+   {
+    "measure": "els_claimant_count",
+    "definition": "ONS Explore Local Statistics indicator, claimant count as a percentage of residents aged 16 to 64",
+    "unit": "%",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "ELS republishes other ONS and government releases; the original table is the citable source"
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "CC01, sheet CC01; Explore Local Statistics",
+  "edition": "current edition (October 2026)",
+  "access_date": "2026-10-24",
+  "citation": "ONS (2015 to 2026b) CC01; ONS (2026g) Explore Local Statistics",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/claimant_2.csv",
+    "sha256": "7eb755ca91e5b5669aa494e149f856685e4cf4719c77e84e2c4cc1bfbfa408b5"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "sha256": "0596e7f281ec3436a0d609df8bb2eecd10867d3c1e1d11a0fadcef3c58d6eafb"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_2.csv",
+    "sha256": "c850200ea72e892eb47765ecad78b7f8a4b2d1edb5c3f1bfcbbd0a51d4d3606f"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_3.csv",
+    "sha256": "e13a1849706a8161f94ec42b515e84d8ba95b563fe988367d40a3386d0ed89be"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_4.csv",
+    "sha256": "b4d33349cbde5628127852f15d76e359c90cf1f53e684fddcd32e9876c5f9097"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_5.csv",
+    "sha256": "d47fca625b03acdb070bb163cd08c0e55456bb1c19da5a09ae5b11b07c345687"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_6.csv",
+    "sha256": "4a0e87b9e89c0340049c7d0c307c50159585d6d1b78188847c99f9c432aab1e6"
+   }
+  ],
+  "vintage": "first published value; later editions revise it",
+  "caveat": "Not consistent over time: Universal Credit widened the group required to look for work, and the earnings threshold rose in 2022, 2023 and 2024. A count, so it is not set against the region or England; the neighbour comparison is the ELS rate for a calendar year.",
+  "next_release": "the next monthly CC01 edition",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2026-09",
+  "neighbour_period": "2025-01-01/P1Y"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "claimant_count_people_first_published",
+   "period": "2026-09",
+   "period_type": "month",
+   "value": 3455,
+   "unit": "persons",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "CC01 Regional labour market: Claimant Count by unitary and local authority (experimental)",
+   "source_table": "CC01 edition, sheet CC01, cell E44",
+   "source_edition": "current edition (October 2026)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/unemployment/datasets/claimantcountbyunitaryandlocalauthorityexperimental/current/lmregtabcc01october2026.xls",
+   "source_sha256": "bf57fb86e304658b0b7483ac6e7843ec9ece9e1a93edbe6a05602a6a4633420b",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "title: Worksheet 1: Claimant Count by unitary and local authorities in the United Kingdom, September 2026¹",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/claimant_2.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "claimant_count_people_first_published",
+     "period": "2026-09"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 874897",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "fixed comparator (STATE.md)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E08000008",
+   "geography_name": "Tameside",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877347",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 1 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000008",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E08000034",
+   "geography_name": "Kirklees",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877972",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 2 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000034",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E06000021",
+   "geography_name": "Stoke-on-Trent",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.6,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 871997",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 3 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000021",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E08000030",
+   "geography_name": "Walsall",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.9,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877872",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 4 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000030",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E08000005",
+   "geography_name": "Rochdale",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 6,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877272",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 5 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000005",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E06000015",
+   "geography_name": "Derby",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 871847",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 6 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000015",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E08000001",
+   "geography_name": "Bolton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877172",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 7 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000001",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E08000002",
+   "geography_name": "Bury",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.3,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877197",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 8 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000002",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E08000027",
+   "geography_name": "Dudley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.7,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877797",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 9 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000027",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E08000017",
+   "geography_name": "Doncaster",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877572",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 10 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000017",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "W06000022",
+   "geography_name": "Newport",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 4.4,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 881722",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 11 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "W06000022",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E08000026",
+   "geography_name": "Coventry",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877772",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 12 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000026",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E08000036",
+   "geography_name": "Wakefield",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 3.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 878022",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 13 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000036",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E08000016",
+   "geography_name": "Barnsley",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 3.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877547",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 14 of 20 (ONS Explore Local Statistics, global model); ELS data carries 2 codes for Barnsley: E08000016 E08000038",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000016",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E06000031",
+   "geography_name": "Peterborough",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 872197",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 15 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000031",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E08000004",
+   "geography_name": "Oldham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 6.6,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877247",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 16 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000004",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E08000032",
+   "geography_name": "Bradford",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 7.2,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877922",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 17 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000032",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E08000031",
+   "geography_name": "Wolverhampton",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 6.9,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877897",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 18 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000031",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "unitary authority",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 5.5,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 871672",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 19 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E06000008",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E08000018",
+   "geography_name": "Rotherham",
+   "geography_type": "local authority (ELS)",
+   "measure": "els_claimant_count",
+   "period": "2025-01-01/P1Y",
+   "period_type": "period as ELS gives it (date)",
+   "value": 3.9,
+   "unit": "as ELS gives it",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Explore local statistics: all datasets for all areas (CSV; the server labels it gzip but the body is plain CSV text)",
+   "source_table": "all-datasets.csv line 877597",
+   "source_edition": "as downloaded 2026-10-25",
+   "source_url": "https://www.ons.gov.uk/explore-local-statistics/files/all-datasets.csv",
+   "source_sha256": "a00cdb086fe9e94cf399d9ee56cf017baf952e8397367ae5b6e1a59712ff892f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "statistical neighbour 20 of 20 (ONS Explore Local Statistics, global model)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/els_1.csv",
+    "key": {
+     "geography_code": "E08000018",
+     "measure": "els_claimant_count",
+     "period": "2025-01-01/P1Y"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  }
+ ],
+ "derived": [
+  {
+   "id": "els_claimant_count_neighbour_median",
+   "label": "Median of the 20 nearest neighbours, claimant count as a share of residents aged 16 to 64",
+   "value": 5.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "median(4.7, 4.7, 5.6, 5.9, 6, 5, 5.4, 4.3, 4.7, 4.2, 4.4, 5.5, 3.5, 3.2, 5.5, 6.6, 7.2, 6.9, 5.5, 3.9)",
+   "inputs": [
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_claimant_count_neighbour_mad",
+   "label": "Median absolute deviation of the 20 nearest neighbours",
+   "value": 0.75,
+   "decimals": 2,
+   "unit": "%",
+   "arithmetic": "mad(4.7, 4.7, 5.6, 5.9, 6, 5, 5.4, 4.3, 4.7, 4.2, 4.4, 5.5, 3.5, 3.2, 5.5, 6.6, 7.2, 6.9, 5.5, 3.9)",
+   "inputs": [
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_claimant_count_neighbours_above_burnley",
+   "label": "Nearest neighbours with a higher value than Burnley",
+   "value": 5,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "countabove(5.7, 4.7, 4.7, 5.6, 5.9, 6, 5, 5.4, 4.3, 4.7, 4.2, 4.4, 5.5, 3.5, 3.2, 5.5, 6.6, 7.2, 6.9, 5.5, 3.9)",
+   "inputs": [
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21",
+    "r1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_claimant_count_neighbour_count",
+   "label": "Nearest neighbours with a value in the period",
+   "value": 20,
+   "decimals": 0,
+   "unit": "areas",
+   "arithmetic": "count(4.7, 4.7, 5.6, 5.9, 6, 5, 5.4, 4.3, 4.7, 4.2, 4.4, 5.5, 3.5, 3.2, 5.5, 6.6, 7.2, 6.9, 5.5, 3.9)",
+   "inputs": [
+    "r2",
+    "r3",
+    "r4",
+    "r5",
+    "r6",
+    "r7",
+    "r8",
+    "r9",
+    "r10",
+    "r11",
+    "r12",
+    "r13",
+    "r14",
+    "r15",
+    "r16",
+    "r17",
+    "r18",
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "els_claimant_count_neighbour_test",
+   "label": "Burnley against the neighbour median, by one median absolute deviation",
+   "value": "similar",
+   "decimals": null,
+   "unit": "",
+   "arithmetic": "test(5.7, 5.2, 0.75)",
+   "inputs": [],
+   "note": "The ONS rule (higher or lower when one or more median absolute deviations away, otherwise similar) applied to the neighbour set held, not the ONS service's own statement, which uses every area at the same level"
+  }
+ ]
+}

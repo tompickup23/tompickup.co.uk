@@ -43,6 +43,14 @@ export const ON_THIS_SITE: Project[] = [
     inFooter: true,
   },
   {
+    href: '/burnley-economy/',
+    accent: '#17645e',
+    title: "Burnley's economy",
+    desc: 'Burnley’s jobs, pay, businesses and skills in official data, against the North West, England and its ONS nearest neighbours, with every source and revision logged.',
+    source: 'ONS, HMRC, DfE, Companies House, VOA, FSA',
+    inFooter: true,
+  },
+  {
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
@@ -165,7 +173,7 @@ function projectsNamed(...titles: string[]): Project[] {
 export const PROJECT_GROUPS = [
   { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
   { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
-  { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', 'Reform UK Burnley') },
+  { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'Reform UK Burnley') },
   { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils") },
 ];
 
@@ -177,6 +185,7 @@ export const PROJECT_DETAILS: Record<string, {
   section?: { href: string; label: string };
 }> = {
   'Stocks Massey': { mark: 'SM', subject: 'History & charitable legacy', section: { href: '/stocks-massey/#articles', label: 'Read the award articles' } },
+  "Burnley's economy": { mark: 'BE', subject: 'Economy & jobs', section: { href: '/burnley-economy/method/', label: 'How the figures are built' } },
   'AI DOGE': { mark: 'DG', subject: 'Public spending', article: { slug: 'where-burnley-councils-money-goes', label: 'Where Burnley Council’s money goes' }, section: { href: '/aidoge/', label: 'How AI DOGE works' } },
   'UK Councils': { mark: 'UC', subject: 'Local government' },
   'UK Elections': { mark: 'UE', subject: 'Elections & forecasts' },

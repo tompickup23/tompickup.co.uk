@@ -1,0 +1,139 @@
+---
+/* People and skills: the wards, the skills pipeline and the three exposure
+   measures, each read from its contract. No ethnicity, religion, country of
+   birth or nationality table is used anywhere in the collection. */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import Panel from '../../components/burnley-economy/Panel.astro';
+import LineChart from '../../components/burnley-economy/LineChart.astro';
+import BarList from '../../components/burnley-economy/BarList.astro';
+import { contract, rows, row, fmt, num } from '../../lib/burnley-economy';
+
+const BOR = 'E07000117', ENG = 'E92000001';
+
+/* 1. wards */
+const w = contract('ps-wards');
+const C21 = 'Census 2021';
+const wardName = (n: string) => n.replace(' (Burnley)', '');
+const wardRows = (m: string) => rows(w, { measure: m, period: C21 }).filter((r) => r.geography_code !== BOR);
+const borough = (m: string, p = C21) => row(w, { measure: m, period: p, geography_code: BOR });
+const bars = (m: string) => wardRows(m).sort((a, b) => (b.value as number) - (a.value as number))
+  .map((r) => ({ label: wardName(r.geography_name), value: r.value, display: fmt(r.value, '%', 1), strong: (r.value as number) > (borough(m).value as number) }));
+const lts = borough('inactive_long_term_sick_or_disabled');
+const lts11 = borough('inactive_long_term_sick_or_disabled', 'Census 2011');
+const l4 = borough('level4_plus'), l4_11 = borough('level4_plus', 'Census 2011');
+const ltsTop = bars('inactive_long_term_sick_or_disabled')[0];
+const ltsLow = bars('inactive_long_term_sick_or_disabled').at(-1)!;
+const TABLE = [
+  ['inactive_long_term_sick_or_disabled', 'Long term sick or disabled'],
+  ['inactive_looking_after_home_or_family', 'Looking after home or family'],
+  ['inactive_student', 'Student'],
+  ['inactive_retired', 'Retired'],
+  ['inactive_other', 'Other inactive'],
+  ['level4_plus', 'Level 4 and above'],
+  ['no_qualifications', 'No qualifications'],
+  ['health_bad_or_very_bad', 'Bad or very bad health'],
+] as const;
+const wv = (code: string, m: string) => rows(w, { geography_code: code, measure: m, period: C21 })[0]?.value ?? null;
+const wname = (code: string) => wardName(rows(w, { geography_code: code, period: C21 })[0].geography_name);
+const wards = wardRows('level4_plus').map((r) => r.geography_code).sort((a, b) => wname(a).localeCompare(wname(b)));
+
+/* 2. skills */
+const sk = contract('ps-skills');
+const ay = Array.from(new Set(rows(sk, { geography_code: BOR, measure: 'apprenticeship_starts' }).map((r) => r.period))).sort();
+const sv = (m: string, y: string, geo = BOR) => rows(sk, { geography_code: geo, measure: m, period: y })[0]?.value ?? null;
+const LEVELS = [
+  ['apprenticeship_starts_level_intermediate_apprenticeship', 'Intermediate (level 2)', 'var(--chart-neutral)'],
+  ['apprenticeship_starts_level_advanced_apprenticeship', 'Advanced (level 3)', 'var(--chart-1)'],
+  ['apprenticeship_starts_level_higher_apprenticeship', 'Higher (level 4 and above)', 'var(--chart-2)'],
+] as const;
+const lastAy = ay[ay.length - 1];
+const FE = 'fe_skills_participation_rate_per_100000_population';
+
+/* 3. automation and AI exposure */
+const au = contract('ps-automation');
+const AREAS = ['E07000117', 'E07000122', 'E07000120', 'E07000125', 'E06000008', 'E10000017', 'E12000002', 'E92000001'];
+const av = (geo: string, m: string, b: string) => rows(au, { geography_code: geo, measure: `${m}_${b}` })[0]?.value ?? null;
+const aname = (geo: string) => rows(au, { geography_code: geo })[0].geography_name.replace(' (county, twelve districts)', ' county');
+const MEASURES = [
+  { m: 'ons_mean_probability', title: 'Physical automation: mean ONS probability', d: 2, unit: '', max: 0.6 },
+  { m: 'gla_genai_share_l1_4', title: 'Generative AI: share of workers in exposed occupations (GLA)', d: 1, unit: '%', max: 40 },
+];
+const dfe = (geo: string) => av(geo, 'dfe_aioe_mean', 'central') as number;
+---
+
+<EconomyPage
+  title="People and skills"
+  seoTitle="Burnley people and skills: wards, health, qualifications | Tom Pickup"
+  description="Burnley's fifteen wards on economic inactivity, qualifications and health from the Census, the apprenticeship pipeline, and three measures of exposure to automation and AI, kept apart."
+  eyebrow="Burnley's economy · People and skills"
+  intro="Who is outside the labour market and why, ward by ward. What qualifications residents hold, how many are training, and how exposed their jobs are to automation and AI."
+  path="/burnley-economy/people-and-skills/"
+>
+  <section aria-labelledby="w-title">
+    <h2 id="w-title">The fifteen wards</h2>
+    <div class="prose">
+      <p>On Census day in 2021, {fmt(lts.value, '%', 1)} of Burnley's residents aged 16 and over were outside the labour market because of long term sickness or disability. The share runs from {fmt(ltsTop.value, '%', 1)} in {ltsTop.label} to {fmt(ltsLow.value, '%', 1)} in {ltsLow.label}. The same wards tend to have the highest shares in bad health.</p>
+      <p>Residents with a level 4 qualification or above, from a higher education certificate upwards, rose from {fmt(l4_11.value, '%', 1)} in 2011 to {fmt(l4.value, '%', 1)} in 2021. Both years count residents aged 16 and over, so the two are comparable.</p>
+    </div>
+    <Panel c={w}>
+      <h3 class="chart-h">Inactive through long term sickness or disability, share of residents aged 16 and over, 2021</h3>
+      <BarList items={bars('inactive_long_term_sick_or_disabled')} max={12} marker={{ value: lts.value as number, label: `Burnley borough ${fmt(lts.value, '%', 1)}` }} label="Share of residents inactive through long term sickness or disability, by ward, Census 2021" />
+      <h3 class="chart-h">Level 4 qualifications and above, 2021</h3>
+      <BarList items={bars('level4_plus')} max={45} marker={{ value: l4.value as number, label: `Burnley borough ${fmt(l4.value, '%', 1)}` }} label="Share of residents with level 4 qualifications and above, by ward, Census 2021" />
+      <div class="table-wrap" slot="table">
+        <table class="econ-table">
+          <caption>Census 2021, share of residents aged 16 and over, by 2022 ward</caption>
+          <thead><tr><th scope="col">Ward</th>{TABLE.map(([, l]) => <th scope="col" class="num">{l}</th>)}</tr></thead>
+          <tbody>
+            {wards.map((c) => <tr><th scope="row">{wname(c)}</th>{TABLE.map(([m]) => <td class="num">{fmt(wv(c, m), '%', 1)}</td>)}</tr>)}
+            <tr class="is-burnley"><th scope="row">Burnley borough</th>{TABLE.map(([m]) => <td class="num">{fmt(borough(m).value, '%', 1)}</td>)}</tr>
+          </tbody>
+        </table>
+      </div>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="sk-title">
+    <h2 id="sk-title">The skills pipeline</h2>
+    <div class="prose">
+      <p>Burnley residents started {num(sv('apprenticeship_starts', lastAy))} apprenticeships in {lastAy}. Higher apprenticeships, at level 4 and above, rose from {num(sv(LEVELS[2][0], ay[0]))} in {ay[0]} to {num(sv(LEVELS[2][0], lastAy))} in {lastAy}. Adult further education reaches a larger share of residents than in England: {num(sv(FE, lastAy))} learners per 100,000 people against {num(sv(FE, lastAy, ENG))}.</p>
+    </div>
+    <Panel c={sk}>
+      <h3 class="chart-h">Apprenticeship starts by Burnley residents, by level</h3>
+      <LineChart series={LEVELS.map(([m, l, c]) => ({ key: m, label: l, color: c, dots: true, points: ay.map((y) => ({ x: y, y: sv(m, y), tip: `${l}, ${y}: ${num(sv(m, y))}` })), endLabel: num(sv(m, lastAy)) }))}
+        xs={ay} yMin={0} yMax={400} yTicks={[0, 100, 200, 300, 400]} yFormat={(v) => num(v)} height={220} label={`Apprenticeship starts by Burnley residents by level, ${ay[0]} to ${lastAy}`} />
+      <table class="econ-table" slot="table">
+        <thead><tr><th scope="col">Academic year</th><th scope="col" class="num">All starts</th>{LEVELS.map(([, l]) => <th scope="col" class="num">{l}</th>)}<th scope="col" class="num">Adult FE per 100,000, Burnley</th><th scope="col" class="num">England</th></tr></thead>
+        <tbody>{ay.map((y) => <tr><th scope="row">{y}</th><td class="num">{num(sv('apprenticeship_starts', y))}</td>{LEVELS.map(([m]) => <td class="num">{num(sv(m, y))}</td>)}<td class="num">{num(sv(FE, y))}</td><td class="num">{num(sv(FE, y, ENG))}</td></tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="au-title">
+    <h2 id="au-title">Exposure to automation and AI</h2>
+    <div class="prose">
+      <p>Three published measures score occupations for exposure. Each is applied here to the jobs Burnley residents did at the 2021 Census. They measure different things, so they are shown side by side and never combined. Exposure is what a technology could in principle do to a task. It is not a forecast of jobs lost.</p>
+      <p>Burnley's residents work in jobs somewhat more exposed to physical automation than England's, and less exposed to AI. On the DfE index of exposure to AI, where a higher score means more exposed, Burnley scores {num(dfe(BOR), 2)} and England {num(dfe(ENG), 2)}.</p>
+    </div>
+    <Panel c={au}>
+      {MEASURES.map((x) => <>
+        <h3 class="chart-h">{x.title}</h3>
+        <BarList items={AREAS.map((g) => ({ label: aname(g), value: av(g, x.m, 'central'), display: x.unit ? fmt(av(g, x.m, 'central'), '%', x.d) : num(av(g, x.m, 'central'), x.d), strong: g === BOR,
+          tip: `${aname(g)}: ${num(av(g, x.m, 'central'), x.d)}${x.unit}, range ${num(av(g, x.m, 'lower'), x.d)} to ${num(av(g, x.m, 'upper'), x.d)}` }))} max={x.max} label={`${x.title}, Burnley and comparators`} />
+      </>)}
+      <table class="econ-table" slot="table">
+        <caption>Central value, with the lower and upper bound from carrying each score across occupation classifications</caption>
+        <thead><tr><th scope="col">Area</th><th scope="col" class="num">ONS probability</th><th scope="col" class="num">DfE AI index</th><th scope="col" class="num">GLA share, levels 1 to 4</th></tr></thead>
+        <tbody>{AREAS.map((g) => <tr class:list={{ 'is-burnley': g === BOR }}><th scope="row">{aname(g)}</th>
+          <td class="num">{num(av(g, 'ons_mean_probability', 'central'), 2)} ({num(av(g, 'ons_mean_probability', 'lower'), 2)} to {num(av(g, 'ons_mean_probability', 'upper'), 2)})</td>
+          <td class="num">{num(av(g, 'dfe_aioe_mean', 'central'), 2)} ({num(av(g, 'dfe_aioe_mean', 'lower'), 2)} to {num(av(g, 'dfe_aioe_mean', 'upper'), 2)})</td>
+          <td class="num">{fmt(av(g, 'gla_genai_share_l1_4', 'central'), '%', 1)} ({num(av(g, 'gla_genai_share_l1_4', 'lower'), 1)} to {num(av(g, 'gla_genai_share_l1_4', 'upper'), 1)})</td>
+        </tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+</EconomyPage>
+
+<style>
+  .chart-h { font-family: var(--font-sans); font-size: 1rem !important; font-weight: 600; margin: 18px 0 8px !important; }
+</style>

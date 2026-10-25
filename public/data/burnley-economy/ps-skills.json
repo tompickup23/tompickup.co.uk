@@ -1,0 +1,1330 @@
+{
+ "$meta": {
+  "panel": "ps-skills",
+  "title": "The skills pipeline: apprenticeship starts by level, and adult further education",
+  "page": "/burnley-economy/people-and-skills/",
+  "measures": [
+   {
+    "measure": "apprenticeship_starts",
+    "definition": "apprenticeship starts",
+    "unit": "learners",
+    "decimals": 0,
+    "codebook": "C_people_skills/series_education.csv",
+    "notes_common_to_every_row": "learners resident in the area"
+   },
+   {
+    "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+    "definition": "apprenticeship starts level advanced apprenticeship",
+    "unit": "learners",
+    "decimals": 0,
+    "codebook": "C_people_skills/series_education.csv",
+    "notes_common_to_every_row": "learners resident in the area"
+   },
+   {
+    "measure": "apprenticeship_starts_level_higher_apprenticeship",
+    "definition": "apprenticeship starts level higher apprenticeship",
+    "unit": "learners",
+    "decimals": 0,
+    "codebook": "C_people_skills/series_education.csv",
+    "notes_common_to_every_row": "learners resident in the area"
+   },
+   {
+    "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+    "definition": "apprenticeship starts level intermediate apprenticeship",
+    "unit": "learners",
+    "decimals": 0,
+    "codebook": "C_people_skills/series_education.csv",
+    "notes_common_to_every_row": "learners resident in the area"
+   },
+   {
+    "measure": "fe_skills_participation_rate_per_100000_population",
+    "definition": "fe skills participation rate per 100000 population",
+    "unit": "per 100,000",
+    "decimals": 0,
+    "codebook": "C_people_skills/series_education.csv",
+    "notes_common_to_every_row": "learners resident in the area"
+   }
+  ],
+  "publisher": "Department for Education",
+  "table": "Explore Education Statistics: Apprenticeships; Further education and skills",
+  "edition": "academic years 2019/20 to 2024/25, published 27 November 2025",
+  "access_date": "2026-10-25",
+  "citation": "DfE (2025) Apprenticeships and Further education and skills, academic year 2024/25",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "sha256": "683e43c8f76de2296c572a07cff8b5fab2179573c8a2d620623411913c9da580"
+   }
+  ],
+  "vintage": "academic year 2024/25 latest",
+  "caveat": "Counts are of learners resident in the area, rounded by the DfE. A start is not a completion.",
+  "next_release": "late November 2026 (2025/26 academic year)",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic."
+ },
+ "rows": [
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 322530,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 620,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 321440,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 580,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 349190,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 630,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 337140,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 700,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 339580,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 650,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "apprenticeship_starts",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 353500,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "apprenticeship_starts",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 650,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Counts by learner home postcode, rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 180,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 310,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 130,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 150,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 260,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 160,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 210,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 280,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 140,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 190,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 350,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 160,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r23"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 150,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 300,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 200,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 140,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_intermediate_apprenticeship",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 290,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_advanced_apprenticeship",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "apprenticeship_starts_level_higher_apprenticeship",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 220,
+   "unit": "learners",
+   "source_publisher": "DfE",
+   "source_title": "Apprenticeships: Geography LAD and PCON, starts, participation, achievements by age, sex, level",
+   "source_table": "data set e49878ad-3daf-4c90-8bb9-67ed1a9e8e94",
+   "source_edition": "Apprenticeships, academic year 2024/25 (published 27 November 2025)",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/e49878ad-3daf-4c90-8bb9-67ed1a9e8e94/csv",
+   "source_sha256": "476492cafb242ef8718ecdcf2e40bf428bfe7ae6de5257a342e174c42d575e59",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "Rounded to the nearest 10 by DfE",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "apprenticeship_starts_level_higher_apprenticeship",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r29"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 5174,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r30"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2024/25",
+   "period_type": "academic year",
+   "value": 8049,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2024/25"
+    },
+    "column": "value"
+   },
+   "rid": "r31"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 5320,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r32"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2023/24",
+   "period_type": "academic year",
+   "value": 8233,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2023/24"
+    },
+    "column": "value"
+   },
+   "rid": "r33"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 5356,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r34"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2022/23",
+   "period_type": "academic year",
+   "value": 8246,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2022/23"
+    },
+    "column": "value"
+   },
+   "rid": "r35"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 5105,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r36"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2021/22",
+   "period_type": "academic year",
+   "value": 7036,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2021/22"
+    },
+    "column": "value"
+   },
+   "rid": "r37"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 4884,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r38"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2020/21",
+   "period_type": "academic year",
+   "value": 6877,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2020/21"
+    },
+    "column": "value"
+   },
+   "rid": "r39"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "ctry",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 5199,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r40"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "lad",
+   "measure": "fe_skills_participation_rate_per_100000_population",
+   "period": "2019/20",
+   "period_type": "academic year",
+   "value": 8070,
+   "unit": "per 100,000",
+   "source_publisher": "DfE",
+   "source_title": "Further education and skills: Geography Region, LA, LAD, PCON, participation and achievement by provision type",
+   "source_table": "data set 1977cdbc-7eae-4257-a8c9-3281bb2dbfa9",
+   "source_edition": "academic year 2024/25 release",
+   "source_url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/1977cdbc-7eae-4257-a8c9-3281bb2dbfa9/csv",
+   "source_sha256": "59a4648778321f149c8ab71a6309e9a015fa6314efcb9b0705c851f837fffa82",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "DfE counts are rounded; rates use DfE's population estimate",
+   "src": {
+    "file": "Burnley_Growth_work/C_people_skills/series_education.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "fe_skills_participation_rate_per_100000_population",
+     "period": "2019/20"
+    },
+    "column": "value"
+   },
+   "rid": "r41"
+  }
+ ],
+ "derived": []
+}

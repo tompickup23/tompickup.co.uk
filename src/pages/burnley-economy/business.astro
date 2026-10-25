@@ -1,0 +1,194 @@
+---
+/* Business: five panels, each read from its contract. No company is named. */
+import EconomyPage from '../../components/burnley-economy/EconomyPage.astro';
+import Panel from '../../components/burnley-economy/Panel.astro';
+import LineChart from '../../components/burnley-economy/LineChart.astro';
+import BarList from '../../components/burnley-economy/BarList.astro';
+import { contract, rows, row, derived, fmt, num, longDate } from '../../lib/burnley-economy';
+
+const BOR = 'E07000117', ENG = 'E92000001';
+
+/* 1. demography */
+const dem = contract('bu-demography');
+const years = Array.from(new Set(rows(dem, { geography_code: BOR, measure: 'births' }).map((r) => r.period))).sort();
+const dv = (m: string, y: string) => row(dem, { geography_code: BOR, measure: m, period: y }).value;
+const surv = rows(dem, { measure: 'survival_5yr_pct' });
+const sb = row(dem, { geography_code: BOR, measure: 'survival_5yr_pct' });
+const se = row(dem, { geography_code: ENG, measure: 'survival_5yr_pct' });
+const survRow = (code: string) => rows(dem, { measure: 'survival_5yr_pct', geography_code: code })[0];
+const survOrder = ['E07000117', 'E07000122', 'E07000120', 'E07000125', 'E06000008'];
+const survItems = [
+  ...survOrder.map(survRow).filter(Boolean),
+  ...surv.filter((r) => !survOrder.includes(r.geography_code) && r.geography_code !== ENG && !r.geography_name.startsWith('Great Britain')),
+].map((r) => ({ label: r.geography_name, value: r.value, display: fmt(r.value, '%', 1), strong: r.geography_code === BOR }));
+const lastYear = years[years.length - 1];
+
+/* 2. the register */
+const reg = contract('bu-register');
+const rv = (code: string, variant: string, m: string) => row(reg, { sector_code: code, variant, measure: m }).value as number;
+const sections = rows(reg, { variant: 'excl_known_shells', measure: 'companies_live' }).filter((r) => r.sector_code !== 'ALL');
+const stripped = derived(reg, 'shell_companies_stripped').value as number;
+
+/* 3. largest filers: counts by band */
+const lf = contract('bu-largest-filers');
+const lfSectors = Array.from(new Map(lf.rows.map((r) => [r.sector_code as string, r.sector_name as string])).entries());
+const band = (code: string, b: string) => row(lf, { sector_code: code, measure: `filers_reporting_${b}_employees` });
+
+/* 4. premises and reliefs */
+const pr = contract('bu-premises');
+const cats = ['retail', 'office', 'industrial', 'other', 'all'];
+const catLabel: Record<string, string> = { retail: 'Retail', office: 'Offices', industrial: 'Industrial', other: 'Other', all: 'All' };
+const dates = Array.from(new Set(rows(pr, { category: 'all', measure: 'hereditaments_count' }).map((r) => r.period)));
+const pv = (cat: string, m: string, d: string) => row(pr, { category: cat, measure: m, period: d }).value as number;
+const accounts = pr.rows.find((r) => r.measure === 'nndr_accounts')!;
+const RELIEF_LABEL: Record<string, string> = {
+  'Small Business Relief England': 'Small business rate relief',
+  'Retail Relief 2026 Identifier': 'Retail relief 2026',
+  'Supporting Small Business Relief (3yr)': 'Supporting small business relief (three year)',
+  'Supporting Small Business Relief (1yr)': 'Supporting small business relief (one year)',
+  'EMPTY PROPERTY RATE NON-INDUSTRIAL': 'Empty property rate, non industrial',
+  'EMPTY PROPERTY RATE INDUSTRIAL': 'Empty property rate, industrial',
+  'EMPTY PROPERTY RATE CHARITABLE': 'Empty property rate, charitable',
+  'Mandatory Relief, Occupied': 'Mandatory relief, occupied (charities)',
+  'Pub & Music Venue Relief 2026': 'Pub and music venue relief 2026',
+  'DISCRETIONARY TOP-UP RELIEF, OCCUPIED': 'Discretionary top up relief, occupied',
+  'DISCRETIONARY RELIEF, OCCUPIED': 'Discretionary relief, occupied',
+  'Public Lavatories Relief': 'Public lavatories relief',
+  'COMMUNITY AMATEUR SPORTS CLUB RELIEF': 'Community amateur sports club relief',
+  'Rural Mandatory Relief 100%': 'Rural mandatory relief',
+};
+const reliefs = pr.rows.filter((r) => r.measure.startsWith('accounts_with_relief: ')).map((r) => {
+  const raw = r.measure.replace('accounts_with_relief: ', '');
+  return { label: RELIEF_LABEL[raw] ?? raw, value: r.value, display: num(r.value) };
+}).sort((a, b) => (b.value as number) - (a.value as number));
+const nndr3 = (m: string) => pr.rows.find((r) => r.measure === m)!;
+const empty = pr.rows.find((r) => r.measure === 'accounts_flagged_empty')!;
+
+/* 5. food premises */
+const fp = contract('bu-food-premises');
+const releases = Array.from(new Set(fp.rows.map((r) => r.period))).sort();
+const types = Array.from(new Set(fp.rows.map((r) => r.fsa_business_type as string))).filter((t) => t !== 'ALL');
+const fv = (t: string, p: string) => rows(fp, { fsa_business_type: t, period: p })[0]?.value ?? null;
+const lastRel = releases[releases.length - 1];
+const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ label: t.replace(/\//g, ', '), value: fv(t, lastRel), display: num(fv(t, lastRel)) }))
+  .sort((a, b) => (b.value as number) - (a.value as number));
+---
+
+<EconomyPage
+  title="Business"
+  seoTitle="Burnley business: firms, survival, premises and reliefs | Tom Pickup"
+  description="Burnley's business base from official data: firms born and surviving, the company register with formation agent clusters stripped out, the largest filers by sector, business premises, rates reliefs and food premises."
+  eyebrow="Burnley's economy · Business"
+  intro="How many businesses Burnley has, how long new ones last, and what premises they use. The company register is shown twice, with and without the addresses used by formation agents, because those addresses distort it."
+  path="/burnley-economy/business/"
+>
+  <section aria-labelledby="dem-title">
+    <h2 id="dem-title">Firms born, firms lost, firms that last</h2>
+    <div class="prose">
+      <p>Of the businesses born in Burnley in 2019, {fmt(sb.value, '%', 1)} were still trading five years later. For England the figure is {fmt(se.value, '%', 1)}, {num(derived(dem, 'survival_gap_england').value as number, 1)} points higher. Burnley had {num(dv('active_enterprises', lastYear))} active enterprises in {lastYear}, {num(dv('births', lastYear))} births and {num(dv('deaths', lastYear))} deaths.</p>
+    </div>
+    <Panel c={dem}>
+      <h3 class="chart-h">Five year survival of businesses born in 2019</h3>
+      <BarList items={survItems} max={50} marker={{ value: se.value as number, label: `England ${fmt(se.value, '%', 1)}` }} label="Five year survival of the 2019 birth cohort, Burnley and comparators, with England marked" />
+      <h3 class="chart-h">Births and deaths in Burnley each year</h3>
+      <LineChart series={[
+        { key: 'b', label: 'Births', color: 'var(--chart-1)', dots: true, points: years.map((y) => ({ x: y, y: dv('births', y), tip: `Births ${y}: ${num(dv('births', y))}` })), endLabel: `Births ${num(dv('births', lastYear))}` },
+        { key: 'd', label: 'Deaths', color: 'var(--chart-2)', dots: true, points: years.map((y) => ({ x: y, y: dv('deaths', y), tip: `Deaths ${y}: ${num(dv('deaths', y))}` })), endLabel: `Deaths ${num(dv('deaths', lastYear))}` },
+      ]} xs={years} yMin={0} yMax={600} yTicks={[0, 200, 400, 600]} yFormat={(v) => num(v)} height={200} label={`Business births and deaths in Burnley, ${years[0]} to ${lastYear}`} />
+      <table class="econ-table" slot="table">
+        <thead><tr><th scope="col">Year</th><th scope="col" class="num">Active</th><th scope="col" class="num">Births</th><th scope="col" class="num">Deaths</th><th scope="col" class="num">High growth</th></tr></thead>
+        <tbody>{years.map((y) => <tr><th scope="row">{y}</th><td class="num">{num(dv('active_enterprises', y))}</td><td class="num">{num(dv('births', y))}</td><td class="num">{num(dv('deaths', y))}</td><td class="num">{num(dv('high_growth_enterprises', y))}</td></tr>)}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="reg-title">
+    <h2 id="reg-title">The company register, with formation agent addresses removed</h2>
+    <div class="prose">
+      <p>On the register of 1 July 2026, {num(rv('ALL', 'all', 'companies_live'))} companies had a registered office in Burnley, and {fmt(rv('ALL', 'all', 'companies_not_active_pct'), '%', 1)} of them were not active. Two postcodes used by company formation agents hold {num(stripped)} of those companies, almost all of them not active. Without them the borough has {num(rv('ALL', 'excl_known_shells', 'companies_live'))} companies and {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active. Counts that include the clusters overstate the share of Burnley's companies that are not active.</p>
+    </div>
+    <Panel c={reg}>
+      <div class="pair">
+        <div><span class="pair-v">{num(rv('ALL', 'all', 'companies_live'))}</span><span class="pair-l">companies on the register, {fmt(rv('ALL', 'all', 'companies_not_active_pct'), '%', 1)} not active</span></div>
+        <div class="strong"><span class="pair-v">{num(rv('ALL', 'excl_known_shells', 'companies_live'))}</span><span class="pair-l">without the two formation agent postcodes, {fmt(rv('ALL', 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active</span></div>
+      </div>
+      <h3 class="chart-h">Companies by industry section, without the clusters</h3>
+      <BarList items={sections.sort((a, b) => (b.value as number) - (a.value as number)).map((r) => ({ label: r.sector_name as string, value: r.value, display: num(r.value), tip: `${r.sector_name}: ${num(r.value)} companies, ${fmt(rv(r.sector_code as string, 'excl_known_shells', 'companies_not_active_pct'), '%', 1)} not active` }))}
+        max={Math.max(...sections.map((r) => r.value as number))} label="Companies registered in Burnley by industry section, formation agent postcodes excluded" labelWidth="50%" />
+      <table class="econ-table" slot="table">
+        <thead><tr><th scope="col">Section</th><th scope="col" class="num">All companies</th><th scope="col" class="num">Not active</th><th scope="col" class="num">Without clusters</th><th scope="col" class="num">Not active</th></tr></thead>
+        <tbody>{rows(reg, { variant: 'all', measure: 'companies_live' }).map((r) => { const c = r.sector_code as string; return <tr class:list={{ 'is-burnley': c === 'ALL' }}>
+          <th scope="row">{r.sector_name}</th><td class="num">{num(r.value)}</td><td class="num">{fmt(rv(c, 'all', 'companies_not_active_pct'), '%', 1)}</td>
+          <td class="num">{num(rv(c, 'excl_known_shells', 'companies_live'))}</td><td class="num">{fmt(rv(c, 'excl_known_shells', 'companies_not_active_pct'), '%', 1)}</td>
+        </tr>; })}</tbody>
+      </table>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="lf-title">
+    <h2 id="lf-title">The largest filers in each sector</h2>
+    <div class="prose">
+      <p>The growth plan looks at nine sectors. For each, its research listed the largest companies registered in Burnley that report a headcount in their accounts. The table counts them by size. It names none of them, and it misses the large employers registered elsewhere, among them the aerospace plants and the public bodies.</p>
+    </div>
+    <Panel c={lf} title="The largest filers in each sector, by reported average employees">
+      <div class="table-wrap">
+        <table class="econ-table">
+          <thead><tr><th scope="col">Sector</th><th scope="col" class="num">Listed</th><th scope="col" class="num">10 to 49</th><th scope="col" class="num">50 to 249</th><th scope="col" class="num">250 or more</th></tr></thead>
+          <tbody>{lfSectors.map(([code, name]) => <tr>
+            <th scope="row">{name}</th><td class="num">{num(band(code, '250_plus').listed as number)}</td>
+            <td class="num">{num(band(code, '10_to_49').value)}</td><td class="num">{num(band(code, '50_to_249').value)}</td><td class="num">{num(band(code, '250_plus').value)}</td>
+          </tr>)}</tbody>
+        </table>
+      </div>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="pr-title">
+    <h2 id="pr-title">Premises and business rates reliefs</h2>
+    <div class="prose">
+      <p>The Valuation Office Agency counted {num(pv('all', 'hereditaments_count', dates[dates.length - 1]))} rated business premises in Burnley at {dates[dates.length - 1]}. Retail premises held steady in number while their rateable value fell. The industrial count more than doubled between the 2017 and 2023 lists. The research traced that to a large number of very small storage units, not new factory floor space.</p>
+      <p>The council's ratepayer file of 27 July 2026 has {num(accounts.value)} accounts. The chart counts the accounts carrying each relief; an account can carry more than one, and {num(empty.value)} accounts are flagged empty.</p>
+    </div>
+    <Panel c={pr}>
+      <div class="table-wrap">
+        <table class="econ-table">
+          <caption>Rated premises and total rateable value (£ thousand) at 31 March each year. Each rating list resets values to rents at its valuation date.</caption>
+          <thead><tr><th scope="col">Category</th>{dates.map((d) => <th scope="col" class="num">{d.replace('31 March ', '')}</th>)}{dates.map((d) => <th scope="col" class="num">RV {d.replace('31 March ', '')}</th>)}</tr></thead>
+          <tbody>{cats.map((c) => <tr class:list={{ 'is-burnley': c === 'all' }}><th scope="row">{catLabel[c]}</th>{dates.map((d) => <td class="num">{num(pv(c, 'hereditaments_count', d))}</td>)}{dates.map((d) => <td class="num">{num(pv(c, 'rateable_value_total', d))}</td>)}</tr>)}</tbody>
+        </table>
+      </div>
+      <h3 class="chart-h">Ratepayer accounts carrying each relief, 27 July 2026</h3>
+      <BarList items={reliefs} max={Math.max(...reliefs.map((r) => r.value as number))} label="Ratepayer accounts carrying each business rates relief in Burnley" labelWidth="50%" />
+      <p class="chart-note">Relief granted in 2025/26 (NNDR3): small business rate relief {fmt(-(nndr3('nndr3_sbrr_tot').value as number), 'GBP', 0)}, mandatory charity relief {fmt(-(nndr3('nndr3_mr_charity_tot').value as number), 'GBP', 0)}, empty property relief {fmt(-(nndr3('nndr3_empty_tot').value as number), 'GBP', 0)}.</p>
+    </Panel>
+  </section>
+
+  <section aria-labelledby="fp-title">
+    <h2 id="fp-title">Food premises</h2>
+    <div class="prose">
+      <p>The Food Standards Agency's register counted {num(derived(fp, `total_${lastRel}`).value as number)} food establishments in the Burnley council area on {longDate(lastRel)}. They run from cafes and takeaways to care homes and school kitchens. Two releases are shown; a longer daily history exists and is not yet shown here.</p>
+    </div>
+    <Panel c={fp}>
+      <BarList items={foodItems} max={Math.max(...foodItems.map((f) => f.value as number))} label={`Food establishments in Burnley by FSA business type, ${longDate(lastRel)}`} labelWidth="50%" />
+      <table class="econ-table" slot="table">
+        <thead><tr><th scope="col">FSA business type</th>{releases.map((r) => <th scope="col" class="num">{longDate(r)}</th>)}</tr></thead>
+        <tbody>
+          {types.map((t) => <tr><th scope="row">{t}</th>{releases.map((r) => <td class="num">{num(fv(t, r))}</td>)}</tr>)}
+          <tr class="is-burnley"><th scope="row">All</th>{releases.map((r) => <td class="num">{num(derived(fp, `total_${r}`).value as number)}</td>)}</tr>
+        </tbody>
+      </table>
+      <p class="chart-note">The FSA renamed one business type between the two releases, so it appears on two rows of the table.</p>
+    </Panel>
+  </section>
+</EconomyPage>
+
+<style>
+  .chart-h { font-family: var(--font-sans); font-size: 1rem !important; font-weight: 600; margin: 18px 0 8px !important; }
+  .chart-note { color: var(--muted); font-size: 0.875rem !important; line-height: 1.55 !important; margin: 10px 0 0; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0 8px; }
+  .pair > div { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; background: var(--panel); border-top: 3px solid var(--chart-neutral); }
+  .pair > div.strong { border-top-color: var(--chart-1); }
+  .pair-v { font-family: var(--font-display); font-size: 2rem; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
+  .pair-l { font-size: 0.9375rem; line-height: 1.45; }
+  @media (max-width: 600px) { .pair { grid-template-columns: 1fr; } }
+</style>

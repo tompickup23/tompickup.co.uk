@@ -1,0 +1,84 @@
+---
+/* A responsive line chart drawn at build time. The lines are SVG stretched to
+   the plot (non-scaling 2px strokes); labels, dots and hover targets are HTML
+   placed by percentage, so text stays legible at phone width. A null value is
+   a gap in the line, never a zero. One y axis only. */
+interface Point { x: string; y: number | null; tip?: string }
+interface Series { key: string; label: string; color: string; points: Point[]; faint?: boolean; endLabel?: string; dots?: boolean }
+interface Props {
+  series: Series[];
+  xs: string[];               // every x category, in order
+  xLabel?: (x: string, i: number) => string;   // axis text; '' to skip a tick
+  yMin: number; yMax: number; yTicks: number[];
+  yFormat?: (v: number) => string;
+  height?: number;
+  label: string;              // accessible description of the whole chart
+  legend?: boolean;
+}
+const { series, xs, xLabel = (x: string) => x, yMin, yMax, yTicks, yFormat = (v: number) => String(v), height = 260, label, legend = series.length > 1 } = Astro.props;
+const xi = new Map(xs.map((x, i) => [x, i]));
+const X = (x: string) => (xs.length === 1 ? 50 : ((xi.get(x) ?? 0) / (xs.length - 1)) * 100);
+const Y = (y: number) => 100 - ((y - yMin) / (yMax - yMin)) * 100;
+/* Split a series at nulls so a suppressed month is a gap. */
+function paths(s: Series): string[] {
+  const out: string[] = [];
+  let cur: string[] = [];
+  for (const p of s.points) {
+    if (p.y === null || !xi.has(p.x)) { if (cur.length) out.push(cur.join(' ')); cur = []; continue; }
+    cur.push(`${cur.length ? 'L' : 'M'}${(X(p.x) * 10).toFixed(2)},${(Y(p.y) * 10).toFixed(2)}`);
+  }
+  if (cur.length) out.push(cur.join(' '));
+  return out;
+}
+const drawn = series.map((s) => ({ ...s, d: paths(s), last: [...s.points].reverse().find((p) => p.y !== null) }));
+/* End labels: placed at their line's last value, then pushed apart so two
+   lines ending close together never print on top of each other. */
+const gap = (34 / height) * 100;
+const ends = drawn.filter((s) => s.endLabel && s.last).map((s) => ({ label: s.endLabel!, top: Y(s.last!.y!) })).sort((a, b) => a.top - b.top);
+for (let i = 1; i < ends.length; i++) if (ends[i].top - ends[i - 1].top < gap) ends[i].top = ends[i - 1].top + gap;
+---
+
+<div class="lc">
+  {legend && <ul class="lc-legend" aria-hidden="true">
+    {series.map((s) => <li><span class:list={['lc-key', { faint: s.faint }]} style={`--c:${s.color}`}></span>{s.label}</li>)}
+  </ul>}
+  <div class="lc-frame" style={`height:${height}px`} role="img" aria-label={label}>
+    <div class="lc-yaxis" aria-hidden="true">
+      {yTicks.map((t) => <span style={`top:${Y(t)}%`}>{yFormat(t)}</span>)}
+    </div>
+    <div class="lc-plot">
+      {yTicks.map((t) => <div class="lc-grid" style={`top:${Y(t)}%`}></div>)}
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        {drawn.map((s) => s.d.map((d) => <path d={d} fill="none" stroke={s.color} stroke-width={s.faint ? 1.5 : 2} stroke-opacity={s.faint ? 0.35 : 1} stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />))}
+      </svg>
+      {drawn.map((s) => s.points.filter((p) => p.y !== null && xi.has(p.x)).map((p) => <span class:list={['lc-hit', { 'lc-dot': s.dots || p === s.last, faint: s.faint }]} style={`left:${X(p.x)}%;top:${Y(p.y!)}%;--c:${s.color}`} data-tip={p.tip ?? `${s.label}, ${p.x}: ${yFormat(p.y!)}`}></span>))}
+      {ends.map((e) => <span class="lc-end" style={`top:${e.top}%`}>{e.label}</span>)}
+    </div>
+  </div>
+  <div class="lc-xaxis" aria-hidden="true">
+    {xs.map((x, i) => { const t = xLabel(x, i); return t ? <span style={`left:${X(x)}%`}>{t}</span> : null; })}
+  </div>
+</div>
+
+<style>
+  .lc { --yw: 48px; --endw: 84px; margin: 4px 0 0; }
+  .lc-legend { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.875rem; color: var(--ink); }
+  .lc-legend li { display: inline-flex; align-items: center; gap: 8px; }
+  .lc-key { display: inline-block; width: 16px; height: 2px; background: var(--c); border-radius: 1px; }
+  .lc-key.faint { opacity: 0.4; height: 1.5px; }
+  .lc-frame { position: relative; margin: 8px 0 0; }
+  .lc-yaxis { position: absolute; left: 0; top: 0; bottom: 0; width: var(--yw); }
+  .lc-yaxis span { position: absolute; right: 8px; transform: translateY(-50%); font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lc-plot { position: absolute; left: var(--yw); right: var(--endw); top: 0; bottom: 0; }
+  .lc-plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .lc-grid { position: absolute; left: 0; right: 0; border-top: 1px solid var(--chart-track); }
+  .lc-hit { position: absolute; width: 18px; height: 18px; transform: translate(-50%, -50%); border-radius: 50%; z-index: 1; }
+  .lc-hit.lc-dot::before { content: ''; position: absolute; left: 4px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--paper); }
+  .lc-hit.lc-dot.faint::before { opacity: 0.45; width: 8px; height: 8px; left: 5px; top: 5px; }
+  .lc-hit:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); z-index: 3; white-space: nowrap; padding: 6px 10px; background: var(--ink); color: #fff; font-size: 0.8125rem; font-weight: 600; line-height: 1.3; border-radius: var(--radius-md); pointer-events: none; }
+  .lc-hit:hover::before { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--c); }
+  .lc-end { position: absolute; left: calc(100% + 10px); transform: translateY(-50%); font-size: 0.8125rem; font-weight: 600; color: var(--ink); width: calc(var(--endw) - 10px); overflow-wrap: anywhere; white-space: normal; line-height: 1.2; }
+  .lc-xaxis { position: relative; height: 22px; margin: 6px var(--endw) 0 var(--yw); }
+  .lc-xaxis span { position: absolute; transform: translateX(-50%); font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @media (max-width: 600px) { .lc { --yw: 40px; --endw: 64px; } .lc-end { font-size: 0.75rem; } }
+</style>

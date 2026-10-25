@@ -1,0 +1,78 @@
+---
+/* Page chrome for the "Burnley's economy" collection: breadcrumb, header, the
+   sub-navigation of the six pages, and the footer links. One collection, fixed
+   pages, no generated profile pages (docs/parked-sections.md says why). */
+import Layout from '../../layouts/Layout.astro';
+import { PAGES } from '../../lib/burnley-economy';
+
+interface Props {
+  title: string;
+  seoTitle: string;
+  description: string;
+  eyebrow: string;
+  intro: string;
+  path: string;
+  schema?: Record<string, unknown>;
+}
+const { title, seoTitle, description, eyebrow, intro, path, schema } = Astro.props;
+const pageSchema = schema ?? {
+  '@type': 'WebPage',
+  '@id': `https://tompickup.co.uk${path}`,
+  url: `https://tompickup.co.uk${path}`,
+  name: title, description, inLanguage: 'en-GB',
+  isPartOf: { '@type': 'CollectionPage', '@id': 'https://tompickup.co.uk/burnley-economy/', name: "Burnley's economy" },
+};
+---
+
+<Layout title={seoTitle} description={description} schema={pageSchema}>
+  <div class="econ-page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/projects/#burnley">Burnley projects</a> <span aria-hidden="true">/</span> {path === '/burnley-economy/' ? "Burnley's economy" : <><a href="/burnley-economy/">Burnley's economy</a> <span aria-hidden="true">/</span> {title}</>}</nav>
+    <header class="econ-hero">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="intro">{intro}</p>
+    </header>
+    <nav class="econ-nav" aria-label="Burnley's economy pages">
+      {PAGES.map((p) => <a href={p.href} aria-current={p.href === path ? 'page' : undefined}>{p.label}</a>)}
+    </nav>
+    <div class="econ-main">
+      <slot />
+    </div>
+    <div class="page-footer"><a href="/projects/#burnley">← More Burnley projects</a><a href="/news/#burnley">All Burnley articles →</a></div>
+  </div>
+</Layout>
+
+<style is:global>
+  .econ-page { max-width: 1040px; margin: 0 auto; padding: 24px var(--gutter) 24px; color: var(--ink); }
+  .econ-page .crumbs { color: var(--muted); font-size: 0.9375rem; }
+  .econ-page .crumbs a, .econ-page .page-footer a { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--teal); font-size: 1rem; font-weight: 600; }
+  .econ-hero { max-width: 760px; padding: 20px 0 24px; }
+  .econ-page .eyebrow { color: var(--teal); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
+  .econ-hero h1 { font-size: clamp(2.25rem, 4.6vw, 3.25rem); line-height: 1.08; margin: 12px 0 14px; }
+  .econ-hero .intro { color: var(--muted); font-size: 1.1875rem; line-height: 1.6; max-width: 60ch; margin: 0; }
+  .econ-nav { display: flex; flex-wrap: wrap; gap: 0 4px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .econ-nav a { display: inline-flex; align-items: center; min-height: var(--touch); padding: 0 12px; color: var(--ink); font-weight: 600; font-size: 0.9375rem; text-decoration: none; border-bottom: 3px solid transparent; }
+  .econ-nav a:hover { color: var(--teal); }
+  .econ-nav a[aria-current='page'] { border-bottom-color: var(--teal); color: var(--teal); }
+  .econ-main { max-width: 820px; }
+  .econ-main > section { padding: 8px 0 32px; border-bottom: 1px solid var(--line); margin-bottom: 28px; scroll-margin-top: 88px; }
+  .econ-main > section:last-child { border-bottom: 0; }
+  .econ-main h2 { font-size: 1.75rem; line-height: 1.2; margin: 8px 0 14px; }
+  .econ-main h3 { font-size: 1.25rem; line-height: 1.3; margin: 24px 0 10px; }
+  .econ-main p, .econ-main li { font-size: 1.0625rem; line-height: 1.7; }
+  .econ-main .prose p { margin: 0 0 16px; }
+  .econ-page .page-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 20px; padding: 20px 0; border-top: 1px solid var(--line); margin-top: 12px; }
+  .table-wrap { overflow-x: auto; }
+  .econ-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+  .econ-table caption { text-align: left; color: var(--muted); font-size: 0.8125rem; padding-bottom: 6px; }
+  .econ-table th, .econ-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .econ-table thead th { border-bottom: 2px solid var(--ink); font-weight: 600; }
+  .econ-table .num { text-align: right; white-space: nowrap; }
+  .econ-table tr.is-burnley th, .econ-table tr.is-burnley td { font-weight: 600; }
+  .econ-table code { overflow-wrap: anywhere; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  @media (max-width: 600px) {
+    .econ-nav a { padding: 0 8px; font-size: 0.875rem; }
+    .econ-hero .intro { font-size: 1.0625rem; }
+  }
+</style>

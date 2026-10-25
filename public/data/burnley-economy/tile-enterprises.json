@@ -1,0 +1,271 @@
+{
+ "$meta": {
+  "panel": "tile-enterprises",
+  "title": "Active enterprises",
+  "page": "/burnley-economy/",
+  "measures": [
+   {
+    "measure": "active_enterprises",
+    "definition": "Active enterprises (turnover or employment at any time in the year; note 1)",
+    "unit": "enterprises",
+    "decimals": 0,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "counts, controlled rounding (Units line)"
+   },
+   {
+    "measure": "li01_population_16_64",
+    "definition": "Residents aged 16 to 64 (the denominator ONS gives for the employment and inactivity rates)",
+    "unit": "persons",
+    "decimals": 0,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": "header may say thousands but the cells hold whole persons (as published)"
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "Business demography, UK, Table 3.1d; LI01 population aged 16 to 64",
+  "edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
+  "access_date": "2026-10-25",
+  "citation": "ONS (2025b) Business demography, UK, 2024 edition",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
+    "sha256": "019fbc476b55206d188b50395c4654a93baa580c2fd64898a68d0aa9e1919d4a"
+   },
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "sha256": "bfb90669f479ca2624f2f8c88e1447a6852885b42d7dd218d0a170658f00afb8"
+   }
+  ],
+  "vintage": "2024 edition; 2025 edition due 19 November 2026",
+  "caveat": "Counts use controlled rounding. Density divides by residents aged 16 to 64 and is derived here. No neighbour comparison: a count depends on size and the held files carry no population for the neighbours.",
+  "next_release": "19 November 2026",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "latest_period": "2024"
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "active_enterprises",
+   "period": "2024",
+   "period_type": "calendar year",
+   "value": 2895,
+   "unit": "enterprises",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 3.1d, cell C44",
+   "source_edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2024.xlsx",
+   "source_sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "active_enterprises",
+     "period": "2024"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "active_enterprises",
+   "period": "2024",
+   "period_type": "calendar year",
+   "value": 283620,
+   "unit": "enterprises",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 3.1d, cell C23",
+   "source_edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2024.xlsx",
+   "source_sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "active_enterprises",
+     "period": "2024"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "active_enterprises",
+   "period": "2024",
+   "period_type": "calendar year",
+   "value": 2521340,
+   "unit": "enterprises",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 3.1d, cell C8",
+   "source_edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2024.xlsx",
+   "source_sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "active_enterprises",
+     "period": "2024"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_population_16_64",
+   "period": "mid-2024",
+   "period_type": "mid-year estimate",
+   "value": 61010,
+   "unit": "persons",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell C44",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Population aged 16 to 64 POPUA (thousands) [note 1]; note 1: Estimates of the population are based on 2024 mid-year population estimates.",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_population_16_64",
+     "period": "mid-2024"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_population_16_64",
+   "period": "mid-2024",
+   "period_type": "mid-year estimate",
+   "value": 4840994,
+   "unit": "persons",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell C23",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Population aged 16 to 64 POPUA (thousands) [note 1]; note 1: Estimates of the population are based on 2024 mid-year population estimates.",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_population_16_64",
+     "period": "mid-2024"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_population_16_64",
+   "period": "mid-2024",
+   "period_type": "mid-year estimate",
+   "value": 36870761,
+   "unit": "persons",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell C8",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Population aged 16 to 64 POPUA (thousands) [note 1]; note 1: Estimates of the population are based on 2024 mid-year population estimates.",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_population_16_64",
+     "period": "mid-2024"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  }
+ ],
+ "derived": [
+  {
+   "id": "density_E07000117",
+   "label": "Active enterprises per 1,000 residents aged 16 to 64, Burnley",
+   "value": 47.5,
+   "decimals": 1,
+   "unit": "enterprises per 1,000",
+   "arithmetic": "2895 / 61010 * 1000",
+   "inputs": [
+    "r0",
+    "r3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "density_E12000002",
+   "label": "Active enterprises per 1,000 residents aged 16 to 64, North West",
+   "value": 58.6,
+   "decimals": 1,
+   "unit": "enterprises per 1,000",
+   "arithmetic": "283620 / 4840994 * 1000",
+   "inputs": [
+    "r1",
+    "r4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "density_E92000001",
+   "label": "Active enterprises per 1,000 residents aged 16 to 64, England",
+   "value": 68.4,
+   "decimals": 1,
+   "unit": "enterprises per 1,000",
+   "arithmetic": "2521340 / 36870761 * 1000",
+   "inputs": [
+    "r2",
+    "r5"
+   ],
+   "note": ""
+  }
+ ]
+}

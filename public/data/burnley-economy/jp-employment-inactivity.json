@@ -1,0 +1,3047 @@
+{
+ "$meta": {
+  "panel": "jp-employment-inactivity",
+  "title": "Employment and inactivity, residents aged 16 to 64, single years and three year means",
+  "page": "/burnley-economy/jobs-and-pay/",
+  "measures": [
+   {
+    "measure": "li01_employment_rate_16_64",
+    "definition": "People aged 16 to 64 in employment as a percentage of all residents aged 16 to 64, APS",
+    "unit": "percent",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": ""
+   },
+   {
+    "measure": "li01_inactivity_rate_16_64",
+    "definition": "Economically inactive residents aged 16 to 64 as a percentage of all residents aged 16 to 64, APS",
+    "unit": "percent",
+    "decimals": 1,
+    "codebook": "A_labour_pay/measures.csv",
+    "notes_common_to_every_row": ""
+   }
+  ],
+  "publisher": "Office for National Statistics",
+  "table": "LI01, sheet LI01, one October edition a year (November 2015 for the first)",
+  "edition": "November 2015 and October 2016 to October 2026 editions",
+  "access_date": "2026-10-24",
+  "citation": "ONS (2015 to 2026a) LI01",
+  "sources": [
+   {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "sha256": "bfb90669f479ca2624f2f8c88e1447a6852885b42d7dd218d0a170658f00afb8"
+   }
+  ],
+  "vintage": "APS official statistics in development",
+  "caveat": "Survey rates. The Annual Population Survey lost its accreditation in 2025. Burnley's single years change by up to 11 points from one year to the next, so the solid line is the mean of three consecutive readings, derived here; single years are shown faint.",
+  "next_release": "October 2027",
+  "generated": "2026-10-25",
+  "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
+  "methodologyVersion": "1.0",
+  "rules": "No company or person is named. No estimate is shown as fact. Derived figures carry their arithmetic."
+ },
+ "rows": [
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 64.3,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G64",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r0"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 74.6,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G64",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r1"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 80.7,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G64",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r2"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 77.7,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G64",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r3"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 66.6862370031,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E64",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r4"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 72.9710117252,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E64",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r5"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 72.6815361395,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E64",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r6"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 67.8478344193,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E49",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r7"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 71.438913673,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E44",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r8"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 81.745631068,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E44",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2023 to June 2024 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r9"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 72.4677000133,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E44",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r10"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 72.5237881172,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E44",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r11"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 70.1,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G34",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r12"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 71.6,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G34",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r13"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 72.4,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G34",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r14"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 73.5,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G34",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r15"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 73.8672269977,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E34",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r16"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 75.1814750871,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E34",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r17"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 73.1354714641,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E34",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r18"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 73.2711829035,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E23",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r19"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 73.8093678844,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E23",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r20"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 72.8643830693,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E23",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2023 to June 2024 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r21"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 74.1073134819,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E23",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 74.2596761491,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E23",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r23"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 73.3,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G14",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 74,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G14",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 74.6,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G14",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 75.2,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell G14",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 75.8075814179,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E14",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 76.5067021318,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E14",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r29"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 74.7204966787,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E14",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Employment2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r30"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 75.7027708309,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E8",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r31"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 75.755647476,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E8",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r32"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 75.6790706396,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E8",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2023 to June 2024 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r33"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 75.7552052499,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E8",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r34"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_employment_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 75.7899835934,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell E8",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Employment rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_employment_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r35"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 28.8,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O64",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r36"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 21.1,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O64",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r37"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 13.9,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O64",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r38"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 17.9,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O64",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r39"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 27.3384973769,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I64",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r40"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 23.2784631249,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I64",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r41"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 23.6588592617,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I64",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Economic inactivity2 / 16-64 Rate (%); small sample (cell highlighted in the source, LI01 note on highlighted cells)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r42"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 29.7930241472,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I49",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]; small sample (cell highlighted in the source, LI01 note on highlighted cells)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r43"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 28.561086327,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I44",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]; small sample (cell highlighted in the source, LI01 note on highlighted cells)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r44"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 17.4388349515,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I44",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2023 to June 2024 % [note 2]; small sample (cell highlighted in the source, LI01 note on highlighted cells)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r45"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 26.4053577188,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I44",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r46"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 26.5883719188,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I44",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r47"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 25.4,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O34",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r48"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 24.2,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O34",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r49"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 24,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O34",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r50"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 23.3,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O34",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r51"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 22.9463686361,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I34",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r52"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 21.7422542315,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I34",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r53"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 23.0463231915,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I34",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r54"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 23.449955318,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r55"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 23.1871931888,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r56"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 23.7290868375,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2023 to June 2024 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r57"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 22.7498011947,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r58"
+  },
+  {
+   "geography_code": "E12000002",
+   "geography_name": "North West",
+   "geography_type": "region",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 22.3866022145,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I23",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E12000002",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r59"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2014-07/2015-06",
+   "period_type": "12 months to June",
+   "value": 22.3,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O14",
+   "source_edition": "November 2015 edition (v1), earliest held on the ONS page; no October 2015 edition listed",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v1/lmregtabli01november2015_tcm77-423100.xls",
+   "source_sha256": "5387a6a1ef1457653c525836eb6af9c645ac7eba898442fea9d733a4aa1ca46c",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2014 to June 2015 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2014-07/2015-06"
+    },
+    "column": "value"
+   },
+   "rid": "r60"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2015-07/2016-06",
+   "period_type": "12 months to June",
+   "value": 21.9,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O14",
+   "source_edition": "October 2016 edition (v8)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v8/lmregtabli01october2016.xls",
+   "source_sha256": "bcd95178dcf255c1fb1c4a4f0cba896be802362e651f6c185615d5cc0cc36bf8",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2015 to June 2016 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2015-07/2016-06"
+    },
+    "column": "value"
+   },
+   "rid": "r61"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2016-07/2017-06",
+   "period_type": "12 months to June",
+   "value": 21.7,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O14",
+   "source_edition": "October 2017 edition (v12)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v12/lmregtabli01october2017.xls",
+   "source_sha256": "15ad1d206b5c71a212c2aeabf5dc94e8ff1ec2bb7ba309d51fa771c35bb3b5e6",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2016 to June 2017 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2016-07/2017-06"
+    },
+    "column": "value"
+   },
+   "rid": "r62"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2017-07/2018-06",
+   "period_type": "12 months to June",
+   "value": 21.4,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell O14",
+   "source_edition": "October 2018 edition (v16)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v16/lmregtabli01october2018.xls",
+   "source_sha256": "cbbab3d8b68b10b9f8a0ef3b4c1217d6636fa806340faa658cc091079f517397",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2017 to June 2018 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2017-07/2018-06"
+    },
+    "column": "value"
+   },
+   "rid": "r63"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2018-07/2019-06",
+   "period_type": "12 months to June",
+   "value": 20.9114666438,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I14",
+   "source_edition": "October 2019 edition (v20)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v20/lmregtabli01october2019.xls",
+   "source_sha256": "35e8fe63080ab7d0376c0e3baf73138c85c48669e03bd7cda91ad3ae5cc779d1",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2018 to June 2019 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2018-07/2019-06"
+    },
+    "column": "value"
+   },
+   "rid": "r64"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2019-07/2020-06",
+   "period_type": "12 months to June",
+   "value": 20.2873504811,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I14",
+   "source_edition": "October 2020 edition (v25)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v25/lmregtabli01october2020.xls",
+   "source_sha256": "edaf5809ef4a6030aea62625502c38bbf8ffc110491966f4a1a14ec5d141d899",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2019 to June 2020 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2019-07/2020-06"
+    },
+    "column": "value"
+   },
+   "rid": "r65"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2020-07/2021-06",
+   "period_type": "12 months to June",
+   "value": 21.1896917621,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I14",
+   "source_edition": "October 2021 edition (v33)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/locallabourmarketindicatorsforcountieslocalandunitaryauthoritiesli01/current/previous/v33/lmregtabli01october2021.xls",
+   "source_sha256": "c9dc9eb60eb0df292f5229fa9359b21de5e622ae175d7c5eca4daee7bae2dc49",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: July 2020 to June 2021 / Labour supply / Economic inactivity2 / 16-64 Rate (%)",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2020-07/2021-06"
+    },
+    "column": "value"
+   },
+   "rid": "r66"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2021-07/2022-06",
+   "period_type": "12 months to June",
+   "value": 21.1869262108,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2022 edition (latest version of that edition)",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2022/lmregtabli01october2022.xlsx",
+   "source_sha256": "504f3619e6845d96c7c0c6a00056d3e6aa08fcb07fc289c8497189a6db54eb4f",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2021 to Jun 2022 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2021-07/2022-06"
+    },
+    "column": "value"
+   },
+   "rid": "r67"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2022-07/2023-06",
+   "period_type": "12 months to June",
+   "value": 21.1622382893,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2023 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2023/lmregtabli01october2023.xlsx",
+   "source_sha256": "e0ebf74ff1e98c64a959b6f1ea24492858cb4798e433f8f4f377ed26e1d73bde",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2022 to Jun 2023 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2022-07/2023-06"
+    },
+    "column": "value"
+   },
+   "rid": "r68"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2023-07/2024-06",
+   "period_type": "12 months to June",
+   "value": 21.2916013228,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2024 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2024/lmregtabli01october2024.xlsx",
+   "source_sha256": "ef3819c5cb6f17fc8aed13d7f40fe98cba183732979c9c846a55b0d2907e0f25",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2023 to June 2024 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2023-07/2024-06"
+    },
+    "column": "value"
+   },
+   "rid": "r69"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2024-07/2025-06",
+   "period_type": "12 months to June",
+   "value": 20.9111940232,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2025 edition",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2025/lmregtabli01october2025.xlsx",
+   "source_sha256": "175ebff98f3027488a95171737812a2ab6a3190f815c674a884b4743824ea08e",
+   "access_date": "2026-10-25",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 July 2024 to June 2025 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2024-07/2025-06"
+    },
+    "column": "value"
+   },
+   "rid": "r70"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "country",
+   "measure": "li01_inactivity_rate_16_64",
+   "period": "2025-07/2026-06",
+   "period_type": "12 months to June",
+   "value": 20.4919374865,
+   "unit": "percent",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "LI01 Regional labour market: local indicators for counties, local and unitary authorities",
+   "source_table": "LI01 sheet LI01, cell I8",
+   "source_edition": "October 2026 edition, released 20 October 2026",
+   "source_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/li01regionallabourmarketlocalindicatorsforcountieslocalandunitaryauthorities/october2026/lmregtabli01october2026.xlsx",
+   "source_sha256": "0ec29b1242ccce10f496eb56b57e3f1b630ae2aed34c2b84e9f55b009b0fc56c",
+   "access_date": "2026-10-24",
+   "derived": "no",
+   "derivation": "",
+   "note": "header: Economic inactivity rate age 16 to 64 Jul 2025 to Jun 2026 % [note 2]",
+   "src": {
+    "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "measure": "li01_inactivity_rate_16_64",
+     "period": "2025-07/2026-06"
+    },
+    "column": "value"
+   },
+   "rid": "r71"
+  }
+ ],
+ "derived": [
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, Burnley",
+   "value": 73.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(64.3, 74.6, 80.7)",
+   "inputs": [
+    "r0",
+    "r1",
+    "r2"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, Burnley",
+   "value": 77.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(74.6, 80.7, 77.7)",
+   "inputs": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, Burnley",
+   "value": 75.0,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(80.7, 77.7, 66.6862370031)",
+   "inputs": [
+    "r2",
+    "r3",
+    "r4"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, Burnley",
+   "value": 72.5,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(77.7, 66.6862370031, 72.9710117252)",
+   "inputs": [
+    "r3",
+    "r4",
+    "r5"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, Burnley",
+   "value": 70.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(66.6862370031, 72.9710117252, 72.6815361395)",
+   "inputs": [
+    "r4",
+    "r5",
+    "r6"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, Burnley",
+   "value": 71.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(72.9710117252, 72.6815361395, 67.8478344193)",
+   "inputs": [
+    "r5",
+    "r6",
+    "r7"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, Burnley",
+   "value": 70.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(72.6815361395, 67.8478344193, 71.438913673)",
+   "inputs": [
+    "r6",
+    "r7",
+    "r8"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, Burnley",
+   "value": 73.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(67.8478344193, 71.438913673, 81.745631068)",
+   "inputs": [
+    "r7",
+    "r8",
+    "r9"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, Burnley",
+   "value": 75.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(71.438913673, 81.745631068, 72.4677000133)",
+   "inputs": [
+    "r8",
+    "r9",
+    "r10"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E07000117_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, Burnley",
+   "value": 75.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(81.745631068, 72.4677000133, 72.5237881172)",
+   "inputs": [
+    "r9",
+    "r10",
+    "r11"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, Burnley",
+   "value": 21.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(28.8, 21.1, 13.9)",
+   "inputs": [
+    "r36",
+    "r37",
+    "r38"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, Burnley",
+   "value": 17.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.1, 13.9, 17.9)",
+   "inputs": [
+    "r37",
+    "r38",
+    "r39"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, Burnley",
+   "value": 19.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(13.9, 17.9, 27.3384973769)",
+   "inputs": [
+    "r38",
+    "r39",
+    "r40"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, Burnley",
+   "value": 22.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(17.9, 27.3384973769, 23.2784631249)",
+   "inputs": [
+    "r39",
+    "r40",
+    "r41"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, Burnley",
+   "value": 24.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(27.3384973769, 23.2784631249, 23.6588592617)",
+   "inputs": [
+    "r40",
+    "r41",
+    "r42"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, Burnley",
+   "value": 25.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.2784631249, 23.6588592617, 29.7930241472)",
+   "inputs": [
+    "r41",
+    "r42",
+    "r43"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, Burnley",
+   "value": 27.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.6588592617, 29.7930241472, 28.561086327)",
+   "inputs": [
+    "r42",
+    "r43",
+    "r44"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, Burnley",
+   "value": 25.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(29.7930241472, 28.561086327, 17.4388349515)",
+   "inputs": [
+    "r43",
+    "r44",
+    "r45"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, Burnley",
+   "value": 24.1,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(28.561086327, 17.4388349515, 26.4053577188)",
+   "inputs": [
+    "r44",
+    "r45",
+    "r46"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E07000117_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, Burnley",
+   "value": 23.5,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(17.4388349515, 26.4053577188, 26.5883719188)",
+   "inputs": [
+    "r45",
+    "r46",
+    "r47"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, North West",
+   "value": 71.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(70.1, 71.6, 72.4)",
+   "inputs": [
+    "r12",
+    "r13",
+    "r14"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, North West",
+   "value": 72.5,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(71.6, 72.4, 73.5)",
+   "inputs": [
+    "r13",
+    "r14",
+    "r15"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, North West",
+   "value": 73.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(72.4, 73.5, 73.8672269977)",
+   "inputs": [
+    "r14",
+    "r15",
+    "r16"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, North West",
+   "value": 74.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.5, 73.8672269977, 75.1814750871)",
+   "inputs": [
+    "r15",
+    "r16",
+    "r17"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, North West",
+   "value": 74.1,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.8672269977, 75.1814750871, 73.1354714641)",
+   "inputs": [
+    "r16",
+    "r17",
+    "r18"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, North West",
+   "value": 73.9,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.1814750871, 73.1354714641, 73.2711829035)",
+   "inputs": [
+    "r17",
+    "r18",
+    "r19"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, North West",
+   "value": 73.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.1354714641, 73.2711829035, 73.8093678844)",
+   "inputs": [
+    "r18",
+    "r19",
+    "r20"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, North West",
+   "value": 73.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.2711829035, 73.8093678844, 72.8643830693)",
+   "inputs": [
+    "r19",
+    "r20",
+    "r21"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, North West",
+   "value": 73.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.8093678844, 72.8643830693, 74.1073134819)",
+   "inputs": [
+    "r20",
+    "r21",
+    "r22"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E12000002_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, North West",
+   "value": 73.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(72.8643830693, 74.1073134819, 74.2596761491)",
+   "inputs": [
+    "r21",
+    "r22",
+    "r23"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, North West",
+   "value": 24.5,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(25.4, 24.2, 24)",
+   "inputs": [
+    "r48",
+    "r49",
+    "r50"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, North West",
+   "value": 23.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(24.2, 24, 23.3)",
+   "inputs": [
+    "r49",
+    "r50",
+    "r51"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, North West",
+   "value": 23.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(24, 23.3, 22.9463686361)",
+   "inputs": [
+    "r50",
+    "r51",
+    "r52"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, North West",
+   "value": 22.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.3, 22.9463686361, 21.7422542315)",
+   "inputs": [
+    "r51",
+    "r52",
+    "r53"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, North West",
+   "value": 22.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(22.9463686361, 21.7422542315, 23.0463231915)",
+   "inputs": [
+    "r52",
+    "r53",
+    "r54"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, North West",
+   "value": 22.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.7422542315, 23.0463231915, 23.449955318)",
+   "inputs": [
+    "r53",
+    "r54",
+    "r55"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, North West",
+   "value": 23.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.0463231915, 23.449955318, 23.1871931888)",
+   "inputs": [
+    "r54",
+    "r55",
+    "r56"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, North West",
+   "value": 23.5,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.449955318, 23.1871931888, 23.7290868375)",
+   "inputs": [
+    "r55",
+    "r56",
+    "r57"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, North West",
+   "value": 23.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.1871931888, 23.7290868375, 22.7498011947)",
+   "inputs": [
+    "r56",
+    "r57",
+    "r58"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E12000002_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, North West",
+   "value": 23.0,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(23.7290868375, 22.7498011947, 22.3866022145)",
+   "inputs": [
+    "r57",
+    "r58",
+    "r59"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, England",
+   "value": 74.0,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(73.3, 74, 74.6)",
+   "inputs": [
+    "r24",
+    "r25",
+    "r26"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, England",
+   "value": 74.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(74, 74.6, 75.2)",
+   "inputs": [
+    "r25",
+    "r26",
+    "r27"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, England",
+   "value": 75.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(74.6, 75.2, 75.8075814179)",
+   "inputs": [
+    "r26",
+    "r27",
+    "r28"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, England",
+   "value": 75.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.2, 75.8075814179, 76.5067021318)",
+   "inputs": [
+    "r27",
+    "r28",
+    "r29"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, England",
+   "value": 75.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.8075814179, 76.5067021318, 74.7204966787)",
+   "inputs": [
+    "r28",
+    "r29",
+    "r30"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, England",
+   "value": 75.6,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(76.5067021318, 74.7204966787, 75.7027708309)",
+   "inputs": [
+    "r29",
+    "r30",
+    "r31"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, England",
+   "value": 75.4,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(74.7204966787, 75.7027708309, 75.755647476)",
+   "inputs": [
+    "r30",
+    "r31",
+    "r32"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, England",
+   "value": 75.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.7027708309, 75.755647476, 75.6790706396)",
+   "inputs": [
+    "r31",
+    "r32",
+    "r33"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, England",
+   "value": 75.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.755647476, 75.6790706396, 75.7552052499)",
+   "inputs": [
+    "r32",
+    "r33",
+    "r34"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_employment_rate_16_64_E92000001_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, England",
+   "value": 75.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(75.6790706396, 75.7552052499, 75.7899835934)",
+   "inputs": [
+    "r33",
+    "r34",
+    "r35"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2016-07/2017-06",
+   "label": "Mean of the three readings ending 2016-07/2017-06, England",
+   "value": 22.0,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(22.3, 21.9, 21.7)",
+   "inputs": [
+    "r60",
+    "r61",
+    "r62"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2017-07/2018-06",
+   "label": "Mean of the three readings ending 2017-07/2018-06, England",
+   "value": 21.7,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.9, 21.7, 21.4)",
+   "inputs": [
+    "r61",
+    "r62",
+    "r63"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2018-07/2019-06",
+   "label": "Mean of the three readings ending 2018-07/2019-06, England",
+   "value": 21.3,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.7, 21.4, 20.9114666438)",
+   "inputs": [
+    "r62",
+    "r63",
+    "r64"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2019-07/2020-06",
+   "label": "Mean of the three readings ending 2019-07/2020-06, England",
+   "value": 20.9,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.4, 20.9114666438, 20.2873504811)",
+   "inputs": [
+    "r63",
+    "r64",
+    "r65"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2020-07/2021-06",
+   "label": "Mean of the three readings ending 2020-07/2021-06, England",
+   "value": 20.8,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(20.9114666438, 20.2873504811, 21.1896917621)",
+   "inputs": [
+    "r64",
+    "r65",
+    "r66"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2021-07/2022-06",
+   "label": "Mean of the three readings ending 2021-07/2022-06, England",
+   "value": 20.9,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(20.2873504811, 21.1896917621, 21.1869262108)",
+   "inputs": [
+    "r65",
+    "r66",
+    "r67"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2022-07/2023-06",
+   "label": "Mean of the three readings ending 2022-07/2023-06, England",
+   "value": 21.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.1896917621, 21.1869262108, 21.1622382893)",
+   "inputs": [
+    "r66",
+    "r67",
+    "r68"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2023-07/2024-06",
+   "label": "Mean of the three readings ending 2023-07/2024-06, England",
+   "value": 21.2,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.1869262108, 21.1622382893, 21.2916013228)",
+   "inputs": [
+    "r67",
+    "r68",
+    "r69"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2024-07/2025-06",
+   "label": "Mean of the three readings ending 2024-07/2025-06, England",
+   "value": 21.1,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.1622382893, 21.2916013228, 20.9111940232)",
+   "inputs": [
+    "r68",
+    "r69",
+    "r70"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  },
+  {
+   "id": "pooled_li01_inactivity_rate_16_64_E92000001_2025-07/2026-06",
+   "label": "Mean of the three readings ending 2025-07/2026-06, England",
+   "value": 20.9,
+   "decimals": 1,
+   "unit": "%",
+   "arithmetic": "mean(21.2916013228, 20.9111940232, 20.4919374865)",
+   "inputs": [
+    "r69",
+    "r70",
+    "r71"
+   ],
+   "note": "A mean of three published single year rates, not an ONS pooled estimate"
+  }
+ ]
+}
