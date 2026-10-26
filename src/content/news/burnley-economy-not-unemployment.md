@@ -37,21 +37,21 @@ draft: false
 
 *By Tom Pickup, Lancashire county councillor and Cabinet Member for Adult Social Care.*
 
-Burnley's unemployment rate is 5.0%. England's is 4.6%. That is not the gap. The gap is in residents out of the labour market through ill health, in what Burnley's jobs pay, and in how many jobs there are. A plan that works has to start there.
+In the latest year Burnley's unemployment rate is 5.0%. England's is 4.6%. That is not the gap. The gap is in residents out of the labour market through ill health, in what Burnley's jobs pay, and in how many jobs there are. A plan that works has to start there.
 
 This month I have been through the ONS series on Burnley's economy: the labour market tables, the pay survey, the Census, payroll data and the business register. This article is what they say. The plan comes next.
 
 <div class="viz-panel-reform">
 <div class="viz-grid viz-grid-2">
-<div class="viz-stat teal">
-<span class="value xl">72.5%</span>
-<span class="label">Residents aged 16 to 64 in work</span>
-<span class="sublabel">England 75.8%. Year to June 2026</span>
-</div>
 <div class="viz-stat red">
-<span class="value xl">26.6%</span>
+<span class="value xl">23.5%</span>
 <span class="label">Residents aged 16 to 64 outside the labour market</span>
-<span class="sublabel">England 20.5%. Year to June 2026</span>
+<span class="sublabel">England 20.9%. Mean of the three years to June 2026</span>
+</div>
+<div class="viz-stat teal">
+<span class="value xl">6.7%</span>
+<span class="label">Adults out of work through long term sickness or disability</span>
+<span class="sublabel">England 4.1%. Census 2021</span>
 </div>
 <div class="viz-stat orange">
 <span class="value xl">£656.8</span>
@@ -80,9 +80,9 @@ The claimant count was 3,455 in September 2026.<sup class="cite"><a href="#sourc
 
 The first gap is in how many working age residents are in the labour market at all.
 
-In the year to June 2026, 72.5% of Burnley residents aged 16 to 64 were in work, against 75.8% for England. The other side of that is economic inactivity: residents who are neither working nor looking for work. Burnley's rate was 26.6%, against 20.5% for England.<sup class="cite"><a href="#source-1">1</a></sup>
+The measure is economic inactivity: residents who are neither working nor looking for work. It comes from a survey, and for an area of Burnley's size a single year can swing a long way, so the fair reading is the mean of three years. Over the three years to June 2026, Burnley's inactivity rate averaged 23.5% against 20.9% for England, a gap of 2.6 points.<sup class="cite"><a href="#source-1">1</a></sup> The latest year alone reads 26.6% against 20.5%; one year at this size is too noisy to lean on.
 
-Burnley has 61,010 residents aged 16 to 64. At England's inactivity rate about 3,720 fewer of them would be outside the labour market (26.588 minus 20.492, divided by 100, times 61,010). At England's employment rate about 1,990 more would be in work.
+Averaged the same way, the employment rate is all but level with England's: 75.6% against 75.7%.<sup class="cite"><a href="#source-1">1</a></sup> The survey is too noisy at Burnley's size to split the difference finely. The Census, which counts everyone, is the steadier guide to where the gap sits, and it points to health.
 
 <div class="viz-panel">
 <div class="viz-label teal">Economic inactivity, residents aged 16 to 64: Burnley (bars) against England (line)</div>
@@ -92,10 +92,10 @@ Burnley has 61,010 residents aged 16 to 64. At England's inactivity rate about 3
 <div style="display:flex; gap:6px; margin-top:8px;">
 <div class="viz-axis">15</div><div class="viz-axis">16</div><div class="viz-axis">17</div><div class="viz-axis">18</div><div class="viz-axis">19</div><div class="viz-axis">20</div><div class="viz-axis">21</div><div class="viz-axis">22</div><div class="viz-axis">23</div><div class="viz-axis">24</div><div class="viz-axis">25</div><div class="viz-axis">26</div>
 </div>
-<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">Each bar is the twelve months to June, from the October edition of that year. Burnley has ranged from 13.9% to 29.8% while England has stayed between 20.3% and 22.3%. Latest: Burnley 26.6%, England 20.5%. Source: ONS LI01, October 2026 and earlier editions. The Annual Population Survey is an official statistic in development; single years for an area of Burnley's size swing widely.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">Each bar is the twelve months to June, from the October edition of that year. Burnley has ranged from 13.9% to 29.8% while England has stayed between 20.3% and 22.3%. Mean of the three years to June 2026: Burnley 23.5%, England 20.9%. Latest single year: 26.6% and 20.5%. Source: ONS LI01, October 2026 and earlier editions. The Annual Population Survey is an official statistic in development; single years for an area of Burnley's size swing widely.</div>
 </div>
 
-One caution. These rates come from a survey, and for an area of Burnley's size a single year can swing a long way. Burnley's inactivity reading has moved between 13.9% and 29.8% since 2015, while England's has stayed between 20.3% and 22.3%. Read the run of years, not any one bar. Over the run, Burnley is above England in eight of the twelve readings, and in seven of the last eight.
+The chart shows why one year is not enough. Burnley's inactivity reading has moved between 13.9% and 29.8% since 2015, while England's has stayed between 20.3% and 22.3%. Read the run of years, not any one bar. Over the run, Burnley is above England in eight of the twelve readings, and in seven of the last eight.
 
 ### Where the gap is: health
 
@@ -109,7 +109,7 @@ The Census says where this gap sits. On Census day in 2021, 5,046 Burnley reside
 
 In Trinity ward the share is 10.7%, more than two and a half times England's. In Cliviger with Worsthorne it is 2.6%. Twelve of the fifteen wards are above England.
 
-The clearest part of the gap in work is a gap in health. This is not a town that will not work. It is a town that is too ill to. I wrote that line in June, from the survey count of working age residents. The Census count here is a different measure, of all adults on one day in 2021. It says the same thing. A plan that treats the gap only as a shortage of vacancies will miss that part.
+The clearest part of the inactivity gap is a gap in health. This is not a town that will not work. It is a town that is too ill to. I wrote that line in June, from the survey count of working age residents. The Census count here is a different measure, of all adults on one day in 2021. It says the same thing. A plan that treats the gap only as a shortage of vacancies will miss that part.
 
 ---
 
@@ -142,7 +142,7 @@ Burnley's residents do better than Burnley's jobs. A full time worker living in 
 
 ## Gap three: how many jobs there are
 
-The third gap is the number of jobs. The ONS measures it as jobs located in an area per resident aged 16 to 64. Burnley's figure is 0.72. England's is 0.86, Lancashire's 0.75 and Blackburn with Darwen's 0.77.<sup class="cite"><a href="#source-1">1</a></sup> At England's ratio there would be about 8,500 more jobs in Burnley (0.14 times 61,010).
+The third gap is the number of jobs. The ONS measures it as jobs located in an area per resident aged 16 to 64. Burnley's figure is 0.72. England's is 0.86, Lancashire's 0.75 and Blackburn with Darwen's 0.77.<sup class="cite"><a href="#source-1">1</a></sup> Burnley has 61,010 residents aged 16 to 64, so at England's ratio there would be about 8,500 more jobs in Burnley (0.14 times 61,010).
 
 This is not a town in decline. HMRC's payroll data counts 39,000 Burnley residents in payrolled employment in August 2026, up from 34,711 in July 2014. That is growth of 12.4%, and the UK grew 12.5% over the same period.<sup class="cite"><a href="#source-6">6</a></sup> Burnley is keeping pace. It is keeping pace from the same distance behind, which is the point: the gaps above do not close on their own.
 
