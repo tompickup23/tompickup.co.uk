@@ -9,6 +9,12 @@ imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"
 subcategory: "Community & charity"
 tags: ["burnley", "charity", "community", "stocks-massey"]
+audio:
+  src: /audio/news/stocks-massey-bequest-2026.mp3
+  duration: 187
+  voice: "Kokoro bf_emma"
+  generated: 2026-10-04
+  textHash: "2e00045849c683c73efb12c4c0b40231a01e58a3d335e72cc22eef54081df983"
 featured: false
 draft: false
 ---

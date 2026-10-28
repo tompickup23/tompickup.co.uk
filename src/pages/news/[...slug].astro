@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { NEWS_AREAS, newsArea, newsTopic } from '../../lib/news-categories';
 import { nextReads } from '../../lib/next-reads';
+import { textHash } from '../../lib/audio';
 
 export async function getStaticPaths() {
   const posts = await getCollection('news', ({ data }) => !data.draft);
@@ -16,6 +17,12 @@ const { post, posts } = Astro.props;
 const { Content, headings } = await render(post);
 const area = NEWS_AREAS.find((a) => a.id === newsArea(post))!;
 const topic = newsTopic(post);
+/* Narration is shown only while it still matches the article text. */
+const audio = post.data.audio;
+const audioCurrent = audio && textHash(post.body ?? '') === audio.textHash;
+if (audio && !audioCurrent) {
+  console.warn(`[audio] ${post.id}: article text changed since the narration was made; player withheld. Rerun scripts/audio/narrate.py.`);
+}
 ---
 
 <BlogPost
@@ -24,6 +31,7 @@ const topic = newsTopic(post);
   area={{ id: area.id, title: area.title }}
   topic={{ id: topic.id, title: topic.title }}
   nextReads={nextReads(post, posts)}
+  audio={audioCurrent ? audio : undefined}
 >
   <Content />
 </BlogPost>
