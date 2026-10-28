@@ -1,6 +1,6 @@
 ---
 title: "Questioning the Combined Authority's spending scrutiny threshold"
-date: 2026-09-27T22:47:00Z
+date: 2025-07-28T15:00:00
 description: "A retrospective video note on my question about the Combined Authority's £500,000 key-decision threshold."
 category: "Lancashire"
 subcategory: "Public debates"
@@ -9,7 +9,7 @@ featured: false
 draft: false
 ---
 
-*Retrospective video note, published 27 September 2026. The clip was uploaded to YouTube on 25 August 2025.*
+*Retrospective video note, added to the site on 27 September 2026. The clip is from the Lancashire Combined County Authority Overview and Scrutiny Committee of 28 July 2025, which considered the key decision threshold, and was uploaded to YouTube on 25 August 2025.*
 
 At the Lancashire Combined County Authority's scrutiny committee, I questioned the £500,000 key-decision threshold and asked whether lowering it would give members more opportunity to scrutinise spending decisions.
 
