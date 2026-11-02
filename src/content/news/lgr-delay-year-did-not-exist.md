@@ -1,5 +1,6 @@
 ---
 title: "The year the pause handed back to Lancashire's councils"
+ogImage: "/images/share/lgr-delay-year-did-not-exist.png"
 date: 2026-10-03
 updated: 2026-10-04
 description: "The Government paused Lancashire's reorganisation on 7 September and set no new date. Seven councils, the county among them, had budgeted to stop existing in March 2028. All fifteen must now plan for 2028/29, a year the July timetable gave to their successors."

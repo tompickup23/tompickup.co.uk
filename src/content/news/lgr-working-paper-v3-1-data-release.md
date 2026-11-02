@@ -1,5 +1,6 @@
 ---
 title: "Data Release: The Lancashire Reorganisation Working Paper, Version 3.1"
+ogImage: "/images/share/lgr-working-paper-v3-1-data-release.png"
 date: 2026-09-29T12:00:00
 description: "Version 3.1 of the working paper on the finances of council reorganisation in Lancashire is deposited on Zenodo with its data and code, under CC BY 4.0. What is in the deposit and how to reproduce it."
 category: "Lancashire"

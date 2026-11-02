@@ -6,7 +6,7 @@ seoTitle: "Where your council tax goes in Burnley, 2026/27"
 seoDescription: "A Burnley Band A bill is £1,693.54. 71p of every pound goes to the county council. See where it goes, then have your say on the 2027/28 budget."
 image: "/images/where-your-council-tax-goes-burnley.png"
 imageAlt: "A pie chart titled 'Of every pound you pay', split 71p county council, 14p Burnley Council, 11p police and 4p fire."
-ogImage: "/images/where-your-council-tax-goes-burnley.png"
+ogImage: "/images/share/where-your-council-tax-goes-burnley.png"
 category: "Burnley"
 subcategory: "Council tax"
 tags: ["burnley", "council-tax", "public-spending", "lancashire-county-council", "budget", "video"]

@@ -1,5 +1,6 @@
 ---
 title: "Burnley's economy: ill health, lower pay and fewer jobs than England"
+ogImage: "/images/share/burnley-economy-not-unemployment.png"
 date: 2026-10-26
 description: "Burnley's economy from the official figures: more residents out of work through ill health, lower pay in local jobs and fewer jobs per resident. Unemployment is close to England's."
 seoTitle: "Burnley's economy: ill health, lower pay and fewer jobs"

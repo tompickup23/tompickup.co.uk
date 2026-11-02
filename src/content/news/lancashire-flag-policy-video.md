@@ -1,5 +1,6 @@
 ---
 title: "My contribution on Lancashire County Council's flag policy"
+ogImage: "/images/share/lancashire-flag-policy-video.png"
 date: 2026-09-27T22:47:00Z
 description: "A retrospective clip of my contribution to a Cabinet exchange about Lancashire County Council's flag policy."
 category: "Lancashire"

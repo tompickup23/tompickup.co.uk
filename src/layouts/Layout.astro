@@ -19,6 +19,9 @@ interface Props {
   ogImage?: string;
   /* Describes the share image for screen readers on platforms that show it. */
   ogImageAlt?: string;
+  /* Pixel size of ogImage, when known. The default card's size is filled in. */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   article?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
@@ -35,6 +38,8 @@ const {
   description = 'Tom Pickup, Reform UK county councillor for Padiham and Burnley West and Cabinet Member for Adult Social Care. Investigations into how public money is spent in Lancashire.',
   ogImage = DEFAULT_OG_IMAGE,
   ogImageAlt,
+  ogImageWidth,
+  ogImageHeight,
   article = false,
   publishedTime,
   modifiedTime,
@@ -44,6 +49,8 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageWidth = ogImageWidth ?? (ogImage === DEFAULT_OG_IMAGE ? 1200 : undefined);
+const imageHeight = ogImageHeight ?? (ogImage === DEFAULT_OG_IMAGE ? 630 : undefined);
 // Search Console ownership. tompickup.co.uk's DNS is at one.com, so this is the
 // HTML-tag method rather than a TXT record. The token is public (it ships in the
 // HTML of every verified site) and is hard-coded on purpose: this site deploys by
@@ -168,8 +175,8 @@ const defaultGraph = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site)} />
-    {ogImage === DEFAULT_OG_IMAGE && <meta property="og:image:width" content="1200" />}
-    {ogImage === DEFAULT_OG_IMAGE && <meta property="og:image:height" content="630" />}
+    {imageWidth && imageHeight && <meta property="og:image:width" content={String(imageWidth)} />}
+    {imageWidth && imageHeight && <meta property="og:image:height" content={String(imageHeight)} />}
     <meta property="og:image:alt" content={ogImageAlt ?? (ogImage === DEFAULT_OG_IMAGE ? DEFAULT_OG_IMAGE_ALT : title)} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:site_name" content="Tom Pickup" />

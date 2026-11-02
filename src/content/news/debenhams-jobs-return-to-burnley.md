@@ -4,7 +4,7 @@ date: 2026-10-23
 description: "Debenhams Group, formerly Boohoo, will bring its distribution operations back to Heasandford in early 2027, with more than 1,200 jobs. How it happened, what the county council leader said, and how the jobs compare with the number of people looking for work."
 seoTitle: "1,200 warehouse jobs return to Burnley in early 2027"
 seoDescription: "Debenhams Group returns to its Heasandford distribution centre in early 2027 with more than 1,200 jobs. How it happened, and how it compares with local need."
-ogImage: "/images/share/burnley-jobs-and-jobseekers.png"
+ogImage: "/images/share/debenhams-jobs-return-to-burnley.png"
 category: "Burnley"
 subcategory: "Jobs"
 tags: ["burnley", "jobs", "economy", "pendle", "hyndburn", "universal-credit", "data"]
