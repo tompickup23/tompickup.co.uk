@@ -51,7 +51,7 @@ const LGR_UNITS = [
       <article class="feature">
         {featuredImage && (
           <a href={`/news/${featured.id}/`} class="feature-image" tabindex="-1" aria-hidden="true">
-            <Image src={featuredImage} alt="" widths={[480, 720, 960]} sizes="(max-width: 800px) calc(100vw - 40px), 560px" format="webp" quality={72} loading="lazy" />
+            <Image src={featuredImage} alt={featured.data.imageAlt || `Lead image for the article: ${featured.data.title}`} widths={[480, 720, 960]} sizes="(max-width: 800px) calc(100vw - 40px), 560px" format="webp" quality={72} loading="lazy" />
           </a>
         )}
         <div class="feature-copy">
