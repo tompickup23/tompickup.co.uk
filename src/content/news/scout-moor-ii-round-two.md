@@ -73,7 +73,7 @@ I have sent a fresh representation to Rossendale and Rochdale. It asks the counc
 - confirm the dates the new documents went public and the earliest date each council can now decide. The councils' letters say 23 October, Rochdale's newspaper notice says 22 October and Rossendale's says 1 November;
 - send the application to committee, not decide it under delegated powers. The national scheme of delegation starts on 31 October, makes no transitional provision for applications already made, and leaves it to one councillor and one officer to agree that this one goes to committee.
 
-Rossendale's newspaper notice of 2 October gives 1 November for comments on the revised environmental statement, and I have asked both councils to accept comments until then. Do not rely on that: Rochdale's own notice gives 22 October, so send yours by **22 October 2026**. The documents are on Rossendale's planning portal under 2025/0267 and Rochdale's under 25/00680/FUL. Rossendale takes comments at planning@rossendalebc.gov.uk and Rochdale at development.management@rochdale.gov.uk. Say which application you are commenting on, and ask for it to be logged on both.
+Rossendale's newspaper notice of 2 October gave 1 November for comments on the revised environmental statement, and I asked both councils to accept comments until then. Rochdale's own notice gave 22 October. The comment window closed on **22 October 2026**. The documents are on Rossendale's planning portal under 2025/0267 and Rochdale's under 25/00680/FUL. Rossendale takes comments at planning@rossendalebc.gov.uk and Rochdale at development.management@rochdale.gov.uk. Say which application you are commenting on, and ask for it to be logged on both.
 
 ## What changed, and what did not
 
