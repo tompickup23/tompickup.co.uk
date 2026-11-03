@@ -1,16 +1,20 @@
-# tompickup.co.uk — Claude Code Context
+# tompickup.co.uk: Claude Code Context
 
 ## Overview
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
-**Stack**: Astro 5 (static output) | no runtime server
-**Hosting**: GitHub Pages, deployed from THIS repo by `.github/workflows/deploy.yml`
-(since `dde8c2e`). Every push to `main` builds, runs the guards and the house-style gate,
-and publishes. **Merging to main is deploying.** Work on a branch; the merge is the release.
-The old `tompickup23/tompickup23.github.io` mirror and the `/publish-tompickup` rsync flow
-are superseded (checked 28 Sep 2026: last three deploy runs succeeded from push).
+**Stack**: Astro 5.17 (static output; `package-lock.json` pins 5.17.3) | no runtime server
+**Hosting**: GitHub Pages serves the live domain from this repo.
+**Deploying**: Automatic from `main` through GitHub Actions since 10 September 2026
+(`.github/workflows/deploy.yml`). Every push to `main` builds, runs the guards and the
+house-style gate, and publishes with `GITHUB_TOKEN`. Merging to main is deploying; work on
+a branch. Six green deploy runs on 25 and 26 October 2026. Check recent runs with
+`gh run list --workflow deploy.yml`. The old `tompickup23/tompickup23.github.io` mirror
+and the `/publish-tompickup` rsync flow (and its expired cross-repo PAT) are superseded.
 **Automation**: 3 GitHub Actions (deploy on push to main; data-etl, manual only since 28 Sep 2026; observatory-schemas)
 **Branch**: main
+**Handover**: newest under `docs/` is `docs/LGR-HANDOVER.md`. The 3 November 2026 audit
+cites `docs/FIGURE-REVIEW-2026-09-28.md`; that file is not in the repository (do not create it).
 
 ## Key Patterns
 - Astro content collections: articles are markdown in `src/content/news/`, schema in `src/content.config.ts`
@@ -29,7 +33,7 @@ npm run build                    # Static build to dist/ (guards run pre and pos
 npm run dev:observatory          # Run the parked Observatory locally, then re-park it
 ```
 
-**Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk — a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
+**Cross-repo data dependency (10 Aug 2026):** `scripts/observatory/aggregate_spend.py` and `scripts/lgr_property/build_lgr_contracts.py` read `~/clawd/burnley-council/data` directly off disk, a hardcoded absolute path, not an API. Local-only (not in CI); output gets committed. Only works on this Mac with `clawd` present at that exact path.
 
 ## Parked sections (see `docs/parked-sections.md`)
 
@@ -46,7 +50,7 @@ Burnley from 2024/25 only, so the 2023-24 year is no longer public anywhere.
 ### Lancashire Business Observatory (10 Sep 2026)
 
 `/lancs/` and `/lancs/business/` are **parked, not deleted**. They were 1,074 of the site's
-1,112 pages — 1,046 of them near-identical Companies House profiles — which is scaled thin
+1,112 pages, 1,046 of them near-identical Companies House profiles, which is scaled thin
 content on a domain that carries a councillor's name and journalism. The section now lives at
 `src/pages/_lancs/`, unrouted by Astro's underscore rule; the launch article is archived at
 `src/content/news/_archive-lancashire-business-observatory-launch.md`.
@@ -58,7 +62,7 @@ content on a domain that carries a councillor's name and journalism. The section
 - To view it: `npm run dev:observatory` (plain `npm run dev` will 404 it).
 - Full reasoning, and the outstanding Search Console steps: `docs/parked-sections.md`.
 
-It returns on its own domain, scaled UK-wide — not as a subdirectory here.
+It returns on its own domain, scaled UK-wide, not as a subdirectory here.
 
 ## Archive (28 Sep 2026)
 Everything in `public/` ships. Files no page uses live in `archive/public/` (same paths),
@@ -78,8 +82,12 @@ and `scripts/guard-unreferenced.mjs` fails the build if an unlinked file under
 - All data processing in ETL pipeline, not in request handlers
 
 ## Related Projects
-Links to all 13 tompickup23 GitHub repos — this is the portfolio hub.
+Twelve projects listed in `src/data/projects.ts` (and twelve public tompickup23 GitHub
+repositories as of 3 November 2026). This site is the portfolio hub.
 
 ## Cross-repo lessons (5 Jul 2026)
 
-Article method, fact-check protocol, factual anchors, imagery rules, and the manual deploy flow live in the clawd repo: `/Users/tompickup/clawd/docs/lessons/editorial-method.md`. The publish procedure is also encoded as the `/publish-tompickup` skill in clawd. Read before publishing, and append new lessons there, not here.
+Article method, fact-check protocol, factual anchors and imagery rules live in the clawd
+repo: `/Users/tompickup/clawd/docs/lessons/editorial-method.md`. Deploy for this site is
+automatic from main (see Deploying above); ignore any manual rsync steps still named in
+clawd. Read before publishing, and append new lessons there, not here.
