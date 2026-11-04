@@ -290,10 +290,8 @@ const pageTitle =
     flex-wrap: wrap;
     align-items: center;
     gap: 0 0.5rem;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--muted);
   }
 
@@ -308,20 +306,24 @@ const pageTitle =
   .article-crumbs a:hover { text-decoration: underline; }
 
   .article-title {
-    font-size: clamp(2rem, 4.6vw, 3rem);
-    line-height: 1.12;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.125rem, 5vw, 3.375rem);
+    line-height: 1.06;
+    letter-spacing: -0.028em;
     color: var(--ink);
     margin: 0.5rem 0 1rem;
     max-width: 22ch;
   }
 
+  /* The italic deck, as on the estate's journal mastheads. */
   .article-standfirst {
-    font-size: 1.3125rem;
-    line-height: 1.5;
-    color: var(--muted);
-    max-width: 60ch;
-    margin: 0 0 1.25rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.4375rem;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 52ch;
+    margin: 0 0 1.5rem;
   }
 
   .article-meta {
@@ -1297,8 +1299,8 @@ const pageTitle =
   @media (max-width: 640px) {
     .blog-post { padding: 1.25rem var(--gutter) 3rem; }
 
-    .article-title { font-size: 2rem; }
-    .article-standfirst { font-size: 1.1875rem; }
+    .article-title { font-size: 2.125rem; }
+    .article-standfirst { font-size: 1.25rem; }
 
     .prose { font-size: 1.125rem; }
     .prose :global(h2) { font-size: 1.5rem; }

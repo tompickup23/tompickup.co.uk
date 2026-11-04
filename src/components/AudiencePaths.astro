@@ -9,7 +9,6 @@
   <div class="container">
     <div class="paths-grid">
       <div class="path-card">
-        <span class="path-num">01</span>
         <h2 class="path-title"><a href="/contact/">Live in Padiham or Burnley?</a></h2>
         <p class="path-desc">Raise a problem, get help with a council issue, or see what is being spent in your ward.</p>
         <span class="path-secondary">
@@ -19,14 +18,12 @@
       </div>
 
       <div class="path-card">
-        <span class="path-num">02</span>
         <h2 class="path-title"><a href="/news/">Read the investigations</a></h2>
         <p class="path-desc">Public spending, housing, health and policing in Burnley, Padiham and Lancashire, each piece with its sources.</p>
         <span class="path-secondary">Reporting on Lancashire? <a href="/press/">Method, data and contact routes for journalists</a>.</span>
       </div>
 
       <div class="path-card">
-        <span class="path-num">03</span>
         <h2 class="path-title"><a href="/projects/">Want the numbers?</a></h2>
         <p class="path-desc">Council spending, population, elections and asylum data. Four open sites, every figure traced to its source.</p>
       </div>
@@ -80,11 +77,11 @@
     text-decoration: none;
   }
 
-  .path-title a::after {
-    content: '→';
-    margin-left: 10px;
-    color: var(--teal);
-    font-family: var(--font-sans);
+  .path-title a {
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
   }
 
   .path-title a:hover { color: var(--teal); text-decoration: underline; }

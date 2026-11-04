@@ -4,29 +4,39 @@ import RecordReviewed from './RecordReviewed.astro';
 import { HERO_FIGURES } from '../data/homepage-record';
 
 const [tax, overspend, seats] = HERO_FIGURES;
+
+/* The record, with its working shown: each figure carries a short reference to
+   the document it comes from, linked to the full entry in the sources list at
+   the foot of the page. data-fact, data-figure and .source-line follow the
+   estate figure rule, so the design check can see every figure has a source. */
+const LEDGER = [
+  { line: tax, figure: '3.80%', source: 3, ref: 'MHCLG Band D council tax, table 4, 2026/27 edition' },
+  { line: overspend, figure: '£27.9M → £2.99M', source: 1, ref: 'LCC 2025/26 outturn report to Cabinet, p. 1, 2 July 2026' },
+  { line: seats, figure: '51 of 84', source: 4, ref: 'LCC councillors by party, checked 28 September 2026' },
+];
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-content">
     <div class="hero-text">
-      <p class="hero-eyebrow">Cabinet Member for Adult Social Care &middot; Reform UK</p>
+      <p class="hero-council">Lancashire County Council</p>
 
-      <h1 id="hero-title">Tom Pickup</h1>
+      <h1 id="hero-title" class="masthead">
+        <span class="masthead-name">Tom Pickup</span><span class="sr-only">, </span>
+        <span class="masthead-role">County councillor for Padiham &amp; Burnley West</span>
+      </h1>
 
-      <p class="hero-role">
-        Your councillor for <strong>Padiham &amp; Burnley West</strong>
-      </p>
+      <p class="hero-deck">Cabinet Member for Adult Social Care. Every figure on this site traces to a document you can open yourself.</p>
 
       <p class="hero-subtitle">
         I was Lead Member for Finance and Resources in 2025/26, the year the council's
         forecast overspend fell from &pound;27.9 million to &pound;2.99 million.<Cite n={1} />
         The 2026/27 budget set a 3.80% council tax rise, the lowest since 2015/16.<Cite n={2} /><Cite n={3} />
-        Every figure on this site traces to a document you can open yourself.
       </p>
 
       <div class="hero-actions">
-        <a href="/contact/" class="btn btn-primary">Get in touch</a>
-        <a href="/about/" class="text-link">See the record <span aria-hidden="true">→</span></a>
+        <a href="/contact/" class="hero-btn">Get in touch</a>
+        <a href="/about/" class="hero-link">Read my record and roles</a>
       </div>
     </div>
 
@@ -34,78 +44,89 @@ const [tax, overspend, seats] = HERO_FIGURES;
       <img
         src="/images/headshot.jpg"
         alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West"
-        width="280"
-        height="320"
+        width="320"
+        height="360"
         loading="eager"
         fetchpriority="high"
       />
-      <figcaption>Elected 2025. <a href="/about/">More about me</a></figcaption>
+      <figcaption>Elected to Lancashire County Council in 2025.</figcaption>
     </figure>
   </div>
 
-  <dl class="hero-figures">
-    {/* column-reverse shows dd above dt; meta comes first in the DOM so it lands under the label. */}
-    <div id={tax.id}>
-      <RecordReviewed id={tax.id} reviewed={tax.reviewed} />
-      <dt>{tax.label}</dt>
-      <dd>3.80%<Cite n={3} /></dd>
-    </div>
-    <div id={overspend.id}>
-      <RecordReviewed id={overspend.id} reviewed={overspend.reviewed} />
-      <dt>{overspend.label}</dt>
-      <dd>&pound;27.9M&rarr;&pound;2.99M<Cite n={1} /></dd>
-    </div>
-    <div id={seats.id}>
-      <RecordReviewed id={seats.id} reviewed={seats.reviewed} />
-      <dt>{seats.label}</dt>
-      <dd>51/84<Cite n={4} /></dd>
-    </div>
-  </dl>
+  <div class="ledger" role="list" aria-label="The record">
+    {LEDGER.map(({ line, figure, source, ref }) => (
+      <div class="ledger-item" id={line.id} role="listitem" data-fact>
+        <p class="ledger-figure" data-figure>{figure}</p>
+        <p class="ledger-label">{line.label}</p>
+        <p class="source-line"><a href={`#source-${source}`}>Source {source}: {ref}</a></p>
+        <RecordReviewed id={line.id} reviewed={line.reviewed} />
+      </div>
+    ))}
+  </div>
 </section>
 
 <style>
   .hero {
-    /* Aligns with .container, whose 1200px includes its gutters */
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2.5rem var(--gutter) 1.5rem;
+    padding: 3.5rem var(--gutter) 2rem;
   }
 
   .hero-content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    align-items: center;
-    gap: 64px;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: end;
+    gap: 72px;
   }
 
-  .hero-eyebrow {
-    font-size: 0.8125rem;
+  .hero-council {
+    font-size: 1rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
     color: var(--teal);
-    margin: 0 0 0.75rem;
+    margin: 0 0 1rem;
   }
 
-  h1 {
-    font-size: clamp(2.5rem, 5vw, 3.75rem);
-    line-height: 1.04;
-    letter-spacing: -0.025em;
-    color: var(--ink);
-    margin: 0 0 0.5rem;
+  .masthead {
+    margin: 0 0 1.25rem;
+    letter-spacing: normal;
   }
 
-  .hero-role {
-    font-size: 1.25rem;
+  .masthead-name {
+    display: block;
+    font-size: clamp(3.25rem, 8vw, 6.25rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
     color: var(--ink);
+  }
+
+  .masthead-role {
+    display: block;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--gold);
+    max-width: 30ch;
+    font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .hero-deck {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.1875rem, 1.8vw, 1.4375rem);
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 44ch;
     margin: 0 0 1rem;
   }
 
   .hero-subtitle {
-    font-size: 1.125rem;
-    line-height: 1.6;
+    font-size: 1.0625rem;
+    line-height: 1.65;
     color: var(--muted);
-    max-width: 58ch;
+    max-width: 60ch;
     margin: 0;
   }
 
@@ -114,27 +135,26 @@ const [tax, overspend, seats] = HERO_FIGURES;
     flex-wrap: wrap;
     align-items: center;
     gap: 12px 28px;
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
   }
 
-  .btn-primary {
+  .hero-btn {
     display: inline-flex;
     align-items: center;
     min-height: 48px;
-    padding: 0 22px;
+    padding: 0 24px;
     background: var(--teal);
-    color: #fff;
+    color: var(--paper);
     font-weight: 600;
     text-decoration: none;
     border-radius: var(--radius-sm);
   }
 
-  .btn-primary:hover { background: var(--ink); color: var(--paper); }
+  .hero-btn:hover { background: var(--ink); color: var(--paper); }
 
-  .text-link {
+  .hero-link {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
     min-height: var(--touch);
     color: var(--teal);
     font-weight: 600;
@@ -144,88 +164,97 @@ const [tax, overspend, seats] = HERO_FIGURES;
 
   .hero-portrait img {
     display: block;
-    width: 280px;
-    height: 320px;
+    width: 320px;
+    height: 360px;
     object-fit: cover;
     object-position: 50% 30%;
     border-radius: var(--radius-sm);
+    box-shadow: 12px 12px 0 var(--panel);
   }
 
   .hero-portrait figcaption {
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid var(--line);
+    margin-top: 18px;
     font-size: 0.875rem;
     color: var(--muted);
   }
 
-  .hero-portrait figcaption a { color: var(--teal); }
-
-  .hero-figures {
+  /* The ledger: three figures, each with the document it rests on. */
+  .ledger {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin: 2rem 0 0;
-    border-top: 1px solid var(--line);
+    margin: 3rem 0 0;
+    border-top: 2px solid var(--ink);
     border-bottom: 1px solid var(--line);
   }
 
-  .hero-figures > div {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    padding: 14px 20px 14px 0;
+  .ledger-item {
+    padding: 18px 24px 18px 0;
     scroll-margin-top: 88px;
   }
 
-  .hero-figures > div + div {
+  .ledger-item + .ledger-item {
     border-left: 1px solid var(--line);
-    padding-left: 20px;
+    padding-left: 24px;
   }
 
-  .hero-figures dt {
-    font-size: 0.9375rem;
-    color: var(--muted);
+  .ledger-figure {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .ledger-label {
+    margin: 6px 0 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
     line-height: 1.4;
   }
 
-  .hero-figures dd {
-    margin: 0 0 2px;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
+  .source-line {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
-  .hero-figures :global(.record-meta) {
-    margin-top: 6px;
+  .source-line a {
+    color: var(--gold);
+    text-decoration-color: rgba(128, 92, 37, 0.4);
   }
 
-  @media (max-width: 800px) {
-    .hero { padding-top: 1.75rem; }
+  .source-line a:hover { color: var(--ink); text-decoration-color: currentColor; }
+
+  .ledger-item :global(.record-meta) { margin-top: 8px; }
+
+  @media (max-width: 860px) {
+    .hero { padding-top: 2rem; }
     .hero-content {
-      grid-template-columns: minmax(0, 1fr) 112px;
+      grid-template-columns: minmax(0, 1fr) 104px;
       gap: 20px;
       align-items: start;
     }
     .hero-text { display: contents; }
-    .hero-eyebrow, h1, .hero-role { grid-column: 1; }
-    .hero-portrait { grid-column: 2; grid-row: 1 / span 3; }
-    .hero-portrait img { width: 112px; height: 128px; }
-    .hero-portrait figcaption { font-size: 0.8125rem; }
-    .hero-subtitle, .hero-actions { grid-column: 1 / -1; }
-    .hero-actions { margin-top: 0.25rem; }
-    h1 { font-size: 2.5rem; }
-    .hero-role { font-size: 1.125rem; margin: 0; }
+    .hero-council, .masthead { grid-column: 1; }
+    .hero-portrait { grid-column: 2; grid-row: 1 / span 2; }
+    .hero-portrait img { width: 104px; height: 120px; box-shadow: 6px 6px 0 var(--panel); }
+    .hero-portrait figcaption { display: none; }
+    .hero-deck, .hero-subtitle, .hero-actions { grid-column: 1 / -1; }
+    .hero-actions { margin-top: 0.5rem; }
+    .masthead-role { max-width: none; }
   }
 
-  @media (max-width: 600px) {
-    .hero-figures { grid-template-columns: 1fr; }
-    .hero-figures > div,
-    .hero-figures > div + div {
-      padding: 10px 0;
+  @media (max-width: 640px) {
+    .ledger { grid-template-columns: 1fr; margin-top: 2rem; }
+    .ledger-item,
+    .ledger-item + .ledger-item {
+      padding: 14px 0;
       border-left: 0;
     }
-    .hero-figures > div + div { border-top: 1px solid var(--line); }
+    .ledger-item + .ledger-item { border-top: 1px solid var(--line); }
   }
 </style>
