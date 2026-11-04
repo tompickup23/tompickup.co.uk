@@ -8,7 +8,13 @@ import { Resvg } from '@resvg/resvg-js';
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const W = 1200;
 export const H = 630;
-const COLOURS = { rose: '#2a78d6', blue: '#eb6234', green: '#1baf7a', ochre: '#eda100', slate: '#e87ba4' };
+const COLOURS = {
+  adults: '#2a78d6',
+  children: '#eb6834',
+  place: '#1baf7a',
+  backoffice: '#eda100',
+  corporate: '#e87ba4',
+};
 export const GRID = { x: 738, y: 90, cell: 36, gap: 6, size: 414 };
 export const DIVIDER_Y = GRID.y + GRID.size + 24;
 
@@ -61,7 +67,7 @@ export async function renderCard(data) {
   const source = sourceText(data);
   const visible = [data.meta.base_year, 'Can you balance Lancashire?', source, ...figures.blocks.map(b => b.label)];
   if (visible.some(text => /[\p{Dash_Punctuation}\u2212]/u.test(text))) throw new Error('Card text contains a dash');
-  const palette = figures.blocks.flatMap((block, i) => Array(block.pct).fill(COLOURS[data.blocks[i].colour]));
+  const palette = figures.blocks.flatMap((block) => Array(block.pct).fill(COLOURS[block.id]));
   const tree = box({ width: W, height: H, backgroundColor: '#0f1b26', color: '#f3f6f9', fontFamily: 'Public Sans' }, [
     box({ position: 'absolute', top: 0, left: 0, width: W, height: 8, backgroundColor: '#ff7a8a' }),
     label(`Lancashire County Council budget ${figures.base_year}`, {
@@ -70,9 +76,9 @@ export async function renderCard(data) {
     box({ position: 'absolute', left: 48, top: 85, flexDirection: 'column', fontFamily: 'Big Shoulders Display', fontWeight: 900, fontSize: 72, lineHeight: 1.04 }, [
       label('Can you balance'), label('Lancashire?', { color: '#ff7a8a' }),
     ]),
-    box({ position: 'absolute', left: 48, top: 258, width: 640, flexDirection: 'column', gap: 12 }, figures.blocks.map((block, i) =>
+    box({ position: 'absolute', left: 48, top: 258, width: 640, flexDirection: 'column', gap: 12 }, figures.blocks.map((block) =>
       box({ alignItems: 'flex-start', gap: 14 }, [
-        box({ width: 18, height: 18, marginTop: 6, borderRadius: 3, flexShrink: 0, backgroundColor: COLOURS[data.blocks[i].colour] }),
+        box({ width: 18, height: 18, marginTop: 6, borderRadius: 3, flexShrink: 0, backgroundColor: COLOURS[block.id] }),
         label(block.label, { width: 540, fontSize: 24, lineHeight: 1.15 }),
         label(`${block.pct}%`, { fontSize: 26, fontWeight: 600, width: 64, justifyContent: 'flex-end' }),
       ]))),
