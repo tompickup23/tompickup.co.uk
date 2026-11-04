@@ -64,14 +64,14 @@ const LGR_UNITS = [
           <h2 id="feature-title"><a href={`/news/${featured.id}/`}>{featured.data.title}</a></h2>
           <p class="feature-desc">{featured.data.description}</p>
           <p class="feature-date">Published {dateFmt.format(featured.data.date)}{featured.data.imageCredit && <> &middot; {featured.data.imageCredit}</>}</p>
-          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation <span aria-hidden="true">→</span></a>
+          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation</a>
         </div>
       </article>
 
       <div class="latest">
         <div class="latest-head">
           <h2>Latest</h2>
-          <a href="/news/">All writing <span aria-hidden="true">→</span></a>
+          <a href="/news/">All writing</a>
         </div>
         <ul>
           {latest.map((post) => (
@@ -149,7 +149,7 @@ const LGR_UNITS = [
 
           <div class="comparison-bars" id={savings.id}>
             <ComparisonBar
-              title="Savings Delivery Rate"
+              title="Savings delivery rate"
               reformLabel="2025/26"
               reformValue="98%"
               reformPercent={98}
@@ -178,14 +178,14 @@ const LGR_UNITS = [
               <h2 class="lgr-teaser-title">Lancashire is being redrawn</h2>
               <p class="lgr-teaser-copy">
                 On 16 July 2026 the government decided Lancashire's 15 councils would be replaced by four new unitary
-                authorities from April 2028. The programme was paused for review on 7 September 2026. I've built an interactive model of what each one would be: who it
+                authorities from April 2028. The programme was paused for review on 7 September 2026, and on 29 October the government withdrew the decision, with all options back under consideration. I've built an interactive model of what each one would be: who it
                 merges, the budget it would run and how its places compare. Every figure sourced; populations
                 are from the 2021 Census.
               </p>
             </div>
             <div class="lgr-teaser-stats">
               <div class="lgr-teaser-stat"><span class="v">15&rarr;4</span><span class="l">Councils replaced</span></div>
-              <div class="lgr-teaser-stat"><span class="v">Apr 2028</span><span class="l">Planned start, now paused</span></div>
+              <div class="lgr-teaser-stat"><span class="v">Withdrawn</span><span class="l">Decision withdrawn 29 October 2026; all options under consideration</span></div>
             </div>
           </div>
 
@@ -402,11 +402,17 @@ const LGR_UNITS = [
   .home-kicker,
   .feature-topic,
   .latest-topic {
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--teal);
+  }
+
+  .home-kicker {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.1875rem;
+    color: var(--ink);
   }
 
   .home-kicker { margin: 0 0 var(--space-md); }
@@ -421,14 +427,15 @@ const LGR_UNITS = [
   .feature-image :global(img) {
     display: block;
     width: 100%;
-    height: 320px;
+    height: 380px;
     object-fit: cover;
     border-radius: var(--radius-sm);
   }
 
   .feature h2 {
-    font-size: clamp(1.625rem, 3vw, 2.25rem);
-    line-height: 1.15;
+    font-size: clamp(1.75rem, 3.4vw, 2.625rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
     margin: 8px 0 12px;
   }
 

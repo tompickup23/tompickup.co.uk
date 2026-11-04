@@ -20,8 +20,11 @@ function isActive(href: string): boolean {
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="brand" aria-label="Tom Pickup, home">
-      <span class="brand-text">Tom Pickup</span>
-      <span class="brand-role">County Councillor, Padiham and Burnley West</span>
+      <span class="brand-seal" aria-hidden="true">TP</span>
+      <span class="brand-words">
+        <span class="brand-text">Tom Pickup</span>
+        <span class="brand-role">County councillor, Padiham and Burnley West</span>
+      </span>
     </a>
 
     <nav class="desktop-nav" aria-label="Main navigation">
@@ -137,12 +140,36 @@ function isActive(href: string): boolean {
   /* Wordmark */
   .brand {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    gap: 12px;
     min-height: var(--touch);
     text-decoration: none;
     color: var(--ink);
     flex-shrink: 0;
+  }
+
+  .brand-words {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* The seal: the site's mark, in the page's own teal. */
+  .brand-seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    background: var(--teal);
+    color: var(--paper);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    box-shadow: inset 0 -3px 0 var(--gold);
   }
 
   .brand:hover {
@@ -158,10 +185,8 @@ function isActive(href: string): boolean {
   }
 
   .brand-role {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 400;
     color: var(--muted);
     margin-top: 2px;
   }
@@ -308,8 +333,13 @@ function isActive(href: string): boolean {
 
     .brand-role {
       display: block;
-      font-size: 0.6875rem;
-      letter-spacing: 0.04em;
+      font-size: 0.75rem;
+    }
+
+    .brand-seal {
+      width: 34px;
+      height: 34px;
+      font-size: 0.9375rem;
     }
   }
 
