@@ -49,6 +49,9 @@ const body = game
     <style is:global>
       a { color: var(--rose); }
       a:hover { color: var(--ink); }
+      /* Links on the dark hero need the hero rose (#ff7a8a), not --rose on navy. */
+      .hero a { color: #ff7a8a; }
+      .hero a:hover { color: var(--hero-ink); }
       .site-home {
         margin: 0;
         padding: 10px 0 0;
