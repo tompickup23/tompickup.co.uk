@@ -21,6 +21,10 @@ cites `docs/FIGURE-REVIEW-2026-09-28.md`; that file is not in the repository (do
 - Articles embed hand-written HTML for charts (`viz-panel`, `viz-reform-bar`); styling lives in `src/layouts/BlogPost.astro`
 - Python scripts under `scripts/` are offline pre-processing only, never request handlers; their output is committed
 - Page-level SEO and JSON-LD in `src/layouts/Layout.astro` and `src/layouts/BlogPost.astro`
+- Article share cards are 1200x630 and never carry Tom's portrait (a named individual and a headline
+  statistic never share an asset). Cards come from `scripts/generate_og_cards.py`; set `ogImage` in the
+  article. `scripts/guard-share-cards.mjs` (postbuild) fails the build on a wrong size or the portrait card.
+  The portrait card `public/og-image.jpg` is for the homepage and about page only
 - The projects list is one file, `src/data/projects.ts`. `/projects/` and the footer's Projects
   column both read it, so they cannot drift; add a project there, not in either template
 

@@ -1,5 +1,6 @@
 ---
 title: "Discussing ketamine harm and prevention in Burnley"
+ogImage: "/images/share/burnley-ketamine-prevention-video.png"
 date: 2026-09-27T22:47:00Z
 description: "A retrospective Cabinet clip discussing ketamine harm, prevention and work involving Burnley county councillors."
 category: "Burnley"

@@ -30,11 +30,22 @@ export function imageQuality(path?: string): number {
   return path?.toLowerCase().endsWith('.png') ? 90 : 72;
 }
 
-/* A 1200px JPEG of the lead image, for articles without their own share card.
-   Social platforms still handle JPEG more reliably than WebP. */
+/* A 1200x630 JPEG of the lead image, cropped to the landscape shape link
+   previews use, for articles without their own share card. Social platforms
+   still handle JPEG more reliably than WebP. A lead image that is not an
+   astro:assets file returns undefined, because its size is unknown here; the
+   caller then uses the article fallback card. */
 export async function shareImageUrl(path?: string): Promise<string | undefined> {
   const meta = articleImage(path);
-  if (!meta) return path;
-  const out = await getImage({ src: meta, width: 1200, format: 'jpg', quality: 80 });
+  if (!meta) return undefined;
+  const out = await getImage({
+    src: meta,
+    width: 1200,
+    height: 630,
+    fit: 'cover',
+    position: 'center',
+    format: 'jpg',
+    quality: 80,
+  });
   return out.src;
 }

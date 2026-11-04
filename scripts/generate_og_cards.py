@@ -3,9 +3,19 @@
 editorial style: warm paper, ink, teal and heritage gold, set in Source Serif 4
 and Source Sans 3 (the same @fontsource files the site ships).
 
-1200x630, one per article, plus the site default public/og-image.jpg. Several
-articles also show their card in the body, so the figures and wording here are
-published figures: change one only with its source, never to fit the layout.
+1200x630, one per article, plus the site default public/og-image.jpg and the
+article fallback public/og-article.jpg. Several articles also show their card in
+the body, so the figures and wording here are published figures: change one only
+with its source, never to fit the layout.
+
+Article cards never carry Tom's portrait. A named individual and a headline
+statistic never share an asset, and the simplest rule that guarantees it is that
+the portrait card (og-image.jpg) is for the homepage and about page only. Articles
+get a figure card, a chart, or a headline card (headline_card below, which sets the
+article's own title and nothing else). An article with no card of its own shares
+its lead photo cropped to 1200x630; where that photo shows Tom and the headline
+carries a figure (a number, a pound sign or a per cent), give it a headline card
+here instead. scripts/guard-share-cards.mjs checks size and portrait on every build.
 
 Run after `npm install`:  uv run --no-project --with pillow python scripts/generate_og_cards.py
 """
@@ -161,6 +171,64 @@ def bar_card(title, bars, note, source, out):
     return out
 
 
+def headline_card(title, eyebrow, out):
+    """Headline only, for articles without a figure card or a chart. No portrait
+    and no name: the headline may carry a figure, so nothing else goes beside it."""
+    img = Image.new("RGB", (W, H), PAPER)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, W, 8], fill=TEAL)
+    ef = F("sans-semibold", 19)
+    _tracked(d, (M, 64), eyebrow.upper(), ef, GOLD, 2.2)
+
+    # Largest serif size that sets the headline in four lines or fewer
+    top, bottom = 124, H - 120
+    for size in range(72, 39, -2):
+        hf = F("serif", size)
+        lines = _wrap(d, title, hf, W - 2 * M)
+        lead = round(size * 1.18)
+        if len(lines) <= 4 and lead * len(lines) <= bottom - top:
+            break
+    y = top
+    for line in lines:
+        d.text((M - 2, y), line, font=hf, fill=INK)
+        y += lead
+    d.rectangle([M, y + 18, M + 140, y + 24], fill=TEAL)
+
+    d.line([M, H - 84, W - M, H - 84], fill=LINE, width=2)
+    d.text((M, H - 62), "tompickup.co.uk", font=F("sans-semibold", 26), fill=TEAL)
+    img.save(out, "PNG", optimize=True)
+    return out
+
+
+def fit_card(src, out):
+    """An existing landscape chart, scaled into 1200x630 whole, never cropped:
+    the margin is filled with the chart's own background colour."""
+    im = Image.open(src).convert("RGB")
+    scale = min(W / im.width, H / im.height)
+    size = (round(im.width * scale), round(im.height * scale))
+    im = im.resize(size, Image.LANCZOS)
+    img = Image.new("RGB", (W, H), im.getpixel((2, 2)))
+    img.paste(im, ((W - size[0]) // 2, (H - size[1]) // 2))
+    img.save(out, "PNG", optimize=True)
+    return out
+
+
+def article_default_card(out):
+    """Fallback share image for an article with no card of its own. No portrait,
+    no figure. The build guard means no published article should reach it."""
+    img = Image.new("RGB", (W, H), PAPER)
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, W, 8], fill=TEAL)
+    x = M
+    d.rectangle([x, 210, x + 56, 214], fill=GOLD)
+    d.text((x - 3, 236), "Tom Pickup", font=F("serif", 78), fill=INK)
+    d.text((x, 344), "Articles and data on Burnley and Lancashire", font=F("sans-semibold", 32), fill=INK)
+    d.line([x, H - 84, W - M, H - 84], fill=LINE, width=2)
+    d.text((x, H - 62), "tompickup.co.uk", font=F("sans-semibold", 26), fill=TEAL)
+    img.save(out, "JPEG", quality=86, optimize=True, progressive=True)
+    return out
+
+
 def default_card(out):
     """The site-wide share image: name and office beside the chamber portrait."""
     img = Image.new("RGB", (W, H), PAPER)
@@ -256,6 +324,46 @@ BAR_CARDS = [
          source="NESO written evidence to the Environmental Audit Committee (DCU0081). NESO says much of the queue is likely to be non-viable."),
 ]
 
+# Headline cards. The headline is read from the article's own frontmatter at
+# generation time, so the card always matches the published title; rerun this
+# script after changing a title. Output: public/images/share/<slug>.png
+HEADLINE_CARDS = [
+    dict(slug="burnley-businesses-register-and-survival", eyebrow="Burnley  ·  Economy"),
+    dict(slug="burnley-economy-not-unemployment", eyebrow="Burnley  ·  Economy"),
+    dict(slug="burnley-ketamine-prevention-video", eyebrow="Burnley  ·  Health"),
+    dict(slug="combined-authority-spending-scrutiny-video", eyebrow="Lancashire  ·  Public debates"),
+    dict(slug="debenhams-jobs-return-to-burnley", eyebrow="Burnley  ·  Jobs"),
+    dict(slug="lancashire-flag-policy-video", eyebrow="Lancashire  ·  Public debates"),
+    dict(slug="lancashire-four-unitaries-model", eyebrow="Lancashire  ·  Reorganisation"),
+    dict(slug="lancashire-growth-plan-scrutiny-video", eyebrow="Lancashire  ·  Public debates"),
+    dict(slug="lancashire-lgr-protective-claim", eyebrow="Lancashire  ·  Reorganisation"),
+    dict(slug="lgr-delay-year-did-not-exist", eyebrow="Lancashire  ·  Reorganisation"),
+    dict(slug="lgr-working-paper-v3-1-data-release", eyebrow="Lancashire  ·  Data release"),
+    # Lead photo is of Tom and the headline carries figures, so headline only.
+    dict(slug="swimathon-2025-triple-5km", eyebrow="Burnley  ·  Community and charity"),
+]
+
+# Existing landscape charts that are not 1200x630, fitted whole into a card.
+FIT_CARDS = [
+    dict(src="public/images/where-your-council-tax-goes-burnley.png",
+         out="where-your-council-tax-goes-burnley.png"),
+]
+
+
+def article_title(slug):
+    """The article's title, exactly as its frontmatter gives it."""
+    import re
+    path = os.path.join(ROOT, "src", "content", "news", slug + ".md")
+    head = open(path, encoding="utf-8").read().split("\n---", 1)[0]
+    m = re.search(r'^title:\s*(.+)$', head, re.M)
+    if not m:
+        raise SystemExit(f"No title in {path}")
+    t = m.group(1).strip()
+    if t[:1] in "\"'" and t[-1:] == t[:1]:
+        t = t[1:-1]
+    return t.replace('\\"', '"')
+
+
 # Cards for archived articles. Not written by default: public/ ships everything,
 # and the build fails on an image no page links. Pass --archived to regenerate.
 ARCHIVED_CARDS = [
@@ -277,5 +385,15 @@ if __name__ == "__main__":
         p = os.path.join(outdir, c["out"])
         bar_card(c["title"], c["bars"], c["note"], c["source"], p)
         print("wrote", os.path.relpath(p, ROOT))
+    for c in HEADLINE_CARDS:
+        p = os.path.join(outdir, c["slug"] + ".png")
+        headline_card(article_title(c["slug"]), c["eyebrow"], p)
+        print("wrote", os.path.relpath(p, ROOT))
+    for c in FIT_CARDS:
+        p = os.path.join(outdir, c["out"])
+        fit_card(os.path.join(ROOT, c["src"]), p)
+        print("wrote", os.path.relpath(p, ROOT))
+    p = article_default_card(os.path.join(ROOT, "public", "og-article.jpg"))
+    print("wrote", os.path.relpath(p, ROOT))
     p = default_card(os.path.join(ROOT, "public", "og-image.jpg"))
     print("wrote", os.path.relpath(p, ROOT))

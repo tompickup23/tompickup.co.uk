@@ -1,5 +1,6 @@
 ---
 title: "Why Lancashire's Cabinet kept the door open to a legal challenge"
+ogImage: "/images/share/lancashire-lgr-protective-claim.png"
 date: 2026-10-04
 description: "On 1 October the county Cabinet authorised a protective judicial review claim over the July decision to replace Lancashire's councils with four unitaries, to be filed by 16 October unless the Government confirms that decision has been withdrawn. What was decided, why, and the full item on video."
 seoDescription: "On 1 October the county Cabinet authorised a protective judicial review claim over the July decision on Lancashire's councils. What was decided, and why."

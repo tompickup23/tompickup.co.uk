@@ -1,6 +1,6 @@
 ---
 import Layout from './Layout.astro';
-import { DEFAULT_OG_IMAGE } from '../data/seo';
+import { DEFAULT_ARTICLE_OG_IMAGE, OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT } from '../data/seo';
 import { isoDate } from '../lib/dates';
 import EmailSignup from '../components/EmailSignup.astro';
 import AuthorBox from '../components/AuthorBox.astro';
@@ -76,8 +76,11 @@ const showToc = headings.length >= 4 && wordCount >= 900;
    than pushing a headline out to 104 characters and losing the end of the claim. */
 const heroMeta = articleImage(frontmatter.image);
 const heroAlt = frontmatter.imageAlt || `Lead image for the article: ${frontmatter.title}`;
+/* Share card, always 1200x630 and never the portrait card: the article's own card
+   (ogImage), else its lead image cropped to 1200x630, else the plain article card.
+   scripts/guard-share-cards.mjs checks the size and the no-portrait rule on build. */
 const shareImage =
-  frontmatter.ogImage || (await shareImageUrl(frontmatter.image)) || DEFAULT_OG_IMAGE;
+  frontmatter.ogImage || (await shareImageUrl(frontmatter.image)) || DEFAULT_ARTICLE_OG_IMAGE;
 
 const BRAND_SUFFIX = ' | Tom Pickup';
 const baseTitle = frontmatter.seoTitle ?? frontmatter.title;
@@ -92,6 +95,8 @@ const pageTitle =
   description={frontmatter.seoDescription ?? frontmatter.description}
   article={true}
   ogImage={shareImage}
+  ogImageWidth={OG_IMAGE_WIDTH}
+  ogImageHeight={OG_IMAGE_HEIGHT}
   ogImageAlt={frontmatter.ogImage ? undefined : frontmatter.imageAlt}
   publishedTime={isoDate(frontmatter.date)}
   modifiedTime={isoDate(frontmatter.updated || frontmatter.date)}
