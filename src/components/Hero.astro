@@ -1,5 +1,9 @@
 ---
 import Cite from './Cite.astro';
+import RecordReviewed from './RecordReviewed.astro';
+import { HERO_FIGURES } from '../data/homepage-record';
+
+const [tax, overspend, seats] = HERO_FIGURES;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -40,16 +44,20 @@ import Cite from './Cite.astro';
   </div>
 
   <dl class="hero-figures">
-    <div>
-      <dt>Lowest council tax rise since 2015/16</dt>
+    {/* column-reverse shows dd above dt; meta comes first in the DOM so it lands under the label. */}
+    <div id={tax.id}>
+      <RecordReviewed id={tax.id} reviewed={tax.reviewed} />
+      <dt>{tax.label}</dt>
       <dd>3.80%<Cite n={3} /></dd>
     </div>
-    <div>
-      <dt>2025/26 overspend, forecast to outturn</dt>
+    <div id={overspend.id}>
+      <RecordReviewed id={overspend.id} reviewed={overspend.reviewed} />
+      <dt>{overspend.label}</dt>
       <dd>&pound;27.9M&rarr;&pound;2.99M<Cite n={1} /></dd>
     </div>
-    <div>
-      <dt>Reform UK seats at LCC, September 2026</dt>
+    <div id={seats.id}>
+      <RecordReviewed id={seats.id} reviewed={seats.reviewed} />
+      <dt>{seats.label}</dt>
       <dd>51/84<Cite n={4} /></dd>
     </div>
   </dl>
@@ -166,6 +174,7 @@ import Cite from './Cite.astro';
     flex-direction: column-reverse;
     justify-content: flex-end;
     padding: 14px 20px 14px 0;
+    scroll-margin-top: 88px;
   }
 
   .hero-figures > div + div {
@@ -186,6 +195,10 @@ import Cite from './Cite.astro';
     font-weight: 600;
     color: var(--ink);
     font-variant-numeric: tabular-nums;
+  }
+
+  .hero-figures :global(.record-meta) {
+    margin-top: 6px;
   }
 
   @media (max-width: 800px) {

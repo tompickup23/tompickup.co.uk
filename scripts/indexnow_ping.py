@@ -9,6 +9,7 @@ day and waiting on a crawl cycle.
 Usage:
     python3 scripts/indexnow_ping.py https://tompickup.co.uk/news/some-article/ [...]
     python3 scripts/indexnow_ping.py --recent 3     # news articles from the last N days
+    python3 scripts/indexnow_ping.py --sitemap      # every URL in the live sitemap
 """
 import argparse
 import json
@@ -22,6 +23,8 @@ HOST = "tompickup.co.uk"
 KEY = "6db086fa92a744fdae08491a16603960"
 ENDPOINT = "https://api.indexnow.org/IndexNow"
 NEWS_DIR = Path(__file__).resolve().parent.parent / "src" / "content" / "news"
+SITEMAP_INDEX = f"https://{HOST}/sitemap-index.xml"
+LOC_RE = re.compile(r"<loc>([^<]+)</loc>")
 
 
 def recent_articles(days: int) -> list[str]:
@@ -50,17 +53,48 @@ def recent_articles(days: int) -> list[str]:
     return urls
 
 
+def fetch_text(url: str, timeout: int = 60) -> str:
+    req = urllib.request.Request(url, headers={"User-Agent": "tompickup-indexnow/1"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read().decode("utf-8", errors="replace")
+
+
+def sitemap_urls() -> list[str]:
+    """Every page <loc> under the live sitemap index (post-deploy surface)."""
+    index_xml = fetch_text(SITEMAP_INDEX, timeout=30)
+    child_maps = [
+        loc.replace("&amp;", "&")
+        for loc in LOC_RE.findall(index_xml)
+        if loc.rstrip("/").endswith(".xml")
+    ]
+    if not child_maps:
+        child_maps = [f"https://{HOST}/sitemap-0.xml"]
+    urls: list[str] = []
+    for sitemap_url in child_maps:
+        body = fetch_text(sitemap_url)
+        for loc in LOC_RE.findall(body):
+            url = loc.replace("&amp;", "&")
+            if url.rstrip("/").endswith(".xml"):
+                continue
+            urls.append(url)
+    return urls
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("urls", nargs="*")
     ap.add_argument("--recent", type=int, metavar="DAYS",
                     help="submit news articles published or updated in the last N days")
+    ap.add_argument("--sitemap", action="store_true",
+                    help="submit every URL in the live sitemap (used after deploy)")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
     urls = list(args.urls)
     if args.recent:
         urls += recent_articles(args.recent)
+    if args.sitemap:
+        urls += sitemap_urls()
     urls = sorted(set(urls))
 
     if not urls:

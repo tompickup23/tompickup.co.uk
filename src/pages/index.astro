@@ -7,10 +7,15 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 import EmailSignup from '../components/EmailSignup.astro';
 import Sources from '../components/Sources.astro';
 import Cite from '../components/Cite.astro';
+import RecordReviewed from '../components/RecordReviewed.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { articleImage } from '../lib/images';
 import { newsTopic } from '../lib/news-categories';
+import { ACHIEVEMENTS, SAVINGS_COMPARISON } from '../data/homepage-record';
+
+const [rise, overspendClosed, bonds] = ACHIEVEMENTS;
+const savings = SAVINGS_COMPARISON;
 
 const allPosts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -93,7 +98,7 @@ const LGR_UNITS = [
         </div>
 
         <div class="achievements-grid stagger-children">
-          <div class="achievement-card">
+          <div class="achievement-card" id={rise.id}>
             <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             </div>
@@ -101,9 +106,10 @@ const LGR_UNITS = [
             <h3 class="achievement-title">Lowest council tax rise since 2015/16</h3>
             <p class="achievement-desc">Every county council budget from 2016/17 to 2025/26 raised council tax by 3.99% or more, peaking at 5.99% in 2018/19. The 2026/27 budget set 3.80%.<Cite n={2} /><Cite n={3} /></p>
             <span class="achievement-before">2025/26: 4.99%</span>
+            <RecordReviewed id={rise.id} reviewed={rise.reviewed} />
           </div>
 
-          <div class="achievement-card">
+          <div class="achievement-card" id={overspendClosed.id}>
             <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7c-1-2-3.5-3-6-3-3.3 0-6 2.7-6 6 0 1.5.5 2.8 1.3 3.8"></path><path d="M4 17h12"></path><path d="M4 13h8"></path><path d="M10 7v14"></path></svg>
             </div>
@@ -111,9 +117,10 @@ const LGR_UNITS = [
             <h3 class="achievement-title">Overspend nearly eliminated</h3>
             <p class="achievement-desc">At the first quarter of 2025/26 the council forecast a &pound;27.9 million overspend. The year closed &pound;2.99 million over on a &pound;1.24 billion budget: an 89% reduction, and 0.24% off balance.<Cite n={1} /></p>
             <span class="achievement-before">Quarter 1 forecast: &pound;27.9M overspend</span>
+            <RecordReviewed id={overspendClosed.id} reviewed={overspendClosed.reviewed} />
           </div>
 
-          <div class="achievement-card">
+          <div class="achievement-card" id={bonds.id}>
             <div class="achievement-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </div>
@@ -121,6 +128,7 @@ const LGR_UNITS = [
             <h3 class="achievement-title">The cost of selling the bonds</h3>
             <p class="achievement-desc">The council has &pound;519M invested in government and commercial bonds.<Cite n={5} /> Its 2026/27 treasury strategy says an immediate sale of all of them would realise a loss of some &pound;350M.<Cite n={6} /></p>
             <span class="achievement-before">Treasury Management Strategy 2026/27, para 29</span>
+            <RecordReviewed id={bonds.id} reviewed={bonds.reviewed} />
           </div>
         </div>
 
@@ -139,7 +147,7 @@ const LGR_UNITS = [
             <p class="comparison-subtitle">A savings plan is a promise made in a budget. This is the share that actually landed.</p>
           </div>
 
-          <div class="comparison-bars">
+          <div class="comparison-bars" id={savings.id}>
             <ComparisonBar
               title="Savings Delivery Rate"
               reformLabel="2025/26"
@@ -151,6 +159,7 @@ const LGR_UNITS = [
               annotation="2025/26: savings delivered, including mitigations where the original saving was delayed (80% delivered on a lasting basis). 2024/25: savings delivered against the original budget; the report gives no figure including mitigations."
             />
             <p class="comparison-sources">Sources<Cite n={7} /><Cite n={8} /></p>
+            <RecordReviewed id={savings.id} reviewed={savings.reviewed} />
           </div>
 
         </div>
@@ -309,6 +318,7 @@ const LGR_UNITS = [
   .achievement-card {
     padding-top: var(--space-md);
     border-top: 2px solid var(--ink);
+    scroll-margin-top: 88px;
   }
 
   .achievement-icon {
@@ -377,6 +387,7 @@ const LGR_UNITS = [
     flex-direction: column;
     gap: var(--space-sm);
     margin-bottom: var(--space-lg);
+    scroll-margin-top: 88px;
   }
 
   .comparison-sources {

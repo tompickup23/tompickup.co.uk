@@ -95,3 +95,36 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # After Pages has the new build. The key file is already served from public/
+  # (6db086fa92a744fdae08491a16603960.txt). continue-on-error: a failed ping must
+  # not mark a successful deploy red. Only on main.
+  indexnow:
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Notify IndexNow of the live sitemap
+        id: indexnow
+        continue-on-error: true
+        run: python3 scripts/indexnow_ping.py --sitemap
+
+      - name: Report IndexNow outcome
+        if: always()
+        env:
+          INDEXNOW_OUTCOME: ${{ steps.indexnow.outcome }}
+        run: |
+          case "$INDEXNOW_OUTCOME" in
+            success)
+              echo "IndexNow: notified." >> "$GITHUB_STEP_SUMMARY" ;;
+            failure)
+              echo "::warning title=IndexNow failed::The site deployed, but IndexNow was not notified. See the Notify IndexNow step log."
+              echo "IndexNow: failed. Pages deployed; search engines were not notified. See the Notify IndexNow step log." >> "$GITHUB_STEP_SUMMARY" ;;
+            *)
+              echo "IndexNow: not run (outcome: ${INDEXNOW_OUTCOME:-none})." >> "$GITHUB_STEP_SUMMARY" ;;
+          esac

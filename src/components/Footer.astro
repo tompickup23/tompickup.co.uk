@@ -2,6 +2,7 @@
 import EmailSignup from './EmailSignup.astro';
 import { FOOTER_PROJECTS } from '../data/projects';
 import { imprint as imp } from '../data/imprint';
+import { externalRel } from '../lib/estate-links';
 const currentYear = new Date().getFullYear();
 
 /* Articles end with their own signup, so the footer's is left off there:
@@ -49,7 +50,7 @@ const { signup = true } = Astro.props;
                 <a
                   href={p.href}
                   target={p.external ? '_blank' : undefined}
-                  rel={p.external ? 'noopener noreferrer' : undefined}
+                  rel={p.external ? externalRel(p.href) : undefined}
                 >
                   {p.title}
                   {p.external && <span class="footer-ext" aria-hidden="true">&#8599;</span>}
