@@ -1,7 +1,6 @@
 ---
 // Lancashire Budget Challenge: a standalone game page.
-// The game itself is generated in the Reports repo (LCC_Budget_Game/build.py --site <this repo>)
-// from the LCC budget model and copied to src/data/lcc-budget-game/game.html. Do not edit that file by hand.
+// The game data is generated in Reports from the LCC budget model. Do not edit it by hand.
 // The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
 import { imprint as imp } from '../../data/imprint';
 import game from '../../data/lcc-budget-game/game.html?raw';
@@ -49,7 +48,7 @@ const body = game
     <style is:global>
       a { color: var(--rose); }
       a:hover { color: var(--ink); }
-      /* Links on the dark hero need the hero rose (#ff7a8a), not --rose on navy. */
+      /* Links on the dark hero use its brighter rose colour. */
       .hero a { color: #ff7a8a; }
       .hero a:hover { color: var(--hero-ink); }
       .site-home {

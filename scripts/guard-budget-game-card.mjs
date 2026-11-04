@@ -1,12 +1,8 @@
-/* Fails the build if the budget game share card is missing, the wrong size,
- * or was made from figures that no longer match src/data/lcc-budget-game/game.html.
- *
- * The generator writes public/images/share/lcc-budget-game.json beside the PNG
- * with the five block percentages. This guard recomputes those percentages from
- * the data file (largest remainder, same as the page waffle) and compares.
- */
+/* Compare the rendered card and every recorded figure with the game data. */
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { sourceText } from './generate_budget_game_card.mjs';
 
 const ROOT = process.cwd();
 const DATA = path.join(ROOT, 'src', 'data', 'lcc-budget-game', 'game.html');
@@ -87,8 +83,13 @@ if (fs.existsSync(SIDE) && fs.existsSync(DATA)) {
   const cells = waffleCells(values, req);
 
   if (side.base_year !== by) fail(`sidecar base_year ${side.base_year} != data ${by}`);
-  if (Math.abs(side.requirement_m - req) > 0.001) {
+  if (side.requirement_m !== req) {
     fail(`sidecar requirement ${side.requirement_m} != data ${req}`);
+  }
+  if (side.square_m !== Number((req / 100).toFixed(3))) fail('Square value differs from data');
+  if (side.source !== sourceText(D)) fail('Source citation differs from data');
+  if (fs.existsSync(PNG) && side.png_sha256 !== createHash('sha256').update(fs.readFileSync(PNG)).digest('hex')) {
+    fail('Card PNG differs from the recorded render');
   }
   if (!Array.isArray(side.blocks) || side.blocks.length !== D.blocks.length) {
     fail(`sidecar has ${side.blocks?.length} blocks, data has ${D.blocks.length}`);
@@ -98,6 +99,7 @@ if (fs.existsSync(SIDE) && fs.existsSync(DATA)) {
       const expect = cells[i];
       if (s.id !== b.id) fail(`block ${i}: sidecar id ${s.id} != ${b.id}`);
       if (s.label !== b.label) fail(`block ${b.id}: sidecar label differs from data`);
+      if (s.value_m !== Number(values[i].toFixed(3))) fail(`block ${b.id}: value differs from data`);
       if (s.pct !== expect) fail(`block ${b.id}: card ${s.pct}% != data ${expect}%`);
     });
   }
@@ -105,7 +107,7 @@ if (fs.existsSync(SIDE) && fs.existsSync(DATA)) {
 
 if (problems.length) {
   console.error('Budget game card guard failed:');
-  for (const p of problems) console.error('  -', p);
+  for (const p of problems) console.error('  ', p);
   process.exit(1);
 }
 console.log('Budget game card guard: ok');

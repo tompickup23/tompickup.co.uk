@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "dev:observatory": "bash scripts/parked-dev.sh observatory",
     "dev:doge": "bash scripts/parked-dev.sh doge",
-    "prebuild": "node scripts/guard-parked.mjs pre && uv run --no-project --with pillow python scripts/generate_budget_game_card.py",
+    "prebuild": "node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs",
     "build": "astro build",
     "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs",
     "preview": "astro preview"
@@ -20,5 +20,9 @@
     "@fontsource/source-sans-3": "^5.3.0",
     "@fontsource/source-serif-4": "^5.3.0",
     "astro": "^5.17.3"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2",
+    "satori": "0.63.2"
   }
 }
