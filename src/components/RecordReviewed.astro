@@ -1,0 +1,41 @@
+---
+import { formatReviewed } from '../data/homepage-record';
+
+interface Props {
+  id: string;
+  reviewed: string;
+}
+
+const { id, reviewed } = Astro.props;
+---
+
+<p class="record-meta">
+  <a class="record-permalink" href={`#${id}`} aria-label={`Permalink to this record line`}>#</a>
+  <span>Last reviewed <time datetime={reviewed}>{formatReviewed(reviewed)}</time></span>
+</p>
+
+<style>
+  .record-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 6px 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .record-permalink {
+    color: var(--muted);
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .record-permalink:hover {
+    color: var(--teal);
+    text-decoration: underline;
+  }
+
+  .record-meta time {
+    font-variant-numeric: tabular-nums;
+  }
+</style>

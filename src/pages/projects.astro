@@ -6,6 +6,7 @@ import { Image } from 'astro:assets';
 import { articleImage } from '../lib/images';
 import { newsArea, newsTopic } from '../lib/news-categories';
 import { ALL_PROJECTS, PROJECT_GROUPS, PROJECT_DETAILS, LOCAL_READING } from '../data/projects';
+import { externalRel } from '../lib/estate-links';
 
 const posts = await getCollection('news', ({ data }) => !data.draft);
 const groupedProjects = PROJECT_GROUPS.flatMap(group => group.projects);
@@ -76,7 +77,7 @@ const schema = {
               {group.projects.filter(p => !isPrimary(p)).map(p => <li>
                 <span class="row-mark" style={`--project-accent:${p.accent}`} aria-hidden="true">{PROJECT_DETAILS[p.title].mark}</span>
                 <div>
-                  <h3><a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? 'noopener noreferrer' : undefined}>{p.title}<span aria-hidden="true"> {p.external ? '↗' : '→'}</span>{p.external && <span class="sr-only"> (opens in a new tab)</span>}</a></h3>
+                  <h3><a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? externalRel(p.href) : undefined}>{p.title}<span aria-hidden="true"> {p.external ? '↗' : '→'}</span>{p.external && <span class="sr-only"> (opens in a new tab)</span>}</a></h3>
                   <p>{p.desc}</p>
                 </div>
                 <span class="row-host">{p.external ? new URL(p.href).hostname : 'tompickup.co.uk'}</span>

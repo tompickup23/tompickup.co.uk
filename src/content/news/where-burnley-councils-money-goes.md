@@ -153,7 +153,7 @@ The figures above are the headlines. The complete record, every one of the 4,489
 <div class="viz-cta">
 <div class="viz-cta-title">Burnley Council spending, 2025/26</div>
 <p class="viz-cta-sub">All 4,489 payments. Searchable and filterable.</p>
-<a href="https://aidoge.co.uk/councils/burnley/" class="viz-cta-btn" target="_blank" rel="noopener noreferrer">Open Burnley on AI DOGE &rarr;</a>
+<a href="https://aidoge.co.uk/councils/burnley/" class="viz-cta-btn" target="_blank" rel="noopener">Open Burnley on AI DOGE &rarr;</a>
 </div>
 
 ## What I want done

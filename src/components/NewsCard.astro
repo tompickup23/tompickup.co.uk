@@ -39,7 +39,7 @@ function formatDate(dateStr: string): string {
       {imageMeta ? (
         <Image
           src={imageMeta}
-          alt=""
+          alt={title}
           widths={[400, 640, 800]}
           sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 380px"
           format="webp"
@@ -49,7 +49,7 @@ function formatDate(dateStr: string): string {
           decoding="async"
         />
       ) : (
-        <img src={image} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        <img src={image} alt={title} loading={eager ? 'eager' : 'lazy'} decoding="async" />
       )}
     </div>
   )}
