@@ -8,6 +8,7 @@ import { Resvg } from '@resvg/resvg-js';
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const W = 1200;
 export const H = 630;
+/** Hex values match the game's --c1 to --c5; keys are the service blocks they colour. */
 const COLOURS = {
   adults: '#2a78d6',
   children: '#eb6834',
