@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { NEWS_IMAGE_ALT } from '../data/news-image-alt';
 import { articleImage, imageQuality } from '../lib/images';
 
 interface Props {
@@ -16,6 +17,8 @@ interface Props {
 
 const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3', eager = false } = Astro.props;
 const imageMeta = articleImage(image);
+const imageAlt = image ? NEWS_IMAGE_ALT[image] ?? '' : '';
+if (image && !imageAlt) throw new Error(`Missing card image description: ${image}`);
 
 function formatDate(dateStr: string): string {
   try {
@@ -39,7 +42,7 @@ function formatDate(dateStr: string): string {
       {imageMeta ? (
         <Image
           src={imageMeta}
-          alt={title}
+          alt={imageAlt}
           widths={[400, 640, 800]}
           sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 380px"
           format="webp"
@@ -49,7 +52,7 @@ function formatDate(dateStr: string): string {
           decoding="async"
         />
       ) : (
-        <img src={image} alt={title} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        <img src={image} alt={imageAlt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
       )}
     </div>
   )}
