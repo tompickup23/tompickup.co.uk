@@ -3,7 +3,7 @@
 ## Overview
 Personal website and portfolio for Tom Pickup. Central hub linking all projects.
 
-**Stack**: Astro 5.17 (static output; `package-lock.json` pins 5.17.3) | no runtime server
+**Stack**: Astro 7.4 (static output; `package-lock.json` pins 7.4.4; Node.js >=22.23.4) | no runtime server
 **Hosting**: GitHub Pages serves the live domain from this repo.
 **Deploying**: Automatic from `main` through GitHub Actions since 10 September 2026
 (`.github/workflows/deploy.yml`). Every push to `main` builds, runs the guards and the
