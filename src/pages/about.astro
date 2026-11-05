@@ -79,7 +79,7 @@ const schema = {
         </div>
 
         <div class="bio-text">
-          <h1>Tom <span class="gradient-text">Pickup</span></h1>
+          <h1 class="bio-title">Tom Pickup<span class="sr-only">, </span><span class="bio-role">Lancashire county councillor and Cabinet Member for Adult Social Care</span></h1>
 
           <div class="bio-body">
             <p>
@@ -183,7 +183,18 @@ const schema = {
 <style>
   /* ---- Bio Header Section ---- */
   .page-header-section {
-    padding: 7rem 0 var(--space-xl);
+    padding: 3.5rem 0 var(--space-xl);
+  }
+
+  .bio-role {
+    display: block;
+    margin-top: 0.875rem;
+    padding-top: 0.875rem;
+    border-top: 2px solid var(--gold);
+    font-size: clamp(1.1875rem, 2vw, 1.4375rem);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    max-width: 32ch;
   }
 
   .bio-grid {
@@ -238,11 +249,21 @@ const schema = {
     margin: 0 0 var(--space-lg);
   }
 
+  .bio-body {
+    max-width: 64ch;
+  }
+
   .bio-body p {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    line-height: 1.75;
+    color: var(--ink);
+    font-size: 1.125rem;
+    line-height: 1.7;
     margin-bottom: var(--space-md);
+  }
+
+  .bio-body p:first-child {
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    line-height: 1.55;
   }
 
   .bio-body p:last-child {

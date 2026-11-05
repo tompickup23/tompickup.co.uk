@@ -64,14 +64,14 @@ const LGR_UNITS = [
           <h2 id="feature-title"><a href={`/news/${featured.id}/`}>{featured.data.title}</a></h2>
           <p class="feature-desc">{featured.data.description}</p>
           <p class="feature-date">Published {dateFmt.format(featured.data.date)}{featured.data.imageCredit && <> &middot; {featured.data.imageCredit}</>}</p>
-          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation <span aria-hidden="true">→</span></a>
+          <a href={`/news/${featured.id}/`} class="feature-link">Read the investigation</a>
         </div>
       </article>
 
       <div class="latest">
         <div class="latest-head">
           <h2>Latest</h2>
-          <a href="/news/">All writing <span aria-hidden="true">→</span></a>
+          <a href="/news/">All writing</a>
         </div>
         <ul>
           {latest.map((post) => (
@@ -149,7 +149,7 @@ const LGR_UNITS = [
 
           <div class="comparison-bars" id={savings.id}>
             <ComparisonBar
-              title="Savings Delivery Rate"
+              title="Savings delivery rate"
               reformLabel="2025/26"
               reformValue="98%"
               reformPercent={98}
@@ -402,11 +402,17 @@ const LGR_UNITS = [
   .home-kicker,
   .feature-topic,
   .latest-topic {
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--teal);
+  }
+
+  .home-kicker {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.1875rem;
+    color: var(--ink);
   }
 
   .home-kicker { margin: 0 0 var(--space-md); }
@@ -421,14 +427,15 @@ const LGR_UNITS = [
   .feature-image :global(img) {
     display: block;
     width: 100%;
-    height: 320px;
+    height: 380px;
     object-fit: cover;
     border-radius: var(--radius-sm);
   }
 
   .feature h2 {
-    font-size: clamp(1.625rem, 3vw, 2.25rem);
-    line-height: 1.15;
+    font-size: clamp(1.75rem, 3.4vw, 2.625rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
     margin: 8px 0 12px;
   }
 

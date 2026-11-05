@@ -104,7 +104,7 @@
   --party-snp: #FDF38E;
   --party-plaid: #005B54;
 
-  color-scheme: light;
+  color-scheme: only light;
 }
 
 @media (min-width: 769px) {
@@ -446,10 +446,8 @@ code {
 .kicker {
   display: block;
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--teal);
 }
 
@@ -486,14 +484,7 @@ code {
   100% { background-position: 200% 0; }
 }
 
-/* Stagger children: apply to grid/list containers */
-.stagger-children > *:nth-child(1) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.04s forwards; }
-.stagger-children > *:nth-child(2) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.08s forwards; }
-.stagger-children > *:nth-child(3) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.12s forwards; }
-.stagger-children > *:nth-child(4) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.16s forwards; }
-.stagger-children > *:nth-child(5) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.20s forwards; }
-.stagger-children > *:nth-child(6) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.24s forwards; }
-.stagger-children > *:nth-child(n+7) { opacity: 0; animation: fadeInUp 0.4s var(--ease-smooth) 0.28s forwards; }
+/* Stagger children: retired. Sections no longer animate in one by one. */
 
 /* Scroll reveal.
    Hidden state only applies when (a) JS is confirmed running (html.js set by an
@@ -504,18 +495,8 @@ code {
   opacity: 1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html.js .reveal {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
-  }
-
-  html.js .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Sections used to fade and rise into view one by one. That reads as template
+   motion and cost layout stability, so .reveal now renders in place. */
 
 
 /* ============================================================
@@ -716,7 +697,7 @@ legend {
 
 .lgr-teaser-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 0.9375rem; font-weight: 600;
   color: var(--teal); margin-bottom: 0.5rem;
 }
 .lgr-teaser-eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
