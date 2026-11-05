@@ -1,20 +1,28 @@
 ---
 // Lancashire Budget Challenge: a standalone game page.
-// The game itself is generated in the Reports repo (LCC_Budget_Game/build.py --site <this repo>)
-// from the LCC budget model and copied to src/data/lcc-budget-game/game.html. Do not edit that file by hand.
+// The game data is generated in Reports from the LCC budget model. Do not edit it by hand.
 // The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
 import { imprint as imp } from '../../data/imprint';
 import game from '../../data/lcc-budget-game/game.html?raw';
 
 const title = 'Lancashire Budget Challenge';
 const description = "Where Lancashire County Council's money goes, what has changed since May 2025, and whether you can balance next year's budget.";
+const ogImage = 'https://tompickup.co.uk/images/share/lcc-budget-game.png';
 const imprintLine = imp.show
   ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
   : '';
-const body = game.replace(/<title>[\s\S]*?<\/title>/, '').replace(
-  '<!--IMPRINT-->',
-  `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : ''),
-);
+// Inject a home link into the page header and keep the footer imprint link.
+// Link colour uses the game's own rose accent so anchors are not browser blue.
+const body = game
+  .replace(/<title>[\s\S]*?<\/title>/, '')
+  .replace(
+    '<header class="top hero">',
+    `<header class="top hero"><p class="site-home"><a href="/">tompickup.co.uk</a></p>`,
+  )
+  .replace(
+    '<!--IMPRINT-->',
+    `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : ''),
+  );
 ---
 <!doctype html>
 <html lang="en-GB">
@@ -23,12 +31,35 @@ const body = game.replace(/<title>[\s\S]*?<\/title>/, '').replace(
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://tompickup.co.uk/lcc-budget-game/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content="https://tompickup.co.uk/lcc-budget-game/" />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <style is:global>
+      a { color: var(--rose); }
+      a:hover { color: var(--ink); }
+      /* Links on the dark hero use its brighter rose colour. */
+      .hero a { color: #ff7a8a; }
+      .hero a:hover { color: var(--hero-ink); }
+      .site-home {
+        margin: 0;
+        padding: 10px 0 0;
+        font: 600 0.82rem/1 var(--f-body);
+        letter-spacing: 0.02em;
+      }
+      .site-home a { text-decoration: none; }
+      .site-home a:hover { text-decoration: underline; }
+    </style>
   </head>
   <body>
     <Fragment set:html={body} />
