@@ -4,6 +4,7 @@
 // It collects nothing: the build rejects any network, storage or form call in the template.
 // The page skips the site Layout so its own styles stay intact, so it renders the imprint itself.
 import { imprint as imp } from '../../data/imprint';
+import { CONTACT_EMAIL } from '../../config';
 import page from '../../data/lancashire-voice/prototype.html?raw';
 
 const title = 'Lancashire Voice: prototype';
@@ -12,7 +13,9 @@ const description = 'A clickable prototype of a resident engagement platform for
 const imprintLine = imp.show
   ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
   : '';
+// The feedback link uses the site's one contact address.
 const body = page
+  .replaceAll('__CONTACT_EMAIL__', CONTACT_EMAIL)
   .replace(/<title>[\s\S]*?<\/title>/, '')
   .replace(
     '<!--IMPRINT-->',
