@@ -1,0 +1,256 @@
+<title>Lancashire Voice: prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* A product, not a poster: a calm app shell with tabs, one task per screen. Same tokens as the budget game. */
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --sunk:#E6EAEE; --ink:#15202B; --muted:#55626F; --line:#CBD2DA;
+  --accent:#2C5F9E; --accent-soft:#DCE7F4; --rose:#B3122E; --rose-soft:#F6DDE1;
+  --good:#256B4A; --good-soft:#DCEFE4; --warn:#9A6212; --warn-soft:#F7EAD2;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --accent:#6A9BDB; --accent-soft:#18273A; --rose:#F0607A; --rose-soft:#3A1C24;
+  --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --accent:#6A9BDB; --accent-soft:#18273A; --rose:#F0607A; --rose-soft:#3A1C24;
+  --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:0 80px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.04;letter-spacing:.005em}
+h1{font-size:clamp(2.6rem,8vw,4.4rem);font-weight:900;text-transform:uppercase}
+h2{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;text-transform:uppercase}
+h3{font-size:1.3rem;font-weight:800;text-transform:uppercase}
+p{margin:0;max-width:68ch}
+ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+cite{font-style:normal;color:var(--muted);font-size:.88em}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.eyebrow{font:600 .74rem/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .small{font-size:.86rem} .mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.stack{display:flex;flex-direction:column;gap:16px}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--bg);font:700 1rem/1 var(--f-body);padding:14px 20px;border-radius:var(--r)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+
+.proto{background:var(--warn-soft);color:var(--ink);border-bottom:2px solid var(--warn);padding:10px 16px;font-size:.88rem}
+.proto .in{max-width:980px;margin:0 auto;display:flex;gap:10px;align-items:baseline}
+.proto b{color:var(--warn);text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;flex:0 0 auto}
+
+.shell{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.shell .in{max-width:980px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:16px;min-height:56px}
+.brand{font:900 1.35rem/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+.brand i{font-style:normal;color:var(--accent)}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:18px 10px 15px;font:600 .9rem/1 var(--f-body);color:var(--muted);white-space:nowrap}
+.tabs button[aria-current="page"]{color:var(--ink);border-color:var(--accent)}
+@media (max-width:700px){.shell .in{flex-wrap:wrap;gap:0;padding-top:10px}.brand{width:100%}.tabs{flex:1 1 100%}.tabs button{padding:12px 10px 11px}}
+
+section{padding-block:32px 8px}
+.lede{font-size:1.1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.notice{border-left:6px solid var(--accent);background:var(--accent-soft)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
+.grid3>*{min-width:0}
+.layer{border-top:5px solid var(--accent)}
+.layer.verified{border-top-color:var(--ink)} .layer.panel{border-top-color:var(--good)}
+.nextrow{display:flex;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--line);margin-top:24px}
+
+/* statement voting */
+.stmt{display:grid;gap:18px;text-align:center;padding:28px 20px}
+.stmt q{font:800 clamp(1.5rem,4.5vw,2.1rem)/1.15 var(--f-display);text-transform:none;quotes:"\201C" "\201D"}
+.votes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:520px;margin:0 auto;width:100%}
+.votes button{border:2px solid var(--line);background:var(--surface);border-radius:var(--r);padding:14px 6px;font-weight:700}
+.votes .a{border-color:var(--good);color:var(--good)} .votes .d{border-color:var(--rose);color:var(--rose)}
+.progress{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.tally{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.tally b{display:block;font:900 2.4rem/1 var(--f-display)}
+.mylist{list-style:none;padding:0;gap:8px}
+.mylist li{display:grid;grid-template-columns:86px 1fr;gap:10px;font-size:.92rem;align-items:baseline}
+.tag{font:700 .72rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:5px 7px;border-radius:3px;text-align:center}
+.tag.agree{background:var(--good-soft);color:var(--good)} .tag.disagree{background:var(--rose-soft);color:var(--rose)} .tag.pass{background:var(--sunk);color:var(--muted)}
+
+/* verified */
+.codebox{display:grid;gap:10px}
+.codebox input{font:600 1.3rem/1 var(--f-data);letter-spacing:.08em;padding:14px;border:2px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--ink);width:100%;max-width:360px;text-transform:uppercase}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.msg{font-size:.9rem} .msg.ok{color:var(--good)} .msg.bad{color:var(--rose)}
+.choice{display:block;width:100%;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.choice b{display:block;font:800 1.3rem/1.1 var(--f-display);text-transform:uppercase}
+.choice[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.q{font:800 clamp(1.4rem,4vw,1.9rem)/1.15 var(--f-display)}
+details{border-top:1px solid var(--line);padding:10px 0}
+details summary{cursor:pointer;font-weight:600}
+details p{margin-top:6px}
+.locked{opacity:.45;pointer-events:none}
+
+/* results */
+.col{display:grid;gap:10px;align-content:start}
+.col .big{font:900 2rem/1.05 var(--f-display)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px 8px 0;border-top:1px solid var(--line);vertical-align:top}
+th{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.num{font-family:var(--f-data);white-space:nowrap}
+.status{font:700 .74rem/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:3px;white-space:nowrap;display:inline-block}
+.status.Changed{background:var(--accent-soft);color:var(--accent)} .status.Adopted{background:var(--good-soft);color:var(--good)} .status.Not{background:var(--rose-soft);color:var(--rose)}
+.example{border:2px dashed var(--line)}
+.tablewrap{overflow-x:auto}
+@media (max-width:600px){
+  .tablewrap thead{display:none}
+  .tablewrap tr{display:grid;gap:4px;padding:12px 0;border-top:1px solid var(--line)}
+  .tablewrap td{border:0;padding:0}
+  .tablewrap td:first-child{font-weight:700}
+  .tablewrap tr:first-child{border-top:0}
+}
+
+footer{margin-top:40px;border-top:3px solid var(--ink);padding-top:18px;display:grid;gap:12px}
+footer ol{margin:8px 0 0;padding-left:1.2em;display:grid;gap:6px;font-size:.84rem;overflow-wrap:anywhere}
+footer td{font-size:.84rem}
+footer td:first-child{font-family:var(--f-data);white-space:nowrap}
+.imprint{display:grid;gap:4px;margin-top:6px}
+.imprint .src{font-size:.8rem;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){.progress i{transition:none}}
+</style>
+
+<div class="proto" role="note"><div class="in"><b>Prototype</b><span id="banner"></span></div></div>
+<div class="shell"><div class="in"><span class="brand" id="brand"></span><nav class="tabs" id="tabs" aria-label="Sections"></nav></div></div>
+<div class="wrap">
+  <main id="app"></main>
+  <footer id="foot"></footer>
+  <div class="imprint"><!--IMPRINT--></div>
+</div>
+
+<script>
+const PROTO = {"meta": {"accessed": "5 November 2026", "survey_url": "https://www.lancashire.gov.uk/council/finance/planning-the-councils-budget/", "example_code": "LV48 2173 9065"}, "words": {"name": "Lancashire Voice", "strap": "A prototype: how Lancashire could ask every resident, count properly and publish the answer.", "banner": "Built by Tom Pickup for his own website. Not a council service: no decision has been made about it. Nothing you enter is collected, stored or sent.", "tabs": ["Home", "Try the demo", "Your code", "Results (demo)", "What changed", "How it works"], "home": {"lede": "A standing way for Lancashire to ask its residents, count the answers properly and publish what changed. This prototype shows how it could work, using the mayoral question as the example.", "about_title": "What this page is", "about": ["A clickable prototype of a platform idea put to the county council's informal Cabinet in November. The council has not decided anything about it.", "Everything happens in your browser. No answer, code or click is recorded, and it all disappears when you close the page.", "The statements and the question are examples written for the prototype. There are no real results here."], "survey": "If you want to have your say on the county council's real budget, its own survey is open until 2 December 2026 <cite>(Lancashire County Council, 2026b)</cite>.", "survey_link": "Go to the council's budget survey", "layers_title": "Three ways in, counted separately", "layers": [{"id": "open", "label": "Open channel", "body": "Anyone can vote on short statements and add their own. Good for ideas and for seeing where people agree. Reported as self selecting, because it is."}, {"id": "verified", "label": "Verified question", "body": "Each elector would get one code, checked against the register, for the headline question. Turnout would be reported against the register, as a referendum would be."}, {"id": "panel", "label": "Random panel", "body": "Residents chosen at random and invited by post, weighted to the census, so the result carries a margin of error."}], "start": "Try the demo"}, "open": {"eyebrow": "Open channel · statement voting", "title": "Example topic: a mayor for Lancashire", "lede": "Vote on each statement. Statements here are examples written for the prototype; on the real platform residents write them.", "agree": "Agree", "disagree": "Disagree", "pass": "Pass", "statements": ["A mayor would give Lancashire a stronger voice with government.", "The cost of a mayor's office would be better spent on services.", "Whoever runs it, buses should be the first thing sorted out.", "Big decisions should rest with a group of council leaders, not one person.", "Residents should get a binding vote before any change.", "I want more local say over transport, skills and investment.", "A mayor would be too far away from towns like mine.", "Whatever is decided, the council should publish what residents said and what it changed."], "add": "Add your own statement", "add_note": "On the real platform you could write one, checked for duplicates and abuse before others see it. The prototype has no text box, so nothing you write can be collected.", "done_title": "Your votes", "map_title": "Where opinion sits", "map": "With real participants this panel groups people who vote alike, shows what divides the groups, and picks out the statements most groups agree on. That shared ground is often the most useful result. There is nothing to show here because no one else's votes exist.", "next": "Next: the verified question"}, "verified": {"eyebrow": "Verified question · example", "title": "One answer per elector", "lede": "On the real platform, every elector would get a unique code by post. The code would be checked against the electoral register, which a council may use “for the purposes of a poll under section 116 (local polls) of the Local Government Act 2003” <cite>(Representation of the People (England and Wales) Regulations 2001, reg. 107)</cite>.", "code_label": "Your code", "code_help": "Nothing you type here leaves the page. Use the example code to carry on.", "use_example": "Use the example code", "check": "Check code", "bad_code": "That is not the example code. Real codes would be checked against the register; this prototype only knows its example.", "ok_code": "Example code accepted. On the real platform this would be matched to the register and could be used once.", "question": "Should Lancashire have a directly elected mayor, leading a combined authority with Blackburn with Darwen and Blackpool?", "options": [{"id": "yes", "label": "Yes", "body": "A directly elected mayor leads the combined authority, with whatever powers a mayoral deal brings."}, {"id": "no", "label": "No", "body": "The combined authority carries on as now, led jointly by its member councils, with no mayor."}], "before_title": "Before you answer", "before_note": "The law expects people to see the realistic alternatives and the reasons, not only a yes or no: “fairness will require that interested persons be consulted not only upon the preferred option but also upon arguable yet discarded alternative options.” <cite>(R (Moseley) v Haringey LBC, 2014)</cite>. On the real platform each of these opens the evidence pack, written and checked before the question opens.", "before": ["What a mayor would and would not control", "What it costs and who pays", "The council's view and the alternatives it considered, with reasons", "What happens if the answer is no"], "before_body": "Evidence pack goes here on the real platform. Not written for the prototype.", "submit": "Try an answer", "thanks": "Answer held in this browser tab only. On the real platform it would be counted once and stored apart from your code, so it could not be traced to you.", "turnout_title": "How the count works", "turnout": ["Turnout would be reported against all 917,889 electors on the county register <cite>(ONS, 2024)</cite>, as a referendum would be.", "Paper and phone answers would count the same way.", "A record of the count would be published after close, so anyone could check the total."], "codes_title": "How the codes arrive", "codes": ["A letter to every address, with a code for each elector there: £370,055 to £423,418 for the 580,024 dwellings on the valuation list, at GOV.UK Notify's economy and second class rates <cite>(GOV.UK Notify, 2026)</cite>.", "Or printed on poll cards, which the districts already post: about £55,073 of print <cite>(Bath and North East Somerset Council, 2026)</cite>, but only electors in wards holding an election that spring get one.", "Or printed on council tax bills: about £47,332 of print <cite>(Tendring District Council, 2021)</cite>, one code per dwelling rather than per elector."], "next": "Next: results"}, "results": {"eyebrow": "Results · your answers only", "title": "Three counts, never merged", "lede": "The real results page puts three counts side by side and never adds them together. Here each column shows only what you did on this page.", "verified_title": "Verified, one per elector", "verified_none": "You have not answered the verified question.", "verified_yours": "Your answer:", "verified_note": "The real figure is a count against the register, with turnout.", "panel_title": "Random panel", "panel_body": "No panel exists. With one, the result comes with a margin of error. The margin depends on the panel's size:", "panel_note": "Plus or minus, in percentage points, nineteen times in twenty, simple random sample before weighting.", "open_title": "Open channel, self selecting", "open_none": "You have not voted on any statements.", "open_note": "The real figure is reported with how many responses were excluded as bots or duplicates.", "why": "Why not add them up? Because they answer different questions. The verified count says how many electors chose each option. The panel says what Lancashire as a whole thinks, within a margin. The open channel shows ideas and strength of feeling. Both recent county wide exercises warned that their open responses were not representative; one put it plainly: “A digital survey of this nature is a self-selecting process rather than a representative poll.” <cite>(Cratus Group, 2025, p. 4)</cite>.", "next": "Next: what changed"}, "changed": {"eyebrow": "What changed · example", "title": "A reason for every theme", "lede": "After close, every theme residents raised would get a decision and a reason, published with the data. The rows below are made up examples of the format, not decisions.", "rows": [{"theme": "Cost of a mayor's office against service cuts", "status": "Changed", "reason": "Made up example: the proposal is amended, and the page shows exactly what moved."}, {"theme": "Buses and transport powers", "status": "Adopted", "reason": "Made up example: the point is taken up as it stands, with a date attached."}, {"theme": "Who is accountable for decisions", "status": "Not adopted", "reason": "Made up example: the point is declined, and the reason is published in full."}], "status_label": "Decision", "rules_title": "The rules it would run on, fixed before any question opens", "rules": ["Every theme gets a decision and a reason, published by a date set before the question opens.", "Free text is sorted into themes with AI help; an officer signs off every theme list and checks a sample, and the prompts are published.", "No figure is published for any group of fewer than five people.", "An arm's length board with members from every party group oversees it."], "next": "Next: how it works"}, "how": {"title": "How it works, and what it costs", "law_title": "The law", "law": ["The law says “A local authority may conduct a poll to ascertain the views of those polled about” its services and their cost <cite>(Local Government Act 2003, s.116)</cite>. Nothing in it binds anyone.", "On reorganisation the Secretary of State may implement a proposal or “decide to take no action” <cite>(Local Government and Public Involvement in Health Act 2007, s.7)</cite>. A mayor needs the councils' consent; the law requires that “the regulations have been consented to in writing by each constituent council and the CCA.” <cite>(Levelling-up and Regeneration Act 2023, s.28)</cite>", "So no vote binds anyone. The aim is an answer that is hard to wave away: one per elector, a sample with a margin of error, and a published response."], "objections_title": "Three objections, answered", "objections": [{"q": "Bots and campaigns", "a": "The headline would count only through codes. The open channel would be screened, and the number excluded published."}, {"q": "Only the keen take part", "a": "A random panel, reported with its margin of error. The county ran a citizens' panel before: 56 per cent answered a budget questionnaire in 2003 <cite>(RBA Research, 2003)</cite> and 64 per cent a wave in 2015 <cite>(Lancashire County Council, 2015)</cite>."}, {"q": "The council marks its own homework", "a": "An arm's length board with every party group, and a published response saying what changed."}], "offline_title": "Not only online", "offline": "Paper and phone routes, help in 64 library branches <cite>(Lancashire County Council, 2026c)</cite>, and over 182 parish councils and 19 town councils <cite>(Lancashire County Council, 2024)</cite>.", "cost_title": "Cost, against a poll", "cost_rows": [{"item": "Advisory county wide poll, once", "cost": "£1.33 million to £2.84 million", "src": "917,889 electors at the official cost per elector of the 2021 PCC elections (£1.45) <cite>(Home Office, 2026)</cite> and the 2019 general election (£3.09) <cite>(Cabinet Office, 2020)</cite>"}, {"item": "Codes by post, one letter per address", "cost": "£370,055 to £423,418", "src": "580,024 dwellings <cite>(MHCLG, 2026)</cite> at Notify rates <cite>(GOV.UK Notify, 2026)</cite>"}, {"item": "Codes on poll cards or bills", "cost": "about £47,332 to £55,073 of print", "src": "<cite>(Tendring District Council, 2021)</cite>; <cite>(Bath and North East Somerset Council, 2026)</cite>"}, {"item": "Platform licence", "cost": "£17,995 to £24,995 a year, or nothing for open source", "src": "Citizen Space, area over a million people <cite>(Delib, 2024)</cite>"}, {"item": "Random panel of 1,000, one round", "cost": "£19,667", "src": "at £19.67 an interview, from Greater Manchester's survey contract <cite>(Contracts Finder, 2025)</cite> <cite>(BMG Research, 2025, p. 5)</cite>; margin plus or minus 3.1 points"}], "cost_note": "Staff time, hosting and the board are not priced: no published rate was found. VAT is excluded; councils recover it."}, "footer": {"about": "A prototype by Tom Pickup. Every figure is published and named below; sums are worked out when the page is built. Nothing you do here leaves this page.", "sources": "Sources", "arithmetic": "Arithmetic"}}, "panel": [{"n": 500, "moe_county": 4.4, "moe_district": 15.3, "cost": 9833}, {"n": 1000, "moe_county": 3.1, "moe_district": 10.8, "cost": 19667}, {"n": 2000, "moe_county": 2.2, "moe_district": 7.6, "cost": 39333}, {"n": 3000, "moe_county": 1.8, "moe_district": 6.2, "cost": 59000}, {"n": 6000, "moe_county": 1.3, "moe_district": 4.4, "cost": 118000}], "arithmetic": [{"figure": "1,124,238", "how": "Lancashire, Blackburn with Darwen and Blackpool, Table 1, added", "cite": "ONS, 2024"}, {"figure": "1,800", "how": "917,889 electors divided by 500, rounded to the nearest hundred", "cite": "ONS, 2024; Lancashire County Council, 2026a"}, {"figure": "580,024", "how": "sum of the twelve district rows of Table 1.01", "cite": "MHCLG, 2026"}, {"figure": "8.16p", "how": "£5,815 printing for 71,259 bills", "cite": "Tendring District Council, 2021"}, {"figure": "£19.67", "how": "£177,000 divided by four waves of 2,250", "cite": "Contracts Finder, 2025; BMG Research, 2025, p. 5"}, {"figure": "£1.33 million", "how": "917,889 electors times £1.45", "cite": "ONS, 2024; Home Office, 2026"}, {"figure": "£2.84 million", "how": "917,889 electors times £3.09", "cite": "ONS, 2024; Cabinet Office, 2020"}, {"figure": "£3.47 million", "how": "1,124,238 electors times £3.09", "cite": "ONS, 2024; Cabinet Office, 2020"}, {"figure": "£19,667", "how": "1,000 interviews times £19.67", "cite": "Contracts Finder, 2025; BMG Research, 2025, p. 5"}, {"figure": "plus or minus 3.1", "how": "1.96 times the square root of (0.25 divided by 1,000), with the finite population correction", "cite": "standard formula"}], "sources": [{"ref": "BMG Research for Greater Manchester Combined Authority (2025) Greater Manchester Residents' Survey: Survey 18, main report, June.", "url": "https://www.greatermanchester-ca.gov.uk/media/hyqfqpcj/gm-residents-survey-main-report-w18.pdf"}, {"ref": "Bath and North East Somerset Council (2026) E3599 Appendix 1: estimate of costs, election recharges from 1 April 2026.", "url": "https://democracy.bathnes.gov.uk/documents/s89828/E3599%20-%20Appendix%201%20-%20Estimate%20of%20Costs.pdf"}, {"ref": "Cabinet Office (2020) Costs of the 2019 UK Parliamentary General Election.", "url": "https://www.gov.uk/government/publications/costs-of-the-2019-uk-parliamentary-general-election/costs-of-the-2019-uk-parliamentary-general-election"}, {"ref": "Contracts Finder (2025) GMCA 880 Greater Manchester Residents' Surveys, award notice, awarded 19 February 2025, published 24 March 2025.", "url": "https://www.contractsfinder.service.gov.uk/Notice/1d520c13-d74c-488e-be9b-8d122552bda3"}, {"ref": "Cratus Group (2025) Lancashire Local Government Reorganisation (LGR) Community Survey Report, October.", "url": "https://new.fylde.gov.uk/wp-content/uploads/2025/10/Lancashire-LGR-Resident-Survey-Report.pdf"}, {"ref": "Delib (2024) 2024 Pricing Guide: Citizen Space, G-Cloud 14 pricing document, 7 May.", "url": "https://assets.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-14/documents/92654/475169740603643-pricing-document-2024-05-07-1131.pdf"}, {"ref": "GOV.UK Notify (2026) Letter pricing, last updated 1 July 2026.", "url": "https://www.notifications.service.gov.uk/pricing/letters"}, {"ref": "Home Office (2026) Costs of the 2021 Police and Crime Commissioner elections, page updated 26 June 2026.", "url": "https://www.gov.uk/government/publications/costs-of-the-2021-police-and-crime-commissioner-elections/costs-of-the-2021-police-and-crime-commissioner-elections"}, {"ref": "Lancashire County Council (2015) Living in Lancashire wave 48, consultation record, fieldwork 20 February to 3 April 2015.", "url": "https://consultation.lancashire.gov.uk/responses/response.asp?ID=267"}, {"ref": "Lancashire County Council (2024) Parish and Town Council Charter 2024.", "url": "https://www.laneshawbridge-pc.gov.uk/_UserFiles/Files/_Other/4438-6._LCC_Parish_Charter.pdf"}, {"ref": "Lancashire County Council (2026b) Planning the council's budget: 2027/28 budget consultation.", "url": "https://www.lancashire.gov.uk/council/finance/planning-the-councils-budget/"}, {"ref": "Lancashire County Council (2026c) Cultural Services Annual Report 2025-2026.", "url": "https://lancashire.gov.uk/media/rnthcz0n/10851-cultural-services-report-25-26.pdf"}, {"ref": "Levelling-up and Regeneration Act 2023, s.28, as substituted from 29 April 2026.", "url": "https://www.legislation.gov.uk/ukpga/2023/55/section/28"}, {"ref": "Local Government Act 2003, s.116.", "url": "https://www.legislation.gov.uk/ukpga/2003/26/section/116"}, {"ref": "Local Government and Public Involvement in Health Act 2007, s.7.", "url": "https://www.legislation.gov.uk/ukpga/2007/28/section/7"}, {"ref": "MHCLG (2026) Council Taxbase 2025 in England, local authority level tables, revised 21 January 2026, Table 1.01, sum of the twelve Lancashire district rows.", "url": "https://assets.publishing.service.gov.uk/media/696f605ff6aa424b452e3359/2025_Local_Authority_Drop_Down.xlsx"}, {"ref": "ONS (2024) Electoral statistics, UK: December 2023, Table 1, workbook electoralstatstables2023v2.xlsx, published 11 April 2024.", "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/elections/electoralregistration/datasets/electoralstatisticsforuk"}, {"ref": "R (Moseley) v London Borough of Haringey [2014] UKSC 56, judgment 29 October 2014.", "url": "https://supremecourt.uk/uploads/uksc_2013_0116_judgment_7fddfefb4f.pdf"}, {"ref": "RBA Research (2003) Budget consultation: summary report, for Lancashire County Council, November to December.", "url": "https://consultation.lancashire.gov.uk/responses/viewdoc.asp?file_id=40"}, {"ref": "Representation of the People (England and Wales) Regulations 2001, SI 2001/341, reg. 107.", "url": "https://www.legislation.gov.uk/uksi/2001/341/regulation/107"}, {"ref": "Tendring District Council (2021) Council Tax Annual Billing: Printing and Postage, procurement exemption report.", "url": "https://tdcdemocracy.tendringdc.gov.uk/documents/s37683/Procurement%20Exemption.pdf"}]};
+(function () {
+  const W = PROTO.words, $ = s => document.querySelector(s);
+  const S = {tab: 0, votes: [], code: "", codeOk: false, answer: null, submitted: false};
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+  const next = (label, tab) => `<div class="nextrow"><button class="btn" type="button" data-tab="${tab}">${label}</button></div>`;
+  const VLAB = {agree: W.open.agree, disagree: W.open.disagree, pass: W.open.pass};
+
+  const screens = [
+    function home() {
+      const h = W.home;
+      return `<section class="stack"><span class="eyebrow">${W.strap}</span><h1>${W.name}</h1><p class="lede">${h.lede}</p>
+        <div class="card notice stack"><h3>${h.about_title}</h3><ul>${h.about.map(x => `<li>${x}</li>`).join("")}</ul>
+          <p class="small">${h.survey} <a href="${esc(PROTO.meta.survey_url)}" rel="noopener" target="_blank">${h.survey_link}</a></p></div>
+        <h2>${h.layers_title}</h2>
+        <div class="grid3">${h.layers.map(l => `<div class="card layer ${l.id} stack"><h3>${l.label}</h3><p>${l.body}</p></div>`).join("")}</div>
+        ${next(h.start, 1)}</section>`;
+    },
+    function open() {
+      const o = W.open, n = S.votes.length, total = o.statements.length;
+      let body;
+      if (n < total) {
+        body = `<div class="card stmt"><span class="eyebrow">Statement ${n + 1} of ${total}</span><q>${o.statements[n]}</q>
+          <div class="votes" role="group" aria-label="Your vote"><button type="button" class="a" data-vote="agree">${o.agree}</button><button type="button" class="d" data-vote="disagree">${o.disagree}</button><button type="button" data-vote="pass">${o.pass}</button></div>
+          <div class="progress" aria-hidden="true"><i style="width:${100 * n / total}%"></i></div></div>
+          <div class="card"><h3>${o.add}</h3><p class="small muted" style="margin-top:6px">${o.add_note}</p></div>`;
+      } else {
+        const c = k => S.votes.filter(v => v === k).length;
+        body = `<div class="card stack"><h3>${o.done_title}</h3>
+          <div class="tally"><div><b class="mono">${c("agree")}</b>${o.agree}</div><div><b class="mono">${c("disagree")}</b>${o.disagree}</div><div><b class="mono">${c("pass")}</b>${o.pass}</div></div>
+          <ul class="mylist">${o.statements.map((s, i) => `<li><span class="tag ${S.votes[i]}">${VLAB[S.votes[i]]}</span><span>${s}</span></li>`).join("")}</ul>
+          <div><button class="btn ghost" type="button" data-reset="votes">Vote again</button></div></div>
+          <div class="card example stack"><h3>${o.map_title}</h3><p>${o.map}</p></div>`;
+      }
+      return `<section class="stack"><span class="eyebrow">${o.eyebrow}</span><h2>${o.title}</h2><p class="lede">${o.lede}</p>${body}${next(o.next, 2)}</section>`;
+    },
+    function verified() {
+      const v = W.verified;
+      const msg = S.code && !S.codeOk ? `<p class="msg bad" role="alert">${v.bad_code}</p>` : S.codeOk ? `<p class="msg ok" role="status">${v.ok_code}</p>` : "";
+      return `<section class="stack"><span class="eyebrow">${v.eyebrow}</span><h2>${v.title}</h2><p class="lede">${v.lede}</p>
+        <div class="card codebox"><label for="code" class="eyebrow">${v.code_label}</label>
+          <input id="code" autocomplete="off" spellcheck="false" inputmode="text" value="${esc(S.code)}" ${S.codeOk ? "disabled" : ""}>
+          <p class="small muted">${v.code_help}</p>
+          <div class="row">${S.codeOk ? "" : `<button class="btn" type="button" data-check="1">${v.check}</button><button class="btn ghost" type="button" data-example="1">${v.use_example}</button>`}</div>${msg}</div>
+        <div class="card stack ${S.codeOk ? "" : "locked"}" ${S.codeOk ? "" : 'aria-disabled="true"'}>
+          <p class="q">${v.question}</p>
+          <div class="stack">${v.options.map(o => `<button class="choice" type="button" data-answer="${o.id}" aria-pressed="${S.answer === o.id}" ${S.submitted ? "disabled" : ""}><b>${o.label}</b>${o.body}</button>`).join("")}</div>
+          <div><h3>${v.before_title}</h3><p class="small" style="margin:6px 0 4px">${v.before_note}</p>
+            ${v.before.map(b => `<details><summary>${b}</summary><p class="small muted">${v.before_body}</p></details>`).join("")}</div>
+          ${S.submitted ? `<p class="msg ok" role="status">${v.thanks}</p>` : `<div><button class="btn" type="button" data-submit="1" ${S.answer ? "" : "disabled"}>${v.submit}</button></div>`}
+        </div>
+        <div class="grid3"><div class="card stack"><h3>${v.turnout_title}</h3><ul>${v.turnout.map(x => `<li>${x}</li>`).join("")}</ul></div>
+          <div class="card stack"><h3>${v.codes_title}</h3><ul>${v.codes.map(x => `<li>${x}</li>`).join("")}</ul></div></div>
+        ${next(v.next, 3)}</section>`;
+    },
+    function results() {
+      const r = W.results, n = S.votes.length;
+      const opt = W.verified.options.find(o => o.id === S.answer);
+      const c = k => S.votes.filter(v => v === k).length;
+      return `<section class="stack"><span class="eyebrow">${r.eyebrow}</span><h2>${r.title}</h2><p class="lede">${r.lede}</p>
+        <div class="grid3">
+          <div class="card col"><h3>${r.verified_title}</h3>${S.submitted ? `<p>${r.verified_yours}</p><span class="big">${opt.label}</span>` : `<p class="muted">${r.verified_none}</p>`}<p class="small muted">${r.verified_note}</p></div>
+          <div class="card col"><h3>${r.panel_title}</h3><p>${r.panel_body}</p>
+            <table><thead><tr><th>Panel</th><th>Margin, county</th><th>Each district</th></tr></thead><tbody>
+            ${PROTO.panel.map(p => `<tr><td class="num">${p.n.toLocaleString("en-GB")}</td><td class="num">±${p.moe_county}</td><td class="num">±${p.moe_district}</td></tr>`).join("")}</tbody></table>
+            <p class="small muted">${r.panel_note}</p></div>
+          <div class="card col"><h3>${r.open_title}</h3>${n ? `<p class="mono">${c("agree")} agree · ${c("disagree")} disagree · ${c("pass")} pass</p>` : `<p class="muted">${r.open_none}</p>`}<p class="small muted">${r.open_note}</p></div>
+        </div>
+        <div class="card"><p>${r.why}</p></div>
+        ${next(r.next, 4)}</section>`;
+    },
+    function changed() {
+      const ch = W.changed;
+      return `<section class="stack"><span class="eyebrow">${ch.eyebrow}</span><h2>${ch.title}</h2><p class="lede">${ch.lede}</p>
+        <div class="card example tablewrap"><table><thead><tr><th>Theme</th><th>${ch.status_label}</th><th>Reason</th></tr></thead><tbody>
+          ${ch.rows.map(x => `<tr><td>${x.theme}</td><td><span class="status ${x.status.split(" ")[0]}">${x.status}</span></td><td>${x.reason}</td></tr>`).join("")}</tbody></table></div>
+        <div class="card stack"><h3>${ch.rules_title}</h3><ul>${ch.rules.map(x => `<li>${x}</li>`).join("")}</ul></div>
+        ${next(ch.next, 5)}</section>`;
+    },
+    function how() {
+      const h = W.how;
+      return `<section class="stack"><h2>${h.title}</h2>
+        <div class="card stack"><h3>${h.law_title}</h3><ul>${h.law.map(x => `<li>${x}</li>`).join("")}</ul></div>
+        <h3>${h.objections_title}</h3>
+        <div class="grid3">${h.objections.map(o => `<div class="card stack"><b>${o.q}</b><p>${o.a}</p></div>`).join("")}</div>
+        <div class="card stack"><h3>${h.offline_title}</h3><p>${h.offline}</p></div>
+        <div class="card stack"><h3>${h.cost_title}</h3><div class="tablewrap"><table><thead><tr><th>Item</th><th>Published cost</th><th>Basis</th></tr></thead><tbody>
+          ${h.cost_rows.map(x => `<tr><td>${x.item}</td><td class="mono">${x.cost}</td><td class="small">${x.src}</td></tr>`).join("")}</tbody></table></div>
+          <p class="small muted">${h.cost_note}</p></div>
+        <div class="nextrow"><button class="btn ghost" type="button" data-tab="0">Back to the start</button></div></section>`;
+    }
+  ];
+
+  function render(focus) {
+    $("#tabs").innerHTML = W.tabs.map((t, i) => `<button type="button" data-tab="${i}" ${i === S.tab ? 'aria-current="page"' : ""}>${t}</button>`).join("");
+    $("#app").innerHTML = screens[S.tab]();
+    if (focus) { window.scrollTo({top: 0}); const h = $("#app h1, #app h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({preventScroll: true}); } }
+  }
+  const refocus = sel => { const el = document.querySelector(sel); if (el) el.focus({preventScroll: true}); };
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b || b.disabled) return;
+    const d = b.dataset;
+    if (d.tab !== undefined) { S.tab = +d.tab; render(true); }
+    else if (d.vote) { S.votes.push(d.vote); render(); refocus(S.votes.length < W.open.statements.length ? '[data-vote="agree"]' : '[data-reset]'); }
+    else if (d.reset) { S.votes = []; render(); refocus('[data-vote="agree"]'); }
+    else if (d.example) { S.code = PROTO.meta.example_code; S.codeOk = true; render(); refocus('[data-answer="yes"]'); }
+    else if (d.check) { S.code = $("#code").value.trim(); S.codeOk = S.code.replace(/\s+/g, "").toUpperCase() === PROTO.meta.example_code.replace(/\s+/g, ""); render(); refocus(S.codeOk ? '[data-answer="yes"]' : "#code"); }
+    else if (d.answer) { S.answer = d.answer; render(); refocus(`[data-answer="${d.answer}"]`); }
+    else if (d.submit) { S.submitted = true; render(); refocus(".msg.ok"); }
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.id === "code") { const b = $("[data-check]"); if (b) b.click(); } });
+
+  $("#banner").textContent = W.banner;
+  $("#brand").innerHTML = W.name.replace(/ (\S+)$/, " <i>$1</i>");
+  $("#foot").innerHTML = `<p class="small">${W.footer.about}</p>
+    <details><summary class="small">${W.footer.arithmetic}</summary><table><tbody>${PROTO.arithmetic.map(a => `<tr><td>${esc(a.figure)}</td><td>${esc(a.how)} (${esc(a.cite)})</td></tr>`).join("")}</tbody></table></details>
+    <details><summary class="small">${W.footer.sources}</summary><ol>${PROTO.sources.map(s => `<li>${esc(s.ref)} Available at: <a href="${esc(s.url)}" rel="noopener" target="_blank">${esc(s.url)}</a> (Accessed ${esc(PROTO.meta.accessed)}).</li>`).join("")}</ol></details>`;
+  render();
+})();
+</script>
