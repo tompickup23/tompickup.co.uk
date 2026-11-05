@@ -10,9 +10,9 @@ const [tax, overspend, seats] = HERO_FIGURES;
    the foot of the page. data-fact, data-figure and .source-line follow the
    estate figure rule, so the design check can see every figure has a source. */
 const LEDGER = [
-  { line: tax, figure: '3.80%', source: 3, ref: 'MHCLG Band D council tax, table 4, 2026/27 edition' },
-  { line: overspend, figure: '£27.9M → £2.99M', source: 1, ref: 'LCC 2025/26 outturn report to Cabinet, p. 1, 2 July 2026' },
-  { line: seats, figure: '51 of 84', source: 4, ref: 'LCC councillors by party, checked 28 September 2026' },
+  { line: tax, figure: tax.value, source: tax.cites[0], ref: 'MHCLG Band D council tax, table 4, 2026/27 edition' },
+  { line: overspend, figure: overspend.value.replace('→', ' → '), source: overspend.cites[0], ref: 'LCC 2025/26 outturn report to Cabinet, p. 1, 2 July 2026' },
+  { line: seats, figure: seats.value.replace('/', ' of '), source: seats.cites[0], ref: 'LCC councillors by party, checked 28 September 2026' },
 ];
 ---
 
@@ -42,7 +42,7 @@ const LEDGER = [
 
     <figure class="hero-portrait">
       <img
-        src="/images/headshot.jpg"
+        src="/images/headshot.jpg" srcset="/images/headshot-160.webp 160w, /images/headshot-320.webp 320w, /images/headshot-480.webp 480w, /images/headshot-640.webp 640w" sizes="(max-width: 860px) 104px, 320px"
         alt="Tom Pickup, Lancashire County Councillor for Padiham and Burnley West"
         width="320"
         height="360"

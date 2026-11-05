@@ -11,14 +11,10 @@ const ogImage = 'https://tompickup.co.uk/images/share/lcc-budget-game.png';
 const imprintLine = imp.show
   ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
   : '';
-// Inject a home link into the page header and keep the footer imprint link.
+// Keep the footer imprint link; the site header sits outside the game.
 // Link colour uses the game's own rose accent so anchors are not browser blue.
 const body = game
   .replace(/<title>[\s\S]*?<\/title>/, '')
-  .replace(
-    '<header class="top hero">',
-    `<header class="top hero"><p class="site-home"><a href="/">tompickup.co.uk</a></p>`,
-  )
   .replace(
     '<!--IMPRINT-->',
     `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : ''),
@@ -34,6 +30,9 @@ const body = game
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://tompickup.co.uk/lcc-budget-game/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content="https://tompickup.co.uk/lcc-budget-game/" />
@@ -53,15 +52,32 @@ const body = game
       .hero a:hover { color: var(--hero-ink); }
       .site-home {
         margin: 0;
-        padding: 10px 0 0;
+        padding: 0 16px;
+        max-width: 1040px;
+        margin-inline: auto;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
         font: 600 0.82rem/1 var(--f-body);
         letter-spacing: 0.02em;
       }
       .site-home a { text-decoration: none; }
+      .site-home nav { display: flex; }
+      /* Reserve the square populated by the game script before its first paint. */
+      #heroWaffle { width: 100%; max-width: 340px; aspect-ratio: 1; margin-inline: auto; }
+      #heroLegend { min-height: 3.5rem; }
+      #heroCap { min-height: 2.5em; }
       .site-home a:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
+    <header class="site-home">
+      <a class="brand" href="/">tompickup.co.uk</a>
+      <nav aria-label="Site"><a href="/about/">About Tom</a></nav>
+    </header>
     <Fragment set:html={body} />
   </body>
 </html>
