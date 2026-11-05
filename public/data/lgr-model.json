@@ -13,7 +13,8 @@
     "https://assets.publishing.service.gov.uk/media/6a58d21c24d4d0ad06d945c0/Local_government_reorganisation_-_decision_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_council_leaders.pdf",
     "https://assets.publishing.service.gov.uk/media/6a69bd5e0825cc51a6c37c7c/Local_government_reorganisation_-_implementation_letter_to_Lancashire__Blackburn_with_Darwen_and_Blackpool_chief_executives.pdf",
     "https://news.lancashire.gov.uk/news/government-announces-local-government-reorganisation-decision-for-lancashire",
-    "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire"
+    "https://lancashirelgr.co.uk/news/article/1/government-announces-local-government-reorganisation-decision-for-lancashire",
+    "https://www.gov.uk/government/publications/local-government-reorganisation-review-update-letters-to-council-leaders"
    ],
    "verified": "Groupings: the decision letter of 16 July 2026 (p. 2) and the councils' joint announcement of the same day agree. Names: the decision letter (p. 2) gives North Lancashire, South Lancashire, Pennine Lancashire and Fylde Coast as the proposal's names, and the MHCLG implementation letter of 20 July 2026 (p. 2) sets them as the names of the new councils. Checked 4 October 2026.",
    "labelsNote": "Until October 2026 this site used East Lancashire and West Lancashire, the labels in the councils' joint announcement of 16 July 2026, and wrongly called West Lancashire the government's label. The government's letters use Pennine Lancashire and Fylde Coast. legacyLabel keeps the old label so existing links and readers can still match it."
@@ -23,7 +24,22 @@
   "shadowElections": "2027-05",
   "vestingDay": "2028-04-01",
   "monthsDecisionToVesting": 20.5,
-  "subjectTo": "Parliamentary approval"
+  "subjectTo": "Parliamentary approval",
+  "status": "withdrawn",
+  "statusDate": "2026-10-29",
+  "statusNote": "Withdrawn on 29 October 2026. The minister's letter to council leaders in nine areas, including Lancashire, Blackburn with Darwen, and Blackpool, withdraws the decisions announced in July 2026 and says \"all options and proposals in your area will remain under consideration as part of the review\" (page 2). For areas covered by the review, May 2027 elections go ahead to existing councils and the timetable is elections to new councils in May 2028 followed by vesting day on 1 April 2029 (page 3). The fields above (announced, shadowElections, vestingDay, monthsDecisionToVesting) describe the July 2026 decision as made, not a current timetable.",
+  "statusSource": {
+   "publisher": "Ministry of Housing, Communities and Local Government, on GOV.UK",
+   "title": "Local government reorganisation: review update letters to council leaders",
+   "document": "Local government reorganisation: withdrawn letter to 9 areas (PDF, 3 pages)",
+   "date": "2026-10-29",
+   "url": "https://assets.publishing.service.gov.uk/media/6ae36c6ed22fc5fecb3eb7f9/Local_government_reorganisation_-_withdrawn_letter_to_9_areas.pdf",
+   "pages": {
+    "withdrawal and options": 2,
+    "timetable": 3
+   },
+   "checked": "2026-11-04"
+  }
  },
  "county": {
   "$meta": {
