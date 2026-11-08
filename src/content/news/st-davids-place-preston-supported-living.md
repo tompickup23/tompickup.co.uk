@@ -2,6 +2,9 @@
 title: "Fourteen Front Doors in Preston: St Davids Place Opens"
 date: 2026-06-16T12:00:00
 description: "St Davids Place, a 14-apartment supported living scheme in Preston for people with a learning disability and autistic people, has opened. Developed by RWP with Lancashire County Council, with support from Affinity Trust."
+seoTitle: "St Davids Place opens: 14 apartments in Preston"
+seoDescription: "St Davids Place: 14 supported living apartments in Preston for people with a learning disability and autistic people, developed by RWP with the county council."
+ogImage: "/images/share/st-davids-place-preston-supported-living.png"
 image: "/images/county-hall-preston.jpg"
 category: "Lancashire"
 subcategory: "Adult Social Care"

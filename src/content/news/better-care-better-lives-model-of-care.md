@@ -2,6 +2,9 @@
 title: "Better Care, Better Lives: Lancashire's New Model of Care, and What It Does Not Do"
 date: 2026-09-30T12:00:00
 description: "Lancashire County Council's Cabinet is asked on 1 October 2026 to endorse Better Care, Better Lives, the county's future model of adult social care. What it proposes, how it was built, and why it closes nothing."
+seoTitle: "Lancashire's new model of adult social care"
+seoDescription: "Lancashire's Cabinet is asked on 1 October to endorse Better Care, Better Lives, a new model of adult social care. What it proposes and why it closes nothing."
+ogImage: "/images/share/better-care-better-lives-model-of-care.png"
 image: "/images/council-chamber.jpg"
 category: "Lancashire"
 subcategory: "Adult Social Care"

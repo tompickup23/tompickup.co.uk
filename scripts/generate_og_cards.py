@@ -326,7 +326,8 @@ BAR_CARDS = [
 
 # Headline cards. The headline is read from the article's own frontmatter at
 # generation time, so the card always matches the published title; rerun this
-# script after changing a title. Output: public/images/share/<slug>.png
+# script after changing a title. A `title` key overrides it, only where the
+# headline would put a name beside a figure. Output: public/images/share/<slug>.png
 HEADLINE_CARDS = [
     dict(slug="burnley-businesses-register-and-survival", eyebrow="Burnley  ·  Economy"),
     dict(slug="burnley-economy-not-unemployment", eyebrow="Burnley  ·  Economy"),
@@ -341,6 +342,18 @@ HEADLINE_CARDS = [
     dict(slug="lgr-working-paper-v3-1-data-release", eyebrow="Lancashire  ·  Data release"),
     # Lead photo is of Tom and the headline carries figures, so headline only.
     dict(slug="swimathon-2025-triple-5km", eyebrow="Burnley  ·  Community and charity"),
+    # The eight adult social care pieces (site PR 67), cards added 8 Nov 2026.
+    dict(slug="better-care-better-lives-model-of-care", eyebrow="Lancashire  ·  Adult social care"),
+    dict(slug="castleford-care-home-animal-safari", eyebrow="Lancashire  ·  Adult social care"),
+    dict(slug="lancashire-listens-big-conversation-on-care", eyebrow="Lancashire  ·  Adult social care"),
+    # The headline pairs a named person with a count, so the card drops the name:
+    # a named individual and a figure never share an asset.
+    dict(slug="peter-franklin-heart-attack-half-marathon", eyebrow="Lancashire  ·  Adult social care",
+         title="From Two Heart Attacks to a Half Marathon"),
+    dict(slug="robotic-cats-leyland-day-centre", eyebrow="Lancashire  ·  Adult social care"),
+    dict(slug="shared-lives-burnley-carers", eyebrow="Burnley  ·  Adult social care"),
+    dict(slug="st-davids-place-preston-supported-living", eyebrow="Lancashire  ·  Adult social care"),
+    dict(slug="st-martins-court-lancaster-extra-care", eyebrow="Lancashire  ·  Adult social care"),
 ]
 
 # Existing landscape charts that are not 1200x630, fitted whole into a card.
@@ -387,7 +400,7 @@ if __name__ == "__main__":
         print("wrote", os.path.relpath(p, ROOT))
     for c in HEADLINE_CARDS:
         p = os.path.join(outdir, c["slug"] + ".png")
-        headline_card(article_title(c["slug"]), c["eyebrow"], p)
+        headline_card(c.get("title") or article_title(c["slug"]), c["eyebrow"], p)
         print("wrote", os.path.relpath(p, ROOT))
     for c in FIT_CARDS:
         p = os.path.join(outdir, c["out"])

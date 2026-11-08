@@ -9,7 +9,7 @@
     "dev:doge": "bash scripts/parked-dev.sh doge",
     "prebuild": "node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs",
     "build": "astro build",
-    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs",
+    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs && node scripts/guard-metadata.mjs",
     "preview": "astro preview"
   },
   "dependencies": {

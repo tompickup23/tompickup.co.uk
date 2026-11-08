@@ -14,6 +14,13 @@ if (groupedProjects.length !== ALL_PROJECTS.length || new Set(groupedProjects).s
   throw new Error('Each portfolio project must appear in exactly one category.');
 }
 const postMap = new Map(posts.map(post => [post.id, post]));
+/* Thumbnail alt: the first sentence of the article's own imageAlt, so the image is
+   described briefly; the headline beside it is already the link text. */
+const thumbAlt = (alt?: string) => {
+  if (!alt) return '';
+  const first = alt.split(/(?<=\.)\s/)[0].trim();
+  return first.endsWith('.') ? first : `${first}.`;
+};
 /* A project leads as a card when it links to writing or a section on this site;
    the rest are listed as rows beneath, so the page weights each project by how
    much there is to follow up here. */
@@ -91,8 +98,8 @@ const schema = {
               return <article class="local-story">
                 <a href={`/news/${post.id}/`}>
                   {articleImage(post.data.image)
-                    ? <Image src={articleImage(post.data.image)!} alt="" width={164} densities={[1]} format="webp" quality={70} loading="lazy" decoding="async" />
-                    : post.data.image && <img src={post.data.image} alt="" width="104" height="90" loading="lazy" decoding="async" />}
+                    ? <Image src={articleImage(post.data.image)!} alt={thumbAlt(post.data.imageAlt)} width={164} densities={[1]} format="webp" quality={70} loading="lazy" decoding="async" />
+                    : post.data.image && <img src={post.data.image} alt={thumbAlt(post.data.imageAlt)} width="104" height="90" loading="lazy" decoding="async" />}
                   <div><p class="reading-topic">{newsTopic(post).title}</p><h4>{post.data.title}</h4></div>
                   <span class="story-arrow" aria-hidden="true">→</span>
                 </a>

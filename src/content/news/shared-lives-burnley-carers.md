@@ -2,6 +2,9 @@
 title: "'She Left Her Slippers After a Night of Respite': Shared Lives in Burnley"
 date: 2026-08-05T12:00:00
 description: "Tracy and Roger Beavan of Burnley have been Shared Lives carers for around ten years. A woman who first stayed with them for a night's respite now lives with them. What the scheme is and why it matters."
+seoTitle: "Shared Lives in Burnley: Tracy and Roger Beavan"
+seoDescription: "Tracy and Roger Beavan of Burnley have been Shared Lives carers for around ten years. A woman who first stayed for a night's respite now lives with them."
+ogImage: "/images/share/shared-lives-burnley-carers.png"
 image: "/images/burnley-panorama.jpg"
 imageCredit: "Photo: Childzy / Wikimedia Commons (CC BY 3.0)"
 category: "Burnley"

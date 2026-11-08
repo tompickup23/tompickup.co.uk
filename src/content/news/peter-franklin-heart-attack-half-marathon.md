@@ -2,6 +2,9 @@
 title: "From Two Heart Attacks to a Half Marathon: Peter Franklin's Year"
 date: 2026-08-18T12:00:00
 description: "Peter Franklin, an enablement support worker in Lancashire County Council's adult social care team, had two heart attacks on and after his honeymoon. A year on he is running the Fleetwood half marathon."
+seoTitle: "Peter Franklin: heart attacks to half marathon"
+seoDescription: "A Lancashire adult social care enablement worker had two heart attacks on and after his honeymoon. A year on he is running the Fleetwood half marathon."
+ogImage: "/images/share/peter-franklin-heart-attack-half-marathon.png"
 category: "Lancashire"
 subcategory: "Adult Social Care"
 tags: ["lancashire", "adult social care", "enablement", "fleetwood", "staff"]

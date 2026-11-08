@@ -20,13 +20,13 @@ const savings = SAVINGS_COMPARISON;
 const allPosts = (await getCollection('news', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-/* The one investigation the home page leads with. Change the slug to feature
-   another; the build fails if it is not a published article. */
-const FEATURED_SLUG = 'scout-moor-ii-round-two';
-const featured = allPosts.find((p) => p.id === FEATURED_SLUG);
-if (!featured) throw new Error(`Featured article is not published: ${FEATURED_SLUG}`);
+/* The one investigation the home page leads with: the newest published article
+   whose frontmatter sets `featured: true`, falling back to the newest article.
+   A story's own PR sets `featured: true` to take the slot; no slug to edit here. */
+const featured = allPosts.find((p) => p.data.featured) ?? allPosts[0];
+if (!featured) throw new Error('No published article to feature on the home page');
 const featuredImage = articleImage(featured.data.image);
-const latest = allPosts.filter((p) => p.id !== FEATURED_SLUG).slice(0, 3);
+const latest = allPosts.filter((p) => p.id !== featured.id).slice(0, 3);
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // The four new unitaries (from the LGR model) for the homepage showcase. Names from the
@@ -175,12 +175,14 @@ const LGR_UNITS = [
           <div class="lgr-show-head">
             <div>
               <span class="lgr-teaser-eyebrow"><span class="dot"></span> Local Government Reorganisation</span>
-              <h2 class="lgr-teaser-title">Lancashire is being redrawn</h2>
+              <h2 class="lgr-teaser-title">Lancashire's four-council plan, withdrawn</h2>
               <p class="lgr-teaser-copy">
                 On 16 July 2026 the government decided Lancashire's 15 councils would be replaced by four new unitary
-                authorities from April 2028. The programme was paused for review on 7 September 2026. On 29 October the government withdrew the decision, and all options remain under consideration. I've built an interactive model of what each one would be: who it
-                merges, the budget it would run and how its places compare. Every figure sourced; populations
-                are from the 2021 Census.
+                authorities from April 2028. The programme was paused for review on 7 September 2026. On 29 October
+                the government withdrew the decision, and all options remain under consideration. The four cards
+                below record what was decided. My interactive model shows each one: who it would have merged, the
+                budget it would have run and how its places compared. Every figure is sourced; populations are
+                from the 2021 Census.
               </p>
             </div>
             <div class="lgr-teaser-stats">
@@ -194,13 +196,13 @@ const LGR_UNITS = [
               <a href="/lgr/#model" class="lgr-show-card" style={`--accent:${u.accent}`}>
                 <span class="lgr-show-name">{u.name}</span>
                 <span class="lgr-show-pop">{u.pop}</span>
-                <span class="lgr-show-meta">{u.councils} councils merged{u.home ? ' · incl. Burnley' : ''}</span>
+                <span class="lgr-show-meta">{u.councils} councils in the plan{u.home ? ' · incl. Burnley' : ''}</span>
               </a>
             ))}
           </div>
 
           <a href="/lgr/" class="lgr-show-cta">
-            Explore the interactive model
+            See the model of the withdrawn plan
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
         </div>
