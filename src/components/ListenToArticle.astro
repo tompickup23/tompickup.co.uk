@@ -1,0 +1,72 @@
+---
+/* Audio version of an article. Native <audio> controls on purpose: they are
+   keyboard and screen-reader accessible in every browser, offer playback
+   speed, and work without JavaScript. preload="none" keeps the page weight
+   unchanged for readers who never press play; it never autoplays. */
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
+import { spokenDuration } from '../lib/audio';
+
+interface Props {
+  audio: { src: string; duration: number; voice: string; generated: Date };
+}
+const { audio } = Astro.props;
+
+// Fails the build if the file is missing, rather than shipping a dead player.
+const bytes = statSync(join(process.cwd(), 'public', audio.src)).size;
+const size = `${(bytes / 1e6).toFixed(1)} MB`;
+const made = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(audio.generated);
+---
+
+<section class="article-listen" aria-labelledby="listen-label">
+  <p class="listen-label" id="listen-label">
+    Listen to this article <span class="listen-duration">{spokenDuration(audio.duration)}</span>
+  </p>
+  <audio controls preload="none" src={audio.src} aria-labelledby="listen-label">
+    <a href={audio.src}>Download the audio version (MP3, {size})</a>
+  </audio>
+  <p class="listen-note">
+    Read by a synthetic British voice, made {made}. The written article is the
+    authoritative version; links and the list of sources are not read out.
+    <a href={audio.src} download>Download MP3 ({size})</a>
+  </p>
+</section>
+
+<style>
+  .article-listen {
+    max-width: 720px;
+    margin: 0 0 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--teal);
+  }
+  .listen-label {
+    margin: 0 0 0.75rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .listen-duration {
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 0.35rem;
+  }
+  audio {
+    display: block;
+    width: 100%;
+    min-height: var(--touch);
+  }
+  .listen-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .listen-note a {
+    color: var(--text-teal);
+    white-space: nowrap;
+  }
+  audio:focus-visible,
+  .listen-note a:focus-visible {
+    outline: 3px solid var(--text-teal);
+    outline-offset: 2px;
+  }
+</style>
