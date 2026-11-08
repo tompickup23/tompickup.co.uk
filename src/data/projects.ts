@@ -54,11 +54,19 @@ export const ON_THIS_SITE: Project[] = [
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
-    desc: 'An interactive model of Lancashire’s council reorganisation, exploring the budgets, needs and obligations of the four councils the government chose in July 2026, a plan paused in September.',
+    desc: 'An interactive model of Lancashire’s council reorganisation, exploring the budgets, needs and obligations of the four councils the government chose in July 2026, a plan since withdrawn.',
     figure: '15→4',
     unit: 'councils in the July proposal',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
     inFooter: true,
+  },  {
+    // Linked from here and the homepage, but noindex and out of the sitemap
+    // (plan of 8 November 2026, decision 3 (b)): Cabinet has not agreed the product.
+    href: '/lancashire-voice/',
+    accent: '#5e7fa8',
+    title: 'Lancashire Voice',
+    desc: 'A clickable prototype of a resident engagement platform for Lancashire. Not a council service; nothing you enter is collected.',
+    inFooter: false,
   },
 ];
 
@@ -174,7 +182,7 @@ export const PROJECT_GROUPS = [
   { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
   { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
   { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'Reform UK Burnley') },
-  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils") },
+  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Voice') },
 ];
 
 /** Related reading is labelled as such, rather than presented as a launch article. */
@@ -195,6 +203,7 @@ export const PROJECT_DETAILS: Record<string, {
   'UK Food Hygiene': { mark: 'FH', subject: 'Food hygiene ratings' },
   'UK School Holiday Dates': { mark: 'SH', subject: 'School calendars' },
   "Lancashire's new councils": { mark: 'LC', subject: 'Interactive council model', article: { slug: 'lancashire-four-unitaries-model', label: 'Read the introduction to the model' }, section: { href: '/lgr/contracts/', label: 'Explore the contracts register' } },
+  'Lancashire Voice': { mark: 'LV', subject: 'Prototype, not a council service' },
   'Reform UK Burnley': { mark: 'RB', subject: 'Political website' },
 };
 
