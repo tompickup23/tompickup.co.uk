@@ -2,6 +2,9 @@
 title: "Misty, Phyllis and Ginge: Why a Day Centre Has Robotic Cats"
 date: 2026-07-21T12:00:00
 description: "Three robotic cats at Lancashire County Council's Leyland day centre are helping people with dementia relax and talk. What staff and service users say, and why a councillor who likes technology is still cautious."
+seoTitle: "Why a Leyland day centre has robotic cats"
+seoDescription: "Three robotic cats at Lancashire County Council's Leyland day centre are helping people with dementia relax and talk. What staff and service users say."
+ogImage: "/images/share/robotic-cats-leyland-day-centre.png"
 category: "Lancashire"
 subcategory: "Adult Social Care"
 tags: ["lancashire", "adult social care", "dementia", "technology", "day centres"]

@@ -2,6 +2,9 @@
 title: "A Skunk, a Bearded Dragon and a Gift in Glenda's Name"
 date: 2026-06-30T12:00:00
 description: "Residents of Castleford care home in Clitheroe met a bearded dragon, a skunk and a skinny pig at an animal safari paid for by the family of a former resident, Glenda Pickover. Why these days matter in a council care home."
+seoTitle: "Animal safari at Castleford care home, Clitheroe"
+seoDescription: "Residents of Castleford care home in Clitheroe met a bearded dragon, a skunk and a skinny pig at a safari paid for by the family of a former resident."
+ogImage: "/images/share/castleford-care-home-animal-safari.png"
 category: "Lancashire"
 subcategory: "Adult Social Care"
 tags: ["lancashire", "adult social care", "care homes", "clitheroe", "ribble valley"]

@@ -3,11 +3,30 @@
 // The game data is generated in Reports from the LCC budget model. Do not edit it by hand.
 // The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
 import { imprint as imp } from '../../data/imprint';
+import { personRef } from '../../data/person';
 import game from '../../data/lcc-budget-game/game.html?raw';
 
 const title = 'Lancashire Budget Challenge';
+// The browser tab and search result carry the site name, as every Layout page does.
+const pageTitle = `${title} | Tom Pickup`;
 const description = "Where Lancashire County Council's money goes, what has changed since May 2025, and whether you can balance next year's budget.";
 const ogImage = 'https://tompickup.co.uk/images/share/lcc-budget-game.png';
+// The game as a WebApplication node, in the same shape as the AI DOGE page's.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  '@id': 'https://tompickup.co.uk/lcc-budget-game/#app',
+  name: title,
+  url: 'https://tompickup.co.uk/lcc-budget-game/',
+  description,
+  image: ogImage,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web browser',
+  isAccessibleForFree: true,
+  inLanguage: 'en-GB',
+  author: personRef,
+  creator: personRef,
+};
 const imprintLine = imp.show
   ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
   : '';
@@ -25,7 +44,7 @@ const body = game
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://tompickup.co.uk/lcc-budget-game/" />
@@ -44,6 +63,7 @@ const body = game
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     <style is:global>
       a { color: var(--rose); }
       a:hover { color: var(--ink); }

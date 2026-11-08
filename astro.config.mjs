@@ -35,6 +35,8 @@ export default defineConfig({
   site: 'https://tompickup.co.uk',
   integrations: [
     sitemap({
+      // Draft prototype: unlinked and noindex, so kept out of the sitemap (and so out of IndexNow pings).
+      filter: (page) => !page.includes('/lancashire-voice/'),
       serialize(item) {
         const lastmod = LASTMOD.get(item.url);
         if (lastmod) item.lastmod = lastmod;

@@ -2,6 +2,9 @@
 title: "92 Front Doors in Lancaster: St Martin's Court Opens This Summer"
 date: 2026-06-18T12:00:00
 description: "St Martin's Court in Lancaster will welcome its first tenants this summer: 92 affordable apartments for people aged 55 and over, with care available 24 hours a day. What Extra Care is and who built it."
+seoTitle: "St Martin's Court: Extra Care in Lancaster"
+seoDescription: "St Martin's Court in Lancaster: 92 affordable apartments for people aged 55 and over, with care available 24 hours a day. What Extra Care is and who built it."
+ogImage: "/images/share/st-martins-court-lancaster-extra-care.png"
 category: "Lancashire"
 subcategory: "Adult Social Care"
 tags: ["lancashire", "adult social care", "housing", "extra care", "lancaster"]
