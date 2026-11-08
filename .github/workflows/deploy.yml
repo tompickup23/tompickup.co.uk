@@ -50,6 +50,10 @@ jobs:
 
       # `npm run build` carries the prebuild and postbuild guards, so a parked
       # section reaching the routed tree or the output fails here, not in public.
+      # The last postbuild guard, scripts/guard-metadata.mjs, prints its counts
+      # (titles over 60, descriptions over 160, invitations with a past date) in
+      # this step's log, as warning annotations and in the run summary. It warns
+      # only; set FAIL_ON_METADATA: '1' under env here to make it fail the build.
       - name: Build Astro
         run: npm run build
 
