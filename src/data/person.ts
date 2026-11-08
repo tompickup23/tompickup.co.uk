@@ -73,6 +73,7 @@ export const person = {
   ],
   sameAs: [
     'https://council.lancashire.gov.uk/mgUserInfo.aspx?UID=33781',
+    'https://burnley.moderngov.co.uk/mgParishCouncilDetails.aspx?ID=181',
     'https://github.com/tompickup23',
     'https://x.com/tompickup',
     'https://www.facebook.com/tompickupburnley',

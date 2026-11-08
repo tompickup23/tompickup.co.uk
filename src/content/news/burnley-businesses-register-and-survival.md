@@ -1,7 +1,7 @@
 ---
 title: "Burnley's businesses: a steady base, and new firms that struggle to last"
 ogImage: "/images/share/burnley-businesses-register-and-survival.png"
-date: 2026-10-25
+date: 2026-10-25T23:09:56Z
 updated: 2026-10-26
 description: "The official figures on Burnley's businesses: how long new firms last, how many companies are active, the largest employers registered here, and the town's shops and premises."
 seoTitle: "Burnley's businesses: survival, size and premises"
