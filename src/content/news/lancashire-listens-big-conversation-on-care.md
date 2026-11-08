@@ -2,6 +2,9 @@
 title: "Lancashire Listens: The Big Conversation on Care Comes to Preston"
 date: 2026-10-29T12:00:00
 description: "Lancashire Listens: The Big Conversation on Care brought people who use care, unpaid carers and care workers to Crossgate Church in Preston on 28 October. What they said will shape Lancashire's response to the Casey commission."
+seoTitle: "Lancashire Listens: the Big Conversation on Care"
+seoDescription: "People who use care, unpaid carers and care workers met in Preston on 28 October. What they said will shape Lancashire's response to the Casey commission."
+ogImage: "/images/share/lancashire-listens-big-conversation-on-care.png"
 category: "Lancashire"
 subcategory: "Adult Social Care"
 tags: ["lancashire", "adult social care", "carers", "casey commission", "preston"]
