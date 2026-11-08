@@ -33,6 +33,10 @@ const LASTMOD = newsLastmod();
 
 export default defineConfig({
   site: 'https://tompickup.co.uk',
+  // Astro 7 defaults to 'jsx', which drops whitespace between inline elements
+  // and text that sit on separate source lines, joining words on most pages.
+  // true keeps the Astro 5 behaviour.
+  compressHTML: true,
   integrations: [
     sitemap({
       // Draft prototype: unlinked and noindex, so kept out of the sitemap (and so out of IndexNow pings).
