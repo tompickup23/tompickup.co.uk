@@ -86,7 +86,7 @@ and `scripts/guard-unreferenced.mjs` fails the build if an unlinked file under
 - All data processing in ETL pipeline, not in request handlers
 
 ## Related Projects
-Twelve projects listed in `src/data/projects.ts` (and twelve public tompickup23 GitHub
+Thirteen projects listed in `src/data/projects.ts` since 8 November 2026, the Lancashire Voice prototype added (and twelve public tompickup23 GitHub
 repositories as of 3 November 2026). This site is the portfolio hub.
 
 ## Cross-repo lessons (5 Jul 2026)

@@ -39,7 +39,7 @@ export default defineConfig({
   compressHTML: true,
   integrations: [
     sitemap({
-      // Draft prototype: unlinked and noindex, so kept out of the sitemap (and so out of IndexNow pings).
+      // Draft prototype: noindex (linked from the homepage and /projects/, decision 3 (b) of 8 Nov 2026), so kept out of the sitemap (and so out of IndexNow pings).
       filter: (page) => !page.includes('/lancashire-voice/'),
       serialize(item) {
         const lastmod = LASTMOD.get(item.url);
