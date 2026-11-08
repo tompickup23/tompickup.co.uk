@@ -1,7 +1,9 @@
 ---
 /* A numbered source marker. Pairs with <Sources />, which renders the list the
    number points to at the foot of the page. Kept deliberately small: the source
-   is there for anyone who wants to check it, not in the way of the sentence. */
+   is there for anyone who wants to check it, not in the way of the sentence.
+   The trailing space is explicit: under compressHTML it would otherwise be
+   dropped, running adjacent markers together (2 and 3 read as 23). */
 interface Props {
   n: number;
 }
@@ -9,7 +11,7 @@ interface Props {
 const { n } = Astro.props;
 ---
 
-<sup class="cite"><a href={`#source-${n}`} aria-label={`Source ${n}`}>{n}</a></sup>
+<sup class="cite"><a href={`#source-${n}`} aria-label={`Source ${n}`}>{n}</a></sup>{' '}
 
 <style>
   .cite {
