@@ -1,9 +1,10 @@
 ---
 title: "Better Care, Better Lives: Lancashire's New Model of Care, and What It Does Not Do"
 date: 2026-09-30T12:00:00
+updated: 2026-11-08
 description: "Lancashire County Council's Cabinet is asked on 1 October 2026 to endorse Better Care, Better Lives, the county's future model of adult social care. What it proposes, how it was built, and why it closes nothing."
 seoTitle: "Lancashire's new model of adult social care"
-seoDescription: "Lancashire's Cabinet is asked on 1 October to endorse Better Care, Better Lives, a new model of adult social care. What it proposes and why it closes nothing."
+seoDescription: "Lancashire's Cabinet agreed Better Care, Better Lives on 1 October as the strategic model for adult social care. What it proposes and why it closes nothing."
 ogImage: "/images/share/better-care-better-lives-model-of-care.png"
 image: "/images/council-chamber.jpg"
 category: "Lancashire"
@@ -45,8 +46,16 @@ I want to be blunt about this because the word "model" makes people nervous, and
 
 A model of care is a direction of travel. The test is whether, in a year, someone in Padiham who needs help finds it faster and has to tell their story fewer times than they do today. That is the measure I would like to be judged on.
 
+## What Cabinet decided
+
+*Update, 8 November 2026.* Cabinet met on 1 October and resolved that Lancashire's Model of Care be agreed as the strategic model for adult social care, and that detailed design and implementation planning be progressed through co-production with residents, carers, communities, providers and partners. The minutes record that the report did not seek approval for any specific service or building changes or individual investment decisions.
+
+So the direction is now agreed. What I wrote above still holds: any change to a service or a building would come separately, with its own business case, assessments, consultation and decision.
+
 ## Where this comes from
 
-Every fact above comes from Lancashire County Council's release of 30 September 2026, [Care model puts people and communities at its heart](https://news.lancashire.gov.uk/news/care-model-puts-people-and-communities-at-its-heart), including its notes to editors. That is the source for the Cabinet date, the May 2026 decision and its promise of no immediate changes, the co-production process and what people said in it, the proposed changes and options, the partner work on dementia, recovery and returning home, and the statement that the report proposes no closures and that any future proposal would need separate business cases, assessments, consultation and decisions. My own quotation is reproduced from that release word for word.
+The Cabinet decision comes from the published minutes of the Cabinet meeting of 1 October 2026, item 6, Models of Care: Better Care, Better Lives, on the [council's committee site](https://council.lancashire.gov.uk/ieListDocuments.aspx?CId=122&MId=16308).
+
+Every other fact above comes from Lancashire County Council's release of 30 September 2026, [Care model puts people and communities at its heart](https://news.lancashire.gov.uk/news/care-model-puts-people-and-communities-at-its-heart), including its notes to editors. That is the source for the Cabinet date, the May 2026 decision and its promise of no immediate changes, the co-production process and what people said in it, the proposed changes and options, the partner work on dementia, recovery and returning home, and the statement that the report proposes no closures and that any future proposal would need separate business cases, assessments, consultation and decisions. My own quotation is reproduced from that release word for word.
 
 The background on the council's work is at [Lancashire County Council: Models of Care](https://www.lancashire.gov.uk/council/strategies-policies-and-plans/adult-social-care/models-of-care/). The test I set at the end is mine.
