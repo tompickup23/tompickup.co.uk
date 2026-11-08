@@ -32,8 +32,16 @@ const imprintLine = imp.show
   : '';
 // Keep the footer imprint link; the site header sits outside the game.
 // Link colour uses the game's own rose accent so anchors are not browser blue.
+// The development banner becomes a dated edition line (plan of 8 November 2026, decision 7).
+// The edition date is the game data's built_at; the report names and dates are as the game cites them.
+// The runid span stays, hidden, because the game's script writes to it on load.
+const editionLine =
+  'Edition of 25 October 2026. Figures come from two council reports: Budget 2026/27 (Full Council, 26 February 2026) and the Quarter 1 2026/27 financial monitoring report (Cabinet, 3 September 2026). The next edition follows the Quarter 2 report.';
+const banner = '<div class="test">Working version. Figures update as the budget model is built. <span id="runid"></span></div>';
+if (!game.includes(banner)) throw new Error('lcc-budget-game: development banner not found; update the edition line replace()');
 const body = game
   .replace(/<title>[\s\S]*?<\/title>/, '')
+  .replace(banner, `<div class="test edition">${editionLine} <span id="runid" hidden></span></div>`)
   .replace(
     '<!--IMPRINT-->',
     `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : ''),
@@ -65,6 +73,8 @@ const body = game
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     <style is:global>
+      /* The edition line is information, not a warning: no amber band. */
+      .test.edition { background: transparent; color: var(--ink2); border-bottom: 1px solid var(--grid); }
       a { color: var(--rose); }
       a:hover { color: var(--ink); }
       /* Links on the dark hero use its brighter rose colour. */
