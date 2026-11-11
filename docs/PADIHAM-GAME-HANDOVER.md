@@ -311,3 +311,31 @@ Ideas I148 and I149 in the Reports register, as a prototype. In `game.js` under 
   **not played through on foot, and the copy step could not be exercised in the pane.**
 - Next, if it earns its place: the route drawn on the map as the share card (I150) and a beat my round link
   (I151).
+
+## Play, pace and phone controls, 11 November 2026 (evening)
+
+Branch `feat/padiham-play`. Asked for: more to do in play, a faster run, and a game that works fully on a phone.
+
+- **Pace.** Three paces in `game.js` (`PACE`: walk 4.6, run 9.5, sprint 14 metres a second). R, the pace button or
+  the controller's A button steps through them; Shift goes one faster while held. Indoors the top pace is a run.
+  Movement is taken in steps of 0.3 m so a sprint cannot pass through a wall. The bonus time (`parFor`) was
+  tightened to suit. The view opens out a little at a sprint unless less movement is set.
+- **Jump.** Space, JUMP on a phone, B on a controller. It changes nothing about where the player can go.
+- **Say hello.** H, HI on a phone, X on a controller. The nearest passer-by within 7 m stops and waves back
+  (`Pedestrians.greet` in `life.js`).
+- **Litter.** 34 pieces on the pavements (22 on a phone), shown as pale green dots on the map. Walking over one
+  picks it up, and it turns up elsewhere after 45 to 90 seconds.
+- **Good turns.** Every third random delivery goes to "a neighbour on" a named street and pays nothing but
+  thanks. Only the street is named, never a house, which keeps the no find your house decision.
+- **Stamps.** Thirteen in the menu (twelve in the plain version, which has no pubs), worked out from the saved
+  counts. The menu also says how far the player has gone on foot. Save key unchanged (`padiham-errands-2`), with
+  new fields added; older saves load as before and their stamps are marked quietly.
+- **Phone.** A thumb put down in the lower half on the stick's side becomes the thumbstick, and the view can be
+  turned with the other thumb at the same time. Full screen falls back to filling the window where the browser
+  cannot do it (iPhone). A layout for a phone held sideways (`max-height: 520px`). Short buzzes on Android for
+  pick-ups, unless less movement is set.
+
+Checked in the dev server at desktop, 375 by 812 and 812 by 375: no panels or controls overlap at standard text,
+in the left-handed layout, or sideways at the largest text. Known and not fixed: at the largest text size in
+portrait, the job card runs under Where next and the street name (it did before this change). Still untested:
+a real phone, a controller, a screen reader. Frame timing cannot be judged in the preview pane.

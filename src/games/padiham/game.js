@@ -27,13 +27,20 @@ const SCRIPT = [
   { title: 'Match day', steps: [['Padiham Town Hall', 'Pick up the raffle prizes from the Town Hall'], ['Padiham Football Club', 'Get them to the Arbories before kick off']] },
 ];
 const CARGO = ['a parcel', 'a toolbox', 'a bunch of flowers', 'a box of teacakes', 'a birthday cake', 'a set of keys', 'a bag of shopping'];
+// Good turns: something small carried to a neighbour's street. They pay nothing but thanks.
+const KINDNESS = ['a hot dinner', 'a bag of shopping', 'a get well card', 'a bunch of flowers', 'the morning paper', 'a flask of soup', 'a borrowed ladder'];
+const THANKS = ['That made their day', 'The kettle is on if you want a brew', 'They were made up with it', 'You are a star, they said', 'They waved you off from the step'];
+const HELLOS = ['Ey up!', 'Morning!', 'Hiya', 'Alright?', 'Nice day for it', 'How do', 'Now then'];
 
 // ---------- State ----------
 const SAVE_KEY = 'padiham-errands-2';
 const save = (() => { try { return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}'); } catch { return {}; } })();
-const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.jobIndex || 0, pigeons: save.pigeons || 0, plaques: new Set(Array.isArray(save.plaques) ? save.plaques : []), job: null, playing: false, inside: null };
+const list = (v) => new Set(Array.isArray(v) ? v : []);
+const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.jobIndex || 0, pigeons: save.pigeons || 0, plaques: list(save.plaques),
+  litter: save.litter || 0, hellos: save.hellos || 0, turns: save.turns || 0, metres: save.metres || 0, dailies: save.dailies || 0, pubs: list(save.pubs), stamps: list(save.stamps),
+  job: null, playing: false, inside: null };
 function persist() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques] })); } catch { /* private mode */ }
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques], litter: state.litter, hellos: state.hellos, turns: state.turns, metres: Math.round(state.metres), dailies: state.dailies, pubs: [...state.pubs], stamps: [...state.stamps] })); } catch { /* private mode */ }
 }
 // Link options for supporters and public bodies, read once from the address. Nothing is stored or sent.
 // ?calm=1 gives a quieter town: fewer passers-by and softer sound. ?edition=clean leaves out the selfie
@@ -115,11 +122,12 @@ const clouds = new THREE.Group();
   }
   scene.add(clouds);
 }
+let baseFov = 62;
 function resize() {
   const w = stage.clientWidth || 800, h = stage.clientHeight || 600;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
-  camera.fov = w < h ? 74 : 62;
+  baseFov = camera.fov = w < h ? 74 : 62;
   camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(stage);
@@ -132,9 +140,13 @@ addEventListener('resize', clearHeader);
 // Draw nothing while the game is scrolled out of view.
 let onScreen = true;
 new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(stage);
+// Full screen. An iPhone cannot put part of a page full screen, so there the game fills the window instead.
+function setFill(on) { stage.classList.toggle('fill', on); document.documentElement.classList.toggle('sop-filled', on); clearHeader(); resize(); }
 $('full').addEventListener('click', () => {
-  if (document.fullscreenElement) document.exitFullscreen();
-  else if (stage.requestFullscreen) stage.requestFullscreen();
+  if (stage.classList.contains('fill')) setFill(false);
+  else if (document.fullscreenElement) document.exitFullscreen();
+  else if (stage.requestFullscreen) stage.requestFullscreen().catch(() => setFill(true));
+  else setFill(true);
 });
 
 // ---------- World ----------
@@ -215,6 +227,11 @@ function drawMini() {
   mini.setTransform(zoom, 0, 0, zoom, S / 2 - sx * zoom, S / 2 - sz * zoom);
   mini.drawImage(mapBase, 0, 0);
   mini.setTransform(1, 0, 0, 1, 0, 0);
+  mini.fillStyle = '#b8f26a';
+  for (const l of litter) {
+    const lx2 = (l.x - player.x) * MS * zoom, lz2 = (l.z - player.z) * MS * zoom;
+    if (l.mesh.visible && Math.hypot(lx2, lz2) < S / 2) { mini.beginPath(); mini.arc(S / 2 + lx2, S / 2 + lz2, 4, 0, 7); mini.fill(); }
+  }
   const t = target();
   if (t) {
     let dx = (t.dx - player.x) * MS * zoom, dz = (t.dz - player.z) * MS * zoom;
@@ -246,7 +263,7 @@ const look = (() => {
   return d;
 })();
 const lookFigure = () => makeFigure({ jacket: JACKET[look.jacket], trousers: 0x2a2f3a, skin: SKIN[look.skin], hair: HAIR[look.hair], face: true, pack: true, style: look.style, cap: look.style === 'cap' ? 0x2b3a67 : undefined });
-const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, fig: lookFigure() };
+const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, y: 0, vy: 0, wave: 0, fig: lookFigure() };
 scene.add(player.fig.group);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');
 function drawLook() {
@@ -332,7 +349,7 @@ function wallHit(px, pz, qx, qz) {
 
 // ---------- Input ----------
 const keys = new Set();
-const input = { x: 0, y: 0, run: false };
+const input = { x: 0, y: 0, gear: 0 };
 addEventListener('keydown', (e) => {
   keys.add(e.code);
   // Keep the page still while playing, but leave the keys alone once the game is out of view or a control has focus.
@@ -341,6 +358,8 @@ addEventListener('keydown', (e) => {
   if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code.startsWith('Page')) e.preventDefault();
   if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.code === 'KeyR') toggleRun();
+  else if (e.code === 'Space') jump();
+  else if (e.code === 'KeyH') hello();
   else if (e.code === 'KeyG') whereNext();
   else if (e.code === 'Enter') closeToast();
 });
@@ -352,44 +371,98 @@ const cam = { yaw: 0, pitch: 0.3, dist: 7.5, cur: 7.5, lastLook: -10 };
 const clampPitch = (p) => Math.min(state.inside ? 0.3 : 1.15, Math.max(0.06, p));
 const view = $('view');
 let lookId = null, lx = 0, ly = 0;
-view.addEventListener('pointerdown', (e) => { lookId = e.pointerId; lx = e.clientX; ly = e.clientY; view.setPointerCapture(e.pointerId); });
-view.addEventListener('pointermove', (e) => {
-  if (e.pointerId !== lookId) return;
-  cam.yaw -= (e.clientX - lx) * 0.006;
-  cam.pitch = clampPitch(cam.pitch + (e.clientY - ly) * 0.004);
-  lx = e.clientX; ly = e.clientY; cam.lastLook = clock.elapsedTime;
-});
-const endLook = (e) => { if (e.pointerId === lookId) lookId = null; };
-view.addEventListener('pointerup', endLook);
-view.addEventListener('pointercancel', endLook);
-
 const stick = $('stick'), knob = $('knob');
-let stickId = null;
+let stickId = null, stickAt = null;
 const stickVec = { x: 0, y: 0 };
 function stickMove(e) {
-  const r = stick.getBoundingClientRect();
-  let dx = (e.clientX - (r.left + r.width / 2)) / 48, dy = (e.clientY - (r.top + r.height / 2)) / 48;
+  let dx = (e.clientX - stickAt[0]) / 48, dy = (e.clientY - stickAt[1]) / 48;
   const l = Math.hypot(dx, dy);
   if (l > 1) { dx /= l; dy /= l; }
   stickVec.x = dx; stickVec.y = -dy;
   knob.style.transform = `translate(${dx * 38}px, ${dy * 38}px)`;
 }
-stick.addEventListener('pointerdown', (e) => { stickId = e.pointerId; stick.setPointerCapture(e.pointerId); stickMove(e); });
+function endStick(e) {
+  if (e.pointerId !== stickId) return;
+  stickId = null; stickVec.x = stickVec.y = 0; knob.style.transform = '';
+  stick.style.left = stick.style.top = stick.style.right = stick.style.bottom = '';
+}
+// On a touch screen a thumb put down anywhere in the lower half on the stick's side becomes the thumbstick,
+// so the thumb never has to find a fixed spot. Everywhere else, a drag turns the view.
+function stickZone(e) {
+  if (!isTouch || e.pointerType === 'mouse' || stickId !== null || !state.playing) return false;
+  const r = stage.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  return fy > 0.42 && (S.lefty ? fx > 0.55 : fx < 0.45);
+}
+view.addEventListener('pointerdown', (e) => {
+  try { view.setPointerCapture(e.pointerId); } catch { /* the pointer has already gone */ }
+  if (stickZone(e)) {
+    const r = stage.getBoundingClientRect();
+    stickId = e.pointerId; stickAt = [e.clientX, e.clientY];
+    const half = (stick.offsetWidth || 130) / 2;
+    stick.style.left = `${e.clientX - r.left - half}px`; stick.style.top = `${e.clientY - r.top - half}px`; stick.style.right = stick.style.bottom = 'auto';
+    return;
+  }
+  lookId = e.pointerId; lx = e.clientX; ly = e.clientY;
+});
+view.addEventListener('pointermove', (e) => {
+  if (e.pointerId === stickId) { stickMove(e); return; }
+  if (e.pointerId !== lookId) return;
+  cam.yaw -= (e.clientX - lx) * 0.006;
+  cam.pitch = clampPitch(cam.pitch + (e.clientY - ly) * 0.004);
+  lx = e.clientX; ly = e.clientY; cam.lastLook = clock.elapsedTime;
+});
+const endLook = (e) => { endStick(e); if (e.pointerId === lookId) lookId = null; };
+view.addEventListener('pointerup', endLook);
+view.addEventListener('pointercancel', endLook);
+view.addEventListener('contextmenu', (e) => e.preventDefault());
+
+stick.addEventListener('pointerdown', (e) => {
+  const r = stick.getBoundingClientRect();
+  stickId = e.pointerId; stickAt = [r.left + r.width / 2, r.top + r.height / 2];
+  try { stick.setPointerCapture(e.pointerId); } catch { /* gone */ }
+  stickMove(e);
+});
 stick.addEventListener('pointermove', (e) => { if (e.pointerId === stickId) stickMove(e); });
-const endStick = (e) => { if (e.pointerId === stickId) { stickId = null; stickVec.x = stickVec.y = 0; knob.style.transform = ''; } };
 stick.addEventListener('pointerup', endStick);
 stick.addEventListener('pointercancel', endStick);
-let runToggle = false;
+
+// Three paces: walk, run and sprint. R, the pace button or the controller's A button steps through them,
+// and holding Shift goes one pace faster for as long as it is held.
+const PACE = [4.6, 9.5, 14], PACE_NAME = ['Walk', 'Run', 'Sprint'];
+let gear = 0;
 function toggleRun() {
-  runToggle = !runToggle;
-  $('run').classList.toggle('on', runToggle); $('run').setAttribute('aria-pressed', String(runToggle));
-  say(runToggle ? 'Running' : 'Walking');
+  gear = (gear + 1) % 3;
+  const b = $('run');
+  b.textContent = PACE_NAME[gear].toUpperCase(); b.classList.toggle('on', gear > 0); b.classList.toggle('fast', gear === 2);
+  b.setAttribute('aria-label', `Pace: ${PACE_NAME[gear].toLowerCase()}. Press to change`);
+  say(['Walking', 'Running', 'Sprinting'][gear]);
 }
 $('run').addEventListener('click', toggleRun);
+const buzz = (ms) => { if (isTouch && !S.reduce && navigator.vibrate) { try { navigator.vibrate(ms); } catch { /* not allowed */ } } };
+// A hop, for the fun of it. It changes nothing about where the player can go.
+function jump() {
+  if (!state.playing || player.y > 0) return;
+  player.vy = state.inside ? 4.2 : 6.6; player.y = 0.001; sound.step(true);
+}
+$('jump').addEventListener('click', jump);
+// Say hello: the player waves, and the nearest passer-by within a few metres waves back.
+let helloCool = 0;
+function hello() {
+  if (!state.playing || helloCool > 0) return;
+  helloCool = 1.1; player.wave = 1;
+  if (state.inside) { toast('Hiya', 'Somebody at the bar nods back', 1600); sound.pickup(); return; }
+  if (peds && peds.greet(player, 7)) {
+    state.hellos++; persist(); sound.pickup(); buzz(15);
+    toast(HELLOS[Math.floor(Math.random() * HELLOS.length)], state.hellos === 1 ? 'They waved back' : `${state.hellos} hellos so far`, 1500);
+    checkStamps();
+  } else say('Nobody is near enough to wave back');
+}
+$('hello').addEventListener('click', hello);
 // Words for the hidden status line, which a screen reader reads out. The same words twice are still read twice.
 let sayFlip = false;
 function say(t) { sayFlip = !sayFlip; $('say').textContent = t + (sayFlip ? '' : '\u00a0'); }
-// A game controller: left stick to move, right stick to look, A to switch running, Y for the way, Start for the menu.
+// A game controller: left stick to move, right stick to look, A to change pace, B to jump, X to say hello,
+// Y for the way, Start for the menu.
 const pad = { x: 0, y: 0, was: [] };
 function readPad(dt) {
   pad.x = pad.y = 0;
@@ -401,10 +474,12 @@ function readPad(dt) {
   const rx = dead(gp.axes[2]), ry = dead(gp.axes[3]);
   if (state.playing && (rx || ry)) { cam.yaw -= rx * dt * 2.2; cam.pitch = clampPitch(cam.pitch + ry * dt * 1.2); cam.lastLook = clock.elapsedTime; }
   const hit = (i) => { const now = !!(gp.buttons[i] && gp.buttons[i].pressed), first = now && !pad.was[i]; pad.was[i] = now; return first; };
-  const a = hit(0), y = hit(3), start = hit(9);
+  const a = hit(0), bB = hit(1), xB = hit(2), y = hit(3), start = hit(9);
   if (start && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); }
   if (!state.playing) return;
   if (a) { if (S.hold && $('toast').classList.contains('on')) closeToast(); else toggleRun(); }
+  if (bB) jump();
+  if (xB) hello();
   if (y) whereNext();
 }
 $('mute').addEventListener('click', () => { sound.setMuted(!sound.muted); $('mute').textContent = sound.muted ? 'Sound is off' : 'Sound is on'; });
@@ -424,7 +499,7 @@ function readInput(dt) {
   const l = Math.hypot(x, y);
   if (l > 1) { x /= l; y /= l; }
   input.x = x; input.y = y;
-  input.run = runToggle || keys.has('ShiftLeft') || keys.has('ShiftRight');
+  input.gear = Math.min(2, gear + (keys.has('ShiftLeft') || keys.has('ShiftRight') ? 1 : 0));
 }
 
 // ---------- Jobs ----------
@@ -452,6 +527,7 @@ function enterPub(door) {
   player.x = pub.spawn.x; player.z = pub.spawn.z; player.heading = cam.yaw = Math.PI;
   cam.dist = cam.cur = 3.1; cam.pitch = 0.2; beam.visible = false;
   fade(); sound.pickup(); toast(pub.name, 'Walk back to the door to leave', 2200);
+  if (!state.pubs.has(pub.name)) { state.pubs.add(pub.name); persist(); checkStamps(); }
   $('street').textContent = pub.name;
 }
 function leavePub() {
@@ -469,6 +545,19 @@ let slicePois = [], jobPois = [];
 // Random deliveries keep to shops, pubs and public places: not schools or the surgery.
 const NO_RANDOM = new Set(['school', 'doctors']);
 
+// The bonus time allows for running most of the way, with a little to spare at each stop.
+const parFor = (d, stops) => Math.round((d * 1.4) / 8 + 8 * stops);
+// A spot on a named street, a fair walk from the shop, for a good turn. Only the street is named, never a house.
+function doorstep(from) {
+  const roads = world.roads.filter((r) => r.n && r.c !== 'foot' && r.c !== 'service' && r.p.length > 1);
+  for (let k = 0; k < 200 && roads.length; k++) {
+    const r = roads[Math.floor(Math.random() * roads.length)], i = Math.floor(Math.random() * (r.p.length - 1));
+    const x = (r.p[i][0] + r.p[i + 1][0]) / 2, z = (r.p[i][1] + r.p[i + 1][1]) / 2, d = Math.hypot(x - from.dx, z - from.dz);
+    if (d < 90 || d > 380 || x < slice[0] + 8 || x > slice[2] - 8 || z < slice[1] + 8 || z > slice[3] - 8 || inRiver(x, z) || nearWall(x, z, 1)) continue;
+    return { n: `a neighbour on ${r.n}`, dx: x, dz: z };
+  }
+  return null;
+}
 function makeJob() {
   let def = SCRIPT[state.jobIndex];
   if (def && !def.steps.every((s) => slicePois.includes(pois.get(s[0])))) def = null;
@@ -480,13 +569,16 @@ function makeJob() {
     do { a = jobPois[Math.floor(Math.random() * jobPois.length)]; b = jobPois[Math.floor(Math.random() * jobPois.length)]; tries++; }
     while (tries < 400 && (a === b || dist2(a, b) < 70 || dist2(a, b) > 380 || dist2(here, a) < 30 || dist2(here, a) > 380));
     const thing = CARGO[Math.floor(Math.random() * CARGO.length)];
-    job = { title: 'Delivery', steps: [{ poi: a, text: `Collect ${thing} at ${a.n}` }, { poi: b, text: `Deliver it to ${b.n}` }] };
+    // Every third delivery is a good turn for a neighbour, if a street can be found for it.
+    const home = state.done % 3 === 2 ? doorstep(a) : null;
+    if (home) { const gift = KINDNESS[Math.floor(Math.random() * KINDNESS.length)]; job = { title: 'Good turn', turn: true, steps: [{ poi: a, text: `Collect ${gift} at ${a.n}` }, { poi: home, text: `Take it round to ${home.n}` }] }; }
+    else job = { title: 'Delivery', steps: [{ poi: a, text: `Collect ${thing} at ${a.n}` }, { poi: b, text: `Deliver it to ${b.n}` }] };
   }
   let d = 0, prev = { dx: player.x, dz: player.z };
   for (const s of job.steps) { d += dist2(prev, s.poi); prev = s.poi; }
   job.i = 0; job.t = 0;
-  job.par = Math.round((d * 1.4) / 5 + 12 * job.steps.length);
-  job.pay = Math.max(10, Math.round(d / 25) * 5);
+  job.par = parFor(d, job.steps.length);
+  job.pay = job.turn ? 0 : Math.max(10, Math.round(d / 25) * 5);
   state.job = job;
   showStep();
 }
@@ -538,22 +630,95 @@ function closeToast() { clearTimeout(toastTimer); $('toast').classList.remove('o
 $('toast').addEventListener('click', closeToast);
 function arrive() {
   const j = state.job;
-  if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
+  if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); buzz(20); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
   const bonus = !S.calm && j.t <= j.par ? Math.round(j.pay / 2) : 0;
-  state.money += j.pay + bonus; state.done++;
+  state.money += j.pay + bonus; state.done++; buzz(60);
+  if (j.turn) state.turns++;
+  if (j.daily) state.dailies++;
   if (!j.daily && state.jobIndex < SCRIPT.length) state.jobIndex++;
   persist(); hud(); sound.done();
   if (j.daily) {
     const old = dailyResult(), r = { date: j.daily, t: Math.round(j.t), par: j.par, calm: S.calm };
     if (!old || old.date !== r.date || old.calm || (!r.calm && r.t < old.t)) { try { localStorage.setItem(DAILY_KEY, JSON.stringify(r)); } catch { /* private mode */ } }
     toast("Today's job done!", S.calm ? 'Open the menu to share it' : `${mmss(j.t)}. Open the menu to share it`, 4000);
-    makeJob();
+    makeJob(); checkStamps();
     return;
   }
-  toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : 'Beat the clock next time for a bonus');
-  makeJob();
+  if (j.turn) toast('Good turn done', THANKS[Math.floor(Math.random() * THANKS.length)], 3200);
+  else toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : 'Beat the clock next time for a bonus');
+  makeJob(); checkStamps();
 }
-function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
+function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('litterN').textContent = state.litter; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
+
+// ---------- Stamps ----------
+// Small rewards for doing things around town. Each is worked out from the saved counts, so nothing extra is kept
+// but the list of stamps already shown.
+const STAMPS = [
+  ['first', 'First job', 'Finish a job', () => state.done >= 1],
+  ['ten', 'Safe pair of hands', 'Finish ten jobs', () => state.done >= 10],
+  ['turn', 'Good neighbour', 'Do three good turns', () => state.turns >= 3],
+  ['litter', 'Litter picker', 'Pick up ten pieces of litter', () => state.litter >= 10],
+  ['tidy', 'Tidy town', 'Pick up fifty pieces of litter', () => state.litter >= 50],
+  ['hello', 'Friendly face', 'Say hello to ten people', () => state.hellos >= 10],
+  ['history', 'Local historian', 'Find five plaques', () => foundCount() >= 5],
+  ['all', 'Knows every stone', 'Find every plaque', () => plaques.length > 0 && foundCount() >= plaques.length],
+  ['daily', 'Regular', "Finish today's job", () => state.dailies >= 1],
+  ['mile', 'Stretched your legs', 'Cover a mile on foot', () => state.metres >= 1609],
+  ['five', 'Legs of steel', 'Cover five miles on foot', () => state.metres >= 8047],
+  ['pigeon', 'Pigeon bother', 'Startle fifty pigeons', () => state.pigeons >= 50],
+  ['pubs', 'Both bars', 'Call in at both pubs', () => state.pubs.size >= 2],
+].filter((st) => !(CLEAN && st[0] === 'pubs'));
+function checkStamps() {
+  const fresh = STAMPS.filter((st) => !state.stamps.has(st[0]) && st[3]());
+  if (!fresh.length) return;
+  for (const st of fresh) state.stamps.add(st[0]);
+  persist();
+  const first = fresh[0];
+  // Wait for the message already on screen to be read before showing the stamp.
+  setTimeout(() => { toast(`Stamp: ${first[1]}`, fresh.length > 1 ? `And ${fresh.length - 1} more. See them in the menu` : 'See your stamps in the menu', 3200); sound.done(); buzz(40); }, $('toast').classList.contains('on') ? 2700 : 0);
+}
+const miles = (m) => (m < 1609 ? `${Math.round(m / 10) * 10} metres` : `${(m / 1609.344).toFixed(1)} miles`);
+
+// ---------- Litter ----------
+// Pieces of litter lie on the pavements. Walking over one picks it up, and it turns up somewhere else later,
+// so there is always some to find. They show as pale green dots on the map.
+const litter = [];
+function placeLitter() {
+  const paths = built.pedPaths;
+  if (!paths.length) return;
+  const geos = [new THREE.BoxGeometry(0.34, 0.06, 0.26), new THREE.CylinderGeometry(0.09, 0.09, 0.3, 8).rotateZ(Math.PI / 2), new THREE.BoxGeometry(0.3, 0.2, 0.22)];
+  const mats = [0xe2473d, 0x3d7fe2, 0xf2c230, 0xf4f1e8].map((c) => new THREE.MeshLambertMaterial({ color: c }));
+  const n = isTouch ? 22 : 34;
+  for (let i = 0; i < n; i++) {
+    const mesh = new THREE.Mesh(geos[i % geos.length], mats[i % mats.length]);
+    const l = { mesh, x: 0, z: 0, back: 0 };
+    scene.add(mesh); litter.push(l); moveLitter(l);
+  }
+}
+function moveLitter(l) {
+  const paths = built.pedPaths;
+  for (let k = 0; k < 60; k++) {
+    const path = paths[Math.floor(Math.random() * paths.length)], i = Math.floor(Math.random() * (path.length - 1)), t = Math.random();
+    const x = path[i][0] + (path[i + 1][0] - path[i][0]) * t + (Math.random() - 0.5) * 1.6, z = path[i][1] + (path[i + 1][1] - path[i][1]) * t + (Math.random() - 0.5) * 1.6;
+    if (x < slice[0] + 6 || x > slice[2] - 6 || z < slice[1] + 6 || z > slice[3] - 6 || nearWall(x, z, 0.7) || inRiver(x, z) || Math.hypot(x - player.x, z - player.z) < 25) continue;
+    if (litter.some((o) => o !== l && Math.hypot(o.x - x, o.z - z) < 18) || plaques.some((q) => Math.hypot(q.x - x, q.z - z) < 3)) continue;
+    l.x = x; l.z = z; l.mesh.position.set(x, 0.2 + groundH(x, z), z); l.mesh.rotation.y = Math.random() * 6.28; l.mesh.visible = true;
+    return;
+  }
+  l.mesh.visible = false; l.back = 20;
+}
+function updateLitter(dt) {
+  for (const l of litter) {
+    if (!l.mesh.visible) { l.back -= dt; if (l.back <= 0) moveLitter(l); continue; }
+    if (state.inside || player.y > 0.5 || Math.hypot(player.x - l.x, player.z - l.z) > 1.25) continue;
+    l.mesh.visible = false; l.back = 45 + Math.random() * 45;
+    state.litter++; persist(); hud(); sound.pickup(); buzz(15);
+    if (state.litter === 1) toast('Litter picked up', 'Walk over any you see. The pale green dots on the map show where', 3600);
+    else if (state.litter % 5 === 0) toast(`${state.litter} pieces picked up`, 'Padiham thanks you', 1700);
+    else say(`Litter picked up. ${state.litter} so far`);
+    checkStamps();
+  }
+}
 const foundCount = () => plaques.filter((p) => state.plaques.has(p.id)).length;
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -589,7 +754,7 @@ function startDaily() {
   for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; }
   let d = 0, prev = { dx: player.x, dz: player.z };
   for (const st of job.steps) { d += dist2(prev, st.poi); prev = st.poi; }
-  job.i = 0; job.t = 0; job.par = Math.round((d * 1.4) / 5 + 12 * job.steps.length); job.pay = 30;
+  job.i = 0; job.t = 0; job.par = parFor(d, job.steps.length); job.pay = 30;
   state.job = job; showStep(); closeMenu();
   toast("Today's job", 'The same three stops for everyone today', 3500);
 }
@@ -668,7 +833,7 @@ function updatePlaques(time) {
   if (!near) { el.classList.remove('on'); return; }
   $('plaqueTitle').textContent = near.title; $('plaqueText').textContent = near.text; $('plaqueSource').textContent = `Source: ${near.short}`;
   el.classList.add('on');
-  if (!state.plaques.has(near.id)) { state.plaques.add(near.id); persist(); hud(); sound.done(); }
+  if (!state.plaques.has(near.id)) { state.plaques.add(near.id); persist(); hud(); sound.done(); buzz(40); checkStamps(); }
 }
 
 // ---------- Menu: pause, the plaque journal, sharing and postcards ----------
@@ -687,10 +852,21 @@ function renderJournal() {
     ul.appendChild(li);
   }
   $('jcount').textContent = `${foundCount()} of ${plaques.length}`;
+  $('tally').textContent = `${plural(state.done, 'job')} done, ${plural(state.turns, 'good turn')}, ${plural(state.litter, 'piece')} of litter picked up, ${plural(state.hellos, 'hello')} said and ${miles(state.metres)} covered on foot.`;
+  const sl = $('stamps'); sl.textContent = '';
+  for (const [id, name, how] of STAMPS) {
+    const li = document.createElement('li'), got = state.stamps.has(id);
+    const b = document.createElement('b'); b.textContent = name;
+    const d = document.createElement('span'); d.textContent = got ? 'Earned' : how;
+    li.append(b, d); if (!got) li.className = 'todo';
+    sl.appendChild(li);
+  }
+  $('scount').textContent = `${state.stamps.size} of ${STAMPS.length}`;
 }
 function openMenu() {
   if (!started || menu.classList.contains('on')) return;
-  state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
+  state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0; persist();
+  $('full').textContent = stage.classList.contains('fill') || document.fullscreenElement ? 'Leave full screen' : 'Full screen';
   $('dailyShare').hidden = !dailyLine();
   renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
   menu.classList.add('on'); $('resume').focus();
@@ -718,10 +894,11 @@ $('dailyShare').addEventListener('click', async () => {
 $('resume').addEventListener('click', closeMenu);
 addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
 // Pause when the tab is left. The dev server can switch this off for testing in a background pane.
+addEventListener('pagehide', persist);
 document.addEventListener('visibilitychange', () => { if (document.hidden && !(import.meta.env.DEV && window.__noAutoPause)) openMenu(); });
 const PAGE = 'https://tompickup.co.uk/the-padiham-job/';
 $('share').addEventListener('click', async () => {
-  const text = `I found ${foundCount()} of ${plaques.length} history plaques and did ${plural(state.done, 'job')} in The Padiham Job, a game on the real streets of Padiham.`;
+  const text = `I found ${foundCount()} of ${plaques.length} history plaques, did ${plural(state.done, 'job')} and picked up ${plural(state.litter, 'piece')} of litter in The Padiham Job, a game on the real streets of Padiham.`;
   try {
     if (navigator.share) await navigator.share({ title: 'The Padiham Job', text, url: PAGE });
     else { await navigator.clipboard.writeText(`${text} ${PAGE}`); note('Copied. Paste it wherever you like'); }
@@ -796,25 +973,37 @@ function step(dt) {
   const fx = Math.sin(cam.yaw), fz = Math.cos(cam.yaw);
   const mx = fx * input.y - fz * input.x, mz = fz * input.y + fx * input.x;
   const mag = Math.min(1, Math.hypot(mx, mz));
-  const top = input.run ? 8.5 : 4.6;
+  // Indoors the top pace is a run: there is no room to sprint round a pool table.
+  const top = PACE[state.inside ? Math.min(1, input.gear) : input.gear];
   const want = state.playing ? mag * top : 0;
-  player.speed += (want - player.speed) * Math.min(1, dt * 10);
+  player.speed += (want - player.speed) * Math.min(1, dt * (want > player.speed ? 6 : 10));
   if (mag > 0.05 && state.playing) {
     const h = Math.atan2(mx, mz);
     player.heading += wrap(h - player.heading) * Math.min(1, dt * 12);
     const ox = player.x, oz = player.z;
-    player.x += (mx / mag) * player.speed * dt;
-    player.z += (mz / mag) * player.speed * dt;
-    pushOut(player);
+    // Move in short steps, so that at a sprint the player cannot pass through a wall between two frames.
+    const dist = player.speed * dt, n = Math.max(1, Math.ceil(dist / 0.3));
+    for (let k = 0; k < n; k++) { player.x += (mx / mag) * (dist / n); player.z += (mz / mag) * (dist / n); pushOut(player); }
+    if (!state.inside) state.metres += Math.hypot(player.x - ox, player.z - oz);
     if (!state.inside && inRiver(player.x, player.z)) { player.x = ox; player.z = oz; if (time > edgeWarn) { toast('Too deep to wade', 'Find a bridge', 1500); edgeWarn = time + 4; } }
     const cx = Math.min(slice[2] - 1, Math.max(slice[0] + 1, player.x)), cz = Math.min(slice[3] - 1, Math.max(slice[1] + 1, player.z));
     if (!state.inside && (cx !== player.x || cz !== player.z)) { player.x = cx; player.z = cz; if (time > edgeWarn) { toast('Edge of the map', 'Turn back towards town', 1800); edgeWarn = time + 5; } }
     if (S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(h - cam.yaw)) * dt * 1.7;
   }
   // Character
-  player.phase += player.speed * dt * 2.3;
-  const amt = Math.min(1, player.speed / 4);
+  // Legs turn over faster at a run, but not in step with the speed, or a sprint would be a blur.
+  player.phase += (Math.min(player.speed, 4.6) + Math.max(0, player.speed - 4.6) * 0.42) * dt * 2.3;
+  const amt = Math.min(1, player.speed / 4) * (player.speed > 11 ? 1.25 : 1);
   animateFigure(player.fig, player.phase, amt);
+  // Hop
+  if (player.y > 0) {
+    player.vy -= 20 * dt; player.y += player.vy * dt;
+    if (player.y <= 0) { player.y = 0; player.vy = 0; sound.step(false); }
+    else { player.fig.legs[0].rotation.x = -0.5; player.fig.legs[1].rotation.x = 0.35; player.fig.arms[0].rotation.x = player.fig.arms[1].rotation.x = -1.1; }
+  }
+  // Wave
+  helloCool -= dt;
+  if (player.wave > 0) { player.wave -= dt; player.fig.arms[1].rotation.x = -2.7 + Math.sin(time * 16) * 0.3; player.fig.arms[1].rotation.z = 0.25; if (player.wave <= 0) player.fig.arms[1].rotation.z = 0; }
   const stepN = Math.floor(player.phase / Math.PI);
   if (stepN !== lastStep) { lastStep = stepN; if (player.speed > 1) sound.step(player.speed > 6); }
   const baseY = state.inside ? state.inside.pub.floorY : 0.14 + groundH(player.x, player.z);
@@ -832,13 +1021,13 @@ function step(dt) {
     }
   }
   const sway = S.reduce ? 0 : amt;
-  player.fig.group.position.set(player.x, baseY + Math.abs(Math.sin(player.phase)) * 0.05 * sway, player.z);
+  player.fig.group.position.set(player.x, baseY + player.y + Math.abs(Math.sin(player.phase)) * 0.05 * sway, player.z);
   player.fig.group.rotation.y = player.heading;
-  player.fig.group.rotation.x = sway * (player.speed > 6 ? 0.16 : 0.05);
+  player.fig.group.rotation.x = sway * (player.speed > 11 ? 0.24 : player.speed > 6 ? 0.16 : 0.05);
 
   for (const sp of labels) { const k = Math.min(1, Math.max(0.2, camera.position.distanceTo(sp.position) / 70)); sp.scale.set(20 * k, 3.75 * k, 1); }
   if (selfie) updateSelfie(dt, time);
-  if (state.playing) updatePlaques(time);
+  if (state.playing) { updatePlaques(time); updateLitter(dt); }
   if (peds) peds.update(dt, player);
   if (pigeons) pigeons.update(dt, player, time);
 
@@ -851,6 +1040,9 @@ function step(dt) {
   // On a slope the ground behind the player can rise above the camera: keep the camera clear of it.
   if (!state.inside) camera.position.y = Math.max(camera.position.y, groundH(camera.position.x, camera.position.z) + 0.6);
   camera.lookAt(player.x, baseY + 1.45, player.z);
+  // The view opens out a little at a sprint, unless less movement has been asked for.
+  const fov = baseFov + (S.reduce ? 0 : Math.max(0, Math.min(1, (player.speed - 9.5) / 4.5)) * 7);
+  if (Math.abs(fov - camera.fov) > 0.05) { camera.fov += (fov - camera.fov) * Math.min(1, dt * 5); camera.updateProjectionMatrix(); }
   sky.position.copy(camera.position); clouds.position.set(camera.position.x, 0, camera.position.z);
   const sx = Math.round(player.x / 4) * 4, sz = Math.round(player.z / 4) * 4;
   sun.target.position.set(sx, baseY, sz);
@@ -963,7 +1155,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     for (let k = 0; k < 12 && (nearWall(player.x, player.z, 3) || k < 3); k++) { player.x += ((first0.dx - home.dx) / dl) * 1.5; player.z += ((first0.dz - home.dz) / dl) * 1.5; }
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
-  placePlaques();
+  placePlaques(); placeLitter();
   peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   peds.setCount(S.calm ? 6 : Infinity);
   pigeons = new Pigeons(scene, built.spots, 7, (n) => {
@@ -972,6 +1164,8 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     sound.flap(n);
     toast(`${n} pigeons startled`, `That is ${state.pigeons} so far`, 1600);
   });
+  // Stamps already earned by an older save are marked quietly, without a run of messages.
+  for (const st of STAMPS) if (st[3]()) state.stamps.add(st[0]);
   hud(); makeJob(); drawMini();
   const b = $('play');
   b.disabled = false; b.textContent = state.done ? 'Carry on' : 'Play';
@@ -980,4 +1174,4 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; } };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; } };

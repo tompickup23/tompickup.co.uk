@@ -137,6 +137,13 @@ export class Pedestrians {
   }
   // Show only the first n passers-by: the calm setting uses this to thin the streets without a reload.
   setCount(n) { this.shown = n; this.peds.forEach((p, i) => { p.fig.group.visible = i < n; }); }
+  // The nearest passer-by within reach stops, turns to the player and waves. Returns whether anyone was near enough.
+  greet(player, reach) {
+    let best = null, bd = reach;
+    for (const p of this.peds.slice(0, this.shown ?? this.peds.length)) { const d = Math.hypot(player.x - p.x, player.z - p.z); if (d < bd) { bd = d; best = p; } }
+    if (best) { best.wave = 1.4; best.wait = Math.max(best.wait, 1.6); }
+    return !!best;
+  }
   update(dt, player) {
     for (const p of this.peds.slice(0, this.shown ?? this.peds.length)) {
       let j = 1;
@@ -144,7 +151,8 @@ export class Pedestrians {
       const a = p.path[j - 1], b = p.path[j], l = p.cum[j] - p.cum[j - 1] || 1, t = (p.s - p.cum[j - 1]) / l;
       const dx = (b[0] - a[0]) / l, dz = (b[1] - a[1]) / l;
       const x = a[0] + (b[0] - a[0]) * t - dz * p.side, z = a[1] + (b[1] - a[1]) * t + dx * p.side;
-      const near = Math.hypot(player.x - x, player.z - z) < 1.3;
+      p.x = x; p.z = z;
+      const near = p.wave > 0 || Math.hypot(player.x - x, player.z - z) < 1.3;
       let moving = !near && p.wait <= 0;
       if (p.wait > 0) p.wait -= dt;
       if (moving) {
@@ -157,6 +165,7 @@ export class Pedestrians {
       const want = near ? Math.atan2(player.x - x, player.z - z) : Math.atan2(dx * p.dir, dz * p.dir);
       g.rotation.y += Math.atan2(Math.sin(want - g.rotation.y), Math.cos(want - g.rotation.y)) * Math.min(1, dt * 6);
       animateFigure(p.fig, p.phase, moving ? 0.7 : 0);
+      if (p.wave > 0) { p.wave -= dt; p.fig.arms[1].rotation.x = -2.7 + Math.sin(p.wave * 16) * 0.3; p.fig.arms[1].rotation.z = p.wave > 0 ? 0.25 : 0; }
     }
   }
 }
