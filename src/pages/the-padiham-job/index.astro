@@ -78,6 +78,7 @@ const schema = {
       </div>
       <div id="sop-ride" class="sop-hud" role="status">
         <div class="d" id="sop-rideText"></div>
+        <div id="sop-askBtns"></div>
         <button id="sop-bell" type="button" hidden>Ring the bell</button>
       </div>
       <div id="sop-say" class="sop-sr" role="status" aria-live="polite"></div>
@@ -98,6 +99,27 @@ const schema = {
         </div>
       </div>
 
+      <div id="sop-trip">
+        <div class="box" role="dialog" aria-modal="true" aria-labelledby="sop-tripName">
+          <p class="name" id="sop-tripName">Practise a trip</p>
+          <p class="sop-help">Pick where the trip starts and ends, and how. The game then shows one step at a time, with no clock and no score. It is for getting to know a journey. It does not teach road safety: the game has no traffic.</p>
+          <label class="lab" for="sop-tripFrom">From</label>
+          <select id="sop-tripFrom"></select>
+          <label class="lab" for="sop-tripTo">To</label>
+          <select id="sop-tripTo"></select>
+          <p class="lab" id="sop-tripHow">How</p>
+          <div id="sop-tripWays" role="radiogroup" aria-labelledby="sop-tripHow"></div>
+          <div class="acts">
+            <button id="sop-tripGo" type="button">Start this trip</button>
+            <button id="sop-tripCopy" type="button">Copy the link</button>
+            <button id="sop-tripClose" type="button">Close</button>
+          </div>
+          <p id="sop-tripNote" class="sop-help" role="status"></p>
+          <input id="sop-tripLink" type="text" readonly hidden aria-label="Trip link" />
+          <p class="sop-help">The link holds the two places and the bus, as short codes, and nothing else. It sits after the # in the address, a part that browsers do not send to the website.</p>
+        </div>
+      </div>
+
       <div id="sop-menu">
         <div class="box" role="dialog" aria-modal="true" aria-label="Game menu">
           <p class="name">Paused</p>
@@ -109,6 +131,8 @@ const schema = {
             <button id="sop-share" type="button">Share my score</button>
             <button id="sop-mute" type="button">Sound is on</button>
             <button id="sop-full" type="button">Full screen</button>
+            <button id="sop-tripBtn" type="button">Practise a trip</button>
+            <button id="sop-leave" type="button" class="only-practice">Back to the main game</button>
           </div>
           <p id="sop-menuNote" role="status"></p>
           <p id="sop-last"></p>
@@ -145,7 +169,8 @@ const schema = {
         <div class="box" role="dialog" aria-label="Start The Padiham Job">
           <p class="name">The <span>Padiham</span> Job</p>
           <p class="not-practice">Make your name on the real streets of Padiham. Take jobs, do a good turn, pick up litter, say hello, and try not to upset the pigeons.</p>
-          <p class="only-practice">A practice route has been set for you. Follow the markers one at a time. There is no clock and no score, and you can walk it as many times as you like.</p>
+          <p class="only-practice">A practice trip has been set for you. Follow the markers one at a time. There is no clock and no score, and you can do it as many times as you like.</p>
+          <ol id="sop-plan" class="only-practice" aria-label="Your trip, step by step"></ol>
           <p class="only-practice sop-warn">This is for getting to know a route. It does not teach road safety: the game has no traffic. On real roads, stop and cross the way you have been taught.</p>
           <div id="sop-look">
             <canvas id="sop-lookPic" width="120" height="150" role="img" aria-label="Your character"></canvas>
@@ -187,6 +212,7 @@ const schema = {
             </div>
           </details>
           <button id="sop-play" type="button" disabled>Loading</button>
+          <button id="sop-tripOpen" type="button" hidden>Practise a trip</button>
           <p class="sop-credit">
             Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
             Open Database Licence. Contains OS data © Crown copyright and database right 2026.
@@ -247,9 +273,11 @@ const schema = {
       </p>
       <h2 id="buses">Catching a bus</h2>
       <p>
-        Most of the bus stops in the town centre work. Stand at one and choose Bus stop. A stop near the edge of
+        Most of the bus stops in the town centre work. Each one that works has a tall blue sign, a blue circle on
+        the ground and its name above it. Stand at one and choose Bus stop. A stop near the edge of
         the map, where no bus goes on to another stop in the game, is there to look at and offers nothing. You are shown the buses that call
-        there, each with its number and where it is going. Pick one, wait, and it comes. On the bus the game tells
+        there, each with its number and where it is going. Pick one, wait, and it comes. The driver says hello and
+        you choose what to say back: show your pass or ask for a single. Either is fine. On the bus the game tells
         you the next stop, and you ring the bell before the one you want. If you do not ring, the bus carries on
         to its last stop on the map.
       </p>
@@ -285,7 +313,14 @@ const schema = {
         in the browser it was played in.
       </p>
       <p>
-        The link holds the spots on the map and nothing else: no name and no words. The game covers the town
+        You can also set a trip without walking it first. Choose Practise a trip on the start screen or in the
+        menu, pick where it starts and ends from the named places and bus stops, and choose whether part of it
+        is by bus. The game lists the steps before it starts, then shows them one at a time. It is a first
+        version: the way is shown as a straight line and an arrow, not yet along the streets.
+      </p>
+      <p>
+        The link holds the spots on the map, or the short codes for the places and the bus, and nothing else: no name and no words. It sits after the # in the
+        address, a part that browsers do not send to the website. The game covers the town
         centre only. It is for getting to know a route, as preparation for a walk with someone, and it does not
         teach road safety: there is no traffic in the game. It has not been tried with learners yet. If you use
         it, please <a href="/contact/">say how it went</a>.
@@ -373,12 +408,34 @@ const schema = {
   .sop #sop-ride .d { font-size: calc(17px * var(--sop-fs, 1)); font-weight: 650; line-height: 1.3; }
   .sop #sop-ride button { pointer-events: auto; margin-top: 8px; padding: 12px 22px; border: 0; border-radius: 999px; background: var(--sop-gold); color: var(--sop-ink); font-family: inherit; font-size: calc(17px * var(--sop-fs, 1)); font-weight: 800; cursor: pointer; }
   .sop #sop-ride:not(.on) button { pointer-events: none; }
+  .sop #sop-askBtns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .sop #sop-askBtns:empty { display: none; }
   .sop.touch #sop-ride { bottom: 190px; }
   .sop.still #sop-ride { transition: none; transform: translate(-50%, 0); }
   .sop.hc #sop-ride { outline: 2px solid #fff; }
   .sop .sop-buttons #sop-busBtn { background: #2f6fb5; color: #fff; font-weight: 800; padding: 10px 14px; }
   .sop #sop-busMenu { position: absolute; inset: 0; z-index: 9; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 22, 26, 0.78); }
   .sop #sop-busMenu.on { display: flex; }
+  .sop #sop-busList button.mine { outline: 3px solid var(--sop-gold); }
+  .sop #sop-busList button em { display: inline-block; margin-bottom: 4px; padding: 2px 8px; border-radius: 999px; background: var(--sop-gold); color: var(--sop-ink); font-style: normal; font-size: 13px; font-weight: 800; }
+  .sop #sop-trip { position: absolute; inset: 0; z-index: 11; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 22, 26, 0.86); }
+  .sop #sop-trip.on { display: flex; }
+  .sop #sop-trip .box { width: min(520px, 100%); max-height: 100%; overflow: auto; background: #1b1e24; border-radius: 20px; padding: 20px; border-top: 6px solid var(--sop-green); text-align: left; }
+  .sop #sop-trip .name { margin: 0 0 6px; font-size: 24px; line-height: 1.1; font-weight: 800; color: var(--sop-text); }
+  .sop #sop-trip .lab { display: block; margin: 12px 0 4px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: var(--sop-gold); }
+  .sop #sop-trip select, .sop #sop-tripLink { width: 100%; min-height: 44px; padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.3); background: #0f1114; color: var(--sop-text); font-family: inherit; font-size: 16px; }
+  .sop #sop-tripWays { display: grid; gap: 6px; }
+  .sop #sop-tripWays label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.07); color: var(--sop-text); font-size: 15px; line-height: 1.4; cursor: pointer; }
+  .sop #sop-tripWays input { width: 20px; height: 20px; flex: none; margin-top: 1px; accent-color: var(--sop-gold); }
+  .sop #sop-trip .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 8px; }
+  .sop #sop-trip .acts button { min-height: 44px; padding: 10px; border: 0; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: var(--sop-text); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sop #sop-trip .acts #sop-tripGo { grid-column: 1 / -1; background: var(--sop-gold); color: var(--sop-ink); font-size: 18px; }
+  .sop #sop-trip .acts button:disabled { opacity: 0.45; cursor: default; }
+  .sop #sop-trip button:focus-visible, .sop #sop-trip select:focus-visible, .sop #sop-trip input:focus-visible, .sop #sop-tripOpen:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .sop #sop-tripOpen { margin-top: 10px; width: 100%; min-height: 44px; padding: 12px; border: 2px solid var(--sop-green); border-radius: 14px; background: transparent; color: var(--sop-text); font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .sop #sop-start ol { margin: 12px 0 0; padding: 0 0 0 1.4em; text-align: left; font-size: 15px; line-height: 1.5; color: var(--sop-text); }
+  .sop #sop-start ol:empty { display: none; }
+  .sop #sop-start ol li { margin-top: 4px; }
   .sop #sop-busMenu .box { width: min(480px, 100%); max-height: 100%; overflow: auto; background: #1b1e24; border-radius: 20px; padding: 20px; border-top: 6px solid #4fb3ff; text-align: left; }
   .sop #sop-busMenu .name { margin: 0 0 6px; font-size: 24px; line-height: 1.1; font-weight: 800; color: var(--sop-text); }
   .sop #sop-busList { display: grid; gap: 8px; margin: 10px 0; }

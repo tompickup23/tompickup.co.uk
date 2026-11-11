@@ -38,7 +38,7 @@ function makeBus() {
 }
 
 export class Buses {
-  // ui: { toast, say, ding, fade, panel(text, canRing), board(), alight(x, z, heading) }
+  // ui: { toast, say, ding, fade, panel(text, canRing), ask(text, choices, done), board(heading), depart(), alight(x, z, heading) }
   constructor(scene, world, ui) {
     this.ui = ui;
     const b = world.bus || { stops: [], routes: [] };
@@ -182,9 +182,14 @@ export class Buses {
       const stopped = this.drive(dt, this.arrive.len);
       this.place(this.arrive, this.s);
       if (stopped) {
-        this.phase = 'boarding'; this.t = 2.2; this.v = 0;
-        ui.toast(`The ${ref} to ${this.opt.route.to} is here`, 'Getting on. Show your pass or pay the driver', 2600);
-        ui.fade(); ui.board();
+        // The bus waits at the stop with its door open until the player has spoken to the driver.
+        this.phase = 'boarding'; this.t = 0; this.v = 0; this.paid = false;
+        ui.fade(); ui.board(this.at(this.arrive, this.arrive.len).h);
+        ui.ask(`The ${ref} to ${this.opt.route.to} is here. The driver says hello`, ['Show my pass', 'A single, please'], (i) => {
+          this.paid = true; this.t = 1.6;
+          ui.toast(i === 0 ? 'Thank you, said the driver' : 'That is paid, said the driver', 'Find a seat', 1800);
+          ui.panel('Finding a seat', false);
+        });
       }
       return;
     }
@@ -192,7 +197,7 @@ export class Buses {
       this.t -= dt;
       const q = this.place(this.arrive, this.arrive.len);
       player.x = q.x; player.z = q.z; player.heading = q.h;
-      if (this.t <= 0) { this.phase = 'ride'; this.s = 0; this.tellNext(); }
+      if (this.paid) { this.t -= dt; if (this.t <= 0) { this.phase = 'ride'; this.s = 0; ui.depart(); this.tellNext(); } }
       return;
     }
     if (this.phase === 'ride') {

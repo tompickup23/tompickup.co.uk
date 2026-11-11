@@ -405,3 +405,35 @@ come from him later, and traffic left out for now.
   crossing game where traffic comes only when the game is started.
 - **Checked** in the dev server: both chairs, the wheelie, a full ride from Town Hall to Bus Stand with the bell,
   the phone layout at a stop. The preview pane runs frames slowly, so ride timing was not judged. No real phone.
+
+## Hostile review fixes and trips (11 November 2026, late)
+
+The review, its issue list and the product research are in the Reports repo, `Tompickup_Games_work/`
+(`Padiham_Job_Hostile_Review_2026-11-11.md`, `padiham_job_issues.csv`, `Padiham_Job_Products_And_Uses_2026-11-11.md`,
+`Padiham_Job_Journey_Practice_Prototype_2026-11-11.md`).
+
+Block one of the fixes: keyboard focus goes back to the game view when a panel closes (Space used to reopen the
+menu); no clock on job one and the clock waits at a plaque; Today's job asks before replacing a job part done and
+starts at `homeStart`; stops with no onward bus are marked `dead` and offer nothing; the corner panel shows money
+and jobs only; 44px buttons and a shorter job card on a phone.
+
+Slice one of journey practice:
+
+- **Links after the #.** `frag` in `game.js` reads the part of the address that is not sent to the host. The route
+  maker now writes `#route=`; old `?route=` links still work.
+- **Trips.** `#trip=1.from.to` or `#trip=1.from.to.board.alight.service`. Each part is a code made by `indexEnds()`
+  from a public name (`p` place, `s` stop, `r` service), so no coordinates and no words. Two stops with one name are
+  told apart by their order west to east. These codes change if a name changes; NaPTAN codes would be better.
+- **Stages.** `tripSteps()` builds the steps. A step with `ride` is the bus leg: its marker is the stop to get off
+  at, its `r` is a wider arrival radius, and it is only ever completed on foot. The bus list marks "This is your bus".
+- **The picker** is the `#sop-trip` dialog (`fillTripPicker`, `tripWays`), opened from the start screen and the menu.
+  Starting a trip sets the address and reloads (`goTo`), because practice mode is fixed at load.
+- **The plan** on the start screen is `showPlan()`.
+- **Bus stops** that work get a tall blue sign, a blue circle and a blue name label (added in the boot code).
+- **Getting on.** The bus now waits at the stop until the player answers the driver (`ui.ask` in `bus.js`, buttons in
+  `#sop-askBtns`, B presses the first). `board(h)` brings the view down to the pavement by the door and `boardView`
+  holds it there; `depart()` lifts it behind the bus.
+
+Not done: the way is still a straight line and an arrow; no helper set-up page or postcode area yet; the ride from
+stop to stop was not watched to the end in the preview (it runs too slowly there), only the steps either side.
+To preview a worktree, add a temporary config to the main checkout's `.claude/launch.json` and restore it after.
