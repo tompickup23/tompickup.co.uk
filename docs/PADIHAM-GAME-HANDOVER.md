@@ -295,3 +295,19 @@ Same branch. Checked in the dev server's preview pane.
 - **Riverbank trees:** `build_world.py` now plants a tree about every 16 m on each bank of the wide river
   lines inside the playable area, clear of roads, buildings and the water outlines (78 trees). They use their
   own random stream, so nothing else moved.
+
+## Today's job, a first version, 11 November 2026
+
+Ideas I148 and I149 in the Reports register, as a prototype. In `game.js` under "Today's job".
+
+- The menu has **Today's job**: three stops picked from the date alone (`seeded('padiham ' + date)` over the
+  job places sorted by name), so everyone playing the same published version gets the same job. It starts
+  everyone outside the Town Hall. Adding or renaming places changes the day's job for everyone at once.
+- On finishing, the result (date, seconds, par, calm or not) is kept in the browser under `padiham-daily-1`,
+  best time of the day, and the menu shows **Share today's result**: the date, three squares and the time (or
+  "done at a stroll" in calm), the address of the page, and nothing about the route. Phones get the share
+  sheet; elsewhere it is copied.
+- No streaks, no reminders, nothing sent. Checked in the preview pane by moving the figure to each stop;
+  **not played through on foot, and the copy step could not be exercised in the pane.**
+- Next, if it earns its place: the route drawn on the map as the share card (I150) and a beat my round link
+  (I151).
