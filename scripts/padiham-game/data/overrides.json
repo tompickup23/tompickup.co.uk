@@ -1,5 +1,5 @@
 {
- "_note": "Per-building details read from openly licensed photos (Wikimedia Commons / Geograph, see photo-credits.json). 'at' is a point inside the outline in game metres. 'src' lists the photo ids used. No photo pixels are used in the game. 'pois' adds named places missing from the map data. The Starkie Arms exterior and interior also follow photos supplied by the site owner.",
+ "_note": "Per-building details read from openly licensed photos (Wikimedia Commons / Geograph, see photo-credits.json). 'at' is a point inside the outline in game metres. 'src' lists the photo ids used. No photo pixels are used in the game. 'pois' adds named places missing from the map data. The Starkie Arms exterior and interior also follow photos supplied by the site owner. The business centre, the leisure centre, the corner shop on Church Street and the Jaipur shop front follow reference pictures supplied by the site owner on 11 November 2026; their positions were pinned from Food Standards Agency food hygiene register geocodes and the OpenStreetMap node for Jaipur. From 11 November 2026 'pois' also holds food businesses taken from the Food Standards Agency food hygiene register (Open Government Licence): name, position and the date read. Care settings, schools, the foodbank, anything marked former and anything not inspected since the start of 2022 were left out. No rating is shown anywhere.",
  "buildings": [
   {
    "at": [
@@ -66,8 +66,8 @@
   },
   {
    "at": [
-    101,
-    114
+    69,
+    132
    ],
    "name": "Former bank, Burnley Road",
    "m": "brick_brown",
@@ -78,7 +78,8 @@
    "shops": false,
    "src": [
     "6128174"
-   ]
+   ],
+   "_moved": "11 Nov 2026: was at [101,114], which is 57 to 65 Burnley Road. Wikimedia Commons gives this photo's object position as game metres (69,132), the outline OpenStreetMap names The Bank."
   },
   {
    "at": [
@@ -122,13 +123,28 @@
     142,
     234
    ],
-   "name": "Shops, Burnley Road south side",
-   "m": "render",
+   "name": "Shops with the white horse, 42 Burnley Road",
+   "m": "brick_brown",
    "f": 2,
-   "r": "gable",
+   "r": "flat",
    "shops": true,
    "src": [
-    "2232487"
+    "2232487",
+    "site owner's reference pictures of the white horse, 11 Nov 2026"
+   ],
+   "fh": 3.0,
+   "frontAt": [
+    134,
+    228
+   ],
+   "spots": [
+    {
+     "at": [
+      124.5,
+      222
+     ],
+     "k": "horse"
+    }
    ]
   },
   {
@@ -238,6 +254,121 @@
     "2482465"
    ],
    "f": 2
+  },
+  {
+   "at": [
+    101,
+    114
+   ],
+   "name": "Padiham Business Centre, 57 to 65 Burnley Road",
+   "m": "stone",
+   "f": 3,
+   "fh": 3.3,
+   "r": "hip",
+   "shops": true,
+   "feat": [
+    "gablefront"
+   ],
+   "frontAt": [
+    92,
+    116
+   ],
+   "src": [
+    "site owner's reference pictures; FSA register geocodes for 61-63 and 65 Burnley Road"
+   ]
+  },
+  {
+   "at": [
+    -131,
+    303
+   ],
+   "name": "Padiham Leisure Centre (Padiham Pool in OpenStreetMap)",
+   "m": "brick_brown",
+   "f": 1,
+   "fh": 4.2,
+   "r": "flat",
+   "win": "tall",
+   "shops": false,
+   "feat": [
+    "sportshall"
+   ],
+   "frontAt": [
+    -137,
+    292
+   ],
+   "src": [
+    "site owner's reference pictures"
+   ]
+  },
+  {
+   "at": [
+    -255,
+    57
+   ],
+   "name": "Serrano's Deli-Pizza, 46 Church Street",
+   "f": 2,
+   "feat": [
+    "cornershop"
+   ],
+   "frontAt": [
+    -260.5,
+    70
+   ],
+   "src": [
+    "site owner's reference pictures; FSA register geocode and name for 46 Church Street. Named on the site owner's say, 11 Nov 2026"
+   ],
+   "sign": "Serrano's Deli-Pizza"
+  },
+  {
+   "at": [
+    270,
+    323
+   ],
+   "name": "Terrace, Burnley Road south side: Bridge Inn (68) and Jaipur (90)",
+   "src": [
+    "site owner's reference pictures; OpenStreetMap node for Jaipur; FSA register geocode for 68 Burnley Road"
+   ],
+   "spots": [
+    {
+     "at": [
+      291,
+      319
+     ],
+     "k": "black",
+     "sign": "Jaipur"
+    },
+    {
+     "at": [
+      224,
+      311
+     ],
+     "k": "pub",
+     "sign": "BRIDGE INN"
+    }
+   ]
+  },
+  {
+   "at": [
+    -578,
+    -56
+   ],
+   "name": "Padiham Cricket Club pavilion",
+   "m": "render",
+   "f": 1,
+   "fh": 3.2,
+   "r": "gable",
+   "shops": false,
+   "feat": [
+    "pavilion"
+   ],
+   "frontAt": [
+    -574,
+    -53.5
+   ],
+   "sign": "Padiham Cricket Club",
+   "src": [
+    "site owner's reference pictures, 11 Nov 2026; FSA register geocode for Padiham Cricket Club; the site owner's word that the pavilion is on the far side of the cricket ground from the football ground"
+   ]
   }
  ],
  "landmarks": [
@@ -261,6 +392,16 @@
    "src": [
     "OpenStreetMap way 973585469 (leisure=bandstand), centre of the mapped outline",
     "No source describes its shape or materials; drawn as a plain open bandstand."
+   ]
+  },
+  {
+   "k": "wicket",
+   "name": "Cricket square",
+   "x": -518,
+   "z": -17,
+   "h": 0.45,
+   "src": [
+    "Centre of the cricket pitch mapped in OpenStreetMap. The direction of the strip is a guess, not surveyed."
    ]
   }
  ],
@@ -292,6 +433,303 @@
    "src": [
     "6128176",
     "5943055"
+   ]
+  },
+  {
+   "n": "Bridge Inn",
+   "x": 224.0,
+   "z": 317.1,
+   "k": "pub",
+   "src": [
+    "FSA food hygiene register, establishment 121101, last inspected 2026-10-01, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Cartmels",
+   "x": 97.3,
+   "z": 113.0,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 120951, last inspected 2025-03-28, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Damz Bites & Delights",
+   "x": 33.1,
+   "z": 38.8,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1929464, last inspected 2026-07-02, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Essentialpharmacy4u",
+   "x": 128.4,
+   "z": 162.5,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1787830, last inspected 2025-03-21, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Katy & Co",
+   "x": 52.0,
+   "z": 25.8,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1946214, last inspected 2026-06-15, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Kendalls",
+   "x": 423.6,
+   "z": 325.2,
+   "k": "restaurant",
+   "src": [
+    "FSA food hygiene register, establishment 1712547, last inspected 2024-06-18, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Molly Rigby's",
+   "x": 9.9,
+   "z": 37.6,
+   "k": "pub",
+   "src": [
+    "FSA food hygiene register, establishment 187497, last inspected 2022-08-02, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Mooch Cafe",
+   "x": 131.5,
+   "z": 172.5,
+   "k": "restaurant",
+   "src": [
+    "FSA food hygiene register, establishment 637884, last inspected 2024-04-24, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "One Stop",
+   "x": 363.3,
+   "z": 331.6,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 121114, last inspected 2025-05-29, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "PK's",
+   "x": 312.7,
+   "z": 297.9,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 120921, last inspected 2025-01-13, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Rawes Grazing Co",
+   "x": 175.3,
+   "z": 212.6,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1419592, last inspected 2023-06-03, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "The Boys Bakehouse",
+   "x": 17.0,
+   "z": 23.9,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1454751, last inspected 2022-03-17, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "The Fat Giraffe",
+   "x": -78.7,
+   "z": 39.3,
+   "k": "restaurant",
+   "src": [
+    "FSA food hygiene register, establishment 919952, last inspected 2024-01-26, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "The Lawrence Hotel",
+   "x": -198.6,
+   "z": 10.0,
+   "k": "pub",
+   "src": [
+    "FSA food hygiene register, establishment 1048603, last inspected 2023-09-07, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "The Sweetest Thing Cakery",
+   "x": 52.0,
+   "z": 25.8,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1946218, last inspected 2026-06-15, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "VSMS",
+   "x": 4.9,
+   "z": -14.7,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1731066, last inspected 2024-08-21, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Caledonia Chicken and Ribs",
+   "x": -91.7,
+   "z": 48.3,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1431205, last inspected 2025-06-29, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "New Taste",
+   "x": 348.7,
+   "z": 306.6,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1540638, last inspected 2025-03-30, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Serrano's Deli-Pizza",
+   "x": -263.3,
+   "z": 58.0,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 982239, last inspected 2025-03-07, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Soup & Spud",
+   "x": 63.3,
+   "z": 93.3,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1885992, last inspected 2026-02-21, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Summer Palace",
+   "x": -241.2,
+   "z": 84.7,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 552491, last inspected 2025-09-04, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Swirlz",
+   "x": 97.3,
+   "z": 113.0,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1800079, last inspected 2025-07-30, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Taj Gourmet",
+   "x": 330.7,
+   "z": 302.7,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 120926, last inspected 2026-02-11, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Tony's Cooked Meats",
+   "x": 100.3,
+   "z": 120.9,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 120952, last inspected 2025-10-21, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Top Local Store",
+   "x": 377.6,
+   "z": 312.5,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 1795905, last inspected 2025-01-27, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "C C Speak Butchers",
+   "x": -255.3,
+   "z": 54.0,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 121044, last inspected 2025-12-03, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Daddy's Chicken & Pizza",
+   "x": 284.9,
+   "z": 324.8,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1582308, last inspected 2026-05-21, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Double Dragon",
+   "x": -231.3,
+   "z": 78.7,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 121041, last inspected 2026-03-13, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "No. 81 Indian Restaurant",
+   "x": 127.4,
+   "z": 156.6,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 1558660, last inspected 2024-11-28, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Premier Store",
+   "x": -154.7,
+   "z": 12.8,
+   "k": "shop",
+   "src": [
+    "FSA food hygiene register, establishment 812854, last inspected 2023-04-03, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Hawali Indian Takeaway",
+   "x": -25.1,
+   "z": -11.6,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 559718, last inspected 2025-03-07, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Fu Lam",
+   "x": -109.7,
+   "z": 42.4,
+   "k": "fast_food",
+   "src": [
+    "FSA food hygiene register, establishment 971691, last inspected 2026-02-11, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Padiham Cricket Club",
+   "x": -578,
+   "z": -56,
+   "k": "sports_club",
+   "src": [
+    "FSA food hygiene register, establishment 121051, last inspected 2025-07-15, read 11 Nov 2026"
    ]
   }
  ]

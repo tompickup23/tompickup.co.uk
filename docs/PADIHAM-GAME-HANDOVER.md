@@ -226,3 +226,88 @@ build passes. Not tried with a real screen reader, a real game controller or a r
 
 Ideas and evidence: rows I128 to I179 in the Reports ideas register (Reports PR 688) and
 `Tompickup_Games_work/Padiham_Job_Access_Local_Play_2026-11-11.md`.
+
+## Four more buildings, 11 November 2026
+
+On branch `feat/padiham-four-buildings` (cut from main, separate from `feat/padiham-access`). Checked in the
+dev server's preview pane; the site build passes.
+
+- **Reference only.** Tom saved nine screenshots on his Desktop (Google Street View, visitor photographs on
+  Google Maps, one Facebook image, one from padiham.org.uk). They were read for shapes and colours. None is in
+  the repo and none is reproduced.
+- **Positions** came from the Food Standards Agency food hygiene register's geocodes (API, header
+  `x-api-version: 2`, no key): 61-63 and 65 Burnley Road, 46 Church Street, 90 Burnley Road.
+- **A fault found on the way.** The "Former bank, Burnley Road" override sat on the outline that is really
+  57 to 65 Burnley Road. Wikimedia Commons gives that photo's object position as game metres (69, 132), the
+  outline OpenStreetMap names The Bank. The override was moved there.
+- **Padiham Business Centre** (`gablefront`): three storeys of stone over shops, central gable, two white bay
+  windows, arched doorway with a balcony, two planters.
+- **Padiham Leisure Centre** (`sportshall`; OpenStreetMap calls it Padiham Pool, and that is the name shown):
+  brown brick ranges, a taller grey hall with a window band, a canopy.
+- **Corner of Church Street and Alma Street** (`cornershop`): white painted splayed corner, dark red pilasters
+  and fascia, wooden door. No name is shown, because the business there is not in OpenStreetMap and the page
+  says names come from it.
+- **Jaipur** (`blackfront`, with new override keys `spot` and `sign`): a black shop front on one bay of the long
+  terrace outline, white lettering. `spot` picks the wall nearest a point, so a single shop in a terrace can be
+  dressed without touching the rest.
+- `build_world.py` is deterministic: outlines and their order did not change, so `terrain.json` was not rebuilt.
+- **Easy next step:** the register lists about fifteen more food businesses inside the playable area that are
+  not in OpenStreetMap (cafes, takeaways, the Bridge Inn). Adding them to OpenStreetMap would bring their real
+  names into the game on the next rebuild.
+
+## The white horse, the Bridge Inn and more named businesses, 11 November 2026
+
+Same branch, `feat/padiham-four-buildings`. Checked in the dev server's preview pane; the site build passes.
+
+- **The white horse** (the "Padiham horse" earlier notes could not identify): on a dark brick block above the
+  shops at 42 Burnley Road, next to the Town Hall. That outline was dressed as rendered and gabled; it is now
+  brown brick with a flat roof. Built as a `spots` entry of kind `horse`. No plaque yet: there is no sourced
+  fact about the horse, so ask Padiham Archives or the Town Council before writing one.
+- **Bridge Inn**, 68 Burnley Road: a stone pub front (`spots` kind `pub`) at the west end of the long terrace
+  that also holds Jaipur. No interior.
+- **`spots` replaces `spot`:** a list on a building override, each `{at, k, sign}` with `k` one of `black`,
+  `pub` or `horse`. Each picks the wall nearest its point.
+- **Serrano's Deli-Pizza is now named**, on Tom's say (11 November 2026).
+- **32 more businesses are named**, from the Food Standards Agency food hygiene register (API, no key, Open
+  Government Licence). They are in the `pois` list in `overrides.json`, each with its establishment number and
+  the date read. Left out: care settings, schools, the foodbank, anything marked former, and anything not
+  inspected since the start of 2022. No rating is stored or shown. The page's disclaimer now names the register
+  as a second source of names. The register lags, so a closed business may linger: removal requests still apply.
+- **Not built, noted:** Tom also saved three pictures of Padiham Cricket Club's pavilion (white walls, brown
+  tiled roof, a central gable with a clock, a veranda). The cricket pitch is in the map data; the pavilion is
+  not dressed. Children appear in one picture: reference for the building only.
+- **Seen when comparing the bridge view with Tom's picture:** the real approach to Padiham Bridge is heavily
+  treed on both banks and has stone parapets with railings; the game's is bare. Riverbank trees are an easy win.
+
+## Cricket pavilion, White Horse plaque and riverbank trees, 11 November 2026
+
+Same branch. Checked in the dev server's preview pane.
+
+- **Padiham Cricket Club pavilion** (`pavilion`): the outline on the far side of the cricket ground from the
+  football ground, as Tom said, and where the food hygiene register places the club. White walls, brown tiled
+  roof, a central gable with a clock, a veranda with benches and baskets, the club's name on the veranda. A new
+  landmark kind `wicket` draws a mown square and strip at the centre of the mapped cricket pitch; its direction
+  is a guess.
+- **Plaque 20, The White Horse.** Tom said the horse was the sign of the White Horse pub. Two sources read in
+  raw text: Lancashire County Council's Red Rose Collections item EBU20150112002 (built with the surrounding
+  buildings in the 1960s, closed June 2008) and CAMRA pub record 175582 (permanently closed 1 July 2008). The
+  plaque says 2008 without a month. Burnley's licensing register lists the premises at 52 Burnley Road.
+- **Riverbank trees:** `build_world.py` now plants a tree about every 16 m on each bank of the wide river
+  lines inside the playable area, clear of roads, buildings and the water outlines (78 trees). They use their
+  own random stream, so nothing else moved.
+
+## Today's job, a first version, 11 November 2026
+
+Ideas I148 and I149 in the Reports register, as a prototype. In `game.js` under "Today's job".
+
+- The menu has **Today's job**: three stops picked from the date alone (`seeded('padiham ' + date)` over the
+  job places sorted by name), so everyone playing the same published version gets the same job. It starts
+  everyone outside the Town Hall. Adding or renaming places changes the day's job for everyone at once.
+- On finishing, the result (date, seconds, par, calm or not) is kept in the browser under `padiham-daily-1`,
+  best time of the day, and the menu shows **Share today's result**: the date, three squares and the time (or
+  "done at a stroll" in calm), the address of the page, and nothing about the route. Phones get the share
+  sheet; elsewhere it is copied.
+- No streaks, no reminders, nothing sent. Checked in the preview pane by moving the figure to each stop;
+  **not played through on foot, and the copy step could not be exercised in the pane.**
+- Next, if it earns its place: the route drawn on the map as the share card (I150) and a beat my round link
+  (I151).

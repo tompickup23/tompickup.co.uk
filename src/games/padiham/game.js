@@ -541,14 +541,65 @@ function arrive() {
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
   const bonus = !S.calm && j.t <= j.par ? Math.round(j.pay / 2) : 0;
   state.money += j.pay + bonus; state.done++;
-  if (state.jobIndex < SCRIPT.length) state.jobIndex++;
+  if (!j.daily && state.jobIndex < SCRIPT.length) state.jobIndex++;
   persist(); hud(); sound.done();
+  if (j.daily) {
+    const old = dailyResult(), r = { date: j.daily, t: Math.round(j.t), par: j.par, calm: S.calm };
+    if (!old || old.date !== r.date || old.calm || (!r.calm && r.t < old.t)) { try { localStorage.setItem(DAILY_KEY, JSON.stringify(r)); } catch { /* private mode */ } }
+    toast("Today's job done!", S.calm ? 'Open the menu to share it' : `${mmss(j.t)}. Open the menu to share it`, 4000);
+    makeJob();
+    return;
+  }
   toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : 'Beat the clock next time for a bonus');
   makeJob();
 }
 function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
 const foundCount = () => plaques.filter((p) => state.plaques.has(p.id)).length;
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+// ---------- Today's job (a first cut of ideas I148 and I149) ----------
+// One job a day, made from the date alone, so everyone in town gets the same three stops and can compare.
+// Nothing is sent anywhere: the result is kept in the browser and shared only if the player chooses to.
+const DAILY_KEY = 'padiham-daily-1';
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+function seeded(str) {
+  let h = 2166136261;
+  for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
+  return () => { h = (h + 0x6d2b79f5) | 0; let t = h; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const dailyResult = () => { try { return JSON.parse(localStorage.getItem(DAILY_KEY) || 'null'); } catch { return null; } };
+function dailyJob() {
+  const rnd = seeded('padiham ' + today()), list = [...jobPois].sort((a, b) => (a.n < b.n ? -1 : 1));
+  const start = pois.get('Padiham Town Hall') || list[0], stops = [];
+  let prev = start, tries = 0;
+  while (stops.length < 3 && tries++ < 800) {
+    const c = list[Math.floor(rnd() * list.length)], d = dist2(prev, c);
+    if (c !== start && !stops.includes(c) && d > 80 && d < 420) { stops.push(c); prev = c; }
+  }
+  if (stops.length < 3) return null;
+  const thing = CARGO[Math.floor(rnd() * CARGO.length)];
+  return { daily: today(), start, title: "Today's job", steps: [{ poi: stops[0], text: `Collect ${thing} at ${stops[0].n}` }, { poi: stops[1], text: `Call in at ${stops[1].n}` }, { poi: stops[2], text: `Deliver it to ${stops[2].n}` }] };
+}
+function startDaily() {
+  const job = dailyJob();
+  if (!job) { note('No job could be made today'); return; }
+  if (state.inside) leavePub();
+  // Everyone sets off from the same spot, outside the Town Hall.
+  player.x = job.start.dx; player.z = job.start.dz;
+  for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; }
+  let d = 0, prev = { dx: player.x, dz: player.z };
+  for (const st of job.steps) { d += dist2(prev, st.poi); prev = st.poi; }
+  job.i = 0; job.t = 0; job.par = Math.round((d * 1.4) / 5 + 12 * job.steps.length); job.pay = 30;
+  state.job = job; showStep(); closeMenu();
+  toast("Today's job", 'The same three stops for everyone today', 3500);
+}
+function dailyLine() {
+  const r = dailyResult();
+  if (!r || r.date !== today()) return null;
+  const day = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+  const marks = r.calm || r.t <= r.par ? '🟩🟩🟩' : r.t <= r.par * 1.5 ? '🟩🟩🟨' : '🟩🟨🟨';
+  return `The Padiham Job, ${day}\n${marks} ${r.calm ? 'done at a stroll' : mmss(r.t)}\nSame three stops for everyone today\ntompickup.co.uk/the-padiham-job`;
+}
 
 // ---------- Local history plaques ----------
 // Each plaque stands on the pavement by its place. The words and their sources are in history.js,
@@ -640,6 +691,7 @@ function renderJournal() {
 function openMenu() {
   if (!started || menu.classList.contains('on')) return;
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
+  $('dailyShare').hidden = !dailyLine();
   renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
   menu.classList.add('on'); $('resume').focus();
 }
@@ -654,6 +706,15 @@ menu.addEventListener('keydown', (e) => {
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 });
 $('menuBtn').addEventListener('click', openMenu);
+$('daily').addEventListener('click', startDaily);
+$('dailyShare').addEventListener('click', async () => {
+  const text = dailyLine();
+  if (!text) return;
+  try {
+    if (navigator.share && isTouch) await navigator.share({ text });
+    else { await navigator.clipboard.writeText(text); note('Copied. Paste it wherever you like'); }
+  } catch { /* the share sheet was closed, or copying is blocked */ }
+});
 $('resume').addEventListener('click', closeMenu);
 addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
 // Pause when the tab is left. The dev server can switch this off for testing in a background pane.
