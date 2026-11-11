@@ -498,6 +498,11 @@ code {
    - A bar reaches full length once it is about an eighth of the way up the
      viewport, so it is short of its value only at the very bottom edge. A line
      chart is complete the moment its whole frame is on screen.
+   - Columns rise from their baseline only once the whole chart is on screen,
+     so a column is never growing from a baseline the reader cannot see.
+   - A stacked bar wipes in only where its segments carry no text (the thin
+     kind). A stack with labels inside its segments stays drawn, because a
+     label must never wait for its mark.
    - transform, clip-path and opacity only: nothing changes layout. Screen
      only, so print always gets the finished chart.
    - Armed by the reader's first scroll (html.motion-armed, set by a small
@@ -507,6 +512,10 @@ code {
      guard those captures showed empty bars and empty line charts. */
 @keyframes bar-grow {
   from { transform: scaleX(0); }
+}
+
+@keyframes col-rise {
+  from { transform: scaleY(0); }
 }
 
 @keyframes line-wipe {
@@ -522,13 +531,15 @@ code {
   @supports (animation-timeline: view()) {
     .viz-reform-bar,
     .cbar-track,
-    .bl-track {
+    .bl-track,
+    .dg-track {
       view-timeline: --bar block;
     }
 
     .motion-armed .viz-reform-bar .fill,
     .motion-armed .cbar-fill,
-    .motion-armed .bl-fill {
+    .motion-armed .bl-fill,
+    .motion-armed .dg-fill {
       transform-origin: left center;
       animation-name: bar-grow;
       animation-timing-function: linear;
@@ -546,8 +557,43 @@ code {
        selector stops the fold. */
     :where(.viz-reform-bar) > .fill,
     :where(.cbar-track) > .cbar-fill,
-    :where(.bl-track) > .bl-fill {
+    :where(.bl-track) > .bl-fill,
+    :where(.dg-track) > .dg-fill {
       animation-timeline: --bar;
+    }
+
+    /* Column charts. The row that holds the columns is the timeline, found by
+       its children because article markup gives it no class. */
+    :has(> .viz-col) {
+      view-timeline: --cols block;
+    }
+
+    .motion-armed .viz-col {
+      transform-origin: center bottom;
+      animation-name: col-rise;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 100% cover 30%;
+    }
+
+    :where(:has(> .viz-col)) > .viz-col {
+      animation-timeline: --cols;
+    }
+
+    /* Thin stacked bars: one wipe across the whole stack, left to right. */
+    .viz-stack.thin {
+      view-timeline: --stack block;
+    }
+
+    .motion-armed .viz-stack.thin {
+      animation-name: line-wipe;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 0% cover 12%;
+    }
+
+    :where(.viz-panel, .prose) .viz-stack.thin {
+      animation-timeline: --stack;
     }
 
     /* Point markers arrive after their line, never before it. */
