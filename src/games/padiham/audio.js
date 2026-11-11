@@ -1,12 +1,12 @@
 // All sound is synthesised in the browser, so there are no audio files to load.
 export class Sound {
-  constructor() { this.ctx = null; this.muted = false; }
+  constructor(level = 1) { this.ctx = null; this.muted = false; this.level = level; }
   start() {
     if (this.ctx) return;
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     const ctx = this.ctx = new AC();
-    this.master = ctx.createGain(); this.master.gain.value = this.muted ? 0 : 1; this.master.connect(ctx.destination);
+    this.master = ctx.createGain(); this.master.gain.value = this.muted ? 0 : this.level; this.master.connect(ctx.destination);
     const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = buf.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     this.noise = buf;
@@ -16,7 +16,7 @@ export class Sound {
     const g = ctx.createGain(); g.gain.value = 0.09;
     src.connect(lp).connect(g).connect(this.master); src.start();
   }
-  setMuted(m) { this.muted = m; if (this.master) this.master.gain.value = m ? 0 : 1; }
+  setMuted(m) { this.muted = m; if (this.master) this.master.gain.value = m ? 0 : this.level; }
   burst(dur, freq, q, gain, when = 0) {
     if (!this.ctx) return;
     const ctx = this.ctx, t = ctx.currentTime + when;
