@@ -46,14 +46,23 @@ function persist() {
 // ?calm=1 gives a quieter town: fewer passers-by and softer sound. ?edition=clean leaves out the selfie
 // taker and keeps pub doors shut. Both can be combined: ?calm=1&edition=clean
 const opts = new URLSearchParams(location.search);
-const CLEAN = opts.get('edition') === 'clean';
+// ?route=12_-45.130_20 is a practice route set by a supporter: a start and up to eleven markers, each a pair of
+// whole metres on the game's own grid. The route is all there is in the link: no name, no words, nothing kept.
+const ROUTE = (() => {
+  const rawRoute = opts.get('route');
+  if (!rawRoute || !/^-?\d+_-?\d+(\.-?\d+_-?\d+){1,11}$/.test(rawRoute)) return null;
+  return { key: rawRoute, pts: rawRoute.split('.').map((q) => q.split('_').map(Number)) };
+})();
+// A practice route is always the plain version: no selfie taker and no pubs.
+const CLEAN = opts.get('edition') === 'clean' || !!ROUTE;
+if (ROUTE) stage.classList.add('practice');
 
 // ---------- Comfort and access settings ----------
 // Kept in the browser, and only the ones the player has changed: the rest follow the device (reduced motion,
 // more contrast) or the calm link. S.text is 0, 1 or 2 for standard, large and largest panel text.
 const SET_KEY = 'padiham-settings-1';
 const mq = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
-const S = { calm: opts.get('calm') === '1', text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
+const S = { calm: opts.get('calm') === '1' || !!ROUTE, text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
 const chosen = (() => { try { return JSON.parse(localStorage.getItem(SET_KEY) || '{}') || {}; } catch { return {}; } })();
 for (const k in S) if (typeof chosen[k] === typeof S[k] && !(k === 'calm' && S.calm)) S[k] = chosen[k];
 if (![0, 1, 2].includes(S.text)) S.text = 0;
@@ -73,6 +82,8 @@ function setSetting(k, v) {
   try { localStorage.setItem(SET_KEY, JSON.stringify(chosen)); } catch { /* private mode */ }
   applySettings();
 }
+// On a practice route calm is fixed, so its switch is put away.
+if (ROUTE) for (const i of stage.querySelectorAll('input[data-set="calm"]')) i.closest('label').hidden = true;
 for (const i of stage.querySelectorAll('input[data-set]')) i.addEventListener('change', () => setSetting(i.dataset.set, i.checked));
 for (const b of stage.querySelectorAll('button[data-text]')) b.addEventListener('click', () => setSetting('text', Number(b.dataset.text)));
 
@@ -231,6 +242,11 @@ function drawMini() {
   for (const l of litter) {
     const lx2 = (l.x - player.x) * MS * zoom, lz2 = (l.z - player.z) * MS * zoom;
     if (l.mesh.visible && Math.hypot(lx2, lz2) < S / 2) { mini.beginPath(); mini.arc(S / 2 + lx2, S / 2 + lz2, 4, 0, 7); mini.fill(); }
+  }
+  if (state.job && state.job.route) {
+    mini.strokeStyle = '#ffcf33'; mini.lineWidth = 5; mini.setLineDash([10, 8]); mini.beginPath(); mini.moveTo(S / 2, S / 2);
+    for (const st of state.job.steps.slice(state.job.i)) mini.lineTo(S / 2 + (st.poi.dx - player.x) * MS * zoom, S / 2 + (st.poi.dz - player.z) * MS * zoom);
+    mini.stroke(); mini.setLineDash([]);
   }
   const t = target();
   if (t) {
@@ -431,7 +447,7 @@ stick.addEventListener('pointercancel', endStick);
 const PACE = [4.6, 9.5, 14], PACE_NAME = ['Walk', 'Run', 'Sprint'];
 let gear = 0;
 function toggleRun() {
-  gear = (gear + 1) % 3;
+  gear = (gear + 1) % (ROUTE ? 2 : 3);
   const b = $('run');
   b.textContent = PACE_NAME[gear].toUpperCase(); b.classList.toggle('on', gear > 0); b.classList.toggle('fast', gear === 2);
   b.setAttribute('aria-label', `Pace: ${PACE_NAME[gear].toLowerCase()}. Press to change`);
@@ -545,6 +561,64 @@ let slicePois = [], jobPois = [];
 // Random deliveries keep to shops, pubs and public places: not schools or the surgery.
 const NO_RANDOM = new Set(['school', 'doctors']);
 
+// ---------- Practice routes ----------
+// For a supporter and a learner: the same markers in the same order every time, one instruction at a time, no
+// clock and no score. It is for getting to know a route before walking it for real with a trainer. It does not
+// teach road safety, and the start screen says so.
+const spotName = (x, z) => {
+  let best = null, bd = 35;
+  for (const q of slicePois) { const d = Math.min(Math.hypot(q.x - x, q.z - z), Math.hypot(q.dx - x, q.dz - z) + 4); if (d < bd) { bd = d; best = q.n; } }
+  if (best) return `by ${best}`;
+  let name = '', near = 20;
+  for (const r of roadGrid.at(x, z)) if (r[5]) { const d = distToSeg(x, z, r)[0]; if (d < near) { near = d; name = r[5]; } }
+  return name ? `on ${name}` : 'in Padiham';
+};
+const routeKey = () => `padiham-route-${ROUTE.key}`;
+const routeCount = () => { try { return Number(localStorage.getItem(routeKey())) || 0; } catch { return 0; } };
+function startRoute() {
+  const clampX = (x) => Math.min(slice[2] - 3, Math.max(slice[0] + 3, x)), clampZ = (z) => Math.min(slice[3] - 3, Math.max(slice[1] + 3, z));
+  const p = ROUTE.pts.map(([x, z]) => [clampX(x), clampZ(z)]);
+  player.x = p[0][0]; player.z = p[0][1]; player.speed = 0;
+  player.heading = cam.yaw = Math.atan2(p[1][0] - p[0][0], p[1][1] - p[0][1]);
+  const steps = p.slice(1).map(([x, z], i) => {
+    const nm = spotName(x, z), last = i === p.length - 2;
+    return { poi: { n: last ? `the end of the route, ${nm}` : `the marker ${nm}`, dx: x, dz: z }, text: last ? `Walk to the end of the route, ${nm}` : `Walk to the marker ${nm}` };
+  });
+  state.job = { title: 'Practice route', route: true, steps, i: 0, t: 0, par: 0, pay: 0 };
+  showStep();
+}
+function routeArrive(j) {
+  buzz(30);
+  if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); toast('Well done', j.steps[j.i].text, 3200); return; }
+  const n = routeCount() + 1;
+  try { localStorage.setItem(routeKey(), String(n)); } catch { /* private mode */ }
+  state.job = null; beam.visible = false; sound.done();
+  $('jobTitle').textContent = 'Route finished'; $('jobText').textContent = `You have walked it ${plural(n, 'time')}. Press Walk it again to start over`; $('dist').textContent = '';
+  toast('Route finished', `Well done. That is ${plural(n, 'time')}`, 4000);
+}
+$('again').addEventListener('click', () => { if (ROUTE && started) { closeToast(); startRoute(); say('Back at the start of the route'); } });
+
+// Making a route: the supporter walks it in the game and marks each turning point from the menu. The link holds
+// the spots and nothing else. Free text is left out on purpose, so a link cannot put words on the screen.
+const draft = [];
+function draftNote(msg) {
+  $('routeNote').textContent = msg || (draft.length ? `${plural(draft.length, 'spot')}: start ${draft.map(([x, z]) => spotName(x, z)).join(', then ')}` : 'No spots yet. Stand where the route starts and add it');
+  $('routeCopy').disabled = draft.length < 2;
+}
+$('routeAdd').addEventListener('click', () => {
+  if (state.inside) { draftNote('Step outside first'); return; }
+  const x = Math.round(player.x), z = Math.round(player.z), last = draft[draft.length - 1];
+  if (draft.length >= 12) { draftNote('Twelve spots is the most a route can hold'); return; }
+  if (last && Math.hypot(last[0] - x, last[1] - z) < 15) { draftNote('Walk a little further before adding the next spot'); return; }
+  draft.push([x, z]); draftNote();
+});
+$('routeClear').addEventListener('click', () => { draft.length = 0; $('routeLink').hidden = true; draftNote(); });
+$('routeCopy').addEventListener('click', async () => {
+  const url = `${location.origin}${location.pathname}?route=${draft.map((q) => q.join('_')).join('.')}`;
+  const box = $('routeLink'); box.value = url; box.hidden = false;
+  try { await navigator.clipboard.writeText(url); draftNote('Link copied. Anyone who opens it gets this route'); } catch { box.select(); draftNote('Copy the link from the box below'); }
+});
+
 // The bonus time allows for running most of the way, with a little to spare at each stop.
 const parFor = (d, stops) => Math.round((d * 1.4) / 8 + 8 * stops);
 // A spot on a named street, a fair walk from the shop, for a good turn. Only the street is named, never a house.
@@ -630,6 +704,7 @@ function closeToast() { clearTimeout(toastTimer); $('toast').classList.remove('o
 $('toast').addEventListener('click', closeToast);
 function arrive() {
   const j = state.job;
+  if (j.route) { routeArrive(j); return; }
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); buzz(20); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
   const bonus = !S.calm && j.t <= j.par ? Math.round(j.pay / 2) : 0;
   state.money += j.pay + bonus; state.done++; buzz(60);
@@ -669,6 +744,7 @@ const STAMPS = [
   ['pubs', 'Both bars', 'Call in at both pubs', () => state.pubs.size >= 2],
 ].filter((st) => !(CLEAN && st[0] === 'pubs'));
 function checkStamps() {
+  if (ROUTE) return;
   const fresh = STAMPS.filter((st) => !state.stamps.has(st[0]) && st[3]());
   if (!fresh.length) return;
   for (const st of fresh) state.stamps.add(st[0]);
@@ -1155,10 +1231,10 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     for (let k = 0; k < 12 && (nearWall(player.x, player.z, 3) || k < 3); k++) { player.x += ((first0.dx - home.dx) / dl) * 1.5; player.z += ((first0.dz - home.dz) / dl) * 1.5; }
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
-  placePlaques(); placeLitter();
+  if (!ROUTE) { placePlaques(); placeLitter(); }
   peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   peds.setCount(S.calm ? 6 : Infinity);
-  pigeons = new Pigeons(scene, built.spots, 7, (n) => {
+  if (!ROUTE) pigeons = new Pigeons(scene, built.spots, 7, (n) => {
     state.pigeons += n; persist(); hud();
     if (S.calm) return;
     sound.flap(n);
@@ -1166,12 +1242,12 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
   });
   // Stamps already earned by an older save are marked quietly, without a run of messages.
   for (const st of STAMPS) if (st[3]()) state.stamps.add(st[0]);
-  hud(); makeJob(); drawMini();
+  hud(); if (ROUTE) startRoute(); else makeJob(); drawMini(); draftNote();
   const b = $('play');
-  b.disabled = false; b.textContent = state.done ? 'Carry on' : 'Play';
+  b.disabled = false; b.textContent = ROUTE ? 'Start the route' : state.done ? 'Carry on' : 'Play';
   b.addEventListener('click', () => { $('setSlot').append($('settings')); $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; } };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE };
