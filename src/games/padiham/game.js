@@ -49,21 +49,29 @@ function persist() {
 const opts = new URLSearchParams(location.search);
 // ?route=12_-45.130_20 is a practice route set by a supporter: a start and up to eleven markers, each a pair of
 // whole metres on the game's own grid. The route is all there is in the link: no name, no words, nothing kept.
+// The part of an address after the # is never sent to the website, so routes and trips are carried there.
+// Older links that put the route in the query still work.
+const frag = new URLSearchParams(location.hash.slice(1));
 const ROUTE = (() => {
-  const rawRoute = opts.get('route');
+  const rawRoute = frag.get('route') || opts.get('route');
   if (!rawRoute || !/^-?\d+_-?\d+(\.-?\d+_-?\d+){1,11}$/.test(rawRoute)) return null;
   return { key: rawRoute, pts: rawRoute.split('.').map((q) => q.split('_').map(Number)) };
 })();
-// A practice route is always the plain version: no selfie taker and no pubs.
-const CLEAN = opts.get('edition') === 'clean' || !!ROUTE;
-if (ROUTE) stage.classList.add('practice');
+// A trip is two named places and, if wanted, one bus ride between two stops: #trip=1.from.to or
+// #trip=1.from.to.board.alight.service. Each part is a short code made from a public name (see indexEnds),
+// so the link holds no words, no coordinates of anyone's home and nothing about the person it is for.
+const TRIP_RAW = (() => { const t = frag.get('trip'); return !ROUTE && t && /^1\.[a-z0-9]{2,12}\.[a-z0-9]{2,12}(\.[a-z0-9]{2,12}){0,3}$/.test(t) ? t : null; })();
+const PRACTICE = !!ROUTE || !!TRIP_RAW;
+// A practice route or trip is always the plain version: no selfie taker and no pubs.
+const CLEAN = opts.get('edition') === 'clean' || PRACTICE;
+if (PRACTICE) stage.classList.add('practice');
 
 // ---------- Comfort and access settings ----------
 // Kept in the browser, and only the ones the player has changed: the rest follow the device (reduced motion,
 // more contrast) or the calm link. S.text is 0, 1 or 2 for standard, large and largest panel text.
 const SET_KEY = 'padiham-settings-1';
 const mq = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
-const S = { calm: opts.get('calm') === '1' || !!ROUTE, text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
+const S = { calm: opts.get('calm') === '1' || PRACTICE, text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
 const chosen = (() => { try { return JSON.parse(localStorage.getItem(SET_KEY) || '{}') || {}; } catch { return {}; } })();
 for (const k in S) if (typeof chosen[k] === typeof S[k] && !(k === 'calm' && S.calm)) S[k] = chosen[k];
 if (![0, 1, 2].includes(S.text)) S.text = 0;
@@ -84,7 +92,7 @@ function setSetting(k, v) {
   applySettings();
 }
 // On a practice route calm is fixed, so its switch is put away.
-if (ROUTE) for (const i of stage.querySelectorAll('input[data-set="calm"]')) i.closest('label').hidden = true;
+if (PRACTICE) for (const i of stage.querySelectorAll('input[data-set="calm"]')) i.closest('label').hidden = true;
 for (const i of stage.querySelectorAll('input[data-set]')) i.addEventListener('change', () => setSetting(i.dataset.set, i.checked));
 for (const b of stage.querySelectorAll('button[data-text]')) b.addEventListener('click', () => setSetting('text', Number(b.dataset.text)));
 
@@ -185,13 +193,13 @@ function safeDoor(p) {
   if (best) { p.dx = best[0]; p.dz = best[1]; }
 }
 const labels = [];
-function label(text, x, y, z) {
+function label(text, x, y, z, bg = 'rgba(20,22,26,.82)') {
   const cv = document.createElement('canvas');
   cv.width = 512; cv.height = 96;
   const g = cv.getContext('2d');
   g.font = '700 44px system-ui, sans-serif';
   const w = Math.min(500, g.measureText(text).width + 40);
-  g.fillStyle = 'rgba(20,22,26,.82)';
+  g.fillStyle = bg;
   g.beginPath(); g.roundRect((512 - w) / 2, 12, w, 72, 20); g.fill();
   g.fillStyle = '#f4f1e8'; g.textAlign = 'center'; g.textBaseline = 'middle';
   g.fillText(text, 256, 50, 470);
@@ -481,7 +489,7 @@ function paceLabel() {
   return name;
 }
 function toggleRun() {
-  gear = (gear + 1) % (ROUTE ? 2 : 3);
+  gear = (gear + 1) % (PRACTICE ? 2 : 3);
   const name = paceLabel();
   say(onWheels() ? `${name} pace` : ['Walking', 'Running', 'Sprinting'][gear]);
 }
@@ -607,19 +615,67 @@ const spotName = (x, z) => {
   for (const r of roadGrid.at(x, z)) if (r[5]) { const d = distToSeg(x, z, r)[0]; if (d < near) { near = d; name = r[5]; } }
   return name ? `on ${name}` : 'in Padiham';
 };
-const routeKey = () => `padiham-route-${ROUTE.key}`;
+const routeKey = () => `padiham-route-${ROUTE ? ROUTE.key : 'trip-' + TRIP_RAW}`;
 const routeCount = () => { try { return Number(localStorage.getItem(routeKey())) || 0; } catch { return 0; } };
+// ---------- Trips: named ends, and one bus ride if wanted ----------
+// Every place and stop gets a short code made from its public name, so a link survives the town being rebuilt
+// as long as the name stays. Two stops with one name (either side of a road) are told apart by their order
+// west to east. Proper stop codes (NaPTAN) would be better and are not in the town file yet.
+const hash36 = (str) => { let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); };
+let ends = [], services = [], trip = null;
+function indexEnds() {
+  const seen = new Map(), code = (pre, key) => { const n = seen.get(pre + key) || 0; seen.set(pre + key, n + 1); return pre + hash36(key) + (n || ''); };
+  const order = (a, b) => (a.n < b.n ? -1 : a.n > b.n ? 1 : a.x - b.x || a.z - b.z);
+  ends = [];
+  for (const p of [...slicePois].sort(order)) ends.push({ id: code('p', p.n), n: p.n, label: p.n, x: p.dx, z: p.dz });
+  for (const st of [...buses.stops].sort(order)) {
+    const o = buses.options(st)[0];
+    ends.push({ id: code('s', st.n), n: st.n, stop: st, x: st.x, z: st.z, label: `${st.n} bus stop (${o ? `${o.route.ref} to ${o.route.to}` : 'no buses in the game'})` });
+  }
+  services = buses.routes.map((r) => ({ id: code('r', `${r.ref}>${r.to}`), route: r }));
+}
+const endOf = (stop) => ends.find((q) => q.stop === stop);
+const apart = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
+function resolveTrip(raw) {
+  const [, a, b, c, d, e] = raw.split('.'), from = ends.find((q) => q.id === a), to = ends.find((q) => q.id === b);
+  if (!from || !to || from === to) return null;
+  const t = { from, to };
+  if (c) {
+    const board = ends.find((q) => q.id === c && q.stop), off = ends.find((q) => q.id === d && q.stop), sv = services.find((q) => q.id === e);
+    if (!board || !off || !sv || !buses.options(board.stop).some((o) => o.route === sv.route && o.later.includes(off.stop))) return null;
+    t.bus = { board, off, route: sv.route };
+  }
+  return t;
+}
+const endName = (e) => (e.stop ? `the ${e.n} bus stop` : e.n);
+function tripSteps(t) {
+  const at = (e) => ({ n: endName(e), dx: e.x, dz: e.z }), steps = [];
+  if (t.bus) {
+    const { board, off, route } = t.bus;
+    if (apart(t.from, board) > 8) steps.push({ poi: at(board), text: `Walk to ${endName(board)}` });
+    // The ride: the marker stands at the stop to get off at. It is reached on foot from the bus, never while riding.
+    steps.push({ poi: at(off), text: `Catch the ${route.ref} to ${route.to} from ${endName(board)}. Ring the bell for ${off.n}`, ride: { stop: board.stop, route }, r: 16 });
+    if (apart(off, t.to) > 8) steps.push({ poi: at(t.to), text: `Walk to ${endName(t.to)}` });
+  } else steps.push({ poi: at(t.to), text: `Walk to ${endName(t.to)}` });
+  return steps;
+}
 function startRoute() {
   const clampX = (x) => Math.min(slice[2] - 3, Math.max(slice[0] + 3, x)), clampZ = (z) => Math.min(slice[3] - 3, Math.max(slice[1] + 3, z));
   stopBus();
-  const p = ROUTE.pts.map(([x, z]) => [clampX(x), clampZ(z)]);
-  player.x = p[0][0]; player.z = p[0][1]; player.speed = 0;
-  player.heading = cam.yaw = Math.atan2(p[1][0] - p[0][0], p[1][1] - p[0][1]);
-  const steps = p.slice(1).map(([x, z], i) => {
-    const nm = spotName(x, z), last = i === p.length - 2;
-    return { poi: { n: last ? `the end of the route, ${nm}` : `the marker ${nm}`, dx: x, dz: z }, text: last ? `Walk to the end of the route, ${nm}` : `Walk to the marker ${nm}` };
-  });
-  state.job = { title: 'Practice route', route: true, steps, i: 0, t: 0, par: 0, pay: 0 };
+  let p0, steps;
+  if (trip) { p0 = [clampX(trip.from.x), clampZ(trip.from.z)]; steps = tripSteps(trip); }
+  else {
+    const p = ROUTE.pts.map(([x, z]) => [clampX(x), clampZ(z)]);
+    p0 = p[0];
+    steps = p.slice(1).map(([x, z], i) => {
+      const nm = spotName(x, z), last = i === p.length - 2;
+      return { poi: { n: last ? `the end of the route, ${nm}` : `the marker ${nm}`, dx: x, dz: z }, text: last ? `Walk to the end of the route, ${nm}` : `Walk to the marker ${nm}` };
+    });
+  }
+  player.x = p0[0]; player.z = p0[1]; player.speed = 0;
+  for (let k = 0; k < 12 && nearWall(player.x, player.z, 0.8); k++) { player.x += 0.8; player.z += 0.5; }
+  player.heading = cam.yaw = Math.atan2(steps[0].poi.dx - player.x, steps[0].poi.dz - player.z);
+  state.job = { title: trip ? 'Your trip' : 'Practice route', route: true, steps, i: 0, t: 0, par: 0, pay: 0 };
   showStep();
 }
 function routeArrive(j) {
@@ -628,10 +684,11 @@ function routeArrive(j) {
   const n = routeCount() + 1;
   try { localStorage.setItem(routeKey(), String(n)); } catch { /* private mode */ }
   state.job = null; beam.visible = false; sound.done();
-  $('jobTitle').textContent = 'Route finished'; $('jobText').textContent = `You have walked it ${plural(n, 'time')}. Press Walk it again to start over`; $('dist').textContent = '';
-  toast('Route finished', `Well done. That is ${plural(n, 'time')}`, 4000);
+  const done = trip ? 'You have arrived' : 'Route finished';
+  $('jobTitle').textContent = done; $('jobText').textContent = `${trip ? `You are at ${endName(trip.to)}. You have done this trip` : 'You have walked it'} ${plural(n, 'time')}. Press Walk it again to start over`; $('dist').textContent = '';
+  toast(done, `Well done. That is ${plural(n, 'time')}`, 4000);
 }
-$('again').addEventListener('click', () => { if (ROUTE && started) { closeToast(); startRoute(); say('Back at the start of the route'); } });
+$('again').addEventListener('click', () => { if ((ROUTE || trip) && started) { closeToast(); startRoute(); say('Back at the start of the route'); } });
 
 // Making a route: the supporter walks it in the game and marks each turning point from the menu. The link holds
 // the spots and nothing else. Free text is left out on purpose, so a link cannot put words on the screen.
@@ -649,7 +706,7 @@ $('routeAdd').addEventListener('click', () => {
 });
 $('routeClear').addEventListener('click', () => { draft.length = 0; $('routeLink').hidden = true; draftNote(); });
 $('routeCopy').addEventListener('click', async () => {
-  const url = `${location.origin}${location.pathname}?route=${draft.map((q) => q.join('_')).join('.')}`;
+  const url = `${location.origin}${location.pathname}#route=${draft.map((q) => q.join('_')).join('.')}`;
   const box = $('routeLink'); box.value = url; box.hidden = false;
   try { await navigator.clipboard.writeText(url); draftNote('Link copied. Anyone who opens it gets this route'); } catch { box.select(); draftNote('Copy the link from the box below'); }
 });
@@ -779,7 +836,7 @@ const STAMPS = [
   ['pubs', 'Both bars', 'Call in at both pubs', () => state.pubs.size >= 2],
 ].filter((st) => !(CLEAN && st[0] === 'pubs'));
 function checkStamps() {
-  if (ROUTE) return;
+  if (PRACTICE) return;
   const fresh = STAMPS.filter((st) => !state.stamps.has(st[0]) && st[3]());
   if (!fresh.length) return;
   for (const st of fresh) state.stamps.add(st[0]);
@@ -1082,30 +1139,52 @@ function updateSelfie(dt, time) {
 // ---------- Buses ----------
 // At a stop a button offers the buses that call there. The player picks one by its number and where it is
 // going, waits for it, rides, and rings the bell before the stop they want. See bus.js.
-let atStop = null, camSaved = null, snapCam = false;
+let atStop = null, camSaved = null, snapCam = false, boardView = false;
 const busUi = {
   toast, say, fade,
   ding() { sound.tone(1320, 0.28, 0.11); sound.tone(1100, 0.4, 0.11, 0.2); buzz(30); },
   panel(text, canRing) {
     const el = $('ride');
+    $('askBtns').textContent = '';
     if (!text) { el.classList.remove('on'); return; }
     $('rideText').textContent = text; $('bell').hidden = !canRing;
     el.classList.add('on');
   },
-  board() { camSaved = { dist: cam.dist, pitch: cam.pitch }; cam.dist = 17; cam.pitch = 0.78; snapCam = true; player.fig.group.visible = false; player.speed = 0; sound.pickup(); },
+  // A question from someone, answered with one of a few large buttons. There is no wrong answer.
+  ask(text, choices, done) {
+    const host = $('askBtns'); host.textContent = '';
+    $('rideText').textContent = text; $('bell').hidden = true;
+    choices.forEach((c, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = c;
+      b.addEventListener('click', () => { host.textContent = ''; view.focus({ preventScroll: true }); done(i); });
+      host.append(b);
+    });
+    $('ride').classList.add('on'); say(`${text}. ${choices.join(', or ')}`);
+    host.querySelector('button').focus({ preventScroll: true });
+  },
+  // Getting on: the view comes down to the pavement by the front door, facing the bus, and stays there while
+  // the player speaks to the driver. The door is on the left of the bus, the pavement side.
+  board(h) {
+    camSaved = { dist: cam.dist, pitch: cam.pitch };
+    const dx = Math.sin(h) * 0.8 + Math.cos(h) * 0.6, dz = Math.cos(h) * 0.8 - Math.sin(h) * 0.6;
+    cam.yaw = Math.atan2(-dx, -dz); cam.dist = cam.cur = 9.5; cam.pitch = 0.2; boardView = true;
+    player.fig.group.visible = false; player.speed = 0; sound.pickup();
+  },
+  // Setting off: the view lifts above the roofs and goes behind the bus.
+  depart() { boardView = false; cam.dist = 17; cam.pitch = 0.78; snapCam = true; },
   alight(x, z, heading) {
     player.x = x; player.z = z;
     for (let k = 0; k < 12 && nearWall(player.x, player.z, 0.8); k++) { player.x += Math.sin(heading) * 0.8; player.z += Math.cos(heading) * 0.8; }
-    player.fig.group.visible = true; player.speed = 0;
+    boardView = false; player.fig.group.visible = true; player.speed = 0;
     if (camSaved) { cam.dist = camSaved.dist; cam.pitch = camSaved.pitch; camSaved = null; }
     sound.done(); buzz(50);
   },
 };
-function stopBus() { if (buses && buses.busy) { const was = buses.riding; buses.cancel(); if (was) { player.fig.group.visible = true; if (camSaved) { cam.dist = camSaved.dist; cam.pitch = camSaved.pitch; camSaved = null; } } } }
+function stopBus() { boardView = false; if (buses && buses.busy) { const was = buses.riding; buses.cancel(); if (was) { player.fig.group.visible = true; if (camSaved) { cam.dist = camSaved.dist; cam.pitch = camSaved.pitch; camSaved = null; } } } }
 const busMenu = $('busMenu');
 function openBusMenu() {
   if (!atStop || !buses || buses.busy || !state.playing) return;
-  const opts = buses.options(atStop), list = $('busList');
+  const opts = buses.options(atStop), list = $('busList'), want = state.job && state.job.steps[state.job.i].ride;
   list.textContent = '';
   $('busStopName').textContent = `Bus stop: ${atStop.n}`;
   $('busNone').hidden = opts.length > 0;
@@ -1116,7 +1195,8 @@ function openBusMenu() {
     b.append(big, sm);
     const stop = atStop;
     b.addEventListener('click', () => { closeBusMenu(); buses.call(stop, o); });
-    list.appendChild(b);
+    if (want && want.stop === stop && want.route === o.route) { const em = document.createElement('em'); em.textContent = 'This is your bus'; b.prepend(em); b.classList.add('mine'); list.prepend(b); }
+    else list.appendChild(b);
   }
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
   busMenu.classList.add('on');
@@ -1126,7 +1206,75 @@ function closeBusMenu() { if (!busMenu.classList.contains('on')) return; busMenu
 $('busClose').addEventListener('click', closeBusMenu);
 $('busBtn').addEventListener('click', openBusMenu);
 $('bell').addEventListener('click', () => buses && buses.ring());
-function busKey() { if (buses && buses.phase === 'ride') buses.ring(); else openBusMenu(); }
+function busKey() { const first = $('askBtns').querySelector('button'); if (first) first.click(); else if (buses && buses.phase === 'ride') buses.ring(); else openBusMenu(); }
+
+// ---------- Planning a trip ----------
+// A helper, or the player, picks where a trip starts and ends and whether part of it is by bus. The choice
+// becomes a link. Starting it reloads the page on that link, so the game is always in one clear state.
+const tripBox = $('trip');
+const pick = (id) => ends.find((q) => q.id === $(id).value);
+function fillTripPicker() {
+  for (const [id, first] of [['tripFrom', 'Padiham Town Hall'], ['tripTo', 'Tesco']]) {
+    const sel = $(id); sel.textContent = '';
+    for (const [title, test] of [['Places', (q) => !q.stop], ['Bus stops', (q) => !!q.stop]]) {
+      const grp = document.createElement('optgroup'); grp.label = title;
+      for (const q of ends.filter(test)) { const o = document.createElement('option'); o.value = q.id; o.textContent = q.label; if (q.n === first && !q.stop) o.selected = true; grp.append(o); }
+      sel.append(grp);
+    }
+    sel.addEventListener('change', tripWays);
+  }
+  tripWays();
+}
+// The ways to make the trip: on foot, and up to three buses that save a fair part of the walk.
+function tripWays() {
+  const a = pick('tripFrom'), b = pick('tripTo'), host = $('tripWays'); host.textContent = '';
+  $('tripGo').disabled = $('tripCopy').disabled = !a || !b || a === b; $('tripLink').hidden = true;
+  if (!a || !b || a === b) { $('tripNote').textContent = 'Pick two different places'; return; }
+  $('tripNote').textContent = '';
+  const direct = apart(a, b), ways = [{ code: `1.${a.id}.${b.id}`, text: `Walk all the way. About ${Math.round(direct / 10) * 10} metres in a straight line` }], rides = [];
+  for (const B of ends) {
+    if (!B.stop || apart(a, B) > 300) continue;
+    for (const o of buses.options(B.stop)) for (const L of o.later) {
+      const A = endOf(L), walk = apart(a, B) + apart(A, b);
+      if (apart(A, b) <= 300 && walk < direct - 60) rides.push({ walk, B, A, o });
+    }
+  }
+  rides.sort((p, q) => p.walk - q.walk);
+  const used = new Set();
+  for (const r of rides) {
+    if (used.has(r.o.route) || used.size >= 3) continue; used.add(r.o.route);
+    const sv = services.find((q) => q.route === r.o.route);
+    ways.push({ code: `1.${a.id}.${b.id}.${r.B.id}.${r.A.id}.${sv.id}`, text: `By bus. ${r.B === a ? '' : `Walk to the ${r.B.n} stop. `}Catch the ${r.o.route.ref} to ${r.o.route.to} and get off at ${r.A.n}${r.A === b ? '' : `. Then walk to ${endName(b)}`}` });
+  }
+  ways.forEach((w, i) => {
+    const lab = document.createElement('label'), inp = document.createElement('input'), sp = document.createElement('span');
+    inp.type = 'radio'; inp.name = 'sop-way'; inp.value = w.code; inp.checked = i === 0; sp.textContent = w.text;
+    inp.addEventListener('change', () => { $('tripLink').hidden = true; });
+    lab.append(inp, sp); host.append(lab);
+  });
+}
+const tripUrl = () => { const w = tripBox.querySelector('input[name="sop-way"]:checked'); return w ? `${location.origin}${location.pathname}#trip=${w.value}` : null; };
+function openTrip() { tripBox.classList.add('on'); $('tripFrom').focus(); }
+function closeTrip() { if (!tripBox.classList.contains('on')) return; tripBox.classList.remove('on'); if (menu.classList.contains('on')) $('tripBtn').focus(); else if (!started) $('tripOpen').focus(); }
+$('tripOpen').addEventListener('click', openTrip);
+$('tripBtn').addEventListener('click', openTrip);
+$('tripClose').addEventListener('click', closeTrip);
+addEventListener('keydown', (e) => { if (e.code === 'Escape' && tripBox.classList.contains('on')) { e.stopImmediatePropagation(); closeTrip(); } }, true);
+// Going to a link that differs only after the # does not reload the page, so the address is set and the page reloaded.
+function goTo(url) { persist(); history.replaceState(null, '', url); location.reload(); }
+$('tripGo').addEventListener('click', () => { const u = tripUrl(); if (u) goTo(u); });
+$('tripCopy').addEventListener('click', async () => {
+  const u = tripUrl(), box = $('tripLink'); if (!u) return;
+  box.value = u; box.hidden = false;
+  try { await navigator.clipboard.writeText(u); $('tripNote').textContent = 'Link copied. Anyone who opens it gets this trip'; } catch { box.select(); $('tripNote').textContent = 'Copy the link from the box below'; }
+});
+$('leave').addEventListener('click', () => goTo(location.pathname));
+// The plan on the start screen: every step of the trip in order, before anything happens.
+function showPlan() {
+  const ol = $('plan'); ol.textContent = '';
+  if (!trip) return;
+  for (const t of [`Start at ${endName(trip.from)}`, ...state.job.steps.map((q) => q.text), `Arrive at ${endName(trip.to)}`]) { const li = document.createElement('li'); li.textContent = t; ol.append(li); }
+}
 
 // ---------- Main loop ----------
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
@@ -1151,7 +1299,7 @@ function step(dt) {
   }
   // On the bus the view starts from behind it, then follows it round the corners.
   if (riding && snapCam && buses.phase === 'ride') { cam.yaw = player.heading; snapCam = false; }
-  if (riding && S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(player.heading - cam.yaw)) * dt * 1.7;
+  if (riding && !boardView && S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(player.heading - cam.yaw)) * dt * 1.7;
   if (mag > 0.05 && state.playing && !riding) {
     const h = Math.atan2(mx, mz);
     player.heading += wrap(h - player.heading) * Math.min(1, dt * 12);
@@ -1234,7 +1382,7 @@ function step(dt) {
   if (tg && state.playing && !state.inside) {
     if (!plaqueShown) state.job.t += dt; // the clock waits while a plaque is being read
     const dx = tg.dx - player.x, dz = tg.dz - player.z, d = Math.hypot(dx, dz);
-    if (d < 3.6 && !riding) arrive();
+    if (d < (state.job.steps[state.job.i].r || 3.6) && !riding) arrive();
     if (S.reduce) beam.scale.setScalar(1);
     else { beam.rotation.y += dt * 0.8; beam.scale.setScalar(1 + Math.sin(time * 3) * 0.06); }
     uiTick -= dt;
@@ -1242,7 +1390,8 @@ function step(dt) {
       uiTick = 0.1;
       $('arrow').style.transform = `rotate(${-wrap(Math.atan2(dx, dz) - cam.yaw)}rad)`;
       const words = bearingWords(wrap(Math.atan2(dx, dz) - cam.yaw)), m = Math.round(d / 5) * 5;
-      $('dist').textContent = `${m} m, ${words}`;
+      const ride = state.job.steps[state.job.i].ride;
+      $('dist').textContent = ride && riding ? 'On the bus' : ride && Math.hypot(player.x - ride.stop.x, player.z - ride.stop.z) < 14 ? (buses.busy ? 'Wait here for your bus' : 'Choose Bus stop to catch your bus') : `${m} m, ${words}`;
       // Read the way out when it changes, but not more than once every eight seconds.
       if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}`); }
       const j = state.job;
@@ -1337,13 +1486,27 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
   homeStart = { x: player.x, z: player.z, h: player.heading };
-  if (!ROUTE) { placePlaques(); placeLitter(); }
+  if (!PRACTICE) { placePlaques(); placeLitter(); }
   buses = new Buses(scene, w, busUi);
   // A stop with no bus going on to another stop in the town centre is left as street furniture: no button, no map square.
   for (const st of buses.stops) st.dead = buses.options(st).length === 0;
+  // Every stop that works gets a tall blue sign and a name that can be read from along the street.
+  {
+    const pole = new THREE.MeshLambertMaterial({ color: 0x2e3a36 }), blue = new THREE.MeshLambertMaterial({ color: 0x2f6fb5 }), white = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    for (const st of buses.stops) {
+      if (st.dead) continue;
+      const y = groundH(st.x, st.z) + 0.14, grp = new THREE.Group(); grp.position.set(st.x, y, st.z);
+      const p = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3.6, 8), pole); p.position.y = 1.8; p.castShadow = true;
+      const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.08, 24), blue); disc.rotation.x = Math.PI / 2; disc.position.y = 3.5; disc.castShadow = true;
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.2, 0.1), white); bar.position.y = 3.5;
+      const pad = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.04, 28), blue); pad.position.y = 0.03;
+      grp.add(p, disc, bar, pad); scene.add(grp);
+      label(`Bus stop: ${st.n}`, st.x, 5.2, st.z, 'rgba(47,111,181,.95)');
+    }
+  }
   peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   peds.setCount(S.calm ? 6 : Infinity);
-  if (!ROUTE) pigeons = new Pigeons(scene, built.spots, 7, (n) => {
+  if (!PRACTICE) pigeons = new Pigeons(scene, built.spots, 7, (n) => {
     state.pigeons += n; persist(); hud();
     if (S.calm) return;
     sound.flap(n);
@@ -1351,12 +1514,19 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
   });
   // Stamps already earned by an older save are marked quietly, without a run of messages.
   for (const st of STAMPS) if (st[3]()) state.stamps.add(st[0]);
-  hud(); if (ROUTE) startRoute(); else makeJob(); drawMini(); draftNote(); paceLabel();
+  indexEnds(); fillTripPicker();
+  if (TRIP_RAW) trip = resolveTrip(TRIP_RAW);
+  hud();
+  if (ROUTE || trip) { startRoute(); showPlan(); }
+  else if (TRIP_RAW) { $('jobTitle').textContent = 'This trip link did not work'; $('jobText').textContent = 'Ask for a new link, or open the menu and choose Practise a trip'; $('dist').textContent = ''; }
+  else makeJob();
+  drawMini(); draftNote(); paceLabel();
   const b = $('play');
-  b.disabled = false; b.textContent = ROUTE ? 'Start the route' : state.done ? 'Carry on' : 'Play';
+  b.disabled = false; b.textContent = trip ? 'Start the trip' : ROUTE ? 'Start the route' : state.done ? 'Carry on' : 'Play';
+  $('tripOpen').hidden = false;
   b.addEventListener('click', () => { $('setSlot').append($('settings')); $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; } };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; }, get ends() { return ends; }, get services() { return services; }, get trip() { return trip; } };
