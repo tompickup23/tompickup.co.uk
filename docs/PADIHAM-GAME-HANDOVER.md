@@ -251,3 +251,20 @@ Same branch, `feat/padiham-four-buildings`. Checked in the dev server's preview 
   not dressed. Children appear in one picture: reference for the building only.
 - **Seen when comparing the bridge view with Tom's picture:** the real approach to Padiham Bridge is heavily
   treed on both banks and has stone parapets with railings; the game's is bare. Riverbank trees are an easy win.
+
+## Cricket pavilion, White Horse plaque and riverbank trees, 11 November 2026
+
+Same branch. Checked in the dev server's preview pane.
+
+- **Padiham Cricket Club pavilion** (`pavilion`): the outline on the far side of the cricket ground from the
+  football ground, as Tom said, and where the food hygiene register places the club. White walls, brown tiled
+  roof, a central gable with a clock, a veranda with benches and baskets, the club's name on the veranda. A new
+  landmark kind `wicket` draws a mown square and strip at the centre of the mapped cricket pitch; its direction
+  is a guess.
+- **Plaque 20, The White Horse.** Tom said the horse was the sign of the White Horse pub. Two sources read in
+  raw text: Lancashire County Council's Red Rose Collections item EBU20150112002 (built with the surrounding
+  buildings in the 1960s, closed June 2008) and CAMRA pub record 175582 (permanently closed 1 July 2008). The
+  plaque says 2008 without a month. Burnley's licensing register lists the premises at 52 Burnley Road.
+- **Riverbank trees:** `build_world.py` now plants a tree about every 16 m on each bank of the wide river
+  lines inside the playable area, clear of roads, buildings and the water outlines (78 trees). They use their
+  own random stream, so nothing else moved.

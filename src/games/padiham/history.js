@@ -125,4 +125,10 @@ export const PLAQUES = [
     short: 'War Memorials Online, record 153903',
     source: 'War Memorials Online, "Padiham Cross", record 153903, inscription as transcribed there (read 11 November 2026)', url: 'https://www.warmemorialsonline.org.uk/memorial/153903',
   },
+  {
+    id: 'white-horse', ll: [53.79999, -2.3131], title: 'The White Horse',
+    text: 'The white horse above these shops was the sign of the White Horse, a pub built with the rest of this row in the 1960s. The pub closed in 2008. The horse is still here.',
+    short: 'Lancashire County Council, Red Rose Collections',
+    source: 'Lancashire County Council, Red Rose Collections, "White Horse, Padiham", item EBU20150112002, general notes (built with the surrounding buildings in the 1960s, closed June 2008); CAMRA, pub record 175582, "White Horse, Padiham" (permanently closed 1 July 2008). Both read 11 November 2026', url: 'https://redrosecollections.lancashire.gov.uk/view-item?i=267245',
+  },
 ];

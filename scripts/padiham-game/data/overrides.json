@@ -346,6 +346,29 @@
      "sign": "BRIDGE INN"
     }
    ]
+  },
+  {
+   "at": [
+    -578,
+    -56
+   ],
+   "name": "Padiham Cricket Club pavilion",
+   "m": "render",
+   "f": 1,
+   "fh": 3.2,
+   "r": "gable",
+   "shops": false,
+   "feat": [
+    "pavilion"
+   ],
+   "frontAt": [
+    -574,
+    -53.5
+   ],
+   "sign": "Padiham Cricket Club",
+   "src": [
+    "site owner's reference pictures, 11 Nov 2026; FSA register geocode for Padiham Cricket Club; the site owner's word that the pavilion is on the far side of the cricket ground from the football ground"
+   ]
   }
  ],
  "landmarks": [
@@ -369,6 +392,16 @@
    "src": [
     "OpenStreetMap way 973585469 (leisure=bandstand), centre of the mapped outline",
     "No source describes its shape or materials; drawn as a plain open bandstand."
+   ]
+  },
+  {
+   "k": "wicket",
+   "name": "Cricket square",
+   "x": -518,
+   "z": -17,
+   "h": 0.45,
+   "src": [
+    "Centre of the cricket pitch mapped in OpenStreetMap. The direction of the strip is a guess, not surveyed."
    ]
   }
  ],
@@ -688,6 +721,15 @@
    "k": "fast_food",
    "src": [
     "FSA food hygiene register, establishment 971691, last inspected 2026-02-11, read 11 Nov 2026"
+   ]
+  },
+  {
+   "n": "Padiham Cricket Club",
+   "x": -578,
+   "z": -56,
+   "k": "sports_club",
+   "src": [
+    "FSA food hygiene register, establishment 121051, last inspected 2025-07-15, read 11 Nov 2026"
    ]
   }
  ]

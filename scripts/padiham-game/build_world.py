@@ -255,6 +255,36 @@ def main(src, dst, os_path=None, over_path=None):
 
     xs = [n[0] for n in nodes.values()]
     zs = [n[1] for n in nodes.values()]
+    # Riverbank trees: the Calder's banks are wooded through the town, and OpenStreetMap maps few single trees.
+    # One tree about every 16 m on each bank, inside the playable area, of the wide river lines, clear of roads, bridges and buildings.
+    # Their own random stream, so nothing placed earlier moves.
+    brng = random.Random(11)
+    for wt in water:
+        if "p" not in wt or wt.get("w", 0) < 10:
+            continue
+        pl = wt["p"]
+        carry = 0.0
+        for i in range(len(pl) - 1):
+            ax, az, bx, bz = pl[i][0], pl[i][1], pl[i + 1][0], pl[i + 1][1]
+            seg = math.hypot(bx - ax, bz - az)
+            if seg < 0.5:
+                continue
+            ux, uz = (bx - ax) / seg, (bz - az) / seg
+            d = carry
+            while d < seg:
+                for side in (1, -1):
+                    off = wt["w"] / 2 + 3.5 + brng.random() * 4
+                    x = ax + ux * d - uz * side * off + (brng.random() - 0.5) * 3
+                    z = az + uz * d + ux * side * off + (brng.random() - 0.5) * 3
+                    near_road = any(nearest_on_seg(x, z, r["p"][k], r["p"][k + 1])[2] < r["w"] / 2 + 5 for r in roads for k in range(len(r["p"]) - 1))
+                    near_b = any(in_poly(x, z, b["p"]) or min(math.hypot(q[0] - x, q[1] - z) for q in b["p"]) < 5 for b in buildings)
+                    in_play = -660 < x < 520 and -370 < z < 470
+                    in_water = any('poly' in q and in_poly(x, z, q['poly']) for q in water)
+                    if in_play and not in_water and not near_road and not near_b:
+                        trees.append([r1(x), r1(z)])
+                d += 16
+            carry = d - seg
+
     world = {
         "attribution": "Map data (c) OpenStreetMap contributors, ODbL. Contains OS data (c) Crown copyright and database right 2026.",
         "slice": [-620, -330, 480, 430],

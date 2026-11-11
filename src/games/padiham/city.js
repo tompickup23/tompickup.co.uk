@@ -371,7 +371,8 @@ function building(b, bi, W, R, P, bays, ex) {
   // Roof
   const ratio = A / (o.L * o.W);
   const slate = 0.75 + hash(bi + 77) * 0.35;
-  const rc = new THREE.Color(slate, slate, slate * 1.04);
+  // Slate grey, or brown tile on the cricket pavilion.
+  const rc = b.feat && b.feat.includes('pavilion') ? new THREE.Color(0.86, 0.56, 0.42) : new THREE.Color(slate, slate, slate * 1.04);
   const ux = o.ux, uz = o.uz, vx = -o.uz, vz = o.ux, hl = o.L / 2, hw = o.W / 2;
   const at = (ud, vd, y) => [o.cx + ux * ud + vx * vd, y, o.cz + uz * ud + vz * vd];
   const hd = Math.atan2(ux, uz);
@@ -568,6 +569,22 @@ function building(b, bi, W, R, P, bays, ex) {
       for (const dz2 of [-0.07, 0.07]) put(P, BOX, f, -1.16, y + 2.24, lz + dz2, 0.06, 0.16, 0.05, white);
       put(P, BOX, f, 1.08, y + 1.05, lz, 0.1, 0.75, 0.1, white, 0.25);
     }
+  }
+  if (front && feat.has('pavilion')) {
+    // The cricket pavilion: white walls under a brown tiled roof, a central gable with a clock facing the
+    // field, and a veranda with benches and hanging baskets.
+    const f = { x: front.x, z: front.z, h: Math.atan2(front.nx, front.nz) }, white = C('#f4f2ea'), tile = C('#8a5a44'), dark = C('#23272d');
+    const half = front.L / 2, y0 = wallH - 0.05, y1 = wallH + 2.6, w2 = 3.2;
+    P.tri(toWorld(f, -w2, y0, 0.5), toWorld(f, w2, y0, 0.5), toWorld(f, 0, y1, 0.5), white, null, [front.nx, 0, front.nz]);
+    for (const sd of [-1, 1]) P.quad(toWorld(f, sd * (w2 + 0.3), y0 - 0.1, 0.8), toWorld(f, 0, y1 + 0.15, 0.8), toWorld(f, 0, y1 + 0.15, -4), toWorld(f, sd * (w2 + 0.3), y0 - 0.1, -4), tile, null, [0, 1, 0]);
+    put(P, SPH, f, 0, wallH + 1.05, 0.52, 0.5, 0.5, 0.05, C('#fbfaf5'));
+    put(P, BOX, f, 0, wallH + 1.2, 0.58, 0.05, 0.36, 0.03, dark); put(P, BOX, f, 0.12, wallH + 1.05, 0.58, 0.26, 0.05, 0.03, dark);
+    put(P, BOX, f, 0, wallH - 0.2, 1.5, front.L + 0.6, 0.16, 3.0, tile);
+    put(P, BOX, f, 0, 0.12, 1.5, front.L + 0.4, 0.24, 3.0, C('#b9b3a4'));
+    for (let lx = -half; lx <= half + 0.01; lx += front.L / 5) put(P, BOX, f, lx, wallH / 2 - 0.1, 2.85, 0.14, wallH - 0.2, 0.14, white);
+    for (const lx of [-half * 0.6, half * 0.6]) { put(P, BOX, f, lx, 0.7, 2.2, 2.4, 0.08, 0.5, dark); put(P, BOX, f, lx, 1.0, 1.98, 2.4, 0.5, 0.06, dark); }
+    for (const lx of [-half * 0.8, -half * 0.3, half * 0.3, half * 0.8]) put(P, SPH, f, lx, wallH - 0.75, 2.85, 0.28, 0.26, 0.28, C(Math.abs(lx) > half * 0.5 ? '#d6508a' : '#d6402f'));
+    if (b.sign) ex.bands.push({ text: b.sign, plain: true, bg: '#1d3b2a', fg: '#f3e2b0', x: f.x + front.nx * 3.05, z: f.z + front.nz * 3.05, y: wallH - 0.2, nx: front.nx, nz: front.nz, w: Math.min(8, front.L * 0.6), h: 0.5 });
   }
   if (feat.has('sportshall')) {
     // The leisure centre on Park Road: low brown brick ranges under a taller grey clad hall with a band of
@@ -880,6 +897,13 @@ export function buildWorld(scene, w, lowSpec) {
   for (const lm of w.landmarks || []) {
     const o = { x: lm.x, z: lm.z, h: lm.h || 0 };
     const solid = (r, n) => { for (let i = 0; i < n; i++) { const a0 = o.h + ((i + 0.5) / n) * 6.2832, a1 = o.h + ((i + 1.5) / n) * 6.2832, q = [lm.x + Math.sin(a0) * r, lm.z + Math.cos(a0) * r, lm.x + Math.sin(a1) * r, lm.z + Math.cos(a1) * r]; walls.add(q[0], q[1], q[2], q[3], 1.5, [...q, 1]); } };
+    if (lm.k === 'wicket') {
+      // A mown cricket square with a paler strip and stumps at each end. The direction is not surveyed.
+      put(P, BOX, o, 0, 0.16, 0, 22, 0.04, 24, C('#7fbf63'));
+      put(P, BOX, o, 0, 0.19, 0, 3.05, 0.04, 20.12, C('#cdbf8a'));
+      for (const lz of [-10.06, 10.06]) { put(P, BOX, o, 0, 0.21, lz - Math.sign(lz) * 1.22, 3.6, 0.02, 0.06, C('#ffffff')); for (const lx of [-0.11, 0, 0.11]) put(P, BOX, o, lx, 0.55, lz, 0.04, 0.71, 0.04, C('#e8d9a8')); }
+      continue;
+    }
     if (lm.k === 'warmemorial') {
       // A Celtic wheel cross on a decorated shaft, a pedestal with a column at each corner and a gold lettered
       // tablet on each face, on a short plinth and base with a stone surround (War Memorials Online, record 153903).
