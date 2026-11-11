@@ -120,7 +120,7 @@ export class Batch {
     if (!terrain() || !mode) return;
     if (mode !== 'plain') this.clipToGrid();
     const p = this.p, water = mode === 'water';
-    for (let i = 0; i < p.length; i += 3) p[i + 1] += groundH(p[i], p[i + 2], water);
+    for (let i = 0; i < p.length; i += 3) p[i + 1] += groundH(p[i], p[i + 2], water ? 'water' : false);
     if (mode !== 'plain') for (let i = 0; i < p.length; i += 9) {
       const ax = p[i + 3] - p[i], ay = p[i + 4] - p[i + 1], az = p[i + 5] - p[i + 2], bx = p[i + 6] - p[i], by = p[i + 7] - p[i + 1], bz = p[i + 8] - p[i + 2];
       const nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx, l = Math.hypot(nx, ny, nz);

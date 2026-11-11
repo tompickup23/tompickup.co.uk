@@ -12,7 +12,12 @@ export function setTerrain(t) {
     const xs = d.p.map((q) => q[0]), zs = d.p.map((q) => q[1]);
     return { ...d, cum, box: [Math.min(...xs) - d.hw, Math.min(...zs) - d.hw, Math.max(...xs) + d.hw, Math.max(...zs) + d.hw] };
   });
-  T = { x0: t.x0, z0: t.z0, s: t.s, nx: t.nx, nz: t.nz, h: Float32Array.from(t.h, (v) => v / 100), decks };
+  const h = Float32Array.from(t.h, (v) => v / 100);
+  // The water has its own copy of the grid: a few nodes by bridge ends were raised to build the bank, and the
+  // river must stay level beneath them.
+  const hw = Float32Array.from(h);
+  for (const [k, v] of t.wk || []) hw[k] = v / 100;
+  T = { x0: t.x0, z0: t.z0, s: t.s, nx: t.nx, nz: t.nz, h, hw, decks };
 }
 export const terrain = () => T;
 
@@ -33,11 +38,12 @@ function deckH(x, z) {
 }
 
 // Height of the surface at a point, in metres: the ground, or a bridge deck where one passes over it.
-// With 'under' true it is always the ground itself, which is what the water and the ground mesh follow.
+// With 'under' true it is always the ground itself, which is what the ground mesh follows; with 'under' set to
+// 'water' it is the level the water lies at.
 // Beyond the grid the ground carries on level from the nearest edge.
 export function groundH(x, z, under = false) {
   if (!T) return 0;
-  const g = T.h;
+  const g = under === 'water' ? T.hw : T.h;
   const u = Math.min(Math.max((x - T.x0) / T.s, 0), T.nx - 1.0001), v = Math.min(Math.max((z - T.z0) / T.s, 0), T.nz - 1.0001);
   const i = Math.floor(u), j = Math.floor(v), fu = u - i, fv = v - j, k = j * T.nx + i;
   const h00 = g[k], h10 = g[k + 1], h01 = g[k + T.nx], h11 = g[k + T.nx + 1];
