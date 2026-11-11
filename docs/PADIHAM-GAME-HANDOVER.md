@@ -339,3 +339,24 @@ Checked in the dev server at desktop, 375 by 812 and 812 by 375: no panels or co
 in the left-handed layout, or sideways at the largest text. Known and not fixed: at the largest text size in
 portrait, the job card runs under Where next and the street name (it did before this change). Still untested:
 a real phone, a controller, a screen reader. Frame timing cannot be judged in the preview pane.
+
+## Practice routes, a first cut, 11 November 2026 (night)
+
+Branch `feat/padiham-practice-route`. Ideas I057 (route rehearsal) and I067 (supporter sets the route), without
+the photographs of I069.
+
+- **The link.** `?route=114_182.230_217.34_136`: a start and up to eleven markers, each a pair of whole metres
+  on the game's grid, checked against a strict pattern in `game.js` (`ROUTE`). No free text, on purpose, so a
+  link cannot put words on the screen. Points are held inside the play area.
+- **The mode.** Always calm and plain. No cash panel, plaques, litter, pigeons, stamps, pubs, selfie taker or
+  today's job; walk and run only. One marker at a time, named from the nearest place or street (`spotName`),
+  with the rest of the route as a dotted line on the map. "Walk it again" returns to the start. The count of
+  finished walks is kept in the browser under `padiham-route-<route>`. The ordinary save is not changed.
+- **The maker.** In the menu of the ordinary game: Add where I am standing, Start again, Copy the link.
+- **What the screen says.** The start box states that it does not teach road safety and that the game has no
+  traffic. Keep that wording unless traffic and crossings are built and tested.
+- **Not done.** Photographs at decision points, any trial with learners, routes beyond the town centre. After a
+  route is finished the map and street name stop updating until Walk it again is pressed.
+
+The article `src/content/news/the-padiham-job-what-it-does-and-who-it-could-help.md` describes the game and
+this use. It quotes no research: the council-uses note in Reports was read through summaries only.

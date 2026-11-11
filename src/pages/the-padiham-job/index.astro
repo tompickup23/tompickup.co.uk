@@ -60,6 +60,7 @@ const schema = {
       <div class="sop-buttons">
         <button id="sop-menuBtn" type="button">Menu</button>
         <button id="sop-whereBtn" type="button">Where next?</button>
+        <button id="sop-again" type="button">Walk it again</button>
       </div>
       <div id="sop-job" class="sop-hud">
         <div class="t" id="sop-jobTitle">Loading Padiham</div>
@@ -101,11 +102,24 @@ const schema = {
           <p id="sop-last"></p>
           <h3>Settings</h3>
           <div id="sop-setSlot"></div>
+          <div id="sop-routeMaker">
+            <h3>Make a practice route</h3>
+            <p class="sop-help">For a parent, teacher or travel trainer. Walk the route in the game. At the start, and at each turning point, open this menu and add the spot. The link you copy holds the spots and nothing else.</p>
+            <div class="acts">
+              <button id="sop-routeAdd" type="button">Add where I am standing</button>
+              <button id="sop-routeClear" type="button">Start again</button>
+              <button id="sop-routeCopy" type="button" disabled>Copy the link</button>
+            </div>
+            <p id="sop-routeNote" class="sop-help" role="status"></p>
+            <input id="sop-routeLink" type="text" readonly hidden aria-label="Practice route link" />
+          </div>
+          <div id="sop-extras">
           <h3>Stamps: <span id="sop-scount"></span></h3>
           <p id="sop-tally"></p>
           <ul id="sop-stamps" class="sop-stamps"></ul>
           <h3>Plaques found: <span id="sop-jcount"></span></h3>
           <ul id="sop-journal"></ul>
+          </div>
           <p class="sop-credit">
             Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
             Open Database Licence. Contains OS data © Crown copyright and database right 2026.
@@ -118,7 +132,9 @@ const schema = {
       <div id="sop-start">
         <div class="box" role="dialog" aria-label="Start The Padiham Job">
           <p class="name">The <span>Padiham</span> Job</p>
-          <p>Make your name on the real streets of Padiham. Take jobs, do a good turn, pick up litter, say hello, and try not to upset the pigeons.</p>
+          <p class="not-practice">Make your name on the real streets of Padiham. Take jobs, do a good turn, pick up litter, say hello, and try not to upset the pigeons.</p>
+          <p class="only-practice">A practice route has been set for you. Follow the markers one at a time. There is no clock and no score, and you can walk it as many times as you like.</p>
+          <p class="only-practice sop-warn">This is for getting to know a route. It does not teach road safety: the game has no traffic. On real roads, stop and cross the way you have been taught.</p>
           <div id="sop-look">
             <canvas id="sop-lookPic" width="120" height="150" role="img" aria-label="Your character"></canvas>
             <div id="sop-lookOpts"></div>
@@ -133,9 +149,10 @@ const schema = {
             <li class="only-touch"><b>Pace:</b> tap WALK to change to run, then sprint</li>
             <li class="only-touch"><b>Jump and wave:</b> tap JUMP, or HI to say hello to someone nearby</li>
             <li class="only-touch"><b>Look around:</b> drag anywhere else on the screen</li>
-            <li><b>Pubs:</b> step on a blue ring to go inside</li>
-            <li><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
-            <li><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
+            <li class="not-practice"><b>Pubs:</b> step on a blue ring to go inside</li>
+            <li class="not-practice"><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
+            <li class="not-practice"><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
+            <li class="only-practice"><b>The way:</b> walk to the glowing beam. The arrow and the dotted line on the map point to it</li>
             <li class="only-keys"><b>Pause:</b> press Esc or click Menu</li>
             <li class="only-touch"><b>Pause:</b> tap Menu</li>
           </ul>
@@ -222,6 +239,23 @@ const schema = {
         Calm can also be switched on and off in the game's own settings.
         <a href="?edition=clean">The plain version</a> leaves out the selfie taker and keeps the pub doors shut.
         <a href="?calm=1&amp;edition=clean">Both together</a> also works.
+      </p>
+      <h2 id="practice">Practice routes</h2>
+      <p>
+        A parent, teacher or travel trainer can set a route for someone to walk in the game before they walk it
+        for real. Walk the route yourself, and at the start and at each turning point open the menu and choose
+        Add where I am standing. Then copy the link and pass it on. Whoever opens it starts at the first spot and
+        is shown one marker at a time, in the same order every time, with no clock, no score, no pubs and
+        nothing else going on. The game counts how many times the route has been walked and keeps that count
+        in the browser it was played in.
+      </p>
+      <p>
+        The link holds the spots on the map and nothing else: no name and no words. The game covers the town
+        centre only. It is for getting to know a route, as preparation for a walk with someone, and it does not
+        teach road safety: there is no traffic in the game. It has not been tried with learners yet. If you use
+        it, please <a href="/contact/">say how it went</a>.
+        <a href="/news/the-padiham-job-what-it-does-and-who-it-could-help/">What the game does and who it could help</a>
+        says more.
       </p>
       <h2 id="access">Playing with a disability</h2>
       <p>
@@ -406,6 +440,17 @@ const schema = {
   .sop.lefty #sop-run { right: auto; left: 22px; }
   .sop.lefty #sop-jump { right: auto; left: 112px; }
   .sop.lefty #sop-hello { right: auto; left: 26px; }
+  .sop .only-practice, .sop #sop-again { display: none; }
+  .sop.practice .only-practice { display: block; }
+  .sop.practice #sop-again { display: inline-block; }
+  .sop.practice .not-practice, .sop.practice #sop-cash, .sop.practice #sop-daily, .sop.practice #sop-dailyShare, .sop.practice #sop-share, .sop.practice #sop-extras, .sop.practice #sop-routeMaker, .sop.practice #sop-look { display: none; }
+  .sop.practice .sop-buttons { top: 10px; }
+  .sop #sop-start p.sop-warn { padding: 10px 12px; border-radius: 10px; background: rgba(255, 207, 51, 0.16); border: 1px solid rgba(255, 207, 51, 0.5); font-size: 15px; text-align: left; }
+  .sop .sop-help { margin: 0 0 8px; font-size: 14px; line-height: 1.45; color: var(--sop-text); }
+  .sop #sop-routeMaker .acts { margin-top: 0; }
+  .sop #sop-routeMaker .acts button:disabled { opacity: 0.45; cursor: default; }
+  .sop #sop-routeNote { margin-top: 8px; color: var(--sop-green); }
+  .sop #sop-routeLink { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.3); background: #0f1114; color: var(--sop-text); font-family: inherit; font-size: 14px; }
   .sop .only-touch { display: none; }
   .sop.touch .only-touch { display: block; }
   .sop.touch .sop-set label.only-touch { display: flex; }
@@ -421,6 +466,9 @@ const schema = {
     .sop .sop-buttons { left: auto; right: 10px; top: 126px; align-items: flex-end; }
     .sop .sop-buttons button, .sop.touch #sop-street, .sop #sop-street { font-size: calc(13px * min(var(--sop-fs, 1), 1.25)); }
     .sop.touch #sop-street, .sop #sop-street { bottom: auto; top: calc(168px + 26px * var(--sop-fs, 1)); left: auto; right: 10px; transform: none; }
+    .sop.practice .sop-buttons { top: 126px; }
+    .sop.practice #sop-job { top: 10px; }
+    .sop.practice.touch #sop-street, .sop.practice #sop-street { top: calc(202px + 26px * var(--sop-fs, 1)); }
     .sop #sop-toast { font-size: calc(18px * var(--sop-fs, 1)); padding: 12px 16px; }
     .sop #sop-job { left: 10px; transform: none; top: calc(18px + 32px * var(--sop-fs, 1)); width: calc(100% - 138px); padding: 8px 10px; }
     .sop #sop-job .d { font-size: calc(15px * var(--sop-fs, 1)); }
