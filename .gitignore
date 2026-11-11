@@ -19,3 +19,6 @@ secrets/**
 # so a manifest built on vps-main can name the commit it came from. Host state,
 # not source, and committing it would make one host's sha look like everyone's.
 scripts/observatory/warehouse/PIPELINE_STAMP.json
+
+# Environment Agency LIDAR downloads for the Padiham game: fetched by scripts/padiham-game/build_terrain.py
+scripts/padiham-game/data/lidar/

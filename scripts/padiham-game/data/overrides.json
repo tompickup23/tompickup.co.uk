@@ -1,0 +1,298 @@
+{
+ "_note": "Per-building details read from openly licensed photos (Wikimedia Commons / Geograph, see photo-credits.json). 'at' is a point inside the outline in game metres. 'src' lists the photo ids used. No photo pixels are used in the game. 'pois' adds named places missing from the map data. The Starkie Arms exterior and interior also follow photos supplied by the site owner.",
+ "buildings": [
+  {
+   "at": [
+    86,
+    196
+   ],
+   "name": "Padiham Town Hall",
+   "m": "brick_red",
+   "f": 2,
+   "fh": 4.4,
+   "r": "hip",
+   "win": "tall",
+   "feat": [
+    "portico",
+    "cupola",
+    "planters"
+   ],
+   "shops": false,
+   "src": [
+    "6128175",
+    "6360083",
+    "2232505"
+   ],
+   "frontAt": [
+    120,
+    182
+   ]
+  },
+  {
+   "at": [
+    60,
+    93
+   ],
+   "name": "Bank building, Burnley Road",
+   "m": "ashlar",
+   "f": 3,
+   "fh": 3.6,
+   "r": "flat",
+   "win": "tall",
+   "feat": [
+    "turret"
+   ],
+   "shops": false,
+   "src": [
+    "6128668",
+    "2482492",
+    "1689834"
+   ]
+  },
+  {
+   "at": [
+    95,
+    67
+   ],
+   "name": "Hand & Shuttle",
+   "m": "render",
+   "f": 2,
+   "r": "gable",
+   "shops": false,
+   "src": [
+    "6128668",
+    "2482492"
+   ]
+  },
+  {
+   "at": [
+    101,
+    114
+   ],
+   "name": "Former bank, Burnley Road",
+   "m": "brick_brown",
+   "f": 2,
+   "fh": 3.4,
+   "r": "hip",
+   "win": "tall",
+   "shops": false,
+   "src": [
+    "6128174"
+   ]
+  },
+  {
+   "at": [
+    41,
+    152
+   ],
+   "name": "Padiham Fire Station",
+   "m": "brick_brown",
+   "f": 1,
+   "fh": 4.4,
+   "r": "flat",
+   "feat": [
+    "firedoors",
+    "drilltower"
+   ],
+   "shops": false,
+   "src": [
+    "1394001"
+   ],
+   "frontAt": [
+    52,
+    140
+   ]
+  },
+  {
+   "at": [
+    186,
+    219
+   ],
+   "name": "Corner shops by the roundabout",
+   "m": "stone",
+   "f": 2,
+   "r": "hip",
+   "shops": true,
+   "src": [
+    "2232505"
+   ]
+  },
+  {
+   "at": [
+    142,
+    234
+   ],
+   "name": "Shops, Burnley Road south side",
+   "m": "render",
+   "f": 2,
+   "r": "gable",
+   "shops": true,
+   "src": [
+    "2232487"
+   ]
+  },
+  {
+   "at": [
+    173,
+    189
+   ],
+   "name": "Brick hall, Ribble Street",
+   "m": "brick_brown",
+   "f": 1,
+   "fh": 4.6,
+   "r": "flat",
+   "shops": false,
+   "src": [
+    "661325"
+   ]
+  },
+  {
+   "at": [
+    -78,
+    1
+   ],
+   "name": "St Leonard's",
+   "feat": [
+    "tower",
+    "nave",
+    "porch"
+   ],
+   "src": [
+    "5943055",
+    "Historic England list entry 1238303 (south-west tower of 4 stages, 4 clock faces, battlements, 4 corner turrets with spirelets, 4 minor pinnacles, clerestory nave, south porch, steep slate roofs)"
+   ]
+  },
+  {
+   "at": [
+    151,
+    197
+   ],
+   "name": "Flying Dutchman and neighbours",
+   "m": "stone",
+   "f": 2,
+   "r": "hip",
+   "shops": true,
+   "src": [
+    "6128176",
+    "5943055",
+    "user photos 11 Nov 2026"
+   ],
+   "pub": true,
+   "band": "FLYING DUTCHMAN",
+   "bandFloor": 1,
+   "bandW": 11,
+   "feat": [
+    "pubplanters"
+   ],
+   "interior": "Flying Dutchman",
+   "frontAt": [
+    143,
+    207
+   ]
+  },
+  {
+   "at": [
+    -46,
+    23
+   ],
+   "name": "Starkie Arms",
+   "m": "stone",
+   "f": 3,
+   "fh": 3.0,
+   "r": "gable",
+   "shops": false,
+   "pub": true,
+   "band": "STARKIE ARMS",
+   "feat": [
+    "fence"
+   ],
+   "interior": "Starkie Arms",
+   "frontAt": [
+    -58,
+    24
+   ],
+   "src": [
+    "6128168",
+    "2482465",
+    "user photos 11 Nov 2026"
+   ],
+   "bays": 3,
+   "bandFloor": 2
+  },
+  {
+   "at": [
+    -100,
+    47
+   ],
+   "name": "Kings Arms and neighbours",
+   "pub": true,
+   "band": "KINGS ARMS",
+   "bandFloor": 1,
+   "bandW": 9,
+   "frontAt": [
+    -71,
+    46
+   ],
+   "src": [
+    "6128170",
+    "2482465"
+   ],
+   "f": 2
+  }
+ ],
+ "landmarks": [
+  {
+   "k": "warmemorial",
+   "name": "Padiham war memorial",
+   "x": -373.5,
+   "z": 162,
+   "h": -2.6,
+   "src": [
+    "War Memorials Online record 153903: Celtic wheel cross, decorated shaft, pedestal with a column at each corner, short plinth and base, stone surround, gold lettered tablets on each face, at the entrance to Memorial Park, Church Street",
+    "Position placed by hand at the park's Church Street and Blackburn Road corner; not surveyed. Height is a guess."
+   ]
+  },
+  {
+   "k": "bandstand",
+   "name": "Memorial Park bandstand",
+   "x": -212.2,
+   "z": 364.3,
+   "h": 0,
+   "src": [
+    "OpenStreetMap way 973585469 (leisure=bandstand), centre of the mapped outline",
+    "No source describes its shape or materials; drawn as a plain open bandstand."
+   ]
+  }
+ ],
+ "pois": [
+  {
+   "n": "Starkie Arms",
+   "x": -55,
+   "z": 24,
+   "k": "pub",
+   "src": [
+    "6128168"
+   ]
+  },
+  {
+   "n": "Kings Arms",
+   "x": -75,
+   "z": 44,
+   "k": "pub",
+   "src": [
+    "6128170",
+    "2482465"
+   ]
+  },
+  {
+   "n": "Flying Dutchman",
+   "x": 146,
+   "z": 205,
+   "k": "pub",
+   "src": [
+    "6128176",
+    "5943055"
+   ]
+  }
+ ]
+}
