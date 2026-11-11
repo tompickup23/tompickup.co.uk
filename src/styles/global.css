@@ -486,17 +486,102 @@ code {
 
 /* Stagger children: retired. Sections no longer animate in one by one. */
 
-/* Scroll reveal.
-   Hidden state only applies when (a) JS is confirmed running (html.js set by an
-   inline script in Layout) and (b) the user has not asked for reduced motion.
-   Without both guards, a slow or blocked script leaves sections invisible,
-   which is the failure mode for Facebook in-app browsers on old phones. */
-.reveal {
-  opacity: 1;
+/* Sections used to fade and rise into view one by one. That reads as template
+   motion and cost layout stability, so .reveal renders in place and no
+   observer script ships. */
+
+/* Chart entrances. CSS only, tied to scroll position, and only where the
+   reader has not asked for reduced motion and the browser supports view
+   timelines; everywhere else the chart is simply drawn. Rules:
+   - Only the marks move. Labels and values are text and never animate, so the
+     figure is on screen before its bar is.
+   - A bar reaches full length once it is about an eighth of the way up the
+     viewport, so it is short of its value only at the very bottom edge. A line
+     chart is complete the moment its whole frame is on screen.
+   - transform and clip-path only: nothing changes layout. Screen only, so
+     print always gets the finished chart. */
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
 }
 
-/* Sections used to fade and rise into view one by one. That reads as template
-   motion and cost layout stability, so .reveal now renders in place. */
+@keyframes line-wipe {
+  from { clip-path: inset(-6px 100% -6px -6px); }
+  to { clip-path: inset(-6px); }
+}
+
+@keyframes dot-in {
+  0%, 60% { opacity: 0; }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .viz-reform-bar,
+    .cbar-track,
+    .bl-track {
+      view-timeline: --bar block;
+    }
+
+    .viz-reform-bar .fill,
+    .cbar-fill,
+    .bl-fill {
+      transform-origin: left center;
+      animation-name: bar-grow;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 0% cover 12%;
+    }
+
+    .lc-frame {
+      view-timeline: --line block;
+    }
+
+    /* The timeline is set in its own rules, on purpose. The build's CSS
+       minifier folds animation-timeline into the animation shorthand, which
+       browsers then reject, dropping the whole animation. A different
+       selector stops the fold. */
+    :where(.viz-reform-bar) > .fill,
+    :where(.cbar-track) > .cbar-fill,
+    :where(.bl-track) > .bl-fill {
+      animation-timeline: --bar;
+    }
+
+    /* Point markers arrive after their line, never before it. */
+    .lc-plot .lc-hit {
+      animation-name: dot-in;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 0% entry 100%;
+    }
+
+    :where(.lc-plot) > svg,
+    :where(.lc-plot) > .lc-hit {
+      animation-timeline: --line;
+    }
+
+    .lc-plot svg {
+      animation-name: line-wipe;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 0% entry 100%;
+    }
+  }
+
+  /* Page to page: a short cross-fade between same-site pages, with the fixed
+     header held still. Browsers without cross-document view transitions
+     navigate as before. */
+  @view-transition {
+    navigation: auto;
+  }
+
+  .site-header {
+    view-transition-name: site-header;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.18s;
+  }
+}
 
 
 /* ============================================================
