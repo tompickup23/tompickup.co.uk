@@ -35,7 +35,13 @@ const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.job
 function persist() {
   try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques] })); } catch { /* private mode */ }
 }
-const sound = new Sound();
+// Link options for supporters and public bodies, read once from the address. Nothing is stored or sent.
+// ?calm=1 gives a quieter town: fewer passers-by and softer sound. ?edition=clean leaves out the selfie
+// taker and keeps pub doors shut. Both can be combined: ?calm=1&edition=clean
+const opts = new URLSearchParams(location.search);
+const CALM = opts.get('calm') === '1';
+const CLEAN = opts.get('edition') === 'clean';
+const sound = new Sound(CALM ? 0.4 : 1);
 
 // ---------- Renderer, sky and light ----------
 let renderer;
@@ -762,7 +768,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     if (!built.signs.has(p.n)) label(p.n.replace('Church of England', 'CE'), p.x, p.k === 'park' || p.k === 'pitch' || p.k === 'bridge' ? 8 : 15, p.z);
   }
   for (const d of built.doors) {
-    if (!PUBS[d.name]) continue;
+    if (CLEAN || !PUBS[d.name]) continue;
     d.pub = buildPub(scene, { ...PUBS[d.name], name: d.name });
     const ring = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.8, 24), new THREE.MeshBasicMaterial({ color: 0x4fb3ff, side: THREE.DoubleSide, fog: false }));
     ring.rotation.x = -Math.PI / 2; ring.position.set(d.x, 0.32 + groundH(d.x, d.z), d.z); scene.add(ring);
@@ -778,7 +784,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     [player.x, player.z] = clear(hall.x + hall.nx * 14 + tx * 2, hall.z + hall.nz * 14 + tz * 2, 1.5);
     player.heading = cam.yaw = Math.atan2(-hall.nx, -hall.nz);
     const [sx, sz] = clear(hall.x + hall.nx * 7.5 - tx * 4.5, hall.z + hall.nz * 7.5 - tz * 4.5, 1.2);
-    selfie = makeSelfie(sx, sz, Math.atan2(hall.nx, hall.nz));
+    if (!CLEAN) selfie = makeSelfie(sx, sz, Math.atan2(hall.nx, hall.nz));
   } else {
     const first0 = pois.get('Padiham Fire Station') || home;
     const dl = Math.hypot(first0.dx - home.dx, first0.dz - home.dz) || 1;
@@ -787,7 +793,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
   placePlaques();
-  peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
+  peds = new Pedestrians(scene, built.pedPaths, CALM ? 6 : isTouch ? 16 : 34);
   pigeons = new Pigeons(scene, built.spots, 7, (n) => {
     state.pigeons += n; persist(); hud(); sound.flap(n);
     toast(`${n} pigeons startled`, `That is ${state.pigeons} so far`, 1600);
