@@ -199,3 +199,30 @@ On branch `perf/padiham-phone-pass`. Measured in the dev server on this Mac; sti
   `game.js`). It never steps back up. In the dev server `window.__padiham.stepDown()` forces a step.
 - **Not checked:** the look of the game after each step-down (the preview pane was hidden, so nothing was
   drawn), and real frame rates on any phone.
+
+## Comfort and access settings, 11 November 2026
+
+On branch `feat/padiham-access`. Checked in the dev server's preview pane at desktop and phone width; the site
+build passes. Not tried with a real screen reader, a real game controller or a real phone.
+
+- **Settings** (`S`, `applySettings` and `setSetting` in `game.js`): calm, less movement, stronger contrast,
+  messages that stay, camera follow, thumbstick side and three text sizes. The block sits in a `details` on the
+  start screen and is moved into the menu when play starts. Only the settings the player has changed are stored
+  (`padiham-settings-1`); the rest follow the device's reduced motion and contrast settings. `?calm=1` still
+  works and is not stored unless the player changes the switch.
+- **Calm** now also removes the clock, the speed bonus, the pigeon and selfie messages and the selfie flash, and
+  thins the passers-by without a reload (`Pedestrians.setCount` in `life.js`).
+- **Keys:** Q and E turn the view, Page Up and Page Down tilt it, R switches running, G (or the Where next
+  button) says the way, Enter closes a message that is set to stay.
+- **The way in words:** the job panel shows the distance and a direction ("ahead, to your left"), measured from
+  where the view faces. A hidden status line (`#sop-say`) reads it out when it changes, at most every eight
+  seconds.
+- **Controller** (`readPad`): left stick moves, right stick looks, A switches running, Y says the way, Start
+  opens the menu. Untested on hardware.
+- **Text size** is one CSS variable, `--sop-fs`; panel sizes and positions are written against it. Messages now
+  last at least two and a half seconds, and the menu shows the last one.
+- **Menu:** `aria-modal`, the Tab key stays inside it, and focus returns to the Menu button on closing.
+- The page has a "Playing with a disability" section that says what works and what does not yet.
+
+Ideas and evidence: rows I128 to I179 in the Reports ideas register (Reports PR 688) and
+`Tompickup_Games_work/Padiham_Job_Access_Local_Play_2026-11-11.md`.

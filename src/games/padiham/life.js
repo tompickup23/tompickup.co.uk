@@ -135,8 +135,10 @@ export class Pedestrians {
       this.peds.push({ fig, path, cum, total: cum[cum.length - 1], s: Math.random() * cum[cum.length - 1], dir: Math.random() < 0.5 ? 1 : -1, speed: 1.1 + Math.random() * 0.6, phase: Math.random() * 6, side: (Math.random() - 0.5) * 1.2, wait: 0 });
     }
   }
+  // Show only the first n passers-by: the calm setting uses this to thin the streets without a reload.
+  setCount(n) { this.shown = n; this.peds.forEach((p, i) => { p.fig.group.visible = i < n; }); }
   update(dt, player) {
-    for (const p of this.peds) {
+    for (const p of this.peds.slice(0, this.shown ?? this.peds.length)) {
       let j = 1;
       while (j < p.cum.length - 1 && p.cum[j] < p.s) j++;
       const a = p.path[j - 1], b = p.path[j], l = p.cum[j] - p.cum[j - 1] || 1, t = (p.s - p.cum[j - 1]) / l;
