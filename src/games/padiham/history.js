@@ -118,4 +118,11 @@ export const PLAQUES = [
     short: 'Lancashire Historic Town Survey, Padiham (2005)',
     source: 'Lancashire County Council and Egerton Lea Consultancy, Lancashire Historic Town Survey Programme: Padiham Historic Town Assessment Report, May 2005, p. 38; Burnley Borough Council, Padiham Conservation Area Appraisal, June 2020, para. 4.13', url: LEUS,
   },
+  // Added 11 November 2026 with the memorial itself. The wording is from the record's transcription of the inscription.
+  {
+    id: 'war-memorial', ll: [53.80050, -2.32064], title: 'The war memorial',
+    text: 'The cross at the park entrance carries the words "Erected by the women of Padiham in honoured memory of the men of this town who sacrificed their lives in the Great War".',
+    short: 'War Memorials Online, record 153903',
+    source: 'War Memorials Online, "Padiham Cross", record 153903, inscription as transcribed there (read 11 November 2026)', url: 'https://www.warmemorialsonline.org.uk/memorial/153903',
+  },
 ];

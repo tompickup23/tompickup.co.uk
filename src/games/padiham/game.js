@@ -4,7 +4,8 @@
 import * as THREE from 'three';
 import { buildWorld, walls, roadGrid, riverGrid, distToSeg, nearWall } from './city.js';
 import { cloudTexture } from './textures.js';
-import { makeFigure, animateFigure, Pedestrians, Pigeons } from './life.js';
+import { setTerrain, groundH } from './terrain.js';
+import { makeFigure, animateFigure, Pedestrians, Pigeons, SKIN, HAIR } from './life.js';
 import { Sound } from './audio.js';
 import { buildPub } from './interior.js';
 import { PLAQUES } from './history.js';
@@ -141,7 +142,7 @@ function label(text, x, y, z) {
   tex.colorSpace = THREE.SRGBColorSpace;
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, fog: false }));
   sp.scale.set(20, 3.75, 1);
-  sp.position.set(x, y, z);
+  sp.position.set(x, y + groundH(x, z), z);
   scene.add(sp);
   labels.push(sp);
 }
@@ -196,9 +197,70 @@ function drawMini() {
 }
 
 // ---------- Player ----------
-const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, // Burnley colours, claret with sky blue sleeves, and the number ten of Andy Payton, the Padiham Predator. No club badge is drawn.
-  fig: makeFigure({ jacket: 0x6c1d45, hair: 0x3a2a1e, face: true, kit: { sleeves: 0x99d6ea, shorts: 0xf4f1e8, socks: 0xf4f1e8, boots: 0x111214, stripes: 0xf4f1e8 }, back: { name: 'PAYTON', number: '10', color: 0xf4f1e8 } }) };
+// The player picks a look on the start screen: hair, hair colour, skin and jacket. It is kept in the browser.
+// The figure is a courier in a plain jacket with a backpack, with no name, number or badge.
+const LOOK_KEY = 'padiham-look-1';
+const LOOKS = {
+  style: [['short', 'Short hair'], ['pony', 'Ponytail'], ['long', 'Long hair'], ['cap', 'Cap']],
+  hair: HAIR.map((c, i) => [i, ['Dark brown', 'Black', 'Fair', 'Grey', 'Auburn'][i]]),
+  skin: SKIN.map((c, i) => [i, `Skin tone ${i + 1}`]),
+  jacket: [[0xf08a24, 'Orange'], [0x2f6fb5, 'Blue'], [0x2f8a5a, 'Green'], [0x8a3fa0, 'Purple'], [0x3a3d42, 'Charcoal']].map(([c, n], i) => [i, n, c]),
+};
+const JACKET = LOOKS.jacket.map((j) => j[2]);
+const look = (() => {
+  const d = { style: 'short', hair: 0, skin: 0, jacket: 0 };
+  try { const v = JSON.parse(localStorage.getItem(LOOK_KEY) || '{}'); for (const k in d) if (LOOKS[k].some((o) => o[0] === v[k])) d[k] = v[k]; } catch { /* private mode */ }
+  return d;
+})();
+const lookFigure = () => makeFigure({ jacket: JACKET[look.jacket], trousers: 0x2a2f3a, skin: SKIN[look.skin], hair: HAIR[look.hair], face: true, pack: true, style: look.style, cap: look.style === 'cap' ? 0x2b3a67 : undefined });
+const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, fig: lookFigure() };
 scene.add(player.fig.group);
+const hex = (c) => '#' + c.toString(16).padStart(6, '0');
+function drawLook() {
+  const cv = document.getElementById('sop-lookPic');
+  if (!cv) return;
+  const g = cv.getContext('2d'), hair = hex(HAIR[look.hair]), skin = hex(SKIN[look.skin]);
+  g.clearRect(0, 0, 120, 150);
+  if (look.style === 'long') { g.fillStyle = hair; g.fillRect(31, 40, 58, 52); }
+  if (look.style === 'pony') { g.fillStyle = hair; g.beginPath(); g.ellipse(93, 62, 9, 22, -0.3, 0, 7); g.fill(); }
+  g.fillStyle = '#3a3f4a'; g.fillRect(28, 88, 64, 50);                       // backpack straps behind the jacket
+  g.fillStyle = hex(JACKET[look.jacket]); g.beginPath(); g.roundRect(24, 84, 72, 66, 18); g.fill();
+  g.fillStyle = '#3a3f4a'; g.fillRect(36, 88, 7, 62); g.fillRect(77, 88, 7, 62);
+  g.fillStyle = skin; g.beginPath(); g.arc(60, 52, 30, 0, 7); g.fill();
+  g.fillStyle = look.style === 'cap' ? '#2b3a67' : hair;
+  g.beginPath(); g.arc(60, 48, 31, Math.PI * 1.02, Math.PI * 1.98); g.fill();
+  if (look.style === 'cap') g.fillRect(52, 40, 46, 8);
+  g.fillStyle = '#2b2f36'; g.beginPath(); g.arc(49, 56, 3.4, 0, 7); g.arc(71, 56, 3.4, 0, 7); g.fill();
+  g.fillStyle = '#8a4a42'; g.fillRect(52, 68, 16, 3);
+}
+function setLook(k, v) {
+  look[k] = v;
+  try { localStorage.setItem(LOOK_KEY, JSON.stringify(look)); } catch { /* private mode */ }
+  scene.remove(player.fig.group);
+  player.fig = lookFigure();
+  scene.add(player.fig.group);
+  for (const b of document.querySelectorAll(`#sop-look button[data-k="${k}"]`)) b.setAttribute('aria-pressed', String(b.dataset.v === String(v)));
+  drawLook();
+}
+{
+  const host = document.getElementById('sop-lookOpts');
+  if (host) {
+    const NAMES = { style: 'Hair', hair: 'Hair colour', skin: 'Skin', jacket: 'Jacket' }, SWATCH = { hair: HAIR, skin: SKIN, jacket: JACKET };
+    for (const k of Object.keys(LOOKS)) {
+      const row = document.createElement('div'); row.className = 'row'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', NAMES[k]);
+      const lab = document.createElement('span'); lab.textContent = NAMES[k]; row.append(lab);
+      for (const [v, name] of LOOKS[k]) {
+        const b = document.createElement('button'); b.type = 'button'; b.dataset.k = k; b.dataset.v = String(v);
+        b.setAttribute('aria-pressed', String(look[k] === v));
+        if (SWATCH[k]) { b.className = 'dot'; b.style.background = hex(SWATCH[k][v]); b.title = name; b.setAttribute('aria-label', name); } else b.textContent = name;
+        b.addEventListener('click', () => setLook(k, v));
+        row.append(b);
+      }
+      host.append(row);
+    }
+    drawLook();
+  }
+}
 const RADIUS = 0.5;
 function inRiver(x, z) {
   for (const s of riverGrid.at(x, z)) {
@@ -361,7 +423,7 @@ function showStep() {
   const j = state.job, s = j.steps[j.i];
   $('jobTitle').textContent = j.title + (j.steps.length > 1 ? `, part ${j.i + 1} of ${j.steps.length}` : '');
   $('jobText').textContent = s.text;
-  beam.position.set(s.poi.dx, 0, s.poi.dz);
+  beam.position.set(s.poi.dx, groundH(s.poi.dx, s.poi.dz), s.poi.dz);
   beam.visible = true;
 }
 let toastTimer;
@@ -436,7 +498,7 @@ function placePlaques() {
     const onRoad = (qx, qz) => { for (const sg of roadGrid.at(qx, qz)) if (sg[6] !== 'foot' && distToSeg(qx, qz, sg)[0] < sg[4] + 0.5) return true; return false; };
     const good = (qx, qz) => inSlice(qx, qz) && !blocked(qx, qz) && !onRoad(qx, qz) && !doors.some((d) => Math.hypot(d.x - qx, d.z - qz) < 3.5) && !plaques.some((p) => Math.hypot(p.x - qx, p.z - qz) < 4) && !slicePois.some((q) => Math.hypot(q.dx - qx, q.dz - qz) < 4.4) && !(selfie && Math.hypot(selfie.x - qx, selfie.z - qz) < 3);
     if (!good(x, z)) search: for (let r = 1; r <= 16; r += 1) for (let k = 0; k < 16; k++) { const qx = x + Math.cos(k * 0.3927) * r, qz = z + Math.sin(k * 0.3927) * r; if (good(qx, qz)) { x = qx; z = qz; break search; } }
-    const g = new THREE.Group(); g.position.set(x, 0.14, z);
+    const g = new THREE.Group(); g.position.set(x, 0.14 + groundH(x, z), z);
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.5, 8), post); pole.position.y = 0.75; pole.castShadow = true;
     const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.05, 24), blue); disc.rotation.x = Math.PI / 2; disc.position.y = 1.62; disc.castShadow = true;
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.025, 6, 28), rim); ring.position.y = 1.62;
@@ -511,7 +573,7 @@ $('card').addEventListener('click', () => {
   g.textBaseline = 'middle';
   g.fillStyle = '#14161a'; g.font = '700 52px Georgia, serif'; g.fillText('Greetings from Padiham', 40, H + 48, W - 80);
   g.fillStyle = '#3c3f44'; g.font = '500 28px system-ui, sans-serif'; g.fillText(`${placeName()}. The Padiham Job, tompickup.co.uk/the-padiham-job`, 40, H + 100, W - 80);
-  g.fillStyle = '#6a6d72'; g.font = '400 18px system-ui, sans-serif'; g.fillText('Map data \u00a9 OpenStreetMap contributors. Contains OS data \u00a9 Crown copyright and database right 2026.', 40, H + 142, W - 80);
+  g.fillStyle = '#6a6d72'; g.font = '400 18px system-ui, sans-serif'; g.fillText('Map data \u00a9 OpenStreetMap contributors. Contains OS data \u00a9 Crown copyright and database right 2026. \u00a9 Environment Agency copyright and/or database right 2022. All rights reserved.', 40, H + 142, W - 80);
   cv.toBlob(async (blob) => {
     if (!blob) { note('Could not make the postcard here'); return; }
     const file = new File([blob], 'padiham-postcard.png', { type: 'image/png' });
@@ -529,7 +591,7 @@ let selfie = null;
 const SELFIE_LINES = ['Say cheese!', 'Just one more for the socials', 'Is the Town Hall in shot?', 'Hang on, that is my good side', 'Can you move? You are in my selfie'];
 function makeSelfie(x, z, heading) {
   const fig = makeFigure({ jacket: 0x1c2740, trousers: 0x1c2740, hair: 0x9a6b42, skin: 0xf0c8ad, suit: true, tie: 0xb3252a, rosette: 0xd4202a, phone: true, face: true, eyes: 0x3f6f9f });
-  fig.group.position.set(x, 0.14, z); fig.group.rotation.y = heading;
+  fig.group.position.set(x, 0.14 + groundH(x, z), z); fig.group.rotation.y = heading;
   const flash = new THREE.PointLight(0xffffff, 0, 9, 1.6); flash.position.set(0.3, 1.9, 0.75); fig.group.add(flash);
   scene.add(fig.group);
   // He stands still, so he is a small obstacle rather than something to walk through.
@@ -582,7 +644,7 @@ function step(dt) {
   animateFigure(player.fig, player.phase, amt);
   const stepN = Math.floor(player.phase / Math.PI);
   if (stepN !== lastStep) { lastStep = stepN; if (player.speed > 1) sound.step(player.speed > 6); }
-  const baseY = state.inside ? state.inside.pub.floorY : 0.14;
+  const baseY = state.inside ? state.inside.pub.floorY : 0.14 + groundH(player.x, player.z);
   if (state.playing) {
     if (!state.inside) { for (const d of doors) if (Math.hypot(player.x - d.x, player.z - d.z) < 1.0) { enterPub(d); break; } }
     else {
@@ -612,11 +674,13 @@ function step(dt) {
   const wantDist = Math.max(1.5, cam.dist * t - (t < 1 ? 0.5 : 0));
   cam.cur += (wantDist - cam.cur) * Math.min(1, dt * (wantDist < cam.cur ? 14 : 3));
   camera.position.set(player.x - fx * cam.cur * cp, baseY + 1.6 + Math.sin(cam.pitch) * cam.cur, player.z - fz * cam.cur * cp);
+  // On a slope the ground behind the player can rise above the camera: keep the camera clear of it.
+  if (!state.inside) camera.position.y = Math.max(camera.position.y, groundH(camera.position.x, camera.position.z) + 0.6);
   camera.lookAt(player.x, baseY + 1.45, player.z);
   sky.position.copy(camera.position); clouds.position.set(camera.position.x, 0, camera.position.z);
   const sx = Math.round(player.x / 4) * 4, sz = Math.round(player.z / 4) * 4;
-  sun.target.position.set(sx, 0, sz);
-  sun.position.set(sx, 0, sz).addScaledVector(sunDir, 220);
+  sun.target.position.set(sx, baseY, sz);
+  sun.position.set(sx, baseY, sz).addScaledVector(sunDir, 220);
 
   // Job progress
   const tg = target();
@@ -649,7 +713,11 @@ function frame() {
 }
 
 // ---------- Boot ----------
-fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
+// The terrain file is optional: without it the town is built flat, as it was before the hills were added.
+const terrainUrl = stage.dataset.world.replace('world.json', 'terrain.json');
+Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl).then((r) => (r.ok ? r.json() : null)).catch(() => null)]).then(([w, tr]) => {
+  setTerrain(tr);
+  if (tr && Array.isArray(tr.bh) && tr.bh.length === w.buildings.length) w.buildings.forEach((b, i) => { if (tr.bh[i]) b.lh = tr.bh[i]; });
   world = w; slice = w.slice;
   built = buildWorld(scene, w, isTouch);
   for (const p of w.pois) {
@@ -662,7 +730,7 @@ fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
     if (!PUBS[d.name]) continue;
     d.pub = buildPub(scene, { ...PUBS[d.name], name: d.name });
     const ring = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.8, 24), new THREE.MeshBasicMaterial({ color: 0x4fb3ff, side: THREE.DoubleSide, fog: false }));
-    ring.rotation.x = -Math.PI / 2; ring.position.set(d.x, 0.32, d.z); scene.add(ring);
+    ring.rotation.x = -Math.PI / 2; ring.position.set(d.x, 0.32 + groundH(d.x, d.z), d.z); scene.add(ring);
     doors.push(d);
   }
   drawMapBase();

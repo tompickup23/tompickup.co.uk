@@ -1,6 +1,7 @@
 // Builds the town from world.json: ground, roads and markings, buildings with roofs and facades,
 // signs, street furniture, parked cars, trees and the slice barriers.
 import * as THREE from 'three';
+import { terrain, groundH } from './terrain.js';
 import { TILE, PART, matTile, tileUV, SHOP_VARIANTS, facadeAtlas, slateTexture, groundTexture, signTexture, closedTexture, unionTexture } from './textures.js';
 
 // ---------- Spatial grids ----------
@@ -74,7 +75,60 @@ export class Batch {
       this.p.push(_v.x, _v.y, _v.z); this.n.push(_n.x, _n.y, _n.z); this.u.push(0, 0); this.c.push(col.r, col.g, col.b);
     }
   }
-  mesh(material, shadows = 'both') {
+  // Cut every triangle along the terrain grid lines and diagonals, so each piece lies inside one flat ground triangle.
+  clipToGrid() {
+    const T = terrain(), s = T.s, P = [], N = [], U = [], Cc = [];
+    const fns = [(q) => (q[0] - T.x0) / s, (q) => (q[2] - T.z0) / s, (q) => (q[0] - T.x0) / s - (q[2] - T.z0) / s];
+    const split = (polys, f) => {
+      const out = [];
+      for (const poly of polys) {
+        let rest = poly, lo = Infinity, hi = -Infinity;
+        for (const q of poly) { const v = f(q); if (v < lo) lo = v; if (v > hi) hi = v; }
+        for (let k = Math.floor(lo) + 1; k < hi && rest.length >= 3; k++) {
+          const a = [], b = [];
+          for (let i = 0; i < rest.length; i++) {
+            const p0 = rest[i], p1 = rest[(i + 1) % rest.length], f0 = f(p0) - k, f1 = f(p1) - k;
+            if (f0 <= 0) a.push(p0);
+            if (f0 >= 0) b.push(p0);
+            if ((f0 < 0 && f1 > 0) || (f0 > 0 && f1 < 0)) { const t = f0 / (f0 - f1), m = p0.map((v, j) => v + (p1[j] - v) * t); a.push(m); b.push(m); }
+          }
+          if (a.length >= 3) out.push(a);
+          rest = b;
+        }
+        if (rest.length >= 3) out.push(rest);
+      }
+      return out;
+    };
+    for (let t = 0; t < this.p.length / 9; t++) {
+      const tri = [0, 1, 2].map((k) => { const v = t * 3 + k; return [this.p[v * 3], this.p[v * 3 + 1], this.p[v * 3 + 2], this.u[v * 2], this.u[v * 2 + 1]]; });
+      // Small pieces (round road joins, short dashes) are left whole and raised a touch: over so short a span the
+      // ground barely bends, and cutting them all would multiply the triangle count several times over.
+      let big = false;
+      for (let k = 0; k < 3; k++) if (Math.hypot(tri[k][0] - tri[(k + 1) % 3][0], tri[k][2] - tri[(k + 1) % 3][2]) > 4) big = true;
+      let polys = [tri];
+      if (big) for (const f of fns) polys = split(polys, f);
+      else for (const q of tri) q[1] += 0.015;
+      const c = [this.c[t * 9], this.c[t * 9 + 1], this.c[t * 9 + 2]], n = [this.n[t * 9], this.n[t * 9 + 1], this.n[t * 9 + 2]];
+      for (const poly of polys) for (let k = 1; k < poly.length - 1; k++) for (const q of [poly[0], poly[k], poly[k + 1]]) { P.push(q[0], q[1], q[2]); U.push(q[3], q[4]); Cc.push(c[0], c[1], c[2]); N.push(n[0], n[1], n[2]); }
+    }
+    this.p = P; this.n = N; this.u = U; this.c = Cc;
+  }
+  // Lift everything on to the terrain. 'plain' moves each point up by the ground height beneath it, which keeps walls
+  // upright and lets a long row follow the slope of its street. 'clip' and 'water' are for flat things lying on the
+  // ground: they are cut along the terrain grid first, so they sit on it exactly. 'water' stays on the ground under bridges.
+  drape(mode) {
+    if (!terrain() || !mode) return;
+    if (mode !== 'plain') this.clipToGrid();
+    const p = this.p, water = mode === 'water';
+    for (let i = 0; i < p.length; i += 3) p[i + 1] += groundH(p[i], p[i + 2], water);
+    if (mode !== 'plain') for (let i = 0; i < p.length; i += 9) {
+      const ax = p[i + 3] - p[i], ay = p[i + 4] - p[i + 1], az = p[i + 5] - p[i + 2], bx = p[i + 6] - p[i], by = p[i + 7] - p[i + 1], bz = p[i + 8] - p[i + 2];
+      const nx = ay * bz - az * by, ny = az * bx - ax * bz, nz = ax * by - ay * bx, l = Math.hypot(nx, ny, nz);
+      if (l > 1e-9) for (let k = 0; k < 9; k += 3) { this.n[i + k] = nx / l; this.n[i + k + 1] = ny / l; this.n[i + k + 2] = nz / l; }
+    }
+  }
+  mesh(material, shadows = 'both', drape = 'plain') {
+    this.drape(drape);
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(this.p, 3));
     g.setAttribute('normal', new THREE.Float32BufferAttribute(this.n, 3));
@@ -217,6 +271,12 @@ function building(b, bi, W, R, P, bays, ex) {
   else if (shed) { floors = 1; floorH = A > 2000 ? 8 : 6.5; bayW = 7; }
   else if (small) { floors = 1; floorH = 2.7; }
   else if (central && A > 140 && h1 < 0.3 && !b.m) floors = 3;
+  // Real height from LIDAR where there is one (b.lh): the middle value of surface minus terrain over the outline,
+  // which sits about half way up the roof. Buildings with details read from photos keep those.
+  if (b.lh && !church && !civic && !school && !small && !b.f && !b.fh) {
+    if (shed) floorH = Math.min(12, Math.max(4, b.lh));
+    else floors = Math.max(1, Math.min(4, Math.round((b.lh - 1.2) / floorH)));
+  }
   if (b.f) floors = b.f;
   if (b.fh) floorH = b.fh;
   if (tall) bayW = 4.2;
@@ -423,11 +483,74 @@ function building(b, bi, W, R, P, bays, ex) {
     for (const y of [3.4, 6.6, 9.8, 13]) { put(P, BOX, t0, 0, y, 0, 2.5, 0.12, 2.5, g); for (const lz of [-1.2, 1.2]) put(P, BOX, t0, 0, y + 0.55, lz, 2.4, 0.06, 0.06, g); }
   }
   if (feat.has('tower')) {
-    const end = at(-hl + 3.2, 0, 0)[0] < at(hl - 3.2, 0, 0)[0] ? -1 : 1, t0 = { x: at(end * (hl - 3.2), 0, 0)[0], z: at(end * (hl - 3.2), 0, 0)[2], h: hd }, st = C(TOWER), th = wallH + 15;
+    // St Leonard's: a south-west tower of four stages, with four clock faces, battlements, four corner turrets with
+    // spirelets and four minor pinnacles (Historic England, list entry 1238303). The height is not in the listing.
+    let sw = p[0];
+    for (const q of p) if (q[1] - q[0] > sw[1] - sw[0]) sw = q;
+    const dl = Math.hypot(o.cx - sw[0], o.cz - sw[1]) || 1;
+    const t0 = { x: sw[0] + ((o.cx - sw[0]) / dl) * 4.4, z: sw[1] + ((o.cz - sw[1]) / dl) * 4.4, h: hd }, st = C(TOWER), th = wallH + 15, e = 3.3;
+    const DARKW = C('#2b3038'), FACE = C('#ece8da');
     put(P, BOX, t0, 0, th / 2, 0, 6.6, th, 6.6, st);
+    for (const f of [0.3, 0.55, 0.8]) put(P, BOX, t0, 0, th * f, 0, 6.9, 0.25, 6.9, trim);
     put(P, BOX, t0, 0, th + 0.4, 0, 7.1, 0.8, 7.1, st);
-    for (const lx of [-3.2, 3.2]) for (const lz of [-3.2, 3.2]) put(P, CONE, t0, lx, th + 2.4, lz, 0.5, 3.4, 0.5, st);
-    for (const [lx, lz, sx, sz] of [[0, 3.32, 1.6, 0.06], [0, -3.32, 1.6, 0.06], [3.32, 0, 0.06, 1.6], [-3.32, 0, 0.06, 1.6]]) put(P, BOX, t0, lx, th - 3.5, lz, sx, 3, sz, C('#2b3038'));
+    const yc = th * 0.675;
+    for (const [ax, az] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+      const lx = ax * (e + 0.04), lz = az * (e + 0.04), wide = az ? 1 : 0;
+      // belfry louvres in the top stage, a tall window lower down, and a clock face in a square panel
+      for (const d of [-1, 1]) put(P, BOX, t0, lx + (wide ? d * 0.95 : 0), th - 2.6, lz + (wide ? 0 : d * 0.95), wide ? 1.1 : 0.06, 3, wide ? 0.06 : 1.1, DARKW);
+      put(P, BOX, t0, lx, th * 0.42, lz, wide ? 1.2 : 0.06, 2.6, wide ? 0.06 : 1.2, DARKW);
+      put(P, BOX, t0, lx, yc, lz, wide ? 2.3 : 0.1, 2.3, wide ? 0.1 : 2.3, trim);
+      put(P, SPH, t0, lx + ax * 0.06, yc, lz + az * 0.06, wide ? 0.95 : 0.05, 0.95, wide ? 0.05 : 0.95, FACE);
+      put(P, BOX, t0, lx + ax * 0.13, yc + 0.32, lz + az * 0.13, wide ? 0.09 : 0.04, 0.7, wide ? 0.04 : 0.09, DARKW);
+      put(P, BOX, t0, lx + ax * 0.13 + (wide ? 0.22 : 0), yc, lz + az * 0.13 + (wide ? 0 : 0.22), wide ? 0.5 : 0.04, 0.09, wide ? 0.04 : 0.5, DARKW);
+      // battlements, with a minor pinnacle in the middle of each side
+      for (const d of [-1.7, 1.7]) put(P, BOX, t0, ax * 3.3 + (wide ? d : 0), th + 1.15, az * 3.3 + (wide ? 0 : d), wide ? 1.1 : 0.5, 0.7, wide ? 0.5 : 1.1, st);
+      put(P, BOX, t0, ax * 3.3, th + 1.2, az * 3.3, 0.5, 0.8, 0.5, st);
+      put(P, CONE, t0, ax * 3.3, th + 2.3, az * 3.3, 0.3, 1.5, 0.3, st);
+    }
+    for (const lx of [-3.2, 3.2]) for (const lz of [-3.2, 3.2]) {
+      put(P, CYL, t0, lx, th + 1.5, lz, 0.55, 2.2, 0.55, st);
+      put(P, CONE, t0, lx, th + 3.9, lz, 0.62, 2.6, 0.62, st);
+    }
+  }
+  if (feat.has('nave') || feat.has('porch')) {
+    // Work from the longest wall, which on a church is a side of the nave.
+    let ei = 0, el = 0;
+    for (let i = 0; i < p.length; i++) { const c = p[(i + 1) % p.length], l = Math.hypot(c[0] - p[i][0], c[1] - p[i][1]); if (l > el) { el = l; ei = i; } }
+    const a = p[ei], c = p[(ei + 1) % p.length], dx = (c[0] - a[0]) / el, dz = (c[1] - a[1]) / el;
+    const mx = (a[0] + c[0]) / 2, mz = (a[1] + c[1]) / 2;
+    let inx = -dz, inz = dx;
+    if ((o.cx - mx) * inx + (o.cz - mz) * inz < 0) { inx = -inx; inz = -inz; }
+    // Depth of the body: the far wall that runs back the other way, not the transept or vestry beyond it.
+    let depth = o.W;
+    for (let i = 0; i < p.length; i++) {
+      if (i === ei) continue;
+      const q = p[i], r = p[(i + 1) % p.length], l = Math.hypot(r[0] - q[0], r[1] - q[1]);
+      if (l > el * 0.4 && Math.abs(((r[0] - q[0]) * dx + (r[1] - q[1]) * dz) / l) > 0.95) depth = ((q[0] + r[0]) / 2 - mx) * inx + ((q[1] + r[1]) / 2 - mz) * inz;
+    }
+    const st = C(TOWER), SLATE = C('#474b53'), DARKW = C('#2b3038');
+    if (feat.has('nave')) {
+      // A clerestory rising above the aisle roofs, under a steeply pitched slate roof.
+      const n0 = { x: mx + (inx * depth) / 2, z: mz + (inz * depth) / 2, h: Math.atan2(dx, dz) }, nw = depth * 0.24, hn = el / 2 - 0.4;
+      const y0 = wallH + 3.2, y1 = y0 + nw * 1.35, ov = nw + 0.4;
+      put(P, BOX, n0, 0, (wallH - 0.6 + y0) / 2, 0, nw * 2, y0 - wallH + 0.6, hn * 2, st);
+      for (let lz = -hn + 2.2; lz < hn - 1; lz += 3.6) for (const sd of [-1, 1]) put(P, BOX, n0, sd * (nw + 0.02), wallH + 1.9, lz, 0.08, 1.5, 1.0, DARKW);
+      for (const sd of [-1, 1]) {
+        P.quad(toWorld(n0, sd * ov, y0 - 0.15, -hn - 0.3), toWorld(n0, sd * ov, y0 - 0.15, hn + 0.3), toWorld(n0, 0, y1, hn + 0.3), toWorld(n0, 0, y1, -hn - 0.3), SLATE, null, [0, 1, 0]);
+        P.tri(toWorld(n0, -nw, y0, sd * hn), toWorld(n0, nw, y0, sd * hn), toWorld(n0, 0, y1 - 0.1, sd * hn), st, null, [dx * sd, 0, dz * sd]);
+      }
+    }
+    if (feat.has('porch')) {
+      // A single storey porch on the south side, clear of the tower.
+      const west = a[0] < c[0] ? 1 : -1, sP = west * (0.4 * el - el / 2);
+      const f = { x: mx + dx * sP, z: mz + dz * sP, h: Math.atan2(-inx, -inz) };
+      put(P, BOX, f, 0, 1.7, 1.5, 4.2, 3.4, 3, st);
+      put(P, BOX, f, 0, 1.25, 3.02, 1.5, 2.5, 0.06, DARKW);
+      P.tri(toWorld(f, -2.3, 3.4, 3.05), toWorld(f, 2.3, 3.4, 3.05), toWorld(f, 0, 5.2, 3.05), st, null, [-inx, 0, -inz]);
+      for (const sd of [-1, 1]) P.quad(toWorld(f, sd * 2.4, 3.3, 3.2), toWorld(f, 0, 5.25, 3.2), toWorld(f, 0, 5.25, -0.1), toWorld(f, sd * 2.4, 3.3, -0.1), SLATE, null, [0, 1, 0]);
+      const k = [toWorld(f, -2.1, 0, 0), toWorld(f, -2.1, 0, 3), toWorld(f, 2.1, 0, 3), toWorld(f, 2.1, 0, 0)];
+      for (let i = 0; i < 3; i++) walls.add(k[i][0], k[i][2], k[i + 1][0], k[i + 1][2], 1.5, [k[i][0], k[i][2], k[i + 1][0], k[i + 1][2], 1]);
+    }
   }
 }
 
@@ -480,8 +603,8 @@ function footballGround(F, poly, scene) {
   const c = [[sx - 0.5, -sl / 2], [sx + 3.6, -sl / 2], [sx + 3.6, sl / 2], [sx - 0.5, sl / 2]].map(([lx, lz]) => toWorld(f, lx, 0, lz));
   for (let i = 0; i < 4; i++) { const a = c[i], b = c[(i + 1) % 4]; walls.add(a[0], a[2], b[0], b[2], 1.5, [a[0], a[2], b[0], b[2], 0]); }
   const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.1), new THREE.MeshLambertMaterial({ map: signTexture('PADIHAM FC', '#1f4fa3', '#ffffff') }));
-  const sp = toWorld(f, sx - 0.6, 4.6, 0); sign.position.set(sp[0], sp[1], sp[2]); sign.rotation.y = h - Math.PI / 2; scene.add(sign);
-  scene.add(G.mesh(new THREE.MeshLambertMaterial({ vertexColors: true })));
+  const sp = toWorld(f, sx - 0.6, 4.6, 0); sign.position.set(sp[0], sp[1] + groundH(sp[0], sp[2]), sp[2]); sign.rotation.y = h - Math.PI / 2; scene.add(sign);
+  scene.add(G.mesh(new THREE.MeshLambertMaterial({ vertexColors: true }), 'both', 'clip'));
   const spot = toWorld(f, 0, 0, 0);
   return { x: spot[0], z: spot[2] };
 }
@@ -492,11 +615,32 @@ export function buildWorld(scene, w, lowSpec) {
   const [SX0, SZ0, SX1, SZ1] = w.slice;
   const inSlice = (x, z, m = 0) => x > SX0 + m && x < SX1 - m && z > SZ0 + m && z < SZ1 - m;
 
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), new THREE.MeshLambertMaterial({ map: groundTexture() }));
-  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
+  // The ground: the terrain grid itself, with one ring of long squares carrying it out level to the horizon.
+  const T = terrain();
+  let ground;
+  if (T) {
+    const xs = [-3000], zs = [-3000];
+    for (let i = 0; i < T.nx; i++) xs.push(T.x0 + i * T.s);
+    for (let j = 0; j < T.nz; j++) zs.push(T.z0 + j * T.s);
+    xs.push(3000); zs.push(3000);
+    const pos = [], uv = [], idx = [], nxv = xs.length;
+    for (const z of zs) for (const x of xs) { pos.push(x, groundH(x, z, true), z); uv.push((x + 3000) / 6000, (3000 - z) / 6000); }
+    for (let j = 0; j < zs.length - 1; j++) for (let i = 0; i < nxv - 1; i++) { const a = j * nxv + i, b = a + 1, d = a + nxv, c = d + 1; idx.push(a, c, b, a, d, c); }
+    const gg = new THREE.BufferGeometry();
+    gg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    gg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    gg.setIndex(idx);
+    gg.computeVertexNormals();
+    ground = new THREE.Mesh(gg, new THREE.MeshLambertMaterial({ map: groundTexture() }));
+  } else {
+    ground = new THREE.Mesh(new THREE.PlaneGeometry(6000, 6000), new THREE.MeshLambertMaterial({ map: groundTexture() }));
+    ground.rotation.x = -Math.PI / 2;
+  }
+  ground.receiveShadow = true;
   scene.add(ground);
 
   const F = new Batch(); // everything flat on the ground
+  const WT = new Batch(); // water, which stays at river level under the bridges
   const GCOL = { park: '#6aa457', pitch: '#62ad55', grass: '#79a863', wood: '#55894c', scrub: '#6c9558' };
   // Town centre ground is paved yards and car parks, not grass.
   const disc = [];
@@ -505,9 +649,9 @@ export function buildWorld(scene, w, lowSpec) {
   for (const g of w.green) fillPoly(F, g.p, 0.03, C(GCOL[g.k] || '#79a863'));
   const WATER = C('#3f7391');
   for (const wt of w.water) {
-    if (wt.poly) fillPoly(F, wt.poly, 0.05, WATER);
+    if (wt.poly) fillPoly(WT, wt.poly, 0.05, WATER);
     else {
-      ribbon(F, wt.p, wt.w, 0.05, WATER);
+      ribbon(WT, wt.p, wt.w, 0.05, WATER);
       if (wt.w >= 10) for (let i = 0; i < wt.p.length - 1; i++) riverGrid.add(wt.p[i][0], wt.p[i][1], wt.p[i + 1][0], wt.p[i + 1][1], wt.w, [wt.p[i][0], wt.p[i][1], wt.p[i + 1][0], wt.p[i + 1][1], wt.w / 2]);
     }
   }
@@ -600,7 +744,43 @@ export function buildWorld(scene, w, lowSpec) {
       }
     }
   }
-  scene.add(F.mesh(new THREE.MeshLambertMaterial({ vertexColors: true }), 'receive'));
+  // Landmarks that have no building outline: placed in overrides.json, each with its source.
+  for (const lm of w.landmarks || []) {
+    const o = { x: lm.x, z: lm.z, h: lm.h || 0 };
+    const solid = (r, n) => { for (let i = 0; i < n; i++) { const a0 = o.h + ((i + 0.5) / n) * 6.2832, a1 = o.h + ((i + 1.5) / n) * 6.2832, q = [lm.x + Math.sin(a0) * r, lm.z + Math.cos(a0) * r, lm.x + Math.sin(a1) * r, lm.z + Math.cos(a1) * r]; walls.add(q[0], q[1], q[2], q[3], 1.5, [...q, 1]); } };
+    if (lm.k === 'warmemorial') {
+      // A Celtic wheel cross on a decorated shaft, a pedestal with a column at each corner and a gold lettered
+      // tablet on each face, on a short plinth and base with a stone surround (War Memorials Online, record 153903).
+      const S = C('#bdb7a8'), S2 = C('#a39c8c'), TAB = C('#8f887a'), GOLD = C('#c9a646');
+      put(P, BOX, o, 0, 0.12, 0, 5.4, 0.24, 5.4, S2);
+      put(P, BOX, o, 0, 0.4, 0, 3.1, 0.32, 3.1, S);
+      put(P, BOX, o, 0, 0.7, 0, 2.4, 0.3, 2.4, S);
+      put(P, BOX, o, 0, 1.65, 0, 1.3, 1.6, 1.3, S);
+      for (const lx of [-0.74, 0.74]) for (const lz of [-0.74, 0.74]) put(P, CYL, o, lx, 1.65, lz, 0.11, 1.6, 0.11, S2);
+      put(P, BOX, o, 0, 2.55, 0, 1.85, 0.2, 1.85, S);
+      for (const [ax, az] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+        put(P, BOX, o, ax * 0.66, 1.65, az * 0.66, az ? 0.9 : 0.04, 1.2, az ? 0.04 : 0.9, TAB);
+        for (let i = 0; i < 6; i++) put(P, BOX, o, ax * 0.69, 2.1 - i * 0.18, az * 0.69, az ? 0.66 : 0.02, 0.05, az ? 0.02 : 0.66, GOLD);
+      }
+      put(P, BOX, o, 0, 2.85, 0, 0.7, 0.4, 0.55, S);
+      put(P, BOX, o, 0, 4.25, 0, 0.42, 2.5, 0.3, S);
+      put(P, BOX, o, 0, 4.85, 0, 1.5, 0.38, 0.28, S);
+      for (let i = 0; i < 12; i++) { const an = (i / 12) * 6.2832; put(P, BOX, o, Math.cos(an) * 0.58, 4.85 + Math.sin(an) * 0.58, 0, 0.34, 0.13, 0.2, S2, an + Math.PI / 2); }
+      solid(2.2, 4);
+    } else if (lm.k === 'bandstand') {
+      // The mapped bandstand in Memorial Park. No source describes it, so this is a plain open bandstand.
+      const BASE = C('#b3aa98'), IRON = C('#2f4a3c'), ROOF = C('#5a4a42');
+      put(P, CYL, o, 0, 0.3, 0, 2.5, 0.6, 2.5, BASE);
+      put(P, CYL, o, 0, 0.65, 0, 2.3, 0.1, 2.3, C('#8c7a5c'));
+      for (let i = 0; i < 8; i++) { const an = ((i + 0.5) / 8) * 6.2832; put(P, CYL, o, Math.sin(an) * 2.05, 2.0, Math.cos(an) * 2.05, 0.06, 2.7, 0.06, IRON); }
+      put(P, CYL, o, 0, 3.4, 0, 2.75, 0.14, 2.75, IRON);
+      put(P, CONE, o, 0, 4.15, 0, 2.7, 1.4, 2.7, ROOF);
+      put(P, CYL, o, 0, 5.1, 0, 0.05, 0.6, 0.05, IRON);
+      solid(2.5, 8);
+    }
+  }
+  scene.add(WT.mesh(new THREE.MeshLambertMaterial({ vertexColors: true }), 'receive', 'water'));
+  scene.add(F.mesh(new THREE.MeshLambertMaterial({ vertexColors: true }), 'receive', 'clip'));
 
   // Buildings
   const W = new Batch(), R = new Batch(), bays = [], ex = { doors: [], bands: [], fronts: new Map() };
@@ -609,7 +789,7 @@ export function buildWorld(scene, w, lowSpec) {
   out.fronts = ex.fronts;
   for (const bd of ex.bands) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(bd.w, 0.62), new THREE.MeshLambertMaterial({ map: signTexture(bd.text.split('').join(' '), '#1f3350', '#e6c877') }));
-    m.position.set(bd.x, bd.y, bd.z); m.rotation.y = Math.atan2(bd.nx, bd.nz); scene.add(m);
+    m.position.set(bd.x, bd.y + groundH(bd.x, bd.z), bd.z); m.rotation.y = Math.atan2(bd.nx, bd.nz); scene.add(m);
     for (const poi of w.pois) if (poi.n.toUpperCase() === bd.text) out.signs.add(poi.n);
   }
   scene.add(W.mesh(new THREE.MeshLambertMaterial({ vertexColors: true, map: facadeAtlas() })));
@@ -620,13 +800,15 @@ export function buildWorld(scene, w, lowSpec) {
   const SIGN_BG = ['#1f3d2b', '#6b1d1d', '#1d2f4f', '#26282c'];
   w.pois.forEach((poi, i) => {
     if (poi.k === 'park' || poi.k === 'pitch' || poi.k === 'bridge' || out.signs.has(poi.n)) return;
-    let best = null, bd = 26;
+    // The big stores are deep sheds, so their nearest front is further from the mapped centre, and the sign is larger.
+    const big = BIG.has(poi.n);
+    let best = null, bd = big ? 80 : 26;
     for (const bay of bays) { if (bay.used) continue; const d = Math.hypot(bay.x - poi.x, bay.z - poi.z) + Math.hypot(bay.x - poi.dx, bay.z - poi.dz) * 0.5; if (d < bd) { bd = d; best = bay; } }
     if (!best) return;
     best.used = true;
-    const sw = Math.min(best.w * 0.94, 4.4);
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(sw, 0.56), new THREE.MeshLambertMaterial({ map: signTexture(SHORT[poi.n] || poi.n, SIGN_BG[i % SIGN_BG.length]) }));
-    m.position.set(best.x + best.nx * 0.09, best.y, best.z + best.nz * 0.09);
+    const sw = big ? Math.min(best.w * 1.25, 9) : Math.min(best.w * 0.94, 4.4);
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(sw, big ? sw / 7.5 : 0.56), new THREE.MeshLambertMaterial({ map: signTexture(SHORT[poi.n] || poi.n, SIGN_BG[i % SIGN_BG.length]) }));
+    m.position.set(best.x + best.nx * 0.09, best.y + groundH(best.x, best.z), best.z + best.nz * 0.09);
     m.rotation.y = Math.atan2(best.nx, best.nz);
     scene.add(m);
     out.signs.add(poi.n);
@@ -638,6 +820,8 @@ export function buildWorld(scene, w, lowSpec) {
     if (l < 1) continue;
     const dx = (c[0] - a[0]) / l, dz = (c[1] - a[1]) / l, off = r.c === 'foot' ? r.w / 2 + 0.3 : r.w / 2 + 2.6;
     const o = { x: (a[0] + c[0]) / 2, z: (a[1] + c[1]) / 2, h: Math.atan2(dx, dz) };
+    // The deck slab under the road, so the bridge has sides and the river runs beneath it.
+    put(P, BOX, o, 0, -0.75, 0, r.c === 'foot' ? r.w + 1.6 : r.w + 6.6, 1.3, l, STONE);
     for (const side of [1, -1]) {
       const ex = dz * side * off, ez = -dx * side * off; // the same side as the box drawn below
       // A parapet belongs on the outside of the bridge, not between the road and a footway that share the deck.
@@ -738,7 +922,7 @@ export function buildWorld(scene, w, lowSpec) {
       for (const e of [-half * 0.6, 0, half * 0.6]) { put(P, CONE, o, e, 0.3, ina ? -1 : 1, 0.2, 0.6, 0.2, ORANGE); }
       if (r.c !== 'service') for (const flip of [0, Math.PI]) {
         const m = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.2), closed);
-        m.position.set(x, 1.95, z); m.rotation.y = o.h + flip; m.translateZ(0.06); scene.add(m);
+        m.position.set(x, 1.95 + groundH(x, z), z); m.rotation.y = o.h + flip; m.translateZ(0.06); scene.add(m);
       }
     }
   }
@@ -750,12 +934,12 @@ export function buildWorld(scene, w, lowSpec) {
   const crowns = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(2.4, 1), new THREE.MeshLambertMaterial({ flatShading: true }), n * 2);
   const col = new THREE.Color();
   w.trees.forEach(([x, z], i) => {
-    const s = 0.7 + hash(i + 3) * 0.8;
+    const s = 0.7 + hash(i + 3) * 0.8, gy = groundH(x, z);
     _q.identity();
-    trunks.setMatrixAt(i, _m.compose(_p.set(x, 1.5 * s, z), _q, _s.set(s, s, s)));
+    trunks.setMatrixAt(i, _m.compose(_p.set(x, gy + 1.5 * s, z), _q, _s.set(s, s, s)));
     _q.setFromAxisAngle(UP, hash(i) * 6);
-    crowns.setMatrixAt(i * 2, _m.compose(_p.set(x, 4.3 * s, z), _q, _s.set(s, s * 1.05, s)));
-    crowns.setMatrixAt(i * 2 + 1, _m.compose(_p.set(x + (hash(i + 9) - 0.5) * s, 6.0 * s, z + (hash(i + 4) - 0.5) * s), _q, _s.set(s * 0.68, s * 0.7, s * 0.68)));
+    crowns.setMatrixAt(i * 2, _m.compose(_p.set(x, gy + 4.3 * s, z), _q, _s.set(s, s * 1.05, s)));
+    crowns.setMatrixAt(i * 2 + 1, _m.compose(_p.set(x + (hash(i + 9) - 0.5) * s, gy + 6.0 * s, z + (hash(i + 4) - 0.5) * s), _q, _s.set(s * 0.68, s * 0.7, s * 0.68)));
     col.setHSL(0.27 + hash(i + 1) * 0.07, 0.42, 0.26 + hash(i + 2) * 0.1);
     crowns.setColorAt(i * 2, col); crowns.setColorAt(i * 2 + 1, col.offsetHSL(0, 0, 0.04));
   });

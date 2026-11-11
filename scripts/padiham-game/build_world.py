@@ -247,12 +247,18 @@ def main(src, dst, os_path=None, over_path=None):
         for cp in json.load(open(over_path, encoding="utf-8")).get("pois", []):
             add_poi(cp["n"], cp["x"], cp["z"], cp["k"])
 
+    # Landmarks with no building outline (memorials, the bandstand), placed in overrides.json.
+    landmarks = []
+    if over_path:
+        for lm in json.load(open(over_path, encoding="utf-8")).get("landmarks", []):
+            landmarks.append({"k": lm["k"], "x": lm["x"], "z": lm["z"], "h": lm.get("h", 0)})
+
     xs = [n[0] for n in nodes.values()]
     zs = [n[1] for n in nodes.values()]
     world = {
         "attribution": "Map data (c) OpenStreetMap contributors, ODbL. Contains OS data (c) Crown copyright and database right 2026.",
         "slice": [-620, -330, 480, 430],
-        "props": props,
+        "props": props, "landmarks": landmarks,
         "bounds": [r1((-2.3260 - LON0) * MX), r1(-(53.8065 - LAT0) * MZ), r1((-2.3040 - LON0) * MX), r1(-(53.7975 - LAT0) * MZ)],
         "buildings": buildings, "roads": roads, "water": water, "green": green,
         "trees": trees, "pois": pois,

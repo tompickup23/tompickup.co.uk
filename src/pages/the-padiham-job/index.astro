@@ -3,7 +3,7 @@
 // The game code is in src/games/padiham/. The world file in public/games/the-padiham-job/
 // is built offline by scripts/padiham-game/build_world.py; do not edit it by hand.
 // Uses the site Layout, so the header, footer and imprint are the same as every other page.
-// noindex and out of the sitemap (astro.config.mjs) until launch day: remove both together.
+// Launched 11 November 2026: indexable and in the sitemap.
 import Layout from '../../layouts/Layout.astro';
 import { person } from '../../data/person';
 import { PLAQUES } from '../../games/padiham/history.js';
@@ -36,7 +36,6 @@ const schema = {
   ogImageHeight={630}
   schema={schema}
   breadcrumbLabel={title}
-  noindex
 >
   <section class="sop-page">
     <header class="sop-intro">
@@ -97,6 +96,8 @@ const schema = {
           <p class="sop-credit">
             Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
             Open Database Licence. Contains OS data © Crown copyright and database right 2026.
+            Ground heights: © Environment Agency copyright and/or database right 2022. All rights reserved.
+            <a href="#disclaimer">Disclaimer and removal requests</a>.
           </p>
         </div>
       </div>
@@ -105,6 +106,10 @@ const schema = {
         <div class="box">
           <p class="name">The <span>Padiham</span> Job</p>
           <p>Make your name on the real streets of Padiham. Take jobs, beat the clock, get paid, and try not to upset the pigeons.</p>
+          <div id="sop-look">
+            <canvas id="sop-lookPic" width="120" height="150" role="img" aria-label="Your character"></canvas>
+            <div id="sop-lookOpts"></div>
+          </div>
           <ul>
             <li class="only-keys"><b>Move:</b> W A S D or the arrow keys</li>
             <li class="only-keys"><b>Run:</b> hold Shift</li>
@@ -121,6 +126,8 @@ const schema = {
           <p class="sop-credit">
             Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
             Open Database Licence. Contains OS data © Crown copyright and database right 2026.
+            Ground heights: © Environment Agency copyright and/or database right 2022. All rights reserved.
+            <a href="#disclaimer">Disclaimer and removal requests</a>.
           </p>
         </div>
       </div>
@@ -132,8 +139,8 @@ const schema = {
         The streets, the river, the building outlines and the named pubs, shops and landmarks are real. The jobs are
         made up for fun, the plain shop fronts carry made-up trades, and nothing here is endorsed by any business
         shown. The people behind the bars are not real people. The figure taking a selfie outside the Town Hall is a
-        light-hearted caricature of the town's MP, and you play in Burnley colours with the number ten of Andy Payton,
-        the Padiham Predator.
+        light-hearted caricature of the town's MP. You choose how your own character looks, and some of the people you
+        pass wear claret and blue with the number ten of Andy Payton, the Padiham Predator.
       </p>
       <p>
         Your progress is kept in your own browser. The game asks for no name or account and has no chat.
@@ -150,9 +157,29 @@ const schema = {
       <h2>Sources</h2>
       <p>
         Map data © OpenStreetMap contributors, Open Database Licence. Building outlines contain OS data © Crown
-        copyright and database right 2026 (OS OpenMap Local, Open Government Licence). Building details were read
+        copyright and database right 2026 (OS OpenMap Local, Open Government Licence). The hills and the building
+        heights come from the Environment Agency's LIDAR Composite, 1 metre terrain and surface models (Open
+        Government Licence): © Environment Agency copyright and/or database right 2022. All rights reserved. Building details were read
         from photographs published on Geograph and Wikimedia Commons under Creative Commons licences, and from
         photographs of the Starkie Arms and the Flying Dutchman. No photograph is reproduced in the game.
+      </p>
+      <h2 id="disclaimer">Disclaimer and removal requests</h2>
+      <p>
+        The Padiham Job is a free game made for fun. It is not a commercial product and it carries no advertising.
+        It is a simplified model of the town, not an accurate map, and it should not be relied on for directions,
+        opening times or anything else. The jobs, the deliveries and the things people say in the game are made up.
+      </p>
+      <p>
+        The names of pubs, shops, clubs, churches and other places come from OpenStreetMap, a public map, and are
+        shown only so that the town is recognisable. No business or organisation shown has sponsored, endorsed or
+        approved the game, and nothing in it is a statement about any of them, their staff or their customers. All
+        names and trade marks belong to their owners. Andy Payton and Burnley Football Club have no connection with
+        the game and have not endorsed it.
+      </p>
+      <p>
+        If you own or run a business or premises shown here and would like it renamed, changed or taken out, or if
+        you have spotted a mistake, please <a href="/contact/">get in touch</a>. Removal requests from the owner or
+        operator of a business will be honoured, with no reason needed, as soon as it can be done.
       </p>
     </div>
   </section>
@@ -216,6 +243,16 @@ const schema = {
   .sop #sop-start { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 16px;
     background: linear-gradient(180deg, rgba(20, 22, 26, 0.55), rgba(20, 22, 26, 0.9)); overflow: auto; }
   .sop #sop-start .box { width: min(460px, 100%); background: #1b1e24; border-radius: 20px; padding: 24px; text-align: center; border-top: 6px solid var(--sop-gold); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+  .sop #sop-start .box { max-height: 100%; overflow: auto; }
+  .sop #sop-look { display: flex; gap: 12px; align-items: center; margin-top: 12px; padding: 10px; background: rgba(255, 255, 255, 0.06); border-radius: 12px; text-align: left; }
+  .sop #sop-lookPic { width: 72px; height: 90px; flex: none; }
+  .sop #sop-lookOpts { flex: 1; min-width: 0; display: grid; gap: 6px; }
+  .sop #sop-lookOpts .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .sop #sop-lookOpts .row span { width: 82px; font-size: 13px; font-weight: 700; color: var(--sop-gold); }
+  .sop #sop-lookOpts button { min-height: 30px; padding: 4px 10px; border: 2px solid transparent; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: var(--sop-text); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .sop #sop-lookOpts button.dot { width: 30px; padding: 0; border-color: rgba(255, 255, 255, 0.25); }
+  .sop #sop-lookOpts button[aria-pressed='true'] { border-color: var(--sop-gold); box-shadow: 0 0 0 2px rgba(255, 207, 51, 0.35); }
+  .sop #sop-lookOpts button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   .sop #sop-start .name { margin: 0; font-size: 34px; line-height: 1; letter-spacing: -0.02em; font-weight: 800; color: var(--sop-text); }
   .sop #sop-start .name span { color: var(--sop-gold); }
   .sop #sop-start p.sop-credit, .sop #sop-menu p.sop-credit { margin: 12px 0 0; font-size: 12px; line-height: 1.4; opacity: 0.75; color: var(--sop-text); }

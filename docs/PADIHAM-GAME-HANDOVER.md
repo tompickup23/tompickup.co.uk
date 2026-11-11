@@ -116,3 +116,68 @@ Not committed when written. The full assessment, the verified history pool and t
 
 Not done: the Memorial Park date check (the town survey says 1922), hills and real heights, a real phone test.
 The four decisions in section 6 of the assessment are still open.
+
+## Added 11 November 2026 (fourth session: landmarks)
+
+Not committed when written. Live check the same day: the branch is still local only and the page returns 404.
+
+- **St Leonard's:** the tower now stands at the south-west corner with four stages, clock faces, battlements,
+  corner turrets and pinnacles, and the church has a clerestory nave under a steep roof and a south porch.
+  All from the list description (Historic England, list entry 1238303). The tower height is not in the
+  listing and is unchanged. Features `nave` and `porch` in `overrides.json`.
+- **War memorial:** a wheel cross on a pedestal at the Church Street and Blackburn Road corner of Memorial
+  Park, built from the War Memorials Online description (record 153903), with a nineteenth plaque quoting
+  the inscription. The position was placed by hand and the height is a guess: check both on the ground.
+- **Bandstand:** at the spot OpenStreetMap maps it (way 973585469). No source describes it, so it is a plain
+  open bandstand. A photograph would let it be drawn properly.
+- **Landmarks list:** things with no building outline go in `overrides.json` under `landmarks`, each with its
+  source, and reach the game as `landmarks` in the world file.
+- **Boyes, Tesco and Lidl** carry larger name boards.
+- **Murals:** not built. "Splendour" (Gavin Renshaw, Station Road corner) and "Up the Hill" (Chris Butcher,
+  Church Street) are painted works, so copying them needs each artist's permission. Whether one shows the
+  horse Tom remembers was not confirmed.
+
+- **Player look:** the start screen has a chooser for hair (short, ponytail, long, cap), hair colour, skin
+  and jacket colour, with no "boy" or "girl" label. The player is a courier in a plain jacket with a
+  backpack. The choice is kept in the browser under `padiham-look-1`. Code: `LOOKS` and `setLook` in `game.js`.
+- **PAYTON 10:** off the player. About one passer-by in six wears a claret and blue shirt with the name and
+  number on the back (`Pedestrians` in `life.js`). The page wording under the game was changed to match.
+  The question of asking Andy Payton is still open.
+
+## Added 11 November 2026 (fifth session: hills and real heights)
+
+Not committed when written. Still local only and not live.
+
+- **Hills:** the town now sits on real ground from the Environment Agency LIDAR Composite 1 m terrain model:
+  54.8 m of relief across the mapped area, on a 12 m grid. `scripts/padiham-game/build_terrain.py` downloads
+  the data (kept out of git in `scripts/padiham-game/data/lidar/`) and writes
+  `public/games/the-padiham-job/terrain.json`. Run it after `build_world.py`, every time: the building heights
+  in it follow the order of the buildings in the world file. The exact command is in the script header.
+- **How the game uses it:** `src/games/padiham/terrain.js` gives `groundH(x, z)`. Every batch of town geometry
+  is lifted on to the ground when its mesh is made (`drape` in `city.js`): roads and other flat things are cut
+  along the terrain grid so they sit on it exactly, and everything else moves up by the ground height under
+  each point, so walls stay upright and a row follows the slope of its street. The player, passers-by, pigeons,
+  plaques, markers, signs and trees all read `groundH`. With no terrain file the town is built flat as before.
+- **Bridges:** the terrain model cuts bridges out, so each mapped bridge is a deck laid from bank to bank over
+  the river, with a slab under the road. Thirteen decks after joining the pieces each bridge is mapped in.
+- **Building heights:** 704 of 853 buildings carry the middle value of surface minus terrain over their
+  outline. Houses take their number of floors from it and sheds their wall height. Buildings with details in
+  `overrides.json`, churches, schools and civic buildings keep what they had.
+- **Credits:** the Environment Agency line is on the start screen, in the menu, on postcards and under Sources.
+- **Cost:** about 870,000 triangles a frame by the Town Hall, up from about 640,000, and 56 to 60 frames a
+  second on this Mac. Roughly 230,000 of the rise is roads and ground cut along the grid. The largest single
+  mesh is still street furniture (about 378,000). Not tried on a real phone: do the phone pass before launch.
+- **Not checked:** the far edges of the map on foot, every bridge, and steep streets where a long row of
+  houses leans with the slope instead of stepping. Small ground pieces (round road joins, short dashes) are
+  not cut along the grid and could flicker on a sharp change of slope; none was seen.
+
+## Launch, 11 November 2026
+
+Tom asked for the game to go live. Done for launch: a "Disclaimer and removal requests" section at the foot of
+the page (linked from the start screen and the menu), `noindex` removed and the page added to the sitemap.
+Checked the same day: Parliament's Members API lists Oliver Ryan (member 5135) as Labour (Co-op), a current
+member; the war memorial inscription was read from the War Memorials Online page itself.
+
+Launched with these still open: no real phone test; the three landlords and Andy Payton not asked; Padiham
+Archives not asked to check the plaques; the Memorial Park opening date (1921 on the plaque, 1922 in the town
+survey); the mural permissions; the war memorial's position and height.

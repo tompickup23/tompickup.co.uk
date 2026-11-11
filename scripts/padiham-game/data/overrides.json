@@ -153,10 +153,13 @@
    ],
    "name": "St Leonard's",
    "feat": [
-    "tower"
+    "tower",
+    "nave",
+    "porch"
    ],
    "src": [
-    "5943055"
+    "5943055",
+    "Historic England list entry 1238303 (south-west tower of 4 stages, 4 clock faces, battlements, 4 corner turrets with spirelets, 4 minor pinnacles, clerestory nave, south porch, steep slate roofs)"
    ]
   },
   {
@@ -235,6 +238,30 @@
     "2482465"
    ],
    "f": 2
+  }
+ ],
+ "landmarks": [
+  {
+   "k": "warmemorial",
+   "name": "Padiham war memorial",
+   "x": -373.5,
+   "z": 162,
+   "h": -2.6,
+   "src": [
+    "War Memorials Online record 153903: Celtic wheel cross, decorated shaft, pedestal with a column at each corner, short plinth and base, stone surround, gold lettered tablets on each face, at the entrance to Memorial Park, Church Street",
+    "Position placed by hand at the park's Church Street and Blackburn Road corner; not surveyed. Height is a guess."
+   ]
+  },
+  {
+   "k": "bandstand",
+   "name": "Memorial Park bandstand",
+   "x": -212.2,
+   "z": 364.3,
+   "h": 0,
+   "src": [
+    "OpenStreetMap way 973585469 (leisure=bandstand), centre of the mapped outline",
+    "No source describes its shape or materials; drawn as a plain open bandstand."
+   ]
   }
  ],
  "pois": [

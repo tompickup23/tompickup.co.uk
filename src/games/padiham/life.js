@@ -1,5 +1,6 @@
 // People and pigeons.
 import * as THREE from 'three';
+import { groundH } from './terrain.js';
 
 const mats = new Map();
 const mat = (c) => { let m = mats.get(c); if (!m) mats.set(c, m = new THREE.MeshLambertMaterial({ color: c })); return m; };
@@ -28,10 +29,17 @@ const G = {
   smile: new THREE.BoxGeometry(0.07, 0.014, 0.01),
   fringe: new THREE.BoxGeometry(0.3, 0.07, 0.12),
   tongue: new THREE.BoxGeometry(0.1, 0.03, 0.09),
+  bun: new THREE.SphereGeometry(0.075, 10, 8),
+  tail: new THREE.CapsuleGeometry(0.05, 0.2, 3, 8),
+  long: new THREE.BoxGeometry(0.35, 0.36, 0.13),
+  lock: new THREE.BoxGeometry(0.06, 0.3, 0.16),
 };
 
 // Name and number for the back of a football shirt, drawn on the shirt colour so it needs no transparency.
+const prints = new Map();
 function backPrint(name, number, bg, fg) {
+  const key = [name, number, bg, fg].join('|');
+  if (prints.has(key)) return prints.get(key);
   const cv = document.createElement('canvas'); cv.width = 256; cv.height = 288;
   const g = cv.getContext('2d');
   g.fillStyle = bg; g.fillRect(0, 0, 256, 288);
@@ -39,7 +47,9 @@ function backPrint(name, number, bg, fg) {
   g.font = '800 62px Arial, sans-serif'; g.fillText(name, 128, 56, 240);
   g.font = '900 176px Arial, sans-serif'; g.fillText(number, 128, 186, 236);
   const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
-  return new THREE.MeshLambertMaterial({ map: t });
+  const m = new THREE.MeshLambertMaterial({ map: t });
+  prints.set(key, m);
+  return m;
 }
 
 export function makeFigure(o = {}) {
@@ -65,6 +75,9 @@ export function makeFigure(o = {}) {
     // a short fringe swept to one side
     if (o.cap === undefined) { const f = part(G.fringe, hair, 0.02, 1.83, 0.09); f.rotation.z = -0.14; f.rotation.x = 0.25; }
   }
+  // Hair styles for the player's chosen look: 'pony' is a ponytail, 'long' falls to the shoulders.
+  if (o.style === 'pony') { part(G.bun, hair, 0, 1.76, -0.19); const t = part(G.tail, hair, 0, 1.6, -0.25); t.rotation.x = 0.35; }
+  if (o.style === 'long') { part(G.long, hair, 0, 1.6, -0.12); for (const sd of [-1, 1]) part(G.lock, hair, sd * 0.165, 1.6, -0.02); }
   if (o.pack) part(G.pack, 0x3a3f4a, 0, 1.2, -0.25);
   const limb = (x, y, geo, len, c, endGeo, endC, ez) => {
     const pivot = new THREE.Group(); pivot.position.set(x, y, 0); g.add(pivot);
@@ -85,8 +98,10 @@ export function makeFigure(o = {}) {
     return p;
   });
   const arms = [-0.31, 0.31].map((x) => {
-    const p = limb(x, 1.42, G.arm, 0.56, kit ? skin : jacket, G.hand, skin, 0);
-    if (kit) part(G.sleeve, kit.sleeves, 0, -0.1, 0, p);
+    // Short sleeves, for a football kit or a replica shirt worn with ordinary trousers.
+    const sleeves = kit ? kit.sleeves : o.sleeves;
+    const p = limb(x, 1.42, G.arm, 0.56, sleeves !== undefined ? skin : jacket, G.hand, skin, 0);
+    if (sleeves !== undefined) part(G.sleeve, sleeves, 0, -0.1, 0, p);
     return p;
   });
   let phone = null;
@@ -103,8 +118,8 @@ export function animateFigure(f, phase, amt) {
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const JACKETS = [0x3b5b8c, 0x7a2f2f, 0x2f6b4f, 0x5a5560, 0xb8a03a, 0x8c8f96, 0x3a3d42, 0xa84a6a, 0x4a7d8c];
 const TROUSERS = [0x2a2f3a, 0x3d4a66, 0x4a4238, 0x5a5d62];
-const SKIN = [0xe6b596, 0xd49a78, 0xf0c8ad, 0xa87453, 0x7a5238];
-const HAIR = [0x3a2a1e, 0x1b1b1d, 0x8a6a3a, 0xb9b9b4, 0x6a3a22];
+export const SKIN = [0xe6b596, 0xd49a78, 0xf0c8ad, 0xa87453, 0x7a5238];
+export const HAIR = [0x3a2a1e, 0x1b1b1d, 0x8a6a3a, 0xb9b9b4, 0x6a3a22];
 
 export class Pedestrians {
   constructor(scene, paths, count) {
@@ -113,7 +128,9 @@ export class Pedestrians {
     for (let i = 0; i < count; i++) {
       const path = pick(paths), cum = [0];
       for (let j = 1; j < path.length; j++) cum.push(cum[j - 1] + Math.hypot(path[j][0] - path[j - 1][0], path[j][1] - path[j - 1][1]));
-      const fig = makeFigure({ jacket: pick(JACKETS), trousers: pick(TROUSERS), skin: pick(SKIN), hair: pick(HAIR), cap: Math.random() < 0.2 ? pick([0x5a5248, 0x2b3a67, 0x3a3d42]) : undefined, scale: 0.92 + Math.random() * 0.14 });
+      // About one passer-by in six wears a claret and blue shirt with the number ten of Andy Payton. No club badge is drawn.
+      const fan = i % 6 === 2 ? { jacket: 0x6c1d45, sleeves: 0x99d6ea, back: { name: 'PAYTON', number: '10', color: 0xf4f1e8 } } : null;
+      const fig = makeFigure({ jacket: pick(JACKETS), trousers: pick(TROUSERS), skin: pick(SKIN), hair: pick(HAIR), cap: Math.random() < 0.2 ? pick([0x5a5248, 0x2b3a67, 0x3a3d42]) : undefined, style: pick(['short', 'short', 'pony', 'long']), scale: 0.92 + Math.random() * 0.14, ...fan });
       scene.add(fig.group);
       this.peds.push({ fig, path, cum, total: cum[cum.length - 1], s: Math.random() * cum[cum.length - 1], dir: Math.random() < 0.5 ? 1 : -1, speed: 1.1 + Math.random() * 0.6, phase: Math.random() * 6, side: (Math.random() - 0.5) * 1.2, wait: 0 });
     }
@@ -134,7 +151,7 @@ export class Pedestrians {
         if (p.s <= 0) { p.s = 0; p.dir = 1; p.wait = 1 + Math.random() * 4; }
       }
       const g = p.fig.group;
-      g.position.set(x, 0.14, z);
+      g.position.set(x, 0.14 + groundH(x, z), z);
       const want = near ? Math.atan2(player.x - x, player.z - z) : Math.atan2(dx * p.dir, dz * p.dir);
       g.rotation.y += Math.atan2(Math.sin(want - g.rotation.y), Math.cos(want - g.rotation.y)) * Math.min(1, dt * 6);
       animateFigure(p.fig, p.phase, moving ? 0.7 : 0);
@@ -211,7 +228,7 @@ export class Pigeons {
           if (b.walk) { b.x += Math.sin(b.h) * 0.5 * dt; b.z += Math.cos(b.h) * 0.5 * dt; b.g.rotation.x = Math.sin(time * 14 + b.phase) * 0.08; }
           else b.g.rotation.x = Math.max(0, Math.sin(time * 5 + b.phase)) * 0.7;
         }
-        b.g.position.set(b.x, b.y, b.z);
+        b.g.position.set(b.x, b.y + groundH(b.x, b.z), b.z);
         b.g.rotation.y = b.h;
       }
     }
