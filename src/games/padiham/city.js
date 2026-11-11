@@ -280,6 +280,8 @@ function building(b, bi, W, R, P, bays, ex) {
     }
   }
 
+  if (b.n && front) ex.fronts.set(b.n, front);
+
   // Roof
   const ratio = A / (o.L * o.W);
   const slate = 0.75 + hash(bi + 77) * 0.35;
@@ -429,6 +431,61 @@ function building(b, bi, W, R, P, bays, ex) {
   }
 }
 
+// ---------- Football ground ----------
+const centre = (p) => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+function footballGround(F, poly, scene) {
+  const o = obb(poly);
+  const G = new Batch(), h = Math.atan2(o.ux, o.uz), f = { x: o.cx, z: o.cz, h };
+  // Local frame: z along the pitch, x across it. The mapped outline includes the run-off, so the lines sit inside it.
+  const hl = o.L / 2 - 6, hw = Math.min(o.W / 2 - 5, 34), y = 0.06, WHITE = C('#f1efe6'), lw = 0.14;
+  const line = (x0, z0, x1, z1) => {
+    const a = toWorld(f, x0, y, z0), b = toWorld(f, x1, y, z1), dx = b[0] - a[0], dz = b[2] - a[2], l = Math.hypot(dx, dz) || 1, nx = (-dz / l) * lw, nz = (dx / l) * lw;
+    F.quad([a[0] + nx, y, a[2] + nz], [b[0] + nx, y, b[2] + nz], [b[0] - nx, y, b[2] - nz], [a[0] - nx, y, a[2] - nz], WHITE, null, [0, 1, 0]);
+  };
+  // mown stripes
+  for (let i = 0; i < 12; i++) if (i % 2) { const z0 = -hl + (i * 2 * hl) / 12, z1 = z0 + (2 * hl) / 12; const c = [[-hw, z0], [hw, z0], [hw, z1], [-hw, z1]].map(([lx, lz]) => toWorld(f, lx, 0.045, lz)); F.quad(c[0], c[1], c[2], c[3], C('#58a04c'), null, [0, 1, 0]); }
+  line(-hw, -hl, hw, -hl); line(-hw, hl, hw, hl); line(-hw, -hl, -hw, hl); line(hw, -hl, hw, hl); line(-hw, 0, hw, 0);
+  for (let k = 0; k < 28; k++) { const a0 = (k / 28) * 6.2832, a1 = ((k + 1) / 28) * 6.2832; line(Math.cos(a0) * 9.15, Math.sin(a0) * 9.15, Math.cos(a1) * 9.15, Math.sin(a1) * 9.15); }
+  const DARK = C('#3a3f45'), LAMP = C('#f4f1d8'), BLUE = C('#1f4fa3'), GREY = C('#8d9299'), SEAT = C('#2a62c4');
+  for (const e of [-1, 1]) {
+    line(-20.15, e * hl, -20.15, e * (hl - 16.5)); line(20.15, e * hl, 20.15, e * (hl - 16.5)); line(-20.15, e * (hl - 16.5), 20.15, e * (hl - 16.5));
+    line(-9.15, e * hl, -9.15, e * (hl - 5.5)); line(9.15, e * hl, 9.15, e * (hl - 5.5)); line(-9.15, e * (hl - 5.5), 9.15, e * (hl - 5.5));
+    // goal
+    for (const lx of [-3.66, 3.66]) put(G, CYL, f, lx, 1.22, e * hl, 0.06, 2.44, 0.06, WHITE);
+    put(G, BOX, f, 0, 2.44, e * hl, 7.44, 0.12, 0.12, WHITE);
+    put(G, BOX, f, 0, 1.2, e * (hl + 1.6), 7.3, 2.3, 0.03, C('#cfd6d2'));
+    for (const lx of [-3.66, 3.66]) for (const [px, pz] of [[lx, e * hl]]) { const p0 = toWorld(f, px - 0.1, 0, pz), p1 = toWorld(f, px + 0.1, 0, pz); walls.add(p0[0], p0[2], p1[0], p1[2], 1.5, [p0[0], p0[2], p1[0], p1[2], 1]); }
+    // floodlights at the corners
+    for (const s of [-1, 1]) {
+      const lx = s * (hw + 3.5), lz = e * (hl - 8);
+      put(G, CYL, f, lx, 9, lz, 0.16, 18, 0.16, DARK);
+      put(G, BOX, f, lx - s * 0.3, 18.2, lz, 0.4, 1.3, 2.6, DARK);
+      for (const dz of [-0.8, 0, 0.8]) for (const dy of [-0.3, 0.3]) put(G, BOX, f, lx - s * 0.52, 18.2 + dy, lz + dz, 0.06, 0.4, 0.6, LAMP);
+    }
+  }
+  // pitch-side rail, with gaps at the halfway line so the pitch can be walked on to
+  for (const s of [-1, 1]) for (const e of [-1, 1]) {
+    const x = s * (hw + 2), z0 = e * 3, z1 = e * (hl + 2);
+    put(G, BOX, f, x, 1.0, (z0 + z1) / 2, 0.07, 0.07, Math.abs(z1 - z0), WHITE);
+    for (let z = Math.min(z0, z1); z <= Math.max(z0, z1); z += 2.5) put(G, BOX, f, x, 0.5, z, 0.06, 1.0, 0.06, WHITE);
+    const p0 = toWorld(f, x, 0, z0), p1 = toWorld(f, x, 0, z1);
+    walls.add(p0[0], p0[2], p1[0], p1[2], 1.5, [p0[0], p0[2], p1[0], p1[2], 1]);
+  }
+  // a small covered stand on one touchline, in the club's blue
+  const sx = hw + 6.5, sl = 30;
+  for (let r = 0; r < 4; r++) { put(G, BOX, f, sx + r * 0.9, 0.3 + r * 0.45, 0, 0.9, 0.6 + r * 0.9, sl, GREY); put(G, BOX, f, sx + r * 0.9, 0.78 + r * 0.9, 0, 0.5, 0.36, sl - 0.6, SEAT); }
+  put(G, BOX, f, sx + 3.4, 2.6, 0, 0.2, 5.2, sl, BLUE);
+  for (const e of [-1, 1]) put(G, BOX, f, sx + 1.5, 2.6, e * (sl / 2), 3.9, 5.2, 0.2, BLUE);
+  put(G, BOX, f, sx + 1.2, 5.3, 0, 5.2, 0.16, sl + 0.8, C('#d9dde2'));
+  const c = [[sx - 0.5, -sl / 2], [sx + 3.6, -sl / 2], [sx + 3.6, sl / 2], [sx - 0.5, sl / 2]].map(([lx, lz]) => toWorld(f, lx, 0, lz));
+  for (let i = 0; i < 4; i++) { const a = c[i], b = c[(i + 1) % 4]; walls.add(a[0], a[2], b[0], b[2], 1.5, [a[0], a[2], b[0], b[2], 0]); }
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.1), new THREE.MeshLambertMaterial({ map: signTexture('PADIHAM FC', '#1f4fa3', '#ffffff') }));
+  const sp = toWorld(f, sx - 0.6, 4.6, 0); sign.position.set(sp[0], sp[1], sp[2]); sign.rotation.y = h - Math.PI / 2; scene.add(sign);
+  scene.add(G.mesh(new THREE.MeshLambertMaterial({ vertexColors: true })));
+  const spot = toWorld(f, 0, 0, 0);
+  return { x: spot[0], z: spot[2] };
+}
+
 // ---------- Main build ----------
 export function buildWorld(scene, w, lowSpec) {
   const out = { pedPaths: [], spots: [], signs: new Set() };
@@ -454,6 +511,11 @@ export function buildWorld(scene, w, lowSpec) {
       if (wt.w >= 10) for (let i = 0; i < wt.p.length - 1; i++) riverGrid.add(wt.p[i][0], wt.p[i][1], wt.p[i + 1][0], wt.p[i + 1][1], wt.w, [wt.p[i][0], wt.p[i][1], wt.p[i + 1][0], wt.p[i + 1][1], wt.w / 2]);
     }
   }
+
+  // Padiham FC's ground: the mapped pitch gets markings, goals, floodlights and a stand.
+  const ground0 = w.pois.find((q) => q.n === 'Padiham Football Club');
+  const fcPitch = ground0 && w.green.filter((g) => g.k === 'pitch').sort((a, b2) => Math.hypot(centre(a.p)[0] - ground0.x, centre(a.p)[1] - ground0.z) - Math.hypot(centre(b2.p)[0] - ground0.x, centre(b2.p)[1] - ground0.z))[0];
+  if (fcPitch) out.ground = footballGround(F, fcPitch.p, scene);
 
   // Roads
   const drive = (r) => r.c !== 'foot' && r.c !== 'service';
@@ -528,9 +590,10 @@ export function buildWorld(scene, w, lowSpec) {
   scene.add(F.mesh(new THREE.MeshLambertMaterial({ vertexColors: true }), 'receive'));
 
   // Buildings
-  const W = new Batch(), R = new Batch(), bays = [], ex = { doors: [], bands: [] };
+  const W = new Batch(), R = new Batch(), bays = [], ex = { doors: [], bands: [], fronts: new Map() };
   w.buildings.forEach((b, bi) => building(b, bi, W, R, P, bays, ex));
   out.doors = ex.doors;
+  out.fronts = ex.fronts;
   for (const bd of ex.bands) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(bd.w, 0.62), new THREE.MeshLambertMaterial({ map: signTexture(bd.text.split('').join(' '), '#1f3350', '#e6c877') }));
     m.position.set(bd.x, bd.y, bd.z); m.rotation.y = Math.atan2(bd.nx, bd.nz); scene.add(m);
@@ -602,7 +665,7 @@ export function buildWorld(scene, w, lowSpec) {
   w.roads.forEach((r, ri) => {
     if (r.c !== 'primary') return;
     walk(r.p, 10 + hash(ri + 9) * 8, () => 17, (x, z, dx, dz) => {
-      if (!inSlice(x, z, 6)) return;
+      if (!inSlice(x, z, 6) || Math.hypot(x - CENTRE[0], z - CENTRE[1]) > 230) return;
       const half = r.w / 2 + 1.5, nF = 13;
       const pos = (t, drop = 0) => { const e = (t * 2 - 1) * half; return [x - dz * e, 6.6 - Math.sin(Math.PI * t) * 1.1 - drop, z + dx * e]; };
       for (let i = 0; i < nF; i++) {

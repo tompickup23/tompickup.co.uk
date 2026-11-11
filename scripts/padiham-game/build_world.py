@@ -1,7 +1,7 @@
 """Convert an OpenStreetMap extract of Padiham town centre into game/world.json.
 
 Usage (from the repo root):
-  uv run --no-project python -I scripts/padiham-game/build_world.py scripts/padiham-game/data/osm-map.json public/games/straight-outta-padiham/world.json scripts/padiham-game/data/os-buildings.json scripts/padiham-game/data/overrides.json
+  uv run --no-project python -I scripts/padiham-game/build_world.py scripts/padiham-game/data/osm-map.json public/games/the-padiham-job/world.json scripts/padiham-game/data/os-buildings.json scripts/padiham-game/data/overrides.json
 
 Map data (c) OpenStreetMap contributors, Open Database Licence.
 Coordinates are local metres: x east, z south, origin at LAT0/LON0.
@@ -251,7 +251,7 @@ def main(src, dst, os_path=None, over_path=None):
     zs = [n[1] for n in nodes.values()]
     world = {
         "attribution": "Map data (c) OpenStreetMap contributors, ODbL. Contains OS data (c) Crown copyright and database right 2026.",
-        "slice": [-125, -30, 250, 295],
+        "slice": [-620, -330, 480, 430],
         "props": props,
         "bounds": [r1((-2.3260 - LON0) * MX), r1(-(53.8065 - LAT0) * MZ), r1((-2.3040 - LON0) * MX), r1(-(53.7975 - LAT0) * MZ)],
         "buildings": buildings, "roads": roads, "water": water, "green": green,

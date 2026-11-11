@@ -14,17 +14,57 @@ const G = {
   band: new THREE.CylinderGeometry(0.255, 0.255, 0.07, 12),
   pack: new THREE.BoxGeometry(0.36, 0.42, 0.18),
   peak: new THREE.BoxGeometry(0.2, 0.035, 0.16),
+  shorts: new THREE.CylinderGeometry(0.115, 0.125, 0.3, 10),
+  sock: new THREE.CylinderGeometry(0.09, 0.085, 0.3, 10),
+  sleeve: new THREE.CylinderGeometry(0.08, 0.085, 0.2, 10),
+  back: new THREE.PlaneGeometry(0.36, 0.4),
+  tie: new THREE.BoxGeometry(0.06, 0.3, 0.02),
+  shirt: new THREE.BoxGeometry(0.16, 0.34, 0.02),
+  rosette: new THREE.CylinderGeometry(0.075, 0.075, 0.02, 14),
+  ribbon: new THREE.BoxGeometry(0.035, 0.14, 0.012),
+  phone: new THREE.BoxGeometry(0.085, 0.16, 0.012),
+  stripe: new THREE.BoxGeometry(0.006, 0.085, 0.022),
+  eye: new THREE.SphereGeometry(0.02, 8, 6),
+  smile: new THREE.BoxGeometry(0.07, 0.014, 0.01),
+  fringe: new THREE.BoxGeometry(0.3, 0.07, 0.12),
+  tongue: new THREE.BoxGeometry(0.1, 0.03, 0.09),
 };
+
+// Name and number for the back of a football shirt, drawn on the shirt colour so it needs no transparency.
+function backPrint(name, number, bg, fg) {
+  const cv = document.createElement('canvas'); cv.width = 256; cv.height = 288;
+  const g = cv.getContext('2d');
+  g.fillStyle = bg; g.fillRect(0, 0, 256, 288);
+  g.fillStyle = fg; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = '800 62px Arial, sans-serif'; g.fillText(name, 128, 56, 240);
+  g.font = '900 176px Arial, sans-serif'; g.fillText(number, 128, 186, 236);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  return new THREE.MeshLambertMaterial({ map: t });
+}
 
 export function makeFigure(o = {}) {
   const g = new THREE.Group();
   const part = (geo, c, x, y, z, parent = g) => { const m = new THREE.Mesh(geo, mat(c)); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m; };
   const jacket = o.jacket ?? 0xff7a1a, trousers = o.trousers ?? 0x2a2f3a, skin = o.skin ?? 0xe6b596, hair = o.hair ?? 0x3a2a1e;
   const torso = part(G.torso, jacket, 0, 1.17, 0); torso.scale.set(1.2, 1, 0.82);
+  const css = (c) => '#' + c.toString(16).padStart(6, '0');
+  if (o.back) { const b = new THREE.Mesh(G.back, backPrint(o.back.name, o.back.number, css(jacket), css(o.back.color ?? 0xffffff))); b.position.set(0, 1.2, -0.172); b.rotation.y = Math.PI; g.add(b); }
+  if (o.suit) { part(G.shirt, 0xf4f1e8, 0, 1.3, 0.158); part(G.tie, o.tie ?? 0xb3252a, 0, 1.29, 0.17); }
+  if (o.rosette !== undefined) {
+    const r = part(G.rosette, o.rosette, -0.15, 1.36, 0.17); r.rotation.x = Math.PI / 2;
+    const c = part(G.rosette, 0xf4d35e, -0.15, 1.36, 0.182); c.rotation.x = Math.PI / 2; c.scale.set(0.42, 1, 0.42);
+    for (const s of [-1, 1]) { const rb = part(G.ribbon, o.rosette, -0.15 + s * 0.03, 1.25, 0.166); rb.rotation.z = s * 0.25; }
+  }
   if (o.hiVis) { const b = part(G.band, 0xf4f1e8, 0, 1.1, 0); b.scale.set(1, 1, 0.72); }
   part(G.head, skin, 0, 1.69, 0);
   const h = part(G.hair, o.cap ?? hair, 0, 1.72, -0.01); h.rotation.x = -0.15;
   if (o.cap !== undefined) part(G.peak, o.cap, 0, 1.76, 0.2);
+  if (o.face) {
+    for (const s of [-1, 1]) part(G.eye, o.eyes ?? 0x2b2f36, s * 0.062, 1.71, 0.16);
+    part(G.smile, 0x8a4a42, 0, 1.63, 0.168);
+    // a short fringe swept to one side
+    if (o.cap === undefined) { const f = part(G.fringe, hair, 0.02, 1.83, 0.09); f.rotation.z = -0.14; f.rotation.x = 0.25; }
+  }
   if (o.pack) part(G.pack, 0x3a3f4a, 0, 1.2, -0.25);
   const limb = (x, y, geo, len, c, endGeo, endC, ez) => {
     const pivot = new THREE.Group(); pivot.position.set(x, y, 0); g.add(pivot);
@@ -32,10 +72,27 @@ export function makeFigure(o = {}) {
     part(endGeo, endC, 0, -len - 0.02, ez, pivot);
     return pivot;
   };
-  const legs = [limb(-0.11, 0.84, G.leg, 0.74, trousers, G.shoe, 0x1b1d20, 0.05), limb(0.11, 0.84, G.leg, 0.74, trousers, G.shoe, 0x1b1d20, 0.05)];
-  const arms = [limb(-0.31, 1.42, G.arm, 0.56, jacket, G.hand, skin, 0), limb(0.31, 1.42, G.arm, 0.56, jacket, G.hand, skin, 0)];
+  // A football kit: bare legs and arms with shorts, socks and short sleeves over them.
+  const kit = o.kit;
+  const legs = [-0.11, 0.11].map((x) => {
+    const p = limb(x, 0.84, G.leg, 0.74, kit ? skin : trousers, G.shoe, kit ? kit.boots ?? 0x1b1d20 : 0x1b1d20, 0.05);
+    if (kit) { part(G.shorts, kit.shorts, 0, -0.1, 0, p); part(G.sock, kit.socks, 0, -0.6, 0, p); }
+    // Classic black leather boots: three white stripes down each side and a white fold-over tongue.
+    if (kit && kit.stripes !== undefined) {
+      for (const s of [-1, 1]) for (let i = 0; i < 3; i++) { const st = part(G.stripe, kit.stripes, s * 0.077, -0.76, 0.03 + i * 0.042, p); st.rotation.x = -0.45; }
+      part(G.tongue, kit.stripes, 0, -0.71, 0.1, p);
+    }
+    return p;
+  });
+  const arms = [-0.31, 0.31].map((x) => {
+    const p = limb(x, 1.42, G.arm, 0.56, kit ? skin : jacket, G.hand, skin, 0);
+    if (kit) part(G.sleeve, kit.sleeves, 0, -0.1, 0, p);
+    return p;
+  });
+  let phone = null;
+  if (o.phone) { phone = part(G.phone, 0x16171a, 0, -0.66, 0.03, arms[1]); phone.rotation.x = -0.5; }
   g.scale.setScalar(o.scale ?? 1);
-  return { group: g, legs, arms };
+  return { group: g, legs, arms, phone };
 }
 export function animateFigure(f, phase, amt) {
   const sw = Math.sin(phase) * amt * 0.8;
@@ -106,7 +163,7 @@ export class Pigeons {
     this.onScare = onScare; this.flocks = []; this.spots = [];
     const pool = [...spots].sort(() => Math.random() - 0.5);
     for (const s of pool) if (this.spots.every((q) => Math.hypot(q[0] - s[0], q[1] - s[1]) > 32)) this.spots.push(s);
-    const nFlocks = Math.min(4, Math.max(0, this.spots.length - 1));
+    const nFlocks = Math.min(7, Math.max(0, this.spots.length - 1));
     for (let f = 0; f < nFlocks; f++) {
       const flock = { spot: this.spots[f], flying: 0, birds: [] };
       for (let i = 0; i < perFlock; i++) {

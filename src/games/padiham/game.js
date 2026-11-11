@@ -1,4 +1,4 @@
-// Straight Outta Padiham: a third-person walking game on the real street layout of Padiham.
+// The Padiham Job: a third-person walking game on the real street layout of Padiham.
 // Map data (c) OpenStreetMap contributors, ODbL. Building outlines contain OS data (c) Crown copyright
 // and database right 2026. The world file is built by scripts/padiham-game/build_world.py.
 import * as THREE from 'three';
@@ -7,6 +7,7 @@ import { cloudTexture } from './textures.js';
 import { makeFigure, animateFigure, Pedestrians, Pigeons } from './life.js';
 import { Sound } from './audio.js';
 import { buildPub } from './interior.js';
+import { PLAQUES } from './history.js';
 
 const $ = (id) => document.getElementById('sop-' + id);
 const stage = $('stage');
@@ -22,20 +23,28 @@ const SCRIPT = [
   { title: 'Lost phone', steps: [['Padiham Mobile Phone & Computers iFix4U', 'Collect the mended phone from iFix4U'], ['Flying Dutchman', 'Its owner is waiting at the Flying Dutchman']] },
   { title: 'Spare part', steps: [['KD Motorcycles', 'Pick up a spare part from KD Motorcycles'], ['Padiham Bridge', 'Meet your mate with the broken bike on Padiham Bridge']] },
   { title: 'Bunting', steps: [['Boyes', 'Buy another roll of bunting from Boyes'], ['Padiham Town Hall', 'Get the bunting to the Town Hall']] },
+  { title: 'Match day', steps: [['Padiham Town Hall', 'Pick up the raffle prizes from the Town Hall'], ['Padiham Football Club', 'Get them to the Arbories before kick off']] },
 ];
 const CARGO = ['a parcel', 'a toolbox', 'a bunch of flowers', 'a box of leaflets', 'a birthday cake', 'a set of keys', 'a bag of shopping'];
 
 // ---------- State ----------
 const SAVE_KEY = 'padiham-errands-2';
 const save = (() => { try { return JSON.parse(localStorage.getItem(SAVE_KEY) || '{}'); } catch { return {}; } })();
-const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.jobIndex || 0, pigeons: save.pigeons || 0, job: null, playing: false, inside: null };
+const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.jobIndex || 0, pigeons: save.pigeons || 0, plaques: new Set(Array.isArray(save.plaques) ? save.plaques : []), job: null, playing: false, inside: null };
 function persist() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons })); } catch { /* private mode */ }
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques] })); } catch { /* private mode */ }
 }
 const sound = new Sound();
 
 // ---------- Renderer, sky and light ----------
-const renderer = new THREE.WebGLRenderer({ canvas: $('view'), antialias: true, powerPreference: 'high-performance' });
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas: $('view'), antialias: true, powerPreference: 'high-performance' }); } catch (err) {
+  // No WebGL (old device, or 3D graphics switched off): say so instead of loading for ever.
+  $('jobTitle').textContent = 'Could not start the game';
+  $('jobText').textContent = 'This browser or device cannot show 3D graphics';
+  $('play').textContent = 'Not available here';
+  throw err;
+}
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isTouch ? 1.75 : 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -82,6 +91,14 @@ function resize() {
 }
 new ResizeObserver(resize).observe(stage);
 resize();
+// The site header is fixed over the page. Size and park the game below it, so the whole panel fits on a phone.
+const siteHeader = document.querySelector('.site-header');
+function clearHeader() { stage.style.setProperty('--sop-top', `${siteHeader ? Math.ceil(siteHeader.getBoundingClientRect().height) : 0}px`); }
+clearHeader();
+addEventListener('resize', clearHeader);
+// Draw nothing while the game is scrolled out of view.
+let onScreen = true;
+new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(stage);
 $('full').addEventListener('click', () => {
   if (document.fullscreenElement) document.exitFullscreen();
   else if (stage.requestFullscreen) stage.requestFullscreen();
@@ -177,7 +194,8 @@ function drawMini() {
 }
 
 // ---------- Player ----------
-const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, fig: makeFigure({ jacket: 0xff7a1a, hiVis: true, pack: true, cap: 0x2b3a67 }) };
+const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, // Burnley colours, claret with sky blue sleeves, and the number ten of Andy Payton, the Padiham Predator. No club badge is drawn.
+  fig: makeFigure({ jacket: 0x6c1d45, hair: 0x3a2a1e, face: true, kit: { sleeves: 0x99d6ea, shorts: 0xf4f1e8, socks: 0xf4f1e8, boots: 0x111214, stripes: 0xf4f1e8 }, back: { name: 'PAYTON', number: '10', color: 0xf4f1e8 } }) };
 scene.add(player.fig.group);
 const RADIUS = 0.5;
 function inRiver(x, z) {
@@ -218,7 +236,12 @@ function wallHit(px, pz, qx, qz) {
 // ---------- Input ----------
 const keys = new Set();
 const input = { x: 0, y: 0, run: false };
-addEventListener('keydown', (e) => { keys.add(e.code); if (state.playing && (e.code.startsWith('Arrow') || e.code === 'Space')) e.preventDefault(); });
+addEventListener('keydown', (e) => {
+  keys.add(e.code);
+  // Keep the page still while playing, but leave the keys alone once the game is out of view or a control has focus.
+  const onControl = e.target instanceof Element && e.target.closest('button, a, input, select, textarea');
+  if (state.playing && onScreen && !onControl && (e.code.startsWith('Arrow') || e.code === 'Space')) e.preventDefault();
+});
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
 
@@ -318,7 +341,7 @@ function makeJob() {
     const here = { dx: player.x, dz: player.z };
     let a, b, tries = 0;
     do { a = slicePois[Math.floor(Math.random() * slicePois.length)]; b = slicePois[Math.floor(Math.random() * slicePois.length)]; tries++; }
-    while (tries < 200 && (a === b || dist2(a, b) < 70 || dist2(here, a) < 30));
+    while (tries < 400 && (a === b || dist2(a, b) < 70 || dist2(a, b) > 380 || dist2(here, a) < 30 || dist2(here, a) > 380));
     const thing = CARGO[Math.floor(Math.random() * CARGO.length)];
     job = { title: 'Delivery', steps: [{ poi: a, text: `Collect ${thing} at ${a.n}` }, { poi: b, text: `Deliver it to ${b.n}` }] };
   }
@@ -355,8 +378,74 @@ function arrive() {
   toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : 'Beat the clock next time for a bonus');
   makeJob();
 }
-function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; }
+function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${plaques.filter((p) => state.plaques.has(p.id)).length} of ${plaques.length}`; }
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+// ---------- Local history plaques ----------
+// Each plaque stands on the pavement by its place. The words and their sources are in history.js,
+// and the page lists every source under the game.
+const plaques = [];
+let plaqueShown = null;
+function placePlaques() {
+  const blocked = (x, z) => nearWall(x, z, 1.1) || world.buildings.some((b) => inPoly(x, z, b.p));
+  const blue = new THREE.MeshLambertMaterial({ color: 0x1f4fa3 }), rim = new THREE.MeshLambertMaterial({ color: 0xf4f1e8 }), post = new THREE.MeshLambertMaterial({ color: 0x2e3a36 });
+  for (const def of PLAQUES) {
+    const poi = pois.get(def.at);
+    if (!poi) continue;
+    // Walk from the road point back towards the building and stop at the last clear spot: the pavement by the frontage.
+    let x = poi.dx, z = poi.dz;
+    for (let t = 0.1; t <= 0.9; t += 0.1) { const qx = poi.dx + (poi.x - poi.dx) * t, qz = poi.dz + (poi.z - poi.dz) * t; if (blocked(qx, qz)) break; if (Math.hypot(qx - poi.dx, qz - poi.dz) > 5.5) break; x = qx; z = qz; }
+    // keep clear of pub doors, the selfie taker and other plaques
+    const crowded = () => doors.some((d) => Math.hypot(d.x - x, d.z - z) < 3.5) || plaques.some((p) => Math.hypot(p.x - x, p.z - z) < 4) || (selfie && Math.hypot(selfie.x - x, selfie.z - z) < 3);
+    for (let k = 0; k < 8 && crowded(); k++) { const a = k * 0.785; const qx = x + Math.cos(a) * 4.2, qz = z + Math.sin(a) * 4.2; if (!blocked(qx, qz)) { x = qx; z = qz; } }
+    const g = new THREE.Group(); g.position.set(x, 0.14, z);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.5, 8), post); pole.position.y = 0.75; pole.castShadow = true;
+    const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.05, 24), blue); disc.rotation.x = Math.PI / 2; disc.position.y = 1.62; disc.castShadow = true;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.025, 6, 28), rim); ring.position.y = 1.62;
+    g.add(pole, disc, ring); g.rotation.y = Math.atan2(poi.dx - poi.x, poi.dz - poi.z); scene.add(g);
+    plaques.push({ ...def, x, z, g });
+  }
+}
+function updatePlaques(time) {
+  let near = null;
+  if (!state.inside) for (const p of plaques) { p.g.children[1].rotation.z = time * 0.6; if (Math.hypot(player.x - p.x, player.z - p.z) < 2.6) near = p; }
+  if (near === plaqueShown) return;
+  plaqueShown = near;
+  const el = $('plaque');
+  if (!near) { el.classList.remove('on'); return; }
+  $('plaqueTitle').textContent = near.title; $('plaqueText').textContent = near.text; $('plaqueSource').textContent = `Source: ${near.short}`;
+  el.classList.add('on');
+  if (!state.plaques.has(near.id)) { state.plaques.add(near.id); persist(); hud(); sound.done(); }
+}
+
+// ---------- The selfie taker by the Town Hall ----------
+// A caricature of the town's MP, Oliver Ryan (Labour and Co-operative), drawn from his official portrait:
+// short light brown hair, clean shaven, navy suit, red tie. Light satire; it says nothing about him as fact.
+let selfie = null;
+const SELFIE_LINES = ['Say cheese!', 'Just one more for the socials', 'Is the Town Hall in shot?', 'Hang on, that is my good side', 'Can you move? You are in my selfie'];
+function makeSelfie(x, z, heading) {
+  const fig = makeFigure({ jacket: 0x1c2740, trousers: 0x1c2740, hair: 0x9a6b42, skin: 0xf0c8ad, suit: true, tie: 0xb3252a, rosette: 0xd4202a, phone: true, face: true, eyes: 0x3f6f9f });
+  fig.group.position.set(x, 0.14, z); fig.group.rotation.y = heading;
+  const flash = new THREE.PointLight(0xffffff, 0, 9, 1.6); flash.position.set(0.3, 1.9, 0.75); fig.group.add(flash);
+  scene.add(fig.group);
+  // He stands still, so he is a small obstacle rather than something to walk through.
+  for (let k = 0; k < 6; k++) { const a0 = (k / 6) * 6.2832, a1 = ((k + 1) / 6) * 6.2832, s = [x + Math.cos(a0) * 0.35, z + Math.sin(a0) * 0.35, x + Math.cos(a1) * 0.35, z + Math.sin(a1) * 0.35, 1]; walls.add(s[0], s[1], s[2], s[3], 1.5, s); }
+  return { fig, x, z, flash, next: 2, cool: 0, line: 0 };
+}
+function updateSelfie(dt, time) {
+  const s = selfie, f = s.fig;
+  // Right arm up and out with the phone, a little sway, left hand giving a thumbs up at his side.
+  f.arms[1].rotation.x = -2.05 + Math.sin(time * 1.3) * 0.06; f.arms[1].rotation.z = 0.28;
+  f.arms[0].rotation.x = -0.25 + Math.sin(time * 2.1) * 0.05;
+  f.group.rotation.z = Math.sin(time * 0.9) * 0.03;
+  s.next -= dt;
+  if (s.next <= 0) { s.flash.intensity = 30; s.next = 3 + Math.random() * 4; }
+  s.flash.intensity *= Math.max(0, 1 - dt * 9);
+  s.cool -= dt;
+  if (s.cool <= 0 && state.playing && !state.inside && Math.hypot(player.x - s.x, player.z - s.z) < 3.2) {
+    toast(SELFIE_LINES[s.line++ % SELFIE_LINES.length], 'Selfie in progress', 2000); sound.pickup(); s.cool = 7;
+  }
+}
 
 // ---------- Main loop ----------
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
@@ -397,8 +486,9 @@ function step(dt) {
       playCool -= dt;
       if (Math.hypot(player.x - pub.exit.x, player.z - pub.exit.z) < 0.62) leavePub();
       else if (playCool <= 0) {
-        for (const pl of pub.pools) if (Math.hypot(player.x - pl.x, player.z - pl.z) < 2.0) { toast(POOL_LINES[Math.floor(Math.random() * POOL_LINES.length)], 'Pool table', 1700); sound.pickup(); playCool = 6; }
-        if (pub.darts && playCool <= 0 && Math.hypot(player.x - pub.darts.x, player.z - pub.darts.z) < 1.1) { toast(DART_LINES[Math.floor(Math.random() * DART_LINES.length)], 'Dartboard', 1700); sound.pickup(); playCool = 6; }
+        // The dartboard is checked first: its spot is inside the pool table's wider reach.
+        if (pub.darts && Math.hypot(player.x - pub.darts.x, player.z - pub.darts.z) < 1.1) { toast(DART_LINES[Math.floor(Math.random() * DART_LINES.length)], 'Dartboard', 1700); sound.pickup(); playCool = 6; }
+        else for (const pl of pub.pools) if (Math.hypot(player.x - pl.x, player.z - pl.z) < 2.0) { toast(POOL_LINES[Math.floor(Math.random() * POOL_LINES.length)], 'Pool table', 1700); sound.pickup(); playCool = 6; break; }
       }
     }
   }
@@ -406,6 +496,8 @@ function step(dt) {
   player.fig.group.rotation.y = player.heading;
   player.fig.group.rotation.x = amt * (player.speed > 6 ? 0.16 : 0.05);
 
+  if (selfie) updateSelfie(dt, time);
+  if (state.playing) updatePlaques(time);
   if (peds) peds.update(dt, player);
   if (pigeons) pigeons.update(dt, player, time);
 
@@ -444,9 +536,11 @@ function step(dt) {
   }
 }
 function frame() {
-  step(Math.min(0.05, clock.getDelta()));
-  renderer.render(scene, camera);
   requestAnimationFrame(frame);
+  const dt = Math.min(0.05, clock.getDelta());
+  if (!onScreen) return;
+  step(dt);
+  renderer.render(scene, camera);
 }
 
 // ---------- Boot ----------
@@ -468,14 +562,24 @@ fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
   }
   drawMapBase();
   const home = pois.get('Padiham Town Hall') || slicePois[0];
-  // Start on the pavement in front of the Town Hall, clear of the portico.
-  const first0 = pois.get('Padiham Fire Station') || home;
-  const dl = Math.hypot(first0.dx - home.dx, first0.dz - home.dz) || 1;
-  player.x = home.dx; player.z = home.dz;
-  for (let k = 0; k < 12 && (nearWall(player.x, player.z, 3) || k < 3); k++) { player.x += ((first0.dx - home.dx) / dl) * 1.5; player.z += ((first0.dz - home.dz) / dl) * 1.5; }
-  const first = pois.get('Padiham Fire Station');
-  if (first) player.heading = cam.yaw = Math.atan2(first.dx - home.dx, first.dz - home.dz);
-  peds = new Pedestrians(scene, built.pedPaths, isTouch ? 10 : 18);
+  const hall = built.fronts.get('Padiham Town Hall');
+  if (hall) {
+    // Start facing the Town Hall from across its forecourt, with the selfie taker in shot beside the portico.
+    const tx = -hall.nz, tz = hall.nx;
+    const clear = (x, z, r) => { let k = 0; while (nearWall(x, z, r) && k++ < 10) { x += hall.nx * 1.2; z += hall.nz * 1.2; } return [x, z]; };
+    [player.x, player.z] = clear(hall.x + hall.nx * 14 + tx * 2, hall.z + hall.nz * 14 + tz * 2, 1.5);
+    player.heading = cam.yaw = Math.atan2(-hall.nx, -hall.nz);
+    const [sx, sz] = clear(hall.x + hall.nx * 7.5 - tx * 4.5, hall.z + hall.nz * 7.5 - tz * 4.5, 1.2);
+    selfie = makeSelfie(sx, sz, Math.atan2(hall.nx, hall.nz));
+  } else {
+    const first0 = pois.get('Padiham Fire Station') || home;
+    const dl = Math.hypot(first0.dx - home.dx, first0.dz - home.dz) || 1;
+    player.x = home.dx; player.z = home.dz;
+    for (let k = 0; k < 12 && (nearWall(player.x, player.z, 3) || k < 3); k++) { player.x += ((first0.dx - home.dx) / dl) * 1.5; player.z += ((first0.dz - home.dz) / dl) * 1.5; }
+    player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
+  }
+  placePlaques();
+  peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   pigeons = new Pigeons(scene, built.spots, 7, (n) => {
     state.pigeons += n; persist(); hud(); sound.flap(n);
     toast(`${n} pigeons startled`, `That is ${state.pigeons} so far`, 1600);
@@ -483,8 +587,9 @@ fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
   hud(); makeJob(); drawMini();
   const b = $('play');
   b.disabled = false; b.textContent = state.done ? 'Carry on' : 'Play';
-  b.addEventListener('click', () => { $('start').style.display = 'none'; state.playing = true; sound.start(); });
+  b.addEventListener('click', () => { $('start').style.display = 'none'; state.playing = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
-window.__padiham = { player, state, cam, pois, doors, input: stickVec, scene, renderer, get built() { return built; }, get pigeons() { return pigeons; } };
+// A handle for testing in the dev server only; it is not in the built site.
+if (import.meta.env.DEV) window.__padiham = { player, state, cam, pois, doors, input: stickVec, scene, renderer, get built() { return built; }, get pigeons() { return pigeons; } };

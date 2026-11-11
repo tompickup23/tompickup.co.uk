@@ -1,4 +1,4 @@
-/* Draws the 1200x630 share card for /straight-outta-padiham/.
+/* Draws the 1200x630 share card for /the-padiham-job/.
  *
  * Run by hand when the card should change; the PNG is committed:
  *   node scripts/generate_padiham_game_card.mjs
@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 
-const OUT = fileURLToPath(new URL('../public/images/share/straight-outta-padiham.png', import.meta.url));
+const OUT = fileURLToPath(new URL('../public/images/share/the-padiham-job.png', import.meta.url));
 const W = 1200, H = 630;
 
 const stone = ['#b9a27a', '#a8946f', '#c2ad86', '#9c8a6c', '#b59a70'];
@@ -36,8 +36,8 @@ const pigeon = (px, py, s) => `<g transform="translate(${px} ${py}) scale(${s})"
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16324a"/><stop offset="1" stop-color="#3f6f8f"/></linearGradient></defs>
   <rect width="${W}" height="${H}" fill="url(#sky)"/>
-  <text x="60" y="118" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="78" fill="#f4f1e8">STRAIGHT OUTTA</text>
-  <text x="60" y="232" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="128" fill="#ffcf33">PADIHAM</text>
+  <text x="60" y="118" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="78" fill="#f4f1e8">THE</text>
+  <text x="60" y="232" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="118" fill="#ffcf33">PADIHAM JOB</text>
   <path d="M20 296 Q 600 356 1180 296" stroke="#e9e7df" stroke-width="2" fill="none"/>
   ${flags}
   ${houses}

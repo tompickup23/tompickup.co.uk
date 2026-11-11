@@ -1,19 +1,20 @@
 ---
-// Straight Outta Padiham: a walking game on the real street layout of Padiham town centre.
-// The game code is in src/games/padiham/. The world file in public/games/straight-outta-padiham/
+// The Padiham Job: a walking game on the real street layout of Padiham town centre.
+// The game code is in src/games/padiham/. The world file in public/games/the-padiham-job/
 // is built offline by scripts/padiham-game/build_world.py; do not edit it by hand.
 // Uses the site Layout, so the header, footer and imprint are the same as every other page.
 import Layout from '../../layouts/Layout.astro';
 import { person } from '../../data/person';
+import { PLAQUES } from '../../games/padiham/history.js';
 
-const title = 'Straight Outta Padiham';
+const title = 'The Padiham Job';
 const description = 'A free browser game set on the real streets of Padiham. Take jobs around town, call in at the pubs and try not to upset the pigeons.';
-const ogImage = 'https://tompickup.co.uk/images/share/straight-outta-padiham.png';
+const ogImage = 'https://tompickup.co.uk/images/share/the-padiham-job.png';
 const schema = {
   '@type': 'WebApplication',
-  '@id': 'https://tompickup.co.uk/straight-outta-padiham/#app',
+  '@id': 'https://tompickup.co.uk/the-padiham-job/#app',
   name: title,
-  url: 'https://tompickup.co.uk/straight-outta-padiham/',
+  url: 'https://tompickup.co.uk/the-padiham-job/',
   description,
   image: ogImage,
   applicationCategory: 'GameApplication',
@@ -29,7 +30,7 @@ const schema = {
   title={`${title} | Tom Pickup`}
   description={description}
   ogImage={ogImage}
-  ogImageAlt="Straight Outta Padiham, a browser game set on the streets of Padiham"
+  ogImageAlt="The Padiham Job, a browser game set on the streets of Padiham"
   ogImageWidth={1200}
   ogImageHeight={630}
   schema={schema}
@@ -37,7 +38,7 @@ const schema = {
 >
   <section class="sop-page">
     <header class="sop-intro">
-      <h1>Straight Outta Padiham</h1>
+      <h1>The Padiham Job</h1>
       <p>
         A game set on the real streets of Padiham town centre. Take jobs around town, call in at the Starkie Arms
         and the Flying Dutchman, and try not to upset the pigeons. It is free, it runs in your browser and it is
@@ -45,13 +46,14 @@ const schema = {
       </p>
     </header>
 
-    <div id="sop-stage" class="sop" data-world="/games/straight-outta-padiham/world.json">
-      <canvas id="sop-view"></canvas>
+    <div id="sop-stage" class="sop" data-world="/games/the-padiham-job/world.json">
+      <canvas id="sop-view" role="img" aria-label="The game view: a figure walking the streets of Padiham"></canvas>
 
       <div id="sop-cash" class="sop-hud">
         £<span id="sop-money">0</span>
         <small><span id="sop-done">0</span> jobs done</small>
         <small><span id="sop-pigeons">0</span> pigeons startled</small>
+        <small><span id="sop-plaques">0</span> plaques read</small>
       </div>
       <div class="sop-buttons">
         <button id="sop-mute" type="button">Sound on</button>
@@ -68,6 +70,11 @@ const schema = {
       <div id="sop-map" class="sop-hud"><canvas id="sop-mini" width="272" height="272"></canvas></div>
       <div id="sop-street" class="sop-hud">Padiham</div>
       <div id="sop-toast" class="sop-hud" role="status"></div>
+      <div id="sop-plaque" class="sop-hud" role="status">
+        <div class="t" id="sop-plaqueTitle"></div>
+        <div class="d" id="sop-plaqueText"></div>
+        <div class="s" id="sop-plaqueSource"></div>
+      </div>
       <div id="sop-fade"></div>
 
       <div id="sop-stick"><div id="sop-knob"></div></div>
@@ -75,7 +82,7 @@ const schema = {
 
       <div id="sop-start">
         <div class="box">
-          <p class="name">Straight Outta <span>Padiham</span></p>
+          <p class="name">The <span>Padiham</span> Job</p>
           <p>Make your name on the real streets of Padiham. Take jobs, beat the clock, get paid, and try not to upset the pigeons.</p>
           <ul>
             <li class="only-keys"><b>Move:</b> W A S D or the arrow keys</li>
@@ -85,6 +92,7 @@ const schema = {
             <li class="only-touch"><b>Run:</b> tap RUN to switch it on or off</li>
             <li class="only-touch"><b>Look around:</b> drag anywhere on the screen</li>
             <li><b>Pubs:</b> step on a blue ring to go inside</li>
+            <li><b>History:</b> walk up to a blue plaque to read it</li>
           </ul>
           <button id="sop-play" type="button" disabled>Loading</button>
         </div>
@@ -94,12 +102,24 @@ const schema = {
     <div class="sop-notes">
       <h2>About the game</h2>
       <p>
-        The streets, the river and the building outlines are real. The jobs and the shop names are made up for fun,
-        and nothing here is endorsed by any business shown. The people behind the bars are not real people.
+        The streets, the river, the building outlines and the named pubs, shops and landmarks are real. The jobs are
+        made up for fun, the plain shop fronts carry made-up trades, and nothing here is endorsed by any business
+        shown. The people behind the bars are not real people. The figure taking a selfie outside the Town Hall is a
+        light-hearted caricature of the town's MP, and you play in Burnley colours with the number ten of Andy Payton,
+        the Padiham Predator.
       </p>
       <p>
         Your progress is kept in your own browser. The game asks for no name or account and has no chat.
       </p>
+      <h2>Local history in the game</h2>
+      <p>The blue plaques around the town each carry one fact. These are the plaques and where each fact comes from.</p>
+      <ul class="sop-history">
+        {PLAQUES.map((p) => (
+          <li>
+            <strong>{p.title}.</strong> {p.text} <span class="src">Source: {p.url ? <a href={p.url}>{p.source}</a> : p.source}.</span>
+          </li>
+        ))}
+      </ul>
       <h2>Sources</h2>
       <p>
         Map data © OpenStreetMap contributors, Open Database Licence. Building outlines contain OS data © Crown
@@ -124,7 +144,7 @@ const schema = {
   .sop-notes p { margin: 0 0 0.75rem; }
 
   .sop { --sop-ink: #14161a; --sop-card: rgba(20, 22, 26, 0.82); --sop-gold: #ffcf33; --sop-green: #5fd38d; --sop-text: #f4f1e8;
-    position: relative; width: 100%; height: min(86svh, 820px); min-height: 480px; overflow: hidden; border-radius: 6px;
+    position: relative; width: 100%; height: min(calc(100svh - var(--sop-top, 72px) - 12px), 820px); min-height: 420px; scroll-margin-top: calc(var(--sop-top, 72px) + 6px); overflow: hidden; border-radius: 6px;
     background: #bcd3e6; color: var(--sop-text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
   .sop:fullscreen { height: 100vh; border-radius: 0; }
@@ -139,7 +159,7 @@ const schema = {
   .sop #sop-arrow { width: 26px; height: 26px; flex: none; transition: transform 0.08s linear; }
   .sop #sop-cash { top: 10px; left: 10px; background: var(--sop-card); border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: 18px; color: var(--sop-green); }
   .sop #sop-cash small { display: block; font-size: 11px; color: var(--sop-text); opacity: 0.75; font-weight: 600; }
-  .sop .sop-buttons { position: absolute; z-index: 3; left: 10px; top: 92px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .sop .sop-buttons { position: absolute; z-index: 3; left: 10px; top: 108px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
   .sop .sop-buttons button { background: var(--sop-card); color: var(--sop-text); border: 0; border-radius: 999px; padding: 7px 12px; font-family: inherit; font-size: 12px; font-weight: 650; line-height: 1; cursor: pointer; }
   .sop #sop-map { top: 10px; right: 10px; width: 136px; height: 136px; border-radius: 50%; border: 3px solid var(--sop-ink); background: #8a9477; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
   .sop #sop-map canvas { width: 100%; height: 100%; display: block; }
@@ -149,6 +169,15 @@ const schema = {
   .sop #sop-toast { top: 34%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: var(--sop-gold); color: var(--sop-ink); border-radius: 16px; padding: 14px 22px;
     font-size: 22px; font-weight: 800; text-align: center; opacity: 0; transition: opacity 0.25s, transform 0.25s; max-width: 86%; }
   .sop #sop-toast.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .sop #sop-plaque { left: 50%; bottom: 58px; transform: translate(-50%, 12px); width: min(520px, calc(100% - 24px)); background: #1f4fa3; color: #fff; border: 3px solid #f4f1e8; border-radius: 16px; padding: 12px 16px; opacity: 0; transition: opacity 0.25s, transform 0.25s; }
+  .sop #sop-plaque.on { opacity: 1; transform: translate(-50%, 0); }
+  .sop #sop-plaque .t { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; }
+  .sop #sop-plaque .d { font-size: 16px; line-height: 1.35; font-weight: 600; margin-top: 4px; }
+  .sop #sop-plaque .s { font-size: 12px; opacity: 0.85; margin-top: 6px; }
+  .sop.touch #sop-plaque { bottom: 190px; }
+  .sop-history { padding-left: 1.1rem; margin: 0 0 0.75rem; }
+  .sop-history li { margin: 0 0 0.6rem; }
+  .sop-history .src { display: block; font-size: 0.875em; opacity: 0.85; }
   .sop #sop-toast small { display: block; font-size: 14px; font-weight: 650; margin-top: 2px; }
   .sop #sop-stick, .sop #sop-run { position: absolute; z-index: 4; display: none; touch-action: none; }
   .sop #sop-stick { left: 22px; bottom: 26px; width: 130px; height: 130px; border-radius: 50%; background: rgba(20, 22, 26, 0.35); border: 2px solid rgba(255, 255, 255, 0.45); }
@@ -174,9 +203,9 @@ const schema = {
   @media (max-width: 640px) {
     .sop-page { padding: 1rem 0 2rem; }
     .sop-intro, .sop-notes { padding: 0 1rem; }
-    .sop { border-radius: 0; height: 88svh; }
-    .sop .sop-buttons { flex-direction: row; top: 96px; }
-    .sop #sop-job { left: 10px; transform: none; top: 160px; width: calc(100% - 170px); }
+    .sop { border-radius: 0; height: calc(100svh - var(--sop-top, 72px)); scroll-margin-top: var(--sop-top, 72px); }
+    .sop .sop-buttons { flex-direction: row; top: 112px; }
+    .sop #sop-job { left: 10px; transform: none; top: 176px; width: calc(100% - 170px); }
     .sop #sop-job .d { font-size: 15px; }
   }
 </style>
