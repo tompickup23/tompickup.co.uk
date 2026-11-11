@@ -1,5 +1,5 @@
 {
- "_note": "Per-building details read from openly licensed photos (Wikimedia Commons / Geograph, see photo-credits.json). 'at' is a point inside the outline in game metres. 'src' lists the photo ids used. No photo pixels are used in the game. 'pois' adds named places missing from the map data. The Starkie Arms exterior and interior also follow photos supplied by the site owner.",
+ "_note": "Per-building details read from openly licensed photos (Wikimedia Commons / Geograph, see photo-credits.json). 'at' is a point inside the outline in game metres. 'src' lists the photo ids used. No photo pixels are used in the game. 'pois' adds named places missing from the map data. The Starkie Arms exterior and interior also follow photos supplied by the site owner. The business centre, the leisure centre, the corner shop on Church Street and the Jaipur shop front follow reference pictures supplied by the site owner on 11 November 2026; their positions were pinned from Food Standards Agency food hygiene register geocodes and the OpenStreetMap node for Jaipur.",
  "buildings": [
   {
    "at": [
@@ -66,8 +66,8 @@
   },
   {
    "at": [
-    101,
-    114
+    69,
+    132
    ],
    "name": "Former bank, Burnley Road",
    "m": "brick_brown",
@@ -78,7 +78,8 @@
    "shops": false,
    "src": [
     "6128174"
-   ]
+   ],
+   "_moved": "11 Nov 2026: was at [101,114], which is 57 to 65 Burnley Road. Wikimedia Commons gives this photo's object position as game metres (69,132), the outline OpenStreetMap names The Bank."
   },
   {
    "at": [
@@ -238,6 +239,87 @@
     "2482465"
    ],
    "f": 2
+  },
+  {
+   "at": [
+    101,
+    114
+   ],
+   "name": "Padiham Business Centre, 57 to 65 Burnley Road",
+   "m": "stone",
+   "f": 3,
+   "fh": 3.3,
+   "r": "hip",
+   "shops": true,
+   "feat": [
+    "gablefront"
+   ],
+   "frontAt": [
+    92,
+    116
+   ],
+   "src": [
+    "site owner's reference pictures; FSA register geocodes for 61-63 and 65 Burnley Road"
+   ]
+  },
+  {
+   "at": [
+    -131,
+    303
+   ],
+   "name": "Padiham Leisure Centre (Padiham Pool in OpenStreetMap)",
+   "m": "brick_brown",
+   "f": 1,
+   "fh": 4.2,
+   "r": "flat",
+   "win": "tall",
+   "shops": false,
+   "feat": [
+    "sportshall"
+   ],
+   "frontAt": [
+    -137,
+    292
+   ],
+   "src": [
+    "site owner's reference pictures"
+   ]
+  },
+  {
+   "at": [
+    -255,
+    57
+   ],
+   "name": "Corner of Church Street and Alma Street",
+   "f": 2,
+   "feat": [
+    "cornershop"
+   ],
+   "frontAt": [
+    -260.5,
+    70
+   ],
+   "src": [
+    "site owner's reference pictures; FSA register geocode for 46 Church Street. No name shown: the business is not in OpenStreetMap"
+   ]
+  },
+  {
+   "at": [
+    270,
+    323
+   ],
+   "name": "Jaipur, 90 Burnley Road",
+   "feat": [
+    "blackfront"
+   ],
+   "spot": [
+    291,
+    319
+   ],
+   "sign": "Jaipur",
+   "src": [
+    "site owner's reference picture; OpenStreetMap node for Jaipur"
+   ]
   }
  ],
  "landmarks": [

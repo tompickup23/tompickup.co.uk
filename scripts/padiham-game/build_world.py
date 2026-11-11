@@ -190,7 +190,7 @@ def main(src, dst, os_path=None, over_path=None):
             if hit is None:
                 print("override matched no building:", ov["name"])
                 continue
-            for k in ("m", "f", "fh", "r", "win", "feat", "shops", "frontAt", "pub", "band", "interior", "bays", "bandFloor", "bandW"):
+            for k in ("m", "f", "fh", "r", "win", "feat", "shops", "frontAt", "pub", "band", "interior", "bays", "bandFloor", "bandW", "spot", "sign"):
                 if k in ov:
                     hit[k] = ov[k]
 

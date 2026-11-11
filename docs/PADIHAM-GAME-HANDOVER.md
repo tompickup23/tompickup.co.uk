@@ -199,3 +199,31 @@ On branch `perf/padiham-phone-pass`. Measured in the dev server on this Mac; sti
   `game.js`). It never steps back up. In the dev server `window.__padiham.stepDown()` forces a step.
 - **Not checked:** the look of the game after each step-down (the preview pane was hidden, so nothing was
   drawn), and real frame rates on any phone.
+
+## Four more buildings, 11 November 2026
+
+On branch `feat/padiham-four-buildings` (cut from main, separate from `feat/padiham-access`). Checked in the
+dev server's preview pane; the site build passes.
+
+- **Reference only.** Tom saved nine screenshots on his Desktop (Google Street View, visitor photographs on
+  Google Maps, one Facebook image, one from padiham.org.uk). They were read for shapes and colours. None is in
+  the repo and none is reproduced.
+- **Positions** came from the Food Standards Agency food hygiene register's geocodes (API, header
+  `x-api-version: 2`, no key): 61-63 and 65 Burnley Road, 46 Church Street, 90 Burnley Road.
+- **A fault found on the way.** The "Former bank, Burnley Road" override sat on the outline that is really
+  57 to 65 Burnley Road. Wikimedia Commons gives that photo's object position as game metres (69, 132), the
+  outline OpenStreetMap names The Bank. The override was moved there.
+- **Padiham Business Centre** (`gablefront`): three storeys of stone over shops, central gable, two white bay
+  windows, arched doorway with a balcony, two planters.
+- **Padiham Leisure Centre** (`sportshall`; OpenStreetMap calls it Padiham Pool, and that is the name shown):
+  brown brick ranges, a taller grey hall with a window band, a canopy.
+- **Corner of Church Street and Alma Street** (`cornershop`): white painted splayed corner, dark red pilasters
+  and fascia, wooden door. No name is shown, because the business there is not in OpenStreetMap and the page
+  says names come from it.
+- **Jaipur** (`blackfront`, with new override keys `spot` and `sign`): a black shop front on one bay of the long
+  terrace outline, white lettering. `spot` picks the wall nearest a point, so a single shop in a terrace can be
+  dressed without touching the rest.
+- `build_world.py` is deterministic: outlines and their order did not change, so `terrain.json` was not rebuilt.
+- **Easy next step:** the register lists about fifteen more food businesses inside the playable area that are
+  not in OpenStreetMap (cafes, takeaways, the Bridge Inn). Adding them to OpenStreetMap would bring their real
+  names into the game on the next rebuild.

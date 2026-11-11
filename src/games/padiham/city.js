@@ -476,6 +476,83 @@ function building(b, bi, W, R, P, bays, ex) {
     put(P, BOX, f, dl, 2.55, 0.35, 0.3, 0.4, 0.3, C('#e9c46a'));
     put(P, BOX, f, dl, 2.8, 0.2, 0.05, 0.05, 0.4, C('#2b2b2b'));
   }
+  // Four frontages dressed from reference pictures supplied by the site owner (no picture is reproduced).
+  const edgeAt = (i) => { const a = p[i], c = p[(i + 1) % p.length], L = Math.hypot(c[0] - a[0], c[1] - a[1]) || 1, dx = (c[0] - a[0]) / L, dz = (c[1] - a[1]) / L; return { a, c, L, dx, dz, nx: dz, nz: -dx }; };
+  // A frame on wall i, centred s metres along it: +x is the viewer's right, +z is out from the wall.
+  const wallFrame = (e, s) => ({ x: e.a[0] + e.dx * s, z: e.a[1] + e.dz * s, h: Math.atan2(e.nx, e.nz) });
+  if (front && feat.has('gablefront')) {
+    // 57 to 65 Burnley Road: three storeys of stone over shops, a central gable, two tall white bay windows
+    // and an arched doorway with a balcony at the left end.
+    const f = { x: front.x, z: front.z, h: Math.atan2(front.nx, front.nz) }, st = C('#b3a07a'), white = C('#f1efe6'), glass = C('#2b3640'), SLATE = C('#474b53');
+    const y0 = wallH - 0.1, y1 = wallH + 3.4, w2 = 4.6;
+    P.tri(toWorld(f, -w2, y0, 0.06), toWorld(f, w2, y0, 0.06), toWorld(f, 0, y1, 0.06), st, null, [front.nx, 0, front.nz]);
+    for (const sd of [-1, 1]) P.quad(toWorld(f, sd * (w2 + 0.3), y0 - 0.1, 0.4), toWorld(f, 0, y1 + 0.15, 0.4), toWorld(f, 0, y1 + 0.15, -5), toWorld(f, sd * (w2 + 0.3), y0 - 0.1, -5), SLATE, null, [0, 1, 0]);
+    put(P, BOX, f, 0, wallH + 1.0, 0.1, 1.7, 1.1, 0.08, glass);
+    put(P, SPH, f, 0, wallH + 1.55, 0.08, 0.85, 0.6, 0.06, glass);
+    put(P, BOX, f, 0, y0 + 0.05, 0.12, w2 * 2 + 0.6, 0.22, 0.3, C(TRIMC));
+    for (const lx of [-6.2, 6.2]) {
+      if (Math.abs(lx) > front.L / 2 - 2) continue;
+      put(P, BOX, f, lx, floorH * 2, 0.45, 3.3, floorH * 2 - 0.5, 0.9, white);
+      for (const fl of [1, 2]) { put(P, BOX, f, lx, fl * floorH + floorH * 0.5, 0.91, 2.7, floorH * 0.56, 0.05, glass); for (const d of [-0.45, 0.45]) put(P, BOX, f, lx + d, fl * floorH + floorH * 0.5, 0.93, 0.07, floorH * 0.56, 0.04, white); }
+    }
+    const ex0 = -(front.L / 2 - 2.4);
+    put(P, BOX, f, ex0, 1.55, 0.12, 2.7, 3.1, 0.24, st);
+    put(P, BOX, f, ex0, 1.25, 0.2, 1.6, 2.5, 0.12, C('#1c2026'));
+    put(P, SPH, f, ex0, 2.5, 0.2, 0.8, 0.55, 0.08, C('#1c2026'));
+    put(P, BOX, f, ex0, floorH + 0.5, 0.55, 3.3, 0.9, 1.1, white);
+    for (const lx of [-4.6, 4.6]) { put(P, BOX, f, lx, 0.55, 3.0, 1.1, 1.1, 1.1, C('#1b1c1f')); put(P, SPH, f, lx, 1.5, 3.0, 0.55, 0.6, 0.55, C('#7a3340')); }
+  }
+  if (forced >= 0 && feat.has('cornershop')) {
+    // The corner of Church Street and Alma Street: a splayed corner painted white, dark red pilasters and
+    // fascia, a wooden corner door and arched windows above. No name is shown.
+    const n = p.length, white = C('#f2efe8'), red = C('#7a1f28'), glass = C('#27303a'), wood = C('#8a5a34');
+    const face = (i, s0, s1, door) => {
+      const e = edgeAt(i); s0 = Math.max(0, s0); s1 = Math.min(e.L, s1);
+      const len = s1 - s0; if (len < 0.8) return;
+      const f = wallFrame(e, (s0 + s1) / 2);
+      put(P, BOX, f, 0, wallH / 2, 0.03, len, wallH, 0.1, white);
+      put(P, BOX, f, 0, floorH - 0.28, 0.1, len, 0.5, 0.14, red);
+      for (const d of [-1, 1]) put(P, BOX, f, d * (len / 2 - 0.16), floorH / 2, 0.1, 0.3, floorH, 0.18, red);
+      const nw = Math.max(1, Math.round(len / 3.2));
+      for (let k = 0; k < nw; k++) {
+        const lx = -len / 2 + ((k + 0.5) * len) / nw, ww = Math.min(1.1, len / nw - 0.9);
+        put(P, BOX, f, lx, floorH + (wallH - floorH) * 0.5, 0.09, ww, (wallH - floorH) * 0.5, 0.06, glass);
+        put(P, SPH, f, lx, floorH + (wallH - floorH) * 0.75, 0.08, ww / 2, 0.4, 0.05, glass);
+        if (door && k === Math.floor(nw / 2)) put(P, BOX, f, lx, 1.1, 0.1, 1.1, 2.2, 0.08, wood);
+        else put(P, BOX, f, lx, 1.35, 0.09, Math.min(1.9, len / nw - 0.8), 1.5, 0.06, glass);
+      }
+    };
+    face(forced, 0, 99, true);
+    const prev = (forced + n - 1) % n, next = (forced + 1) % n;
+    face(prev, edgeAt(prev).L - 6.4, 99, false);
+    face(next, 0, 6.4, false);
+  }
+  if (b.spot && feat.has('blackfront')) {
+    // 90 Burnley Road: a black painted shop front with a moulded cornice, white lettering and windows frosted
+    // along the bottom. The name is the one OpenStreetMap gives.
+    let bi2 = 0, bd = 1e9, bq = null;
+    for (let i = 0; i < p.length; i++) { const c = p[(i + 1) % p.length], r = distToSeg(b.spot[0], b.spot[1], [p[i][0], p[i][1], c[0], c[1]]); if (r[0] < bd) { bd = r[0]; bi2 = i; bq = r; } }
+    const e = edgeAt(bi2), f = { x: bq[1], z: bq[2], h: Math.atan2(e.nx, e.nz) }, black = C('#15161a'), warm = C('#e6d9b8'), frost = C('#f1efe9');
+    put(P, BOX, f, 0, 1.8, 0.05, 7.4, 3.6, 0.14, black);
+    put(P, BOX, f, 0, 3.66, 0.16, 7.7, 0.2, 0.36, black);
+    for (let k = -8; k <= 8; k++) put(P, BOX, f, k * 0.45, 3.5, 0.2, 0.2, 0.12, 0.14, black);
+    for (const lx of [-2.35, 2.35]) { put(P, BOX, f, lx, 1.55, 0.13, 2.6, 2.1, 0.03, warm); put(P, BOX, f, lx, 0.85, 0.15, 2.6, 0.7, 0.03, frost); }
+    put(P, BOX, f, 0, 1.2, 0.13, 1.0, 2.2, 0.03, warm); put(P, BOX, f, 0, 0.7, 0.15, 1.0, 0.6, 0.03, frost);
+    if (b.sign) ex.bands.push({ text: b.sign, plain: true, bg: '#15161a', fg: '#ffffff', x: f.x + e.nx * 0.16, z: f.z + e.nz * 0.16, y: 3.0, nx: e.nx, nz: e.nz, w: 5.2, h: 0.78 });
+  }
+  if (feat.has('sportshall')) {
+    // The leisure centre on Park Road: low brown brick ranges under a taller grey clad hall with a band of
+    // windows, and a canopy over the way in.
+    const c0 = { x: o.cx, z: o.cz, h: hd }, clad = C('#9aa1a6'), dark = C('#3b4650');
+    put(P, BOX, c0, 0, wallH + 2.5, o.L * 0.14, o.W * 0.78, 5, o.L * 0.58, clad);
+    put(P, BOX, c0, 0, wallH + 3.7, o.L * 0.14, o.W * 0.78 + 0.12, 1.0, o.L * 0.5, dark);
+    put(P, BOX, c0, 0, wallH + 5.1, o.L * 0.14, o.W * 0.78 + 0.5, 0.25, o.L * 0.58 + 0.5, C('#6d7378'));
+    if (front) {
+      const f = { x: front.x, z: front.z, h: Math.atan2(front.nx, front.nz) }, red = C('#7a2a2a');
+      put(P, BOX, f, 0, 3.0, 1.7, 7, 0.28, 3.4, red);
+      for (const lx of [-3.2, 3.2]) put(P, CYL, f, lx, 1.45, 3.1, 0.09, 2.9, 0.09, C('#4a4f55'));
+    }
+  }
   if (feat.has('cupola')) {
     const c0 = { x: o.cx, z: o.cz, h: front ? Math.atan2(front.nx, front.nz) : hd }, y = roofTop - 0.3;
     put(P, BOX, c0, 0, y + 0.7, 0, 2.6, 1.4, 2.6, C('#e9e6da'));
@@ -814,9 +891,9 @@ export function buildWorld(scene, w, lowSpec) {
   out.doors = ex.doors;
   out.fronts = ex.fronts;
   for (const bd of ex.bands) {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(bd.w, 0.62), new THREE.MeshLambertMaterial({ map: signTexture(bd.text.split('').join(' '), '#1f3350', '#e6c877') }));
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(bd.w, bd.h || 0.62), new THREE.MeshLambertMaterial({ map: bd.plain ? signTexture(bd.text, bd.bg, bd.fg) : signTexture(bd.text.split('').join(' '), '#1f3350', '#e6c877') }));
     m.position.set(bd.x, bd.y + groundH(bd.x, bd.z), bd.z); m.rotation.y = Math.atan2(bd.nx, bd.nz); scene.add(m);
-    for (const poi of w.pois) if (poi.n.toUpperCase() === bd.text) out.signs.add(poi.n);
+    for (const poi of w.pois) if (poi.n.toUpperCase() === bd.text || (bd.plain && poi.n === bd.text)) out.signs.add(poi.n);
   }
   scene.add(W.mesh(new THREE.MeshLambertMaterial({ vertexColors: true, map: facadeAtlas() })));
   scene.add(R.mesh(new THREE.MeshLambertMaterial({ vertexColors: true, map: slateTexture(), side: THREE.DoubleSide })));
