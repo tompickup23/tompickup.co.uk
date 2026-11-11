@@ -227,3 +227,27 @@ dev server's preview pane; the site build passes.
 - **Easy next step:** the register lists about fifteen more food businesses inside the playable area that are
   not in OpenStreetMap (cafes, takeaways, the Bridge Inn). Adding them to OpenStreetMap would bring their real
   names into the game on the next rebuild.
+
+## The white horse, the Bridge Inn and more named businesses, 11 November 2026
+
+Same branch, `feat/padiham-four-buildings`. Checked in the dev server's preview pane; the site build passes.
+
+- **The white horse** (the "Padiham horse" earlier notes could not identify): on a dark brick block above the
+  shops at 42 Burnley Road, next to the Town Hall. That outline was dressed as rendered and gabled; it is now
+  brown brick with a flat roof. Built as a `spots` entry of kind `horse`. No plaque yet: there is no sourced
+  fact about the horse, so ask Padiham Archives or the Town Council before writing one.
+- **Bridge Inn**, 68 Burnley Road: a stone pub front (`spots` kind `pub`) at the west end of the long terrace
+  that also holds Jaipur. No interior.
+- **`spots` replaces `spot`:** a list on a building override, each `{at, k, sign}` with `k` one of `black`,
+  `pub` or `horse`. Each picks the wall nearest its point.
+- **Serrano's Deli-Pizza is now named**, on Tom's say (11 November 2026).
+- **32 more businesses are named**, from the Food Standards Agency food hygiene register (API, no key, Open
+  Government Licence). They are in the `pois` list in `overrides.json`, each with its establishment number and
+  the date read. Left out: care settings, schools, the foodbank, anything marked former, and anything not
+  inspected since the start of 2022. No rating is stored or shown. The page's disclaimer now names the register
+  as a second source of names. The register lags, so a closed business may linger: removal requests still apply.
+- **Not built, noted:** Tom also saved three pictures of Padiham Cricket Club's pavilion (white walls, brown
+  tiled roof, a central gable with a clock, a veranda). The cricket pitch is in the map data; the pavilion is
+  not dressed. Children appear in one picture: reference for the building only.
+- **Seen when comparing the bridge view with Tom's picture:** the real approach to Padiham Bridge is heavily
+  treed on both banks and has stone parapets with railings; the game's is bare. Riverbank trees are an easy win.

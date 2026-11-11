@@ -523,22 +523,51 @@ function building(b, bi, W, R, P, bays, ex) {
       }
     };
     face(forced, 0, 99, true);
+    if (b.sign) { const e = edgeAt(forced), f = wallFrame(e, e.L / 2); ex.bands.push({ text: b.sign, plain: true, bg: '#5e1820', fg: '#f3e2b0', x: f.x + e.nx * 0.2, z: f.z + e.nz * 0.2, y: floorH - 0.28, nx: e.nx, nz: e.nz, w: Math.max(2.6, e.L * 0.95), h: 0.44 }); }
     const prev = (forced + n - 1) % n, next = (forced + 1) % n;
     face(prev, edgeAt(prev).L - 6.4, 99, false);
     face(next, 0, 6.4, false);
   }
-  if (b.spot && feat.has('blackfront')) {
-    // 90 Burnley Road: a black painted shop front with a moulded cornice, white lettering and windows frosted
-    // along the bottom. The name is the one OpenStreetMap gives.
+  // Single frontages inside a longer outline: each spot picks the wall nearest its point.
+  for (const sp of b.spots || []) {
     let bi2 = 0, bd = 1e9, bq = null;
-    for (let i = 0; i < p.length; i++) { const c = p[(i + 1) % p.length], r = distToSeg(b.spot[0], b.spot[1], [p[i][0], p[i][1], c[0], c[1]]); if (r[0] < bd) { bd = r[0]; bi2 = i; bq = r; } }
-    const e = edgeAt(bi2), f = { x: bq[1], z: bq[2], h: Math.atan2(e.nx, e.nz) }, black = C('#15161a'), warm = C('#e6d9b8'), frost = C('#f1efe9');
-    put(P, BOX, f, 0, 1.8, 0.05, 7.4, 3.6, 0.14, black);
-    put(P, BOX, f, 0, 3.66, 0.16, 7.7, 0.2, 0.36, black);
-    for (let k = -8; k <= 8; k++) put(P, BOX, f, k * 0.45, 3.5, 0.2, 0.2, 0.12, 0.14, black);
-    for (const lx of [-2.35, 2.35]) { put(P, BOX, f, lx, 1.55, 0.13, 2.6, 2.1, 0.03, warm); put(P, BOX, f, lx, 0.85, 0.15, 2.6, 0.7, 0.03, frost); }
-    put(P, BOX, f, 0, 1.2, 0.13, 1.0, 2.2, 0.03, warm); put(P, BOX, f, 0, 0.7, 0.15, 1.0, 0.6, 0.03, frost);
-    if (b.sign) ex.bands.push({ text: b.sign, plain: true, bg: '#15161a', fg: '#ffffff', x: f.x + e.nx * 0.16, z: f.z + e.nz * 0.16, y: 3.0, nx: e.nx, nz: e.nz, w: 5.2, h: 0.78 });
+    for (let i = 0; i < p.length; i++) { const c = p[(i + 1) % p.length], r = distToSeg(sp.at[0], sp.at[1], [p[i][0], p[i][1], c[0], c[1]]); if (r[0] < bd) { bd = r[0]; bi2 = i; bq = r; } }
+    const e = edgeAt(bi2), f = { x: bq[1], z: bq[2], h: Math.atan2(e.nx, e.nz) };
+    if (sp.k === 'black') {
+      // 90 Burnley Road: a black painted shop front with a moulded cornice, white lettering and windows frosted
+      // along the bottom.
+      const black = C('#15161a'), warm = C('#e6d9b8'), frost = C('#f1efe9');
+      put(P, BOX, f, 0, 1.8, 0.05, 7.4, 3.6, 0.14, black);
+      put(P, BOX, f, 0, 3.66, 0.16, 7.7, 0.2, 0.36, black);
+      for (let k = -8; k <= 8; k++) put(P, BOX, f, k * 0.45, 3.5, 0.2, 0.2, 0.12, 0.14, black);
+      for (const lx of [-2.35, 2.35]) { put(P, BOX, f, lx, 1.55, 0.13, 2.6, 2.1, 0.03, warm); put(P, BOX, f, lx, 0.85, 0.15, 2.6, 0.7, 0.03, frost); }
+      put(P, BOX, f, 0, 1.2, 0.13, 1.0, 2.2, 0.03, warm); put(P, BOX, f, 0, 0.7, 0.15, 1.0, 0.6, 0.03, frost);
+      if (sp.sign) ex.bands.push({ text: sp.sign, plain: true, bg: '#15161a', fg: '#ffffff', x: f.x + e.nx * 0.16, z: f.z + e.nz * 0.16, y: 3.0, nx: e.nx, nz: e.nz, w: 5.2, h: 0.78 });
+    } else if (sp.k === 'pub') {
+      // 68 Burnley Road: a two storey stone pub front, a door in a white surround between sash windows, gold
+      // lettering between the floors, a lantern and hanging baskets.
+      const st = C('#a8946c'), white = C('#f1efe6'), glass = C('#27303a');
+      put(P, BOX, f, 0, floorH / 2, 0.04, 11, floorH, 0.1, st);
+      put(P, BOX, f, 0, 1.3, 0.1, 1.5, 2.6, 0.14, white); put(P, BOX, f, 0, 1.1, 0.16, 0.95, 2.2, 0.06, C('#1c2026'));
+      for (const lx of [-3.6, 3.6]) { put(P, BOX, f, lx, 1.55, 0.1, 1.5, 1.7, 0.06, white); put(P, BOX, f, lx, 1.55, 0.13, 1.25, 1.45, 0.04, glass); }
+      for (const lx of [-1.5, 1.5]) { put(P, SPH, f, lx, 2.45, 0.5, 0.3, 0.26, 0.3, C('#4f8a4a')); put(P, SPH, f, lx, 2.55, 0.5, 0.2, 0.14, 0.2, C('#d6402f')); }
+      put(P, BOX, f, 0, 2.75, 0.35, 0.28, 0.38, 0.28, C('#e9c46a'));
+      if (sp.sign) ex.bands.push({ text: sp.sign, x: f.x + e.nx * 0.12, z: f.z + e.nz * 0.12, y: floorH + 0.3, nx: e.nx, nz: e.nz, w: 5.5 });
+    } else if (sp.k === 'horse') {
+      // 42 Burnley Road: a dark brick block rising above the shops, with a white horse standing on a ledge at
+      // first floor height, facing along the row.
+      const dark = C('#3b302b'), white = C('#f3f1ea');
+      put(P, BOX, f, 0, floorH + (wallH + 1.7 - floorH) / 2, 0.12, 7, wallH + 1.7 - floorH, 0.5, dark);
+      put(P, BOX, f, 0, wallH + 1.75, 0.12, 7.3, 0.16, 0.7, C('#e4e0d4'));
+      const y = floorH + 0.75, lz = 0.85;
+      put(P, BOX, f, 0, y - 0.06, lz, 3.0, 0.12, 0.8, C('#d8d4c8'));
+      put(P, SPH, f, 0.1, y + 1.3, lz, 0.95, 0.42, 0.3, white);
+      for (const lx of [-0.55, -0.4, 0.7, 0.85]) put(P, CYL, f, lx, y + 0.5, lz + (lx === -0.4 || lx === 0.7 ? 0.13 : -0.13), 0.065, 1.0, 0.065, white);
+      put(P, BOX, f, -0.86, y + 1.64, lz, 0.38, 1.1, 0.24, white, -0.6);
+      put(P, BOX, f, -1.4, y + 1.98, lz, 0.6, 0.27, 0.2, white, 0.5);
+      for (const dz2 of [-0.07, 0.07]) put(P, BOX, f, -1.16, y + 2.24, lz + dz2, 0.06, 0.16, 0.05, white);
+      put(P, BOX, f, 1.08, y + 1.05, lz, 0.1, 0.75, 0.1, white, 0.25);
+    }
   }
   if (feat.has('sportshall')) {
     // The leisure centre on Park Road: low brown brick ranges under a taller grey clad hall with a band of
