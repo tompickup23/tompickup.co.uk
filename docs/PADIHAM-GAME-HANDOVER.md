@@ -360,3 +360,23 @@ the photographs of I069.
 
 The article `src/content/news/the-padiham-job-what-it-does-and-who-it-could-help.md` describes the game and
 this use. It quotes no research: the council-uses note in Reports was read through summaries only.
+
+## Bridge ends and the Bridge Inn junction, 11 November 2026 (late)
+
+Branch `feat/padiham-bridge-inn-fix`. Tom reported that outside the Bridge Inn the pavement covered the road and a
+building opposite stuck out into it.
+
+- **Cause one.** The terrain model has the river bank cut away at each end of a road bridge, so the road dropped
+  2 m off the end of the deck into a dip, and flat layers that straddled the deck edge (the Green Lane junction)
+  folded over each other. `build_terrain.py` now does three things: an arm of a bridge that starts in mid-river
+  takes the height of the deck it joins; land nodes around each bank end are raised towards the deck
+  (`bridge approaches` in its output); and any deck still above the ground at its end is carried on along the
+  way it joins until the ground meets it, 30 m at most. One node on the edge of the river's drawn line is raised
+  with the bank and its old height kept in `wk`, which `terrain.js` uses for the water alone (`groundH(x, z,
+  'water')`), so the river stays level.
+- **Cause two.** The OS OpenMap Local outline north of Burnley Road, opposite the pub, overlapped the
+  OpenStreetMap road line by 3.9 m. `overrides.json` can now replace an outline with a `p` key, and that building's
+  front was pulled back to clear the carriageway and pavement. It was not surveyed.
+- **Known, not fixed.** 71 other outlines overlap a carriageway by 0.3 to 3.2 m, mostly terraces on back streets
+  where the drawn road is wider than the real one. The fix for those is a narrower drawn width for back streets,
+  not 71 overrides.

@@ -14,6 +14,7 @@ What it writes:
   x0, z0, s, nx, nz   a grid of ground heights in game metres, nx by nz nodes, s metres apart
   h                   height at each node in centimetres above the lowest node, row by row (z, then x)
   decks               one per mapped bridge: its line, half width, and the height at each end in metres
+  wk                  grid nodes raised to build a bridge approach that the water must ignore: [node, old height]
   bh                  one entry per building in world.json, in the same order: the middle value of surface
                       minus terrain inside the outline, in metres, or null where there is too little data
 Rerun this after build_world.py, because bh follows the order of the buildings there.
@@ -175,7 +176,154 @@ def main(world_path, out_path):
             return max(ground(a[0] + ux * d, a[1] + uz * d, h) for d in (0, 6, 12))
 
         ha, hb = end_height(pts[0], pts[1]), end_height(pts[-1], pts[-2])
-        decks.append({"p": pts, "hw": round(r["w"] / 2 + (1.0 if r["c"] == "foot" else 3.4), 2), "a": round(float(ha - base), 2), "b": round(float(hb - base), 2)})
+        decks.append({"p": pts, "hw": round(r["w"] / 2 + (1.0 if r["c"] == "foot" else 3.4), 2), "a": round(float(ha - base), 2), "b": round(float(hb - base), 2), "road": r["c"] == "road"})
+
+    # Where a bridge forks over the water, one arm starts in mid-river and its end has no bank to measure. Give
+    # that end the height of the deck it joins.
+    def deck_at(d, x, z):
+        cum = [0.0]
+        for i in range(1, len(d["p"])):
+            cum.append(cum[-1] + math.hypot(d["p"][i][0] - d["p"][i - 1][0], d["p"][i][1] - d["p"][i - 1][1]))
+        best = None
+        for i in range(len(d["p"]) - 1):
+            a, b = d["p"][i], d["p"][i + 1]
+            dx, dz = b[0] - a[0], b[1] - a[1]
+            t = max(0.0, min(1.0, ((x - a[0]) * dx + (z - a[1]) * dz) / ((dx * dx + dz * dz) or 1)))
+            dist = math.hypot(x - a[0] - dx * t, z - a[1] - dz * t)
+            if best is None or dist < best[0]:
+                best = (dist, d["a"] + (d["b"] - d["a"]) * (cum[i] + t * (cum[i + 1] - cum[i])) / (cum[-1] or 1))
+        return best
+    fork_ends = set()
+    for di, d in enumerate(decks):
+        if not d["road"]:
+            continue
+        for key, end in (("a", d["p"][0]), ("b", d["p"][-1])):
+            for oi, o in enumerate(decks):
+                if oi == di or not o["road"]:
+                    continue
+                # the other deck passes through this end, and not merely by sharing its own end point
+                inner = any(math.hypot(q[0] - end[0], q[1] - end[1]) < 0.3 for q in o["p"][1:-1])
+                if inner:
+                    d[key] = round(float(deck_at(o, end[0], end[1])[1]), 2)
+                    fork_ends.add((di, key))
+
+    # The terrain model has the river bank cut away at each end of a road bridge, which left the road dropping off
+    # the end of the deck into a dip. Build the approach: raise the land around each bank end towards the height
+    # of the deck, falling away gently with distance. Ground in or beside the water is left alone, so the river
+    # stays level.
+    def in_water(x, z):
+        """0 on land, 2 inside a mapped water outline, 1 on the river's drawn line where no outline covers it."""
+        on_line = 0
+        for wt in world["water"]:
+            if "poly" in wt:
+                q = wt["poly"]
+                inside = False
+                jn = len(q) - 1
+                for i in range(len(q)):
+                    if (q[i][1] > z) != (q[jn][1] > z) and x < (q[jn][0] - q[i][0]) * (z - q[i][1]) / (q[jn][1] - q[i][1]) + q[i][0]:
+                        inside = not inside
+                    jn = i
+                if inside:
+                    return 2
+            else:
+                for i in range(len(wt["p"]) - 1):
+                    a, b = wt["p"][i], wt["p"][i + 1]
+                    dx, dz = b[0] - a[0], b[1] - a[1]
+                    t = max(0.0, min(1.0, ((x - a[0]) * dx + (z - a[1]) * dz) / ((dx * dx + dz * dz) or 1)))
+                    if math.hypot(x - a[0] - dx * t, z - a[1] - dz * t) < wt["w"] / 2:
+                        on_line = 1
+        return on_line
+    raised = 0
+    # A node on the edge of the river's drawn line, close to a bridge end, is raised with the bank, and its old
+    # height is kept for the water, which stays level beneath the new bank.
+    water_keep = {}
+    for di, d in enumerate(decks):
+        if not d["road"]:
+            continue
+        for key, end, back in (("a", d["p"][0], d["p"][1]), ("b", d["p"][-1], d["p"][-2])):
+            if (di, key) in fork_ends:
+                continue
+            top = d[key] + base
+            l = math.hypot(end[0] - back[0], end[1] - back[1]) or 1
+            ux, uz = (end[0] - back[0]) / l, (end[1] - back[1]) / l
+            for j in range(nz):
+                for i in range(nx):
+                    x, z = x0 + i * S, z0 + j * S
+                    vx, vz = x - end[0], z - end[1]
+                    dist = math.hypot(vx, vz)
+                    if dist > 34 or vx * ux + vz * uz < -4:
+                        continue
+                    wet = in_water(x, z)
+                    if wet == 2 or (wet == 1 and dist > 16):
+                        continue
+                    want = top - max(0.0, dist - 10) * 0.12
+                    if want > h[j, i]:
+                        if wet == 1:
+                            water_keep.setdefault(j * nx + i, float(h[j, i]))
+                        h[j, i] = want
+                        raised += 1
+    print("bridge approaches: grid nodes raised", raised, "fork ends", sorted(fork_ends))
+
+    # Where the bank could not be raised (the grid node is in the water), the road still dropped off the end of
+    # the deck. Carry each deck on along the way it joins until the ground comes up to meet it, 30 m at most.
+    plain = [r for r in world["roads"] if not r.get("b")]
+
+    def next_way(at, ux, uz, used):
+        best = None
+        for r in plain:
+            if id(r) in used:
+                continue
+            for pts2 in (r["p"], r["p"][::-1]):
+                if math.hypot(pts2[0][0] - at[0], pts2[0][1] - at[1]) < 0.3 and len(pts2) > 1:
+                    l2 = math.hypot(pts2[1][0] - pts2[0][0], pts2[1][1] - pts2[0][1]) or 1
+                    dot = ((pts2[1][0] - pts2[0][0]) * ux + (pts2[1][1] - pts2[0][1]) * uz) / l2
+                    if dot > 0.3 and (best is None or dot > best[0]):
+                        best = (dot, r, pts2)
+        return best
+    carried = []
+    for di, d in enumerate(decks):
+        for key in ("a", "b"):
+            if (di, key) in fork_ends:
+                continue
+            pts2 = d["p"] if key == "b" else d["p"][::-1]
+            top = d[key] + base
+            end, back = pts2[-1], pts2[-2]
+            if ground(end[0], end[1], h) >= top - 0.3:
+                continue
+            l = math.hypot(end[0] - back[0], end[1] - back[1]) or 1
+            ux, uz = (end[0] - back[0]) / l, (end[1] - back[1]) / l
+            extra, used, at, gone, met = [], set(), end, 0.0, False
+            while gone < 30 and not met:
+                nw = next_way(at, ux, uz, used)
+                if nw is None:
+                    break
+                used.add(id(nw[1]))
+                line = nw[2]
+                for i in range(1, len(line)):
+                    a2, b2 = line[i - 1], line[i]
+                    seg = math.hypot(b2[0] - a2[0], b2[1] - a2[1]) or 1
+                    ux, uz = (b2[0] - a2[0]) / seg, (b2[1] - a2[1]) / seg
+                    step = 1.0
+                    while step < seg and gone + step < 30:
+                        x, z = a2[0] + ux * step, a2[1] + uz * step
+                        if ground(x, z, h) >= top - 0.15:
+                            extra.append([round(x, 1), round(z, 1)])
+                            met = True
+                            break
+                        step += 1.0
+                    if met:
+                        break
+                    gone += seg
+                    extra.append([b2[0], b2[1]])
+                    at = b2
+                    if gone >= 30:
+                        break
+            if extra:
+                d["p"] = (pts2 + extra) if key == "b" else (pts2 + extra)[::-1]
+                carried.append((di, key, len(extra), met))
+    print("decks carried on to meet the ground (deck, end, points added, met):", carried)
+    for d in decks:
+        del d["road"]
     print("grid", nx, "by", nz, "relief", round(float(h.max()) - base, 1), "m, lowest", round(base, 2), "m above datum, bridge decks", len(decks), [(d["a"], d["b"]) for d in decks])
 
     # Buildings: the middle value of surface minus terrain inside each outline, pulled in a little from the walls.
@@ -220,6 +368,7 @@ def main(world_path, out_path):
         "x0": x0, "z0": z0, "s": S, "nx": nx, "nz": nz,
         "h": [int(round((v - base) * 100)) for v in h.ravel()],
         "decks": decks,
+        "wk": [[k, int(round((v - base) * 100))] for k, v in sorted(water_keep.items())],
         "bh": bh,
     }
     json.dump(out, open(out_path, "w", encoding="utf-8"), separators=(",", ":"))
