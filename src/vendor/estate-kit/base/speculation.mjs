@@ -11,8 +11,8 @@
 // Chromium prerenders and prefetches; Safari 26.2 prefetches; other browsers
 // ignore the block.
 
-/** Addresses never worth fetching ahead: downloads, feeds, anything with a query. */
-export const DEFAULT_EXCLUDE = ["/*\\?*", "/*.pdf", "/*.xml", "/*.csv", "/*.json", "/*.zip", "/*.xlsx", "/*.ods", "/*.mp3", "/*.mp4", "/*.ics", "/*.txt"];
+/** Addresses never worth fetching ahead: downloads, feeds, linked images, anything with a query. */
+export const DEFAULT_EXCLUDE = ["/*\\?*", "/*.pdf", "/*.xml", "/*.csv", "/*.json", "/*.zip", "/*.xlsx", "/*.ods", "/*.mp3", "/*.mp4", "/*.ics", "/*.txt", "/*.webp", "/*.png", "/*.jpg", "/*.jpeg", "/*.gif", "/*.avif", "/*.svg"];
 
 /** Links never followed ahead, whatever their address. */
 export const DEFAULT_SKIP = "[rel~=nofollow], [rel~=external], [download], [target=_blank], [data-no-speculate], [data-no-speculate] a";

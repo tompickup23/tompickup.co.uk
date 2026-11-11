@@ -46,7 +46,9 @@ export function numberLabel(label, seen) {
   const n = (seen.get(label) ?? 0) + 1;
   seen.set(label, n);
   if (n === 1) return label;
-  return label.startsWith("Table") ? label.replace(/^Table/, `Table ${n}`) : `${label} (${n})`;
+  // Only the recipe's own "Table: heading" form is renumbered in place; a caption that
+  // merely starts with the word (Tables of spend, Table 1: Spend) takes a suffix.
+  return /^Table(:|$)/.test(label) ? label.replace(/^Table/, `Table ${n}`) : `${label} (${n})`;
 }
 
 /** True when the recipe should leave this table as it is. */

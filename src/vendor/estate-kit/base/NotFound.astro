@@ -56,7 +56,9 @@ const { title = "This page does not exist", pages, links, retired = [], linksHea
 
   for (const root of document.querySelectorAll<HTMLElement>("[data-ek-notfound]")) {
     const data = JSON.parse(root.querySelector("[data-ek-pages]")?.textContent ?? "{}");
-    const path = decodeURIComponent(location.pathname);
+    // A malformed percent sequence (/100%) throws; show the address as typed instead.
+    let path = location.pathname;
+    try { path = decodeURIComponent(path); } catch { /* keep the raw address */ }
 
     const asked = root.querySelector<HTMLElement>("[data-ek-asked]");
     if (asked && path !== "/404" && path !== "/404/" && path !== "/404.html") {

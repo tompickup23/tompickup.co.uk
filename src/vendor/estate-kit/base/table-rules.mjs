@@ -7,7 +7,8 @@ const EMPTY = /^(|n\/a|na|none|nil|not published|not held|–|—|-|\.\.|:)$/i; 
 // optional sign, currency, unit or range end: 1,204  £3.2m  -4.1%  (12)  2025/26.
 const NUMBER = /^\(?[-+−]?\s*[£$€]?\s*\d[\d,]*(\.\d+)?\s*(%|p|pp|m|bn|k|x|million|billion|trillion|per cent)?\)?$/i;
 const YEAR_SPAN = /^\d{4}[/–-]\d{2,4}$/; // dash-ok: a financial year may be typed with either mark
-const MARKS = /[*†‡§]+$|\[\d+\]$|\(\w\)$/;
+// A bracketed mark counts only after a value: "(5)" alone is an accounting negative.
+const MARKS = /[*†‡§]+$|\[\d+\]$|(?<=\S\s*)\(\w\)$/;
 
 /** True when a cell's text is a number a reader would compare down a column. */
 export function isNumeric(text) {

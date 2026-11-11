@@ -4,15 +4,16 @@
    layer of a page. Set in one monospace face they read apart from the
    argument, and a reader learns where to look to check something.
 
-   Opt in with class ek-meta or the data-meta attribute. Never the prose, never a
-   headline figure: a monospace face is slower to read at length.
+   Opt in with class ek-meta. Never the prose, never a headline figure: a
+   monospace face is slower to read at length. The opt in is a class and not
+   a bare data attribute, because a site may already use that attribute name
+   to carry data.
 
    The face is drawn larger on its body than the sans beside it, so it is
    stepped down to sit level, and loosened slightly because small monospace
    text sets tight. */
 @layer estate-base {
-  .ek-meta,
-  [data-meta] {
+  .ek-meta {
     font-family: var(--ek-font-mono);
     font-size: 0.875em;
     font-weight: 400;
@@ -36,7 +37,7 @@
 
   /* Links inside the record keep the record's colour; the underline says
      they are links. */
-  :is(.ek-meta, [data-meta]) a {
+  .ek-meta a {
     color: inherit;
   }
 

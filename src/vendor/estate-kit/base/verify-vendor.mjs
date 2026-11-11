@@ -15,7 +15,8 @@ const root = resolve(here, "..");
 const version = readFileSync(join(root, "VERSION"), "utf8");
 const recorded = new Map([...version.matchAll(/^sha256 ([0-9a-f]{64}) (base\/.+)$/gm)].map((m) => [m[2], m[1]]));
 
-const walk = (dir) => readdirSync(dir).flatMap((name) => {
+// Finder leaves .DS_Store in any folder it opens; it is never part of the copy.
+const walk = (dir) => readdirSync(dir).filter((name) => name !== ".DS_Store").flatMap((name) => {
   const path = join(dir, name);
   return statSync(path).isDirectory() ? walk(path) : [relative(root, path).split("\\").join("/")];
 });
