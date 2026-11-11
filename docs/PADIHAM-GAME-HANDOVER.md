@@ -181,3 +181,21 @@ member; the war memorial inscription was read from the War Memorials Online page
 Launched with these still open: no real phone test; the three landlords and Andy Payton not asked; Padiham
 Archives not asked to check the plaques; the Memorial Park opening date (1921 on the plaque, 1922 in the town
 survey); the mural permissions; the war memorial's position and height.
+
+## Phone performance pass, 11 November 2026 (after launch)
+
+On branch `perf/padiham-phone-pass`. Measured in the dev server on this Mac; still not tried on a real phone.
+
+- **Culling:** every batch of town geometry and the trees are now built in squares 230 m across (`CHUNK` in
+  `city.js`), so the renderer skips what is out of view, and squares beyond the haze are hidden
+  (`cullChunks` in `game.js`). Triangles drawn per frame by the Town Hall fell from about 870,000 to about
+  250,000; the widest view tested, from the north side, draws about 390,000. Draw calls are 225 to 444.
+- **Lighter shapes:** chimney pots and lamp posts are five-sided open tubes, and a parked car's four wheels are
+  two drums. That took roughly 160,000 triangles out of the street furniture with no visible change.
+- **Phones:** half the parked cars, plainer trees with one crown, no dark kerb edge, and a nearer horizon
+  (600 m against 900 m). About 480,000 triangles are built in all, against about 700,000 on a desktop.
+- **Automatic step-down:** if play runs under 27 frames a second for three seconds the game lowers the
+  resolution, then switches shadows off, then brings the horizon in to 380 m (`watchSpeed` and `stepDown` in
+  `game.js`). It never steps back up. In the dev server `window.__padiham.stepDown()` forces a step.
+- **Not checked:** the look of the game after each step-down (the preview pane was hidden, so nothing was
+  drawn), and real frame rates on any phone.

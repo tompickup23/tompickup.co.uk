@@ -127,23 +127,49 @@ export class Batch {
       if (l > 1e-9) for (let k = 0; k < 9; k += 3) { this.n[i + k] = nx / l; this.n[i + k + 1] = ny / l; this.n[i + k + 2] = nz / l; }
     }
   }
+  // Returns a group of meshes, one per square of the town, so only the squares in view are drawn.
   mesh(material, shadows = 'both', drape = 'plain') {
     this.drape(drape);
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(this.p, 3));
-    g.setAttribute('normal', new THREE.Float32BufferAttribute(this.n, 3));
-    g.setAttribute('uv', new THREE.Float32BufferAttribute(this.u, 2));
-    g.setAttribute('color', new THREE.Float32BufferAttribute(this.c, 3));
-    const m = new THREE.Mesh(g, material);
-    m.castShadow = shadows === 'both' || shadows === 'cast';
-    m.receiveShadow = shadows === 'both' || shadows === 'receive';
-    return m;
+    const p = this.p, buckets = new Map();
+    for (let t = 0; t < p.length; t += 9) {
+      const k = Math.floor((p[t] + p[t + 3] + p[t + 6]) / 3 / CHUNK) + ',' + Math.floor((p[t + 2] + p[t + 5] + p[t + 8]) / 3 / CHUNK);
+      let b = buckets.get(k);
+      if (!b) buckets.set(k, b = []);
+      b.push(t / 9);
+    }
+    const group = new THREE.Group();
+    for (const [k, tris] of buckets) {
+      const n = tris.length * 3, P3 = new Float32Array(n * 3), N3 = new Float32Array(n * 3), U2 = new Float32Array(n * 2), C3 = new Float32Array(n * 3);
+      tris.forEach((t, i) => {
+        for (let j = 0; j < 9; j++) { P3[i * 9 + j] = p[t * 9 + j]; N3[i * 9 + j] = this.n[t * 9 + j]; C3[i * 9 + j] = this.c[t * 9 + j]; }
+        for (let j = 0; j < 6; j++) U2[i * 6 + j] = this.u[t * 6 + j];
+      });
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(P3, 3));
+      g.setAttribute('normal', new THREE.BufferAttribute(N3, 3));
+      g.setAttribute('uv', new THREE.BufferAttribute(U2, 2));
+      g.setAttribute('color', new THREE.BufferAttribute(C3, 3));
+      const m = new THREE.Mesh(g, material);
+      m.castShadow = shadows === 'both' || shadows === 'cast';
+      m.receiveShadow = shadows === 'both' || shadows === 'receive';
+      const [cx, cz] = k.split(',').map(Number);
+      chunks.push({ mesh: m, x: (cx + 0.5) * CHUNK, z: (cz + 0.5) * CHUNK });
+      group.add(m);
+    }
+    return group;
   }
 }
 const BOX = new THREE.BoxGeometry(1, 1, 1).toNonIndexed();
 const CYL = new THREE.CylinderGeometry(1, 1, 1, 8).toNonIndexed();
 const CONE = new THREE.CylinderGeometry(0.15, 1, 1, 8).toNonIndexed();
 const SPH = new THREE.SphereGeometry(1, 8, 6).toNonIndexed();
+// Cheap shapes for things there are hundreds of: a five-sided open tube (10 triangles) for poles and chimney pots,
+// and a six-sided drum (24) that serves as both wheels on one axle of a parked car.
+const POLE = new THREE.CylinderGeometry(1, 1, 1, 5, 1, true).toNonIndexed();
+const AXLE = new THREE.CylinderGeometry(1, 1, 1, 6).toNonIndexed();
+// Town geometry is split into squares this many metres across, so the renderer can skip the parts out of view.
+const CHUNK = 230;
+export const chunks = []; // { mesh, x, z } for every square, for hiding the far ones
 // Place a primitive in a local frame: o = {x, z, h} where local +z points along heading h.
 function put(b, geo, o, lx, ly, lz, sx, sy, sz, col, tiltZ = 0) {
   const s = Math.sin(o.h), c = Math.cos(o.h);
@@ -364,8 +390,8 @@ function building(b, bi, W, R, P, bays, ex) {
       for (let s = -hl + 2.3; s < hl - 1; s += 9.2) {
         const org = { x: o.cx + ux * s, z: o.cz + uz * s, h: hd };
         put(P, BOX, org, 0, roofTop + 0.35, 0, 1.0, 1.5, 0.6, stoneC);
-        put(P, CYL, org, -0.25, roofTop + 1.25, 0, 0.13, 0.36, 0.13, pot);
-        put(P, CYL, org, 0.25, roofTop + 1.25, 0, 0.13, 0.36, 0.13, pot);
+        put(P, POLE, org, -0.25, roofTop + 1.25, 0, 0.13, 0.36, 0.13, pot);
+        put(P, POLE, org, 0.25, roofTop + 1.25, 0, 0.13, 0.36, 0.13, pot);
       }
     }
   } else if (kind === 'hip') {
@@ -671,7 +697,7 @@ export function buildWorld(scene, w, lowSpec) {
   });
   for (const r of w.roads) if (drive(r)) ribbon(F, r.p, r.w + 4.8, 0.08, C('#b9b4a8'));
   for (const r of w.roads) if (r.c === 'foot') ribbon(F, r.p, r.w, 0.1, C('#c2b596'));
-  for (const r of w.roads) if (drive(r)) ribbon(F, r.p, r.w + 0.6, 0.11, C('#7f7c75'));
+  if (!lowSpec) for (const r of w.roads) if (drive(r)) ribbon(F, r.p, r.w + 0.6, 0.11, C('#7f7c75')); // the dark kerb edge: left out on a phone
   for (const r of w.roads) if (r.c !== 'foot') ribbon(F, r.p, r.w, 0.14, C(r.c === 'service' ? '#66686c' : r.c === 'primary' ? '#3d3f44' : '#494b50'));
   const WHITE = C('#e9e7df'), YELLOW = C('#e2b93b');
   // Kerb lines break where a side road joins, as they do on the street.
@@ -840,8 +866,8 @@ export function buildWorld(scene, w, lowSpec) {
       const px = x - dz * side * off, pz = z + dx * side * off;
       if (nearWall(px, pz, 0.7)) return;
       const o = { x: px, z: pz, h: Math.atan2(dz * side, -dx * side) }; // local +z points to the road
-      put(P, CYL, o, 0, 3.6, 0, 0.085, 7.2, 0.085, DARK);
-      put(P, CYL, o, 0, 0.35, 0, 0.14, 0.7, 0.14, DARK);
+      put(P, POLE, o, 0, 3.6, 0, 0.085, 7.2, 0.085, DARK);
+      put(P, POLE, o, 0, 0.35, 0, 0.14, 0.7, 0.14, DARK);
       put(P, BOX, o, 0, 7.15, 0.7, 0.08, 0.08, 1.5, DARK);
       put(P, BOX, o, 0, 7.08, 1.45, 0.3, 0.12, 0.6, C('#d9d6c8'));
     });
@@ -885,6 +911,7 @@ export function buildWorld(scene, w, lowSpec) {
     if (total < 30) return;
     walk(r.p, 10 + hash(ri) * 10, (n) => 6.2 + hash(ri * 13 + n) * 24, (x, z, dx, dz, s, n) => {
       if (s > total - 10) return;
+      if (lowSpec && n % 2) return; // half the parked cars on a phone
       const off = r.w / 2 - 1.05, px = x - dz * side * off, pz = z + dx * side * off;
       for (const q of roadGrid.at(px, pz)) if (q[7] !== ri && q[6] !== 'foot' && distToSeg(px, pz, q)[0] < q[4] + 4) return;
       if (nearWall(px, pz, 2.4)) return;
@@ -894,7 +921,7 @@ export function buildWorld(scene, w, lowSpec) {
       put(P, BOX, o, 0, 0.62, 0, 1.72, 0.62, 4.1, col);
       put(P, BOX, o, 0, van ? 1.35 : 1.16, van ? -0.35 : -0.15, 1.56, van ? 0.95 : 0.5, van ? 3.1 : 2.1, van ? col : C('#1c2530'));
       if (!van) put(P, BOX, o, 0, 1.44, -0.15, 1.5, 0.07, 1.9, col);
-      for (const wx of [-0.82, 0.82]) for (const wz of [-1.3, 1.3]) put(P, CYL, o, wx, 0.32, wz, 0.32, 0.2, 0.32, BLACK, Math.PI / 2);
+      for (const wz of [-1.3, 1.3]) put(P, AXLE, o, 0, 0.32, wz, 0.32, 1.84, 0.32, BLACK, Math.PI / 2);
       put(P, BOX, o, 0, 0.7, 2.06, 1.5, 0.14, 0.04, C('#f4f0d8'));
       put(P, BOX, o, 0, 0.7, -2.06, 1.5, 0.14, 0.04, C('#a01c1c'));
       const s2 = Math.sin(o.h), c2 = Math.cos(o.h);
@@ -929,22 +956,33 @@ export function buildWorld(scene, w, lowSpec) {
   scene.add(P.mesh(new THREE.MeshLambertMaterial({ vertexColors: true })));
 
   // Trees
-  const n = w.trees.length;
-  const trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.22, 0.34, 3, 6), new THREE.MeshLambertMaterial({ color: 0x6b4f35 }), n);
-  const crowns = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(2.4, 1), new THREE.MeshLambertMaterial({ flatShading: true }), n * 2);
-  const col = new THREE.Color();
-  w.trees.forEach(([x, z], i) => {
-    const s = 0.7 + hash(i + 3) * 0.8, gy = groundH(x, z);
-    _q.identity();
-    trunks.setMatrixAt(i, _m.compose(_p.set(x, gy + 1.5 * s, z), _q, _s.set(s, s, s)));
-    _q.setFromAxisAngle(UP, hash(i) * 6);
-    crowns.setMatrixAt(i * 2, _m.compose(_p.set(x, gy + 4.3 * s, z), _q, _s.set(s, s * 1.05, s)));
-    crowns.setMatrixAt(i * 2 + 1, _m.compose(_p.set(x + (hash(i + 9) - 0.5) * s, gy + 6.0 * s, z + (hash(i + 4) - 0.5) * s), _q, _s.set(s * 0.68, s * 0.7, s * 0.68)));
-    col.setHSL(0.27 + hash(i + 1) * 0.07, 0.42, 0.26 + hash(i + 2) * 0.1);
-    crowns.setColorAt(i * 2, col); crowns.setColorAt(i * 2 + 1, col.offsetHSL(0, 0, 0.04));
-  });
-  trunks.castShadow = crowns.castShadow = true;
-  scene.add(trunks, crowns);
+  // One set of instanced meshes per square of the town, so trees out of view are skipped. On a phone each tree is
+  // a plainer shape with a single crown.
+  const trunkGeo = new THREE.CylinderGeometry(0.22, 0.34, 3, 5, 1, true), crownGeo = new THREE.IcosahedronGeometry(2.4, lowSpec ? 0 : 1);
+  const trunkMat = new THREE.MeshLambertMaterial({ color: 0x6b4f35 }), crownMat = new THREE.MeshLambertMaterial({ flatShading: true });
+  const col = new THREE.Color(), per = lowSpec ? 1 : 2, groves = new Map();
+  w.trees.forEach((t, i) => { const k = Math.floor(t[0] / CHUNK) + ',' + Math.floor(t[1] / CHUNK); if (!groves.has(k)) groves.set(k, []); groves.get(k).push(i); });
+  for (const [k, ids] of groves) {
+    const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, ids.length), crowns = new THREE.InstancedMesh(crownGeo, crownMat, ids.length * per);
+    ids.forEach((i, e) => {
+      const [x, z] = w.trees[i], s = 0.7 + hash(i + 3) * 0.8, gy = groundH(x, z);
+      _q.identity();
+      trunks.setMatrixAt(e, _m.compose(_p.set(x, gy + 1.5 * s, z), _q, _s.set(s, s, s)));
+      _q.setFromAxisAngle(UP, hash(i) * 6);
+      crowns.setMatrixAt(e * per, _m.compose(_p.set(x, gy + 4.3 * s, z), _q, _s.set(s, s * 1.05, s)));
+      col.setHSL(0.27 + hash(i + 1) * 0.07, 0.42, 0.26 + hash(i + 2) * 0.1);
+      crowns.setColorAt(e * per, col);
+      if (per === 2) {
+        crowns.setMatrixAt(e * 2 + 1, _m.compose(_p.set(x + (hash(i + 9) - 0.5) * s, gy + 6.0 * s, z + (hash(i + 4) - 0.5) * s), _q, _s.set(s * 0.68, s * 0.7, s * 0.68)));
+        crowns.setColorAt(e * 2 + 1, col.offsetHSL(0, 0, 0.04));
+      }
+    });
+    trunks.castShadow = crowns.castShadow = true;
+    trunks.computeBoundingSphere(); crowns.computeBoundingSphere();
+    const [cx, cz] = k.split(',').map(Number);
+    chunks.push({ mesh: trunks, x: (cx + 0.5) * CHUNK, z: (cz + 0.5) * CHUNK }, { mesh: crowns, x: (cx + 0.5) * CHUNK, z: (cz + 0.5) * CHUNK });
+    scene.add(trunks, crowns);
+  }
 
   // Pavement paths for pedestrians, and spots for pigeons
   w.roads.forEach((r) => {
