@@ -61,6 +61,7 @@ const schema = {
         <button id="sop-menuBtn" type="button">Menu</button>
         <button id="sop-whereBtn" type="button">Where next?</button>
         <button id="sop-again" type="button">Walk it again</button>
+        <button id="sop-busBtn" type="button" hidden>Bus stop</button>
       </div>
       <div id="sop-job" class="sop-hud">
         <div class="t" id="sop-jobTitle">Loading Padiham</div>
@@ -78,6 +79,10 @@ const schema = {
         <div class="d" id="sop-plaqueText"></div>
         <div class="s" id="sop-plaqueSource"></div>
       </div>
+      <div id="sop-ride" class="sop-hud" role="status">
+        <div class="d" id="sop-rideText"></div>
+        <button id="sop-bell" type="button" hidden>Ring the bell</button>
+      </div>
       <div id="sop-say" class="sop-sr" role="status" aria-live="polite"></div>
       <div id="sop-fade"></div>
 
@@ -85,6 +90,16 @@ const schema = {
       <button id="sop-run" type="button" aria-label="Pace: walk. Press to change">WALK</button>
       <button id="sop-jump" type="button">JUMP</button>
       <button id="sop-hello" type="button" aria-label="Say hello">HI</button>
+
+      <div id="sop-busMenu">
+        <div class="box" role="dialog" aria-modal="true" aria-labelledby="sop-busStopName">
+          <p class="name" id="sop-busStopName">Bus stop</p>
+          <p class="sop-help">Pick your bus by its number and where it is going. Then wait at the stop.</p>
+          <div id="sop-busList"></div>
+          <p id="sop-busNone" class="sop-help" hidden>No bus from this stop goes on to another stop in the town centre. Try the stop across the road.</p>
+          <div class="acts"><button id="sop-busClose" type="button">Not now</button></div>
+        </div>
+      </div>
 
       <div id="sop-menu">
         <div class="box" role="dialog" aria-modal="true" aria-label="Game menu">
@@ -142,13 +157,14 @@ const schema = {
           <ul>
             <li class="only-keys"><b>Move:</b> W A S D or the arrow keys</li>
             <li class="only-keys"><b>Pace:</b> press R to change between walk, run and sprint. Hold Shift to go one faster</li>
-            <li class="only-keys"><b>Jump and wave:</b> Space to jump, H to say hello to someone nearby</li>
+            <li class="only-keys"><b>Jump and wave:</b> Space to jump, or for a wheelie or a spin in a chair. H to say hello to someone nearby</li>
             <li class="only-keys"><b>Look around:</b> click and drag, or press Q and E to turn</li>
             <li class="only-keys"><b>Where next:</b> press G to be told the way</li>
             <li class="only-touch"><b>Move:</b> put a thumb down on the lower left and push. The thumbstick comes to your thumb</li>
             <li class="only-touch"><b>Pace:</b> tap WALK to change to run, then sprint</li>
-            <li class="only-touch"><b>Jump and wave:</b> tap JUMP, or HI to say hello to someone nearby</li>
+            <li class="only-touch"><b>Jump and wave:</b> tap JUMP (WHEELIE or SPIN in a chair), or HI to say hello to someone nearby</li>
             <li class="only-touch"><b>Look around:</b> drag anywhere else on the screen</li>
+            <li><b>Buses:</b> stand at a bus stop and choose Bus stop<span class="only-keys">, or press B</span>. Ring the bell before your stop</li>
             <li class="not-practice"><b>Pubs:</b> step on a blue ring to go inside</li>
             <li class="not-practice"><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
             <li class="not-practice"><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
@@ -223,7 +239,27 @@ const schema = {
         Jobs pay, and every third delivery is a good turn for a neighbour that pays nothing but thanks. Litter lies
         on the pavements: walk over it to pick it up. Say hello and the nearest passer-by waves back. You can walk,
         run or sprint, and jump for the fun of it. The menu keeps a set of stamps for what you have done, and
-        counts how far you have gone on foot. None of it leaves your browser.
+        counts how far you have gone. None of it leaves your browser.
+      </p>
+      <p>
+        You choose how your character gets about: on foot, in a wheelchair or in a powerchair. It changes how
+        you look and nothing else. Every pace, place and job is the same, some of the people you pass use
+        wheelchairs too, and the jump button becomes a wheelie or a turn on the spot. The two chairs were drawn
+        without advice from a wheelchair user. If something about them is wrong, please
+        <a href="/contact/">say so</a> and it will be changed.
+      </p>
+      <h2 id="buses">Catching a bus</h2>
+      <p>
+        The bus stops in the town centre work. Stand at one and choose Bus stop. You are shown the buses that call
+        there, each with its number and where it is going. Pick one, wait, and it comes. On the bus the game tells
+        you the next stop, and you ring the bell before the one you want. If you do not ring, the bus carries on
+        to its last stop on the map.
+      </p>
+      <p>
+        The stops, the numbers and the order of the stops come from OpenStreetMap and may be out of date. The game
+        shows no times and no fares, and the bus is a plain white one, not any company's. It is for getting to
+        know the steps of a bus journey. For a real journey, check the timetable. There is no other traffic in the
+        game.
       </p>
       <h2 id="daily">Today's job</h2>
       <p>
@@ -246,7 +282,8 @@ const schema = {
         for real. Walk the route yourself, and at the start and at each turning point open the menu and choose
         Add where I am standing. Then copy the link and pass it on. Whoever opens it starts at the first spot and
         is shown one marker at a time, in the same order every time, with no clock, no score, no pubs and
-        nothing else going on. The game counts how many times the route has been walked and keeps that count
+        nothing else going on. A route can include a bus: add a spot at the stop where they get on and another
+        near the stop where they get off. The game counts how many times the route has been walked and keeps that count
         in the browser it was played in.
       </p>
       <p>
@@ -267,6 +304,7 @@ const schema = {
       <p>
         The whole game can be played from the keyboard: W A S D or the arrow keys to move, Q and E to turn the view,
         Page Up and Page Down to tilt it, R to change pace between walk, run and sprint, Space to jump, H to say hello,
+        B at a bus stop to catch a bus and B again on the bus to ring the bell,
         G to be told the way to the next place, Esc for the menu and Enter to close a message. A game controller should also work, though it has not yet been
         tested on one. The way to the next place is given in words as well as by the arrow, and a screen reader will
         read it out along with the messages and the plaques.
@@ -332,6 +370,25 @@ const schema = {
   .sop #sop-map { top: 10px; right: 10px; width: 136px; height: 136px; border-radius: 50%; border: 3px solid var(--sop-ink); background: #8a9477; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
   .sop #sop-map canvas { width: 100%; height: 100%; display: block; }
   .sop #sop-street { bottom: 14px; left: 50%; transform: translateX(-50%); background: var(--sop-card); border-radius: 999px; padding: 6px 14px; font-size: calc(14px * var(--sop-fs, 1)); font-weight: 650; white-space: nowrap; }
+  .sop #sop-ride { left: 50%; bottom: 58px; transform: translate(-50%, 12px); width: min(460px, calc(100% - 24px)); background: var(--sop-card); border-left: 5px solid #4fb3ff; border-radius: 14px; padding: 10px 14px; opacity: 0; transition: opacity 0.25s, transform 0.25s; text-align: center; }
+  .sop #sop-ride.on { opacity: 1; transform: translate(-50%, 0); }
+  .sop #sop-ride .d { font-size: calc(17px * var(--sop-fs, 1)); font-weight: 650; line-height: 1.3; }
+  .sop #sop-ride button { pointer-events: auto; margin-top: 8px; padding: 12px 22px; border: 0; border-radius: 999px; background: var(--sop-gold); color: var(--sop-ink); font-family: inherit; font-size: calc(17px * var(--sop-fs, 1)); font-weight: 800; cursor: pointer; }
+  .sop #sop-ride:not(.on) button { pointer-events: none; }
+  .sop.touch #sop-ride { bottom: 190px; }
+  .sop.still #sop-ride { transition: none; transform: translate(-50%, 0); }
+  .sop.hc #sop-ride { outline: 2px solid #fff; }
+  .sop .sop-buttons #sop-busBtn { background: #2f6fb5; color: #fff; font-weight: 800; padding: 10px 14px; }
+  .sop #sop-busMenu { position: absolute; inset: 0; z-index: 9; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 22, 26, 0.78); }
+  .sop #sop-busMenu.on { display: flex; }
+  .sop #sop-busMenu .box { width: min(480px, 100%); max-height: 100%; overflow: auto; background: #1b1e24; border-radius: 20px; padding: 20px; border-top: 6px solid #4fb3ff; text-align: left; }
+  .sop #sop-busMenu .name { margin: 0 0 6px; font-size: 24px; line-height: 1.1; font-weight: 800; color: var(--sop-text); }
+  .sop #sop-busList { display: grid; gap: 8px; margin: 10px 0; }
+  .sop #sop-busList button, .sop #sop-busMenu .acts button { width: 100%; padding: 12px 14px; border: 0; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: var(--sop-text); font-family: inherit; text-align: left; cursor: pointer; }
+  .sop #sop-busList button b { display: block; font-size: 19px; color: var(--sop-gold); }
+  .sop #sop-busList button span { display: block; font-size: 14px; line-height: 1.35; margin-top: 2px; }
+  .sop #sop-busMenu .acts button { text-align: center; font-size: 15px; font-weight: 700; }
+  .sop #sop-busMenu button:focus-visible, .sop #sop-ride button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
   .sop #sop-fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.25s; }
   .sop #sop-fade.on { opacity: 1; }
   .sop #sop-toast { top: 34%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: var(--sop-gold); color: var(--sop-ink); border-radius: 16px; padding: 14px 22px;
@@ -354,6 +411,7 @@ const schema = {
   .sop #sop-jump { right: 112px; bottom: 28px; }
   .sop #sop-hello { right: 26px; bottom: 132px; }
   .sop #sop-jump:active, .sop #sop-hello:active { background: rgba(255, 255, 255, 0.4); }
+  .sop #sop-jump.long { font-size: 11px; }
   .sop #sop-run.fast { background: #ff7a3c; color: var(--sop-ink); }
   /* Filling the window, for phones that cannot go full screen. */
   .sop.fill { position: fixed; inset: 0; z-index: 2147483000; width: 100%; height: 100dvh; min-height: 0; max-height: none; border-radius: 0; }
@@ -443,7 +501,7 @@ const schema = {
   .sop .only-practice, .sop #sop-again { display: none; }
   .sop.practice .only-practice { display: block; }
   .sop.practice #sop-again { display: inline-block; }
-  .sop.practice .not-practice, .sop.practice #sop-cash, .sop.practice #sop-daily, .sop.practice #sop-dailyShare, .sop.practice #sop-share, .sop.practice #sop-extras, .sop.practice #sop-routeMaker, .sop.practice #sop-look { display: none; }
+  .sop.practice .not-practice, .sop.practice #sop-cash, .sop.practice #sop-daily, .sop.practice #sop-dailyShare, .sop.practice #sop-share, .sop.practice #sop-extras, .sop.practice #sop-routeMaker { display: none; }
   .sop.practice .sop-buttons { top: 10px; }
   .sop #sop-start p.sop-warn { padding: 10px 12px; border-radius: 10px; background: rgba(255, 207, 51, 0.16); border: 1px solid rgba(255, 207, 51, 0.5); font-size: 15px; text-align: left; }
   .sop .sop-help { margin: 0 0 8px; font-size: 14px; line-height: 1.45; color: var(--sop-text); }
@@ -466,6 +524,9 @@ const schema = {
     .sop .sop-buttons { left: auto; right: 10px; top: 126px; align-items: flex-end; }
     .sop .sop-buttons button, .sop.touch #sop-street, .sop #sop-street { font-size: calc(13px * min(var(--sop-fs, 1), 1.25)); }
     .sop.touch #sop-street, .sop #sop-street { bottom: auto; top: calc(168px + 26px * var(--sop-fs, 1)); left: auto; right: 10px; transform: none; }
+    /* The bus stop button takes the street name's place, so the name moves down a line. */
+    .sop.atstop.touch #sop-street, .sop.atstop #sop-street { top: calc(214px + 26px * var(--sop-fs, 1)); }
+    .sop.practice.atstop.touch #sop-street, .sop.practice.atstop #sop-street { top: calc(248px + 26px * var(--sop-fs, 1)); }
     .sop.practice .sop-buttons { top: 126px; }
     .sop.practice #sop-job { top: 10px; }
     .sop.practice.touch #sop-street, .sop.practice #sop-street { top: calc(202px + 26px * var(--sop-fs, 1)); }
@@ -492,6 +553,7 @@ const schema = {
     .sop.lefty #sop-hello { left: 28px; }
     .sop.touch #sop-plaque, .sop #sop-plaque { bottom: 8px; width: min(440px, calc(100% - 330px)); padding: 8px 12px; }
     .sop #sop-plaque .d { font-size: calc(14px * var(--sop-fs, 1)); }
+    .sop.touch #sop-ride, .sop #sop-ride { bottom: 8px; width: min(420px, calc(100% - 330px)); }
     .sop #sop-toast { top: 42%; font-size: calc(18px * var(--sop-fs, 1)); padding: 10px 16px; }
     .sop #sop-start, .sop #sop-menu { padding: 8px; align-items: flex-start; }
   }

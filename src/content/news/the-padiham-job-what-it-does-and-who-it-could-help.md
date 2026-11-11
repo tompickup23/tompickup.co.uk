@@ -1,6 +1,7 @@
 ---
 title: "The Padiham Job: what the game does and who it could help"
 date: 2026-11-11T21:30:00Z
+updated: 2026-11-11
 description: "A free game on the real streets of Padiham. What you can do in it, and how a parent, teacher or travel trainer can now set a practice route for someone to walk."
 seoTitle: "The Padiham Job: features, benefits and uses"
 seoDescription: "A free browser game on Padiham's real streets: jobs, history plaques, litter picking, and practice routes a parent or teacher can set for a learner."
@@ -30,6 +31,8 @@ A parent, teacher or travel trainer can now set a route in the game:
 
 When they open the link, the game changes. They start at the first spot. They are shown one marker at a time: "Walk to the marker by Boyes." The markers come in the same order every time. There is no clock, no score, no pubs, no litter to chase and fewer people on the street. A button takes them back to the start to walk it again, and the game counts how many times they have.
 
+A route can include a bus ride: add a spot at the stop where they get on, and another near the stop where they get off.
+
 The link holds the spots on the map and nothing else. It carries no name and no words, and nothing about the person walking it is stored or sent.
 
 ### What it is not
@@ -46,8 +49,10 @@ It is meant for one job: making a place familiar before the real walk, alongside
 - **Say hello.** The nearest passer-by stops and waves back.
 - **Find the history.** Twenty blue plaques stand around the town, each with one fact and its source. The game keeps a journal of the ones you have found.
 - **Try today's job.** One job a day, the same three stops for everyone, so you can compare with a friend.
-- **Collect stamps.** Thirteen of them, for things like ten jobs done, fifty pieces of litter or a mile covered on foot.
+- **Collect stamps.** Thirteen of them, for things like ten jobs done, fifty pieces of litter or a mile covered.
 - **Send a postcard.** A picture of wherever you are standing, with the place name under it.
+- **Catch a bus.** The stops in the town centre work. Pick your bus by its number and where it is going, wait for it, and ring the bell before your stop.
+- **Get about your way.** On foot, in a wheelchair or in a powerchair. It changes how you look and nothing else, and some of the people you pass use wheelchairs too.
 
 You can walk, run or sprint, and jump for the fun of it. The play area is 1,100 metres by 760 metres of the town centre, with 68 named places in it.
 
@@ -63,7 +68,9 @@ You can walk, run or sprint, and jump for the fun of it. The play area is 1,100 
 
 ## What it cannot do yet
 
-- It has no moving traffic, no working crossings and no buses.
+- It has no moving traffic and no working crossings. The buses are the only vehicles that move.
+- The bus numbers and stops come from OpenStreetMap and may be out of date. The game shows no times.
+- The wheelchair and the powerchair were drawn without advice from a wheelchair user. If something is wrong, tell me.
 - It stops at the edge of the town centre.
 - A practice route cannot show a photograph of the real corner, which is where I think it would help most.
 - It is one person's project and it is still being built.

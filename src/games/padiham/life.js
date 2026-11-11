@@ -33,7 +33,18 @@ const G = {
   tail: new THREE.CapsuleGeometry(0.05, 0.2, 3, 8),
   long: new THREE.BoxGeometry(0.35, 0.36, 0.13),
   lock: new THREE.BoxGeometry(0.06, 0.3, 0.16),
+  // Seated figures and their chairs. Wheels are built facing along x, so they spin about their axle.
+  thigh: new THREE.CapsuleGeometry(0.085, 0.3, 3, 8).rotateX(Math.PI / 2),
+  shin: new THREE.CapsuleGeometry(0.075, 0.3, 3, 8),
+  tyre: new THREE.TorusGeometry(0.29, 0.022, 6, 22).rotateY(Math.PI / 2),
+  pushRim: new THREE.TorusGeometry(0.255, 0.01, 5, 22).rotateY(Math.PI / 2),
+  spoke: new THREE.BoxGeometry(0.012, 0.56, 0.012),
+  hub: new THREE.CylinderGeometry(0.035, 0.035, 0.06, 10).rotateZ(Math.PI / 2),
+  castor: new THREE.CylinderGeometry(0.06, 0.06, 0.035, 12).rotateZ(Math.PI / 2),
+  drive: new THREE.CylinderGeometry(0.17, 0.17, 0.09, 16).rotateZ(Math.PI / 2),
+  box: new THREE.BoxGeometry(1, 1, 1),
 };
+const WHEEL_R = { chair: 0.31, power: 0.17 };
 
 // Name and number for the back of a football shirt, drawn on the shirt colour so it needs no transparency.
 const prints = new Map();
@@ -53,7 +64,11 @@ function backPrint(name, number, bg, fg) {
 }
 
 export function makeFigure(o = {}) {
-  const g = new THREE.Group();
+  // A seated figure is the same figure lowered into a chair: 'chair' is a rigid-frame manual wheelchair of the
+  // kind an everyday user pushes themselves, 'power' is a powerchair driven from a joystick on the armrest.
+  const root = new THREE.Group();
+  const g = o.seat ? new THREE.Group() : root;
+  if (o.seat) { g.position.y = -0.26; root.add(g); }
   const part = (geo, c, x, y, z, parent = g) => { const m = new THREE.Mesh(geo, mat(c)); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m; };
   const jacket = o.jacket ?? 0xff7a1a, trousers = o.trousers ?? 0x2a2f3a, skin = o.skin ?? 0xe6b596, hair = o.hair ?? 0x3a2a1e;
   const torso = part(G.torso, jacket, 0, 1.17, 0); torso.scale.set(1.2, 1, 0.82);
@@ -87,7 +102,7 @@ export function makeFigure(o = {}) {
   };
   // A football kit: bare legs and arms with shorts, socks and short sleeves over them.
   const kit = o.kit;
-  const legs = [-0.11, 0.11].map((x) => {
+  const legs = o.seat ? [new THREE.Group(), new THREE.Group()] : [-0.11, 0.11].map((x) => {
     const p = limb(x, 0.84, G.leg, 0.74, kit ? skin : trousers, G.shoe, kit ? kit.boots ?? 0x1b1d20 : 0x1b1d20, 0.05);
     if (kit) { part(G.shorts, kit.shorts, 0, -0.1, 0, p); part(G.sock, kit.socks, 0, -0.6, 0, p); }
     // Classic black leather boots: three white stripes down each side and a white fold-over tongue.
@@ -106,8 +121,60 @@ export function makeFigure(o = {}) {
   });
   let phone = null;
   if (o.phone) { phone = part(G.phone, 0x16171a, 0, -0.66, 0.03, arms[1]); phone.rotation.x = -0.5; }
-  g.scale.setScalar(o.scale ?? 1);
-  return { group: g, legs, arms, phone };
+  let wheels = null;
+  if (o.seat) {
+    // Thighs along the seat, shins down to the footplate.
+    for (const x of [-0.11, 0.11]) { part(G.thigh, trousers, x, 0.84, 0.2); part(G.shin, trousers, x, 0.63, 0.41); part(G.shoe, 0x1b1d20, x, 0.4, 0.45); }
+    const box = (c, x, y, z, w, h, d, parent = root) => { const m = part(G.box, c, x, y, z, parent); m.scale.set(w, h, d); return m; };
+    const frame = o.frame ?? 0x2b6cb0, dark = 0x24272c, steel = 0xb9bec6;
+    wheels = [];
+    if (o.seat === 'chair') {
+      box(dark, 0, 0.5, 0.02, 0.42, 0.05, 0.42);              // seat cushion
+      box(dark, 0, 0.7, -0.19, 0.4, 0.3, 0.035);              // a low backrest, as on an active chair
+      box(frame, 0, 0.11, 0.44, 0.3, 0.02, 0.15);             // footplate
+      for (const x of [-0.19, 0.19]) { const t = box(frame, x, 0.3, 0.33, 0.025, 0.44, 0.025); t.rotation.x = -0.42; box(frame, x, 0.47, 0.02, 0.025, 0.025, 0.44); }
+      box(frame, 0, 0.31, -0.06, 0.56, 0.03, 0.03);           // axle
+      for (const sd of [-1, 1]) {
+        // The big wheels lean in a little at the top, which is what keeps an active chair steady.
+        const lean = new THREE.Group(); lean.position.set(sd * 0.31, WHEEL_R.chair, -0.06); lean.rotation.z = sd * 0.06; root.add(lean);
+        const spin = new THREE.Group(); lean.add(spin);
+        part(G.tyre, 0x1b1d20, 0, 0, 0, spin); part(G.pushRim, steel, sd * 0.035, 0, 0, spin); part(G.hub, steel, 0, 0, 0, spin);
+        for (let k = 0; k < 3; k++) { const sp = part(G.spoke, steel, 0, 0, 0, spin); sp.rotation.x = (k * Math.PI) / 3; }
+        wheels.push(spin);
+        part(G.castor, 0x1b1d20, sd * 0.17, 0.06, 0.36, root);
+      }
+    } else {
+      box(dark, 0, 0.26, 0, 0.5, 0.2, 0.7);                   // the base, with the batteries and motors
+      box(dark, 0, 0.47, 0.02, 0.46, 0.09, 0.46);             // seat
+      box(dark, 0, 0.82, -0.2, 0.44, 0.62, 0.06);             // a full backrest
+      box(frame, 0, 0.11, 0.45, 0.3, 0.02, 0.17);             // footplate
+      box(frame, 0, 0.3, 0.37, 0.05, 0.36, 0.04);
+      for (const sd of [-1, 1]) {
+        box(dark, sd * 0.27, 0.72, 0.04, 0.07, 0.04, 0.36);   // armrests
+        box(frame, sd * 0.27, 0.6, -0.1, 0.03, 0.22, 0.03);
+        const spin = new THREE.Group(); spin.position.set(sd * 0.3, WHEEL_R.power, 0); root.add(spin);
+        part(G.drive, 0x1b1d20, 0, 0, 0, spin); part(G.hub, steel, sd * 0.03, 0, 0, spin);
+        const mark = part(G.spoke, steel, sd * 0.05, 0, 0, spin); mark.scale.set(1, 0.5, 1);
+        wheels.push(spin);
+        for (const z of [-0.36, 0.36]) part(G.castor, 0x1b1d20, sd * 0.21, 0.06, z, root);
+      }
+      box(dark, 0.27, 0.76, 0.24, 0.07, 0.05, 0.08);          // the controller on the right armrest
+      part(G.hand, 0x1b1d20, 0.27, 0.82, 0.25, root).scale.setScalar(0.45);
+    }
+  }
+  root.scale.setScalar(o.scale ?? 1);
+  return { group: root, legs, arms, phone, wheels, seat: o.seat || null };
+}
+// A seated figure on the move: the wheels turn with the distance covered. In a manual chair the arms push the
+// rims in strokes; in a powerchair the right hand stays on the joystick.
+export function animateSeated(f, dist, moving) {
+  const r = WHEEL_R[f.seat];
+  for (const w of f.wheels) w.rotation.x = dist / r;
+  f.arms[0].rotation.z = f.arms[1].rotation.z = 0;
+  if (f.seat === 'chair') {
+    const a = moving ? 0.1 + 0.45 * Math.cos(dist * 4.2) : -0.5;
+    f.arms[0].rotation.x = f.arms[1].rotation.x = a;
+  } else { f.arms[0].rotation.x = -0.5; f.arms[1].rotation.x = -0.78; }
 }
 export function animateFigure(f, phase, amt) {
   const sw = Math.sin(phase) * amt * 0.8;
@@ -130,7 +197,9 @@ export class Pedestrians {
       for (let j = 1; j < path.length; j++) cum.push(cum[j - 1] + Math.hypot(path[j][0] - path[j - 1][0], path[j][1] - path[j - 1][1]));
       // About one passer-by in six wears a claret and blue shirt with the number ten of Andy Payton. No club badge is drawn.
       const fan = i % 6 === 2 ? { jacket: 0x6c1d45, sleeves: 0x99d6ea, back: { name: 'PAYTON', number: '10', color: 0xf4f1e8 } } : null;
-      const fig = makeFigure({ jacket: pick(JACKETS), trousers: pick(TROUSERS), skin: pick(SKIN), hair: pick(HAIR), cap: Math.random() < 0.2 ? pick([0x5a5248, 0x2b3a67, 0x3a3d42]) : undefined, style: pick(['short', 'short', 'pony', 'long']), scale: 0.92 + Math.random() * 0.14, ...fan });
+      // About one passer-by in twelve uses a wheelchair, so the player is not the only one in town who does.
+      const seat = i % 12 === 7 ? 'chair' : undefined;
+      const fig = makeFigure({ seat, frame: pick([0x2b6cb0, 0xb03a2b, 0x2f8a5a, 0x3a3d42]), jacket: pick(JACKETS), trousers: pick(TROUSERS), skin: pick(SKIN), hair: pick(HAIR), cap: Math.random() < 0.2 ? pick([0x5a5248, 0x2b3a67, 0x3a3d42]) : undefined, style: pick(['short', 'short', 'pony', 'long']), scale: 0.92 + Math.random() * 0.14, ...fan });
       scene.add(fig.group);
       this.peds.push({ fig, path, cum, total: cum[cum.length - 1], s: Math.random() * cum[cum.length - 1], dir: Math.random() < 0.5 ? 1 : -1, speed: 1.1 + Math.random() * 0.6, phase: Math.random() * 6, side: (Math.random() - 0.5) * 1.2, wait: 0 });
     }
@@ -164,7 +233,7 @@ export class Pedestrians {
       g.position.set(x, 0.14 + groundH(x, z), z);
       const want = near ? Math.atan2(player.x - x, player.z - z) : Math.atan2(dx * p.dir, dz * p.dir);
       g.rotation.y += Math.atan2(Math.sin(want - g.rotation.y), Math.cos(want - g.rotation.y)) * Math.min(1, dt * 6);
-      animateFigure(p.fig, p.phase, moving ? 0.7 : 0);
+      if (p.fig.wheels) animateSeated(p.fig, p.s, moving); else animateFigure(p.fig, p.phase, moving ? 0.7 : 0);
       if (p.wave > 0) { p.wave -= dt; p.fig.arms[1].rotation.x = -2.7 + Math.sin(p.wave * 16) * 0.3; p.fig.arms[1].rotation.z = p.wave > 0 ? 0.25 : 0; }
     }
   }
