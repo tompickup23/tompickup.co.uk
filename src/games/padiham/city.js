@@ -530,10 +530,23 @@ export function buildWorld(scene, w, lowSpec) {
   for (const r of w.roads) if (drive(r)) ribbon(F, r.p, r.w + 0.6, 0.11, C('#7f7c75'));
   for (const r of w.roads) if (r.c !== 'foot') ribbon(F, r.p, r.w, 0.14, C(r.c === 'service' ? '#66686c' : r.c === 'primary' ? '#3d3f44' : '#494b50'));
   const WHITE = C('#e9e7df'), YELLOW = C('#e2b93b');
-  for (const r of w.roads) {
+  // Kerb lines break where a side road joins, as they do on the street.
+  // Another main road counts only when the line is well inside it (a fork), so the lines carry on where one stretch meets the next.
+  const inSideRoad = (x, z, ri) => { for (const s of roadGrid.at(x, z)) { if (s[6] === 'foot' || s[7] === ri) continue; if (distToSeg(x, z, s)[0] < (s[6] === 'primary' ? s[4] - 0.9 : s[4] + 0.5)) return true; } return false; };
+  const clearRuns = (p, ri) => {
+    const runs = []; let run = [];
+    const flush = () => { if (run.length > 1) runs.push(run); run = []; };
+    for (let i = 0; i < p.length - 1; i++) {
+      const dx = p[i + 1][0] - p[i][0], dz = p[i + 1][1] - p[i][1], n = Math.max(1, Math.ceil(Math.hypot(dx, dz) / 1.5));
+      for (let k = i ? 1 : 0; k <= n; k++) { const q = [p[i][0] + (dx * k) / n, p[i][1] + (dz * k) / n]; if (inSideRoad(q[0], q[1], ri)) flush(); else run.push(q); }
+    }
+    flush();
+    return runs;
+  };
+  w.roads.forEach((r, ri) => {
     if (r.c === 'primary' || r.c === 'tertiary') dashes(F, r.p, 0.17, 0.14, 3, 6, WHITE);
-    if (r.c === 'primary') for (const side of [1, -1]) for (const off of [r.w / 2 - 0.3, r.w / 2 - 0.55]) ribbon(F, offsetLine(r.p, side * off), 0.09, 0.17, YELLOW, false);
-  }
+    if (r.c === 'primary') for (const side of [1, -1]) for (const off of [r.w / 2 - 0.3, r.w / 2 - 0.55]) for (const run of clearRuns(offsetLine(r.p, side * off), ri)) ribbon(F, run, 0.09, 0.17, YELLOW, false);
+  });
   const roadAt = (x, z) => { let best = null, bd = 12; for (const s of roadGrid.at(x, z)) { if (s[6] === 'foot') continue; const d = distToSeg(x, z, s)[0]; if (d < bd) { bd = d; best = s; } } return best; };
   const P = new Batch(); // props
   const DARK = C('#2e3a36'), BLACK = C('#1b1d20'), ORANGE = C('#f08a24'), RED = C('#c0241f'), GLASS = C('#9fc1d1'), STONE = C('#9d8f76');
@@ -626,8 +639,10 @@ export function buildWorld(scene, w, lowSpec) {
     const dx = (c[0] - a[0]) / l, dz = (c[1] - a[1]) / l, off = r.c === 'foot' ? r.w / 2 + 0.3 : r.w / 2 + 2.6;
     const o = { x: (a[0] + c[0]) / 2, z: (a[1] + c[1]) / 2, h: Math.atan2(dx, dz) };
     for (const side of [1, -1]) {
+      const ex = dz * side * off, ez = -dx * side * off; // the same side as the box drawn below
+      // A parapet belongs on the outside of the bridge, not between the road and a footway that share the deck.
+      if (w.roads.some((r2) => r2.b && r2 !== r && r2.p.some((q, j) => j < r2.p.length - 1 && distToSeg(o.x + ex, o.z + ez, [q[0], q[1], r2.p[j + 1][0], r2.p[j + 1][1]])[0] < (r2.c === 'foot' ? r2.w / 2 + 0.2 : r2.w / 2 + 2.5)))) continue;
       put(P, BOX, o, side * off, 0.6, 0, 0.4, 1.2, l, STONE);
-      const ex = -dz * side * off, ez = dx * side * off;
       walls.add(a[0] + ex, a[1] + ez, c[0] + ex, c[1] + ez, 1.5, [a[0] + ex, a[1] + ez, c[0] + ex, c[1] + ez, 1]);
     }
   }

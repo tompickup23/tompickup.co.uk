@@ -67,4 +67,55 @@ export const PLAQUES = [
     short: 'North West Counties Football League (2017)',
     source: 'North West Counties Football League, "Emblematically Speaking: Padiham", Stewart Taylor, 27 December 2017', url: 'https://www.nwcfl.com/news-articles.php?id=6419',
   },
+  // Added 11 November 2026. Each Historic England entry was read on historicengland.org.uk that day.
+  // A plaque with 'll' stands by the building at that latitude and longitude, converted from the list
+  // entry's National Grid Reference. A plaque with 'road' stands on the pavement of that street.
+  {
+    id: 'craven-bank', ll: [53.80199, -2.31471], title: 'The Craven Bank',
+    text: 'This corner bank with the round tower was built in 1893 for the Craven Bank, to designs by William Dent of Nelson. It later became Barclays.',
+    short: 'Historic England, list entry 1238196',
+    source: 'Historic England, National Heritage List for England, "Barclays Bank", 17 Burnley Road, list entry 1238196, Grade II, first listed 12 February 1985; Lancashire Historic Town Survey Programme: Padiham Historic Town Assessment Report, May 2005, p. 25', url: HE(1238196),
+  },
+  {
+    id: 'county-bank', ll: [53.80144, -2.31389], title: 'The Manchester and County Bank',
+    text: 'This bank was built in 1901 for the Manchester and County Bank, by Mills and Murgatroyd of Manchester. It later became the National Westminster Bank.',
+    short: 'Historic England, list entry 1274553',
+    source: 'Historic England, National Heritage List for England, "National Westminster Bank", 47 Burnley Road, list entry 1274553, Grade II, first listed 12 February 1985; Lancashire Historic Town Survey Programme: Padiham Historic Town Assessment Report, May 2005, p. 25', url: HE(1274553),
+  },
+  {
+    id: 'gawthorpe-street', ll: [53.80239, -2.31616], title: 'Gawthorpe Street',
+    text: 'These houses were built in 1842 for the Shuttleworths of Gawthorpe Hall. They are said to be to the designs of Sir Charles Barry.',
+    short: 'Historic England, list entry 1274185',
+    source: 'Historic England, National Heritage List for England, "1-21, Gawthorpe Street", list entry 1274185, Grade II, first listed 15 January 1980; Burnley Borough Council, Padiham Conservation Area Appraisal, June 2020, para. 5.20', url: HE(1274185),
+  },
+  {
+    id: 'oddfellows', ll: [53.80198, -2.31740], title: "The Oddfellows' Hall",
+    text: "The Oddfellows' Hall was built in 1845. A stone plaque on the North Street side still carries the date.",
+    short: 'Historic England, list entry 1238155',
+    source: 'Historic England, National Heritage List for England, "2, Bank Street, 4 and 6, North Street", list entry 1238155, Grade II, first listed 12 February 1985; Lancashire Historic Town Survey Programme: Padiham Historic Town Assessment Report, May 2005, plate 9', url: HE(1238155),
+  },
+  {
+    id: 'headmasters-house', ll: [53.80150, -2.31456], title: "The headmaster's house",
+    text: 'This house was built in 1854 for the headmaster of the National School, which stood across the courtyard.',
+    short: 'Historic England, list entry 1237658',
+    source: 'Historic England, National Heritage List for England, "29, Mill Street", list entry 1237658, Grade II, first listed 19 July 1984; Burnley Borough Council, Padiham Conservation Area Appraisal, June 2020, para. 5.34', url: HE(1237658),
+  },
+  {
+    id: 'town-hall-door', at: 'Padiham Town Hall', title: 'The Town Hall doorway',
+    text: 'Look above the main door. The keystone carries the figure of a woman holding a distaff and a shuttle. The hall stands on the site of Bridge End Mill.',
+    short: 'Historic England, list entry 1237652',
+    source: 'Historic England, National Heritage List for England, "Town Hall", list entry 1237652, Grade II, first listed 12 February 1985; Burnley Borough Council, Padiham Conservation Area Appraisal, June 2020, para. 4.31', url: HE(1237652),
+  },
+  {
+    id: 'font', at: "St Leonard's", title: 'The font of 1525',
+    text: "Inside St Leonard's is an eight-sided stone font from the old church. It is said to have been given in 1525 by John Paslew, the last Abbot of Whalley.",
+    short: 'Victoria County History of Lancashire, volume 6 (1911)',
+    source: 'Farrer and Brownbill (eds), A History of the County of Lancaster: Volume 6 (1911), "Townships: Padiham", p. 495, British History Online; Historic England, "Church of St Leonard", list entry 1238303, Grade II, first listed 12 February 1985', url: 'https://www.british-history.ac.uk/vch/lancs/vol6/pp492-496',
+  },
+  {
+    id: 'turnpike', road: 'Church Street', title: 'The turnpike road',
+    text: 'In 1754 to 1755 the road through Padiham became a turnpike, running from Blackburn by Burnley to Yorkshire. It was the earliest turnpike road in east Lancashire.',
+    short: 'Lancashire Historic Town Survey, Padiham (2005)',
+    source: 'Lancashire County Council and Egerton Lea Consultancy, Lancashire Historic Town Survey Programme: Padiham Historic Town Assessment Report, May 2005, p. 38; Burnley Borough Council, Padiham Conservation Area Appraisal, June 2020, para. 4.13', url: LEUS,
+  },
 ];

@@ -3,6 +3,7 @@
 // The game code is in src/games/padiham/. The world file in public/games/the-padiham-job/
 // is built offline by scripts/padiham-game/build_world.py; do not edit it by hand.
 // Uses the site Layout, so the header, footer and imprint are the same as every other page.
+// noindex and out of the sitemap (astro.config.mjs) until launch day: remove both together.
 import Layout from '../../layouts/Layout.astro';
 import { person } from '../../data/person';
 import { PLAQUES } from '../../games/padiham/history.js';
@@ -35,6 +36,7 @@ const schema = {
   ogImageHeight={630}
   schema={schema}
   breadcrumbLabel={title}
+  noindex
 >
   <section class="sop-page">
     <header class="sop-intro">
@@ -53,11 +55,10 @@ const schema = {
         £<span id="sop-money">0</span>
         <small><span id="sop-done">0</span> jobs done</small>
         <small><span id="sop-pigeons">0</span> pigeons startled</small>
-        <small><span id="sop-plaques">0</span> plaques read</small>
+        <small><span id="sop-plaques">0</span> plaques found</small>
       </div>
       <div class="sop-buttons">
-        <button id="sop-mute" type="button">Sound on</button>
-        <button id="sop-full" type="button">Full screen</button>
+        <button id="sop-menuBtn" type="button">Menu</button>
       </div>
       <div id="sop-job" class="sop-hud">
         <div class="t" id="sop-jobTitle">Loading Padiham</div>
@@ -80,6 +81,26 @@ const schema = {
       <div id="sop-stick"><div id="sop-knob"></div></div>
       <button id="sop-run" type="button">RUN</button>
 
+      <div id="sop-menu">
+        <div class="box" role="dialog" aria-label="Game menu">
+          <p class="name">Paused</p>
+          <div class="acts">
+            <button id="sop-resume" type="button">Carry on</button>
+            <button id="sop-card" type="button">Take a postcard</button>
+            <button id="sop-share" type="button">Share my score</button>
+            <button id="sop-mute" type="button">Sound is on</button>
+            <button id="sop-full" type="button">Full screen</button>
+          </div>
+          <p id="sop-menuNote" role="status"></p>
+          <h3>Plaques found: <span id="sop-jcount"></span></h3>
+          <ul id="sop-journal"></ul>
+          <p class="sop-credit">
+            Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
+            Open Database Licence. Contains OS data © Crown copyright and database right 2026.
+          </p>
+        </div>
+      </div>
+
       <div id="sop-start">
         <div class="box">
           <p class="name">The <span>Padiham</span> Job</p>
@@ -92,9 +113,15 @@ const schema = {
             <li class="only-touch"><b>Run:</b> tap RUN to switch it on or off</li>
             <li class="only-touch"><b>Look around:</b> drag anywhere on the screen</li>
             <li><b>Pubs:</b> step on a blue ring to go inside</li>
-            <li><b>History:</b> walk up to a blue plaque to read it</li>
+            <li><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
+            <li class="only-keys"><b>Pause:</b> press Esc or click Menu</li>
+            <li class="only-touch"><b>Pause:</b> tap Menu</li>
           </ul>
           <button id="sop-play" type="button" disabled>Loading</button>
+          <p class="sop-credit">
+            Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
+            Open Database Licence. Contains OS data © Crown copyright and database right 2026.
+          </p>
         </div>
       </div>
     </div>
@@ -191,6 +218,23 @@ const schema = {
   .sop #sop-start .box { width: min(460px, 100%); background: #1b1e24; border-radius: 20px; padding: 24px; text-align: center; border-top: 6px solid var(--sop-gold); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
   .sop #sop-start .name { margin: 0; font-size: 34px; line-height: 1; letter-spacing: -0.02em; font-weight: 800; color: var(--sop-text); }
   .sop #sop-start .name span { color: var(--sop-gold); }
+  .sop #sop-start p.sop-credit, .sop #sop-menu p.sop-credit { margin: 12px 0 0; font-size: 12px; line-height: 1.4; opacity: 0.75; color: var(--sop-text); }
+  .sop .sop-credit a { color: inherit; }
+  .sop #sop-menu { position: absolute; inset: 0; z-index: 9; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(20, 22, 26, 0.78); }
+  .sop #sop-menu.on { display: flex; }
+  .sop #sop-menu .box { width: min(560px, 100%); max-height: 100%; overflow: auto; background: #1b1e24; border-radius: 20px; padding: 20px; border-top: 6px solid var(--sop-gold); text-align: left; user-select: text; -webkit-user-select: text; }
+  .sop #sop-menu .name { margin: 0; font-size: 26px; line-height: 1; font-weight: 800; color: var(--sop-text); }
+  .sop #sop-menu .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .sop #sop-menu .acts button { padding: 12px; border: 0; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: var(--sop-text); font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.1; cursor: pointer; }
+  .sop #sop-menu .acts #sop-resume { grid-column: 1 / -1; background: var(--sop-gold); color: var(--sop-ink); font-size: 18px; padding: 14px; }
+  .sop #sop-menuNote { min-height: 1.3em; margin: 8px 0 0; font-size: 14px; color: var(--sop-green); }
+  .sop #sop-menu h3 { margin: 10px 0 6px; font-family: inherit; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sop-gold); }
+  .sop #sop-journal { list-style: none; margin: 0; padding: 0; }
+  .sop #sop-journal li { padding: 8px 10px; background: rgba(255, 255, 255, 0.06); border-radius: 10px; margin-top: 6px; font-size: 14px; line-height: 1.4; color: var(--sop-text); }
+  .sop #sop-journal li b { display: block; }
+  .sop #sop-journal li small { display: block; font-size: 12px; opacity: 0.75; margin-top: 2px; }
+  .sop #sop-journal li.todo { opacity: 0.6; }
+  .sop #sop-dist { white-space: nowrap; }
   .sop #sop-start p { margin: 12px 0 0; font-size: 16px; line-height: 1.45; color: var(--sop-text); }
   .sop #sop-start ul { list-style: none; margin: 14px 0 0; padding: 0; text-align: left; font-size: 15px; line-height: 1.5; }
   .sop #sop-start li { padding: 7px 10px; background: rgba(255, 255, 255, 0.06); border-radius: 10px; margin-top: 6px; color: var(--sop-text); }
@@ -204,8 +248,14 @@ const schema = {
     .sop-page { padding: 1rem 0 2rem; }
     .sop-intro, .sop-notes { padding: 0 1rem; }
     .sop { border-radius: 0; height: calc(100svh - var(--sop-top, 72px)); scroll-margin-top: var(--sop-top, 72px); }
-    .sop .sop-buttons { flex-direction: row; top: 112px; }
-    .sop #sop-job { left: 10px; transform: none; top: 176px; width: calc(100% - 170px); }
+    /* Phone: one line of cash, the job card beside a smaller map, Menu under the map. */
+    .sop #sop-cash { padding: 6px 10px; font-size: 16px; }
+    .sop #sop-cash small { display: none; }
+    .sop #sop-map { width: 108px; height: 108px; }
+    .sop .sop-buttons { left: auto; right: 10px; top: 126px; }
+    .sop.touch #sop-street, .sop #sop-street { bottom: auto; top: 160px; left: auto; right: 10px; transform: none; font-size: 12px; }
+    .sop #sop-job { left: 10px; transform: none; top: 50px; width: calc(100% - 138px); padding: 8px 10px; }
     .sop #sop-job .d { font-size: 15px; }
+    .sop #sop-job .m { font-size: 13px; gap: 8px; }
   }
 </style>

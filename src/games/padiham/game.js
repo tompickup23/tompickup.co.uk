@@ -25,7 +25,7 @@ const SCRIPT = [
   { title: 'Bunting', steps: [['Boyes', 'Buy another roll of bunting from Boyes'], ['Padiham Town Hall', 'Get the bunting to the Town Hall']] },
   { title: 'Match day', steps: [['Padiham Town Hall', 'Pick up the raffle prizes from the Town Hall'], ['Padiham Football Club', 'Get them to the Arbories before kick off']] },
 ];
-const CARGO = ['a parcel', 'a toolbox', 'a bunch of flowers', 'a box of leaflets', 'a birthday cake', 'a set of keys', 'a bag of shopping'];
+const CARGO = ['a parcel', 'a toolbox', 'a bunch of flowers', 'a box of teacakes', 'a birthday cake', 'a set of keys', 'a bag of shopping'];
 
 // ---------- State ----------
 const SAVE_KEY = 'padiham-errands-2';
@@ -47,7 +47,7 @@ try { renderer = new THREE.WebGLRenderer({ canvas: $('view'), antialias: true, p
 }
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isTouch ? 1.75 : 2));
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap; // the soft kind costs far more and the sun here is hard daylight
 const scene = new THREE.Scene();
 const HORIZON = 0xd3e2ec;
 scene.fog = new THREE.Fog(HORIZON, 140, 900);
@@ -126,6 +126,7 @@ function safeDoor(p) {
   }
   if (best) { p.dx = best[0]; p.dz = best[1]; }
 }
+const labels = [];
 function label(text, x, y, z) {
   const cv = document.createElement('canvas');
   cv.width = 512; cv.height = 96;
@@ -142,6 +143,7 @@ function label(text, x, y, z) {
   sp.scale.set(20, 3.75, 1);
   sp.position.set(x, y, z);
   scene.add(sp);
+  labels.push(sp);
 }
 
 // ---------- Minimap ----------
@@ -278,7 +280,7 @@ stick.addEventListener('pointerup', endStick);
 stick.addEventListener('pointercancel', endStick);
 let runToggle = false;
 $('run').addEventListener('click', () => { runToggle = !runToggle; $('run').classList.toggle('on', runToggle); });
-$('mute').addEventListener('click', () => { sound.setMuted(!sound.muted); $('mute').textContent = sound.muted ? 'Sound off' : 'Sound on'; });
+$('mute').addEventListener('click', () => { sound.setMuted(!sound.muted); $('mute').textContent = sound.muted ? 'Sound is off' : 'Sound is on'; });
 
 function readInput() {
   let x = stickVec.x, y = stickVec.y;
@@ -330,7 +332,9 @@ function leavePub() {
 
 const target = () => (state.job ? state.job.steps[state.job.i].poi : null);
 const dist2 = (a, b) => Math.hypot(a.dx - b.dx, a.dz - b.dz);
-let slicePois = [];
+let slicePois = [], jobPois = [];
+// Random deliveries keep to shops, pubs and public places: not schools or the surgery.
+const NO_RANDOM = new Set(['school', 'doctors']);
 
 function makeJob() {
   let def = SCRIPT[state.jobIndex];
@@ -340,7 +344,7 @@ function makeJob() {
   else {
     const here = { dx: player.x, dz: player.z };
     let a, b, tries = 0;
-    do { a = slicePois[Math.floor(Math.random() * slicePois.length)]; b = slicePois[Math.floor(Math.random() * slicePois.length)]; tries++; }
+    do { a = jobPois[Math.floor(Math.random() * jobPois.length)]; b = jobPois[Math.floor(Math.random() * jobPois.length)]; tries++; }
     while (tries < 400 && (a === b || dist2(a, b) < 70 || dist2(a, b) > 380 || dist2(here, a) < 30 || dist2(here, a) > 380));
     const thing = CARGO[Math.floor(Math.random() * CARGO.length)];
     job = { title: 'Delivery', steps: [{ poi: a, text: `Collect ${thing} at ${a.n}` }, { poi: b, text: `Deliver it to ${b.n}` }] };
@@ -378,7 +382,8 @@ function arrive() {
   toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : 'Beat the clock next time for a bonus');
   makeJob();
 }
-function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${plaques.filter((p) => state.plaques.has(p.id)).length} of ${plaques.length}`; }
+function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
+const foundCount = () => plaques.filter((p) => state.plaques.has(p.id)).length;
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // ---------- Local history plaques ----------
@@ -386,18 +391,51 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart
 // and the page lists every source under the game.
 const plaques = [];
 let plaqueShown = null;
+const LAT0 = 53.802, LON0 = -2.315, MXM = Math.cos((LAT0 * Math.PI) / 180) * 111320, MZM = 110540;
 function placePlaques() {
   const blocked = (x, z) => nearWall(x, z, 1.1) || world.buildings.some((b) => inPoly(x, z, b.p));
   const blue = new THREE.MeshLambertMaterial({ color: 0x1f4fa3 }), rim = new THREE.MeshLambertMaterial({ color: 0xf4f1e8 }), post = new THREE.MeshLambertMaterial({ color: 0x2e3a36 });
+  const inSlice = (x, z) => x > slice[0] + 6 && x < slice[2] - 6 && z > slice[1] + 6 && z < slice[3] - 6;
+  const taken = (x, z) => Math.min(...plaques.map((p) => Math.hypot(p.x - x, p.z - z)), ...doors.map((d) => Math.hypot(d.x - x, d.z - z)), ...slicePois.map((q) => Math.hypot(q.dx - x, q.dz - z)), 60);
   for (const def of PLAQUES) {
-    const poi = pois.get(def.at);
+    let poi = def.at ? pois.get(def.at) : null;
+    if (def.ll) {
+      // A building given by latitude and longitude, in the world file's local metres (see build_world.py).
+      const bx = (def.ll[1] - LON0) * MXM, bz = -(def.ll[0] - LAT0) * MZM;
+      let bd = 1e9;
+      for (const r of world.roads) {
+        if (r.c === 'foot' || r.c === 'service') continue;
+        for (let i = 0; i < r.p.length - 1; i++) { const [d, qx, qz] = distToSeg(bx, bz, [r.p[i][0], r.p[i][1], r.p[i + 1][0], r.p[i + 1][1]]); if (d < bd && inSlice(qx, qz)) { bd = d; poi = { x: bx, z: bz, dx: qx, dz: qz }; } }
+      }
+    }
+    if (def.road) {
+      // A fact about a street: stand on its pavement, on the stretch furthest from the other plaques and job markers.
+      let bs = -1;
+      for (const r of world.roads) {
+        if (r.n !== def.road || r.c === 'foot') continue;
+        for (let i = 0; i < r.p.length - 1; i++) {
+          const mx = (r.p[i][0] + r.p[i + 1][0]) / 2, mz = (r.p[i][1] + r.p[i + 1][1]) / 2, l = Math.hypot(r.p[i + 1][0] - r.p[i][0], r.p[i + 1][1] - r.p[i][1]) || 1;
+          const nx = -(r.p[i + 1][1] - r.p[i][1]) / l, nz = (r.p[i + 1][0] - r.p[i][0]) / l;
+          for (const side of [1, -1]) {
+            const px = mx + nx * side * (r.w / 2 + 1.5), pz = mz + nz * side * (r.w / 2 + 1.5);
+            if (!inSlice(px, pz) || blocked(px, pz)) continue;
+            const sc = taken(px, pz);
+            if (sc > bs) { bs = sc; poi = { x: px + nx * side * 0.4, z: pz + nz * side * 0.4, dx: px, dz: pz, k: 'street' }; }
+          }
+        }
+      }
+    }
     if (!poi) continue;
     // Walk from the road point back towards the building and stop at the last clear spot: the pavement by the frontage.
     let x = poi.dx, z = poi.dz;
-    for (let t = 0.1; t <= 0.9; t += 0.1) { const qx = poi.dx + (poi.x - poi.dx) * t, qz = poi.dz + (poi.z - poi.dz) * t; if (blocked(qx, qz)) break; if (Math.hypot(qx - poi.dx, qz - poi.dz) > 5.5) break; x = qx; z = qz; }
-    // keep clear of pub doors, the selfie taker and other plaques
-    const crowded = () => doors.some((d) => Math.hypot(d.x - x, d.z - z) < 3.5) || plaques.some((p) => Math.hypot(p.x - x, p.z - z) < 4) || (selfie && Math.hypot(selfie.x - x, selfie.z - z) < 3);
-    for (let k = 0; k < 8 && crowded(); k++) { const a = k * 0.785; const qx = x + Math.cos(a) * 4.2, qz = z + Math.sin(a) * 4.2; if (!blocked(qx, qz)) { x = qx; z = qz; } }
+    const L = Math.hypot(poi.x - poi.dx, poi.z - poi.dz) || 1, ux = (poi.x - poi.dx) / L, uz = (poi.z - poi.dz) / L;
+    const cap = poi.k === 'park' || poi.k === 'pitch' || poi.k === 'bridge' ? 5.5 : 16;
+    for (let t = 0.5; t <= Math.min(L, cap); t += 0.5) { const qx = poi.dx + ux * t, qz = poi.dz + uz * t; if (blocked(qx, qz)) break; x = qx; z = qz; }
+    // Then settle on the nearest spot that is off the carriageway and clear of pub doors, the selfie taker,
+    // job markers and other plaques.
+    const onRoad = (qx, qz) => { for (const sg of roadGrid.at(qx, qz)) if (sg[6] !== 'foot' && distToSeg(qx, qz, sg)[0] < sg[4] + 0.5) return true; return false; };
+    const good = (qx, qz) => inSlice(qx, qz) && !blocked(qx, qz) && !onRoad(qx, qz) && !doors.some((d) => Math.hypot(d.x - qx, d.z - qz) < 3.5) && !plaques.some((p) => Math.hypot(p.x - qx, p.z - qz) < 4) && !slicePois.some((q) => Math.hypot(q.dx - qx, q.dz - qz) < 4.4) && !(selfie && Math.hypot(selfie.x - qx, selfie.z - qz) < 3);
+    if (!good(x, z)) search: for (let r = 1; r <= 16; r += 1) for (let k = 0; k < 16; k++) { const qx = x + Math.cos(k * 0.3927) * r, qz = z + Math.sin(k * 0.3927) * r; if (good(qx, qz)) { x = qx; z = qz; break search; } }
     const g = new THREE.Group(); g.position.set(x, 0.14, z);
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 1.5, 8), post); pole.position.y = 0.75; pole.castShadow = true;
     const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.05, 24), blue); disc.rotation.x = Math.PI / 2; disc.position.y = 1.62; disc.castShadow = true;
@@ -417,6 +455,72 @@ function updatePlaques(time) {
   el.classList.add('on');
   if (!state.plaques.has(near.id)) { state.plaques.add(near.id); persist(); hud(); sound.done(); }
 }
+
+// ---------- Menu: pause, the plaque journal, sharing and postcards ----------
+let started = false;
+const menu = $('menu');
+const note = (t) => { $('menuNote').textContent = t; };
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+function renderJournal() {
+  const ul = $('journal'); ul.textContent = '';
+  for (const p of plaques) {
+    const found = state.plaques.has(p.id), li = document.createElement('li');
+    const b = document.createElement('b'); b.textContent = p.title;
+    const d = document.createElement('span'); d.textContent = found ? p.text : 'Not found yet';
+    li.append(b, d);
+    if (found) { const sm = document.createElement('small'); sm.textContent = `Source: ${p.short}`; li.appendChild(sm); } else li.className = 'todo';
+    ul.appendChild(li);
+  }
+  $('jcount').textContent = `${foundCount()} of ${plaques.length}`;
+}
+function openMenu() {
+  if (!started || menu.classList.contains('on')) return;
+  state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
+  renderJournal(); note(''); menu.classList.add('on'); $('resume').focus();
+}
+function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; }
+$('menuBtn').addEventListener('click', openMenu);
+$('resume').addEventListener('click', closeMenu);
+addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
+// Pause when the tab is left. The dev server can switch this off for testing in a background pane.
+document.addEventListener('visibilitychange', () => { if (document.hidden && !(import.meta.env.DEV && window.__noAutoPause)) openMenu(); });
+const PAGE = 'https://tompickup.co.uk/the-padiham-job/';
+$('share').addEventListener('click', async () => {
+  const text = `I found ${foundCount()} of ${plaques.length} history plaques and did ${plural(state.done, 'job')} in The Padiham Job, a game on the real streets of Padiham.`;
+  try {
+    if (navigator.share) await navigator.share({ title: 'The Padiham Job', text, url: PAGE });
+    else { await navigator.clipboard.writeText(`${text} ${PAGE}`); note('Copied. Paste it wherever you like'); }
+  } catch { /* the share sheet was closed, or copying is blocked */ }
+});
+// A postcard is the view as it stands, without the panels, on a card with the place name under it.
+function placeName() {
+  if (state.inside) return state.inside.pub.name;
+  let best = null, bd = 45;
+  for (const q of slicePois) { const d = Math.hypot(q.x - player.x, q.z - player.z); if (d < bd) { bd = d; best = q.n; } }
+  return best || $('street').textContent;
+}
+$('card').addEventListener('click', () => {
+  const was = beam.visible; beam.visible = false;
+  renderer.render(scene, camera);
+  const src = renderer.domElement, W = 1600, H = Math.round((W * src.height) / src.width);
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H + 170;
+  const g = cv.getContext('2d');
+  g.fillStyle = '#f4f1e8'; g.fillRect(0, 0, cv.width, cv.height);
+  g.drawImage(src, 0, 0, W, H);
+  beam.visible = was;
+  g.textBaseline = 'middle';
+  g.fillStyle = '#14161a'; g.font = '700 52px Georgia, serif'; g.fillText('Greetings from Padiham', 40, H + 48, W - 80);
+  g.fillStyle = '#3c3f44'; g.font = '500 28px system-ui, sans-serif'; g.fillText(`${placeName()}. The Padiham Job, tompickup.co.uk/the-padiham-job`, 40, H + 100, W - 80);
+  g.fillStyle = '#6a6d72'; g.font = '400 18px system-ui, sans-serif'; g.fillText('Map data \u00a9 OpenStreetMap contributors. Contains OS data \u00a9 Crown copyright and database right 2026.', 40, H + 142, W - 80);
+  cv.toBlob(async (blob) => {
+    if (!blob) { note('Could not make the postcard here'); return; }
+    const file = new File([blob], 'padiham-postcard.png', { type: 'image/png' });
+    if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'A postcard from Padiham' }); } catch { /* closed */ } return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'padiham-postcard.png'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    note('Postcard saved to your downloads');
+  }, 'image/png');
+});
 
 // ---------- The selfie taker by the Town Hall ----------
 // A caricature of the town's MP, Oliver Ryan (Labour and Co-operative), drawn from his official portrait:
@@ -469,7 +573,7 @@ function step(dt) {
     pushOut(player);
     if (!state.inside && inRiver(player.x, player.z)) { player.x = ox; player.z = oz; if (time > edgeWarn) { toast('Too deep to wade', 'Find a bridge', 1500); edgeWarn = time + 4; } }
     const cx = Math.min(slice[2] - 1, Math.max(slice[0] + 1, player.x)), cz = Math.min(slice[3] - 1, Math.max(slice[1] + 1, player.z));
-    if (!state.inside && (cx !== player.x || cz !== player.z)) { player.x = cx; player.z = cz; if (time > edgeWarn) { toast('Closed off for now', 'More of Padiham is coming soon', 1800); edgeWarn = time + 5; } }
+    if (!state.inside && (cx !== player.x || cz !== player.z)) { player.x = cx; player.z = cz; if (time > edgeWarn) { toast('Edge of the map', 'Turn back towards town', 1800); edgeWarn = time + 5; } }
     if (lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(h - cam.yaw)) * dt * 1.7;
   }
   // Character
@@ -496,6 +600,7 @@ function step(dt) {
   player.fig.group.rotation.y = player.heading;
   player.fig.group.rotation.x = amt * (player.speed > 6 ? 0.16 : 0.05);
 
+  for (const sp of labels) { const k = Math.min(1, Math.max(0.2, camera.position.distanceTo(sp.position) / 70)); sp.scale.set(20 * k, 3.75 * k, 1); }
   if (selfie) updateSelfie(dt, time);
   if (state.playing) updatePlaques(time);
   if (peds) peds.update(dt, player);
@@ -527,10 +632,10 @@ function step(dt) {
       $('arrow').style.transform = `rotate(${-wrap(Math.atan2(dx, dz) - cam.yaw)}rad)`;
       $('dist').textContent = `${Math.round(d / 5) * 5} m`;
       const j = state.job;
-      $('timer').textContent = j.t <= j.par ? `Bonus if done by ${mmss(j.par)} (${mmss(j.t)})` : mmss(j.t);
+      $('timer').textContent = j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
       let name = '', best = 14;
       for (const r of roadGrid.at(player.x, player.z)) if (r[5]) { const dd = distToSeg(player.x, player.z, r)[0]; if (dd < best) { best = dd; name = r[5]; } }
-      if (name) $('street').textContent = name;
+      $('street').textContent = name || 'Padiham';
       drawMini();
     }
   }
@@ -550,7 +655,7 @@ fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
   for (const p of w.pois) {
     pois.set(p.n, p);
     const inside = p.dx > slice[0] + 4 && p.dx < slice[2] - 4 && p.dz > slice[1] + 4 && p.dz < slice[3] - 4;
-    if (inside) { safeDoor(p); slicePois.push(p); }
+    if (inside) { safeDoor(p); slicePois.push(p); if (!NO_RANDOM.has(p.k)) jobPois.push(p); }
     if (!built.signs.has(p.n)) label(p.n.replace('Church of England', 'CE'), p.x, p.k === 'park' || p.k === 'pitch' || p.k === 'bridge' ? 8 : 15, p.z);
   }
   for (const d of built.doors) {
@@ -587,9 +692,9 @@ fetch(stage.dataset.world).then((r) => r.json()).then((w) => {
   hud(); makeJob(); drawMini();
   const b = $('play');
   b.disabled = false; b.textContent = state.done ? 'Carry on' : 'Play';
-  b.addEventListener('click', () => { $('start').style.display = 'none'; state.playing = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
+  b.addEventListener('click', () => { $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { player, state, cam, pois, doors, input: stickVec, scene, renderer, get built() { return built; }, get pigeons() { return pigeons; } };
+if (import.meta.env.DEV) window.__padiham = { player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; } };

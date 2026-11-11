@@ -32,6 +32,8 @@ interface Props {
   schema?: Record<string, unknown>;
   /* Overrides the last breadcrumb label, which is otherwise derived from the URL. */
   breadcrumbLabel?: string;
+  /* Keep the page out of search results, for work that is not launched yet. */
+  noindex?: boolean;
 }
 
 const {
@@ -47,6 +49,7 @@ const {
   tags = [],
   schema,
   breadcrumbLabel,
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -144,7 +147,7 @@ const defaultGraph = {
 
     {/* Large image previews are a precondition for Google Discover and Top Stories
         image treatment. Without this Google assumes a thumbnail-sized preview. */}
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
 
     <!-- Feed autodiscovery -->
     <link rel="alternate" type="application/rss+xml" title="Tom Pickup" href="https://tompickup.co.uk/rss.xml" />

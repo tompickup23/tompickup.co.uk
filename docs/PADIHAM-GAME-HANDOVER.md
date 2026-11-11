@@ -90,3 +90,29 @@ For the next review, start here:
 - **Fixes:** dartboard trigger, phone layout below the fixed header, off-screen pause, a message when WebGL is missing.
 
 Still open: the name (Tom wants a new one), real building heights from LIDAR (the Environment Agency service address was not found), hills, phone performance on a real device.
+
+## Added 11 November 2026 (third session: assessment and quick wins)
+
+Not committed when written. The full assessment, the verified history pool and the working LIDAR route are in
+`docs/PADIHAM-GAME-ASSESSMENT-2026-11-11.md`.
+
+- **Plaques:** eighteen, up from ten. The eight new ones were checked against Historic England's own pages
+  (opened in a browser, 11 November 2026) and the raw text of the town survey, the conservation area appraisal
+  and the county history. A plaque can now be placed by `at` (a named place), `ll` (latitude and longitude of
+  a building) or `road` (a street name). Every plaque settles off the carriageway and at least 4.4 m from a
+  job marker.
+- **Menu:** the Menu button, Esc, or leaving the tab pauses the game. The menu holds the plaque journal, Share
+  my score (text only, nothing is sent anywhere by the game), Take a postcard (the view saved as an image with
+  the credits on it), sound and full screen.
+- **Fixes:** place labels shrink close up; the camera no longer starts inside the player in a pub; phone
+  panels take about a quarter of the view; kerb lines break at side roads and forks; bridge parapets stand
+  only on the outside of the deck; the timer and map edge wording; the street name falls back to "Padiham".
+- **Jobs:** random deliveries no longer go to schools or the medical centre, and the box of leaflets is gone.
+- **Credits:** OpenStreetMap and OS credits are on the start screen, in the menu and on every postcard.
+- **Search:** the page is `noindex` and out of the sitemap (`noindex` on the Layout call, and the filter in
+  `astro.config.mjs`). Remove both together on launch day.
+- **Shadows:** the cheaper shadow type. Not measured on a real phone.
+- **Testing:** in the dev server, set `window.__noAutoPause = true` to stop the pause on tab switch.
+
+Not done: the Memorial Park date check (the town survey says 1922), hills and real heights, a real phone test.
+The four decisions in section 6 of the assessment are still open.

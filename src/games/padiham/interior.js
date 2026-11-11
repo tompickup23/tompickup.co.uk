@@ -130,7 +130,7 @@ export function buildPub(scene, cfg) {
   // way out
   box(1.0, 2.1, 0.06, 0, Y + 1.05, D / 2 - 0.04, 0x3a2416);
   box(0.5, 0.18, 0.04, 0, Y + 2.35, D / 2 - 0.04, new THREE.MeshBasicMaterial({ color: 0x2fae5a }));
-  const out = { name: cfg.name, floorY: Y, spawn: { x: cfg.x, z: cfg.z + D / 2 - 1.8 }, exit: { x: cfg.x, z: cfg.z + D / 2 - 0.6 }, pools: [], darts: null };
+  const out = { name: cfg.name, floorY: Y, spawn: { x: cfg.x, z: cfg.z + D / 2 - 3.8 }, exit: { x: cfg.x, z: cfg.z + D / 2 - 0.6 }, pools: [], darts: null };
 
   if (cfg.layout === 'starkie') {
     zone(5.6, 3.4, 3.6, -0.9, 'flags');
