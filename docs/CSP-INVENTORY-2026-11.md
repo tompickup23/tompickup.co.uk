@@ -23,7 +23,7 @@ calls, inline event handler attributes, `style` attributes and blocks, `data:` U
 |---|---|---|---|
 | Astro bundle | `/_astro/page.<hash>.js`, module script | 70 pages | `script-src 'self'` |
 | Astro inline modules | Hoisted component scripts: mobile menu toggle, scroll reveal, IntersectionObserver check and others | 141 tags on 68 pages | a hash per distinct script, or `'unsafe-inline'` |
-| Inline classic script | `document.documentElement.classList.add('js')` in the head of every layout page. Removed on 11 November 2026 with the scroll reveal observer (branch design/motion-layer-2026-11); nothing read the class | 72 tags at the time of this inventory | none once that branch is merged |
+| Inline classic script | `document.documentElement.classList.add('js')` in the head of every layout page. Removed on 11 November 2026 with the scroll reveal observer (branch design/motion-layer-2026-11); nothing read the class. The same branch adds one small inline module script in its place, a single scroll listener that sets `motion-armed` on the root | 72 tags at the time of this inventory | a hash (one script, same text everywhere) |
 | Structured data | `<script type="application/ld+json">` | 117 tags on 68 pages | none: data blocks are not executed, so script-src does not apply |
 | Cloudflare Web Analytics beacon | `https://static.cloudflareinsights.com/beacon.min.js`, `defer`, with a public site token in `data-cf-beacon` | 68 pages (not the two standalone pages below) | `script-src https://static.cloudflareinsights.com`; `connect-src https://cloudflareinsights.com` for the beacon's reports |
 | Stylesheets | Astro CSS bundles under `/_astro/`, preloads | 124 stylesheet and 136 preload links | `style-src 'self'` |

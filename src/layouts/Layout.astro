@@ -241,6 +241,17 @@ const defaultGraph = {
 
     <Footer signup={!article} />
 
+    <!-- Arms the chart entrances in global.css on the reader's first scroll.
+         Until then, and whenever this script does not run, charts are drawn
+         in full, so a capture that never scrolls is never left empty. -->
+    <script>
+      addEventListener(
+        'scroll',
+        () => document.documentElement.classList.add('motion-armed'),
+        { once: true, passive: true }
+      );
+    </script>
+
   </body>
 </html>
 

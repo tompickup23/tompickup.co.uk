@@ -498,8 +498,13 @@ code {
    - A bar reaches full length once it is about an eighth of the way up the
      viewport, so it is short of its value only at the very bottom edge. A line
      chart is complete the moment its whole frame is on screen.
-   - transform and clip-path only: nothing changes layout. Screen only, so
-     print always gets the finished chart. */
+   - transform, clip-path and opacity only: nothing changes layout. Screen
+     only, so print always gets the finished chart.
+   - Armed by the reader's first scroll (html.motion-armed, set by a small
+     script in Layout). A page that is never scrolled, such as a full-page
+     screenshot, a link preview render or a visual regression capture, shows
+     every chart finished. If the script fails, the same holds. Without this
+     guard those captures showed empty bars and empty line charts. */
 @keyframes bar-grow {
   from { transform: scaleX(0); }
 }
@@ -521,9 +526,9 @@ code {
       view-timeline: --bar block;
     }
 
-    .viz-reform-bar .fill,
-    .cbar-fill,
-    .bl-fill {
+    .motion-armed .viz-reform-bar .fill,
+    .motion-armed .cbar-fill,
+    .motion-armed .bl-fill {
       transform-origin: left center;
       animation-name: bar-grow;
       animation-timing-function: linear;
@@ -546,7 +551,7 @@ code {
     }
 
     /* Point markers arrive after their line, never before it. */
-    .lc-plot .lc-hit {
+    .motion-armed .lc-plot .lc-hit {
       animation-name: dot-in;
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -558,7 +563,7 @@ code {
       animation-timeline: --line;
     }
 
-    .lc-plot svg {
+    .motion-armed .lc-plot svg {
       animation-name: line-wipe;
       animation-timing-function: linear;
       animation-fill-mode: both;
