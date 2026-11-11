@@ -2,6 +2,10 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import fs from 'node:fs';
 import path from 'node:path';
+import { satteri } from '@astrojs/markdown-satteri';
+// Build-time parts of the shared base layer (src/vendor/estate-kit/base), in
+// their form for Sätteri, the Markdown processor Astro 7 uses by default.
+import { estateTables, bindFiguresPlugin } from './src/vendor/estate-kit/base/satteri.mjs';
 
 // Google uses <lastmod> to schedule recrawls, and treats it as a lie if every URL
 // carries the build date. So only the pages whose real change date we know get one:
@@ -52,6 +56,12 @@ export default defineConfig({
     shikiConfig: {
       theme: 'github-dark',
     },
+    // Every Markdown table gets the one table recipe: a region that scrolls
+    // sideways on its own, numeric columns set to the end, a "Source:" line
+    // directly after the table taken as its caption. Figures are bound to
+    // their units with a no-break space, which changes white space only.
+    // Hand-written HTML tables in an article are not touched.
+    processor: satteri({ hastPlugins: [estateTables(), bindFiguresPlugin()] }),
   },
   prefetch: {
     defaultStrategy: 'hover',

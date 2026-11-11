@@ -12,7 +12,13 @@ import '@fontsource/source-serif-4/600.css';
 import '@fontsource/source-serif-4/600-italic.css';
 import sansLatin400 from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
 import serifLatin600 from '@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url';
+import '@fontsource/source-code-pro/latin-400.css';
+import '@fontsource/source-code-pro/latin-600.css';
+/* The shared base layer first, so this site's own stylesheet has the last word. */
+import '../vendor/estate-kit/base/base.css';
 import '../styles/global.css';
+import HeadIcons from '../vendor/estate-kit/base/HeadIcons.astro';
+import Speculation from '../vendor/estate-kit/base/Speculation.astro';
 
 interface Props {
   title: string;
@@ -132,8 +138,6 @@ const defaultGraph = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="color-scheme" content="only light" />
-    <meta name="theme-color" content="#faf9f5" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -154,11 +158,9 @@ const defaultGraph = {
       <meta http-equiv="refresh" content="0;url=/coming-soon" />
     )}
 
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <link rel="manifest" href="/site.webmanifest" />
+    {/* Colour scheme, theme colour and the icon set, from the shared base layer.
+        The site is light only; the SVG icon carries its own dark variant. */}
+    <HeadIcons light="#faf9f5" scheme="only light" />
 
 
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d166519fc11d4f12b9bd7b7d91ceac40"}'></script><!-- End Cloudflare Web Analytics -->
@@ -240,6 +242,12 @@ const defaultGraph = {
     </main>
 
     <Footer signup={!article} />
+
+    {/* Same-site pages the reader points at are fetched before the click.
+        Prefetch only: the page fetched runs no script, so the analytics beacon
+        never counts a page nobody opened. Downloads, the feed and the two
+        standalone tools are left alone. */}
+    <Speculation exclude={['/documents/*', '/audio/*', '/data/*', '/lcc-budget-game/*', '/lancashire-voice/*']} />
 
     <!-- Arms the chart entrances in global.css on the reader's first scroll.
          Until then, and whenever this script does not run, charts are drawn

@@ -25,6 +25,15 @@ cites `docs/FIGURE-REVIEW-2026-09-28.md`; that file is not in the repository (do
   statistic never share an asset). Cards come from `scripts/generate_og_cards.py`; set `ogImage` in the
   article. `scripts/guard-share-cards.mjs` (postbuild) fails the build on a wrong size or the portrait card.
   The portrait card `public/og-image.jpg` is for the homepage and about page only
+- The shared base layer (11 Nov 2026) is a vendored copy of the Estate Kit's `base/` at
+  `src/vendor/estate-kit/base/`, with its kit commit and file hashes in `src/vendor/estate-kit/VERSION`.
+  It supplies type sizes, numerals, the record face (Source Code Pro, class `ek-meta`), links, focus,
+  selection, the table recipe, page transitions, prefetch and the 404 page, all in the cascade layer
+  `estate-base`; `src/styles/global.css` is unlayered and wins. Never edit the copy: change
+  `~/estate-kit/base`, then `node scripts/vendor-base.mjs <this repo>/src/vendor/estate-kit` from the kit.
+  `prebuild` fails on a changed copy; `scripts/guard-base-layer.mjs` (postbuild) fails if the minifier
+  breaks the layer order. Markdown tables are wrapped at build time by the kit's Sätteri plugin in
+  `astro.config.mjs`; a "Source:" paragraph directly after a table becomes its caption
 - The projects list is one file, `src/data/projects.ts`. `/projects/` and the footer's Projects
   column both read it, so they cannot drift; add a project there, not in either template
 

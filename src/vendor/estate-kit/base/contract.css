@@ -1,0 +1,35 @@
+/* The contract: the only custom properties the base layer reads. Each falls
+   back to the kit token of the same meaning, so a site on the estate tokens
+   sets nothing. A site with its own names maps them once, outside the layer:
+
+     :root { --ek-bg: var(--paper); --ek-text: var(--ink); --ek-accent: var(--teal); }
+
+   Declared on every theme and site scope, so a panel with its own data-theme
+   recomputes them. */
+@layer estate-base {
+  :root,
+  [data-theme],
+  [data-site] {
+    --ek-bg: var(--bg, #ffffff);
+    --ek-bg-subtle: var(--bg-subtle, #f5f6f7);
+    --ek-text: var(--text, #171b1f);
+    --ek-muted: var(--text-muted, #545c63);
+    --ek-accent: var(--accent, #4338ca);
+    --ek-line: var(--border, #dbdfe3);
+    --ek-line-strong: var(--border-strong, #c2c8ce);
+    --ek-font-display: var(--font-display, "Source Serif 4", Georgia, "Times New Roman", serif);
+    --ek-font-sans: var(--font-sans, "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
+    /* Source Code Pro is the monospace drawn as the companion to Source Serif
+       and Source Sans, so the record face belongs to the same family. */
+    --ek-font-mono: var(--font-mono, "Source Code Pro", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+    --ek-radius: var(--radius-sm, 4px);
+    /* Height of a fixed header, so an anchor target is not hidden under it. */
+    --ek-header-offset: 0px;
+    /* The widest a line of prose may run. */
+    --ek-measure: 68ch;
+    /* The focus ring: the ring itself, and the gap colour that separates it
+       from whatever the control sits on. */
+    --ek-focus: var(--ek-accent);
+    --ek-focus-gap: var(--ek-bg);
+  }
+}

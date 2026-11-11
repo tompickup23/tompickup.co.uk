@@ -1,0 +1,175 @@
+/* I061. One table recipe.
+
+   The markup comes from base/rehype-tables.mjs (Markdown and raw HTML tables)
+   or base/DataTable.astro: a focusable region that scrolls sideways on its
+   own, so the page never does; numeric columns marked data-ek-num and set to
+   the end; the source carried as the table's own caption, at the foot.
+
+   Sticky header rows are left out on purpose: a header cannot stick to the
+   page from inside a region that scrolls sideways. The first column sticks
+   instead, which is what a reader loses first on a phone. */
+@layer estate-base {
+  .ek-table-wrap {
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    margin-block: 1.75em;
+    /* Edge shading that appears only on the side with more to see: the two
+       ground-coloured covers scroll with the content and hide the shadows at
+       each end. No script, every browser. */
+    background:
+      linear-gradient(to right, var(--ek-bg) 40%, transparent) left center / 2.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--ek-bg) 40%, transparent) right center / 2.5rem 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, color-mix(in oklab, var(--ek-text) 22%, transparent), transparent) left center / 0.75rem 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, color-mix(in oklab, var(--ek-text) 22%, transparent), transparent) right center / 0.75rem 100% no-repeat scroll;
+  }
+
+  .ek-table-wrap:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .ek-table-wrap > table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-family: var(--ek-font-sans);
+    font-size: 0.9375em;
+    line-height: 1.4;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--ek-text);
+  }
+
+  .ek-table-wrap :is(th, td) {
+    padding: 0.6em 0.8em;
+    text-align: start;
+    /* Rows of mixed length line up on their first line of text. */
+    vertical-align: baseline;
+    border-block-end: 1px solid var(--ek-line);
+  }
+
+  .ek-table-wrap :is(th, td):first-child { padding-inline-start: 0; }
+  .ek-table-wrap :is(th, td):last-child { padding-inline-end: 0; }
+
+  .ek-table-wrap thead th {
+    font-size: 0.92em;
+    font-weight: 600;
+    vertical-align: bottom;
+    border-block-end: 2px solid var(--ek-text);
+    /* A long header wraps at a sensible place, not one word a line. */
+    text-wrap: balance;
+  }
+
+  .ek-table-wrap tbody th {
+    font-weight: 600;
+  }
+
+  /* Numbers: to the end of the cell, never wrapped, so units and thousands
+     line up down the column. */
+  .ek-table-wrap [data-ek-num] {
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  /* A totals row. */
+  .ek-table-wrap tfoot :is(th, td),
+  .ek-table-wrap tr[data-ek-total] :is(th, td) {
+    font-weight: 600;
+    border-block-start: 2px solid var(--ek-text);
+    border-block-end: 0;
+  }
+
+  /* The source is the table's caption, at the foot, in the record face. */
+  .ek-table-wrap caption {
+    caption-side: bottom;
+    padding-block-start: 0.7em;
+    text-align: start;
+    font-family: var(--ek-font-mono);
+    font-size: 0.82em;
+    line-height: 1.5;
+    color: var(--ek-muted);
+    text-wrap: pretty;
+  }
+
+  .ek-table-wrap caption a {
+    color: inherit;
+  }
+
+  /* A caption that names the table, when there is one, sits above it. */
+  .ek-table-wrap caption[data-ek-title] {
+    caption-side: top;
+    padding-block: 0 0.5em;
+    font-family: var(--ek-font-sans);
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--ek-text);
+  }
+
+  @media (hover: hover) {
+    .ek-table-wrap tbody tr:hover :is(th, td) {
+      background-color: color-mix(in oklab, var(--ek-accent) 6%, transparent);
+    }
+  }
+
+  /* Wide tables: the first column stays in view while the rest scrolls. Its
+     ground is opaque so the columns pass beneath it. */
+  .ek-table-wrap[data-ek-sticky] :is(th, td):first-child {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 1;
+    background-color: var(--ek-bg);
+    padding-inline-end: 0.8em;
+  }
+
+  /* Print: no scrolling region, no shading, rows kept whole. */
+  @media print {
+    .ek-table-wrap {
+      overflow: visible;
+      background: none;
+    }
+
+    .ek-table-wrap tr {
+      break-inside: avoid;
+    }
+
+    .ek-table-wrap thead {
+      display: table-header-group;
+    }
+  }
+}
+
+/* Where the browser can tie a value to the region's own scroll position, the
+   sticky column gains an edge the moment anything has passed beneath it.
+   Outside the layer on purpose: @property is global, and the timeline sits in
+   its own rule with its own selector because CSS minifiers fold
+   animation-timeline into the animation shorthand, which browsers then
+   reject, dropping the animation. */
+@property --ek-scrolled {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@keyframes ek-scrolled {
+  from { --ek-scrolled: 0; }
+  to { --ek-scrolled: 1; }
+}
+
+@supports (animation-timeline: scroll()) {
+  @layer estate-base {
+    .ek-table-wrap[data-ek-sticky] {
+      animation-name: ek-scrolled;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: 0 1.5rem;
+    }
+
+    :where(.ek-table-wrap)[data-ek-sticky] {
+      animation-timeline: scroll(self inline);
+    }
+
+    .ek-table-wrap[data-ek-sticky] :is(th, td):first-child {
+      box-shadow: calc(var(--ek-scrolled) * 1px) 0 0 0 color-mix(in oklab, var(--ek-line-strong) calc(var(--ek-scrolled) * 100%), transparent);
+    }
+  }
+}

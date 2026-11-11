@@ -1,0 +1,99 @@
+/* I062. Focus, underline, selection and anchor targets. */
+@layer estate-base {
+  /* Links. The underline is drawn at the weight the face asks for, set a
+     little below the baseline, and quieter than the text until the pointer
+     or the keyboard arrives. Colour alone never marks a link. */
+  a {
+    color: var(--ek-accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: max(1px, 0.0625em);
+    text-underline-offset: 0.2em;
+    text-decoration-skip-ink: auto;
+    text-decoration-color: color-mix(in oklab, currentColor 45%, transparent);
+    transition: text-decoration-color 0.15s ease-out, color 0.15s ease-out;
+  }
+
+  /* Hover styles only where there is a pointer that can hover; on a touch
+     screen a hover style sticks after the tap. Weight never changes on hover:
+     it moves the words beside it. */
+  @media (hover: hover) {
+    a:hover {
+      text-decoration-color: currentColor;
+      text-decoration-thickness: max(2px, 0.09em);
+    }
+  }
+
+  a:active {
+    text-decoration-color: currentColor;
+  }
+
+  /* Focus. Two rings: the ring, and a gap in the ground colour inside it, so
+     it holds 3:1 against any surface a control sits on (WCAG 2.2, 2.4.13).
+     The outline carries it in forced colours, where shadows are dropped. */
+  :focus-visible {
+    outline: 3px solid var(--ek-focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--ek-focus-gap);
+    border-radius: var(--ek-radius);
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Text links take the ring tight to the words. */
+  a:focus-visible {
+    outline-offset: 3px;
+    text-decoration-color: currentColor;
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
+      box-shadow: none;
+    }
+  }
+
+  /* Selection and found-in-page text in the site's own colour. */
+  ::selection {
+    background: color-mix(in oklab, var(--ek-accent) 24%, var(--ek-bg));
+    color: var(--ek-text);
+  }
+
+  ::target-text {
+    background: color-mix(in oklab, var(--ek-accent) 18%, var(--ek-bg));
+    color: var(--ek-text);
+  }
+
+  /* Form controls, the caret and native widgets take the accent. */
+  :root {
+    accent-color: var(--ek-accent);
+    caret-color: var(--ek-accent);
+    -webkit-tap-highlight-color: transparent;
+    /* The page does not shift sideways when a scrollbar appears. */
+    scrollbar-gutter: stable;
+  }
+
+  /* An anchor target clears a fixed header and has room above it. */
+  :target,
+  [id] {
+    scroll-margin-block-start: calc(var(--ek-header-offset) + 1rem);
+  }
+
+  /* Arriving at a heading by its link marks it for a moment, so the reader
+     sees where they landed. Motion only where it is welcome. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :is(h2, h3, h4, section, figure):target {
+      animation: ek-arrive 1.6s ease-out 1;
+    }
+  }
+
+  @keyframes ek-arrive {
+    from { background-color: color-mix(in oklab, var(--ek-accent) 16%, transparent); }
+    to { background-color: transparent; }
+  }
+}

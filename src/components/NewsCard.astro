@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { NEWS_IMAGE_ALT } from '../data/news-image-alt';
 import { articleImage, imageQuality } from '../lib/images';
+import { vtName, vtStyle } from '../vendor/estate-kit/base/vt.mjs';
 
 interface Props {
   title: string;
@@ -13,9 +14,14 @@ interface Props {
   headingLevel?: 'h3' | 'h4';
   /* The first card on a page sits above the fold: load its image straight away. */
   eager?: boolean;
+  /* The card image travels into the article's heading image when the card is
+     opened. A shared name may appear once on a page, so a page that lists the
+     same article twice turns this off for the second card. */
+  morph?: boolean;
 }
 
-const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3', eager = false } = Astro.props;
+const { title, date, description, slug, tags = [], image, headingLevel: Heading = 'h3', eager = false, morph = true } = Astro.props;
+const travel = image && morph ? vtStyle(vtName('media', `/news/${slug}/`)) : undefined;
 const imageMeta = articleImage(image);
 const imageAlt = image ? NEWS_IMAGE_ALT[image] ?? '' : '';
 if (image && !imageAlt) throw new Error(`Missing card image description: ${image}`);
@@ -38,7 +44,7 @@ function formatDate(dateStr: string): string {
   <div class="news-card-overlay"></div>
 
   {image && (
-    <div class="news-card-image">
+    <div class="news-card-image" style={travel}>
       {imageMeta ? (
         <Image
           src={imageMeta}
@@ -67,7 +73,7 @@ function formatDate(dateStr: string): string {
 
   <Heading class="news-title">{title}</Heading>
 
-  <time class="news-date" datetime={date}>
+  <time class="news-date ek-meta" datetime={date}>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>

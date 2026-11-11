@@ -10,16 +10,18 @@
     "dev": "astro dev",
     "dev:observatory": "bash scripts/parked-dev.sh observatory",
     "dev:doge": "bash scripts/parked-dev.sh doge",
-    "prebuild": "node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs",
+    "prebuild": "node src/vendor/estate-kit/base/verify-vendor.mjs && node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs",
     "build": "astro build",
-    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs && node scripts/guard-metadata.mjs",
+    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs && node scripts/guard-metadata.mjs && node scripts/guard-base-layer.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.7",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource/big-shoulders-display": "^5.3.0",
     "@fontsource/public-sans": "^5.3.0",
+    "@fontsource/source-code-pro": "^5.3.1",
     "@fontsource/source-sans-3": "^5.3.1",
     "@fontsource/source-serif-4": "^5.3.1",
     "astro": "^7.4.7"

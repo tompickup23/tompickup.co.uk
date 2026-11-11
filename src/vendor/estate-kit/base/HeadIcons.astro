@@ -1,0 +1,38 @@
+---
+/**
+ * I063. Theme colour and icon set. The browser chrome takes the page ground in
+ * each scheme, and the icon links follow the six-file set base/icons.mjs builds:
+ * a 32px ico for old browsers, an SVG that adapts to dark, a 180px touch icon
+ * and a manifest with a 192px and a maskable 512px icon.
+ *
+ * Give `dark` only when the site has a dark theme. A light-only site passes
+ * scheme="only light" so a dark-mode browser does not restyle its controls.
+ */
+interface Props {
+  /** The page ground in the light scheme, as a colour the browser can read (not a variable). */
+  light: string;
+  /** The page ground in the dark scheme. */
+  dark?: string;
+  scheme?: "light dark" | "only light" | "dark light" | "only dark";
+  /** Folder the icon files are served from. */
+  base?: string;
+  manifest?: string | false;
+}
+
+const { light, dark, scheme = dark ? "light dark" : "only light", base = "/", manifest = "site.webmanifest" } = Astro.props;
+const at = (file: string) => `${base.replace(/\/?$/, "/")}${file}`;
+---
+
+<meta name="color-scheme" content={scheme} />
+{dark ? (
+  <>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={light} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={dark} />
+  </>
+) : (
+  <meta name="theme-color" content={light} />
+)}
+<link rel="icon" href={at("favicon.ico")} sizes="32x32" />
+<link rel="icon" type="image/svg+xml" href={at("favicon.svg")} />
+<link rel="apple-touch-icon" href={at("apple-touch-icon.png")} sizes="180x180" />
+{manifest && <link rel="manifest" href={at(manifest)} />}

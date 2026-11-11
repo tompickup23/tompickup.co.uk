@@ -1,0 +1,44 @@
+/* I057. Numerals that line up.
+
+   Where numbers are compared (tables, figures, dates, anything marked) every
+   digit takes the same width, so columns align and a figure does not jitter
+   when it changes. In running prose, figures take their natural widths, so a
+   1 does not stand in a gap as wide as an 8 and an amount sits in the
+   sentence like a word.
+
+   Checked against the faces on 11 November 2026: the @fontsource builds of
+   Source Sans 3 and Source Serif 4 set tabular figures by default and carry
+   proportional ones (pnum), but hold no old-style figures (no onum), so
+   old-style is not asked for here. A site whose face has them sets
+   --ek-prose-numerals: oldstyle-nums proportional-nums. */
+@layer estate-base {
+  table,
+  time,
+  output,
+  [data-figure],
+  .ek-num,
+  .ek-chart text,
+  .ek-stat-value {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .ek-prose :is(p, li, blockquote, figcaption),
+  .ek-prose :is(p, li, blockquote, figcaption) :is(strong, b, em, a) {
+    font-variant-numeric: var(--ek-prose-numerals, proportional-nums);
+  }
+
+  /* A figure the page marks as a figure stays tabular wherever it sits, so it
+     keeps its width if the value is updated in place. */
+  .ek-prose [data-figure],
+  .ek-prose time {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  /* Codes and reference numbers keep one width per character. */
+  code,
+  kbd,
+  samp,
+  .ek-code {
+    font-variant-numeric: tabular-nums;
+  }
+}
