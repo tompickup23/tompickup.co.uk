@@ -2,7 +2,7 @@
 // Map data (c) OpenStreetMap contributors, ODbL. Building outlines contain OS data (c) Crown copyright
 // and database right 2026. The world file is built by scripts/padiham-game/build_world.py.
 import * as THREE from 'three';
-import { buildWorld, walls, roadGrid, riverGrid, distToSeg, nearWall } from './city.js';
+import { chunks, buildWorld, walls, roadGrid, riverGrid, distToSeg, nearWall } from './city.js';
 import { cloudTexture } from './textures.js';
 import { setTerrain, groundH } from './terrain.js';
 import { makeFigure, animateFigure, Pedestrians, Pigeons, SKIN, HAIR } from './life.js';
@@ -704,12 +704,47 @@ function step(dt) {
     }
   }
 }
+// ---------- Quality ----------
+// The town is built in squares, and squares beyond the haze are not drawn. If the game still runs slowly it steps
+// down by itself: first a lower resolution, then no shadows, then a nearer horizon. It never steps back up, so it
+// cannot flicker between settings. A phone starts with a nearer horizon than a desktop.
+const quality = { level: 0, view: isTouch ? 600 : 900, frames: 0, since: 0, last: 0, hold: 2 };
+scene.fog.far = quality.view;
+if (isTouch) scene.fog.near = 110;
+function cullChunks() {
+  const lim = quality.view + 110;
+  for (const c of chunks) c.mesh.visible = Math.hypot(c.x - camera.position.x, c.z - camera.position.z) < lim;
+}
+function stepDown() {
+  if (quality.level >= 3) return;
+  quality.level++;
+  if (quality.level === 1) renderer.setPixelRatio(Math.max(1, renderer.getPixelRatio() * 0.75));
+  else if (quality.level === 2) {
+    sun.castShadow = false;
+    scene.traverse((o) => { if (o.material) for (const m of [].concat(o.material)) m.needsUpdate = true; });
+  } else {
+    quality.view = 380; scene.fog.far = 380; scene.fog.near = 80;
+    renderer.setPixelRatio(Math.max(0.75, renderer.getPixelRatio() * 0.8));
+  }
+}
+function watchSpeed(now) {
+  // Judge three seconds of play at a time. A long gap (the tab was hidden, or a pause) throws the sample away.
+  if (!state.playing || now - quality.last > 400) { quality.frames = 0; quality.since = now; quality.last = now; return; }
+  quality.last = now; quality.frames++;
+  if (now - quality.since < 3000) return;
+  const fps = (quality.frames * 1000) / (now - quality.since);
+  quality.frames = 0; quality.since = now;
+  if (quality.hold > 0) { quality.hold--; return; }
+  if (fps < 27) { stepDown(); quality.hold = 1; }
+}
 function frame() {
   requestAnimationFrame(frame);
   const dt = Math.min(0.05, clock.getDelta());
   if (!onScreen) return;
   step(dt);
+  cullChunks();
   renderer.render(scene, camera);
+  watchSpeed(performance.now());
 }
 
 // ---------- Boot ----------
@@ -765,4 +800,4 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; } };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; } };
