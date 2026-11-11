@@ -39,9 +39,35 @@ function persist() {
 // ?calm=1 gives a quieter town: fewer passers-by and softer sound. ?edition=clean leaves out the selfie
 // taker and keeps pub doors shut. Both can be combined: ?calm=1&edition=clean
 const opts = new URLSearchParams(location.search);
-const CALM = opts.get('calm') === '1';
 const CLEAN = opts.get('edition') === 'clean';
-const sound = new Sound(CALM ? 0.4 : 1);
+
+// ---------- Comfort and access settings ----------
+// Kept in the browser, and only the ones the player has changed: the rest follow the device (reduced motion,
+// more contrast) or the calm link. S.text is 0, 1 or 2 for standard, large and largest panel text.
+const SET_KEY = 'padiham-settings-1';
+const mq = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
+const S = { calm: opts.get('calm') === '1', text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
+const chosen = (() => { try { return JSON.parse(localStorage.getItem(SET_KEY) || '{}') || {}; } catch { return {}; } })();
+for (const k in S) if (typeof chosen[k] === typeof S[k] && !(k === 'calm' && S.calm)) S[k] = chosen[k];
+if (![0, 1, 2].includes(S.text)) S.text = 0;
+const sound = new Sound(S.calm ? 0.4 : 1);
+function applySettings() {
+  const c = stage.classList;
+  c.toggle('t1', S.text === 1); c.toggle('t2', S.text === 2);
+  c.toggle('hc', S.contrast); c.toggle('still', S.reduce); c.toggle('hold', S.hold); c.toggle('lefty', S.lefty);
+  sound.setLevel(S.calm ? 0.4 : 1);
+  if (peds) peds.setCount(S.calm ? 6 : Infinity);
+  if (S.calm) $('timer').textContent = '';
+  for (const i of stage.querySelectorAll('input[data-set]')) i.checked = !!S[i.dataset.set];
+  for (const b of stage.querySelectorAll('button[data-text]')) b.setAttribute('aria-pressed', String(Number(b.dataset.text) === S.text));
+}
+function setSetting(k, v) {
+  S[k] = v; chosen[k] = v;
+  try { localStorage.setItem(SET_KEY, JSON.stringify(chosen)); } catch { /* private mode */ }
+  applySettings();
+}
+for (const i of stage.querySelectorAll('input[data-set]')) i.addEventListener('change', () => setSetting(i.dataset.set, i.checked));
+for (const b of stage.querySelectorAll('button[data-text]')) b.addEventListener('click', () => setSetting('text', Number(b.dataset.text)));
 
 // ---------- Renderer, sky and light ----------
 let renderer;
@@ -113,6 +139,7 @@ $('full').addEventListener('click', () => {
 
 // ---------- World ----------
 let world, built, slice, peds, pigeons;
+applySettings();
 const pois = new Map();
 function inPoly(x, z, p) {
   let inside = false;
@@ -309,21 +336,27 @@ const input = { x: 0, y: 0, run: false };
 addEventListener('keydown', (e) => {
   keys.add(e.code);
   // Keep the page still while playing, but leave the keys alone once the game is out of view or a control has focus.
-  const onControl = e.target instanceof Element && e.target.closest('button, a, input, select, textarea');
-  if (state.playing && onScreen && !onControl && (e.code.startsWith('Arrow') || e.code === 'Space')) e.preventDefault();
+  const onControl = e.target instanceof Element && e.target.closest('button, a, input, select, textarea, summary');
+  if (!state.playing || !onScreen || onControl) return;
+  if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code.startsWith('Page')) e.preventDefault();
+  if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.code === 'KeyR') toggleRun();
+  else if (e.code === 'KeyG') whereNext();
+  else if (e.code === 'Enter') closeToast();
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
 
 const clock = new THREE.Clock();
 const cam = { yaw: 0, pitch: 0.3, dist: 7.5, cur: 7.5, lastLook: -10 };
+const clampPitch = (p) => Math.min(state.inside ? 0.3 : 1.15, Math.max(0.06, p));
 const view = $('view');
 let lookId = null, lx = 0, ly = 0;
 view.addEventListener('pointerdown', (e) => { lookId = e.pointerId; lx = e.clientX; ly = e.clientY; view.setPointerCapture(e.pointerId); });
 view.addEventListener('pointermove', (e) => {
   if (e.pointerId !== lookId) return;
   cam.yaw -= (e.clientX - lx) * 0.006;
-  cam.pitch = Math.min(state.inside ? 0.3 : 1.15, Math.max(0.06, cam.pitch + (e.clientY - ly) * 0.004));
+  cam.pitch = clampPitch(cam.pitch + (e.clientY - ly) * 0.004);
   lx = e.clientX; ly = e.clientY; cam.lastLook = clock.elapsedTime;
 });
 const endLook = (e) => { if (e.pointerId === lookId) lookId = null; };
@@ -347,11 +380,43 @@ const endStick = (e) => { if (e.pointerId === stickId) { stickId = null; stickVe
 stick.addEventListener('pointerup', endStick);
 stick.addEventListener('pointercancel', endStick);
 let runToggle = false;
-$('run').addEventListener('click', () => { runToggle = !runToggle; $('run').classList.toggle('on', runToggle); });
+function toggleRun() {
+  runToggle = !runToggle;
+  $('run').classList.toggle('on', runToggle); $('run').setAttribute('aria-pressed', String(runToggle));
+  say(runToggle ? 'Running' : 'Walking');
+}
+$('run').addEventListener('click', toggleRun);
+// Words for the hidden status line, which a screen reader reads out. The same words twice are still read twice.
+let sayFlip = false;
+function say(t) { sayFlip = !sayFlip; $('say').textContent = t + (sayFlip ? '' : '\u00a0'); }
+// A game controller: left stick to move, right stick to look, A to switch running, Y for the way, Start for the menu.
+const pad = { x: 0, y: 0, was: [] };
+function readPad(dt) {
+  pad.x = pad.y = 0;
+  let gp = null;
+  try { gp = navigator.getGamepads ? [...navigator.getGamepads()].find((g) => g && g.connected) : null; } catch { /* not allowed here */ }
+  if (!gp) return;
+  const dead = (v) => (Math.abs(v || 0) < 0.2 ? 0 : v);
+  pad.x = dead(gp.axes[0]); pad.y = -dead(gp.axes[1]);
+  const rx = dead(gp.axes[2]), ry = dead(gp.axes[3]);
+  if (state.playing && (rx || ry)) { cam.yaw -= rx * dt * 2.2; cam.pitch = clampPitch(cam.pitch + ry * dt * 1.2); cam.lastLook = clock.elapsedTime; }
+  const hit = (i) => { const now = !!(gp.buttons[i] && gp.buttons[i].pressed), first = now && !pad.was[i]; pad.was[i] = now; return first; };
+  const a = hit(0), y = hit(3), start = hit(9);
+  if (start && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); }
+  if (!state.playing) return;
+  if (a) { if (S.hold && $('toast').classList.contains('on')) closeToast(); else toggleRun(); }
+  if (y) whereNext();
+}
 $('mute').addEventListener('click', () => { sound.setMuted(!sound.muted); $('mute').textContent = sound.muted ? 'Sound is off' : 'Sound is on'; });
 
-function readInput() {
-  let x = stickVec.x, y = stickVec.y;
+function readInput(dt) {
+  readPad(dt);
+  let x = stickVec.x + pad.x, y = stickVec.y + pad.y;
+  // Q and E turn the view, Page Up and Page Down tilt it, for play without a mouse.
+  if (state.playing) {
+    const turn = (keys.has('KeyQ') ? 1 : 0) - (keys.has('KeyE') ? 1 : 0), tilt = (keys.has('PageUp') ? 1 : 0) - (keys.has('PageDown') ? 1 : 0);
+    if (turn || tilt) { cam.yaw += turn * dt * 1.9; cam.pitch = clampPitch(cam.pitch + tilt * dt * 0.9); cam.lastLook = clock.elapsedTime; }
+  }
   if (keys.has('KeyW') || keys.has('ArrowUp')) y += 1;
   if (keys.has('KeyS') || keys.has('ArrowDown')) y -= 1;
   if (keys.has('KeyD') || keys.has('ArrowRight')) x += 1;
@@ -380,7 +445,7 @@ const doors = [];
 const POOL_LINES = ['Potted the black. Get in!', 'In off the white. Unlucky', 'Fluked a double', 'Cleared up in one visit'];
 const DART_LINES = ['One hundred and eighty!', 'Treble twenty', 'Bounced out. Mind your toes', 'Bullseye'];
 let playCool = 0;
-function fade() { const f = $('fade'); f.classList.add('on'); setTimeout(() => f.classList.remove('on'), 260); }
+function fade() { if (S.reduce) return; const f = $('fade'); f.classList.add('on'); setTimeout(() => f.classList.remove('on'), 260); }
 function enterPub(door) {
   const pub = door.pub;
   state.inside = { door, pub, camDist: cam.dist, camPitch: cam.pitch };
@@ -431,23 +496,54 @@ function showStep() {
   $('jobText').textContent = s.text;
   beam.position.set(s.poi.dx, groundH(s.poi.dx, s.poi.dz), s.poi.dz);
   beam.visible = true;
+  lastWords = ''; saidAt = -99;
 }
-let toastTimer;
+// The way to the next place in words, measured from where the view is facing: the arrow says the same thing.
+function bearingWords(a) {
+  const d = Math.abs(a) * 57.2958, side = a > 0 ? 'left' : 'right';
+  if (d < 20) return 'straight ahead';
+  if (d < 70) return `ahead, to your ${side}`;
+  if (d < 110) return `to your ${side}`;
+  if (d < 160) return `behind you, to your ${side}`;
+  return 'behind you';
+}
+let lastWords = '', saidAt = -99;
+function wayNow() {
+  const tg = target();
+  if (!tg) return null;
+  const dx = tg.dx - player.x, dz = tg.dz - player.z;
+  return { m: Math.round(Math.hypot(dx, dz) / 5) * 5, words: bearingWords(wrap(Math.atan2(dx, dz) - cam.yaw)) };
+}
+function whereNext() {
+  if (state.inside) { toast(state.inside.pub.name, 'Walk back to the door to leave'); return; }
+  const w = wayNow();
+  if (!w) return;
+  toast(state.job.steps[state.job.i].text, `${w.m} metres, ${w.words}. You are on ${$('street').textContent}`, 5000);
+}
+$('whereBtn').addEventListener('click', () => { if (state.playing) whereNext(); });
+// Messages show for at least two and a half seconds, or until closed if the player has asked for that.
+// The menu keeps the last one.
+let toastTimer, lastMsg = '';
 function toast(title, sub = '', ms = 2600) {
   const t = $('toast');
   t.textContent = title;
   if (sub) { const s = document.createElement('small'); s.textContent = sub; t.appendChild(s); }
+  lastMsg = sub ? `${title}. ${sub}` : title;
+  if (S.hold) { const s = document.createElement('small'); s.textContent = isTouch ? 'Tap to close' : 'Press Enter or click to close'; t.appendChild(s); }
   t.classList.add('on');
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms);
+  clearTimeout(toastTimer);
+  if (!S.hold) toastTimer = setTimeout(() => t.classList.remove('on'), Math.max(ms, 2500));
 }
+function closeToast() { clearTimeout(toastTimer); $('toast').classList.remove('on'); }
+$('toast').addEventListener('click', closeToast);
 function arrive() {
   const j = state.job;
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
-  const bonus = j.t <= j.par ? Math.round(j.pay / 2) : 0;
+  const bonus = !S.calm && j.t <= j.par ? Math.round(j.pay / 2) : 0;
   state.money += j.pay + bonus; state.done++;
   if (state.jobIndex < SCRIPT.length) state.jobIndex++;
   persist(); hud(); sound.done();
-  toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : 'Beat the clock next time for a bonus');
+  toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : 'Beat the clock next time for a bonus');
   makeJob();
 }
 function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
@@ -514,7 +610,7 @@ function placePlaques() {
 }
 function updatePlaques(time) {
   let near = null;
-  if (!state.inside) for (const p of plaques) { p.g.children[1].rotation.z = time * 0.6; if (Math.hypot(player.x - p.x, player.z - p.z) < 2.6) near = p; }
+  if (!state.inside) for (const p of plaques) { if (!S.reduce) p.g.children[1].rotation.z = time * 0.6; if (Math.hypot(player.x - p.x, player.z - p.z) < 2.6) near = p; }
   if (near === plaqueShown) return;
   plaqueShown = near;
   const el = $('plaque');
@@ -544,9 +640,19 @@ function renderJournal() {
 function openMenu() {
   if (!started || menu.classList.contains('on')) return;
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
-  renderJournal(); note(''); menu.classList.add('on'); $('resume').focus();
+  renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
+  menu.classList.add('on'); $('resume').focus();
 }
-function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; }
+function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; $('menuBtn').focus(); }
+// Keep the Tab key inside the menu while it is open.
+menu.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const f = [...menu.querySelectorAll('button, a[href], input, summary')].filter((el) => el.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 $('menuBtn').addEventListener('click', openMenu);
 $('resume').addEventListener('click', closeMenu);
 addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
@@ -611,10 +717,10 @@ function updateSelfie(dt, time) {
   f.arms[0].rotation.x = -0.25 + Math.sin(time * 2.1) * 0.05;
   f.group.rotation.z = Math.sin(time * 0.9) * 0.03;
   s.next -= dt;
-  if (s.next <= 0) { s.flash.intensity = 30; s.next = 3 + Math.random() * 4; }
+  if (s.next <= 0) { if (!S.calm && !S.reduce) s.flash.intensity = 30; s.next = 3 + Math.random() * 4; }
   s.flash.intensity *= Math.max(0, 1 - dt * 9);
   s.cool -= dt;
-  if (s.cool <= 0 && state.playing && !state.inside && Math.hypot(player.x - s.x, player.z - s.z) < 3.2) {
+  if (s.cool <= 0 && !S.calm && state.playing && !state.inside && Math.hypot(player.x - s.x, player.z - s.z) < 3.2) {
     toast(SELFIE_LINES[s.line++ % SELFIE_LINES.length], 'Selfie in progress', 2000); sound.pickup(); s.cool = 7;
   }
 }
@@ -624,7 +730,7 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 let uiTick = 0, edgeWarn = 0, lastStep = 0;
 
 function step(dt) {
-  readInput();
+  readInput(dt);
   const time = clock.elapsedTime;
   const fx = Math.sin(cam.yaw), fz = Math.cos(cam.yaw);
   const mx = fx * input.y - fz * input.x, mz = fz * input.y + fx * input.x;
@@ -642,7 +748,7 @@ function step(dt) {
     if (!state.inside && inRiver(player.x, player.z)) { player.x = ox; player.z = oz; if (time > edgeWarn) { toast('Too deep to wade', 'Find a bridge', 1500); edgeWarn = time + 4; } }
     const cx = Math.min(slice[2] - 1, Math.max(slice[0] + 1, player.x)), cz = Math.min(slice[3] - 1, Math.max(slice[1] + 1, player.z));
     if (!state.inside && (cx !== player.x || cz !== player.z)) { player.x = cx; player.z = cz; if (time > edgeWarn) { toast('Edge of the map', 'Turn back towards town', 1800); edgeWarn = time + 5; } }
-    if (lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(h - cam.yaw)) * dt * 1.7;
+    if (S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(h - cam.yaw)) * dt * 1.7;
   }
   // Character
   player.phase += player.speed * dt * 2.3;
@@ -664,9 +770,10 @@ function step(dt) {
       }
     }
   }
-  player.fig.group.position.set(player.x, baseY + Math.abs(Math.sin(player.phase)) * 0.05 * amt, player.z);
+  const sway = S.reduce ? 0 : amt;
+  player.fig.group.position.set(player.x, baseY + Math.abs(Math.sin(player.phase)) * 0.05 * sway, player.z);
   player.fig.group.rotation.y = player.heading;
-  player.fig.group.rotation.x = amt * (player.speed > 6 ? 0.16 : 0.05);
+  player.fig.group.rotation.x = sway * (player.speed > 6 ? 0.16 : 0.05);
 
   for (const sp of labels) { const k = Math.min(1, Math.max(0.2, camera.position.distanceTo(sp.position) / 70)); sp.scale.set(20 * k, 3.75 * k, 1); }
   if (selfie) updateSelfie(dt, time);
@@ -694,15 +801,18 @@ function step(dt) {
     state.job.t += dt;
     const dx = tg.dx - player.x, dz = tg.dz - player.z, d = Math.hypot(dx, dz);
     if (d < 3.6) arrive();
-    beam.rotation.y += dt * 0.8;
-    beam.scale.setScalar(1 + Math.sin(time * 3) * 0.06);
+    if (S.reduce) beam.scale.setScalar(1);
+    else { beam.rotation.y += dt * 0.8; beam.scale.setScalar(1 + Math.sin(time * 3) * 0.06); }
     uiTick -= dt;
     if (uiTick <= 0) {
       uiTick = 0.1;
       $('arrow').style.transform = `rotate(${-wrap(Math.atan2(dx, dz) - cam.yaw)}rad)`;
-      $('dist').textContent = `${Math.round(d / 5) * 5} m`;
+      const words = bearingWords(wrap(Math.atan2(dx, dz) - cam.yaw)), m = Math.round(d / 5) * 5;
+      $('dist').textContent = `${m} m, ${words}`;
+      // Read the way out when it changes, but not more than once every eight seconds.
+      if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}`); }
       const j = state.job;
-      $('timer').textContent = j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
+      $('timer').textContent = S.calm ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
       let name = '', best = 14;
       for (const r of roadGrid.at(player.x, player.z)) if (r[5]) { const dd = distToSeg(player.x, player.z, r)[0]; if (dd < best) { best = dd; name = r[5]; } }
       $('street').textContent = name || 'Padiham';
@@ -793,15 +903,18 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
   placePlaques();
-  peds = new Pedestrians(scene, built.pedPaths, CALM ? 6 : isTouch ? 16 : 34);
+  peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
+  peds.setCount(S.calm ? 6 : Infinity);
   pigeons = new Pigeons(scene, built.spots, 7, (n) => {
-    state.pigeons += n; persist(); hud(); sound.flap(n);
+    state.pigeons += n; persist(); hud();
+    if (S.calm) return;
+    sound.flap(n);
     toast(`${n} pigeons startled`, `That is ${state.pigeons} so far`, 1600);
   });
   hud(); makeJob(); drawMini();
   const b = $('play');
   b.disabled = false; b.textContent = state.done ? 'Carry on' : 'Play';
-  b.addEventListener('click', () => { $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
+  b.addEventListener('click', () => { $('setSlot').append($('settings')); $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 

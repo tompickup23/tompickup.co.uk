@@ -16,6 +16,7 @@ export class Sound {
     const g = ctx.createGain(); g.gain.value = 0.09;
     src.connect(lp).connect(g).connect(this.master); src.start();
   }
+  setLevel(l) { this.level = l; if (this.master) this.master.gain.value = this.muted ? 0 : l; }
   setMuted(m) { this.muted = m; if (this.master) this.master.gain.value = m ? 0 : this.level; }
   burst(dur, freq, q, gain, when = 0) {
     if (!this.ctx) return;
