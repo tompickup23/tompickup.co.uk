@@ -160,9 +160,6 @@ const defaultGraph = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Marks JS as running; scroll-reveal hidden states are gated on html.js
-         so content is never invisible when scripts fail or load slowly -->
-    <script is:inline>document.documentElement.classList.add('js');</script>
 
     <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d166519fc11d4f12b9bd7b7d91ceac40"}'></script><!-- End Cloudflare Web Analytics -->
 
@@ -244,26 +241,17 @@ const defaultGraph = {
 
     <Footer signup={!article} />
 
-    <!-- Scroll reveal observer -->
+    <!-- Arms the chart entrances in global.css on the reader's first scroll.
+         Until then, and whenever this script does not run, charts are drawn
+         in full, so a capture that never scrolls is never left empty. -->
     <script>
-      if (typeof IntersectionObserver !== 'undefined') {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-        );
-
-        document.querySelectorAll('.reveal').forEach((el) => {
-          observer.observe(el);
-        });
-      }
+      addEventListener(
+        'scroll',
+        () => document.documentElement.classList.add('motion-armed'),
+        { once: true, passive: true }
+      );
     </script>
+
   </body>
 </html>
 
