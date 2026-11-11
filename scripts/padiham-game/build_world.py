@@ -210,6 +210,24 @@ def main(src, dst, os_path=None, over_path=None):
         if k:
             props.append({"k": k, "x": r1(x), "z": r1(z)})
 
+    # Buses: the named stops inside the play area, and for each mapped service and direction the stops it calls
+    # at, in order. From OpenStreetMap route relations, which can be out of date. Limited services are left out.
+    SL = [-620, -330, 480, 430]
+    stop_ix, bus_stops, bus_routes = {}, [], []
+    for nid, (x, z, t) in nodes.items():
+        if t.get("highway") == "bus_stop" and t.get("name") and SL[0] + 6 < x < SL[2] - 6 and SL[1] + 6 < z < SL[3] - 6:
+            stop_ix[nid] = len(bus_stops)
+            bus_stops.append({"n": t["name"], "x": r1(x), "z": r1(z)})
+    for rel in rels:
+        t = rel.get("tags", {})
+        if t.get("route") != "bus" or not t.get("ref") or not t.get("to") or "Limited" in t["ref"]:
+            continue
+        calls = [stop_ix[m["ref"]] for m in rel["members"] if m["type"] == "node" and m["ref"] in stop_ix]
+        calls = [c for i, c in enumerate(calls) if c not in calls[:i]]
+        if len(calls) >= 2:
+            bus_routes.append({"ref": t["ref"], "to": t["to"].replace(" Bus Station", ""), "s": calls})
+    bus_routes.sort(key=lambda r: (r["ref"], r["to"]))
+
     # Points of interest: named shops, amenities, landmarks.
     walk = [r for r in roads]
 
@@ -289,7 +307,7 @@ def main(src, dst, os_path=None, over_path=None):
     world = {
         "attribution": "Map data (c) OpenStreetMap contributors, ODbL. Contains OS data (c) Crown copyright and database right 2026.",
         "slice": [-620, -330, 480, 430],
-        "props": props, "landmarks": landmarks,
+        "props": props, "landmarks": landmarks, "bus": {"stops": bus_stops, "routes": bus_routes},
         "bounds": [r1((-2.3260 - LON0) * MX), r1(-(53.8065 - LAT0) * MZ), r1((-2.3040 - LON0) * MX), r1(-(53.7975 - LAT0) * MZ)],
         "buildings": buildings, "roads": roads, "water": water, "green": green,
         "trees": trees, "pois": pois,

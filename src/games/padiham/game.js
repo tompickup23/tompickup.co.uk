@@ -5,10 +5,11 @@ import * as THREE from 'three';
 import { chunks, buildWorld, walls, roadGrid, riverGrid, distToSeg, nearWall } from './city.js';
 import { cloudTexture } from './textures.js';
 import { setTerrain, groundH } from './terrain.js';
-import { makeFigure, animateFigure, Pedestrians, Pigeons, SKIN, HAIR } from './life.js';
+import { makeFigure, animateFigure, animateSeated, Pedestrians, Pigeons, SKIN, HAIR } from './life.js';
 import { Sound } from './audio.js';
 import { buildPub } from './interior.js';
 import { PLAQUES } from './history.js';
+import { Buses } from './bus.js';
 
 const $ = (id) => document.getElementById('sop-' + id);
 const stage = $('stage');
@@ -161,7 +162,7 @@ $('full').addEventListener('click', () => {
 });
 
 // ---------- World ----------
-let world, built, slice, peds, pigeons;
+let world, built, slice, peds, pigeons, buses;
 applySettings();
 const pois = new Map();
 function inPoly(x, z, p) {
@@ -238,6 +239,10 @@ function drawMini() {
   mini.setTransform(zoom, 0, 0, zoom, S / 2 - sx * zoom, S / 2 - sz * zoom);
   mini.drawImage(mapBase, 0, 0);
   mini.setTransform(1, 0, 0, 1, 0, 0);
+  if (buses) {
+    mini.fillStyle = '#2f6fb5'; mini.strokeStyle = '#fff'; mini.lineWidth = 2;
+    for (const st of buses.stops) { const bx = (st.x - player.x) * MS * zoom, bz = (st.z - player.z) * MS * zoom; if (Math.hypot(bx, bz) < S / 2) { mini.fillRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); mini.strokeRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); } }
+  }
   mini.fillStyle = '#b8f26a';
   for (const l of litter) {
     const lx2 = (l.x - player.x) * MS * zoom, lz2 = (l.z - player.z) * MS * zoom;
@@ -267,6 +272,8 @@ function drawMini() {
 // The figure is a courier in a plain jacket with a backpack, with no name, number or badge.
 const LOOK_KEY = 'padiham-look-1';
 const LOOKS = {
+  // How the player gets about. It is a look and nothing more: every pace, place and job is the same for all three.
+  move: [['foot', 'On foot'], ['chair', 'Wheelchair'], ['power', 'Powerchair']],
   style: [['short', 'Short hair'], ['pony', 'Ponytail'], ['long', 'Long hair'], ['cap', 'Cap']],
   hair: HAIR.map((c, i) => [i, ['Dark brown', 'Black', 'Fair', 'Grey', 'Auburn'][i]]),
   skin: SKIN.map((c, i) => [i, `Skin tone ${i + 1}`]),
@@ -274,12 +281,12 @@ const LOOKS = {
 };
 const JACKET = LOOKS.jacket.map((j) => j[2]);
 const look = (() => {
-  const d = { style: 'short', hair: 0, skin: 0, jacket: 0 };
+  const d = { move: 'foot', style: 'short', hair: 0, skin: 0, jacket: 0 };
   try { const v = JSON.parse(localStorage.getItem(LOOK_KEY) || '{}'); for (const k in d) if (LOOKS[k].some((o) => o[0] === v[k])) d[k] = v[k]; } catch { /* private mode */ }
   return d;
 })();
-const lookFigure = () => makeFigure({ jacket: JACKET[look.jacket], trousers: 0x2a2f3a, skin: SKIN[look.skin], hair: HAIR[look.hair], face: true, pack: true, style: look.style, cap: look.style === 'cap' ? 0x2b3a67 : undefined });
-const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, y: 0, vy: 0, wave: 0, fig: lookFigure() };
+const lookFigure = () => makeFigure({ seat: look.move === 'foot' ? undefined : look.move, jacket: JACKET[look.jacket], trousers: 0x2a2f3a, skin: SKIN[look.skin], hair: HAIR[look.hair], face: true, pack: true, style: look.style, cap: look.style === 'cap' ? 0x2b3a67 : undefined });
+const player = { x: 0, z: 0, heading: 0, speed: 0, phase: 0, y: 0, vy: 0, wave: 0, trick: 0, rolled: 0, fig: lookFigure() };
 scene.add(player.fig.group);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');
 function drawLook() {
@@ -298,6 +305,18 @@ function drawLook() {
   if (look.style === 'cap') g.fillRect(52, 40, 46, 8);
   g.fillStyle = '#2b2f36'; g.beginPath(); g.arc(49, 56, 3.4, 0, 7); g.arc(71, 56, 3.4, 0, 7); g.fill();
   g.fillStyle = '#8a4a42'; g.fillRect(52, 68, 16, 3);
+  if (look.move === 'chair') {
+    // A push wheel either side of the figure.
+    g.strokeStyle = '#1b1d20'; g.lineWidth = 5;
+    for (const x of [16, 104]) { g.beginPath(); g.ellipse(x, 128, 10, 24, 0, 0, 7); g.stroke(); }
+    g.strokeStyle = '#b9bec6'; g.lineWidth = 2;
+    for (const x of [16, 104]) { g.beginPath(); g.ellipse(x, 128, 6, 18, 0, 0, 7); g.stroke(); }
+  }
+  if (look.move === 'power') {
+    // Armrests, with the joystick on one of them.
+    g.fillStyle = '#24272c'; g.fillRect(6, 112, 20, 9); g.fillRect(94, 112, 20, 9); g.fillRect(8, 121, 6, 29); g.fillRect(106, 121, 6, 29);
+    g.fillRect(101, 100, 4, 12); g.beginPath(); g.arc(103, 99, 4, 0, 7); g.fill();
+  }
 }
 function setLook(k, v) {
   look[k] = v;
@@ -307,11 +326,12 @@ function setLook(k, v) {
   scene.add(player.fig.group);
   for (const b of document.querySelectorAll(`#sop-look button[data-k="${k}"]`)) b.setAttribute('aria-pressed', String(b.dataset.v === String(v)));
   drawLook();
+  if (k === 'move') paceLabel();
 }
 {
   const host = document.getElementById('sop-lookOpts');
   if (host) {
-    const NAMES = { style: 'Hair', hair: 'Hair colour', skin: 'Skin', jacket: 'Jacket' }, SWATCH = { hair: HAIR, skin: SKIN, jacket: JACKET };
+    const NAMES = { move: 'Getting about', style: 'Hair', hair: 'Hair colour', skin: 'Skin', jacket: 'Jacket' }, SWATCH = { hair: HAIR, skin: SKIN, jacket: JACKET };
     for (const k of Object.keys(LOOKS)) {
       const row = document.createElement('div'); row.className = 'row'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', NAMES[k]);
       const lab = document.createElement('span'); lab.textContent = NAMES[k]; row.append(lab);
@@ -376,6 +396,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyR') toggleRun();
   else if (e.code === 'Space') jump();
   else if (e.code === 'KeyH') hello();
+  else if (e.code === 'KeyB') busKey();
   else if (e.code === 'KeyG') whereNext();
   else if (e.code === 'Enter') closeToast();
 });
@@ -444,20 +465,30 @@ stick.addEventListener('pointercancel', endStick);
 
 // Three paces: walk, run and sprint. R, the pace button or the controller's A button steps through them,
 // and holding Shift goes one pace faster for as long as it is held.
-const PACE = [4.6, 9.5, 14], PACE_NAME = ['Walk', 'Run', 'Sprint'];
+const PACE = [4.6, 9.5, 14], PACE_NAME = { foot: ['Walk', 'Run', 'Sprint'], wheels: ['Steady', 'Quick', 'Fast'] };
+const onWheels = () => look.move !== 'foot';
 let gear = 0;
+// The words on the pace and jump buttons follow how the player gets about.
+function paceLabel() {
+  const b = $('run'), name = PACE_NAME[onWheels() ? 'wheels' : 'foot'][gear];
+  b.textContent = name.toUpperCase(); b.classList.toggle('on', gear > 0); b.classList.toggle('fast', gear === 2);
+  b.setAttribute('aria-label', `Pace: ${name.toLowerCase()}. Press to change`);
+  const j = $('jump'), trick = look.move === 'chair' ? 'Wheelie' : look.move === 'power' ? 'Spin' : 'Jump';
+  j.textContent = trick.toUpperCase(); j.classList.toggle('long', trick.length > 4);
+  return name;
+}
 function toggleRun() {
   gear = (gear + 1) % (ROUTE ? 2 : 3);
-  const b = $('run');
-  b.textContent = PACE_NAME[gear].toUpperCase(); b.classList.toggle('on', gear > 0); b.classList.toggle('fast', gear === 2);
-  b.setAttribute('aria-label', `Pace: ${PACE_NAME[gear].toLowerCase()}. Press to change`);
-  say(['Walking', 'Running', 'Sprinting'][gear]);
+  const name = paceLabel();
+  say(onWheels() ? `${name} pace` : ['Walking', 'Running', 'Sprinting'][gear]);
 }
 $('run').addEventListener('click', toggleRun);
 const buzz = (ms) => { if (isTouch && !S.reduce && navigator.vibrate) { try { navigator.vibrate(ms); } catch { /* not allowed */ } } };
 // A hop, for the fun of it. It changes nothing about where the player can go.
 function jump() {
-  if (!state.playing || player.y > 0) return;
+  if (!state.playing || player.y > 0 || player.trick > 0) return;
+  // In a wheelchair the same button is a wheelie, and in a powerchair a turn on the spot.
+  if (onWheels()) { player.trick = look.move === 'chair' ? 0.8 : 0.9; sound.step(true); return; }
   player.vy = state.inside ? 4.2 : 6.6; player.y = 0.001; sound.step(true);
 }
 $('jump').addEventListener('click', jump);
@@ -577,6 +608,7 @@ const routeKey = () => `padiham-route-${ROUTE.key}`;
 const routeCount = () => { try { return Number(localStorage.getItem(routeKey())) || 0; } catch { return 0; } };
 function startRoute() {
   const clampX = (x) => Math.min(slice[2] - 3, Math.max(slice[0] + 3, x)), clampZ = (z) => Math.min(slice[3] - 3, Math.max(slice[1] + 3, z));
+  stopBus();
   const p = ROUTE.pts.map(([x, z]) => [clampX(x), clampZ(z)]);
   player.x = p[0][0]; player.z = p[0][1]; player.speed = 0;
   player.heading = cam.yaw = Math.atan2(p[1][0] - p[0][0], p[1][1] - p[0][1]);
@@ -738,8 +770,8 @@ const STAMPS = [
   ['history', 'Local historian', 'Find five plaques', () => foundCount() >= 5],
   ['all', 'Knows every stone', 'Find every plaque', () => plaques.length > 0 && foundCount() >= plaques.length],
   ['daily', 'Regular', "Finish today's job", () => state.dailies >= 1],
-  ['mile', 'Stretched your legs', 'Cover a mile on foot', () => state.metres >= 1609],
-  ['five', 'Legs of steel', 'Cover five miles on foot', () => state.metres >= 8047],
+  ['mile', 'Out and about', 'Cover a mile', () => state.metres >= 1609],
+  ['five', 'Five mile club', 'Cover five miles', () => state.metres >= 8047],
   ['pigeon', 'Pigeon bother', 'Startle fifty pigeons', () => state.pigeons >= 50],
   ['pubs', 'Both bars', 'Call in at both pubs', () => state.pubs.size >= 2],
 ].filter((st) => !(CLEAN && st[0] === 'pubs'));
@@ -825,6 +857,7 @@ function startDaily() {
   const job = dailyJob();
   if (!job) { note('No job could be made today'); return; }
   if (state.inside) leavePub();
+  stopBus();
   // Everyone sets off from the same spot, outside the Town Hall.
   player.x = job.start.dx; player.z = job.start.dz;
   for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; }
@@ -928,7 +961,7 @@ function renderJournal() {
     ul.appendChild(li);
   }
   $('jcount').textContent = `${foundCount()} of ${plaques.length}`;
-  $('tally').textContent = `${plural(state.done, 'job')} done, ${plural(state.turns, 'good turn')}, ${plural(state.litter, 'piece')} of litter picked up, ${plural(state.hellos, 'hello')} said and ${miles(state.metres)} covered on foot.`;
+  $('tally').textContent = `${plural(state.done, 'job')} done, ${plural(state.turns, 'good turn')}, ${plural(state.litter, 'piece')} of litter picked up, ${plural(state.hellos, 'hello')} said and ${miles(state.metres)} covered.`;
   const sl = $('stamps'); sl.textContent = '';
   for (const [id, name, how] of STAMPS) {
     const li = document.createElement('li'), got = state.stamps.has(id);
@@ -941,6 +974,7 @@ function renderJournal() {
 }
 function openMenu() {
   if (!started || menu.classList.contains('on')) return;
+  closeBusMenu();
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0; persist();
   $('full').textContent = stage.classList.contains('fill') || document.fullscreenElement ? 'Leave full screen' : 'Full screen';
   $('dailyShare').hidden = !dailyLine();
@@ -968,7 +1002,7 @@ $('dailyShare').addEventListener('click', async () => {
   } catch { /* the share sheet was closed, or copying is blocked */ }
 });
 $('resume').addEventListener('click', closeMenu);
-addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
+addEventListener('keydown', (e) => { if (e.code === 'Escape' && started) { if (busMenu.classList.contains('on')) closeBusMenu(); else if (menu.classList.contains('on')) closeMenu(); else openMenu(); } });
 // Pause when the tab is left. The dev server can switch this off for testing in a background pane.
 addEventListener('pagehide', persist);
 document.addEventListener('visibilitychange', () => { if (document.hidden && !(import.meta.env.DEV && window.__noAutoPause)) openMenu(); });
@@ -1039,6 +1073,55 @@ function updateSelfie(dt, time) {
   }
 }
 
+// ---------- Buses ----------
+// At a stop a button offers the buses that call there. The player picks one by its number and where it is
+// going, waits for it, rides, and rings the bell before the stop they want. See bus.js.
+let atStop = null, camSaved = null, snapCam = false;
+const busUi = {
+  toast, say, fade,
+  ding() { sound.tone(1320, 0.28, 0.11); sound.tone(1100, 0.4, 0.11, 0.2); buzz(30); },
+  panel(text, canRing) {
+    const el = $('ride');
+    if (!text) { el.classList.remove('on'); return; }
+    $('rideText').textContent = text; $('bell').hidden = !canRing;
+    el.classList.add('on');
+  },
+  board() { camSaved = { dist: cam.dist, pitch: cam.pitch }; cam.dist = 17; cam.pitch = 0.78; snapCam = true; player.fig.group.visible = false; player.speed = 0; sound.pickup(); },
+  alight(x, z, heading) {
+    player.x = x; player.z = z;
+    for (let k = 0; k < 12 && nearWall(player.x, player.z, 0.8); k++) { player.x += Math.sin(heading) * 0.8; player.z += Math.cos(heading) * 0.8; }
+    player.fig.group.visible = true; player.speed = 0;
+    if (camSaved) { cam.dist = camSaved.dist; cam.pitch = camSaved.pitch; camSaved = null; }
+    sound.done(); buzz(50);
+  },
+};
+function stopBus() { if (buses && buses.busy) { const was = buses.riding; buses.cancel(); if (was) { player.fig.group.visible = true; if (camSaved) { cam.dist = camSaved.dist; cam.pitch = camSaved.pitch; camSaved = null; } } } }
+const busMenu = $('busMenu');
+function openBusMenu() {
+  if (!atStop || !buses || buses.busy || !state.playing) return;
+  const opts = buses.options(atStop), list = $('busList');
+  list.textContent = '';
+  $('busStopName').textContent = `Bus stop: ${atStop.n}`;
+  $('busNone').hidden = opts.length > 0;
+  for (const o of opts) {
+    const b = document.createElement('button'); b.type = 'button';
+    const big = document.createElement('b'); big.textContent = `${o.route.ref} to ${o.route.to}`;
+    const sm = document.createElement('span'); sm.textContent = `Stops at ${o.later.map((q) => q.n).join(', ')}`;
+    b.append(big, sm);
+    const stop = atStop;
+    b.addEventListener('click', () => { closeBusMenu(); buses.call(stop, o); });
+    list.appendChild(b);
+  }
+  state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
+  busMenu.classList.add('on');
+  (list.querySelector('button') || $('busClose')).focus();
+}
+function closeBusMenu() { if (!busMenu.classList.contains('on')) return; busMenu.classList.remove('on'); state.playing = true; }
+$('busClose').addEventListener('click', closeBusMenu);
+$('busBtn').addEventListener('click', openBusMenu);
+$('bell').addEventListener('click', () => buses && buses.ring());
+function busKey() { if (buses && buses.phase === 'ride') buses.ring(); else openBusMenu(); }
+
 // ---------- Main loop ----------
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 let uiTick = 0, edgeWarn = 0, lastStep = 0;
@@ -1051,9 +1134,19 @@ function step(dt) {
   const mag = Math.min(1, Math.hypot(mx, mz));
   // Indoors the top pace is a run: there is no room to sprint round a pool table.
   const top = PACE[state.inside ? Math.min(1, input.gear) : input.gear];
-  const want = state.playing ? mag * top : 0;
+  const riding = !!buses && buses.riding;
+  const want = state.playing && !riding ? mag * top : 0;
   player.speed += (want - player.speed) * Math.min(1, dt * (want > player.speed ? 6 : 10));
-  if (mag > 0.05 && state.playing) {
+  if (buses && state.playing) {
+    buses.update(dt, player);
+    // The button for the stop the player is standing at.
+    const st = !state.inside && !buses.busy ? buses.near(player.x, player.z) : null;
+    if (st !== atStop) { atStop = st; const b = $('busBtn'); b.hidden = !st; stage.classList.toggle('atstop', !!st); if (st) { b.textContent = `Bus stop: ${st.n}`; say(`Bus stop: ${st.n}. Press B to catch a bus`); } }
+  }
+  // On the bus the view starts from behind it, then follows it round the corners.
+  if (riding && snapCam && buses.phase === 'ride') { cam.yaw = player.heading; snapCam = false; }
+  if (riding && S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(player.heading - cam.yaw)) * dt * 1.7;
+  if (mag > 0.05 && state.playing && !riding) {
     const h = Math.atan2(mx, mz);
     player.heading += wrap(h - player.heading) * Math.min(1, dt * 12);
     const ox = player.x, oz = player.z;
@@ -1070,7 +1163,10 @@ function step(dt) {
   // Legs turn over faster at a run, but not in step with the speed, or a sprint would be a blur.
   player.phase += (Math.min(player.speed, 4.6) + Math.max(0, player.speed - 4.6) * 0.42) * dt * 2.3;
   const amt = Math.min(1, player.speed / 4) * (player.speed > 11 ? 1.25 : 1);
-  animateFigure(player.fig, player.phase, amt);
+  const wheels = !!player.fig.wheels;
+  if (wheels) { player.rolled += player.speed * dt; animateSeated(player.fig, player.rolled, player.speed > 0.4); }
+  else animateFigure(player.fig, player.phase, amt);
+  if (player.trick > 0) player.trick -= dt;
   // Hop
   if (player.y > 0) {
     player.vy -= 20 * dt; player.y += player.vy * dt;
@@ -1081,10 +1177,10 @@ function step(dt) {
   helloCool -= dt;
   if (player.wave > 0) { player.wave -= dt; player.fig.arms[1].rotation.x = -2.7 + Math.sin(time * 16) * 0.3; player.fig.arms[1].rotation.z = 0.25; if (player.wave <= 0) player.fig.arms[1].rotation.z = 0; }
   const stepN = Math.floor(player.phase / Math.PI);
-  if (stepN !== lastStep) { lastStep = stepN; if (player.speed > 1) sound.step(player.speed > 6); }
+  if (stepN !== lastStep) { lastStep = stepN; if (player.speed > 1) { if (wheels) sound.roll(); else sound.step(player.speed > 6); } }
   const baseY = state.inside ? state.inside.pub.floorY : 0.14 + groundH(player.x, player.z);
   if (state.playing) {
-    if (!state.inside) { for (const d of doors) if (Math.hypot(player.x - d.x, player.z - d.z) < 1.0) { enterPub(d); break; } }
+    if (!state.inside && !riding) { for (const d of doors) if (Math.hypot(player.x - d.x, player.z - d.z) < 1.0) { enterPub(d); break; } }
     else {
       const pub = state.inside.pub;
       playCool -= dt;
@@ -1096,26 +1192,29 @@ function step(dt) {
       }
     }
   }
-  const sway = S.reduce ? 0 : amt;
+  const sway = S.reduce || wheels ? 0 : amt;
   player.fig.group.position.set(player.x, baseY + player.y + Math.abs(Math.sin(player.phase)) * 0.05 * sway, player.z);
-  player.fig.group.rotation.y = player.heading;
-  player.fig.group.rotation.x = sway * (player.speed > 11 ? 0.24 : player.speed > 6 ? 0.16 : 0.05);
+  // A wheelie tips the chair back on its big wheels; a powerchair turns once round on the spot.
+  const trick = Math.max(0, player.trick), spin = look.move === 'power' ? (1 - trick / 0.9) * Math.PI * 2 * (trick > 0 ? 1 : 0) : 0;
+  player.fig.group.rotation.y = player.heading + spin;
+  player.fig.group.rotation.x = wheels ? (look.move === 'chair' ? -0.34 * Math.sin(Math.PI * Math.min(1, trick / 0.8)) : 0) : sway * (player.speed > 11 ? 0.24 : player.speed > 6 ? 0.16 : 0.05);
 
   for (const sp of labels) { const k = Math.min(1, Math.max(0.2, camera.position.distanceTo(sp.position) / 70)); sp.scale.set(20 * k, 3.75 * k, 1); }
   if (selfie) updateSelfie(dt, time);
-  if (state.playing) { updatePlaques(time); updateLitter(dt); }
+  if (state.playing && !riding) { updatePlaques(time); updateLitter(dt); }
   if (peds) peds.update(dt, player);
   if (pigeons) pigeons.update(dt, player, time);
 
   // Camera, pulled in if a wall is in the way
   const cp = Math.cos(cam.pitch), flat = cam.dist * cp;
-  const t = wallHit(player.x, player.z, player.x - fx * (flat + 0.6), player.z - fz * (flat + 0.6));
+  // On the bus the view rides high above the roofs, so walls behind it are not allowed to push it in.
+  const t = riding ? 1 : wallHit(player.x, player.z, player.x - fx * (flat + 0.6), player.z - fz * (flat + 0.6));
   const wantDist = Math.max(1.5, cam.dist * t - (t < 1 ? 0.5 : 0));
   cam.cur += (wantDist - cam.cur) * Math.min(1, dt * (wantDist < cam.cur ? 14 : 3));
   camera.position.set(player.x - fx * cam.cur * cp, baseY + 1.6 + Math.sin(cam.pitch) * cam.cur, player.z - fz * cam.cur * cp);
   // On a slope the ground behind the player can rise above the camera: keep the camera clear of it.
   if (!state.inside) camera.position.y = Math.max(camera.position.y, groundH(camera.position.x, camera.position.z) + 0.6);
-  camera.lookAt(player.x, baseY + 1.45, player.z);
+  camera.lookAt(player.x, baseY + (riding ? 2.2 : 1.45), player.z);
   // The view opens out a little at a sprint, unless less movement has been asked for.
   const fov = baseFov + (S.reduce ? 0 : Math.max(0, Math.min(1, (player.speed - 9.5) / 4.5)) * 7);
   if (Math.abs(fov - camera.fov) > 0.05) { camera.fov += (fov - camera.fov) * Math.min(1, dt * 5); camera.updateProjectionMatrix(); }
@@ -1129,7 +1228,7 @@ function step(dt) {
   if (tg && state.playing && !state.inside) {
     state.job.t += dt;
     const dx = tg.dx - player.x, dz = tg.dz - player.z, d = Math.hypot(dx, dz);
-    if (d < 3.6) arrive();
+    if (d < 3.6 && !riding) arrive();
     if (S.reduce) beam.scale.setScalar(1);
     else { beam.rotation.y += dt * 0.8; beam.scale.setScalar(1 + Math.sin(time * 3) * 0.06); }
     uiTick -= dt;
@@ -1232,6 +1331,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
   if (!ROUTE) { placePlaques(); placeLitter(); }
+  buses = new Buses(scene, w, busUi);
   peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   peds.setCount(S.calm ? 6 : Infinity);
   if (!ROUTE) pigeons = new Pigeons(scene, built.spots, 7, (n) => {
@@ -1242,7 +1342,7 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
   });
   // Stamps already earned by an older save are marked quietly, without a run of messages.
   for (const st of STAMPS) if (st[3]()) state.stamps.add(st[0]);
-  hud(); if (ROUTE) startRoute(); else makeJob(); drawMini(); draftNote();
+  hud(); if (ROUTE) startRoute(); else makeJob(); drawMini(); draftNote(); paceLabel();
   const b = $('play');
   b.disabled = false; b.textContent = ROUTE ? 'Start the route' : state.done ? 'Carry on' : 'Play';
   b.addEventListener('click', () => { $('setSlot').append($('settings')); $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
@@ -1250,4 +1350,4 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; } };

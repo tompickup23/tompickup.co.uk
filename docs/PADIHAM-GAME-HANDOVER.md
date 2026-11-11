@@ -380,3 +380,28 @@ building opposite stuck out into it.
 - **Known, not fixed.** 71 other outlines overlap a carriageway by 0.3 to 3.2 m, mostly terraces on back streets
   where the drawn road is wider than the real one. The fix for those is a narrower drawn width for back streets,
   not 71 overrides.
+
+## Wheelchair, powerchair and bus rides, 11 November 2026 (late)
+
+Branch `feat/padiham-wheels-bus`, on top of the Bridge Inn fix. Tom asked for both as steps towards door to door
+practice for independent travel (walk to the stop, catch the bus, walk to Tesco), with the inside of Tesco to
+come from him later, and traffic left out for now.
+
+- **Getting about.** The look chooser has a first row: on foot, wheelchair, powerchair (`look.move`). It is a look
+  and nothing else: same paces, places and jobs. `makeFigure({ seat })` in `life.js` builds a seated figure in a
+  rigid-frame manual chair or a powerchair; `animateSeated` turns the wheels with distance and pushes the rims.
+  The jump button is a wheelie in the chair and a turn on the spot in the powerchair; pace names read Steady,
+  Quick, Fast. One passer-by in twelve uses a wheelchair. Kerbs never block anyone. Stamps and the menu no longer
+  say "on foot". **Drawn without advice from a wheelchair user, at Tom's direction (he has no adviser); the page
+  says so and asks for corrections.** Still do not frame it as a simulation of disability.
+- **Buses.** `build_world.py` writes `bus` into the town file: 21 named stops in the play area and 10 services by
+  direction with their stops in order, from OpenStreetMap route relations (152, 64, 65, M1, M2; limited services
+  left out). `bus.js` finds the way along the roads between stops, keeps the bus to the left, and runs the
+  journey: Bus stop button (or B) at a stop, pick a bus by number and destination, wait, it arrives, ride, ring
+  the bell (button or B) before your stop, step off on to the pavement. With no bell it runs to its last stop on
+  the map. A plain white bus: no operator colours or names, no times, no fares. Works on a practice route too.
+- **Not done.** Other traffic, crossings, a ride that leaves the map, the inside of Tesco, a wheelchair ramp or
+  space on the bus, one-way streets (the bus takes the shortest way). The idea Tom floated for later: a school
+  crossing game where traffic comes only when the game is started.
+- **Checked** in the dev server: both chairs, the wheelie, a full ride from Town Hall to Bus Stand with the bell,
+  the phone layout at a stop. The preview pane runs frames slowly, so ride timing was not judged. No real phone.

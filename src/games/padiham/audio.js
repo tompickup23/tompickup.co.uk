@@ -33,6 +33,7 @@ export class Sound {
     const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(gain, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g).connect(this.master); o.start(t); o.stop(t + dur + 0.05);
   }
+  roll() { this.burst(0.12, 220 + Math.random() * 80, 0.8, 0.07); }
   step(run) { this.burst(0.06, 700 + Math.random() * 500, 1.2, run ? 0.16 : 0.1); }
   flap(n) { for (let i = 0; i < Math.min(14, n * 2); i++) this.burst(0.07, 1400 + Math.random() * 1200, 0.8, 0.12, i * 0.045 + Math.random() * 0.03); this.coo(0.25); }
   coo(when = 0) { this.tone(430, 0.22, 0.05, when, 360); this.tone(390, 0.3, 0.05, when + 0.26, 330); }
