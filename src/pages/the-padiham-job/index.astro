@@ -48,14 +48,11 @@ const schema = {
     </header>
 
     <div id="sop-stage" class="sop" data-world="/games/the-padiham-job/world.json">
-      <canvas id="sop-view" role="img" aria-label="The game view: a figure walking the streets of Padiham"></canvas>
+      <canvas id="sop-view" tabindex="-1" role="img" aria-label="The game view: a figure walking the streets of Padiham"></canvas>
 
       <div id="sop-cash" class="sop-hud">
         £<span id="sop-money">0</span>
-        <small><span id="sop-done">0</span> jobs done</small>
-        <small><span id="sop-litterN">0</span> litter picked up</small>
-        <small><span id="sop-pigeons">0</span> pigeons startled</small>
-        <small><span id="sop-plaques">0</span> plaques found</small>
+        <small id="sop-done">0 jobs done</small>
       </div>
       <div class="sop-buttons">
         <button id="sop-menuBtn" type="button">Menu</button>
@@ -250,7 +247,8 @@ const schema = {
       </p>
       <h2 id="buses">Catching a bus</h2>
       <p>
-        The bus stops in the town centre work. Stand at one and choose Bus stop. You are shown the buses that call
+        Most of the bus stops in the town centre work. Stand at one and choose Bus stop. A stop near the edge of
+        the map, where no bus goes on to another stop in the game, is there to look at and offers nothing. You are shown the buses that call
         there, each with its number and where it is going. Pick one, wait, and it comes. On the bus the game tells
         you the next stop, and you ring the bell before the one you want. If you do not ring, the bus carries on
         to its last stop on the map.
@@ -365,7 +363,7 @@ const schema = {
   .sop #sop-arrow { width: 26px; height: 26px; flex: none; transition: transform 0.08s linear; }
   .sop #sop-cash { top: 10px; left: 10px; background: var(--sop-card); border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: calc(18px * var(--sop-fs, 1)); color: var(--sop-green); }
   .sop #sop-cash small { display: block; line-height: 1.4; font-size: calc(13px * var(--sop-fs, 1)); color: var(--sop-text); opacity: 0.9; font-weight: 600; }
-  .sop .sop-buttons { position: absolute; z-index: 3; left: 10px; top: calc(18px + 120px * var(--sop-fs, 1)); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .sop .sop-buttons { position: absolute; z-index: 3; left: 10px; top: calc(18px + 60px * var(--sop-fs, 1)); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
   .sop .sop-buttons button { background: var(--sop-card); color: var(--sop-text); border: 0; border-radius: 999px; padding: 7px 12px; font-family: inherit; font-size: calc(13px * var(--sop-fs, 1)); font-weight: 650; line-height: 1; cursor: pointer; }
   .sop #sop-map { top: 10px; right: 10px; width: 136px; height: 136px; border-radius: 50%; border: 3px solid var(--sop-ink); background: #8a9477; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
   .sop #sop-map canvas { width: 100%; height: 100%; display: block; }
@@ -406,7 +404,7 @@ const schema = {
   .sop #sop-toast small { display: block; font-size: calc(14px * var(--sop-fs, 1)); font-weight: 650; margin-top: 2px; }
   .sop #sop-stick, .sop #sop-run, .sop #sop-jump, .sop #sop-hello { position: absolute; z-index: 4; display: none; touch-action: none; }
   .sop button { touch-action: manipulation; -webkit-touch-callout: none; }
-  .sop #sop-view { -webkit-touch-callout: none; }
+  .sop #sop-view { -webkit-touch-callout: none; outline: none; }
   .sop #sop-jump, .sop #sop-hello { width: 66px; height: 66px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.45); background: rgba(20, 22, 26, 0.45); color: #fff; font-weight: 800; font-size: 14px; font-family: inherit; }
   .sop #sop-jump { right: 112px; bottom: 28px; }
   .sop #sop-hello { right: 26px; bottom: 132px; }
@@ -511,6 +509,7 @@ const schema = {
   .sop #sop-routeLink { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.3); background: #0f1114; color: var(--sop-text); font-family: inherit; font-size: 14px; }
   .sop .only-touch { display: none; }
   .sop.touch .only-touch { display: block; }
+  .sop .sop-set label.only-touch { display: none; }
   .sop.touch .sop-set label.only-touch { display: flex; }
   .sop.touch .only-keys { display: none; }
   @media (max-width: 640px) {
@@ -523,17 +522,24 @@ const schema = {
     .sop #sop-map { width: 108px; height: 108px; }
     .sop .sop-buttons { left: auto; right: 10px; top: 126px; align-items: flex-end; }
     .sop .sop-buttons button, .sop.touch #sop-street, .sop #sop-street { font-size: calc(13px * min(var(--sop-fs, 1), 1.25)); }
-    .sop.touch #sop-street, .sop #sop-street { bottom: auto; top: calc(168px + 26px * var(--sop-fs, 1)); left: auto; right: 10px; transform: none; }
+    /* Buttons a thumb can hit: 44px tall. The street name sits under the two of them. */
+    .sop .sop-buttons button, .sop .sop-buttons #sop-busBtn { min-height: 44px; padding: 0 14px; }
+    .sop.touch #sop-street, .sop #sop-street { bottom: auto; top: 228px; left: auto; right: 10px; transform: none; }
     /* The bus stop button takes the street name's place, so the name moves down a line. */
-    .sop.atstop.touch #sop-street, .sop.atstop #sop-street { top: calc(214px + 26px * var(--sop-fs, 1)); }
-    .sop.practice.atstop.touch #sop-street, .sop.practice.atstop #sop-street { top: calc(248px + 26px * var(--sop-fs, 1)); }
+    .sop.atstop.touch #sop-street, .sop.atstop #sop-street { top: 278px; }
+    .sop.practice.atstop.touch #sop-street, .sop.practice.atstop #sop-street { top: 328px; }
     .sop.practice .sop-buttons { top: 126px; }
     .sop.practice #sop-job { top: 10px; }
-    .sop.practice.touch #sop-street, .sop.practice #sop-street { top: calc(202px + 26px * var(--sop-fs, 1)); }
+    .sop.practice.touch #sop-street, .sop.practice #sop-street { top: 278px; }
     .sop #sop-toast { font-size: calc(18px * var(--sop-fs, 1)); padding: 12px 16px; }
     .sop #sop-job { left: 10px; transform: none; top: calc(18px + 32px * var(--sop-fs, 1)); width: calc(100% - 138px); padding: 8px 10px; }
     .sop #sop-job .d { font-size: calc(15px * var(--sop-fs, 1)); }
-    .sop #sop-job .m { font-size: calc(13px * var(--sop-fs, 1)); gap: 8px; }
+    .sop #sop-job .m { font-size: calc(13px * var(--sop-fs, 1)); gap: 2px 8px; margin-top: 4px; }
+    /* A shorter card: the heading on one line, the way beside its arrow, the clock under it. */
+    .sop #sop-job .t { font-size: calc(11px * var(--sop-fs, 1)); letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sop #sop-arrow { width: 20px; height: 20px; }
+    .sop #sop-dist { flex: 1; min-width: 0; }
+    .sop #sop-timer { flex-basis: 100%; }
   }
   /* A phone held sideways, or any short window: keep every panel clear of the thumbs. */
   @media (max-height: 520px) {

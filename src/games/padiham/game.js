@@ -162,7 +162,7 @@ $('full').addEventListener('click', () => {
 });
 
 // ---------- World ----------
-let world, built, slice, peds, pigeons, buses;
+let world, built, slice, peds, pigeons, buses, homeStart = null;
 applySettings();
 const pois = new Map();
 function inPoly(x, z, p) {
@@ -241,7 +241,7 @@ function drawMini() {
   mini.setTransform(1, 0, 0, 1, 0, 0);
   if (buses) {
     mini.fillStyle = '#2f6fb5'; mini.strokeStyle = '#fff'; mini.lineWidth = 2;
-    for (const st of buses.stops) { const bx = (st.x - player.x) * MS * zoom, bz = (st.z - player.z) * MS * zoom; if (Math.hypot(bx, bz) < S / 2) { mini.fillRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); mini.strokeRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); } }
+    for (const st of buses.stops) { if (st.dead) continue; const bx = (st.x - player.x) * MS * zoom, bz = (st.z - player.z) * MS * zoom; if (Math.hypot(bx, bz) < S / 2) { mini.fillRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); mini.strokeRect(S / 2 + bx - 5, S / 2 + bz - 5, 10, 10); } }
   }
   mini.fillStyle = '#b8f26a';
   for (const l of litter) {
@@ -452,6 +452,9 @@ const endLook = (e) => { endStick(e); if (e.pointerId === lookId) lookId = null;
 view.addEventListener('pointerup', endLook);
 view.addEventListener('pointercancel', endLook);
 view.addEventListener('contextmenu', (e) => e.preventDefault());
+// A button pressed with the mouse or a finger must not keep the keyboard: left there, Space would press it again
+// and the action keys would be ignored. A button reached and pressed from the keyboard keeps its focus.
+for (const b of stage.querySelectorAll('.sop-buttons button, #sop-bell, #sop-run, #sop-jump, #sop-hello')) b.addEventListener('click', (e) => { if (e.detail > 0 && state.playing) view.focus({ preventScroll: true }); });
 
 stick.addEventListener('pointerdown', (e) => {
   const r = stick.getBoundingClientRect();
@@ -668,7 +671,7 @@ function makeJob() {
   let def = SCRIPT[state.jobIndex];
   if (def && !def.steps.every((s) => slicePois.includes(pois.get(s[0])))) def = null;
   let job;
-  if (def) job = { title: `Job ${state.jobIndex + 1}: ${def.title}`, steps: def.steps.map(([n, text]) => ({ poi: pois.get(n), text })) };
+  if (def) job = { title: `Job ${state.jobIndex + 1}: ${def.title}`, noClock: state.jobIndex === 0, steps: def.steps.map(([n, text]) => ({ poi: pois.get(n), text })) };
   else {
     const here = { dx: player.x, dz: player.z };
     let a, b, tries = 0;
@@ -738,7 +741,7 @@ function arrive() {
   const j = state.job;
   if (j.route) { routeArrive(j); return; }
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); buzz(20); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
-  const bonus = !S.calm && j.t <= j.par ? Math.round(j.pay / 2) : 0;
+  const bonus = !S.calm && !j.noClock && j.t <= j.par ? Math.round(j.pay / 2) : 0;
   state.money += j.pay + bonus; state.done++; buzz(60);
   if (j.turn) state.turns++;
   if (j.daily) state.dailies++;
@@ -752,10 +755,10 @@ function arrive() {
     return;
   }
   if (j.turn) toast('Good turn done', THANKS[Math.floor(Math.random() * THANKS.length)], 3200);
-  else toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : 'Beat the clock next time for a bonus');
+  else toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : j.noClock ? `The next job pays a bonus for being quick. ${isTouch ? 'Tap WALK' : 'Press R'} to run` : 'Beat the clock next time for a bonus', j.noClock ? 4200 : 2600);
   makeJob(); checkStamps();
 }
-function hud() { $('money').textContent = state.money; $('done').textContent = state.done; $('pigeons').textContent = state.pigeons; $('litterN').textContent = state.litter; $('plaques').textContent = `${foundCount()} of ${plaques.length}`; }
+function hud() { $('money').textContent = state.money; $('done').textContent = `${plural(state.done, 'job')} done`; }
 
 // ---------- Stamps ----------
 // Small rewards for doing things around town. Each is worked out from the saved counts, so nothing extra is kept
@@ -853,14 +856,17 @@ function dailyJob() {
   const thing = CARGO[Math.floor(rnd() * CARGO.length)];
   return { daily: today(), start, title: "Today's job", steps: [{ poi: stops[0], text: `Collect ${thing} at ${stops[0].n}` }, { poi: stops[1], text: `Call in at ${stops[1].n}` }, { poi: stops[2], text: `Deliver it to ${stops[2].n}` }] };
 }
+let dailyAsked = false;
 function startDaily() {
   const job = dailyJob();
   if (!job) { note('No job could be made today'); return; }
+  // Part way through a job, the first press only asks. A job not yet begun is simply offered again afterwards.
+  if (state.job && !state.job.daily && state.job.i > 0 && !dailyAsked) { dailyAsked = true; note("You are part way through a job. Press Today's job again to leave it"); return; }
   if (state.inside) leavePub();
   stopBus();
-  // Everyone sets off from the same spot, outside the Town Hall.
-  player.x = job.start.dx; player.z = job.start.dz;
-  for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; }
+  // Everyone sets off from the same spot, outside the Town Hall: where a new game starts, facing the same way.
+  if (homeStart) { player.x = homeStart.x; player.z = homeStart.z; player.heading = cam.yaw = homeStart.h; player.speed = 0; }
+  else { player.x = job.start.dx; player.z = job.start.dz; for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; } }
   let d = 0, prev = { dx: player.x, dz: player.z };
   for (const st of job.steps) { d += dist2(prev, st.poi); prev = st.poi; }
   job.i = 0; job.t = 0; job.par = parFor(d, job.steps.length); job.pay = 30;
@@ -961,7 +967,7 @@ function renderJournal() {
     ul.appendChild(li);
   }
   $('jcount').textContent = `${foundCount()} of ${plaques.length}`;
-  $('tally').textContent = `${plural(state.done, 'job')} done, ${plural(state.turns, 'good turn')}, ${plural(state.litter, 'piece')} of litter picked up, ${plural(state.hellos, 'hello')} said and ${miles(state.metres)} covered.`;
+  $('tally').textContent = `${plural(state.done, 'job')} done, ${plural(state.turns, 'good turn')}, ${plural(state.litter, 'piece')} of litter picked up, ${plural(state.hellos, 'hello')} said, ${plural(state.pigeons, 'pigeon')} startled and ${miles(state.metres)} covered.`;
   const sl = $('stamps'); sl.textContent = '';
   for (const [id, name, how] of STAMPS) {
     const li = document.createElement('li'), got = state.stamps.has(id);
@@ -978,10 +984,10 @@ function openMenu() {
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0; persist();
   $('full').textContent = stage.classList.contains('fill') || document.fullscreenElement ? 'Leave full screen' : 'Full screen';
   $('dailyShare').hidden = !dailyLine();
-  renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
+  dailyAsked = false; renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
   menu.classList.add('on'); $('resume').focus();
 }
-function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; $('menuBtn').focus(); }
+function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; view.focus({ preventScroll: true }); }
 // Keep the Tab key inside the menu while it is open.
 menu.addEventListener('keydown', (e) => {
   if (e.key !== 'Tab') return;
@@ -1116,7 +1122,7 @@ function openBusMenu() {
   busMenu.classList.add('on');
   (list.querySelector('button') || $('busClose')).focus();
 }
-function closeBusMenu() { if (!busMenu.classList.contains('on')) return; busMenu.classList.remove('on'); state.playing = true; }
+function closeBusMenu() { if (!busMenu.classList.contains('on')) return; busMenu.classList.remove('on'); state.playing = true; view.focus({ preventScroll: true }); }
 $('busClose').addEventListener('click', closeBusMenu);
 $('busBtn').addEventListener('click', openBusMenu);
 $('bell').addEventListener('click', () => buses && buses.ring());
@@ -1140,7 +1146,7 @@ function step(dt) {
   if (buses && state.playing) {
     buses.update(dt, player);
     // The button for the stop the player is standing at.
-    const st = !state.inside && !buses.busy ? buses.near(player.x, player.z) : null;
+    const near = !state.inside && !buses.busy ? buses.near(player.x, player.z) : null, st = near && !near.dead ? near : null;
     if (st !== atStop) { atStop = st; const b = $('busBtn'); b.hidden = !st; stage.classList.toggle('atstop', !!st); if (st) { b.textContent = `Bus stop: ${st.n}`; say(`Bus stop: ${st.n}. Press B to catch a bus`); } }
   }
   // On the bus the view starts from behind it, then follows it round the corners.
@@ -1226,7 +1232,7 @@ function step(dt) {
   // Job progress
   const tg = target();
   if (tg && state.playing && !state.inside) {
-    state.job.t += dt;
+    if (!plaqueShown) state.job.t += dt; // the clock waits while a plaque is being read
     const dx = tg.dx - player.x, dz = tg.dz - player.z, d = Math.hypot(dx, dz);
     if (d < 3.6 && !riding) arrive();
     if (S.reduce) beam.scale.setScalar(1);
@@ -1240,7 +1246,7 @@ function step(dt) {
       // Read the way out when it changes, but not more than once every eight seconds.
       if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}`); }
       const j = state.job;
-      $('timer').textContent = S.calm ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
+      $('timer').textContent = S.calm || j.noClock ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
       let name = '', best = 14;
       for (const r of roadGrid.at(player.x, player.z)) if (r[5]) { const dd = distToSeg(player.x, player.z, r)[0]; if (dd < best) { best = dd; name = r[5]; } }
       $('street').textContent = name || 'Padiham';
@@ -1330,8 +1336,11 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     for (let k = 0; k < 12 && (nearWall(player.x, player.z, 3) || k < 3); k++) { player.x += ((first0.dx - home.dx) / dl) * 1.5; player.z += ((first0.dz - home.dz) / dl) * 1.5; }
     player.heading = cam.yaw = Math.atan2(first0.dx - home.dx, first0.dz - home.dz);
   }
+  homeStart = { x: player.x, z: player.z, h: player.heading };
   if (!ROUTE) { placePlaques(); placeLitter(); }
   buses = new Buses(scene, w, busUi);
+  // A stop with no bus going on to another stop in the town centre is left as street furniture: no button, no map square.
+  for (const st of buses.stops) st.dead = buses.options(st).length === 0;
   peds = new Pedestrians(scene, built.pedPaths, isTouch ? 16 : 34);
   peds.setCount(S.calm ? 6 : Infinity);
   if (!ROUTE) pigeons = new Pigeons(scene, built.spots, 7, (n) => {
