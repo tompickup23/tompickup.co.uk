@@ -5,6 +5,14 @@
    self-hosted via @fontsource (imported in Layout.astro).
    ============================================================ */
 
+/* The shared base layer (src/vendor/estate-kit/base, imported in Layout.astro
+   before this file) supplies type sizes, numerals, the record face, links,
+   focus, selection, tables, page transitions and dead-end pages, all in the
+   cascade layer estate-base. Everything in this file is unlayered and so wins
+   over it. The reset below sits in a lower layer so the base layer's own
+   padding survives it. */
+@layer reset, estate-base;
+
 /* ---- Design tokens ---- */
 :root {
   /* Surfaces */
@@ -45,7 +53,7 @@
 
   --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-sans: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-mono: 'Source Code Pro', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Small corners, flat surfaces */
   --radius-sm: 2px;
@@ -105,6 +113,26 @@
   --party-plaid: #005B54;
 
   color-scheme: only light;
+
+  /* The base layer's contract, mapped to this site's names. */
+  --ek-bg: var(--paper);
+  --ek-bg-subtle: var(--panel);
+  --ek-text: var(--ink);
+  --ek-muted: var(--muted);
+  --ek-accent: var(--teal);
+  --ek-line: var(--line);
+  --ek-line-strong: var(--line-strong);
+  --ek-font-display: var(--font-display);
+  --ek-font-sans: var(--font-sans);
+  --ek-font-mono: var(--font-mono);
+  --ek-radius: var(--radius-sm);
+  --ek-header-offset: 64px;
+  /* Heading sizes keep this site's own ends (32 to 56, 24 to 36 and 19.5 to
+     24 px between a 360 and a 1240 px viewport), as one clamp each with a rem
+     term, in place of the old pairs of vw clamps either side of 768 px. */
+  --ek-h1: clamp(2rem, 1.3864rem + 2.7273vw, 3.5rem);
+  --ek-h2: clamp(1.5rem, 1.1932rem + 1.3636vw, 2.25rem);
+  --ek-h3: clamp(1.2188rem, 1.1037rem + 0.5114vw, 1.5rem);
 }
 
 @media (min-width: 769px) {
@@ -114,12 +142,14 @@
 /* ============================================================
    Reset and base
    ============================================================ */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 }
 
 html {
@@ -129,8 +159,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -138,7 +166,6 @@ body {
   color: var(--ink);
   min-height: 100dvh;
   overflow-x: hidden;
-  font-size: 1.0625rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -147,12 +174,9 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.15;
   letter-spacing: -0.015em;
   color: var(--ink);
-  text-wrap: balance;
 }
 
-h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.625rem, 3.2vw, 2.25rem); }
-h3 { font-size: clamp(1.25rem, 2.4vw, 1.5rem); }
+/* h1 to h3 take their sizes from the base layer (--ek-h1 to --ek-h3 above). */
 h4 { font-size: 1.1875rem; }
 h5 { font-size: 1.0625rem; }
 
@@ -165,22 +189,10 @@ h6 {
 }
 
 p {
-  max-width: 68ch;
   line-height: 1.65;
 }
 
-a {
-  color: var(--teal);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
-}
-
-a:hover {
-  color: var(--ink);
-  text-decoration-thickness: 2px;
-}
+/* Links, their underlines and hover come from the base layer. */
 
 img,
 picture,
@@ -200,7 +212,6 @@ ol {
 table {
   border-collapse: collapse;
   width: 100%;
-  font-variant-numeric: tabular-nums;
 }
 
 button {
@@ -236,10 +247,6 @@ small {
   color: var(--muted);
 }
 
-time {
-  font-variant-numeric: tabular-nums;
-}
-
 hr {
   border: none;
   border-top: 1px solid var(--line);
@@ -258,14 +265,7 @@ code {
 /* ============================================================
    Accessibility
    ============================================================ */
-:focus-visible {
-  outline: 3px solid var(--teal);
-  outline-offset: 3px;
-}
-
-:focus:not(:focus-visible) {
-  outline: none;
-}
+/* The focus ring comes from the base layer: a teal ring with a paper gap. */
 
 .skip-to-content {
   position: absolute;
@@ -571,20 +571,12 @@ code {
     }
   }
 
-  /* Page to page: a short cross-fade between same-site pages, with the fixed
-     header held still. Browsers without cross-document view transitions
-     navigate as before. */
-  @view-transition {
-    navigation: auto;
-  }
-
+  /* Page to page: the cross-fade, and the card image that travels into the
+     article's heading image, come from the base layer. The fixed header is
+     held still while the page changes beneath it. */
   .site-header {
     view-transition-name: site-header;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.18s;
+    view-transition-class: ek-hold;
   }
 }
 
@@ -683,15 +675,6 @@ legend {
 
 
 /* ============================================================
-   Selection
-   ============================================================ */
-::selection {
-  background: rgba(23, 100, 94, 0.18);
-  color: var(--ink);
-}
-
-
-/* ============================================================
    Utility classes
    ============================================================ */
 .text-secondary { color: var(--muted); }
@@ -750,10 +733,6 @@ legend {
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: clamp(2rem, 8vw, 2.5rem); }
-  h2 { font-size: clamp(1.5rem, 6vw, 1.875rem); }
-  h3 { font-size: clamp(1.1875rem, 4.5vw, 1.375rem); }
-
   .grid-2,
   .grid-3,
   .grid-4 {

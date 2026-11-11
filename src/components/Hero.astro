@@ -58,7 +58,7 @@ const LEDGER = [
       <div class="ledger-item" id={line.id} role="listitem" data-fact>
         <p class="ledger-figure" data-figure>{figure}</p>
         <p class="ledger-label">{line.label}</p>
-        <p class="source-line"><a href={`#source-${source}`}>Source {source}: {ref}</a></p>
+        <p class="source-line ek-meta"><a href={`#source-${source}`}>Source {source}: {ref}</a></p>
         <RecordReviewed id={line.id} reviewed={line.reviewed} />
       </div>
     ))}

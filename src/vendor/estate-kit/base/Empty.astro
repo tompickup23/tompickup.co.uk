@@ -1,0 +1,22 @@
+---
+/**
+ * I071. An empty list or a filter with no results: what happened, and a way on.
+ * Announced politely to a screen reader when it appears.
+ */
+interface Props {
+  title: string;
+  links?: { href: string; label: string }[];
+  heading?: "h2" | "h3" | "h4" | "p";
+}
+const { title, links = [], heading: Heading = "p" } = Astro.props;
+---
+
+<div class="ek-state" data-ek-state="empty" role="status">
+  <Heading class="ek-state-title">{title}</Heading>
+  {Astro.slots.has("default") && <p class="ek-state-body"><slot /></p>}
+  {links.length > 0 && (
+    <ul class="ek-state-links">
+      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+    </ul>
+  )}
+</div>

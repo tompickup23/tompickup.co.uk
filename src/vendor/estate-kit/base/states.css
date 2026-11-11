@@ -1,0 +1,94 @@
+/* I071. Dead ends with a next step.
+
+   One pattern for a missing page, an empty list and a failed load: what
+   happened in a sentence, then somewhere to go. base/NotFound.astro and
+   base/Empty.astro write the markup. */
+@layer estate-base {
+  .ek-state {
+    display: grid;
+    gap: 0.9em;
+    justify-items: start;
+    max-inline-size: 40rem;
+    padding-block: clamp(2.5rem, 8vw, 5rem);
+  }
+
+  .ek-state > * {
+    margin: 0;
+  }
+
+  /* An empty list inside a page is quieter than a missing page. */
+  .ek-state[data-ek-state="empty"] {
+    padding: 1.5em;
+    border: 1px dashed var(--ek-line-strong);
+    border-radius: var(--ek-radius);
+  }
+
+  .ek-state-code {
+    font-family: var(--ek-font-mono);
+    font-size: 0.82em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ek-muted);
+  }
+
+  .ek-state-title {
+    font-family: var(--ek-font-display);
+    font-size: var(--ek-step-3, 1.9rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .ek-state[data-ek-state="empty"] .ek-state-title {
+    font-size: var(--ek-step-1, 1.25rem);
+  }
+
+  .ek-state-body {
+    color: var(--ek-muted);
+    line-height: 1.6;
+  }
+
+  /* The address that was asked for, shown back so a mistyped link is plain. */
+  .ek-state-path {
+    font-family: var(--ek-font-mono);
+    font-size: 0.875em;
+    overflow-wrap: anywhere;
+    color: var(--ek-text);
+  }
+
+  .ek-state-heading {
+    font-family: var(--ek-font-sans);
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--ek-muted);
+    margin-block-start: 0.6em;
+  }
+
+  .ek-state-links {
+    display: grid;
+    gap: 0.15em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Each way on is a full-height target. */
+  .ek-state-links a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    font-weight: 600;
+  }
+
+  .ek-state-links small {
+    margin-inline-start: 0.6em;
+    font-family: var(--ek-font-mono);
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--ek-muted);
+  }
+
+  .ek-state [hidden] {
+    display: none;
+  }
+}

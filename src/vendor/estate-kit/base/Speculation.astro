@@ -1,0 +1,22 @@
+---
+/**
+ * I060. Same-site pages the reader points at are fetched before the click.
+ * Place once, at the end of <body>. No script runs: the browser reads the rules.
+ *
+ * mode "prefetch" (the default) cannot inflate analytics. Use "prerender" only
+ * where every script that counts a view waits for document.prerendering to end.
+ */
+import { speculationRules } from "./speculation.mjs";
+
+interface Props {
+  mode?: "prefetch" | "prerender";
+  eagerness?: "conservative" | "moderate" | "eager";
+  include?: string[];
+  exclude?: string[];
+  skip?: string;
+}
+
+const rules = speculationRules(Astro.props);
+---
+
+<script type="speculationrules" is:inline set:html={JSON.stringify(rules)} />

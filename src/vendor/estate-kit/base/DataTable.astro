@@ -1,0 +1,70 @@
+---
+/**
+ * I061. One table recipe, for a table built from data. Markdown tables get the
+ * same markup from base/rehype-tables.mjs.
+ *
+ * Numeric columns are found from the values unless a column says otherwise.
+ * The first column labels its rows and is a row header.
+ */
+import { numericColumns, STICKY_FROM } from "./table-rules.mjs";
+
+type Cell = string | number | null | undefined;
+interface Column {
+  key: string;
+  label: string;
+  /** Override the detection. */
+  numeric?: boolean;
+}
+interface Props {
+  columns: Column[];
+  rows: Record<string, Cell>[];
+  /** Names the table, above it, and labels the scrolling region. */
+  title?: string;
+  /** The source, at the foot, in the record face. Plain text; use the "source" slot for a link. */
+  source?: string;
+  /** A final row set as a total. */
+  total?: Record<string, Cell>;
+  /** Keep the first column in view. Defaults to tables of four or more columns. */
+  sticky?: boolean;
+  /** Label for the region when there is no title. */
+  label?: string;
+}
+
+const { columns, rows, title, source, total, sticky = columns.length >= STICKY_FROM, label } = Astro.props;
+if (!columns.length) throw new Error("DataTable: no columns");
+const show = (v: Cell) => (v === null || v === undefined ? "" : String(v));
+const found = numericColumns(rows.map((r) => columns.map((c) => show(r[c.key]))));
+const numeric = columns.map((c, i) => (i === 0 ? false : c.numeric ?? found[i]));
+const hasSource = Boolean(source) || Astro.slots.has("source");
+if (!title && !label) throw new Error("DataTable: give a title or a label, so the scrolling region has a name");
+---
+
+<div class="ek-table-wrap" role="region" tabindex="0" aria-label={title ?? label} data-ek-sticky={sticky ? "" : undefined}>
+  <table>
+    {title && !hasSource && <caption data-ek-title>{title}</caption>}
+    {hasSource && <caption><slot name="source">{source}</slot></caption>}
+    <thead>
+      <tr>
+        {columns.map((c, i) => <th scope="col" data-ek-num={numeric[i] ? "" : undefined}>{c.label}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          {columns.map((c, i) => i === 0
+            ? <th scope="row">{show(r[c.key])}</th>
+            : <td data-ek-num={numeric[i] ? "" : undefined}>{show(r[c.key])}</td>)}
+        </tr>
+      ))}
+    </tbody>
+    {total && (
+      <tfoot>
+        <tr>
+          {columns.map((c, i) => i === 0
+            ? <th scope="row">{show(total[c.key])}</th>
+            : <td data-ek-num={numeric[i] ? "" : undefined}>{show(total[c.key])}</td>)}
+        </tr>
+      </tfoot>
+    )}
+  </table>
+</div>

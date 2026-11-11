@@ -27,6 +27,9 @@ const schema = {
     })),
   },
 };
+/* An article in Latest appears again under its topic; only its first card
+   carries the shared name that the page transition uses. */
+const latestIds = new Set(latest.map((post) => post.id));
 ---
 
 <Layout title="News & investigations | Tom Pickup" description={description} schema={schema}>
@@ -74,6 +77,7 @@ const schema = {
         {topic.posts.length >= CARD_MIN ? (
           <div class="posts-grid">
             {topic.posts.map(post => <NewsCard
+              morph={!latestIds.has(post.id)}
               title={post.data.title}
               date={post.data.date.toISOString()}
               description={post.data.description}

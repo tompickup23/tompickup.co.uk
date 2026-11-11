@@ -1,0 +1,55 @@
+/* I059. The card becomes the page.
+
+   A card's image and the heading image of the page it opens share a
+   view-transition-name (base/vt.mjs makes one from the page's address), so
+   the browser moves one into the other across the navigation. Text is not
+   morphed: a title set at two sizes stretches on the way, so the title
+   cross-fades in place while the picture travels.
+
+   Chrome 126 and Safari 18.2 do this; Firefox navigates as it always has.
+   Nothing here runs for a reader who asked for reduced motion. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  @layer estate-base {
+    /* The page itself: a short cross-fade. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.18s;
+      animation-timing-function: ease-out;
+    }
+
+    /* Anything given the ek-morph class travels: under a third of a second,
+       easing out, the old and new pictures blended at their natural shapes
+       so neither is stretched. */
+    ::view-transition-group(.ek-morph) {
+      animation-duration: 0.32s;
+      animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    ::view-transition-old(.ek-morph),
+    ::view-transition-new(.ek-morph) {
+      block-size: 100%;
+      inline-size: 100%;
+      object-fit: cover;
+      overflow: clip;
+    }
+
+    /* Anything given the ek-hold class stays put while the page changes
+       beneath it: a fixed header, a persistent player. */
+    ::view-transition-group(.ek-hold) {
+      animation: none;
+      z-index: 10;
+    }
+
+    ::view-transition-old(.ek-hold) {
+      display: none;
+    }
+
+    ::view-transition-new(.ek-hold) {
+      animation: none;
+    }
+  }
+}

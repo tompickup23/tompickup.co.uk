@@ -1,0 +1,97 @@
+---
+/**
+ * I071. A missing page with a next step. Static hosting serves one 404 file
+ * for every wrong address, so the page cannot know at build time what was
+ * asked for. A small script reads the address in the browser and:
+ *   shows it back, so a mistyped link is plain;
+ *   names the closest pages that do exist (base/suggest.mjs);
+ *   says so when the address belongs to a section that was retired.
+ * Without the script the reader still has the sentence and the main links.
+ *
+ * Nothing from the address is written as markup: only as text.
+ */
+interface Page { url: string; title: string }
+interface Retired {
+  /** Addresses under this prefix belonged to the retired section. */
+  prefix: string;
+  /** One sentence saying what happened to it. */
+  message: string;
+  /** Where its content is now, if anywhere. */
+  href?: string;
+  label?: string;
+}
+interface Props {
+  title?: string;
+  /** Every page worth suggesting: address and title. */
+  pages: Page[];
+  /** The main ways on, always shown. */
+  links: { href: string; label: string; note?: string }[];
+  retired?: Retired[];
+  linksHeading?: string;
+  suggestHeading?: string;
+}
+
+const { title = "This page does not exist", pages, links, retired = [], linksHeading = "Start again from", suggestHeading = "Closest pages" } = Astro.props;
+---
+
+<section class="ek-state" data-ek-state="missing" data-ek-notfound>
+  <p class="ek-state-code">Error 404</p>
+  <h1 class="ek-state-title">{title}</h1>
+  <p class="ek-state-body"><slot>It may have moved, or the link may be wrong.</slot></p>
+  <p class="ek-state-body" data-ek-asked hidden>The address asked for was <span class="ek-state-path"></span></p>
+  <p class="ek-state-body" data-ek-retired hidden><span></span> <a hidden></a></p>
+  <div data-ek-suggest hidden>
+    <h2 class="ek-state-heading">{suggestHeading}</h2>
+    <ul class="ek-state-links"></ul>
+  </div>
+  <h2 class="ek-state-heading">{linksHeading}</h2>
+  <ul class="ek-state-links">
+    {links.map((l) => <li><a href={l.href}>{l.label}</a>{l.note && <small>{l.note}</small>}</li>)}
+  </ul>
+  <script type="application/json" data-ek-pages is:inline set:html={JSON.stringify({ pages, retired }).replace(/</g, "\\u003c")} />
+</section>
+
+<script>
+  import { retiredFor, suggest } from "./suggest.mjs";
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-ek-notfound]")) {
+    const data = JSON.parse(root.querySelector("[data-ek-pages]")?.textContent ?? "{}");
+    // A malformed percent sequence (/100%) throws; show the address as typed instead.
+    let path = location.pathname;
+    try { path = decodeURIComponent(path); } catch { /* keep the raw address */ }
+
+    const asked = root.querySelector<HTMLElement>("[data-ek-asked]");
+    if (asked && path !== "/404" && path !== "/404/" && path !== "/404.html") {
+      asked.querySelector("span")!.textContent = path.length > 120 ? `${path.slice(0, 120)}...` : path;
+      asked.hidden = false;
+    }
+
+    const was = retiredFor(path, data.retired ?? []);
+    const retired = root.querySelector<HTMLElement>("[data-ek-retired]");
+    if (was && retired) {
+      retired.querySelector("span")!.textContent = was.message;
+      const link = retired.querySelector("a")!;
+      if (was.href && was.label) {
+        link.href = was.href;
+        link.textContent = was.label;
+        link.hidden = false;
+      }
+      retired.hidden = false;
+    }
+
+    const close = was ? [] : suggest(path, data.pages ?? []);
+    const box = root.querySelector<HTMLElement>("[data-ek-suggest]");
+    if (close.length && box) {
+      const list = box.querySelector("ul")!;
+      for (const page of close) {
+        const a = document.createElement("a");
+        a.href = page.url;
+        a.textContent = page.title;
+        const li = document.createElement("li");
+        li.append(a);
+        list.append(li);
+      }
+      box.hidden = false;
+    }
+  }
+</script>

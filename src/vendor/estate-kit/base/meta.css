@@ -1,0 +1,60 @@
+/* I058. Monospace for the record.
+
+   Dates, source lines, edition notes and reference codes are the evidence
+   layer of a page. Set in one monospace face they read apart from the
+   argument, and a reader learns where to look to check something.
+
+   Opt in with class ek-meta. Never the prose, never a headline figure: a
+   monospace face is slower to read at length. The opt in is a class and not
+   a bare data attribute, because a site may already use that attribute name
+   to carry data.
+
+   The face is drawn larger on its body than the sans beside it, so it is
+   stepped down to sit level, and loosened slightly because small monospace
+   text sets tight. */
+@layer estate-base {
+  .ek-meta {
+    font-family: var(--ek-font-mono);
+    font-size: 0.875em;
+    font-weight: 400;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-variant-ligatures: none;
+    letter-spacing: 0.01em;
+    color: var(--ek-muted);
+    text-wrap: pretty;
+  }
+
+  /* A label before the value: SOURCE, UPDATED, EDITION. Small capitals in the
+     same face, spaced out so they read as a label and not as a word. */
+  .ek-meta-label {
+    font-family: var(--ek-font-mono);
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ek-muted);
+  }
+
+  /* Links inside the record keep the record's colour; the underline says
+     they are links. */
+  .ek-meta a {
+    color: inherit;
+  }
+
+  /* A row of record items: a date, a reading time, an edition. Divided by a
+     hairline, never by a typed bar or dash. */
+  .ek-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ek-meta-row > * + * {
+    margin-inline-start: 0.85em;
+    padding-inline-start: 0.85em;
+    border-inline-start: 1px solid var(--ek-line-strong);
+  }
+}

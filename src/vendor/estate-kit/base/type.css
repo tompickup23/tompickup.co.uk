@@ -1,0 +1,79 @@
+/* I064. Fluid type and a capped measure.
+
+   One clamp per step, from a 360px to a 1240px viewport, each with a rem
+   term so browser zoom and a reader's own font size still scale it (a bare
+   vw size ignores both). Steps 0 to 5 run from a 1.18 ratio on a phone to
+   1.26 on a desktop; the two small steps hold still, because small text that
+   shrinks further on a phone is the wrong way round. base/fluid.mjs holds the
+   sum and tests/base.test.ts checks these lines against it.
+
+   Headings read --ek-h1 to --ek-h3, which default to steps 5, 3 and 2, so a
+   site keeps its own endpoints by setting those three. */
+@layer estate-base {
+  :root {
+    --ek-step--2: 0.78rem;
+    --ek-step--1: 0.9rem;
+    --ek-step-0: clamp(1.0625rem, 1.0369rem + 0.1136vw, 1.125rem);
+    --ek-step-1: clamp(1.2537rem, 1.1868rem + 0.2977vw, 1.4175rem);
+    --ek-step-2: clamp(1.4794rem, 1.3538rem + 0.558vw, 1.7862rem);
+    --ek-step-3: clamp(1.7456rem, 1.539rem + 0.9182vw, 2.2506rem);
+    --ek-step-4: clamp(2.06rem, 1.7427rem + 1.4102vw, 2.8356rem);
+    --ek-step-5: clamp(2.4306rem, 1.9635rem + 2.0761vw, 3.5725rem);
+  }
+
+  html {
+    /* Never let a phone inflate text on rotation; the scale does the work. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-optical-sizing: auto;
+    font-kerning: normal;
+  }
+
+  body {
+    font-size: var(--ek-step-0);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--ek-font-display);
+    text-wrap: balance;
+    /* Large type wants tighter leading and tracking; both ease off as the
+       size falls. */
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+  }
+
+  h1 { font-size: var(--ek-h1, var(--ek-step-5)); }
+  h2 { font-size: var(--ek-h2, var(--ek-step-3)); line-height: 1.16; letter-spacing: -0.014em; }
+  h3 { font-size: var(--ek-h3, var(--ek-step-2)); line-height: 1.22; letter-spacing: -0.01em; }
+  h4 { font-size: var(--ek-step-1); line-height: 1.3; letter-spacing: 0; }
+
+  /* Prose never runs wider than the measure. The last line of a paragraph is
+     not left as one short word where the browser can prevent it, and opening
+     quotation marks hang in the margin where the browser can do that. */
+  p,
+  .ek-prose :is(li, blockquote, figcaption, dd) {
+    max-inline-size: var(--ek-measure);
+  }
+
+  /* List items outside prose are often navigation or cards, so they are not
+     capped; they still wrap well. */
+  p,
+  li,
+  blockquote,
+  figcaption,
+  dd {
+    text-wrap: pretty;
+    hanging-punctuation: first;
+  }
+
+  /* A heading is never the last thing above a page or column break. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+}

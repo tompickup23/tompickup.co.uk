@@ -10,6 +10,7 @@ import ListenToArticle from '../components/ListenToArticle.astro';
 import { isoDuration } from '../lib/audio';
 import { person } from '../data/person';
 import { Image } from 'astro:assets';
+import { vtName, vtStyle } from '../vendor/estate-kit/base/vt.mjs';
 import { articleImage, imageQuality, shareImageUrl } from '../lib/images';
 import type { NextRead } from '../lib/next-reads';
 
@@ -209,7 +210,7 @@ const pageTitle =
         <h1 class="article-title">{frontmatter.title}</h1>
         <p class="article-standfirst">{frontmatter.description}</p>
 
-        <p class="article-meta">
+        <p class="article-meta ek-meta">
           <span>Published <time datetime={isoDate(frontmatter.date)}>{formattedDate}</time></span>
           {formattedUpdated && <span>Updated <time datetime={isoDate(frontmatter.updated!)}>{formattedUpdated}</time></span>}
           <span>{readingTime} min read</span>
@@ -219,7 +220,7 @@ const pageTitle =
       {audio && <ListenToArticle audio={audio} />}
 
       {frontmatter.image && (
-        <figure class:list={['article-hero-image', { 'hero-uncropped': frontmatter.imageUncropped }]}>
+        <figure class:list={['article-hero-image', { 'hero-uncropped': frontmatter.imageUncropped }]} style={vtStyle(vtName('media', Astro.url.pathname))}>
           {heroMeta ? (
             <Image
               src={heroMeta}
@@ -250,7 +251,7 @@ const pageTitle =
       )}
 
       <div class="article-main">
-        <article class="prose">
+        <article class="prose ek-prose">
           <slot />
         </article>
 
@@ -347,9 +348,6 @@ const pageTitle =
     gap: 0.25rem 1.25rem;
     padding-top: 0.875rem;
     border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 0.9375rem;
-    font-variant-numeric: tabular-nums;
   }
 
   .article-meta time { color: var(--ink); }
@@ -487,17 +485,7 @@ const pageTitle =
     color: var(--ink);
   }
 
-  .prose :global(a) {
-    color: var(--teal);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
-  }
-
-  .prose :global(a:hover) {
-    color: var(--ink);
-    text-decoration-thickness: 2px;
-  }
+  /* Link colour, underline and hover come from the shared base layer. */
 
   .prose :global(strong) {
     color: var(--ink);
@@ -716,39 +704,11 @@ const pageTitle =
     margin: 2.5rem 0;
   }
 
-  /* ---- Tables: flat, ruled, numbers aligned ---- */
-  .prose :global(table) {
-    width: 100%;
-    table-layout: auto;
-    border-collapse: collapse;
-    margin: 1.75rem 0;
-    font-size: 1rem;
-    line-height: 1.45;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .prose :global(th) {
-    padding: 0.6rem 0.75rem;
-    font-weight: 600;
-    color: var(--ink);
-    font-size: 0.9375rem;
-    text-align: left;
-    vertical-align: bottom;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  .prose :global(td) {
-    padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--line);
-    color: var(--ink);
-    vertical-align: top;
-  }
-
-  .prose :global(th:first-child),
-  .prose :global(td:first-child) { padding-left: 0; text-align: left; width: auto; }
-  .prose :global(th:last-child),
-  .prose :global(td:last-child) { padding-right: 0; text-align: right; }
-
+  /* ---- Tables ----
+     Every Markdown table is wrapped and marked at build time by the shared
+     table recipe (rehype-tables.mjs in the vendored base layer): a region that
+     scrolls sideways on its own, numeric columns set to the end, the source
+     line as the caption. Its rules are in the base layer's tables.css. */
   .prose :global(td strong) { color: var(--ink); }
 
   .prose :global(.reform-row td) {
@@ -1302,13 +1262,6 @@ const pageTitle =
     .prose :global(span[style*="font-size: 3rem"]) { font-size: 2.25rem !important; }
     .prose :global(span[style*="font-size: 2.5rem"]) { font-size: 1.75rem !important; }
 
-    /* Tables scroll sideways rather than squeezing */
-    .prose :global(table) {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      font-size: 0.9375rem;
-    }
   }
 
   @media (max-width: 640px) {

@@ -1,0 +1,19 @@
+/* The Estate Kit base layer: the quick wins every site takes in one pass.
+   Ideas I057 to I064 and I071 in Reports Website_Audits/ideas.csv.
+
+   Everything sits in one cascade layer, so any rule a site already has wins
+   without a fight, and a site adopts a part by deleting its own version.
+   A site with an unlayered universal reset wraps that reset in a layer named
+   before this one (see base/README.md), or the reset beats the layer.
+
+   Import the whole layer, or the parts one at a time. */
+@layer reset, estate-base;
+
+@import "./contract.css";
+@import "./type.css";
+@import "./numerals.css";
+@import "./meta.css";
+@import "./links.css";
+@import "./tables.css";
+@import "./transitions.css";
+@import "./states.css";
