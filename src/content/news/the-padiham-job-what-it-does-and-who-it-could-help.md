@@ -55,7 +55,9 @@ It is meant for one job: making a place familiar before the real walk, alongside
 
 ## The rest of the game
 
-- **Take jobs around town.** Collect a tray of pies from the bakery and get them to the pub. Carry bunting to the Town Hall. Each job sends you between real places.
+The start screen now offers three ways to play. **Explore** is a wander with no job and no clock. **Jobs** is deliveries around town, one after another. **Get somewhere** is the practice trip described above. You can change between Explore and Jobs from the menu at any time.
+
+- **Take jobs around town.** Collect a tray of pies from the bakery and get them to the pub. Carry bunting to the Town Hall. Each job sends you between real places. There is no clock unless you switch it on.
 - **Do a good turn.** Once the first jobs are done, one delivery in three is for a neighbour: a hot dinner, a get well card, the morning paper. It pays nothing but thanks.
 - **Pick up litter.** It lies on the pavements. Walk over it and it is gone.
 - **Say hello.** The nearest passer-by stops and waves back.
@@ -66,13 +68,13 @@ It is meant for one job: making a place familiar before the real walk, alongside
 - **Catch a bus.** The stops in the town centre work. Pick your bus by its number and where it is going, wait for it, and ring the bell before your stop.
 - **Get about your way.** On foot, in a wheelchair or in a powerchair. It changes how you look and nothing else, and some of the people you pass use wheelchairs too.
 
-You can walk, run or sprint, and jump for the fun of it. The play area is 1,100 metres by 760 metres of the town centre, with 68 named places in it.
+You can walk, run or sprint, and jump for the fun of it. The controls are shown one line at a time as you play, and you can change how you look or start a new game from the menu. The play area is 1,100 metres by 760 metres of the town centre, with 68 named places in it.
 
 ## Who else it could help
 
 **Schools and families.** Every plaque gives its source, so a teacher can check each fact. A class could find all twenty and then walk the real street.
 
-**People who find games hard to use.** The settings include a calm town with no clock, larger text, stronger contrast, less movement on screen and messages that stay until you close them. The whole game can be played from a keyboard, and the way to the next place is given in words as well as by an arrow and a map. On a phone, the thumbstick comes to wherever your thumb lands.
+**People who find games hard to use.** The clock is off unless you ask for it. The settings include a calm town, larger text, stronger contrast, less movement on screen and messages that stay until you close them. The whole game can be played from a keyboard, and the way to the next place is given in words as well as by an arrow and a map. On a phone, the thumbstick comes to wherever your thumb lands.
 
 **Anyone who cannot have the pubs on screen.** [The plain version](/the-padiham-job/?edition=clean) keeps the pub doors shut and leaves out the caricature by the Town Hall. Practice routes always use it.
 
