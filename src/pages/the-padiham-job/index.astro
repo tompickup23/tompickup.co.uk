@@ -40,11 +40,6 @@ const schema = {
   <section class="sop-page">
     <header class="sop-intro">
       <h1>The Padiham Job</h1>
-      <p>
-        A game set on the real streets of Padiham town centre. Take jobs around town, call in at the Starkie Arms
-        and the Flying Dutchman, and try not to upset the pigeons. It is free, it runs in your browser and it is
-        still being built.
-      </p>
     </header>
 
     <div id="sop-stage" class="sop" data-world="/games/the-padiham-job/world.json">
@@ -71,6 +66,7 @@ const schema = {
       <button id="sop-map" class="sop-hud" type="button" aria-label="Open the full map"><canvas id="sop-mini" width="272" height="272"></canvas></button>
       <div id="sop-street" class="sop-hud">Padiham</div>
       <div id="sop-toast" class="sop-hud" role="status"></div>
+      <div id="sop-hint" class="sop-hud" role="status"></div>
       <div id="sop-plaque" class="sop-hud" role="status">
         <div class="t" id="sop-plaqueTitle"></div>
         <div class="d" id="sop-plaqueText"></div>
@@ -148,6 +144,7 @@ const schema = {
           <p class="name">Paused</p>
           <div class="acts">
             <button id="sop-resume" type="button">Carry on</button>
+            <button id="sop-modeBtn" type="button" class="not-practice">Take jobs</button>
             <button id="sop-mapBtn" type="button">Map</button>
             <button id="sop-daily" type="button">Today's job</button>
             <button id="sop-dailyShare" type="button" hidden>Share today's result</button>
@@ -157,9 +154,12 @@ const schema = {
             <button id="sop-full" type="button">Full screen</button>
             <button id="sop-tripBtn" type="button">Practise a trip</button>
             <button id="sop-leave" type="button" class="only-practice">Back to the main game</button>
+            <button id="sop-newGame" type="button" class="not-practice">Start a new game</button>
           </div>
           <p id="sop-menuNote" role="status"></p>
           <p id="sop-last"></p>
+          <h3>How you look</h3>
+          <div id="sop-lookSlot"></div>
           <h3>Settings</h3>
           <div id="sop-setSlot"></div>
           <div id="sop-routeMaker">
@@ -192,36 +192,32 @@ const schema = {
       <div id="sop-start">
         <div class="box" role="dialog" aria-label="Start The Padiham Job">
           <p class="name">The <span>Padiham</span> Job</p>
-          <p class="not-practice">Make your name on the real streets of Padiham. Take jobs, do a good turn, pick up litter, say hello, and try not to upset the pigeons.</p>
+          <p class="not-practice lead">The real streets of Padiham. Pick how to play.</p>
           <p class="only-practice">A practice trip has been set for you. Follow the markers one at a time. There is no clock and no score, and you can do it as many times as you like.</p>
           <ol id="sop-plan" class="only-practice" aria-label="Your trip, step by step"></ol>
           <p class="only-practice sop-warn">This is for getting to know a route. It does not teach road safety: the game has no traffic. On real roads, stop and cross the way you have been taught.</p>
-          <div id="sop-look">
-            <canvas id="sop-lookPic" width="120" height="150" role="img" aria-label="Your character"></canvas>
-            <div id="sop-lookOpts"></div>
+          <button id="sop-play" type="button" disabled>Loading</button>
+          <div id="sop-modes">
+            <button id="sop-modeExplore" class="mode" type="button" disabled><b>Explore</b><span>Wander the town. Find the plaques, pick up litter, say hello. No clock.</span></button>
+            <button id="sop-modeJobs" class="mode" type="button" disabled><b>Jobs</b><span>Deliveries around town, one after another.</span></button>
+            <div class="jobsRow">
+              <label><input type="checkbox" data-set="clock" /> Against the clock</label>
+              <button id="sop-modeDaily" type="button" disabled>Today's job</button>
+            </div>
+            <button id="sop-tripOpen" class="mode" type="button" hidden><b>Get somewhere</b><span>Pick a place and practise getting there, on foot or by bus.</span></button>
           </div>
-          <ul>
-            <li class="only-keys"><b>Move:</b> W A S D or the arrow keys</li>
-            <li class="only-keys"><b>Pace:</b> press R to change between walk, run and sprint. Hold Shift to go one faster</li>
-            <li class="only-keys"><b>Jump and wave:</b> Space to jump, or for a wheelie or a spin in a chair. H to say hello to someone nearby</li>
-            <li class="only-keys"><b>Look around:</b> click and drag, or press Q and E to turn</li>
-            <li class="only-keys"><b>Where next:</b> press G to be told the way, or M for the map</li>
-            <li class="only-touch"><b>Move:</b> put a thumb down on the lower left and push. The thumbstick comes to your thumb</li>
-            <li class="only-touch"><b>Pace:</b> tap WALK to change to run, then sprint</li>
-            <li class="only-touch"><b>Jump and wave:</b> tap JUMP (WHEELIE or SPIN in a chair), or HI to say hello to someone nearby</li>
-            <li class="only-touch"><b>Look around:</b> drag anywhere else on the screen</li>
-            <li><b>Buses:</b> stand at a bus stop and choose Bus stop<span class="only-keys">, or press B</span>. Ring the bell before your stop</li>
-            <li class="not-practice"><b>Pubs:</b> step on a blue ring to go inside</li>
-            <li class="not-practice"><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
-            <li class="not-practice"><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
-            <li><b>The way:</b> the arrow and the yellow line on the map follow the streets to the next place<span class="only-touch">. Tap the small map to open the full one</span></li>
-            <li class="only-keys"><b>Pause:</b> press Esc or click Menu</li>
-            <li class="only-touch"><b>Pause:</b> tap Menu</li>
-          </ul>
           <details class="sop-set-wrap">
-            <summary>Comfort and access settings</summary>
+            <summary>Change how you look</summary>
+            <div id="sop-look">
+              <canvas id="sop-lookPic" width="120" height="150" role="img" aria-label="Your character"></canvas>
+              <div id="sop-lookOpts"></div>
+            </div>
+          </details>
+          <details class="sop-set-wrap">
+            <summary>Settings and controls</summary>
             <div id="sop-settings" class="sop-set">
               <label><input type="checkbox" data-set="calm" /> Calm: fewer people, softer sound, no clock</label>
+              <label class="not-practice"><input type="checkbox" data-set="clock" /> Jobs against the clock, with a bonus for being quick</label>
               <label><input type="checkbox" data-set="reduce" /> Less movement on screen</label>
               <label><input type="checkbox" data-set="contrast" /> Stronger contrast on the panels</label>
               <label><input type="checkbox" data-set="hold" /> Messages stay until I close them</label>
@@ -234,9 +230,25 @@ const schema = {
                 <button type="button" data-text="2">Largest</button>
               </div>
             </div>
+            <ul>
+              <li class="only-keys"><b>Move:</b> W A S D or the arrow keys</li>
+              <li class="only-keys"><b>Pace:</b> press R to change between walk, run and sprint. Hold Shift to go one faster</li>
+              <li class="only-keys"><b>Jump and wave:</b> Space to jump, or for a wheelie or a spin in a chair. H to say hello to someone nearby</li>
+              <li class="only-keys"><b>Look around:</b> click and drag, or press Q and E to turn</li>
+              <li class="only-keys"><b>Where next:</b> press G to be told the way, or M for the map</li>
+              <li class="only-touch"><b>Move:</b> put a thumb down on the lower left and push. The thumbstick comes to your thumb</li>
+              <li class="only-touch"><b>Pace:</b> tap WALK to change to run, then sprint</li>
+              <li class="only-touch"><b>Jump and wave:</b> tap JUMP (WHEELIE or SPIN in a chair), or HI to say hello to someone nearby</li>
+              <li class="only-touch"><b>Look around:</b> drag anywhere else on the screen</li>
+              <li><b>Buses:</b> stand at a bus stop and choose Bus stop<span class="only-keys">, or press B</span>. Ring the bell before your stop</li>
+              <li class="not-practice"><b>Pubs:</b> step on a blue ring to go inside</li>
+              <li class="not-practice"><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
+              <li class="not-practice"><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
+              <li><b>The way:</b> the arrow and the yellow line on the map follow the streets to the next place<span class="only-touch">. Tap the small map to open the full one</span></li>
+              <li class="only-keys"><b>Pause:</b> press Esc or click Menu</li>
+              <li class="only-touch"><b>Pause:</b> tap Menu</li>
+            </ul>
           </details>
-          <button id="sop-play" type="button" disabled>Loading</button>
-          <button id="sop-tripOpen" type="button" hidden>Practise a trip</button>
           <p class="sop-credit">
             Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors,
             Open Database Licence. Contains OS data © Crown copyright and database right 2026.
@@ -249,6 +261,10 @@ const schema = {
 
     <div class="sop-notes">
       <h2>About the game</h2>
+      <p>
+        A game set on the real streets of Padiham town centre. Explore, take jobs around town, or practise getting
+        somewhere on foot or by bus. It is free, it runs in your browser and it is still being built.
+      </p>
       <p>
         The streets, the river, the building outlines and the named pubs, shops and landmarks are real. The jobs are
         made up for fun, the plain shop fronts carry made-up trades, and nothing here is endorsed by any business
@@ -400,16 +416,17 @@ const schema = {
 
 <style is:global>
   .sop-page { max-width: 1180px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-  .sop-intro h1 { margin: 0 0 0.5rem; }
-  .sop-intro p { max-width: 62ch; margin: 0 0 1.25rem; }
+  .sop-intro h1 { margin: 0 0 0.5rem; font-size: 1.6rem; line-height: 1.2; }
   .sop-notes { max-width: 68ch; margin-top: 2rem; }
   .sop-notes h2 { font-size: 1.15rem; margin: 1.5rem 0 0.4rem; }
   .sop-notes p { margin: 0 0 0.75rem; }
 
   .sop { --sop-ink: #14161a; --sop-card: rgba(20, 22, 26, 0.82); --sop-gold: #ffcf33; --sop-green: #5fd38d; --sop-text: #f4f1e8;
-    position: relative; width: 100%; height: min(calc(100svh - var(--sop-top, 72px) - 12px), 820px); min-height: 420px; scroll-margin-top: calc(var(--sop-top, 72px) + 6px); overflow: hidden; border-radius: 6px;
+    position: relative; width: 100%; height: min(calc(100svh - var(--sop-top, 72px) - var(--sop-intro, 64px) - 12px), 820px); min-height: 420px; scroll-margin-top: calc(var(--sop-top, 72px) + 6px); overflow: hidden; border-radius: 6px;
     background: #bcd3e6; color: var(--sop-text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+  /* Before Play the stage leaves room for the heading above it, so the start box is whole on arrival. */
+  .sop.started { --sop-intro: 0px; }
   .sop:fullscreen { height: 100vh; border-radius: 0; }
   .sop * { box-sizing: border-box; }
   .sop #sop-view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
@@ -567,6 +584,26 @@ const schema = {
   .sop #sop-start li b { color: var(--sop-gold); }
   .sop #sop-play { margin-top: 18px; width: 100%; padding: 16px; border: 0; border-radius: 14px; background: var(--sop-gold); color: var(--sop-ink); font-family: inherit; font-size: 20px; font-weight: 800; line-height: 1; cursor: pointer; }
   .sop #sop-play:disabled { opacity: 0.5; }
+  .sop #sop-start p.lead { margin-top: 8px; font-size: 15px; }
+  .sop #sop-modes { display: none; gap: 8px; margin-top: 12px; }
+  .sop:not(.practice) #sop-modes { display: grid; }
+  .sop #sop-modes .mode { display: block; width: 100%; min-height: 44px; margin: 0; padding: 10px 14px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 14px; background: rgba(255, 255, 255, 0.07); color: var(--sop-text); font-family: inherit; text-align: left; cursor: pointer; }
+  .sop #sop-modes .mode[hidden] { display: none; }
+  .sop #sop-modes .mode b { display: block; font-size: 19px; line-height: 1.2; color: var(--sop-gold); }
+  .sop #sop-modes .mode span { display: block; margin-top: 2px; font-size: 14.5px; font-weight: 500; line-height: 1.35; }
+  .sop #sop-modes .mode.pick { border-color: var(--sop-gold); background: rgba(255, 207, 51, 0.12); }
+  .sop #sop-modes .mode:disabled, .sop #sop-modeDaily:disabled { opacity: 0.5; cursor: default; }
+  .sop #sop-modes .jobsRow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; margin: -4px 0; padding: 0 6px; }
+  .sop #sop-modes .jobsRow label { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; color: var(--sop-text); cursor: pointer; }
+  .sop #sop-modes .jobsRow input { width: 20px; height: 20px; flex: none; accent-color: var(--sop-gold); }
+  .sop #sop-modeDaily { min-height: 40px; padding: 6px 14px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, 0.14); color: var(--sop-text); font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer; }
+  .sop #sop-modes button:focus-visible, .sop #sop-modes input:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .sop #sop-start .sop-set-wrap { margin-top: 8px; }
+  .sop #sop-start .sop-set-wrap ul { margin-top: 8px; }
+  .sop.nojob #sop-arrow { display: none; }
+  .sop #sop-hint { left: 50%; bottom: 54px; transform: translateX(-50%); max-width: min(520px, calc(100% - 24px)); padding: 9px 16px; border-radius: 12px; background: var(--sop-card); border: 2px solid var(--sop-gold); color: var(--sop-text); font-size: calc(16px * var(--sop-fs, 1)); font-weight: 650; line-height: 1.3; text-align: center; display: none; }
+  .sop #sop-hint.on { display: block; }
+  .sop.touch #sop-hint { bottom: auto; top: 46%; }
   .sop.t1 { --sop-fs: 1.25; }
   .sop.t2 { --sop-fs: 1.5; }
   .sop .sop-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -619,7 +656,7 @@ const schema = {
   @media (max-width: 640px) {
     .sop-page { padding: 1rem 0 2rem; }
     .sop-intro, .sop-notes { padding: 0 1rem; }
-    .sop { border-radius: 0; height: calc(100svh - var(--sop-top, 72px)); scroll-margin-top: var(--sop-top, 72px); }
+    .sop { border-radius: 0; height: calc(100svh - var(--sop-top, 72px) - var(--sop-intro, 56px)); scroll-margin-top: var(--sop-top, 72px); }
     /* Phone: one line of cash, the job card beside a smaller map, Menu under the map. */
     .sop #sop-cash { padding: 6px 10px; font-size: calc(16px * var(--sop-fs, 1)); }
     .sop #sop-cash small { display: none; }
@@ -647,7 +684,7 @@ const schema = {
   }
   /* A phone held sideways, or any short window: keep every panel clear of the thumbs. */
   @media (max-height: 520px) {
-    .sop { min-height: 260px; height: calc(100svh - var(--sop-top, 72px)); }
+    .sop { min-height: 260px; height: calc(100svh - var(--sop-top, 72px) - var(--sop-intro, 56px)); }
     .sop #sop-cash small { display: none; }
     .sop .sop-buttons { top: calc(20px + 42px * var(--sop-fs, 1)); left: 10px; right: auto; align-items: flex-start; gap: 5px; }
     .sop #sop-map { width: 96px; height: 96px; }

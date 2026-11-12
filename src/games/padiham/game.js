@@ -41,8 +41,11 @@ const list = (v) => new Set(Array.isArray(v) ? v : []);
 const state = { money: save.money || 0, done: save.done || 0, jobIndex: save.jobIndex || 0, pigeons: save.pigeons || 0, plaques: list(save.plaques),
   litter: save.litter || 0, hellos: save.hellos || 0, turns: save.turns || 0, metres: save.metres || 0, dailies: save.dailies || 0, pubs: list(save.pubs), stamps: list(save.stamps),
   job: null, playing: false, inside: null };
+// How the game is being played: 'explore' (no job until one is asked for) or 'jobs'. A save from before the
+// modes were added was a game of jobs. A new player has no mode until they pick one on the start screen.
+let mode = save.mode === 'explore' || save.mode === 'jobs' ? save.mode : save.done ? 'jobs' : null;
 function persist() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques], litter: state.litter, hellos: state.hellos, turns: state.turns, metres: Math.round(state.metres), dailies: state.dailies, pubs: [...state.pubs], stamps: [...state.stamps] })); } catch { /* private mode */ }
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ mode, money: state.money, done: state.done, jobIndex: state.jobIndex, pigeons: state.pigeons, plaques: [...state.plaques], litter: state.litter, hellos: state.hellos, turns: state.turns, metres: Math.round(state.metres), dailies: state.dailies, pubs: [...state.pubs], stamps: [...state.stamps] })); } catch { /* private mode */ }
 }
 // Link options for supporters and public bodies, read once from the address. Nothing is stored or sent.
 // ?calm=1 gives a quieter town: fewer passers-by and softer sound. ?edition=clean leaves out the selfie
@@ -72,7 +75,9 @@ if (PRACTICE) stage.classList.add('practice');
 // more contrast) or the calm link. S.text is 0, 1 or 2 for standard, large and largest panel text.
 const SET_KEY = 'padiham-settings-1';
 const mq = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
-const S = { calm: opts.get('calm') === '1' || PRACTICE, text: 0, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
+const S = { calm: opts.get('calm') === '1' || PRACTICE, text: 0, clock: false, reduce: mq('(prefers-reduced-motion: reduce)'), contrast: mq('(prefers-contrast: more)'), hold: false, follow: true, lefty: false };
+// Jobs are against the clock only if the player has asked for it, and never in the calm town.
+const timed = () => S.clock && !S.calm;
 const chosen = (() => { try { return JSON.parse(localStorage.getItem(SET_KEY) || '{}') || {}; } catch { return {}; } })();
 for (const k in S) if (typeof chosen[k] === typeof S[k] && !(k === 'calm' && S.calm)) S[k] = chosen[k];
 if (![0, 1, 2].includes(S.text)) S.text = 0;
@@ -83,7 +88,7 @@ function applySettings() {
   c.toggle('hc', S.contrast); c.toggle('still', S.reduce); c.toggle('hold', S.hold); c.toggle('lefty', S.lefty);
   sound.setLevel(S.calm ? 0.4 : 1);
   if (peds) peds.setCount(S.calm ? 6 : Infinity);
-  if (S.calm) $('timer').textContent = '';
+  if (!timed()) $('timer').textContent = '';
   for (const i of stage.querySelectorAll('input[data-set]')) i.checked = !!S[i.dataset.set];
   for (const b of stage.querySelectorAll('button[data-text]')) b.setAttribute('aria-pressed', String(Number(b.dataset.text) === S.text));
 }
@@ -759,7 +764,7 @@ function routeArrive(j) {
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); toast('Well done', j.steps[j.i].text, 3200); return; }
   const n = routeCount() + 1;
   try { localStorage.setItem(routeKey(), String(n)); } catch { /* private mode */ }
-  state.job = null; beam.visible = false; sound.done();
+  state.job = null; beam.visible = false; sound.done(); stage.classList.add('nojob');
   const done = trip ? 'You have arrived' : 'Route finished';
   $('jobTitle').textContent = done; $('jobText').textContent = `${trip ? `You are at ${endName(trip.to)}. You have done this trip` : 'You have walked it'} ${plural(n, 'time')}. Press Walk it again to start over`; $('dist').textContent = '';
   toast(done, `Well done. That is ${plural(n, 'time')}`, 4000);
@@ -829,7 +834,7 @@ function showStep() {
   $('jobTitle').textContent = j.title + (j.steps.length > 1 ? `, part ${j.i + 1} of ${j.steps.length}` : '');
   $('jobText').textContent = s.text;
   beam.position.set(s.poi.dx, groundH(s.poi.dx, s.poi.dz), s.poi.dz);
-  beam.visible = true;
+  beam.visible = true; stage.classList.remove('nojob');
   lastWords = ''; saidAt = -99;
 }
 // The way to the next place in words, measured from where the view is facing: the arrow says the same thing.
@@ -873,22 +878,37 @@ function arrive() {
   const j = state.job;
   if (j.route) { routeArrive(j); return; }
   if (j.i < j.steps.length - 1) { j.i++; showStep(); sound.pickup(); buzz(20); toast('Got it!', 'Now follow the arrow to the drop off', 1900); return; }
-  const bonus = !S.calm && !j.noClock && j.t <= j.par ? Math.round(j.pay / 2) : 0;
+  const bonus = timed() && !j.noClock && j.t <= j.par ? Math.round(j.pay / 2) : 0;
   state.money += j.pay + bonus; state.done++; buzz(60);
   if (j.turn) state.turns++;
   if (j.daily) state.dailies++;
   if (!j.daily && state.jobIndex < SCRIPT.length) state.jobIndex++;
   persist(); hud(); sound.done();
   if (j.daily) {
-    const old = dailyResult(), r = { date: j.daily, t: Math.round(j.t), par: j.par, calm: S.calm };
+    const old = dailyResult(), r = { date: j.daily, t: Math.round(j.t), par: j.par, calm: !timed() };
     if (!old || old.date !== r.date || old.calm || (!r.calm && r.t < old.t)) { try { localStorage.setItem(DAILY_KEY, JSON.stringify(r)); } catch { /* private mode */ } }
-    toast("Today's job done!", S.calm ? 'Open the menu to share it' : `${mmss(j.t)}. Open the menu to share it`, 4000);
-    makeJob(); checkStamps();
+    toast("Today's job done!", !timed() ? 'Open the menu to share it' : `${mmss(j.t)}. Open the menu to share it`, 4000);
+    nextJob(); checkStamps();
     return;
   }
   if (j.turn) toast('Good turn done', THANKS[Math.floor(Math.random() * THANKS.length)], 3200);
-  else toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : S.calm ? '' : j.noClock ? `The next job pays a bonus for being quick. ${isTouch ? 'Tap WALK' : 'Press R'} to run` : 'Beat the clock next time for a bonus', j.noClock ? 4200 : 2600);
-  makeJob(); checkStamps();
+  else toast(`Job done! +£${j.pay + bonus}`, bonus ? `Includes a £${bonus} speed bonus` : !timed() ? '' : j.noClock ? `The next job pays a bonus for being quick. ${isTouch ? 'Tap WALK' : 'Press R'} to run` : 'Beat the clock next time for a bonus', j.noClock ? 4200 : 2600);
+  nextJob(); checkStamps();
+}
+// With no job in hand the card says so and the arrow is put away.
+function idleCard() {
+  state.job = null; beam.visible = false; way = null; wayFor = null; wayPos = null;
+  $('jobTitle').textContent = 'Exploring'; $('jobText').textContent = `Wander where you like. ${isTouch ? 'Open the menu' : 'Press Esc'} if you want a job`;
+  $('dist').textContent = ''; $('timer').textContent = ''; stage.classList.add('nojob');
+}
+const nextJob = () => { if (mode === 'explore') idleCard(); else makeJob(); };
+const MODE_NAME = { explore: 'Explore', jobs: 'Jobs' };
+function setMode(m) {
+  mode = m; persist();
+  $('modeBtn').textContent = m === 'explore' ? 'Take jobs' : 'Just explore';
+  if (!world || PRACTICE) return;
+  if (m === 'jobs' && !state.job) makeJob();
+  else if (m === 'explore' && state.job && !state.job.daily) idleCard();
 }
 function hud() { $('money').textContent = state.money; $('done').textContent = `${plural(state.done, 'job')} done`; }
 
@@ -1116,7 +1136,7 @@ function openMenu() {
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0; persist();
   $('full').textContent = stage.classList.contains('fill') || document.fullscreenElement ? 'Leave full screen' : 'Full screen';
   $('dailyShare').hidden = !dailyLine();
-  dailyAsked = false; renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
+  dailyAsked = false; newAsked = false; renderJournal(); note(''); $('last').textContent = lastMsg ? `Last message: ${lastMsg}` : '';
   menu.classList.add('on'); $('resume').focus();
 }
 function closeMenu() { if (!menu.classList.contains('on')) return; menu.classList.remove('on'); state.playing = true; view.focus({ preventScroll: true }); }
@@ -1130,6 +1150,20 @@ menu.addEventListener('keydown', (e) => {
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 });
 $('menuBtn').addEventListener('click', openMenu);
+$('modeBtn').addEventListener('click', () => {
+  const m = mode === 'explore' ? 'jobs' : 'explore';
+  setMode(m); closeMenu();
+  toast(m === 'jobs' ? 'Jobs' : 'Exploring', m === 'jobs' ? 'Follow the arrow to the first place' : 'No jobs for now. Wander where you like', 3000);
+});
+// Starting again wipes the jobs, money, stamps and plaques. The look and the settings stay. The first press asks.
+let newAsked = false;
+$('newGame').addEventListener('click', () => {
+  if (!newAsked) { newAsked = true; note('This wipes your jobs, money, stamps and plaques. Your look and settings stay. Press Start a new game again to do it'); return; }
+  Object.assign(state, { money: 0, done: 0, jobIndex: 0, pigeons: 0, litter: 0, hellos: 0, turns: 0, metres: 0, dailies: 0 });
+  state.plaques.clear(); state.pubs.clear(); state.stamps.clear(); mode = null;
+  try { localStorage.removeItem(HINT_KEY); } catch { /* private mode */ }
+  persist(); location.reload();
+});
 $('daily').addEventListener('click', startDaily);
 $('dailyShare').addEventListener('click', async () => {
   const text = dailyLine();
@@ -1439,7 +1473,7 @@ function openBig() {
   if (!started || bigBox.classList.contains('on') || (buses && buses.riding)) return;
   closeBusMenu(); if (menu.classList.contains('on')) menu.classList.remove('on');
   state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
-  $('bigText').textContent = bigWords();
+  $('bigText').textContent = bigWords(); hintState.map = true;
   bigBox.classList.add('on');
   bigFit(); drawBig();
   $('bigClose').focus();
@@ -1616,12 +1650,40 @@ function step(dt) {
       // Read the way out when it changes, but not more than once every eight seconds.
       if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; const tw = turnWords(g.turn); say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}${tw ? '. ' + tw : ''}`); }
       const j = state.job;
-      $('timer').textContent = S.calm || j.noClock ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
-      let name = '', best = 14;
-      for (const r of roadGrid.at(player.x, player.z)) if (r[5]) { const dd = distToSeg(player.x, player.z, r)[0]; if (dd < best) { best = dd; name = r[5]; } }
-      $('street').textContent = name || 'Padiham';
-      drawMini();
+      $('timer').textContent = !timed() || j.noClock ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
+      streetNow(); drawMini(); hintTick(time);
     }
+  } else if (state.playing && !state.inside) {
+    // No job in hand: the street name, the small map and the prompts still keep up.
+    uiTick -= dt;
+    if (uiTick <= 0) { uiTick = 0.1; streetNow(); drawMini(); hintTick(time); }
+  }
+}
+function streetNow() {
+  let name = '', best = 14;
+  for (const r of roadGrid.at(player.x, player.z)) if (r[5]) { const dd = distToSeg(player.x, player.z, r)[0]; if (dd < best) { best = dd; name = r[5]; } }
+  $('street').textContent = name || 'Padiham';
+}
+// ---------- First prompts ----------
+// The controls are taught in play, one line at a time. Each line goes once the thing has been done, and is not
+// shown again on this device. The full list stays under Settings and controls on the start screen.
+const HINT_KEY = 'padiham-hints-1';
+const hintsDone = (() => { try { return new Set(JSON.parse(localStorage.getItem(HINT_KEY) || '[]')); } catch { return new Set(); } })();
+const hintState = { at: null, m0: 0, look0: 0, wait: 0, map: false };
+const HINTS = [
+  ['move', () => (isTouch ? 'Put a thumb on the lower left and push to move' : 'Move with W A S D or the arrow keys'), () => state.metres - hintState.m0 > 6],
+  ['look', () => (isTouch ? 'Drag anywhere else to look around' : 'Drag to look around, or press Q and E'), () => cam.lastLook > hintState.look0],
+  ['pace', () => (isTouch ? `Tap ${$('run').textContent} to go faster` : 'Press R to go faster'), () => gear > 0],
+  ['map', () => (isTouch ? 'Tap the small map to open the full map' : 'Press M for the map'), () => hintState.map],
+];
+function hintTick(time) {
+  const el = $('hint'), cur = HINTS.find((h) => !hintsDone.has(h[0]));
+  if (!cur || time < hintState.wait) { el.classList.remove('on'); return; }
+  if (hintState.at !== cur[0]) { hintState.at = cur[0]; hintState.m0 = state.metres; hintState.look0 = cam.lastLook; hintState.map = false; el.textContent = cur[1](); el.classList.add('on'); return; }
+  if (cur[0] === 'pace') el.textContent = cur[1]();
+  if (cur[2]()) {
+    hintsDone.add(cur[0]); hintState.at = null; hintState.wait = time + 1.2; el.classList.remove('on');
+    try { localStorage.setItem(HINT_KEY, JSON.stringify([...hintsDone])); } catch { /* private mode */ }
   }
 }
 // ---------- Quality ----------
@@ -1742,14 +1804,28 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
   hud();
   if (ROUTE || trip) { startRoute(); showPlan(); }
   else if (TRIP_RAW) { $('jobTitle').textContent = 'This trip link did not work'; $('jobText').textContent = 'Ask for a new link, or open the menu and choose Practise a trip'; $('dist').textContent = ''; }
-  else makeJob();
+  else if (mode === 'jobs') makeJob();
+  else idleCard();
   drawMini(); draftNote(); paceLabel();
+  // The start screen: a returning player gets Carry on first, in the way they last played. A new player picks.
   const b = $('play');
-  b.disabled = false; b.textContent = trip ? 'Start the trip' : ROUTE ? 'Start the route' : state.done ? 'Carry on' : 'Play';
+  const begin = () => {
+    $('setSlot').append($('settings')); $('lookSlot').append($('look'));
+    $('start').style.display = 'none'; stage.classList.add('started');
+    state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); view.focus({ preventScroll: true });
+  };
+  b.disabled = false;
+  if (PRACTICE) b.textContent = trip ? 'Start the trip' : ROUTE ? 'Start the route' : 'Play';
+  else if (mode) { b.textContent = `Carry on: ${MODE_NAME[mode]}`; setMode(mode); }
+  else b.hidden = true;
+  b.addEventListener('click', begin);
+  $(mode === 'jobs' ? 'modeJobs' : 'modeExplore').classList.add('pick');
+  for (const [id, m] of [['modeExplore', 'explore'], ['modeJobs', 'jobs']]) { $(id).disabled = false; $(id).addEventListener('click', () => { setMode(m); begin(); }); }
+  $('modeDaily').disabled = false;
+  $('modeDaily').addEventListener('click', () => { setMode('jobs'); begin(); startDaily(); });
   $('tripOpen').hidden = false;
-  b.addEventListener('click', () => { $('setSlot').append($('settings')); $('start').style.display = 'none'; state.playing = true; started = true; sound.start(); clearHeader(); stage.scrollIntoView({ block: 'start' }); });
   frame();
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; }, get ends() { return ends; }, get services() { return services; }, get trip() { return trip; }, get streets() { return streets; }, get way() { return way; }, guide, big };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; }, get ends() { return ends; }, get services() { return services; }, get trip() { return trip; }, get mode() { return mode; }, setMode, hintsDone, get streets() { return streets; }, get way() { return way; }, guide, big };

@@ -467,3 +467,30 @@ Block three of the hostile review (PJ-11 and PJ-21).
 Not done: the route takes no account of steps, kerbs or crossings, so it is not a step-free route; a parked car in
 the road still has to be walked round; the map does not follow the player while open. Dev handle additions:
 `streets`, `way`, `guide`, `big`.
+
+## Start screen and three ways to play (12 November 2026)
+
+Block two of the hostile review (PJ-01 to PJ-06) and Tom's decision on the clock (I191).
+
+- **Start screen.** A title, one line and three choices: Explore, Jobs and Get somewhere. Each choice is a button
+  that starts play (Get somewhere opens the trip picker). A returning player gets "Carry on: Jobs" or "Carry on:
+  Explore" first. The look chooser and the settings and controls list sit behind two `details` rows. The words on
+  the start box fell from 224 to about 95.
+- **`mode`** in `game.js` is `'explore'`, `'jobs'` or `null` for a new player, kept in the save. A save from before
+  the modes with any job done counts as `'jobs'`. `setMode(m)` switches in play; `nextJob()` gives the next job in
+  Jobs and `idleCard()` (no job, no arrow, class `nojob` on the stage) in Explore. Today's job can be taken from
+  either; after it Explore goes back to no job.
+- **The clock** is off unless asked for: setting `S.clock`, a checkbox under the Jobs card and in the settings.
+  `timed()` is `S.clock && !S.calm` and is what the timer, the bonus and the daily result now test. With the clock
+  off Today's job is shared as "done at a stroll".
+- **The page** no longer has a paragraph above the game. Before Play the stage is shorter by `--sop-intro` so the
+  whole start box shows under the heading; class `started` on the stage gives the height back.
+- **In the menu:** "Take jobs" or "Just explore" (`#sop-modeBtn`), the look chooser (moved in on Play, as the
+  settings are), and "Start a new game" (`#sop-newGame`), which asks first, then wipes jobs, money, stamps, plaques
+  and the prompts, and keeps the look and the settings.
+- **First prompts** (`HINTS`, `hintTick`, `#sop-hint`): move, look, pace and map, one line at a time, each gone for
+  good once done (key `padiham-hints-1`). The UI tick now runs with no job in hand, so the street name and the
+  small map keep up in Explore.
+
+Testing: when the Browser pane is hidden nothing is drawn, so play tests were run in headless Chrome through
+Playwright with software 3D (slow: allow ten minutes). The script pattern is in the pull request.
