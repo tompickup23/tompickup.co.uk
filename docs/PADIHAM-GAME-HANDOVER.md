@@ -437,3 +437,33 @@ Slice one of journey practice:
 Not done: the way is still a straight line and an arrow; no helper set-up page or postcode area yet; the ride from
 stop to stop was not watched to the end in the preview (it runs too slowly there), only the steps either side.
 To preview a worktree, add a temporary config to the main checkout's `.claude/launch.json` and restore it after.
+
+## Finding the way: street routes and the full map (12 November 2026)
+
+Block three of the hostile review (PJ-11 and PJ-21).
+
+- **`route.js`** is new. `Streets` builds a network from `world.roads`: the roads share points where they meet, so
+  the network is those points joined along each road, kept to the walkable slice. `route(ax, az, bx, bz, clear)`
+  snaps both ends to the nearest stretch and runs a shortest-path search; `along`, `pointAt` and `nextTurn` read a
+  route back. Service roads cost a quarter more, so a street is preferred to a back yard.
+- **Shut stretches.** `shutRoad` in `game.js` sends a walker along any stretch a wall crosses, sliding as the player
+  does (`pushOut`). If it cannot reach the far end the stretch is left out. Ten stretches are shut on the current
+  town file, all building outlines that sit on a road (the known overlap fault); routes go round them.
+- **`guide(time)`** gives the metres left by the streets, the spot to walk towards now (14 m further along the way,
+  or the place itself when it is within 24 m and in plain sight) and the next change of street. The way is worked
+  out again when the player is more than 14 m off it, at most once a second. Before a bus ride the way leads to the
+  stop to board at (`guideTarget`, `rode` on the step).
+- **What uses it:** the arrow, the distance on the job card, Where next (now says "by the streets" and the next
+  turn), the spoken way, the yellow line on the small map, the bonus time and pay for a job (`walkLen`), and the
+  walking distance in the trip picker.
+- **The full map** is the `#sop-big` dialog (`openBig`, `drawBig`): M, the Map button in the menu, or a press on the
+  small map, which is now a button. It pauses the game. `paintTown(g)` draws the town in metres for both maps. Names
+  are placed in order of importance and one that would cover another is left out. Drag, wheel, pinch, the three
+  buttons, arrow keys and plus and minus all work; the line of text above the map says the same as the picture.
+- **Bridge parapets** (`city.js`): a bridge stretch that another road or path crosses gets no parapet. The old
+  railway path crosses Station Road and Green Lane on bridges, and its parapets stood as walls across both streets,
+  which cut off Green Lane, Calder Green Approach and LP Technology from the rest of town.
+
+Not done: the route takes no account of steps, kerbs or crossings, so it is not a step-free route; a parked car in
+the road still has to be walked round; the map does not follow the player while open. Dev handle additions:
+`streets`, `way`, `guide`, `big`.

@@ -10,6 +10,7 @@ import { Sound } from './audio.js';
 import { buildPub } from './interior.js';
 import { PLAQUES } from './history.js';
 import { Buses } from './bus.js';
+import { Streets, along, pointAt, nextTurn } from './route.js';
 
 const $ = (id) => document.getElementById('sop-' + id);
 const stage = $('stage');
@@ -224,6 +225,10 @@ function drawMapBase() {
   const g = mapBase.getContext('2d');
   g.fillStyle = '#8f987c'; g.fillRect(0, 0, mapBase.width, mapBase.height);
   g.setTransform(MS, 0, 0, MS, -mapOrigin[0] * MS, -mapOrigin[1] * MS);
+  paintTown(g);
+}
+// The town drawn flat, in the game's own metres: the caller sets the scale and the offset.
+function paintTown(g) {
   const poly = (p) => { g.beginPath(); p.forEach(([x, z], i) => (i ? g.lineTo(x, z) : g.moveTo(x, z))); };
   g.fillStyle = '#6fae5c'; for (const gr of world.green) { poly(gr.p); g.fill(); }
   g.lineCap = g.lineJoin = 'round';
@@ -237,6 +242,7 @@ function drawMapBase() {
   g.fillStyle = '#5a5148'; for (const bd of world.buildings) { poly(bd.p); g.closePath(); g.fill(); }
   g.strokeStyle = '#c8201c'; g.lineWidth = 3; g.setLineDash([8, 6]);
   g.strokeRect(slice[0], slice[1], slice[2] - slice[0], slice[3] - slice[1]);
+  g.setLineDash([]);
 }
 const mini = $('mini').getContext('2d');
 function drawMini() {
@@ -256,10 +262,12 @@ function drawMini() {
     const lx2 = (l.x - player.x) * MS * zoom, lz2 = (l.z - player.z) * MS * zoom;
     if (l.mesh.visible && Math.hypot(lx2, lz2) < S / 2) { mini.beginPath(); mini.arc(S / 2 + lx2, S / 2 + lz2, 4, 0, 7); mini.fill(); }
   }
-  if (state.job && state.job.route) {
-    mini.strokeStyle = '#ffcf33'; mini.lineWidth = 5; mini.setLineDash([10, 8]); mini.beginPath(); mini.moveTo(S / 2, S / 2);
-    for (const st of state.job.steps.slice(state.job.i)) mini.lineTo(S / 2 + (st.poi.dx - player.x) * MS * zoom, S / 2 + (st.poi.dz - player.z) * MS * zoom);
-    mini.stroke(); mini.setLineDash([]);
+  if (way && wayPos) {
+    // The way along the streets, from where the player is now.
+    mini.lineCap = mini.lineJoin = 'round'; mini.beginPath(); mini.moveTo(S / 2, S / 2);
+    for (let i = wayPos.i + 1; i < way.pts.length; i++) mini.lineTo(S / 2 + (way.pts[i][0] - player.x) * MS * zoom, S / 2 + (way.pts[i][1] - player.z) * MS * zoom);
+    mini.strokeStyle = '#14161a'; mini.lineWidth = 9; mini.stroke();
+    mini.strokeStyle = '#ffcf33'; mini.lineWidth = 5; mini.stroke();
   }
   const t = target();
   if (t) {
@@ -406,6 +414,7 @@ addEventListener('keydown', (e) => {
   else if (e.code === 'KeyH') hello();
   else if (e.code === 'KeyB') busKey();
   else if (e.code === 'KeyG') whereNext();
+  else if (e.code === 'KeyM') openBig();
   else if (e.code === 'Enter') closeToast();
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
@@ -599,6 +608,73 @@ function leavePub() {
 
 const target = () => (state.job ? state.job.steps[state.job.i].poi : null);
 const dist2 = (a, b) => Math.hypot(a.dx - b.dx, a.dz - b.dz);
+
+// ---------- The way along the streets ----------
+// The arrow, the distance and the line on the map follow the streets and footpaths, not a straight line, so the
+// way never leads into a wall or the river. It is worked out again when the player strays from it.
+let streets = null, way = null, wayFor = null, wayAt = -9, wayPos = null;
+// Whether two spots can be joined on foot in a straight line: no tall wall and no river between them.
+function joined(ax, az, bx, bz) {
+  if (wallHit(ax, az, bx, bz) < 1) return false;
+  const n = Math.ceil(Math.hypot(bx - ax, bz - az) / 3);
+  for (let i = 1; i < n; i++) if (inRiver(ax + ((bx - ax) * i) / n, az + ((bz - az) * i) / n)) return false;
+  return true;
+}
+// Whether any wall, tall or low, crosses the line from A to B.
+function crossesWall(ax, az, bx, bz) {
+  const rx = bx - ax, rz = bz - az, n = Math.max(1, Math.ceil(Math.hypot(rx, rz) / 6));
+  for (let i = 0; i <= n; i++) for (const s of walls.at(ax + (rx * i) / n, az + (rz * i) / n)) {
+    const sx = s[2] - s[0], sz = s[3] - s[1], den = rx * sz - rz * sx;
+    if (Math.abs(den) < 1e-9) continue;
+    const t = ((s[0] - ax) * sz - (s[1] - az) * sx) / den, u = ((s[0] - ax) * rz - (s[1] - az) * rx) / den;
+    if (t > 0 && t < 1 && u >= 0 && u <= 1) return true;
+  }
+  return false;
+}
+// A stretch of road is shut if a walker sent along it, sliding round whatever is in the way as the player does,
+// cannot reach the far end. Some building outlines in the town file clip a carriageway: those can be walked
+// round and stay open. Only stretches a wall crosses are tried, so this costs little when the town is loaded.
+function shutRoad(ax, az, bx, bz) {
+  if (!crossesWall(ax, az, bx, bz)) return false;
+  const o = { x: ax, z: az }, max = Math.ceil((Math.hypot(bx - ax, bz - az) * 3) / 0.3) + 20;
+  pushOut(o);
+  for (let k = 0; k < max; k++) {
+    const dx = bx - o.x, dz = bz - o.z, d = Math.hypot(dx, dz);
+    if (d < 1.5) return false;
+    o.x += (dx / d) * 0.3; o.z += (dz / d) * 0.3; pushOut(o);
+  }
+  return true;
+}
+// Where the way leads now. Before a bus ride it is the stop to board at; after it, the place itself.
+function guideTarget() {
+  const j = state.job; if (!j) return null;
+  const s = j.steps[j.i];
+  return s.ride && !s.rode ? { dx: s.ride.stop.x, dz: s.ride.stop.z } : s.poi;
+}
+// { m: metres left by the streets, x, z: the spot to walk towards now, turn: the next change of street }
+function guide(time) {
+  const tg = guideTarget(), riding = !!buses && buses.riding;
+  if (riding && state.job) state.job.steps[state.job.i].rode = true;
+  if (!tg || state.inside || riding) { way = null; wayFor = null; wayPos = null; return null; }
+  const straight = Math.hypot(tg.dx - player.x, tg.dz - player.z);
+  if (!streets) return { m: straight, x: tg.dx, z: tg.dz, turn: null };
+  wayPos = way && wayFor === tg ? along(way, player.x, player.z) : null;
+  if ((!wayPos || wayPos.off > 14) && (wayFor !== tg || time - wayAt > 1)) {
+    way = streets.route(player.x, player.z, tg.dx, tg.dz, joined); wayFor = tg; wayAt = time;
+    wayPos = way ? along(way, player.x, player.z) : null;
+  }
+  if (!way || !wayPos) return { m: straight, x: tg.dx, z: tg.dz, turn: null };
+  // Close by and in plain sight, walk straight to it. Otherwise walk towards a spot a little further along the way.
+  if (straight < 24 && joined(player.x, player.z, tg.dx, tg.dz)) return { m: straight, x: tg.dx, z: tg.dz, turn: null };
+  const [x, z] = pointAt(way, wayPos.s + 14);
+  return { m: Math.max(straight, way.len - wayPos.s + wayPos.off), x, z, turn: nextTurn(way, wayPos.s) };
+}
+// The distance on foot between two spots by the streets, or the straight line if no way is found.
+function walkLen(ax, az, bx, bz) {
+  const r = streets && streets.route(ax, az, bx, bz, joined);
+  return r ? r.len : Math.hypot(bx - ax, bz - az);
+}
+const turnWords = (t) => (t && t.m < 400 ? `In ${Math.max(5, Math.round(t.m / 5) * 5)} metres, ${t.side ? `turn ${t.side} into` : 'carry on into'} ${t.name}` : '');
 let slicePois = [], jobPois = [];
 // Random deliveries keep to shops, pubs and public places: not schools or the surgery.
 const NO_RANDOM = new Set(['school', 'doctors']);
@@ -711,8 +787,8 @@ $('routeCopy').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(url); draftNote('Link copied. Anyone who opens it gets this route'); } catch { box.select(); draftNote('Copy the link from the box below'); }
 });
 
-// The bonus time allows for running most of the way, with a little to spare at each stop.
-const parFor = (d, stops) => Math.round((d * 1.4) / 8 + 8 * stops);
+// The bonus time allows for running most of the way by the streets, with a little to spare at each stop.
+const parFor = (d, stops) => Math.round((d * 1.15) / 8 + 8 * stops);
 // A spot on a named street, a fair walk from the shop, for a good turn. Only the street is named, never a house.
 function doorstep(from) {
   const roads = world.roads.filter((r) => r.n && r.c !== 'foot' && r.c !== 'service' && r.p.length > 1);
@@ -741,7 +817,7 @@ function makeJob() {
     else job = { title: 'Delivery', steps: [{ poi: a, text: `Collect ${thing} at ${a.n}` }, { poi: b, text: `Deliver it to ${b.n}` }] };
   }
   let d = 0, prev = { dx: player.x, dz: player.z };
-  for (const s of job.steps) { d += dist2(prev, s.poi); prev = s.poi; }
+  for (const s of job.steps) { d += walkLen(prev.dx, prev.dz, s.poi.dx, s.poi.dz); prev = s.poi; }
   job.i = 0; job.t = 0;
   job.par = parFor(d, job.steps.length);
   job.pay = job.turn ? 0 : Math.max(10, Math.round(d / 25) * 5);
@@ -767,16 +843,15 @@ function bearingWords(a) {
 }
 let lastWords = '', saidAt = -99;
 function wayNow() {
-  const tg = target();
-  if (!tg) return null;
-  const dx = tg.dx - player.x, dz = tg.dz - player.z;
-  return { m: Math.round(Math.hypot(dx, dz) / 5) * 5, words: bearingWords(wrap(Math.atan2(dx, dz) - cam.yaw)) };
+  const g = guide(clock.elapsedTime);
+  if (!g) return null;
+  return { m: Math.round(g.m / 5) * 5, words: bearingWords(wrap(Math.atan2(g.x - player.x, g.z - player.z) - cam.yaw)), turn: turnWords(g.turn) };
 }
 function whereNext() {
   if (state.inside) { toast(state.inside.pub.name, 'Walk back to the door to leave'); return; }
   const w = wayNow();
   if (!w) return;
-  toast(state.job.steps[state.job.i].text, `${w.m} metres, ${w.words}. You are on ${$('street').textContent}`, 5000);
+  toast(state.job.steps[state.job.i].text, `${w.m} metres by the streets, ${w.words}. ${w.turn ? w.turn + '. ' : ''}You are on ${$('street').textContent}`, 5000);
 }
 $('whereBtn').addEventListener('click', () => { if (state.playing) whereNext(); });
 // Messages show for at least two and a half seconds, or until closed if the player has asked for that.
@@ -925,7 +1000,7 @@ function startDaily() {
   if (homeStart) { player.x = homeStart.x; player.z = homeStart.z; player.heading = cam.yaw = homeStart.h; player.speed = 0; }
   else { player.x = job.start.dx; player.z = job.start.dz; for (let k = 0; k < 12 && nearWall(player.x, player.z, 1.2); k++) { player.x += 1; player.z += 0.6; } }
   let d = 0, prev = { dx: player.x, dz: player.z };
-  for (const st of job.steps) { d += dist2(prev, st.poi); prev = st.poi; }
+  for (const st of job.steps) { d += walkLen(prev.dx, prev.dz, st.poi.dx, st.poi.dz); prev = st.poi; }
   job.i = 0; job.t = 0; job.par = parFor(d, job.steps.length); job.pay = 30;
   state.job = job; showStep(); closeMenu();
   toast("Today's job", 'The same three stops for everyone today', 3500);
@@ -1231,7 +1306,7 @@ function tripWays() {
   $('tripGo').disabled = $('tripCopy').disabled = !a || !b || a === b; $('tripLink').hidden = true;
   if (!a || !b || a === b) { $('tripNote').textContent = 'Pick two different places'; return; }
   $('tripNote').textContent = '';
-  const direct = apart(a, b), ways = [{ code: `1.${a.id}.${b.id}`, text: `Walk all the way. About ${Math.round(direct / 10) * 10} metres in a straight line` }], rides = [];
+  const direct = apart(a, b), ways = [{ code: `1.${a.id}.${b.id}`, text: `Walk all the way. About ${Math.round(walkLen(a.x, a.z, b.x, b.z) / 10) * 10} metres by the streets` }], rides = [];
   for (const B of ends) {
     if (!B.stop || apart(a, B) > 300) continue;
     for (const o of buses.options(B.stop)) for (const L of o.later) {
@@ -1276,6 +1351,150 @@ function showPlan() {
   for (const t of [`Start at ${endName(trip.from)}`, ...state.job.steps.map((q) => q.text), `Arrive at ${endName(trip.to)}`]) { const li = document.createElement('li'); li.textContent = t; ol.append(li); }
 }
 
+// ---------- The full map ----------
+// Opened with M, from the menu, or by pressing the small map. The game waits while it is open. It shows the whole
+// of the town that can be walked, with place names, the bus stops that work, plaques already found and the way
+// to the next place. It can be dragged, and zoomed with the buttons, the wheel or the plus and minus keys.
+const bigBox = $('big'), bigCv = $('bigMap'), bigG = bigCv.getContext('2d');
+const big = { x: 0, z: 0, k: 1, min: 0.3, max: 4, queued: false };
+function bigFit() {
+  const r = bigCv.getBoundingClientRect();
+  big.min = Math.min(r.width / (slice[2] - slice[0] + 40), r.height / (slice[3] - slice[1] + 40));
+  big.k = big.min; big.x = (slice[0] + slice[2]) / 2; big.z = (slice[1] + slice[3]) / 2;
+}
+function bigClamp() {
+  big.k = Math.min(big.max, Math.max(big.min, big.k));
+  big.x = Math.min(slice[2], Math.max(slice[0], big.x)); big.z = Math.min(slice[3], Math.max(slice[1], big.z));
+}
+function drawBig() {
+  big.queued = false;
+  if (!bigBox.classList.contains('on')) return;
+  const r = bigCv.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1), W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
+  if (bigCv.width !== W || bigCv.height !== H) { bigCv.width = W; bigCv.height = H; }
+  const g = bigG, k = big.k * dpr, X = (x) => W / 2 + (x - big.x) * k, Z = (z) => H / 2 + (z - big.z) * k;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = '#8f987c'; g.fillRect(0, 0, W, H);
+  g.setTransform(k, 0, 0, k, W / 2 - big.x * k, H / 2 - big.z * k);
+  paintTown(g);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.lineCap = g.lineJoin = 'round';
+  // The way to the next place, then the places after it.
+  if (way) {
+    g.beginPath(); g.moveTo(X(player.x), Z(player.z));
+    for (let i = (wayPos ? wayPos.i : 0) + 1; i < way.pts.length; i++) g.lineTo(X(way.pts[i][0]), Z(way.pts[i][1]));
+    g.strokeStyle = '#14161a'; g.lineWidth = 8 * dpr; g.stroke();
+    g.strokeStyle = '#ffcf33'; g.lineWidth = 4.5 * dpr; g.stroke();
+  }
+  // Names are placed in order of how much they matter, and one that would cover another is left out.
+  const taken = [], fs = 12.5 * dpr;
+  const name = (text, x, y, colour = '#fff', must = false, italic = false) => {
+    g.font = `${italic ? 'italic 600' : '700'} ${fs}px system-ui, sans-serif`;
+    const w = g.measureText(text).width, box = [x - w / 2 - 4 * dpr, y - fs * 0.75, x + w / 2 + 4 * dpr, y + fs * 0.75];
+    if (box[2] < 0 || box[0] > W || box[3] < 0 || box[1] > H) return false;
+    if (!must && taken.some((t) => box[0] < t[2] && box[2] > t[0] && box[1] < t[3] && box[3] > t[1])) return false;
+    taken.push(box);
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineWidth = 3.5 * dpr; g.strokeStyle = 'rgba(20,22,26,.9)';
+    g.strokeText(text, x, y); g.fillStyle = colour; g.fillText(text, x, y);
+    return true;
+  };
+  const dot = (x, y, rad, fill, line = '#14161a') => { g.beginPath(); g.arc(x, y, rad * dpr, 0, 7); g.fillStyle = fill; g.fill(); g.lineWidth = 2 * dpr; g.strokeStyle = line; g.stroke(); };
+  const j = state.job, next = j ? j.steps[j.i].poi : null;
+  if (j) for (const st of j.steps.slice(j.i + 1)) dot(X(st.poi.dx), Z(st.poi.dz), 6, 'rgba(255,207,51,.45)');
+  if (next) { dot(X(next.dx), Z(next.dz), 9, '#ffcf33'); name(next.n.replace(/^the /, ''), X(next.dx), Z(next.dz) - 19 * dpr, '#ffcf33', true); }
+  // The player: an arrow pointing the way they face.
+  g.save(); g.translate(X(player.x), Z(player.z)); g.rotate(-player.heading + Math.PI); g.scale(dpr, dpr);
+  g.fillStyle = '#ff5a3c'; g.strokeStyle = '#fff'; g.lineWidth = 2.5;
+  g.beginPath(); g.moveTo(0, -13); g.lineTo(9, 10); g.lineTo(0, 5); g.lineTo(-9, 10); g.closePath(); g.fill(); g.stroke(); g.restore();
+  taken.push([X(player.x) - 12 * dpr, Z(player.z) - 12 * dpr, X(player.x) + 12 * dpr, Z(player.z) + 12 * dpr]);
+  name('You', X(player.x), Z(player.z) + 21 * dpr, '#ffd9cf', true);
+  if (buses) for (const st of buses.stops) {
+    if (st.dead) continue;
+    const x = X(st.x), y = Z(st.z), q = 5 * dpr;
+    g.fillStyle = '#2f6fb5'; g.strokeStyle = '#fff'; g.lineWidth = 1.5 * dpr; g.fillRect(x - q, y - q, q * 2, q * 2); g.strokeRect(x - q, y - q, q * 2, q * 2);
+  }
+  for (const p of plaques) if (state.plaques.has(p.id)) dot(X(p.x), Z(p.z), 4.5, '#fff', '#2f6fb5');
+  for (const p of slicePois) { if (p === next) continue; if (name(p.n.replace('Church of England', 'CE'), X(p.dx), Z(p.dz) - 11 * dpr)) dot(X(p.dx), Z(p.dz), 3, '#14161a', '#fff'); }
+  if (buses && big.k > 0.9) for (const st of buses.stops) if (!st.dead) name(`${st.n} stop`, X(st.x), Z(st.z) + 14 * dpr, '#cfe4ff');
+  // Street names, once each, at the middle of the longest stretch that carries the name.
+  if (big.k > 0.7) {
+    const longest = new Map();
+    for (const rd of world.roads) {
+      if (!rd.n || rd.c === 'foot' || rd.c === 'service') continue;
+      let len = 0; for (let i = 1; i < rd.p.length; i++) len += Math.hypot(rd.p[i][0] - rd.p[i - 1][0], rd.p[i][1] - rd.p[i - 1][1]);
+      const m = rd.p[Math.floor((rd.p.length - 1) / 2)], m2 = rd.p[Math.ceil((rd.p.length - 1) / 2)], old = longest.get(rd.n);
+      if (!old || len > old.len) longest.set(rd.n, { len, x: (m[0] + m2[0]) / 2, z: (m[1] + m2[1]) / 2 });
+    }
+    for (const [n, q] of [...longest].sort((a, b) => b[1].len - a[1].len)) if (q.x > slice[0] && q.x < slice[2] && q.z > slice[1] && q.z < slice[3]) name(n, X(q.x), Z(q.z), '#efe9d8', false, true);
+  }
+}
+const bigRedraw = () => { if (!big.queued) { big.queued = true; requestAnimationFrame(drawBig); } };
+function bigWords() {
+  const st = $('street').textContent, here = st && st !== 'Padiham' ? `You are on ${st}.` : 'You are in Padiham.';
+  if (state.inside) return `You are inside ${state.inside.pub.name}.`;
+  const w = wayNow();
+  if (!w || !state.job) return here;
+  return `${here} Next: ${state.job.steps[state.job.i].text}. ${w.m} metres by the streets. ${w.turn ? w.turn + '.' : ''}`;
+}
+function openBig() {
+  if (!started || bigBox.classList.contains('on') || (buses && buses.riding)) return;
+  closeBusMenu(); if (menu.classList.contains('on')) menu.classList.remove('on');
+  state.playing = false; keys.clear(); stickVec.x = stickVec.y = 0;
+  $('bigText').textContent = bigWords();
+  bigBox.classList.add('on');
+  bigFit(); drawBig();
+  $('bigClose').focus();
+}
+function closeBig() { if (!bigBox.classList.contains('on')) return; bigBox.classList.remove('on'); state.playing = true; view.focus({ preventScroll: true }); }
+function bigZoom(f, px, pz) {
+  // Zoom about a point on the map (the middle if none is given), so the spot under the pointer stays put.
+  const r = bigCv.getBoundingClientRect(), ox = px === undefined ? 0 : px - r.width / 2, oz = pz === undefined ? 0 : pz - r.height / 2;
+  const wx = big.x + ox / big.k, wz = big.z + oz / big.k;
+  big.k = Math.min(big.max, Math.max(big.min, big.k * f));
+  big.x = wx - ox / big.k; big.z = wz - oz / big.k;
+  bigClamp(); bigRedraw();
+}
+$('bigIn').addEventListener('click', () => bigZoom(1.6));
+$('bigOut').addEventListener('click', () => bigZoom(1 / 1.6));
+$('bigMe').addEventListener('click', () => { big.x = player.x; big.z = player.z; big.k = Math.max(big.k, 1.4); bigClamp(); bigRedraw(); });
+$('bigClose').addEventListener('click', closeBig);
+$('map').addEventListener('click', openBig);
+$('mapBtn').addEventListener('click', openBig);
+bigCv.addEventListener('wheel', (e) => { e.preventDefault(); const r = bigCv.getBoundingClientRect(); bigZoom(e.deltaY < 0 ? 1.25 : 0.8, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+{
+  // One finger or the mouse drags the map; two fingers pinch it.
+  const touches = new Map();
+  let gap = 0;
+  bigCv.addEventListener('pointerdown', (e) => { bigCv.setPointerCapture(e.pointerId); touches.set(e.pointerId, [e.clientX, e.clientY]); gap = 0; });
+  bigCv.addEventListener('pointermove', (e) => {
+    const was = touches.get(e.pointerId); if (!was) return;
+    touches.set(e.pointerId, [e.clientX, e.clientY]);
+    if (touches.size === 1) { big.x -= (e.clientX - was[0]) / big.k; big.z -= (e.clientY - was[1]) / big.k; bigClamp(); bigRedraw(); }
+    else if (touches.size === 2) {
+      const [a, b] = [...touches.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]), r = bigCv.getBoundingClientRect();
+      if (gap > 0 && d > 0) bigZoom(d / gap, (a[0] + b[0]) / 2 - r.left, (a[1] + b[1]) / 2 - r.top);
+      gap = d;
+    }
+  });
+  const up = (e) => { touches.delete(e.pointerId); gap = 0; };
+  bigCv.addEventListener('pointerup', up); bigCv.addEventListener('pointercancel', up);
+}
+bigBox.addEventListener('keydown', (e) => {
+  const step = 60 / big.k;
+  if (e.key === 'Tab') {
+    const f = [...bigBox.querySelectorAll('button')], first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  } else if (e.key === '+' || e.key === '=') bigZoom(1.6);
+  else if (e.key === '-' || e.key === '_') bigZoom(1 / 1.6);
+  else if (e.key === 'ArrowLeft') { big.x -= step; bigClamp(); bigRedraw(); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') { big.x += step; bigClamp(); bigRedraw(); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { big.z -= step; bigClamp(); bigRedraw(); e.preventDefault(); }
+  else if (e.key === 'ArrowDown') { big.z += step; bigClamp(); bigRedraw(); e.preventDefault(); }
+  else if (e.code === 'KeyM' && !e.repeat) closeBig();
+});
+addEventListener('keydown', (e) => { if (e.code === 'Escape' && bigBox.classList.contains('on')) { e.stopImmediatePropagation(); closeBig(); } }, true);
+addEventListener('resize', () => { if (bigBox.classList.contains('on')) { bigFit(); bigRedraw(); } });
+
 // ---------- Main loop ----------
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 let uiTick = 0, edgeWarn = 0, lastStep = 0;
@@ -1308,7 +1527,7 @@ function step(dt) {
     const dist = player.speed * dt, n = Math.max(1, Math.ceil(dist / 0.3));
     for (let k = 0; k < n; k++) { player.x += (mx / mag) * (dist / n); player.z += (mz / mag) * (dist / n); pushOut(player); }
     if (!state.inside) state.metres += Math.hypot(player.x - ox, player.z - oz);
-    if (!state.inside && inRiver(player.x, player.z)) { player.x = ox; player.z = oz; if (time > edgeWarn) { toast('Too deep to wade', 'Find a bridge', 1500); edgeWarn = time + 4; } }
+    if (!state.inside && inRiver(player.x, player.z)) { player.x = ox; player.z = oz; if (time > edgeWarn) { toast('Too deep to wade', 'The yellow line on the map leads to a bridge', 2600); edgeWarn = time + 4; } }
     const cx = Math.min(slice[2] - 1, Math.max(slice[0] + 1, player.x)), cz = Math.min(slice[3] - 1, Math.max(slice[1] + 1, player.z));
     if (!state.inside && (cx !== player.x || cz !== player.z)) { player.x = cx; player.z = cz; if (time > edgeWarn) { toast('Edge of the map', 'Turn back towards town', 1800); edgeWarn = time + 5; } }
     if (S.follow && lookId === null && time - cam.lastLook > 1.2) cam.yaw += Math.sin(wrap(h - cam.yaw)) * dt * 1.7;
@@ -1388,12 +1607,14 @@ function step(dt) {
     uiTick -= dt;
     if (uiTick <= 0) {
       uiTick = 0.1;
-      $('arrow').style.transform = `rotate(${-wrap(Math.atan2(dx, dz) - cam.yaw)}rad)`;
-      const words = bearingWords(wrap(Math.atan2(dx, dz) - cam.yaw)), m = Math.round(d / 5) * 5;
+      // The arrow points along the streets to the next turn, not straight at the place.
+      const g = guide(time) || { m: d, x: tg.dx, z: tg.dz, turn: null }, bearing = wrap(Math.atan2(g.x - player.x, g.z - player.z) - cam.yaw);
+      $('arrow').style.transform = `rotate(${-bearing}rad)`;
+      const words = bearingWords(bearing), m = Math.round(g.m / 5) * 5;
       const ride = state.job.steps[state.job.i].ride;
       $('dist').textContent = ride && riding ? 'On the bus' : ride && Math.hypot(player.x - ride.stop.x, player.z - ride.stop.z) < 14 ? (buses.busy ? 'Wait here for your bus' : 'Choose Bus stop to catch your bus') : `${m} m, ${words}`;
       // Read the way out when it changes, but not more than once every eight seconds.
-      if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}`); }
+      if (words !== lastWords && time - saidAt > 8) { lastWords = words; saidAt = time; const tw = turnWords(g.turn); say(`${state.job.steps[state.job.i].poi.n}: ${m} metres, ${words}${tw ? '. ' + tw : ''}`); }
       const j = state.job;
       $('timer').textContent = S.calm || j.noClock ? '' : j.t <= j.par ? `${mmss(j.t)}, bonus up to ${mmss(j.par)}` : mmss(j.t);
       let name = '', best = 14;
@@ -1468,6 +1689,8 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
     doors.push(d);
   }
   drawMapBase();
+  // The network of streets and paths for finding the way.
+  streets = new Streets(w.roads, slice, shutRoad);
   const home = pois.get('Padiham Town Hall') || slicePois[0];
   const hall = built.fronts.get('Padiham Town Hall');
   if (hall) {
@@ -1529,4 +1752,4 @@ Promise.all([fetch(stage.dataset.world).then((r) => r.json()), fetch(terrainUrl)
 }).catch((err) => { console.error(err); $('jobTitle').textContent = 'Could not load the town'; $('jobText').textContent = String(err); });
 
 // A handle for testing in the dev server only; it is not in the built site.
-if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; }, get ends() { return ends; }, get services() { return services; }, get trip() { return trip; } };
+if (import.meta.env.DEV) window.__padiham = { quality, stepDown, chunks, player, state, cam, pois, doors, input: stickVec, scene, renderer, plaques, get world() { return world; }, get built() { return built; }, get pigeons() { return pigeons; }, litter, jump, hello, toggleRun, get peds() { return peds; }, draft, ROUTE, get buses() { return buses; }, get ends() { return ends; }, get services() { return services; }, get trip() { return trip; }, get streets() { return streets; }, get way() { return way; }, guide, big };

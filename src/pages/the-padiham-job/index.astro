@@ -68,7 +68,7 @@ const schema = {
           <span id="sop-dist"></span><span id="sop-timer"></span>
         </div>
       </div>
-      <div id="sop-map" class="sop-hud"><canvas id="sop-mini" width="272" height="272"></canvas></div>
+      <button id="sop-map" class="sop-hud" type="button" aria-label="Open the full map"><canvas id="sop-mini" width="272" height="272"></canvas></button>
       <div id="sop-street" class="sop-hud">Padiham</div>
       <div id="sop-toast" class="sop-hud" role="status"></div>
       <div id="sop-plaque" class="sop-hud" role="status">
@@ -99,6 +99,29 @@ const schema = {
         </div>
       </div>
 
+      <div id="sop-big">
+        <div class="box" role="dialog" aria-modal="true" aria-labelledby="sop-bigName">
+          <div class="head">
+            <p class="name" id="sop-bigName">Map of Padiham</p>
+            <button id="sop-bigClose" type="button">Close</button>
+          </div>
+          <p id="sop-bigText" class="sop-help" role="status"></p>
+          <canvas id="sop-bigMap" role="img" aria-label="Map of the town centre. Your place, the next place and the way between them are described in the line above"></canvas>
+          <div class="acts">
+            <button id="sop-bigIn" type="button">Zoom in</button>
+            <button id="sop-bigOut" type="button">Zoom out</button>
+            <button id="sop-bigMe" type="button">Find me</button>
+          </div>
+          <ul class="key" aria-label="Key">
+            <li><i class="you"></i>You</li>
+            <li><i class="next"></i>Next place</li>
+            <li><i class="way"></i>Your way</li>
+            <li><i class="stop"></i>Bus stop</li>
+            <li class="not-practice"><i class="plq"></i>Plaque found</li>
+          </ul>
+        </div>
+      </div>
+
       <div id="sop-trip">
         <div class="box" role="dialog" aria-modal="true" aria-labelledby="sop-tripName">
           <p class="name" id="sop-tripName">Practise a trip</p>
@@ -125,6 +148,7 @@ const schema = {
           <p class="name">Paused</p>
           <div class="acts">
             <button id="sop-resume" type="button">Carry on</button>
+            <button id="sop-mapBtn" type="button">Map</button>
             <button id="sop-daily" type="button">Today's job</button>
             <button id="sop-dailyShare" type="button" hidden>Share today's result</button>
             <button id="sop-card" type="button">Take a postcard</button>
@@ -181,7 +205,7 @@ const schema = {
             <li class="only-keys"><b>Pace:</b> press R to change between walk, run and sprint. Hold Shift to go one faster</li>
             <li class="only-keys"><b>Jump and wave:</b> Space to jump, or for a wheelie or a spin in a chair. H to say hello to someone nearby</li>
             <li class="only-keys"><b>Look around:</b> click and drag, or press Q and E to turn</li>
-            <li class="only-keys"><b>Where next:</b> press G to be told the way</li>
+            <li class="only-keys"><b>Where next:</b> press G to be told the way, or M for the map</li>
             <li class="only-touch"><b>Move:</b> put a thumb down on the lower left and push. The thumbstick comes to your thumb</li>
             <li class="only-touch"><b>Pace:</b> tap WALK to change to run, then sprint</li>
             <li class="only-touch"><b>Jump and wave:</b> tap JUMP (WHEELIE or SPIN in a chair), or HI to say hello to someone nearby</li>
@@ -190,7 +214,7 @@ const schema = {
             <li class="not-practice"><b>Pubs:</b> step on a blue ring to go inside</li>
             <li class="not-practice"><b>History:</b> walk up to a blue plaque to read it. The menu keeps the ones you have found</li>
             <li class="not-practice"><b>Litter:</b> walk over any you see to pick it up. The menu keeps your stamps</li>
-            <li class="only-practice"><b>The way:</b> walk to the glowing beam. The arrow and the dotted line on the map point to it</li>
+            <li><b>The way:</b> the arrow and the yellow line on the map follow the streets to the next place<span class="only-touch">. Tap the small map to open the full one</span></li>
             <li class="only-keys"><b>Pause:</b> press Esc or click Menu</li>
             <li class="only-touch"><b>Pause:</b> tap Menu</li>
           </ul>
@@ -402,6 +426,28 @@ const schema = {
   .sop .sop-buttons button { background: var(--sop-card); color: var(--sop-text); border: 0; border-radius: 999px; padding: 7px 12px; font-family: inherit; font-size: calc(13px * var(--sop-fs, 1)); font-weight: 650; line-height: 1; cursor: pointer; }
   .sop #sop-map { top: 10px; right: 10px; width: 136px; height: 136px; border-radius: 50%; border: 3px solid var(--sop-ink); background: #8a9477; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
   .sop #sop-map canvas { width: 100%; height: 100%; display: block; }
+  .sop button#sop-map { pointer-events: auto; padding: 0; cursor: pointer; z-index: 3; }
+  .sop button#sop-map:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .sop #sop-big { position: absolute; inset: 0; z-index: 10; display: none; padding: 10px; background: rgba(20, 22, 26, 0.86); }
+  .sop #sop-big.on { display: flex; }
+  .sop #sop-big .box { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; background: #1b1e24; border-radius: 16px; padding: 12px; border-top: 6px solid var(--sop-gold); text-align: left; }
+  .sop #sop-big .head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .sop #sop-big .name { margin: 0; font-size: 20px; line-height: 1.1; font-weight: 800; color: var(--sop-text); }
+  .sop #sop-bigText { margin: 0; font-size: calc(14px * var(--sop-fs, 1)); line-height: 1.35; color: var(--sop-text); }
+  .sop #sop-bigMap { flex: 1; min-height: 0; width: 100%; border-radius: 10px; background: #8f987c; touch-action: none; cursor: grab; }
+  .sop #sop-big .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .sop #sop-big button { min-height: 44px; padding: 8px 14px; border: 0; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: var(--sop-text); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .sop #sop-big #sop-bigClose { background: var(--sop-gold); color: var(--sop-ink); }
+  .sop #sop-big button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .sop #sop-big .key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--sop-text); }
+  .sop #sop-big .key li { display: flex; align-items: center; gap: 6px; }
+  .sop.practice #sop-big .key .not-practice { display: none; }
+  .sop #sop-big .key i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .sop #sop-big .key .you { background: #ff5a3c; border: 2px solid #fff; }
+  .sop #sop-big .key .next { background: #ffcf33; border: 2px solid #14161a; }
+  .sop #sop-big .key .way { width: 18px; height: 5px; border-radius: 3px; background: #ffcf33; }
+  .sop #sop-big .key .stop { border-radius: 2px; background: #2f6fb5; border: 2px solid #fff; }
+  .sop #sop-big .key .plq { background: #fff; border: 2px solid #2f6fb5; }
   .sop #sop-street { bottom: 14px; left: 50%; transform: translateX(-50%); background: var(--sop-card); border-radius: 999px; padding: 6px 14px; font-size: calc(14px * var(--sop-fs, 1)); font-weight: 650; white-space: nowrap; }
   .sop #sop-ride { left: 50%; bottom: 58px; transform: translate(-50%, 12px); width: min(460px, calc(100% - 24px)); background: var(--sop-card); border-left: 5px solid #4fb3ff; border-radius: 14px; padding: 10px 14px; opacity: 0; transition: opacity 0.25s, transform 0.25s; text-align: center; }
   .sop #sop-ride.on { opacity: 1; transform: translate(-50%, 0); }
@@ -566,6 +612,7 @@ const schema = {
   .sop #sop-routeLink { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.3); background: #0f1114; color: var(--sop-text); font-family: inherit; font-size: 14px; }
   .sop .only-touch { display: none; }
   .sop.touch .only-touch { display: block; }
+  .sop.touch span.only-touch { display: inline; }
   .sop .sop-set label.only-touch { display: none; }
   .sop.touch .sop-set label.only-touch { display: flex; }
   .sop.touch .only-keys { display: none; }

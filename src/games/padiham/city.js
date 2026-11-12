@@ -982,6 +982,11 @@ export function buildWorld(scene, w, lowSpec) {
       const ex = dz * side * off, ez = -dx * side * off; // the same side as the box drawn below
       // A parapet belongs on the outside of the bridge, not between the road and a footway that share the deck.
       if (w.roads.some((r2) => r2.b && r2 !== r && r2.p.some((q, j) => j < r2.p.length - 1 && distToSeg(o.x + ex, o.z + ez, [q[0], q[1], r2.p[j + 1][0], r2.p[j + 1][1]])[0] < (r2.c === 'foot' ? r2.w / 2 + 0.2 : r2.w / 2 + 2.5)))) continue;
+      // Nor where another road or path passes across: the old railway path crosses Station Road and Green Lane
+      // on bridges, and a parapet drawn on flat ground there would stand as a wall across the street below.
+      const cuts = (p, q, u, v) => { const rx = q[0] - p[0], rz = q[1] - p[1], sx = v[0] - u[0], sz = v[1] - u[1], den = rx * sz - rz * sx; if (Math.abs(den) < 1e-9) return false; const t = ((u[0] - p[0]) * sz - (u[1] - p[1]) * sx) / den, k = ((u[0] - p[0]) * rz - (u[1] - p[1]) * rx) / den; return t > 0 && t < 1 && k > 0 && k < 1; };
+      const pa = [a[0] + ex, a[1] + ez], pc = [c[0] + ex, c[1] + ez];
+      if (w.roads.some((r2) => r2 !== r && r2.p.some((q, j) => j < r2.p.length - 1 && (cuts(pa, pc, q, r2.p[j + 1]) || cuts(a, c, q, r2.p[j + 1]))))) continue;
       put(P, BOX, o, side * off, 0.6, 0, 0.4, 1.2, l, STONE);
       walls.add(a[0] + ex, a[1] + ez, c[0] + ex, c[1] + ez, 1.5, [a[0] + ex, a[1] + ez, c[0] + ex, c[1] + ez, 1]);
     }
