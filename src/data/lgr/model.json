@@ -1243,23 +1243,33 @@
  },
  "paper": {
   "$meta": {
-   "citation": "Pickup, T. (2026). The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Five Structural Proposals, with a Postscript on the 2026 Decisions. Working paper, v3.1. Zenodo.",
-   "doi": "10.5281/zenodo.23016761",
-   "doiUrl": "https://doi.org/10.5281/zenodo.23016761",
-   "record": "https://zenodo.org/records/23016761",
-   "file": "zen.zip",
-   "fileMd5": "ec718021205d5f70695caa59fd156bd3",
-   "published": "2026-09-28",
+   "citation": "Pickup, T. (2026). The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions. Working paper, v3.2. Zenodo.",
+   "title": "The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions",
+   "version": "3.2",
+   "doi": "10.5281/zenodo.24208546",
+   "doiUrl": "https://doi.org/10.5281/zenodo.24208546",
+   "record": "https://zenodo.org/records/24208546",
+   "file": "LGR_Lancashire_Zenodo_Package_v3.2.zip",
+   "fileMd5": "f9b31fe7e25e20755842f53fc9a65d3c",
+   "published": "2026-11-13",
+   "previousVersion": {
+    "version": "3.1",
+    "doi": "10.5281/zenodo.23016761",
+    "doiUrl": "https://doi.org/10.5281/zenodo.23016761",
+    "published": "2026-09-28"
+   },
    "tableSource": "derived/paper_tables.md, Table 8a",
    "figureSource": "derived/paper_figures.json",
    "peerReviewed": false,
-   "note": "Working paper, not peer reviewed. Steady-state net annual position and ten-year NPV at 3.5% (2024-25 prices), for 2, 3, 4 and 5 unitaries. Structural effects only: transformation savings are excluded. The author is a Cabinet member of Lancashire County Council, which proposed two unitaries; see the paper's Declaration of Interests."
+   "note": "Working paper, not peer reviewed. Steady-state net annual position and ten-year NPV at 3.5% (2024-25 prices), for 2, 3, 4 and 5 unitaries and two single-council forms that no council proposed (one new council for the whole area, 1UA; the county council with its twelve districts, 1UA (county+12)). Structural effects only: transformation savings are excluded. The model's ordering favours fewer councils by construction. The author is a Cabinet member of Lancashire County Council, which proposed two unitaries and would be the continuing authority under one of the single-council forms; see the paper's Declaration of Interests."
   },
   "configurations": [
    "2UA",
    "3UA",
    "4UA",
-   "5UA"
+   "5UA",
+   "1UA",
+   "1UA (county+12)"
   ],
   "rows": [
    {
@@ -1269,19 +1279,95 @@
      "\u00a375.9M",
      "\u00a331.7M",
      "\u2212\u00a32.6M",
-     "\u2212\u00a333.3M"
+     "\u2212\u00a333.3M",
+     "\u00a3133.0M",
+     "\u00a388.4M"
     ],
     "tenYearNpv": [
      "\u00a3491.6M",
      "\u00a3135.4M",
      "\u2212\u00a3140.5M",
-     "\u2212\u00a3389.1M"
+     "\u2212\u00a3389.1M",
+     "\u00a3943.4M",
+     "\u00a3619.1M"
     ],
     "payback": [
      "1.8",
      "4.2",
      "none",
-     "none"
+     "none",
+     "0.8",
+     "1.0"
+    ]
+   },
+   {
+    "label": "Savings scaled to what Buckinghamshire reported",
+    "paperLabel": "Realised savings per resident for two unitaries set to Buckinghamshire's reported rate (as in Table 8d; version 3.2, F75)",
+    "netAnnual": [
+     "\u00a318.0M",
+     "\u2212\u00a316.7M",
+     "\u2212\u00a343.9M",
+     "\u2212\u00a367.9M",
+     "\u00a361.3M",
+     "\u00a342.9M"
+    ],
+    "tenYearNpv": [
+     "\u00a361.3M",
+     "\u2212\u00a3224.5M",
+     "\u2212\u00a3447.8M",
+     "\u2212\u00a3646.6M",
+     "\u00a3410.3M",
+     "\u00a3280.0M"
+    ],
+    "payback": null
+   },
+   {
+    "label": "Savings scaled to what West and North Northamptonshire reported",
+    "paperLabel": "The same, at West and North Northamptonshire's reported rate (as in Table 8d; version 3.2, F75)",
+    "netAnnual": [
+     "\u00a30.8M",
+     "\u2212\u00a331.2M",
+     "\u2212\u00a356.2M",
+     "\u2212\u00a378.2M",
+     "\u00a340.0M",
+     "\u00a329.3M"
+    ],
+    "tenYearNpv": [
+     "\u2212\u00a367.0M",
+     "\u2212\u00a3331.9M",
+     "\u2212\u00a3539.5M",
+     "\u2212\u00a3723.4M",
+     "\u00a3251.3M",
+     "\u00a3178.9M"
+    ],
+    "payback": null
+   },
+   {
+    "label": "Councillors paid at the two-council allowance rate",
+    "paperLabel": "Councillors at the two unitaries' allowance rate (like for like; version 3.2)",
+    "netAnnual": [
+     "\u00a375.9M",
+     "\u00a331.7M",
+     "\u2212\u00a32.6M",
+     "\u2212\u00a333.3M",
+     "\u00a3133.7M",
+     "\u00a389.1M"
+    ],
+    "tenYearNpv": [
+     "\u00a3491.6M",
+     "\u00a3135.4M",
+     "\u2212\u00a3140.5M",
+     "\u2212\u00a3389.1M",
+     "\u00a3948.9M",
+     "\u00a3624.7M"
+    ],
+    "payback": [
+     "1.8",
+     "4.2",
+     "none",
+     "none",
+     "0.8",
+     "0.9"
     ]
    },
    {
@@ -1291,19 +1377,25 @@
      "\u00a357.5M",
      "\u00a315.4M",
      "\u2212\u00a316.9M",
-     "\u2212\u00a345.8M"
+     "\u2212\u00a345.8M",
+     "\u00a3112.4M",
+     "\u00a375.1M"
     ],
     "tenYearNpv": [
      "\u00a3354.8M",
      "\u00a314.5M",
      "\u2212\u00a3247.3M",
-     "\u2212\u00a3482.3M"
+     "\u2212\u00a3482.3M",
+     "\u00a3790.6M",
+     "\u00a3519.8M"
     ],
     "payback": [
      "2.2",
      "7.6",
      "none",
-     "none"
+     "none",
+     "0.9",
+     "1.1"
     ]
    },
    {
@@ -1313,19 +1405,25 @@
      "\u00a369.3M",
      "\u00a318.8M",
      "\u2212\u00a318.6M",
-     "\u2212\u00a351.1M"
+     "\u2212\u00a351.1M",
+     "\u00a3145.5M",
+     "\u00a388.4M"
     ],
     "tenYearNpv": [
      "\u00a3433.8M",
      "\u00a321.6M",
      "\u2212\u00a3282.3M",
-     "\u2212\u00a3547.2M"
+     "\u2212\u00a3547.2M",
+     "\u00a31,051.9M",
+     "\u00a3619.1M"
     ],
     "payback": [
      "2.1",
      "7.3",
      "none",
-     "none"
+     "none",
+     "0.6",
+     "1.0"
     ]
    },
    {
@@ -1335,19 +1433,25 @@
      "\u00a362.5M",
      "\u00a33.3M",
      "\u2212\u00a338.1M",
-     "\u2212\u00a373.3M"
+     "\u2212\u00a373.3M",
+     "\u00a3164.2M",
+     "\u00a388.4M"
     ],
     "tenYearNpv": [
      "\u00a3372.6M",
      "\u2212\u00a3114.2M",
      "\u2212\u00a3453.0M",
-     "\u2212\u00a3741.0M"
+     "\u2212\u00a3741.0M",
+     "\u00a31,212.1M",
+     "\u00a3619.1M"
     ],
     "payback": [
      "2.3",
      "none",
      "none",
-     "none"
+     "none",
+     "0.5",
+     "1.0"
     ]
    },
    {
@@ -1357,19 +1461,25 @@
      "\u00a350.9M",
      "\u00a32.5M",
      "\u2212\u00a333.0M",
-     "\u2212\u00a363.7M"
+     "\u2212\u00a363.7M",
+     "\u00a3125.0M",
+     "\u00a375.1M"
     ],
     "tenYearNpv": [
      "\u00a3297.0M",
      "\u2212\u00a399.3M",
      "\u2212\u00a3389.1M",
-     "\u2212\u00a3640.4M"
+     "\u2212\u00a3640.4M",
+     "\u00a3899.2M",
+     "\u00a3519.8M"
     ],
     "payback": [
      "2.5",
      "none",
      "none",
-     "none"
+     "none",
+     "0.7",
+     "1.1"
     ]
    },
    {
@@ -1379,19 +1489,25 @@
      "\u00a344.1M",
      "\u2212\u00a313.0M",
      "\u2212\u00a352.4M",
-     "\u2212\u00a385.8M"
+     "\u2212\u00a385.8M",
+     "\u00a3143.7M",
+     "\u00a375.1M"
     ],
     "tenYearNpv": [
      "\u00a3235.9M",
      "\u2212\u00a3235.2M",
      "\u2212\u00a3559.8M",
-     "\u2212\u00a3834.2M"
+     "\u2212\u00a3834.2M",
+     "\u00a31,059.4M",
+     "\u00a3519.8M"
     ],
     "payback": [
      "2.9",
      "none",
      "none",
-     "none"
+     "none",
+     "0.5",
+     "1.1"
     ]
    },
    {
@@ -1401,19 +1517,25 @@
      "\u00a375.0M",
      "\u00a326.3M",
      "\u2212\u00a310.5M",
-     "\u2212\u00a343.7M"
+     "\u2212\u00a343.7M",
+     "\u00a3140.6M",
+     "\u00a388.4M"
     ],
     "tenYearNpv": [
      "\u00a3484.2M",
      "\u00a391.9M",
      "\u2212\u00a3205.2M",
-     "\u2212\u00a3473.6M"
+     "\u2212\u00a3473.6M",
+     "\u00a31,003.9M",
+     "\u00a3619.1M"
     ],
     "payback": [
      "1.8",
      "5.0",
      "none",
-     "none"
+     "none",
+     "0.7",
+     "1.0"
     ]
    },
    {
@@ -1423,19 +1545,25 @@
      "\u00a358.1M",
      "\u00a337.0M",
      "\u00a320.8M",
-     "\u00a35.3M"
+     "\u00a35.3M",
+     "\u00a382.0M",
+     "\u00a358.5M"
     ],
     "tenYearNpv": [
      "\u00a3380.7M",
      "\u00a3210.3M",
      "\u00a380.1M",
-     "\u2212\u00a346.1M"
+     "\u2212\u00a346.1M",
+     "\u00a3564.4M",
+     "\u00a3396.4M"
     ],
     "payback": [
      "1.7",
      "2.7",
      "4.6",
-     "none"
+     "none",
+     "1.1",
+     "1.3"
     ]
    },
    {
@@ -1445,19 +1573,25 @@
      "\u00a337.9M",
      "\u00a319.4M",
      "\u00a35.5M",
-     "\u2212\u00a37.9M"
+     "\u2212\u00a37.9M",
+     "\u00a358.6M",
+     "\u00a342.6M"
     ],
     "tenYearNpv": [
      "\u00a3230.0M",
      "\u00a379.7M",
      "\u2212\u00a333.9M",
-     "\u2212\u00a3144.0M"
+     "\u2212\u00a3144.0M",
+     "\u00a3390.4M",
+     "\u00a3278.0M"
     ],
     "payback": [
      "2.3",
      "4.3",
      "none",
-     "none"
+     "none",
+     "1.4",
+     "1.7"
     ]
    },
    {
@@ -1467,82 +1601,254 @@
      "\u00a375.7M",
      "\u00a334.2M",
      "\u00a31.5M",
-     "\u2212\u00a327.8M"
+     "\u2212\u00a327.8M",
+     "\u00a3127.6M",
+     "\u00a388.4M"
     ],
     "tenYearNpv": [
      "\u00a3490.5M",
      "\u00a3158.5M",
      "\u2212\u00a3103.4M",
-     "\u2212\u00a3339.6M"
+     "\u2212\u00a3339.6M",
+     "\u00a3895.3M",
+     "\u00a3619.1M"
     ],
     "payback": [
      "1.8",
      "3.8",
      "none",
-     "none"
+     "none",
+     "0.9",
+     "1.0"
+    ]
+   }
+  ],
+  "singleCouncilRows": [
+   {
+    "label": "Council tax collection and election costs scaled one for one with size",
+    "paperLabel": "Collection and electoral line elasticities at 1 for the single councils (the lines on which they lie beyond the data; version 3.2)",
+    "netAnnual": [
+     "\u00a3125.1M",
+     "\u00a381.9M"
+    ],
+    "tenYearNpv": [
+     "\u00a3884.8M",
+     "\u00a3570.7M"
+    ]
+   },
+   {
+    "label": "Without the care placements term for people aged 65 and over",
+    "paperLabel": "Adult placements, 65 and over (A1) term excluded (version 3.2, item G)",
+    "netAnnual": [
+     "\u00a3135.2M",
+     "\u00a388.4M"
+    ],
+    "tenYearNpv": [
+     "\u00a3963.4M",
+     "\u00a3619.1M"
+    ]
+   },
+   {
+    "label": "Without the care placements term for people aged 18 to 64",
+    "paperLabel": "Adult placements, 18 to 64 (A11) term excluded (version 3.2, item G)",
+    "netAnnual": [
+     "\u00a3133.0M",
+     "\u00a388.4M"
+    ],
+    "tenYearNpv": [
+     "\u00a3943.6M",
+     "\u00a3619.1M"
+    ]
+   },
+   {
+    "label": "Without any of the three terms that count against a larger council",
+    "paperLabel": "All negative parts excluded (SEN transport (T1), adult placements, 65 and over (A1), adult placements, 18 to 64 (A11); version 3.2, item G)",
+    "netAnnual": [
+     "\u00a3142.9M",
+     "\u00a388.4M"
+    ],
+    "tenYearNpv": [
+     "\u00a31,024.1M",
+     "\u00a3619.1M"
+    ]
+   },
+   {
+    "label": "Each single council's savings scaled to Buckinghamshire's rate per resident",
+    "paperLabel": "Own calibration: each single council's realisation set so that its own realised structural saving per resident equals Buckinghamshire's reported rate, capped at the central 75% (version 3.2, F05)",
+    "netAnnual": [
+     "\u00a348.9M",
+     "\u00a343.8M"
+    ],
+    "tenYearNpv": [
+     "\u00a3317.6M",
+     "\u00a3287.4M"
+    ]
+   },
+   {
+    "label": "Each single council's savings scaled to West and North Northamptonshire's rate per resident",
+    "paperLabel": "Own calibration, the same at West and North Northamptonshire's reported rate (version 3.2, F05)",
+    "netAnnual": [
+     "\u00a331.6M",
+     "\u00a329.9M"
+    ],
+    "tenYearNpv": [
+     "\u00a3189.3M",
+     "\u00a3183.8M"
     ]
    }
   ],
   "monteCarlo": [
    {
     "paperLabel": "Monte Carlo, Option 2 (central)",
-    "pNetPositive": [
-     "100%",
-     "100%",
-     "46%",
-     "3%"
-    ],
-    "pNpvPositive": [
-     "100%",
-     "88%",
-     "10%",
-     "0%"
-    ]
+    "pNetPositive": {
+     "2UA": "100%",
+     "3UA": "100%",
+     "4UA": "46%",
+     "5UA": "3%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    },
+    "pNpvPositive": {
+     "2UA": "100%",
+     "3UA": "88%",
+     "4UA": "10%",
+     "5UA": "0%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    }
+   },
+   {
+    "paperLabel": "Monte Carlo, Option 2 (central), one new council with replication held at 1 (version 3.2)",
+    "pNetPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    },
+    "pNpvPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    }
    },
    {
     "paperLabel": "Monte Carlo, Option 1",
-    "pNetPositive": [
-     "98%",
-     "70%",
-     "29%",
-     "9%"
-    ],
-    "pNpvPositive": [
-     "96%",
-     "49%",
-     "14%",
-     "3%"
-    ]
+    "pNetPositive": {
+     "2UA": "98%",
+     "3UA": "70%",
+     "4UA": "29%",
+     "5UA": "9%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    },
+    "pNpvPositive": {
+     "2UA": "96%",
+     "3UA": "49%",
+     "4UA": "14%",
+     "5UA": "3%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    }
+   },
+   {
+    "paperLabel": "Monte Carlo, Option 1, one new council with replication held at 1 (version 3.2)",
+    "pNetPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    },
+    "pNpvPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    }
    },
    {
     "paperLabel": "Monte Carlo, netted definition, Option 2",
-    "pNetPositive": [
-     "100%",
-     "100%",
-     "99%",
-     "74%"
-    ],
-    "pNpvPositive": [
-     "100%",
-     "100%",
-     "85%",
-     "24%"
-    ]
+    "pNetPositive": {
+     "2UA": "100%",
+     "3UA": "100%",
+     "4UA": "99%",
+     "5UA": "74%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    },
+    "pNpvPositive": {
+     "2UA": "100%",
+     "3UA": "100%",
+     "4UA": "85%",
+     "5UA": "24%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    }
+   },
+   {
+    "paperLabel": "Monte Carlo, netted definition, Option 2, one new council with replication held at 1 (version 3.2)",
+    "pNetPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    },
+    "pNpvPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    }
    },
    {
     "paperLabel": "Monte Carlo, netted definition, Option 1",
-    "pNetPositive": [
-     "99%",
-     "87%",
-     "65%",
-     "38%"
-    ],
-    "pNpvPositive": [
-     "94%",
-     "71%",
-     "41%",
-     "18%"
-    ]
+    "pNetPositive": {
+     "2UA": "99%",
+     "3UA": "87%",
+     "4UA": "65%",
+     "5UA": "38%",
+     "1UA": "100%",
+     "1UA (county+12)": "100%"
+    },
+    "pNpvPositive": {
+     "2UA": "94%",
+     "3UA": "71%",
+     "4UA": "41%",
+     "5UA": "18%",
+     "1UA": "99%",
+     "1UA (county+12)": "100%"
+    }
+   },
+   {
+    "paperLabel": "Monte Carlo, netted definition, Option 1, one new council with replication held at 1 (version 3.2)",
+    "pNetPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "100%",
+     "1UA (county+12)": "n/a"
+    },
+    "pNpvPositive": {
+     "2UA": "n/a",
+     "3UA": "n/a",
+     "4UA": "n/a",
+     "5UA": "n/a",
+     "1UA": "99%",
+     "1UA (county+12)": "n/a"
+    }
    }
   ],
   "headline": {
