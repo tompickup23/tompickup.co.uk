@@ -76,6 +76,14 @@ export const ON_THIS_SITE: Project[] = [
     desc: 'A clickable prototype of a resident engagement platform for Lancashire. Not a council service; nothing you enter is collected.',
     inFooter: false,
   },
+  {
+    // The young people's side of Lancashire Voice. Prototype, noindex, like its parent.
+    href: '/young-lancashire-voice/',
+    accent: '#2f5d50',
+    title: 'Young Lancashire Voice',
+    desc: 'A prototype for young people: take a seat in the county council chamber, bring your own motion and put it to Lancashire. Not a council service; nothing is collected.',
+    inFooter: false,
+  },
 ];
 
 /* Separate publications, each on its own domain, each with its own method and
@@ -190,7 +198,7 @@ export const PROJECT_GROUPS = [
   { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
   { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
   { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'The Padiham Job', 'Reform UK Burnley') },
-  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Voice') },
+  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Voice', 'Young Lancashire Voice') },
 ];
 
 /** Related reading is labelled as such, rather than presented as a launch article. */
@@ -213,6 +221,7 @@ export const PROJECT_DETAILS: Record<string, {
   'UK School Holiday Dates': { mark: 'SH', subject: 'School calendars' },
   "Lancashire's new councils": { mark: 'LC', subject: 'Interactive council model', article: { slug: 'lancashire-four-unitaries-model', label: 'Read the introduction to the model' }, section: { href: '/lgr/contracts/', label: 'Explore the contracts register' } },
   'Lancashire Voice': { mark: 'LV', subject: 'Prototype, not a council service' },
+  'Young Lancashire Voice': { mark: 'YV', subject: 'Prototype, not a council service' },
   'Reform UK Burnley': { mark: 'RB', subject: 'Political website' },
 };
 

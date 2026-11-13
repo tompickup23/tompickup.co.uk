@@ -1,0 +1,122 @@
+{
+  "_note": "Fixed parts for motions on Young Lancashire Voice. A motion is four small numbers (subject, reason, action, money), so a link can carry a motion but can never carry typed words. Read by the Young Lancashire Voice page and by the Lancashire Voice page wrapper. Keep every subject within what a county council decides, and keep figures out: a published figure needs a source.",
+  "subjects": [
+    {
+      "id": "crossings",
+      "name": "Crossing the road to school",
+      "service": "Highways",
+      "notes": [
+        "children should be able to walk to school safely",
+        "busy roads near schools worry pupils and parents",
+        "more children would walk to school if crossing the road felt safe"
+      ],
+      "actions": [
+        "look again at every primary school that has asked for a crossing patrol",
+        "ask pupils which crossings near their school feel unsafe, and publish what they say",
+        "put school crossings at the front of the queue for road safety work"
+      ]
+    },
+    {
+      "id": "roads",
+      "name": "Potholes on the way to school",
+      "service": "Highways",
+      "notes": [
+        "potholes are dangerous for children on bikes and scooters",
+        "pavements and cycle paths get less attention than main roads",
+        "a safe route to school matters as much as a smooth road for cars"
+      ],
+      "actions": [
+        "repair potholes on walking and cycling routes to schools first",
+        "let pupils report a pothole on their route to school in a simple way",
+        "check the routes to one school in every district each year, with pupils"
+      ]
+    },
+    {
+      "id": "libraries",
+      "name": "Libraries",
+      "service": "Libraries",
+      "notes": [
+        "a library is a free, warm and safe place to go after school",
+        "many libraries close before young people can get to them",
+        "teenagers need somewhere quiet to study that is not home or school"
+      ],
+      "actions": [
+        "open one library in every district later on a school night",
+        "set aside a space for teenagers in the larger libraries",
+        "ask young people to help choose what their library offers"
+      ]
+    },
+    {
+      "id": "youth",
+      "name": "Things to do",
+      "service": "Youth services",
+      "notes": [
+        "young people need safe places to meet their friends",
+        "there is less to do in some towns than in others",
+        "a good youth club can change how a young person feels about where they live"
+      ],
+      "actions": [
+        "run a youth club night in every district each week",
+        "ask young people in each district what they want from a youth club",
+        "publish a simple list of things to do for young people in every town"
+      ]
+    },
+    {
+      "id": "vapes",
+      "name": "Shops selling vapes to children",
+      "service": "Trading Standards",
+      "notes": [
+        "it is against the law to sell vapes to under 18s, and some shops still do",
+        "pupils see vaping in and around school",
+        "shops that keep to the law should not lose out to shops that break it"
+      ],
+      "actions": [
+        "carry out more test purchases at shops that young people report",
+        "give young people a simple way to report a shop to Trading Standards",
+        "tell the public each year how many shops were checked and what was found"
+      ]
+    },
+    {
+      "id": "buses",
+      "name": "Buses",
+      "service": "Public transport",
+      "notes": [
+        "young people rely on buses to reach school, college, work and friends",
+        "the cost of the bus stops some young people going out at all",
+        "evening and weekend buses matter most to people too young to drive"
+      ],
+      "actions": [
+        "ask young people which bus journeys they cannot make now",
+        "put young people's journeys first when deciding which bus services to support",
+        "publish one simple guide to young people's bus fares in Lancashire"
+      ]
+    },
+    {
+      "id": "paths",
+      "name": "Country parks and footpaths",
+      "service": "Countryside",
+      "notes": [
+        "Lancashire's countryside belongs to young people as well",
+        "some footpaths are hard to use or hard to find",
+        "being outdoors is good for how young people feel"
+      ],
+      "actions": [
+        "invite schools and youth groups to help look after a footpath or country park",
+        "make it easier to report a blocked or broken footpath",
+        "mark one easy walk from every town for families and young people"
+      ]
+    }
+  ],
+  "money": [
+    "by spending less on something else, which the motion names",
+    "by doing it in a few places first to see what it costs",
+    "from money the council already has for this service, spent in a different order"
+  ],
+  "elsewhere": [
+    { "want": "Bins, recycling and litter on your street", "who": "Your district or borough council" },
+    { "want": "A new play area", "who": "Your district, parish or town council" },
+    { "want": "New houses, or stopping them", "who": "Your district or borough council decides planning applications" },
+    { "want": "Phones, uniform and homework", "who": "Your school and its governors" },
+    { "want": "The voting age, or the law on vapes", "who": "Parliament" }
+  ]
+}
