@@ -1,5 +1,6 @@
 ---
 title: "Lancashire Reorganisation Paper, Version 3.2: One Council and the County Tested Beside the Four Proposals"
+ogImage: "/images/share/lgr-working-paper-v3-2-single-councils.png"
 date: 2026-11-13T18:00:00
 description: "Version 3.2 of the working paper on the finances of council reorganisation in Lancashire adds two single-council forms that nobody proposed, and prints every alternative result beside the central one. What it finds, what it cannot show, and how to check it."
 seoTitle: "Lancashire reorganisation paper, version 3.2"
@@ -8,16 +9,16 @@ category: "Lancashire"
 subcategory: "Local government reorganisation"
 tags: ["lancashire", "lgr", "local-government-reorganisation", "releases", "data"]
 featured: false
-draft: true
+draft: false
 sources:
-  - text: "Pickup, T. (2026) The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions. Working paper, version 3.2. Zenodo. Tables 6c, 8, 8a, 8h, 12b and 13d; Sections 6.5, 8.6 and 12; Declaration of interests."
-    url: "https://doi.org/10.5281/zenodo.PENDING"
+  - text: "Pickup, T. (2026) The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions. Working paper, version 3.2. Zenodo. Tables 6c, 8, 8a, 8h, 12b and 13d; Sections 5.7, 6.5, 8.6 and 12; Declaration of interests."
+    url: "https://doi.org/10.5281/zenodo.24208546"
   - text: "Ministry of Housing, Communities and Local Government (2026) Local government reorganisation: withdrawn letter to 9 areas. Letter from the Minister for Local Government, Devolution and Regional Growth to council leaders and chief executives, 29 October 2026, p. 2, paras 7 and 8, and p. 3, para. 13."
     url: "https://assets.publishing.service.gov.uk/media/6ae36c6ed22fc5fecb3eb7f9/Local_government_reorganisation_-_withdrawn_letter_to_9_areas.pdf"
 data:
   links:
-    - label: "Zenodo: working paper, data and code, version 3.2 (DOI 10.5281/zenodo.PENDING)"
-      url: "https://doi.org/10.5281/zenodo.PENDING"
+    - label: "Zenodo: working paper, data and code, version 3.2 (DOI 10.5281/zenodo.24208546)"
+      url: "https://doi.org/10.5281/zenodo.24208546"
     - label: "Version 3.1, unchanged and still citable (DOI 10.5281/zenodo.23016761)"
       url: "https://doi.org/10.5281/zenodo.23016761"
   method: "Run uv run python reproduce.py in the unzipped package. It uses the Python 3.12 standard library only, with a fixed Monte Carlo seed, so every run gives the same tables. tools/check_published_four.py confirms that every version 3.1 figure for the four proposals is unchanged."
@@ -25,13 +26,15 @@ data:
 
 *By Tom Pickup, Lancashire county councillor and Cabinet Member for Adult Social Care. The county council proposed two unitaries and would carry on under one of the two forms this version adds. That interest is declared in full in the paper and again below.*
 
-Version 3.2 of my working paper on the finances of council reorganisation in Lancashire is on Zenodo, with its data and code: [10.5281/zenodo.PENDING](https://doi.org/10.5281/zenodo.PENDING).<sup class="cite"><a href="#source-1">1</a></sup>
+Version 3.2 of my working paper on the finances of council reorganisation in Lancashire is on Zenodo, with its data and code: [10.5281/zenodo.24208546](https://doi.org/10.5281/zenodo.24208546).<sup class="cite"><a href="#source-1">1</a></sup>
 
 It asks one new question. Lancashire's councils put forward plans for two, three, four and five unitaries. Nobody proposed a single council. On 29 October the Government withdrew its choice of four and said all options and proposals remain under consideration.<sup class="cite"><a href="#source-2">2</a></sup> So the paper now runs the same model on two forms that were never on the table: one new council for the whole area, and the county council continuing with its twelve districts.
 
 ## What the model gives
 
 The figures below are the steady-state net annual position: the yearly saving from structure alone once the change has settled, less the yearly cost of running more or fewer councils. They are model outputs in 2024/25 prices, not forecasts of any council's budget. Transformation savings, which any structure could pursue, are left out.
+
+Read this table with the section below it. The model favours fewer councils by construction, and past reorganisations have not shown savings on this scale.
 
 | Form | Net annual position | Ten-year value |
 |---|---:|---:|
@@ -50,11 +53,11 @@ The four proposals' figures are the same as in version 3.1. A script in the pack
 
 Three things in the paper cut against reading the table as a ranking to act on.
 
-**The model favours fewer councils by construction.** It counts overheads that fall as councils merge and costs that rise as services are split. It has no term for what is lost when a council gets further from the people it serves. One new council would be larger than any single-tier council in England.
+**The model favours fewer councils by construction.** It counts overheads that fall as councils merge and costs that rise as services are split. It has no term for what is lost when a council gets further from the people it serves. One new council would be larger than any single-tier council in England (Section 5.7).
 
-**Past reorganisations have not shown savings on this scale.** In the areas reorganised between 2019 and 2023, three of which became single county unitaries, total spending per resident shows no detectable change against areas left alone (Section 8.6). When the model's savings are scaled to what Buckinghamshire and the two Northamptonshire councils reported, only two unitaries of the four proposals stay positive each year, and the single councils fall to between £31.6M and £61.3M (one new council) and between £29.3M and £43.8M (the county with its districts) (Table 8a).
+**Past reorganisations have not shown savings on this scale.** In the areas reorganised between 2019 and 2023, three of which became single county unitaries, total spending per resident shows no detectable change against areas left alone (Section 8.6). When the model's savings are scaled to what Buckinghamshire and the two Northamptonshire councils reported, only two unitaries of the four proposals stay positive each year (Table 8a). On that scaling, one new council falls to between £31.6M and £61.3M, and the county with its districts to between £29.3M and £43.8M.
 
-**The older evidence is mixed and comes with a label.** A new test on the five single county unitaries created in 2009 finds spending per resident fell relative to two-tier counties over the following ten years. It rests on two years of data before the change where the test as first specified required three, the check on prior trends failed, and one of the nine alternative runs finds no detectable difference (Table 13d). The paper prints all of that beside the result.
+**The older evidence is mixed and comes with a label.** A new test on the five single county unitaries created in 2009 finds spending per resident fell relative to two-tier counties over the following ten years. It comes with three weaknesses (Table 13d). It rests on two years of data before the change, where the test as first specified required three. The check on prior trends failed. One of the nine alternative runs finds no detectable difference. The paper prints all of that beside the result.
 
 ## What else is new
 
@@ -81,4 +84,4 @@ The paper, derived files, review records and code are released under Creative Co
 
 I am the county councillor for Padiham and Burnley West and Lancashire County Council's Cabinet Member for Adult Social Care. The county council proposed two unitaries, and it would be the continuing authority under the second single-council form. The analysis and any errors are mine and do not represent the position of the county council or its Cabinet.
 
-**Cite as:** Pickup, T. (2026) *The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions*. Working paper, version 3.2. Zenodo. doi:10.5281/zenodo.PENDING.
+**Cite as:** Pickup, T. (2026) *The Financial Case for Local Government Reorganisation in Lancashire: A Transparent Component Model of Four Proposals and Two Single-Council Forms, with a Postscript on the 2026 Decisions*. Working paper, version 3.2. Zenodo. doi:10.5281/zenodo.24208546.
