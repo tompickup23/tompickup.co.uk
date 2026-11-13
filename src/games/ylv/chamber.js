@@ -318,7 +318,7 @@ export function createRoom(host, { plan, reduced = false }) {
   const torso = inst(torsoGeo, 0xffffff), head = inst(new THREE.SphereGeometry(0.115, 14, 10), 0xffffff), hair = inst(hairGeo, 0xffffff);
   const eyeGeo = mergeGeometries([-1, 1].map((k) => new THREE.SphereGeometry(0.014, 6, 5).translate(k * 0.042, 0.018, 0.106)));
   const eyes = inst(eyeGeo, 0x1d1a18);
-  const arm = inst(new THREE.BoxGeometry(0.075, 0.44, 0.075), 0xffffff), card = inst(new THREE.BoxGeometry(0.3, 0.21, 0.014), 0xffffff);
+  const arm = inst(new THREE.BoxGeometry(0.09, 0.46, 0.09), 0xffffff), palm = inst(new THREE.SphereGeometry(0.068, 8, 6), 0xffffff);
   const CLOTH = [0x2b3440, 0x3b3f46, 0x4a4036, 0x5a5f66, 0x23303a, 0x6b6257, 0x34383f, 0x7a7468, 0x4b5560];
   const SKIN = [0xf0c8a8, 0xdba47d, 0xb97b52, 0x8c5c3b, 0x6c442a, 0xe8b792];
   const HAIR = [0x2a1d14, 0x4a3524, 0x6e6e6e, 0xb9a57a, 0x151515, 0xc8c8c8, 0x7a4a2a];
@@ -326,7 +326,8 @@ export function createRoom(host, { plan, reduced = false }) {
   for (let i = 0; i < N; i++) {
     const c = people[i].guest ? 0x24509c : CLOTH[Math.floor(rr() * CLOTH.length)];
     torso.setColorAt(i, col.set(c)); arm.setColorAt(i, col.set(c));
-    head.setColorAt(i, col.set(SKIN[Math.floor(rr() * SKIN.length)]));
+    const sk = SKIN[Math.floor(rr() * SKIN.length)];
+    head.setColorAt(i, col.set(sk)); palm.setColorAt(i, col.set(sk));
     hair.setColorAt(i, col.set(HAIR[Math.floor(rr() * HAIR.length)]));
   }
   // The Chairman's figure is set by hand, not by the shuffle, so it does not misdescribe the office holder.
@@ -334,7 +335,8 @@ export function createRoom(host, { plan, reduced = false }) {
   const legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.92, 0.2), new THREE.MeshLambertMaterial({ color: 0x2a2d33 })); scene.add(legs);
   const pointer = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.24, 4), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); pointer.rotation.x = Math.PI; scene.add(pointer);
   const mine = new THREE.Mesh(new THREE.OctahedronGeometry(0.13), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); scene.add(mine);
-  const VOTE = { for: 0x2e8b3a, against: 0xc2362c };
+  // A show of hands is two calls: those in favour, then those against. No cards, as in the real room.
+  const vote = { phase: null, lift: 0, t0: 0 };
   const dummy = new THREE.Object3D(), ZERO = new THREE.Matrix4().makeScale(0, 0, 0);
 
   const st = { seat: -1, speaker: null, tally: null, mode: 'over', pick: false, hover: -1 };
@@ -354,13 +356,11 @@ export function createRoom(host, { plan, reduced = false }) {
       };
       set(torso, 0, 0.78, 0); set(head, 0, 1.2, 0.01); set(hair, 0, 1.228, -0.03); set(eyes, 0, 1.2, 0.01);
       const v = st.tally && i < seats.length ? st.tally[i] : null;
-      const hand = v === 'for' || v === 'against';
-      set(arm, 0.25, 1.2, 0.04, hand); set(card, 0.25, 1.52, 0.04, hand);
-      if (hand) card.setColorAt(i, col.set(VOTE[v]));
+      const hand = !!v && v === vote.phase && vote.lift > 0.02;
+      set(arm, 0.25, 0.84 + 0.38 * vote.lift, 0.04, hand); set(palm, 0.25, 1.11 + 0.38 * vote.lift, 0.04, hand);
       if (show && up) { legs.visible = true; legs.position.set(p.x, p.fy + 0.46 + (p.guest ? 0.5 : 0), p.z); legs.rotation.y = p.ry; }
     }
-    [torso, head, hair, eyes, arm, card].forEach((m) => { m.instanceMatrix.needsUpdate = true; });
-    if (card.instanceColor) card.instanceColor.needsUpdate = true;
+    [torso, head, hair, eyes, arm, palm].forEach((m) => { m.instanceMatrix.needsUpdate = true; });
     const sh = sp != null && sp >= 0 ? people[sp] : null;
     pointer.visible = !!sh;
     if (sh) pointer.position.set(sh.x, sh.fy + 1.2 + (sp === OFFICE.chair ? 1.0 : 0.82), sh.z);
@@ -401,9 +401,20 @@ export function createRoom(host, { plan, reduced = false }) {
     camera.position.copy(cam.pos); camera.rotation.set(cam.pitch, cam.yaw, 0);
     if (Math.abs(camera.fov - cam.fov) > 0.01) { camera.fov = cam.fov; camera.updateProjectionMatrix(); }
     pointer.rotation.y = mine.rotation.y = t / 700;
+    if (st.tally) {
+      const c = ((t - vote.t0) / 1000) % 7.4;
+      const seg = (a) => Math.max(0, Math.min(1, (c - a) / 0.4)) * Math.max(0, Math.min(1, (a + 3 - c) / 0.4));
+      const ph = c < 3.7 ? 'for' : 'against';
+      let lf = seg(ph === 'for' ? 0.4 : 4.1);
+      if (reduced) lf = lf > 0.5 ? 1 : 0;
+      if (ph !== vote.phase || Math.abs(lf - vote.lift) > 0.001) {
+        vote.phase = ph; vote.lift = lf; placePeople();
+        label.textContent = lf > 0 ? (ph === 'for' ? 'All those in favour' : 'All those against') : '';
+      }
+    }
     renderer.render(scene, camera);
     const settled = cam.pos.distanceToSquared(cam.tp) < 1e-5 && Math.abs(dy) < 1e-3 && Math.abs(cam.tpitch + cam.op - cam.pitch) < 1e-3;
-    if (t < until || dragging || !settled) raf = requestAnimationFrame(frame);
+    if (t < until || dragging || !settled || (st.tally && canvas.isConnected)) raf = requestAnimationFrame(frame);
   }
   const kick = (ms = 1800) => { until = performance.now() + (reduced ? 120 : ms); if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
 
@@ -459,7 +470,9 @@ export function createRoom(host, { plan, reduced = false }) {
     canvas,
     set(next) {
       const moved = next.speaker !== st.speaker || next.mode !== st.mode || next.seat !== st.seat;
+      if (next.tally && !st.tally) vote.t0 = performance.now();
       Object.assign(st, next);
+      vote.phase = null; vote.lift = 0;
       if (!st.pick) { st.hover = -1; label.textContent = ''; }
       if (moved) { cam.oy = 0; cam.op = 0; }
       canvas.style.cursor = 'grab';
