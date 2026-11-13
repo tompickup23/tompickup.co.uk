@@ -340,6 +340,7 @@ HEADLINE_CARDS = [
     dict(slug="lancashire-lgr-protective-claim", eyebrow="Lancashire  ·  Reorganisation"),
     dict(slug="lgr-delay-year-did-not-exist", eyebrow="Lancashire  ·  Reorganisation"),
     dict(slug="lgr-working-paper-v3-1-data-release", eyebrow="Lancashire  ·  Data release"),
+    dict(slug="lgr-working-paper-v3-2-single-councils", eyebrow="Lancashire  ·  Data release"),
     # Lead photo is of Tom and the headline carries figures, so headline only.
     dict(slug="swimathon-2025-triple-5km", eyebrow="Burnley  ·  Community and charity"),
     # The eight adult social care pieces (site PR 67), cards added 8 Nov 2026.
