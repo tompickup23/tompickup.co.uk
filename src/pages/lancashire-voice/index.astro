@@ -6,6 +6,9 @@
 import { imprint as imp } from '../../data/imprint';
 import { CONTACT_EMAIL } from '../../config';
 import page from '../../data/lancashire-voice/prototype.html?raw';
+// Young Lancashire Voice hands a motion over as four numbers after the # (#ylv=s.n.a.m).
+// The parts live in one file, read by both pages; the generated page above is untouched.
+import motions from '../../data/young-lancashire-voice/motions.json';
 
 const title = 'Lancashire Voice: prototype';
 const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
@@ -56,15 +59,48 @@ const body = page
       .site-home-bar { background: var(--surface); border-bottom: 1px solid var(--line); }
       .site-home a { text-decoration: none; color: var(--ink); }
       .site-home a:hover { text-decoration: underline; }
+      .ylv-in { margin: 20px 0 0; display: grid; gap: 12px; border-left: 4px solid var(--accent, #17645e); }
+      .ylv-in q { font: 800 clamp(1.25rem, 3.4vw, 1.6rem)/1.2 var(--f-display); quotes: "\201C" "\201D"; }
+      .ylv-in p { margin: 0; }
+      .ylv-in .votes { margin: 0; }
     </style>
   </head>
   <body>
     <div class="site-home-bar">
       <header class="site-home">
         <a class="brand-home" href="/">tompickup.co.uk</a>
-        <nav aria-label="Site"><a href="/about/">About Tom</a></nav>
+        <nav aria-label="Site"><a href="/young-lancashire-voice/">Young Lancashire Voice</a> · <a href="/about/">About Tom</a></nav>
       </header>
     </div>
     <Fragment set:html={body} />
+    <script is:inline define:vars={{ motions }}>
+      // A motion sent over from Young Lancashire Voice. The pattern is strict: four small
+      // numbers, so a link can never put anyone's typed words on this page.
+      (function () {
+        var k = (new URLSearchParams(location.hash.slice(1)).get('ylv') || '').match(/^([0-6])\.([0-2])\.([0-2])\.([0-2])$/);
+        var wrap = document.querySelector('.wrap');
+        if (!wrap) return;
+        var box = document.createElement('section');
+        box.className = 'card ylv-in';
+        box.setAttribute('aria-label', 'Young Lancashire Voice');
+        if (!k) {
+          box.innerHTML = '<span class="eyebrow">For young people</span><p><b>Young Lancashire Voice</b> is the young people\'s side of this prototype: take a seat in the council chamber, bring a motion and see it put here. <a href="/young-lancashire-voice/">Open Young Lancashire Voice</a></p>';
+        } else {
+          var s = motions.subjects[+k[1]];
+          var text = 'The county council should ' + s.actions[+k[3]] + ', paid for ' + motions.money[+k[4]] + '.';
+          var back = '/young-lancashire-voice/#m=' + k.slice(1).join('.');
+          box.innerHTML = '<span class="eyebrow">From Young Lancashire Voice · ' + s.service + '</span>' +
+            '<q></q><p class="small muted">A young person moved this as a motion in the chamber game. Here it is put to adults as a statement, so the two answers can be read side by side. Example only: your answer is not counted or kept.</p>' +
+            '<div class="votes"><button type="button" class="a" data-ylv="Agree">Agree</button><button type="button" class="d" data-ylv="Disagree">Disagree</button><button type="button" data-ylv="Pass">Pass</button></div>' +
+            '<p class="small" id="ylv-said" aria-live="polite"></p><p class="small"><a href="' + back + '">Back to the motion on Young Lancashire Voice</a></p>';
+          box.querySelector('q').textContent = text;
+          box.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-ylv]');
+            if (b) document.getElementById('ylv-said').textContent = 'You said: ' + b.dataset.ylv + '. On the real platform this would sit beside what young people said.';
+          });
+        }
+        wrap.insertBefore(box, wrap.firstChild);
+      })();
+    </script>
   </body>
 </html>
