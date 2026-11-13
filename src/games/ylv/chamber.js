@@ -329,6 +329,8 @@ export function createRoom(host, { plan, reduced = false }) {
     head.setColorAt(i, col.set(SKIN[Math.floor(rr() * SKIN.length)]));
     hair.setColorAt(i, col.set(HAIR[Math.floor(rr() * HAIR.length)]));
   }
+  // The Chairman's figure is set by hand, not by the shuffle, so it does not misdescribe the office holder.
+  head.setColorAt(OFFICE.chair, col.set(SKIN[0])); hair.setColorAt(OFFICE.chair, col.set(HAIR[2]));
   const legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.92, 0.2), new THREE.MeshLambertMaterial({ color: 0x2a2d33 })); scene.add(legs);
   const pointer = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.24, 4), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); pointer.rotation.x = Math.PI; scene.add(pointer);
   const mine = new THREE.Mesh(new THREE.OctahedronGeometry(0.13), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); scene.add(mine);
