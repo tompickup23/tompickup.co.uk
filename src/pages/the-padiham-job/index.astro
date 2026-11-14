@@ -6,6 +6,7 @@
 // Launched 11 November 2026: indexable and in the sitemap.
 import Layout from '../../layouts/Layout.astro';
 import { person } from '../../data/person';
+import { PROTOTYPE_NOTICE } from '../../data/prototype-notice';
 import { PLAQUES } from '../../games/padiham/history.js';
 
 const title = 'The Padiham Job';
@@ -261,6 +262,7 @@ const schema = {
 
     <div class="sop-notes">
       <h2>About the game</h2>
+      <p class="sop-proto" role="note"><strong>Prototype.</strong> {PROTOTYPE_NOTICE}</p>
       <p>
         A game set on the real streets of Padiham town centre. Explore, take jobs around town, or practise getting
         somewhere on foot or by bus. It is free, it runs in your browser and it is still being built.
@@ -389,6 +391,9 @@ const schema = {
       </p>
       <h2 id="disclaimer">Disclaimer and removal requests</h2>
       <p>
+        {PROTOTYPE_NOTICE}
+      </p>
+      <p>
         The Padiham Job is a free game made for fun. It is not a commercial product and it carries no advertising.
         It is a simplified model of the town, not an accurate map, and it should not be relied on for directions,
         opening times or anything else. The jobs, the deliveries and the things people say in the game are made up.
@@ -420,6 +425,7 @@ const schema = {
   .sop-notes { max-width: 68ch; margin-top: 2rem; }
   .sop-notes h2 { font-size: 1.15rem; margin: 1.5rem 0 0.4rem; }
   .sop-notes p { margin: 0 0 0.75rem; }
+  .sop-notes .sop-proto { padding: 10px 14px; border: 1px solid var(--gold); border-radius: var(--radius-lg); }
 
   .sop { --sop-ink: #14161a; --sop-card: rgba(20, 22, 26, 0.82); --sop-gold: #ffcf33; --sop-green: #5fd38d; --sop-text: #f4f1e8;
     position: relative; width: 100%; height: min(calc(100svh - var(--sop-top, 72px) - var(--sop-intro, 64px) - 12px), 820px); min-height: 420px; scroll-margin-top: calc(var(--sop-top, 72px) + 6px); overflow: hidden; border-radius: 6px;

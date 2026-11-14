@@ -9,6 +9,7 @@ import page from '../../data/lancashire-voice/prototype.html?raw';
 // Young Lancashire Voice hands a motion over as four numbers after the # (#ylv=s.n.a.m).
 // The parts live in one file, read by both pages; the generated page above is untouched.
 import motions from '../../data/young-lancashire-voice/motions.json';
+import { PROTOTYPE_NOTICE } from '../../data/prototype-notice';
 
 const title = 'Lancashire Voice: prototype';
 const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
@@ -59,6 +60,8 @@ const body = page
       .site-home-bar { background: var(--surface); border-bottom: 1px solid var(--line); }
       .site-home a { text-decoration: none; color: var(--ink); }
       .site-home a:hover { text-decoration: underline; }
+      .site-notice { margin: 0 auto; padding: 10px 16px; max-width: 980px; font: 400 0.86rem/1.45 var(--f-body); color: var(--ink); }
+      .site-notice b { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; margin-right: 8px; }
       .ylv-in { margin: 20px 0 0; display: grid; gap: 12px; border-left: 4px solid var(--accent, #17645e); }
       .ylv-in q { font: 800 clamp(1.25rem, 3.4vw, 1.6rem)/1.2 var(--f-display); quotes: "\201C" "\201D"; }
       .ylv-in p { margin: 0; }
@@ -71,6 +74,7 @@ const body = page
         <a class="brand-home" href="/">tompickup.co.uk</a>
         <nav aria-label="Site"><a href="/young-lancashire-voice/">Young Lancashire Voice</a> · <a href="/about/">About Tom</a></nav>
       </header>
+      <p class="site-notice" role="note"><b>Not ready for release</b>{PROTOTYPE_NOTICE}</p>
     </div>
     <Fragment set:html={body} />
     <script is:inline define:vars={{ motions }}>
