@@ -8,7 +8,6 @@
 // and the imprint, which is a legal footer.
 import { imprint as imp } from '../../data/imprint';
 import { personRef } from '../../data/person';
-import { DEFAULT_OG_IMAGE } from '../../data/seo';
 import game from '../../data/burnley-budget-game/game.html?raw';
 import source from '../../data/burnley-budget-game/source.json';
 
@@ -16,9 +15,9 @@ const title = 'Burnley Budget Challenge';
 // The browser tab and search result carry the site name, as every Layout page does.
 const pageTitle = `${title} | Tom Pickup`;
 const description = "Where Burnley Borough Council's money goes, the council's own budget gap for the next two years, and whether you can close it.";
-// No card is generated for this game: scripts/generate_budget_game_card.mjs draws the Lancashire
-// card only. Until a card is generated from the game's own data, the page uses the site's default.
-const ogImage = new URL(DEFAULT_OG_IMAGE, 'https://tompickup.co.uk').href;
+// The share card is drawn in prebuild from the game's own data and the edition line below by
+// scripts/generate_burnley_budget_game_card.mjs; scripts/guard-burnley-budget-game-card.mjs checks it.
+const ogImage = 'https://tompickup.co.uk/images/share/burnley-budget-game.png';
 // The game as a WebApplication node, in the same shape as the Lancashire game's.
 const schema = {
   '@context': 'https://schema.org',

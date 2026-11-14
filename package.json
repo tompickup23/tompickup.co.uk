@@ -10,9 +10,9 @@
     "dev": "astro dev",
     "dev:observatory": "bash scripts/parked-dev.sh observatory",
     "dev:doge": "bash scripts/parked-dev.sh doge",
-    "prebuild": "node src/vendor/estate-kit/base/verify-vendor.mjs && node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs",
+    "prebuild": "node src/vendor/estate-kit/base/verify-vendor.mjs && node scripts/guard-parked.mjs pre && node scripts/generate_budget_game_card.mjs && node scripts/generate_burnley_budget_game_card.mjs",
     "build": "astro build",
-    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs && node scripts/guard-metadata.mjs && node scripts/guard-base-layer.mjs",
+    "postbuild": "node scripts/strip-parked-data.mjs && node scripts/guard-parked.mjs post && node scripts/guard-unreferenced.mjs && node scripts/guard-share-cards.mjs && node scripts/guard-budget-game-card.mjs && node scripts/guard-burnley-budget-game-card.mjs && node scripts/guard-metadata.mjs && node scripts/guard-base-layer.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
