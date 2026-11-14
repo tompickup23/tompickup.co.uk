@@ -1,0 +1,326 @@
+/* Print stylesheet for the working paper. Colours and faces are the site's:
+   Source Serif 4 for reading, Source Sans 3 for tables and furniture,
+   ink #1b3035, muted #536368, teal #17645e, rules #d4d7d0. */
+
+:root {
+  --ink: #1b3035;
+  --muted: #536368;
+  --teal: #17645e;
+  --teal-deep: #0f4a45;
+  --line: #d4d7d0;
+  --line-strong: #aeb4ad;
+  --panel: #f3f1ea;
+  --serif: "Source Serif 4", "STIX Two Text", "Times New Roman", serif;
+  --sans: "Source Sans 3", "Helvetica Neue", "STIX Two Text", sans-serif;
+  --mono: "Source Code Pro", Menlo, monospace;
+}
+
+@page {
+  size: A4;
+  margin: 22mm 21mm 20mm 21mm;
+  @top-left {
+    content: "Pickup (2026) \2003 Local government reorganisation in Lancashire";
+    font: 400 7.5pt "Source Sans 3", sans-serif;
+    color: var(--muted);
+    vertical-align: bottom;
+    padding-bottom: 4mm;
+  }
+  @top-right {
+    content: "Working paper v3.2";
+    font: 400 7.5pt "Source Sans 3", sans-serif;
+    color: var(--muted);
+    vertical-align: bottom;
+    padding-bottom: 4mm;
+  }
+  @bottom-center {
+    content: counter(page);
+    font: 600 8pt "Source Sans 3", sans-serif;
+    color: var(--ink);
+    vertical-align: top;
+    padding-top: 5mm;
+  }
+}
+/* Tables of twelve or more columns sit on landscape pages. */
+@page wide {
+  size: A4 landscape;
+  margin: 20mm 20mm 18mm 20mm;
+}
+.landscape { page: wide; }
+.landscape table { font-size: 7pt; }
+
+@page :first {
+  margin: 0;
+  @top-left { content: none; }
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 9.6pt;
+  line-height: 1.47;
+  color: var(--ink);
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  hyphens: auto;
+  orphans: 3;
+  widows: 3;
+  overflow-wrap: break-word;
+}
+pre { white-space: pre-wrap; font-family: var(--mono); font-size: 7.6pt; }
+
+a { color: var(--teal-deep); text-decoration: none; overflow-wrap: anywhere; }
+code {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  color: var(--teal-deep);
+  overflow-wrap: anywhere;
+  hyphens: none;
+}
+strong { font-weight: 600; }
+
+/* ---------- Cover ---------- */
+.cover {
+  break-after: page;
+  height: 297mm;
+  padding: 30mm 24mm 22mm 28mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #faf9f5;
+  border-left: 7mm solid var(--teal);
+}
+.cover .eyebrow {
+  font: 600 8.5pt var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin: 0 0 9mm;
+}
+.cover h1.title {
+  font: 600 31pt/1.08 var(--serif);
+  letter-spacing: -0.012em;
+  margin: 0 0 6mm;
+  max-width: 150mm;
+  hyphens: none;
+  font-variant-numeric: lining-nums;
+}
+.cover .subtitle {
+  font: 400 italic 15pt/1.32 var(--serif);
+  color: var(--muted);
+  margin: 0 0 16mm;
+  max-width: 145mm;
+  hyphens: none;
+}
+.cover .author {
+  font: 600 13pt var(--sans);
+  margin: 0 0 1.5mm;
+  padding-top: 6mm;
+  border-top: 0.6pt solid var(--line-strong);
+  max-width: 145mm;
+}
+.cover .affil {
+  font: 400 9.5pt/1.45 var(--sans);
+  color: var(--muted);
+  margin: 0;
+  max-width: 145mm;
+}
+.cover-version {
+  margin-top: 10mm;
+  max-width: 145mm;
+  font: 400 9pt/1.5 var(--sans);
+  color: var(--ink);
+}
+.cover-version strong { font-weight: 700; }
+.cover-meta {
+  margin-top: auto;
+  max-width: 150mm;
+  font: 400 8pt/1.45 var(--sans);
+  color: var(--muted);
+  border-top: 0.6pt solid var(--line);
+  padding-top: 5mm;
+  hyphens: none;
+}
+.cover-meta p, .cover-version p { margin: 0 0 2.6mm; }
+.cover-meta strong { color: var(--ink); font-weight: 600; }
+.cover-meta .typeset { font-style: italic; margin-top: 3mm; }
+
+/* ---------- Contents ---------- */
+.toc { break-after: page; font-family: var(--sans); }
+h2.toc-head {
+  font: 600 18pt var(--serif);
+  margin: 0 0 5mm;
+  padding: 0;
+  border: 0;
+}
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li {
+  display: flex;
+  align-items: baseline;
+  font-size: 8.2pt;
+  line-height: 1.3;
+  font-variant-numeric: lining-nums tabular-nums;
+  break-inside: avoid;
+}
+.toc li.l2 { font-weight: 600; margin-top: 1.5mm; font-size: 8.8pt; }
+.toc li.l3 { color: var(--muted); padding-left: 9mm; margin-top: 0.4mm; }
+.toc li a { color: inherit; display: flex; min-width: 0; }
+.toc .cnum { display: inline-block; min-width: 9mm; color: var(--teal); }
+.toc li.l3 .cnum { min-width: 9mm; }
+.toc .dots {
+  flex: 1;
+  border-bottom: 0.5pt dotted var(--line-strong);
+  margin: 0 2mm;
+  transform: translateY(-1.2mm);
+  min-width: 6mm;
+}
+.toc .pg { min-width: 7mm; text-align: right; color: var(--ink); }
+
+/* ---------- Headings ---------- */
+h2, h3, h4 { break-after: avoid; hyphens: none; font-variant-numeric: lining-nums; }
+h2 {
+  font: 600 15pt/1.2 var(--serif);
+  margin: 9mm 0 3.5mm;
+  padding-top: 3.2mm;
+  border-top: 1.2pt solid var(--teal);
+  letter-spacing: -0.005em;
+}
+h2 .num, h3 .num {
+  color: var(--teal);
+  margin-right: 2.6mm;
+}
+h2.new-page { break-before: page; margin-top: 0; }
+h2.abstract-head {
+  margin-top: 0;
+  font: 600 8.5pt var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  border-top: 0;
+  padding-top: 0;
+}
+h3 {
+  font: 600 10.6pt/1.3 var(--sans);
+  margin: 6mm 0 2mm;
+}
+h4 { font: 600 italic 9.8pt var(--serif); margin: 4.5mm 0 1.5mm; }
+
+/* ---------- Text ---------- */
+p { margin: 0 0 2.3mm; text-align: justify; }
+ul, ol { margin: 0 0 2.6mm; padding-left: 5.5mm; }
+li { margin-bottom: 1mm; }
+li::marker { color: var(--teal); }
+blockquote {
+  margin: 3mm 0 3mm 0;
+  padding: 0 0 0 4mm;
+  border-left: 1.4pt solid var(--line-strong);
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Abstract, keywords and JEL codes: the opening block after the contents. */
+main > h2.abstract-head + p,
+main > h2.abstract-head + p + p {
+  font-size: 10.2pt;
+  line-height: 1.5;
+}
+main > p:has(> strong:first-child) { text-align: left; }
+
+/* ---------- Tables ---------- */
+figure.tbl { margin: 4.5mm 0 5mm; }
+figcaption {
+  font: 400 8.6pt/1.35 var(--sans);
+  margin: 0 0 1.6mm;
+  break-after: avoid;
+  hyphens: none;
+}
+figcaption .tlabel {
+  font-weight: 700;
+  color: var(--teal);
+  margin-right: 1.6mm;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 7.6pt;
+  line-height: 1.28;
+  font-variant-numeric: lining-nums tabular-nums;
+  margin: 0 0 1.5mm;
+  hyphens: auto;
+  border-top: 1pt solid var(--ink);
+  border-bottom: 1pt solid var(--ink);
+}
+table.mid { font-size: 7.2pt; }
+table.wide { font-size: 6.7pt; }
+/* Repeating headers across pages trips a Chrome print bug that shrinks every page, so headers print once. */
+thead { display: table-row-group; }
+th {
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+  padding: 1.5mm 1.6mm 1.2mm;
+  border-bottom: 0.6pt solid var(--ink);
+  background: var(--panel);
+  hyphens: manual;
+}
+td {
+  padding: 0.75mm 1.6mm;
+  vertical-align: top;
+  border-bottom: 0.35pt solid var(--line);
+}
+tr { break-inside: avoid; }
+tbody tr:last-child td { border-bottom: 0; }
+th { overflow-wrap: break-word; }
+td:first-child, th:first-child { padding-left: 0.8mm; }
+td:last-child, th:last-child { padding-right: 0.8mm; }
+tr.total td {
+  border-top: 0.6pt solid var(--ink);
+  font-weight: 600;
+}
+tr.total td strong { font-weight: 700; }
+td code { font-size: 0.9em; }
+
+p.tnote {
+  font: 400 7.3pt/1.4 var(--sans);
+  color: var(--muted);
+  text-align: left;
+  margin: 1.4mm 0 0;
+  hyphens: auto;
+}
+p.tnote code { color: var(--muted); }
+
+/* Paragraphs that sit straight after a table but begin otherwise. */
+figure.tbl + p { margin-top: 1mm; }
+
+/* ---------- References ---------- */
+h2#references ~ p {
+  text-align: left;
+  padding-left: 6mm;
+  text-indent: -6mm;
+  font-size: 8.3pt;
+  line-height: 1.4;
+  margin-bottom: 1.6mm;
+  hyphens: none;
+}
+h2#references ~ h2 ~ p {
+  padding-left: 0;
+  text-indent: 0;
+  font-size: 9.6pt;
+  line-height: 1.47;
+  margin-bottom: 2.3mm;
+  text-align: justify;
+  hyphens: auto;
+}
+h2[id^="change-log"] ~ p,
+h2[id^="change-log"] ~ ul,
+h2[id^="change-log"] ~ ul li {
+  font-size: 8.6pt;
+  line-height: 1.42;
+}
+
+.nb { white-space: nowrap; }
