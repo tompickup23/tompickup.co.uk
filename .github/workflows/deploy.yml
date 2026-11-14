@@ -86,7 +86,7 @@ jobs:
           echo "House style gate passed."
 
       - name: Check budget card regression fixtures
-        run: node --test scripts/budget-game-card.test.mjs
+        run: node --test scripts/budget-game-card.test.mjs scripts/burnley-budget-game-card.test.mjs
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
