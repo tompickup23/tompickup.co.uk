@@ -1,7 +1,7 @@
 ---
 title: "The Padiham Job: what the game does and who it could help"
 date: 2026-11-11T21:30:00Z
-updated: 2026-11-12
+updated: 2026-11-14
 description: "A free game on the real streets of Padiham. What you can do in it, and how a parent, teacher or travel trainer can now set a practice route for someone to walk."
 seoTitle: "The Padiham Job: features, benefits and uses"
 seoDescription: "A free browser game on Padiham's real streets: jobs, history plaques, litter picking, and practice routes a parent or teacher can set for a learner."
@@ -18,6 +18,8 @@ draft: false
 It now has a use beyond fun, and that comes first here. The rest of the game follows.
 
 One thing first. I am the county council's cabinet member for adult social care. This game is my own project on my own website. It is not a council service, and the council has not adopted or endorsed it.
+
+And a second. The game is a prototype example, shown to illustrate an idea. It is not finished and not ready for release. It may contain mistakes. It is offered as it stands, and no liability is accepted for any use made of it or any reliance placed on it.
 
 ## Practice routes: getting to know a walk before you do it
 

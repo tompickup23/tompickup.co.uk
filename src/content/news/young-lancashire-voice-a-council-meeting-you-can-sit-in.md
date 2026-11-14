@@ -23,6 +23,8 @@ The idea of a virtual council meeting was not mine. It came from Wayne Walsh, wh
 
 One thing first. I am the county council's cabinet member for adult social care. This is my own project on my own website. It is not a council service, the council has not adopted or endorsed it, and it is not part of the UK Youth Parliament. It names no councillor and no party.
 
+And a second. This is a prototype example, shown to illustrate an idea. It is not finished and not ready for release. It may contain mistakes. It is offered as it stands, and no liability is accepted for any use made of it or any reliance placed on it.
+
 ## What you do in it
 
 1. **Write a motion.** A motion asks the council to do something. You build yours from set parts: something the county council runs, such as libraries, buses or the roads near schools; why it matters; what should happen; and how it is paid for. If you want to change something the county council does not run, the page tells you who does.

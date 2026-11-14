@@ -10,6 +10,7 @@
 // hands, casting vote, debrief), tap-to-explain words, read aloud and sound (both off until
 // asked for), "how the vote went", and the figures turn to whoever is speaking.
 import Layout from '../../layouts/Layout.astro';
+import { PROTOTYPE_NOTICE } from '../../data/prototype-notice';
 
 const title = 'Young Lancashire Voice';
 const description = 'A prototype: take a seat in the county council chamber, bring your own motion and put it to Lancashire. Not a council service; nothing is collected.';
@@ -30,6 +31,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     <p class="ylv-proto" role="note">
       <b>Prototype</b>
       Built by Tom Pickup for his own website. Not a council service and not part of the UK Youth Parliament. Nothing you enter is collected, stored or sent.
+      {PROTOTYPE_NOTICE}
     </p>
     <header class="ylv-head">
       <div>
