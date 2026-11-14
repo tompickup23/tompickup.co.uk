@@ -6,6 +6,9 @@
 // Motion parts: src/data/young-lancashire-voice/motions.json (also read by the Lancashire
 // Voice wrapper). Research: docs/COUNTY-HALL-YOUTH-VOICE-DESIGN-2026-11-13.md.
 // Offices only: no named councillor, no party, no real seating plan.
+// 14 Nov 2026: class meeting on one screen (role cards, speech clock, the room's own show of
+// hands, casting vote, debrief), tap-to-explain words, read aloud and sound (both off until
+// asked for), "how the vote went", and the figures turn to whoever is speaking.
 import Layout from '../../layouts/Layout.astro';
 
 const title = 'Young Lancashire Voice';
@@ -72,6 +75,11 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     hands: { f: 0, a: 0 },
     cam: 'seat',
     d3: true,
+    cls: false,
+    room: { report: null, motion: null },
+    tie: null,
+    voice: false,
+    sound: false,
   };
   const code = () => S.motion.join('.');
   function motionText(m = S.motion) {
@@ -84,6 +92,125 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
       short: cap(s.actions[m[2]]) + '.',
     };
   }
+
+  /* Words a young person may not know. One list feeds the tap-to-explain buttons in the meeting
+     and the word list on How it works. [name, pattern, meaning]; longer patterns come first. */
+  const TERMS = [
+    ['Full Council', 'Full Council', 'The meeting of all the county councillors together.'],
+    ['Friendly amendment', 'friendly amendment', 'A change to a motion that the mover accepts, so it is added with no vote.'],
+    ['Supplementary question', 'supplementary question|supplementary', 'One follow-up question on the same subject.'],
+    ['Chief Executive', 'Chief Executive', 'The council\'s most senior officer.'],
+    ['Cabinet Member', 'Cabinet Members?', 'A councillor in charge of one of the council\'s services, such as roads or libraries.'],
+    ['Notice of motion', 'notices? of motion', 'A motion sent in ahead of the meeting, so that it is on the agenda.'],
+    ['Right of reply', 'right to reply|right of reply', 'The mover\'s last word before the vote.'],
+    ['Show of hands', 'show of hands', 'A vote by raising a hand. Nobody counts the hands unless it is close.'],
+    ['Named vote', 'named vote', 'A vote where each councillor\'s name and vote is written down. Six councillors must stand to ask for one.'],
+    ['Casting vote', 'casting vote', 'When the votes are equal, the Chairman has one more vote to settle it.'],
+    ['Through the Chair', 'through the Chair', 'Speaking to the Chairman, and not straight to another councillor.'],
+    ['Chairman', 'Chairman', 'The councillor who runs the meeting and keeps it to the rules.'],
+    ['Apologies', 'apologies', 'The councillors who could not come to the meeting.'],
+    ['Declare', 'declare', 'To say out loud that a decision could affect you or people close to you.'],
+    ['Seconder', 'seconder', 'The councillor who backs a motion so that it can be debated.'],
+    ['Amendment', 'amendments?', 'A change to the words of a motion.'],
+    ['Motion', 'motions?', 'A councillor asking the council to do something.'],
+    ['Mover', 'mover', 'The councillor who puts a motion to the council.'],
+    ['Agenda', 'agenda', 'The list of things the meeting will deal with, in order.'],
+    ['Officer', 'officers?', 'Someone who works for the council. Officers are not elected and do not vote.'],
+    ['Division', 'division', 'The area a county councillor is elected for.'],
+    ['Carried', 'carried', 'Agreed. The council said yes.'],
+    ['Abstain', 'abstain|abstentions?', 'To be there and vote neither for nor against.'],
+  ];
+  const TERM_RE = new RegExp('\\b(?:' + TERMS.map((t) => `(${t[1]})`).join('|') + ')\\b', 'gi');
+  // Escapes the text, then turns the first use of each known word into a button that explains it.
+  function words(text) {
+    const seen = new Set();
+    return esc(text).replace(TERM_RE, (hit, ...g) => {
+      const i = g.findIndex((x, k) => k < TERMS.length && x != null);
+      if (i < 0 || seen.has(i)) return hit;
+      seen.add(i);
+      return `<button type="button" class="ylv-term" data-term="${i}">${hit}</button>`;
+    });
+  }
+
+  /* Read aloud and sound. Both are off until asked for, and both are made on the device. */
+  const canSpeak = 'speechSynthesis' in window;
+  function speak(text) {
+    if (!canSpeak) return;
+    speechSynthesis.cancel();
+    if (!S.voice || !text) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB'; u.rate = 0.95;
+    speechSynthesis.speak(u);
+  }
+  let ac = null;
+  function sound(kind) {
+    if (!S.sound) return;
+    try {
+      ac ||= new (window.AudioContext || window.webkitAudioContext)();
+      if (ac.state === 'suspended') ac.resume();
+      const t = ac.currentTime, out = ac.createGain();
+      out.connect(ac.destination);
+      if (kind === 'item') {
+        // Two soft notes when the meeting moves to a new item.
+        [[587, 0], [784, 0.16]].forEach(([f, at]) => {
+          const o = ac.createOscillator(), g = ac.createGain();
+          o.type = 'sine'; o.frequency.value = f;
+          g.gain.setValueAtTime(0.0001, t + at); g.gain.exponentialRampToValueAtTime(0.09, t + at + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + at + 0.7);
+          o.connect(g).connect(out); o.start(t + at); o.stop(t + at + 0.75);
+        });
+      } else {
+        // A low murmur in the room when a vote is announced.
+        const len = Math.floor(ac.sampleRate * 1.6), buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (0.6 + 0.4 * Math.sin(i / 900));
+        const n = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+        n.buffer = buf; f.type = 'bandpass'; f.frequency.value = 320; f.Q.value = 0.8;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.55);
+        n.connect(f).connect(g).connect(out); n.start(t);
+      }
+    } catch { S.sound = false; }
+  }
+  // The speech clock for a class meeting. Ten seconds here stand for each minute in the real chamber.
+  let clock = 0;
+  function startClock(secs) {
+    clearInterval(clock);
+    const out = $('#ylv-clock-out'), end = Date.now() + secs * 1000;
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+      if (!out.isConnected) return clearInterval(clock);
+      out.textContent = left > 0 ? `${left} seconds left` : 'Time. The Chairman says: sum up, please, councillor.';
+      out.classList.toggle('over', left === 0);
+      if (!left) { clearInterval(clock); sound('item'); }
+    };
+    tick(); clock = setInterval(tick, 250);
+  }
+  // Print one part of the page (the motion paper, the role cards) and nothing else.
+  function printOnly(sel) {
+    const el = $(sel);
+    if (!el) return;
+    el.classList.add('ylv-printme'); document.documentElement.classList.add('ylv-print');
+    addEventListener('afterprint', () => { el.classList.remove('ylv-printme'); document.documentElement.classList.remove('ylv-print'); }, { once: true });
+    window.print();
+  }
+  const ROLES = [
+    ['The Chairman', 'Runs the meeting. Reads the Chairman\'s words, calls each speaker and announces every result.'],
+    ['The Chief Executive', 'Reads the apologies, and helps the Chairman count the hands.'],
+    ['A Cabinet Member', 'Answers the questions and moves the report on library rules.'],
+    ['The questioner', 'Asks the public question about the crossing, from the public seats.'],
+    ['The mover', 'Sits in the chosen seat. Asks a question, moves the class motion and has the last word. Makes the choices on the screen, with help from the room.'],
+    ['The seconder', 'Backs the report, and then the motion, so that each can be debated.'],
+    ['A councillor with an amendment', 'Asks for one change to the motion.'],
+    ['A speaker for the motion', 'Makes a short speech for it. Read the words on the screen or use your own.'],
+    ['A speaker against the motion', 'Makes a short speech against it. Argue with the idea, never the person.'],
+    ['Councillors', 'Everyone else. Listen to the debate, then vote by raising a hand.'],
+    ['Reporters', 'One or two people who do not vote. Write one sentence that says what the meeting decided.'],
+  ];
+  const DEBRIEF = [
+    'Did anyone change their mind during the debate? What changed it?',
+    'Was the amendment a fair change, or did it weaken the motion?',
+    'Who did not speak, and what would they have said?',
+    'If this cost money, what would you spend less on to pay for it?',
+    'Which of the real ways to be heard would you use to take this further?',
+  ];
 
   /* The chamber, drawn as a plan. Seat positions are not the real seating plan. */
   const PLAN = (() => {
@@ -201,11 +328,30 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     t[me] = n.mine;
     return t;
   }
-  function count() {
+  // A class meeting: the hands counted in the room, set out over the seats. The other seats stay as they are.
+  function roomTally(v) {
+    const order = PLAN.map((_, i) => i).sort((a, b) => ((a * 37 + 11) % SEATS) - ((b * 37 + 11) % SEATS));
+    const t = new Array(SEATS).fill('empty');
+    let k = 0;
+    for (const [key, n] of [['for', v.f], ['against', v.a], ['abstain', v.abs]]) for (let j = 0; j < n && k < SEATS; j++) t[order[k++]] = key;
+    return t;
+  }
+  const won = (v) => v.f > v.a || (v.f === v.a && v.cast === 'for');
+  // What moved votes in the made-up count: [what you did, votes it won or lost].
+  function sway() {
     const L = S.log;
-    let f = 30 + [3, 6, 3][S.motion[3]] + (L.open === 2 ? 4 : 2) + (L.friendly ? 10 : 0) + [8, 2, -6][L.reply ?? 1];
+    return [
+      ['Councillors who liked the idea before anyone spoke, and you', 31],
+      [`Saying it would be paid for ${M.money[S.motion[3]]}`, [3, 6, 3][S.motion[3]]],
+      [L.open === 2 ? 'Opening with what it costs' : L.open === 1 ? 'Opening with why it is fair' : 'Opening with one young person\'s story', L.open === 2 ? 4 : 2],
+      [L.friendly ? 'Accepting the friendly amendment' : 'Refusing the amendment', L.friendly ? 10 : 0],
+      [['Answering the question about money', 'A polite reply that left the money question hanging', 'Going for the person and not the idea'][L.reply ?? 1], [8, 2, -6][L.reply ?? 1]],
+    ];
+  }
+  function count() {
+    if (S.cls && S.room.motion) { const v = S.room.motion; return { f: v.f, a: v.a, abs: v.abs, mine: 'for', carried: won(v), cast: v.f === v.a ? v.cast : null }; }
+    const forAll = sway().reduce((n, x) => n + x[1], 0);
     const abs = 5;
-    const forAll = f + 1;
     const against = SEATS - abs - forAll;
     return { f: forAll, a: against, abs, mine: 'for', carried: forAll > against };
   }
@@ -213,6 +359,9 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     const t = motionText();
     const L = S.log;
     const n = count();
+    const C = S.cls, R = S.room.report, V = S.room.motion;
+    const own = C ? ' The speaker can read these words or use their own.' : '';
+    const room = (v) => `In your room it was ${v.f} for and ${v.a} against, with ${v.abs} not voting.${v.f === v.a ? ' The votes were equal, so the Chairman used the casting vote.' : ''}`;
     return [
       { item: 0, who: 'chair', say: 'Good afternoon and welcome to this meeting of the Full Council. A reminder: you speak when I call your name, and not otherwise.', plain: 'The Chairman runs the meeting and does not take sides. Everyone speaks to the Chairman, not to each other.' },
       { item: 1, who: 'chair', say: 'Apologies. I invite the Chief Executive to read the apologies, please.', plain: 'Apologies are the councillors who could not come today.' },
@@ -236,13 +385,15 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
       { item: 5, who: 'chair', say: 'Item 5, the rules for our libraries. Cabinet Member, to move the report, please.', plain: 'A report asks the whole council to agree something. To move it means to ask the council to say yes.' },
       { item: 5, who: 'cab', say: 'Chairman, I am happy to move the recommendation.', plain: 'Nothing can be debated until one councillor moves it and another seconds it.' },
       { item: 5, who: 'second', say: 'Chairman, I am happy to second that.', plain: 'To second is to say: I agree this is worth deciding.' },
-      { item: 5, who: 'chair', say: 'Would any member like to speak? I do not see any indicating. Can I have a show of hands? All those in favour, please?', plain: 'Your first vote. Each councillor has one vote.',
-        ask: 'report', choices: ['For', 'Against', 'Abstain (do not vote either way)'], tally: null },
-      { item: 5, who: 'chair', say: 'Clearly carried.', plain: 'Carried means the council said yes. Most votes are a show of hands like this one.',
-        tally: tallyFor({ f: 76, abs: 3, mine: ['for', 'against', 'abstain'][L.report ?? 0] }) },
+      { item: 5, who: 'chair', say: 'Would any member like to speak? I do not see any indicating. Can I have a show of hands? All those in favour, please?', plain: C ? 'The first vote. Each councillor has one vote. The Chairman asks for those in favour, then those against. Count the hands and type the numbers in.' : 'Your first vote. Each councillor has one vote.',
+        ...(C ? { hands: 'report' } : { ask: 'report', choices: ['For', 'Against', 'Abstain (do not vote either way)'] }), tally: null },
+      C && R
+        ? { item: 5, who: 'chair', say: won(R) ? (R.a ? 'That is carried.' : 'Clearly carried.') : 'That is lost.', plain: `${room(R)} Carried means the council said yes. Most votes are a show of hands like this one.`, tally: roomTally(R) }
+        : { item: 5, who: 'chair', say: 'Clearly carried.', plain: 'Carried means the council said yes. Most votes are a show of hands like this one.',
+          tally: tallyFor({ f: 76, abs: 3, mine: ['for', 'against', 'abstain'][L.report ?? 0] }) },
       { item: 6, who: 'chair', say: 'Notices of motion. Councillor, please put forward your notice of motion.', plain: 'A motion is a councillor asking the council to do something. This one is yours. How do you open your speech?', motion: true,
         ask: 'open', choices: ['Tell the story of one young person this would help', 'Say why it is fair', 'Say what it costs and where the money comes from'] },
-      { item: 6, who: 'me', say: `Chairman, I rise to propose the motion in your papers. ${t.notes} ${t.resolves}`, plain: 'In the real chamber the mover of a motion can speak for up to five minutes. Everyone else gets three.', motion: true },
+      { item: 6, who: 'me', say: `Chairman, I rise to propose the motion in your papers. ${t.notes} ${t.resolves}`, plain: 'In the real chamber the mover of a motion can speak for up to five minutes. Everyone else gets three.' + own, motion: true, clock: 50 },
       { item: 6, who: 'chair', say: 'Is there a seconder to that motion?', plain: 'Without a seconder the motion falls and is not debated.', motion: true },
       { item: 6, who: 'second', say: 'Yes. I formally second, and reserve my right to speak.', plain: 'Reserving the right to speak means: I will make my speech later in the debate.', motion: true },
       { item: 6, who: 'chair', say: 'Are there any proposed amendments?', plain: 'An amendment is a change to the words of a motion. It must not turn the motion into its opposite.', motion: true },
@@ -251,16 +402,20 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
       L.friendly
         ? { item: 6, who: 'chair', say: 'The mover accepts the friendly amendment. We continue with the motion as amended.', plain: 'You gave a little and kept the councillor on your side. That is how many motions get through.', motion: true }
         : { item: 6, who: 'chair', say: 'The mover does not accept the amendment, so we vote on it. All those in favour of the amendment? The amendment is carried.', plain: 'The council added it anyway, and a few councillors noticed you would not bend.', motion: true },
-      { item: 6, who: 'for', say: 'Chairman, I support this motion. Young people in my division have asked for exactly this.', plain: 'A division is the area a county councillor is elected for.', motion: true },
-      { item: 6, who: 'against', say: 'Chairman, I am not against the idea. But every pound can only be spent once. What gives way to pay for this?', plain: 'This is the heart of most debates: not whether something is good, but what to spend less on.', motion: true },
+      { item: 6, who: 'for', say: 'Chairman, I support this motion. Young people in my division have asked for exactly this.', plain: 'A division is the area a county councillor is elected for.' + own, motion: true, clock: 30 },
+      { item: 6, who: 'against', say: 'Chairman, I am not against the idea. But every pound can only be spent once. What gives way to pay for this?', plain: 'This is the heart of most debates: not whether something is good, but what to spend less on.' + own, motion: true, clock: 30 },
       { item: 6, who: 'chair', say: 'Councillor, you now have the right to reply before the vote.', plain: 'The mover always gets the last word. How do you use it?', motion: true,
         ask: 'reply', choices: ['Answer the question about money', 'Thank everyone and say your motion again', 'Say the last speaker does not care about young people'] },
       L.reply === 2
         ? { item: 6, who: 'chair', say: 'Through the Chair, please. Councillors will debate the motion, not each other.', plain: 'You lost some votes there. In the chamber you argue with the idea, never the person.', motion: true }
-        : { item: 6, who: 'me', say: L.reply === 0 ? `Chairman, the councillor asks a fair question. This would be paid for ${M.money[S.motion[3]]}. I ask the council to support the motion.` : 'Chairman, I thank members for the debate, and I ask the council to support the motion.', plain: L.reply === 0 ? 'You answered the hardest question in the room. That wins votes.' : 'Polite, but the question about money is still hanging.', motion: true },
-      { item: 6, who: 'chair', say: 'Can I have a show of hands? All those in favour, please?', plain: 'You can vote by a show of hands. Or, if six councillors stand up to ask for it, every name is read out and each vote is written down. That is a named vote.', motion: true,
-        ask: 'named', choices: ['Show of hands', 'Stand and ask for a named vote'] },
-      L.named === 1
+        : { item: 6, who: 'me', say: L.reply === 0 ? `Chairman, the councillor asks a fair question. This would be paid for ${M.money[S.motion[3]]}. I ask the council to support the motion.` : 'Chairman, I thank members for the debate, and I ask the council to support the motion.', plain: (L.reply === 0 ? 'You answered the hardest question in the room. That wins votes.' : 'Polite, but the question about money is still hanging.') + own, motion: true, clock: 30 },
+      C
+        ? { item: 6, who: 'chair', say: 'Can I have a show of hands? All those in favour, please?', plain: 'Now the room decides. The Chairman asks for those in favour, then those against. Count the hands and type the numbers in. In the real chamber, six councillors can stand to ask for a named vote instead.', motion: true, hands: 'motion' }
+        : { item: 6, who: 'chair', say: 'Can I have a show of hands? All those in favour, please?', plain: 'You can vote by a show of hands. Or, if six councillors stand up to ask for it, every name is read out and each vote is written down. That is a named vote.', motion: true,
+          ask: 'named', choices: ['Show of hands', 'Stand and ask for a named vote'] },
+      C && V
+        ? { item: 6, who: 'chair', say: won(V) ? 'That is carried.' : 'That is lost.', plain: `${room(V)} This vote was real: it is the count from your room.`, motion: true, tally: roomTally(V), end: true }
+        : L.named === 1
         ? { item: 6, who: 'ce', say: `Members, there were ${n.f} votes for, ${n.a} against and ${n.abs} abstentions. The motion was therefore ${n.carried ? 'carried' : 'defeated'}.`, plain: 'Five more councillors stood with you, so the Chief Executive read out every name. These numbers are made up for the game and depend on the choices you made.', motion: true, tally: tallyFor(n), end: true }
         : { item: 6, who: 'chair', say: n.carried ? 'I think that is carried.' : 'That is lost.', plain: `On a show of hands nobody counts unless it is close. In this game it was ${n.f} for and ${n.a} against, with ${n.abs} not voting. The numbers are made up and depend on the choices you made.`, motion: true, tally: tallyFor(n), end: true },
       { item: 7, who: 'chair', say: 'That brings us to the end of today\'s business. Thank you for your attendance and your contributions.', plain: 'The meeting is over. Real meetings are much longer, with many more items.', close: true },
@@ -287,9 +442,11 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
           <li><b>Ask Lancashire.</b> See your motion put to young people, and to adults on Lancashire Voice.</li>
           <li><b>See what happens next.</b> Find the real ways to be heard.</li>
         </ol>
+        <p>You can play on your own, or run the meeting as a class on one screen, with role cards and a real show of hands.</p>
         <p><button class="ylv-btn" data-tab="1">Start with your motion</button> <button class="ylv-btn ghost" data-tab="2">Go straight to the chamber</button></p>
       </section>
-      <section class="ylv-card"><h2>In Concilio Consilium</h2><p>These words are over the Chairman's chair in the real chamber. They are Latin, and are usually read as: in council there is wisdom. The idea is that a room of people who disagree, and who follow fair rules, decides better than one person alone.</p></section>`;
+      <section class="ylv-card"><h2>In Concilio Consilium</h2><p>These words are over the Chairman's chair in the real chamber. They are Latin, and are usually read as: in council there is wisdom. The idea is that a room of people who disagree, and who follow fair rules, decides better than one person alone.</p></section>
+      <section class="ylv-card"><h2>Whose idea was this?</h2><p>The idea of a virtual council meeting came from Wayne Walsh, who lives in Burnley. Thank you, Wayne.</p></section>`;
     },
     1() {
       const m = S.motion, t = motionText();
@@ -307,13 +464,13 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
             <table><thead><tr><th>If you want to change</th><th>Ask</th></tr></thead><tbody>${M.elsewhere.map((e) => `<tr><td>${esc(e.want)}</td><td>${esc(e.who)}</td></tr>`).join('')}</tbody></table>
           </details>
         </div>
-        <aside class="ylv-paper" aria-label="Your motion paper">
+        <aside class="ylv-paper" id="ylv-motion-paper" aria-label="Your motion paper">
           <p class="ylv-eyebrow">Notice of Motion · ${esc(t.service)}</p>
           <h3>${esc(t.subject)}</h3>
           <p>${esc(t.notes)}</p>
           <p>${esc(t.resolves)}</p>
           <p class="ylv-small">The prototype has no text box, so nothing you write can be collected. A full version would let you type your own words, and they would stay on your device.</p>
-          <p><button class="ylv-btn" data-go-chamber>Take it to the chamber</button></p>
+          <p><button class="ylv-btn" data-go-chamber>Take it to the chamber</button> <button class="ylv-btn ghost" data-print="#ylv-motion-paper">Print the motion paper</button></p>
         </aside>
       </section>`;
     },
@@ -324,8 +481,16 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
           <div class="ylv-stack">
             <h2>Take your seat</h2>
             <p>Every councillor has a numbered seat, and a vote only counts from that seat. You are looking down from the public gallery. Choose your seat in the room, or from the list.</p>
-            <p><label for="ylv-seat">Seat number</label> <select id="ylv-seat">${PLAN.map((_, i) => `<option>${i + 1}</option>`).join('')}</select> <button class="ylv-btn" data-sit>Sit here</button></p>
+            <fieldset class="ylv-pick"><legend>How are you playing?</legend>
+              <button type="button" data-cls="0" aria-pressed="${!S.cls}">On my own</button>
+              <button type="button" data-cls="1" aria-pressed="${S.cls}">As a class, on one screen</button>
+            </fieldset>
+            ${S.cls ? `<p>Put this screen where the whole room can see it. Hand out the roles below, and choose the seat for the mover of your motion. The votes will be real: you count the hands in your room.</p>` : ''}
+            <p><label for="ylv-seat">Seat number</label> <select id="ylv-seat">${PLAN.map((_, i) => `<option>${i + 1}</option>`).join('')}</select> <button class="ylv-btn" data-sit>${S.cls ? 'Seat the mover here' : 'Sit here'}</button></p>
             <p class="ylv-small">The room is drawn from shapes, not photographs. The seat positions are not the council's real seating plan.</p>
+            ${S.cls ? `<div class="ylv-card" id="ylv-roles"><h3>Role cards</h3><p class="ylv-small">Nobody needs their own device. Print the cards, or read them out.</p>
+              <dl class="ylv-roles">${ROLES.map((r) => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl>
+              <p><button class="ylv-btn ghost" data-print="#ylv-roles">Print the role cards</button></p></div>` : ''}
           </div>
         </section>`;
       }
@@ -337,22 +502,39 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
       let foot;
       if (st.close) {
         const n = count();
-        foot = `<div class="ylv-card"><h3>What was decided</h3><ul><li>The library rules were agreed.</li><li>Your motion was ${n.carried ? 'carried' : 'lost'}: ${n.f} for, ${n.a} against, ${n.abs} not voting (made up for the game).</li><li>The pupil will get a written answer about the crossing.</li></ul>
-          <p><button class="ylv-btn" data-tab="3">Next: ask Lancashire</button> <button class="ylv-btn ghost" data-card>Save your decision card</button> <button class="ylv-btn ghost" data-again>Play again</button></p></div>`;
+        const lib = S.cls && S.room.report ? won(S.room.report) : true;
+        const how = S.cls
+          ? `<div class="ylv-card"><h3>Talk about it</h3><ol class="ylv-debrief">${DEBRIEF.map((q) => `<li>${q}</li>`).join('')}</ol><p class="ylv-small">Reporters: read out your one sentence on what the meeting decided.</p></div>`
+          : `<div class="ylv-card"><h3>How the vote went</h3><ul class="ylv-sway">${sway().map(([what, v], i) => `<li><span>${esc(cap(what))}</span><b>${i === 0 ? v + ' votes' : v > 0 ? 'won ' + v : v < 0 ? 'lost ' + -v : 'won none'}</b></li>`).join('')}</ul><p class="ylv-small">These numbers are made up for the game. The lesson is real: a motion is won by answering the room, giving a little and saying how it is paid for. Play again and choose differently.</p></div>`;
+        foot = `<div class="ylv-card"><h3>What was decided</h3><ul><li>The library rules were ${lib ? 'agreed' : 'not agreed'}.</li><li>${S.cls ? 'The' : 'Your'} motion was ${n.carried ? 'carried' : 'lost'}: ${n.f} for, ${n.a} against, ${n.abs} not voting (${S.cls ? 'counted in your room' : 'made up for the game'}).</li><li>The pupil will get a written answer about the crossing.</li></ul>
+          <p><button class="ylv-btn" data-tab="3">Next: ask Lancashire</button> <button class="ylv-btn ghost" data-card>Save your decision card</button> <button class="ylv-btn ghost" data-again>Play again</button></p></div>${how}`;
+      } else if (st.hands && S.tie === st.hands) {
+        foot = `<div class="ylv-card"><h3>The votes are equal</h3><p>When the votes are equal, the Chairman has a casting vote to settle it. Chairman, how do you use it?</p>
+          <div class="ylv-choices" role="group" aria-label="The casting vote"><button type="button" class="ylv-btn ghost" data-cast="for">For</button><button type="button" class="ylv-btn ghost" data-cast="against">Against</button></div></div>`;
+      } else if (st.hands) {
+        const num = (id, label) => `<label>${label} <input id="ylv-h-${id}" type="number" min="0" max="60" value="0" inputmode="numeric"></label>`;
+        foot = `<div class="ylv-card"><h3>Count the hands in your room</h3><p class="ylv-hands">${num('f', 'For')} ${num('a', 'Against')} ${num('n', 'Not voting')}</p>
+          <p><button class="ylv-btn" data-hands="${st.hands}">Announce the result</button></p><p class="ylv-small">The numbers stay on this screen.</p></div>`;
       } else if (st.ask && !answered) {
         foot = `<div class="ylv-choices" role="group" aria-label="Your choice">${st.choices.map((c, k) => `<button type="button" class="ylv-btn ghost" data-ask="${st.ask}" data-val="${k}">${esc(c)}</button>`).join('')}</div>`;
       } else {
         foot = `<p><button class="ylv-btn" data-next>Next</button></p>`;
       }
+      const timer = S.cls && st.clock ? `<p class="ylv-clock"><button type="button" class="ylv-chip" data-clock="${st.clock}">Start the clock: ${st.clock} seconds</button> <output id="ylv-clock-out"></output><span class="ylv-small">Ten seconds here stand for each minute in the real chamber.</span></p>` : '';
+      const aids = `<p class="ylv-roomtools ylv-aids">${canSpeak ? `<button type="button" class="ylv-chip" data-voice aria-pressed="${S.voice}">Read aloud</button>` : ''}<button type="button" class="ylv-chip" data-sound aria-pressed="${S.sound}">Sound</button></p>`;
+      const who = S.cls ? { me: 'The mover', second: 'The seconder' }[st.who] || WHO[st.who] : WHO[st.who];
       return `<section class="ylv-two ylv-meet">
         <div class="ylv-m-room">${roomBox(chamber({ speaker: st.who, tally: st.tally }), st.tally ? `<span class="ylv-chip is-note">The vote, seen from the Chairman's bench</span>` : `<button type="button" class="ylv-chip" data-cam="seat" aria-pressed="${S.cam === 'seat'}">Your seat</button><button type="button" class="ylv-chip" data-cam="chair" aria-pressed="${S.cam === 'chair'}">Chairman's bench</button><button type="button" class="ylv-chip" data-cam="over" aria-pressed="${S.cam === 'over'}">Public gallery</button>`)}</div>
         <ol class="ylv-agenda ylv-m-agenda" aria-label="Agenda">${agenda}</ol>
         <div class="ylv-stack ylv-m-words">
-          <p class="ylv-eyebrow">Item ${st.item + 1} of ${AGENDA.length} · ${AGENDA[st.item][0]} · Seat ${S.seat}</p>
-          <div class="ylv-screen" id="ylv-screen"><span class="who">${WHO[st.who]}</span><q>${esc(st.say)}</q></div>
-          <p class="ylv-plain"><b>In plain words.</b> ${esc(st.plain)}</p>
+          <p class="ylv-eyebrow">${S.cls ? 'Class meeting · ' : ''}Item ${st.item + 1} of ${AGENDA.length} · ${AGENDA[st.item][0]} · Seat ${S.seat}</p>
+          <div class="ylv-screen" id="ylv-screen"><span class="who">${who}</span><q>${words(st.say)}</q></div>
+          <p class="ylv-plain"><b>In plain words.</b> ${words(st.plain)}</p>
+          <p class="ylv-def" id="ylv-def" role="status"></p>
+          ${timer}
           ${st.motion ? `<details class="ylv-card"><summary>Your motion on the desk screen</summary><p>${esc(t.notes)}</p><p>${esc(t.resolves)}</p></details>` : ''}
           ${foot}
+          ${aids}
         </div>
       </section>`;
     },
@@ -412,19 +594,19 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
         <h3>What is real and what is made up</h3>
         <table><thead><tr><th>Real</th><th>Made up for the game</th></tr></thead><tbody>
           <tr><td>The order of the meeting, and the rules shown</td><td>Every speech, question and answer</td></tr>
-          <tr><td>The offices: Chairman, Chief Executive, Cabinet Member</td><td>Every vote count</td></tr>
+          <tr><td>The offices: Chairman, Chief Executive, Cabinet Member</td><td>Every vote count, unless you play as a class and count your own hands</td></tr>
           <tr><td>The shape of the room and the words over the chair</td><td>The seat positions, the carvings and the shields</td></tr>
         </tbody></table>
         <p>No councillor is named and no party appears. The forms of words follow those used in the chamber. The room is built from simple shapes and drawn patterns, with no photograph in it, and the figures in the seats are not real people.</p>
         <h3>Words</h3>
-        <dl>
-          <dt>Motion</dt><dd>A councillor asking the council to do something.</dd>
-          <dt>Mover and seconder</dt><dd>The councillor who puts a motion, and the one who backs it so it can be debated.</dd>
-          <dt>Amendment</dt><dd>A change to the words of a motion. A friendly amendment is one the mover accepts, so it needs no vote.</dd>
-          <dt>Right of reply</dt><dd>The mover's last word before the vote.</dd>
-          <dt>Named vote</dt><dd>A vote where each councillor's name and vote is written down. Six councillors must stand to ask for one.</dd>
-          <dt>Abstain</dt><dd>To be there and vote neither for nor against.</dd>
-        </dl>
+        <p>In the meeting, tap any underlined word to see what it means.</p>
+        <dl>${TERMS.slice().sort((a, b) => a[0].localeCompare(b[0])).map((t) => `<dt>${t[0]}</dt><dd>${esc(t[2])}</dd>`).join('')}</dl>
+        <h3>Playing as a class</h3>
+        <p>Choose "As a class, on one screen" when you take your seat. The page gives you role cards to print, a clock for each speech and a set of questions to talk over at the end. The votes are a real show of hands, counted in your room and typed in by the teacher or youth worker. If the votes are equal, your Chairman settles it with the casting vote.</p>
+        <h3>Sound and reading aloud</h3>
+        <p>Both are off until you turn them on in the meeting. Reading aloud uses the voice built into your own device, so nothing is sent anywhere to make it.</p>
+        <h3>Where the idea came from</h3>
+        <p>The idea of a virtual council meeting came from Wayne Walsh, who lives in Burnley. The design, the wording and any mistakes are Tom Pickup's.</p>
         <h3>Your information</h3>
         <p>There are no accounts and no text boxes. Nothing is stored on your device and nothing is sent anywhere. A link to your motion holds four numbers and nothing else.</p>
         <h3>Sources</h3>
@@ -446,6 +628,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
 
   function render(focus) {
     $('#ylv-tabs').innerHTML = TABS.map((t, i) => `<button type="button" data-tab="${i}" ${i === S.tab ? 'aria-current="page"' : ''}>${t}</button>`).join('');
+    clearInterval(clock);
     $('#ylv-app').innerHTML = views[S.tab]();
     const pinned = S.tab === 2 && S.seat && matchMedia('(max-width: 820px) and (min-height: 620px)').matches;
     if (focus) {
@@ -454,6 +637,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     }
     const q = $('#ylv-screen');
     if (q) $('#ylv-sr').textContent = q.textContent;
+    speak(q ? $('q', q).textContent : '');
     if (S.tab === 2 && S.d3) mountRoom();
     // The site header stays at the top of the screen; the pinned room sits just under it.
     const hd = document.querySelector('body > header, header.site-header, header');
@@ -494,7 +678,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     wrap(t.notes, 40, 54); wrap(t.resolves, 40, 54);
     wrap(`For ${n.f}, against ${n.a}, not voting ${n.abs}. Moved from seat ${S.seat}.`, 40, 54);
     g.fillStyle = '#d9bd83';
-    y = 1200; wrap('A game. Not a real decision of Lancashire County Council. The vote is made up.', 30, 42);
+    y = 1200; wrap(S.cls ? 'A class game. Not a real decision of Lancashire County Council. The hands were counted in our room.' : 'A game. Not a real decision of Lancashire County Council. The vote is made up.', 30, 42);
     c.toBlob((b) => {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(b); a.download = 'young-lancashire-voice-motion.png';
@@ -503,25 +687,45 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     });
   }
 
+  function advance() {
+    const before = steps()[S.step];
+    S.step++;
+    const now = steps()[Math.min(S.step, steps().length - 1)];
+    sound(now.tally ? 'vote' : now.item !== before.item ? 'item' : '');
+    render('[data-next], [data-ask], [data-hands], [data-tab="3"].ylv-btn');
+  }
   $('.ylv').addEventListener('click', (e) => {
     const b = e.target.closest('button, circle[data-seat]');
     if (!b) return;
     const d = b.dataset;
-    if (d.tab != null) { S.tab = +d.tab; render(); window.scrollTo({ top: $('.ylv').offsetTop, behavior: 'auto' }); }
+    if (d.tab != null) { S.tab = +d.tab; S.tie = null; render(); window.scrollTo({ top: $('.ylv').offsetTop, behavior: 'auto' }); }
     else if (d.d3 != null) { S.d3 = d.d3 === '1'; render('[data-d3]'); }
     else if (d.cam) { S.cam = d.cam; render(`[data-cam="${d.cam}"]`); }
     else if (d.part != null) {
       S.motion[+d.part] = +d.val;
       if (+d.part === 0) { S.motion[1] = 0; S.motion[2] = 0; }
-      S.built = true; S.step = 0; S.log = {}; S.votes = [];
+      S.built = true; S.step = 0; S.log = {}; S.votes = []; S.room = { report: null, motion: null }; S.tie = null;
       setHash(); render(`[data-part="${d.part}"][data-val="${d.val}"]`);
     }
     else if ('goChamber' in d) { S.built = true; setHash(); S.tab = 2; render('#ylv-seat, [data-next]'); }
-    else if (d.seat) { S.seat = +d.seat; S.step = 0; render('[data-next]'); }
+    else if (d.seat && !d.cls) { S.seat = +d.seat; S.step = 0; render('[data-next]'); }
     else if ('sit' in d) { S.seat = +$('#ylv-seat').value; S.step = 0; render('[data-next]'); }
-    else if ('next' in d) { S.step++; render('[data-next], [data-ask], [data-tab="3"].ylv-btn'); }
-    else if (d.ask) { S.log[d.ask] = d.ask === 'friendly' ? (+d.val === 0 ? 1 : 0) : +d.val; S.step++; render('[data-next], [data-ask]'); }
-    else if ('again' in d) { S.step = 0; S.log = {}; render('[data-next]'); }
+    else if ('next' in d) advance();
+    else if (d.ask) { S.log[d.ask] = d.ask === 'friendly' ? (+d.val === 0 ? 1 : 0) : +d.val; advance(); }
+    else if (d.hands) {
+      const n = (id) => Math.max(0, Math.min(60, Math.floor(+$('#ylv-h-' + id).value || 0)));
+      const v = { f: n('f'), a: n('a'), abs: n('n'), cast: null };
+      S.room[d.hands] = v;
+      if (v.f === v.a) { S.tie = d.hands; render('[data-cast]'); } else advance();
+    }
+    else if (d.cast) { S.room[S.tie].cast = d.cast; S.tie = null; advance(); }
+    else if (d.cls != null) { S.cls = d.cls === '1'; render(`[data-cls="${d.cls}"]`); }
+    else if (d.term != null) { const t = TERMS[+d.term]; $('#ylv-def').innerHTML = `<b>${t[0]}.</b> ${esc(t[2])}`; }
+    else if (d.clock) startClock(+d.clock);
+    else if (d.print) printOnly(d.print);
+    else if ('voice' in d) { S.voice = !S.voice; render('[data-voice]'); }
+    else if ('sound' in d) { S.sound = !S.sound; sound('item'); render('[data-sound]'); }
+    else if ('again' in d) { S.step = 0; S.log = {}; S.room = { report: null, motion: null }; S.tie = null; render('[data-next]'); }
     else if ('card' in d) decisionCard();
     else if (d.vote) { S.votes.push(d.vote); render('[data-vote], [data-revote]'); }
     else if ('revote' in d) { S.votes = []; render('[data-vote]'); }
@@ -641,5 +845,27 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
   .ylv-how dl { display: grid; gap: 4px 16px; grid-template-columns: max-content 1fr; margin: 0; }
   .ylv-how dt { font-weight: 700; } .ylv-how dd { margin: 0; }
   @media (max-width: 560px) { .ylv-how dl { grid-template-columns: 1fr; } .ylv-agenda li b { flex-basis: 9em; } }
+  .ylv-term { border: 0; background: none; padding: 0; margin: 0; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .ylv-term:hover { text-decoration-style: solid; }
+  .ylv-def { margin: 0; padding: 10px 16px; border-left: 4px solid var(--gold); background: var(--surface); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+  .ylv-def:empty { display: none; }
+  .ylv-clock { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0; }
+  .ylv-clock output { font: 700 1.1rem/1.2 var(--font-sans); font-variant-numeric: tabular-nums; }
+  .ylv-clock output.over { color: #8a1c16; }
+  .ylv-clock .ylv-small { flex-basis: 100%; }
+  .ylv-roles { display: grid; gap: 10px; margin: 0 0 12px; }
+  .ylv-roles dt { font-weight: 700; } .ylv-roles dd { margin: 0; }
+  .ylv-sway { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 2px; }
+  .ylv-app .ylv-sway li { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; border-bottom: 1px solid var(--line); max-width: none; }
+  .ylv-sway b { white-space: nowrap; }
+  .ylv-debrief { display: grid; gap: 8px; padding-left: 1.3em; margin: 0 0 10px; }
+  .ylv-plan .seat.empty { opacity: 0.35; }
+  @media print {
+    html.ylv-print body * { visibility: hidden !important; }
+    html.ylv-print .ylv-printme, html.ylv-print .ylv-printme * { visibility: visible !important; }
+    html.ylv-print .ylv-printme { position: fixed; left: 0; top: 0; width: 100%; border: 0; background: #fff; color: #000; }
+    html.ylv-print .ylv-printme button { display: none; }
+    html.ylv-print .ylv-roles > div { break-inside: avoid; border: 1px solid #000; padding: 10px 14px; }
+  }
   .ylv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 </style>

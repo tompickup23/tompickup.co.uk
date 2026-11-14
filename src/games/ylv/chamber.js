@@ -344,17 +344,25 @@ export function createRoom(host, { plan, reduced = false }) {
     const seatedMe = st.mode === 'seat' ? st.seat : -1;
     const sp = st.speaker === 'me' ? (st.mode === 'seat' ? -1 : st.seat) : st.speaker;
     legs.visible = false;
+    const watch = st.speaker === 'me' ? people[st.seat] : sp != null && sp >= 0 ? people[sp] : null;
     for (let i = 0; i < N; i++) {
       const p = people[i];
       const show = i !== seatedMe && (!p.guest || sp === i);
       const up = sp === i && i !== OFFICE.chair ? 0.44 : 0;
-      const set = (mesh, lx, ly, lz, on = true) => {
+      // Heads turn towards whoever is speaking, as far as a neck allows. During a vote they face front.
+      let turn = 0;
+      if (show && watch && watch !== p && !st.tally) {
+        const d = Math.atan2(watch.x - p.x, watch.z - p.z) - p.ry;
+        turn = Math.max(-1.15, Math.min(1.15, Math.atan2(Math.sin(d), Math.cos(d))));
+      }
+      const set = (mesh, lx, ly, lz, on = true, t = 0) => {
         if (!show || !on) return mesh.setMatrixAt(i, ZERO);
         const s = Math.sin(p.ry), c = Math.cos(p.ry);
+        if (t) { const z0 = lz - 0.01, ts = Math.sin(t), tc = Math.cos(t); lx = z0 * ts; lz = 0.01 + z0 * tc; }
         dummy.position.set(p.x + lx * c + lz * s, p.fy + up + ly, p.z - lx * s + lz * c);
-        dummy.rotation.set(0, p.ry, 0); dummy.updateMatrix(); mesh.setMatrixAt(i, dummy.matrix);
+        dummy.rotation.set(0, p.ry + t, 0); dummy.updateMatrix(); mesh.setMatrixAt(i, dummy.matrix);
       };
-      set(torso, 0, 0.78, 0); set(head, 0, 1.2, 0.01); set(hair, 0, 1.228, -0.03); set(eyes, 0, 1.2, 0.01);
+      set(torso, 0, 0.78, 0); set(head, 0, 1.2, 0.01, true, turn); set(hair, 0, 1.228, -0.03, true, turn); set(eyes, 0, 1.2, 0.01, true, turn);
       const v = st.tally && i < seats.length ? st.tally[i] : null;
       const hand = !!v && v === vote.phase && vote.lift > 0.02;
       set(arm, 0.25, 0.84 + 0.38 * vote.lift, 0.04, hand); set(palm, 0.25, 1.11 + 0.38 * vote.lift, 0.04, hand);
