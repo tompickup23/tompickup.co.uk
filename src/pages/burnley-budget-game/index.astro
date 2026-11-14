@@ -1,7 +1,7 @@
 ---
 // Burnley Budget Challenge: a standalone game page for Burnley Borough Council's budget.
 // The game (src/data/burnley-budget-game/game.html) is generated in Reports from the Burnley
-// budget model (Burnley_Budget_Model_work/game/, model run run-a81dd5ae34f2b6d2). Do not edit
+// budget model (Burnley_Budget_Model_work/game/, model run run-f2ca9ce5ee34f595). Do not edit
 // it by hand: rebuild it in Reports and run scripts/sync-burnley-game.sh.
 // The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
 // The game is politically neutral: this wrapper adds no wording to it beyond the edition line
@@ -39,7 +39,7 @@ const imprintLine = imp.show
   ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
   : '';
 // The model run the game was built from, as recorded by the sync script. The game prints it too.
-const runId = 'run-a81dd5ae34f2b6d2';
+const runId = 'run-f2ca9ce5ee34f595';
 if (source.model_run_id !== runId || !game.includes(`"model_run_id": "${runId}"`)) {
   throw new Error('burnley-budget-game: model run id changed; read what changed in Reports, then update runId and the edition line');
 }
