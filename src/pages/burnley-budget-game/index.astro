@@ -1,0 +1,125 @@
+---
+// Burnley Budget Challenge: a standalone game page for Burnley Borough Council's budget.
+// The game (src/data/burnley-budget-game/game.html) is generated in Reports from the Burnley
+// budget model (Burnley_Budget_Model_work/game/, model run run-f2ca9ce5ee34f595). Do not edit
+// it by hand: rebuild it in Reports and run scripts/sync-burnley-game.sh.
+// The page skips the site Layout so the game's own styles stay intact, so it renders the imprint itself.
+// The game is politically neutral: this wrapper adds no wording to it beyond the edition line
+// and the imprint, which is a legal footer.
+import { imprint as imp } from '../../data/imprint';
+import { personRef } from '../../data/person';
+import { DEFAULT_OG_IMAGE } from '../../data/seo';
+import game from '../../data/burnley-budget-game/game.html?raw';
+import source from '../../data/burnley-budget-game/source.json';
+
+const title = 'Burnley Budget Challenge';
+// The browser tab and search result carry the site name, as every Layout page does.
+const pageTitle = `${title} | Tom Pickup`;
+const description = "Where Burnley Borough Council's money goes, the council's own budget gap for the next two years, and whether you can close it.";
+// No card is generated for this game: scripts/generate_budget_game_card.mjs draws the Lancashire
+// card only. Until a card is generated from the game's own data, the page uses the site's default.
+const ogImage = new URL(DEFAULT_OG_IMAGE, 'https://tompickup.co.uk').href;
+// The game as a WebApplication node, in the same shape as the Lancashire game's.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  '@id': 'https://tompickup.co.uk/burnley-budget-game/#app',
+  name: title,
+  url: 'https://tompickup.co.uk/burnley-budget-game/',
+  description,
+  image: ogImage,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web browser',
+  isAccessibleForFree: true,
+  inLanguage: 'en-GB',
+  author: personRef,
+  creator: personRef,
+};
+const imprintLine = imp.show
+  ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
+  : '';
+// The model run the game was built from, as recorded by the sync script. The game prints it too.
+const runId = 'run-f2ca9ce5ee34f595';
+if (source.model_run_id !== runId || !game.includes(`"model_run_id": "${runId}"`)) {
+  throw new Error('burnley-budget-game: model run id changed; read what changed in Reports, then update runId and the edition line');
+}
+// The development banner becomes a dated edition line. The document names and dates are as the game cites them.
+// The runid span stays, hidden, because the game's script writes to it on load.
+const editionLine =
+  "Edition of 14 November 2026. Figures come from Burnley Borough Council's published papers, chiefly Revenue Budget 2027-30 (Executive, 16 September 2026), the Budget Book 2026/27 and the Council Tax Resolution for 2026/27.";
+const banner = `<div class="test">Working version, not published. Built from Burnley Borough Council's published papers and government tables. <span id="runid"></span></div>`;
+// Reports writes the game as a whole document; the page supplies its own head, so the shell comes off.
+const shellStart = /^<!doctype html><html[^>]*><head>[\s\S]*?<\/head><body>/i;
+const shellEnd = /<\/body><\/html>\s*$/i;
+// The game has no imprint marker, so the imprint goes at the end of its own footer.
+const footerEnd = '</footer>';
+if (!game.includes(banner)) throw new Error('burnley-budget-game: development banner not found; update the edition line replace()');
+if (!shellStart.test(game) || !shellEnd.test(game)) throw new Error('burnley-budget-game: document shell not found; update the shell replace()');
+if (game.split(footerEnd).length !== 2) throw new Error('burnley-budget-game: expected one footer; update the imprint replace()');
+const body = game
+  .replace(shellStart, '')
+  .replace(shellEnd, '')
+  .replace(/<title>[\s\S]*?<\/title>/, '')
+  .replace(banner, `<div class="test edition">${editionLine} <span id="runid" hidden></span></div>`)
+  .replace(
+    footerEnd,
+    `<p class="src"><a href="/">tompickup.co.uk</a></p>` + (imprintLine ? `<p class="src">${imprintLine}</p>` : '') + footerEnd,
+  );
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://tompickup.co.uk/burnley-budget-game/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://tompickup.co.uk/burnley-budget-game/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <style is:global>
+      /* The edition line is information, not a warning: no amber band. */
+      .test.edition { background: transparent; color: var(--ink2); border-bottom: 1px solid var(--grid); }
+      a { color: var(--rose); }
+      a:hover { color: var(--ink); }
+      .site-home {
+        margin: 0;
+        padding: 0 16px;
+        max-width: 1040px;
+        margin-inline: auto;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+        font: 600 0.82rem/1 var(--f-body);
+        letter-spacing: 0.02em;
+      }
+      .site-home a { text-decoration: none; }
+      .site-home nav { display: flex; }
+      .site-home a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <header class="site-home">
+      <a class="brand" href="/">tompickup.co.uk</a>
+      <nav aria-label="Site"><a href="/about/">About Tom</a></nav>
+    </header>
+    <Fragment set:html={body} />
+  </body>
+</html>

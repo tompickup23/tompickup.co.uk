@@ -248,9 +248,9 @@ const defaultGraph = {
 
     {/* Same-site pages the reader points at are fetched before the click.
         Prefetch only: the page fetched runs no script, so the analytics beacon
-        never counts a page nobody opened. Downloads, the feed and the two
+        never counts a page nobody opened. Downloads, the feed and the
         standalone tools are left alone. */}
-    <Speculation exclude={['/documents/*', '/audio/*', '/data/*', '/lcc-budget-game/*', '/lancashire-voice/*']} />
+    <Speculation exclude={['/documents/*', '/audio/*', '/data/*', '/lcc-budget-game/*', '/burnley-budget-game/*', '/lancashire-voice/*']} />
 
     <!-- Arms the chart entrances in global.css on the reader's first scroll.
          Until then, and whenever this script does not run, charts are drawn

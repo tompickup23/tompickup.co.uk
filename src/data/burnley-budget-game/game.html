@@ -1,0 +1,1005 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body><title>Burnley Budget Game</title>
+<style>
+/* Layout: a civic signboard. One step at a time, a stepper across the top, a gap meter pinned to the foot once money starts moving. */
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --sunk:#E6EAEE; --ink:#15202B; --muted:#55626F; --line:#CBD2DA;
+  --rose:#B3122E; --rose-soft:#F6DDE1;
+  --good:#256B4A; --good-soft:#DCEFE4; --warn:#7F4F0C; --warn-soft:#F7EAD2; --bad:#B3122E;
+  --b-rose:#B3122E; --b-blue:#2C5F9E; --b-green:#2E7D57; --b-ochre:#A8741A; --b-slate:#5E6B78;
+  --f-display:"Avenir Next Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --f-data:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --rose:#F0607A; --rose-soft:#3A1C24; --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; --bad:#F0607A;
+  --b-rose:#E8566F; --b-blue:#6A9BDB; --b-green:#55B985; --b-ochre:#D9A445; --b-slate:#93A1AF; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#17202A; --sunk:#1F2A35; --ink:#E7ECF1; --muted:#9AA7B4; --line:#2E3B48;
+  --rose:#F0607A; --rose-soft:#3A1C24; --good:#5FC793; --good-soft:#173328; --warn:#E3AA4F; --warn-soft:#3A2C14; --bad:#F0607A;
+  --b-rose:#E8566F; --b-blue:#6A9BDB; --b-green:#55B985; --b-ochre:#D9A445; --b-slate:#93A1AF; color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:0 120px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.02;letter-spacing:.005em}
+h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:900;text-transform:uppercase}
+h2{font-size:clamp(2rem,5vw,3rem);font-weight:800;text-transform:uppercase}
+h3{font-size:1.45rem;font-weight:800;text-transform:uppercase}
+p{margin:0;max-width:65ch}
+.mono,.num{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 .75rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+button{font:inherit;cursor:pointer}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--bg);font:700 1rem/1 var(--f-body);padding:14px 22px;border-radius:var(--r);letter-spacing:.02em}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:focus-visible,.chip:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+
+/* top */
+.test{background:var(--warn-soft);color:var(--warn);font-size:.82rem;padding:8px 16px;text-align:center}
+.top{display:grid;gap:14px;padding-block:28px 18px;border-bottom:3px solid var(--ink)}
+.top .rose{color:var(--rose)}
+.stepper{display:flex;gap:4px;overflow-x:auto;padding-block:14px 4px}
+.stepper button{flex:1 0 auto;background:none;border:0;border-top:4px solid var(--line);padding:8px 6px 0;text-align:left;color:var(--muted);font:600 .8rem/1.2 var(--f-body)}
+.stepper button b{display:block;font:800 1.15rem/1 var(--f-display);text-transform:uppercase;color:inherit}
+.stepper button.on{border-color:var(--rose);color:var(--ink)}
+.stepper button.done{border-color:var(--ink);color:var(--ink)}
+
+section.step{padding-block:34px 10px}
+.lede{font-size:1.12rem}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px}
+.grid2>*{min-width:0}
+.nav{display:flex;justify-content:space-between;gap:12px;padding-block:26px 0;border-top:1px solid var(--line);margin-top:30px}
+
+/* guess */
+.gslider{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;padding-block:8px;border-bottom:1px solid var(--line)}
+.gslider label{font-weight:600}
+.gslider input{grid-column:1 / -1;width:100%;accent-color:var(--ink)}
+.sw{width:14px;height:14px;border-radius:3px}
+.gval{font:600 1.2rem/1 var(--f-data)}
+.cmp{display:grid;gap:10px}
+.cmprow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.bars{display:grid;gap:3px}
+.bar{height:16px;border-radius:2px;transition:width .6s ease}
+.bar.g{opacity:.35}
+.score{font:900 4rem/1 var(--f-display);color:var(--rose)}
+
+/* bill */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;font:700 .95rem/1 var(--f-body)}
+.chip.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.bignum{font:900 clamp(3.4rem,10vw,6rem)/.9 var(--f-display);letter-spacing:-.01em}
+.stackbar{display:flex;height:56px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.stackbar>div{display:flex;align-items:flex-end;padding:4px 6px;color:#fff;font:600 .75rem/1.1 var(--f-body);min-width:0;overflow:hidden;transition:flex-grow .5s}
+.receipt{font-family:var(--f-data);font-size:.92rem;background:var(--surface);border:1px dashed var(--muted);padding:18px;border-radius:2px}
+.receipt .rl{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;padding-block:6px;border-bottom:1px dotted var(--line);align-items:baseline}
+.receipt .rl span:first-child{font-family:var(--f-body);min-width:0}
+.receipt .tot{font-weight:600;border-bottom:0;border-top:2px solid var(--ink);margin-top:6px}
+.receipt details summary{cursor:pointer;list-style:none}
+.receipt details summary::-webkit-details-marker{display:none}
+.receipt .sub{padding-left:14px;font-size:.84rem;color:var(--muted)}
+.fact{border-left:4px solid var(--rose);padding:6px 0 6px 14px}
+.fact b{font:800 1.6rem/1 var(--f-display);display:block}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:18px}
+
+/* waterfall */
+.wf{display:grid;gap:6px}
+.wfrow{display:grid;grid-template-columns:minmax(120px,240px) 1fr 84px;gap:10px;align-items:center;font-size:.9rem}
+.wfrow .lab{min-width:0}
+.wftrack{position:relative;height:22px;background:var(--sunk);border-radius:2px}
+.wftrack i{position:absolute;top:0;bottom:0;border-radius:2px}
+.up{background:var(--rose)} .down{background:var(--good)} .tot{background:var(--ink)}
+.wfrow .v{text-align:right;font-family:var(--f-data)}
+
+@media (prefers-reduced-motion: reduce){.bar,.stackbar>div{transition:none}}
+
+/* dials and levers */
+.dgroup{display:grid;gap:2px}
+.dial{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.dial input{grid-column:1 / -1;width:100%;accent-color:var(--rose)}
+.dial .eff{font:600 .95rem/1.2 var(--f-data);text-align:right}
+.dial .meta{grid-column:1 / -1;font-size:.78rem;color:var(--muted)}
+.lever{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lever input{grid-column:1 / -1;width:100%;accent-color:var(--ink)}
+.lever .meta{grid-column:1 / -1;font-size:.8rem;color:var(--muted)}
+.lever > [id^="Lv_"]{grid-column:1 / -1;font-size:.9rem;overflow-wrap:anywhere}
+.lever .duty{color:var(--warn)}
+.pos{color:var(--rose)} .neg{color:var(--good)}
+details.blk{border-top:3px solid var(--ink);padding-block:10px}
+details.blk>summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+details.blk>summary h3{display:inline}
+.flag{display:inline-block;font:700 .72rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:3px}
+.flag.warn{background:var(--warn-soft);color:var(--warn)}
+.flag.bad{background:var(--rose-soft);color:var(--rose)}
+.flag.good{background:var(--good-soft);color:var(--good)}
+
+/* meter */
+.meter{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:5}
+.meter .in{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.meter .gap{font:900 2rem/1 var(--f-display);white-space:nowrap}
+.meter .gtrack{height:10px;background:rgba(127,127,127,.35);border-radius:5px;overflow:hidden}
+.meter .gtrack i{display:block;height:100%;background:var(--good);transition:width .3s}
+.meter .lbl{font-size:.78rem;opacity:.8}
+@media (max-width:560px){.meter .in{grid-template-columns:1fr auto}.meter .gtrack{grid-column:1 / -1;order:3}}
+
+/* result */
+.stamp{display:inline-block;border:5px solid currentColor;padding:10px 18px;font:900 clamp(2rem,6vw,3.2rem)/1 var(--f-display);text-transform:uppercase;transform:rotate(-3deg);letter-spacing:.04em}
+.stamp.ok{color:var(--good)} .stamp.no{color:var(--rose)}
+table.t{width:100%;border-collapse:collapse;font-size:.92rem}
+table.t td,table.t th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--f-data);white-space:nowrap}
+.tscroll{overflow-x:auto}
+.src{font-size:.76rem;color:var(--muted)}
+footer{border-top:3px solid var(--ink);margin-top:40px;padding-block:24px;display:grid;gap:14px;font-size:.86rem}
+.status{display:grid;gap:6px}
+.status div{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+
+/* ---------- redesign layer (10 Oct 2026): calmer surfaces, one job per screen ---------- */
+body{font-size:17px}
+.wrap{max-width:1080px}
+h2{font-size:clamp(1.9rem,4.4vw,2.8rem)}
+.lede{font-size:1.15rem;line-height:1.5}
+.test{font-size:.8rem}
+.top{border-bottom:0;padding-block:36px 8px;gap:18px}
+.intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+.intro div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:4px}
+.intro b{font:800 1.1rem/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.intro span{font-size:.9rem;color:var(--muted)}
+.intro i{font-style:normal;font:600 .72rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--rose)}
+.stepper{gap:6px;padding-block:18px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:4;border-bottom:1px solid var(--line);padding-bottom:10px}
+.stepper button{border-top:0;display:flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;border-radius:999px;font:600 .82rem/1 var(--f-body)}
+.stepper button .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);font:700 .8rem/1 var(--f-body)}
+.stepper button b{display:inline;font:700 .85rem/1 var(--f-body);text-transform:none}
+.stepper button.on{background:var(--ink);color:var(--bg)}
+.stepper button.on .n{border-color:var(--bg);background:var(--bg);color:var(--ink)}
+.stepper button.done .n{background:var(--good);border-color:var(--good);color:#fff}
+section.step{padding-block:30px 10px}
+.panel{border-radius:12px;padding:22px;box-shadow:0 1px 2px rgba(20,30,40,.05),0 6px 20px -12px rgba(20,30,40,.18)}
+.task{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:2px solid var(--ink);border-radius:12px;padding:14px 18px;font-weight:600;max-width:70ch}
+.task::before{content:"Your move";flex:none;font:700 .7rem/1.9 var(--f-body);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:0 8px;border-radius:4px}
+.point{border-radius:12px;background:var(--ink);color:var(--bg);padding:18px 22px;font:700 1.15rem/1.4 var(--f-body);max-width:none}
+.point b{color:var(--bg);font-family:var(--f-display);font-size:1.5rem;letter-spacing:.01em}
+.note{font-size:.92rem;color:var(--muted);max-width:70ch}
+.hbars{display:grid;gap:12px}
+.hb{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline}
+.hb .l{font-weight:600;min-width:0}
+.hb .v{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hb .v small{color:var(--muted);font-size:.8em}
+.hb .t{grid-column:1 / -1;height:12px;background:var(--sunk);border-radius:6px;overflow:hidden}
+.hb .t i{display:block;height:100%;border-radius:6px;transition:width .5s}
+.wfrow{grid-template-columns:minmax(140px,250px) 1fr 84px;gap:12px;padding-block:3px}
+.wfrow .lab small{display:block;color:var(--muted);font-size:.74rem;line-height:1.2}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.board > div{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.board > div > span{font-size:.78rem;color:var(--muted)}
+.board > div > b{font:800 1.5rem/1.1 var(--f-display)}
+.board > .left > b{color:var(--rose)} .board > .left.ok > b{color:var(--good)}
+.board > .panel{box-shadow:none;border:0;border-radius:0}
+.tool{display:grid;gap:14px}
+.toolhead{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.toolhead .n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg);font:800 1.1rem/1 var(--f-display)}
+.toolhead h3{flex:1 1 auto}
+.closes{font:600 .85rem/1 var(--f-data);background:var(--good-soft);color:var(--good);padding:6px 10px;border-radius:999px;white-space:nowrap}
+.closes.zero{background:var(--sunk);color:var(--muted)}
+.ctgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.ctgrid div{background:var(--sunk);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.ctgrid span{font-size:.78rem;color:var(--muted)}
+.ctgrid b{font:600 1.15rem/1.1 var(--f-data)}
+.ctval{font:900 2.6rem/1 var(--f-display)}
+input[type=range]{height:28px}
+.lever{padding:14px 0}
+.lever .meta{font-size:.82rem}
+.tag{display:inline-block;font:700 .66rem/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:4px 6px;border-radius:3px;background:var(--warn-soft);color:var(--warn);margin-right:6px;vertical-align:1px}
+details.blk{border-top:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:10px}
+details.blk>summary{list-style:none}
+details.blk>summary::-webkit-details-marker{display:none}
+details.blk>summary::after{content:"Show";font:600 .78rem/1 var(--f-body);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px}
+details.blk[open]>summary::after{content:"Hide"}
+.receipt{border-radius:8px}
+.nav{border-top:0;margin-top:24px}
+.btn{border-radius:999px;padding:14px 26px}
+.src{font-size:.78rem;line-height:1.45}
+.fact{border-left-width:3px}
+.fact b{font-size:1.75rem}
+.yearchip{flex:none;align-self:center;font:700 .78rem/1 var(--f-body);background:#B3122E;color:#fff;border-radius:999px;padding:8px 12px;white-space:nowrap}
+.carry{display:grid;gap:10px}
+.equiv{grid-column:1 / -1;font-size:.86rem;background:var(--sunk);border-radius:8px;padding:8px 12px}
+.equiv b{font-family:var(--f-data)}
+@media (max-width:560px){.board .left{grid-column:1 / -1}.meter #mSub{display:none}.meter .lbl{white-space:nowrap}.stepper button b{font-size:.8rem}}
+
+/* ---------- chart layer: validated categorical slots (dataviz reference palette, adjacent CVD pass both modes) ---------- */
+:root{--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--press:#e34948;--relief:#2a78d6;--grid:#e1e5ea;--mute:#b9c1ca;--ink2:#334150;--hero:#0f1b26;--hero-ink:#f3f6f9}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#008300;--c7:#9085e9;--press:#e66767;--relief:#3987e5;--grid:#2b3744;--mute:#4a5866;--ink2:#c9d3dc;--hero:#0a1118;--hero-ink:#eef2f6}}
+:root[data-theme="dark"]{--c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#008300;--c7:#9085e9;--press:#e66767;--relief:#3987e5;--grid:#2b3744;--mute:#4a5866;--ink2:#c9d3dc;--hero:#0a1118;--hero-ink:#eef2f6}
+.up{background:var(--press)} .down{background:var(--relief)}
+.pos{color:var(--ink)} .neg{color:var(--ink)}
+.receipt .rl.tot{background:none}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:var(--bg);font:600 .82rem/1.35 var(--f-body);padding:8px 10px;border-radius:8px;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.tip[hidden]{display:none}
+[data-tip]{cursor:default}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block;flex:none}
+.legend i.hatch{background:repeating-linear-gradient(135deg,var(--mute) 0 3px,transparent 3px 6px);outline:1px solid var(--mute);outline-offset:-1px}
+/* hero */
+.top.hero{background:var(--hero);color:var(--hero-ink);margin-inline:-16px;padding-inline:16px;border-radius:0 0 22px 22px;padding-block:34px 30px}
+.hero .eyebrow{color:rgba(255,255,255,.65)}
+.hero .lede{color:rgba(255,255,255,.88)}
+.hero .rose{color:#ff7a8a}
+.herogrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;align-items:center}
+@media (max-width:820px){.herogrid{grid-template-columns:1fr}}
+.wafflebox{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;display:grid;gap:12px}
+.wafflebox .legend{color:rgba(255,255,255,.8)}
+.wafflebox .cap{font-size:.8rem;color:rgba(255,255,255,.65)}
+.waffle{width:100%;max-width:340px;height:auto;display:block;margin-inline:auto}
+.waffle rect{transition:opacity .2s}
+.waffle:hover rect{opacity:.55} .waffle rect:hover{opacity:1}
+.hero .intro div{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+.hero .intro span{color:rgba(255,255,255,.7)} .hero .intro i{color:#ff9aa6}
+/* guess dot plot */
+.dp{display:grid;gap:14px}
+.dprow{display:grid;gap:6px}
+.dprow .h{display:flex;justify-content:space-between;gap:10px;font-size:.9rem}
+.dprow .h b{font-family:var(--f-data);font-weight:600}
+.dptrack{position:relative;height:22px;border-radius:6px;background:linear-gradient(var(--grid),var(--grid)) 0 50%/100% 2px no-repeat}
+.dptrack .real{position:absolute;left:0;top:5px;height:12px;border-radius:0 4px 4px 0;transition:width .7s cubic-bezier(.3,.7,.2,1)}
+.dptrack .you{position:absolute;top:1px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--surface);border:3px solid var(--ink);transition:left .25s}
+.dpaxis{display:flex;justify-content:space-between;font:500 .72rem/1 var(--f-data);color:var(--muted)}
+/* donut */
+.donutwrap{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:22px;align-items:center}
+@media (max-width:560px){.donutwrap{grid-template-columns:1fr}}
+.donut{position:relative;width:100%;max-width:220px;aspect-ratio:1;margin-inline:auto}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.donut .mid b{font:900 2rem/1 var(--f-display)}
+.donut .mid span{font-size:.78rem;color:var(--muted)}
+.lrows{display:grid;gap:10px}
+.lrow{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;font-size:.92rem}
+.lrow i{width:12px;height:12px;border-radius:3px;align-self:center}
+.lrow .v{font-family:var(--f-data);white-space:nowrap}
+.lrow small{grid-column:2 / -1;color:var(--muted);font-size:.78rem}
+/* diverging bars */
+.totals{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.totals .t{background:var(--sunk);border-radius:10px;padding:10px 14px}
+.totals .t span{display:block;font-size:.75rem;color:var(--muted)}
+.totals .t b{font:800 1.4rem/1.1 var(--f-display)}
+.totals .arrow{font:800 1.4rem/1 var(--f-display);color:var(--muted)}
+.div{display:grid;gap:8px}
+.drow{display:grid;grid-template-columns:minmax(120px,42%) minmax(0,1fr);gap:12px;align-items:center;font-size:.88rem}
+.drow .lab small{display:block;color:var(--muted);font-size:.72rem;line-height:1.2}
+.dchart{position:relative;height:24px;background:linear-gradient(var(--ink),var(--ink)) 50% 0/1px 100% no-repeat}
+.dchart i{position:absolute;top:5px;height:14px}
+.dchart i.r{left:50%;border-radius:0 4px 4px 0} .dchart i.l{right:50%;border-radius:4px 0 0 4px}
+.dchart em{position:absolute;top:3px;font:600 .75rem/18px var(--f-data);font-style:normal;white-space:nowrap;color:var(--ink2)}
+/* columns */
+.cols{width:100%;height:auto;display:block;overflow:visible}
+.cols text{font-family:var(--f-data);fill:var(--ink2);font-size:11px}
+.cols .lbl{font-family:var(--f-body);fill:var(--muted);font-size:11px}
+.cols .base{stroke:var(--ink);stroke-width:1}
+.cols .gl{stroke:var(--grid);stroke-width:1}
+/* target bars */
+.tb{display:grid;gap:12px}
+.tbrow{display:grid;gap:5px}
+.tbrow .h{display:flex;justify-content:space-between;gap:10px;font-size:.88rem}
+.tbrow .h b{font-family:var(--f-data);font-weight:600}
+.tbrow .h strong{font-weight:700}
+.tbtrack{position:relative;height:14px;background:var(--sunk);border-radius:0 4px 4px 0}
+.tbtrack i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0}
+.tbtrack s{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+/* gap filler */
+.gapviz{display:grid;gap:10px}
+.gapbar{position:relative;display:flex;gap:2px;height:34px;border-radius:8px;overflow:hidden;background:var(--surface)}
+.gapbar > div{height:100%;min-width:0;transition:flex-grow .35s}
+.gapbar .rem{background:repeating-linear-gradient(135deg,var(--mute) 0 4px,transparent 4px 9px);box-shadow:inset 0 0 0 1px var(--mute)}
+.gapbar .target{position:absolute;top:0;bottom:0;width:3px;margin-left:-1px;background:var(--ink)}
+.gaphead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline}
+.gaphead b{font:800 1.3rem/1 var(--f-display)}
+.meter .gtrack{display:flex;gap:2px;background:rgba(127,127,127,.35)}
+.meter .gtrack > div{height:100%}
+.blk summary h3{display:inline-flex;align-items:center;gap:10px}
+.blk summary h3 i{width:14px;height:14px;border-radius:4px;display:inline-block}
+</style>
+<style>
+/* Burnley additions */
+.quote{border-left:3px solid var(--line);padding-left:12px;font-style:italic;color:var(--ink2)}
+.blank{display:grid;gap:4px;padding:10px 0;border-bottom:1px solid var(--line)}
+.blank b{font-weight:600}
+.blank .flag{justify-self:start}
+.gi{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.gi .v{font-family:var(--f-data);white-space:nowrap}
+.gi small{grid-column:1 / -1;color:var(--muted)}
+.bignum{font:900 clamp(3rem,9vw,5rem)/.95 var(--f-display)}
+.svc{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.svchead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.svchead b{font:800 1.15rem/1.1 var(--f-display);text-transform:uppercase}
+.ctgrid b.who{font:600 .9rem/1.25 var(--f-body)}
+.gi span:first-child{min-width:0;overflow-wrap:anywhere}
+.board > div > b{overflow-wrap:anywhere}
+</style>
+<div class="test">Working version, not published. Built from Burnley Borough Council's published papers and government tables. <span id="runid"></span></div>
+<div class="wrap">
+  <header class="top hero">
+    <div class="herogrid">
+      <div class="stack">
+        <div class="eyebrow">Burnley Borough Council &middot; budget for <span class="py"></span> and <span class="ny"></span></div>
+        <h1>Can you balance <span class="rose">Burnley?</span></h1>
+        <p class="lede">Burnley Borough Council's Net Budget Requirement for <span class="by"></span> is <b class="num" id="hdrReq"></b>. See where it goes and what pays for it. Then take the council's own budget gap for the next two years and make your own choices.</p>
+      </div>
+      <div class="wafflebox"><div id="heroWaffle"></div><div class="legend" id="heroLegend"></div><div class="cap" id="heroCap"></div></div>
+    </div>
+    <div class="intro">
+      <div><i>Steps 1 and 2</i><b>Learn</b><span>Where the money goes, and what your council tax band pays.</span></div>
+      <div><i>Step 3</i><b>This year</b><span>How the budget moved from 2025/26, what was added and what was saved.</span></div>
+      <div><i>Steps 4 and 5</i><b>Play two years</b><span>Start from the council's own gap for <span class="py"></span>, keep or change its assumptions, close it, then do the same for <span class="ny"></span>.</span></div>
+      <div><i>Step 6</i><b>Result</b><span>Your council tax, your cuts and the reserves you leave.</span></div>
+    </div>
+  </header>
+  <nav class="stepper" id="stepper" aria-label="Steps"></nav>
+
+  <!-- 1 GUESS -->
+  <section class="step" data-step="1">
+    <div class="stack">
+      <div class="eyebrow">Step 1 of 6 &middot; Warm up</div>
+      <h2>Where does each £100 go?</h2>
+      <p class="task">Guess how every £100 of net service cost is split. Move the sliders (they always add up to £100), then press Reveal.</p>
+      <div class="grid2">
+        <div class="panel" id="guessPanel"></div>
+        <div class="panel stack" id="revealPanel">
+          <div class="eyebrow">Your guess against the real budget</div>
+          <div id="cmp" class="cmp"></div>
+          <div id="scoreBox" hidden><div class="row"><div class="score" id="score"></div><p id="scoreTxt"></p></div></div>
+          <div class="row"><button class="btn" id="revealBtn">Reveal the real split</button></div>
+          <p class="src" id="guessSrc"></p>
+        </div>
+      </div>
+      <div class="panel stack"><h3>From net service cost to the Net Budget Requirement</h3><div id="bridge"></div><p class="src" id="bridgeSrc"></p></div>
+      <p class="note" id="detailNote1"></p>
+    </div>
+    <div class="nav"><span></span><button class="btn" data-go="2">Next: your bill</button></div>
+  </section>
+
+  <!-- 2 BILL -->
+  <section class="step" data-step="2" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 2 of 6 &middot; Your council tax</div>
+      <h2>Your band, and the borough council's part of the bill</h2>
+      <p class="task">Choose your council tax band.</p>
+      <div class="chips bandchips" role="group" aria-label="Council tax band"></div>
+      <div class="grid2">
+        <div class="panel stack">
+          <div class="eyebrow">Band <span class="bandname"></span>, Burnley Borough Council only, <span class="by"></span></div>
+          <div class="bignum num" id="billBig"></div>
+          <p id="billTxt"></p>
+          <p class="quote" id="billQuote"></p>
+          <p class="src" id="billSrc"></p>
+        </div>
+        <div class="panel stack">
+          <h3>The full bill for Band <span class="bandname"></span>, <span class="by"></span></h3>
+          <div id="fullBill"></div>
+          <p class="note" id="bandsNote"></p>
+          <p class="src" id="fullBillSrc"></p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack">
+          <h3>Band D, 2016/17 to 2026/27</h3>
+          <div id="histChart"></div>
+          <p class="small" id="histTxt"></p>
+          <p class="src" id="histSrc"></p>
+        </div>
+        <div class="panel stack">
+          <h3>What pays for the budget</h3>
+          <p>Council tax raises <b class="num" id="ctCash"></b> of the <span class="num" id="reqB"></span>. Government grant and business rates cover most of the rest.</p>
+          <div class="hbars" id="fundBar"></div>
+          <p class="src" id="fundSrc"></p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <h3>An illustration of the borough's charge for Band <span class="bandname"></span></h3>
+        <div class="donutwrap"><div class="donut"><div id="billDonut"></div><div class="mid"><b class="num" id="donutMid"></b><span>a year</span></div></div><div class="lrows" id="billBar"></div></div>
+        <p class="src">An illustrative share of the borough council's charge, using each group's share of net service cost. Council tax is not ring fenced to services, so this pictures the budget; it is not an invoice.</p>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="1">Back</button><button class="btn" data-go="3">Next: this year's budget</button></div>
+  </section>
+
+  <!-- 3 THIS YEAR -->
+  <section class="step" data-step="3" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 3 of 6 &middot; The budget for <span class="by"></span></div>
+      <h2>How the budget moved from 2025/26</h2>
+      <p class="lede" id="moveLede"></p>
+      <div class="totals" id="moveTotals"></div>
+      <div class="grid2">
+        <div class="panel stack"><h3>What moved it</h3><div class="legend" id="moveLegend"></div><div class="div" id="moveChart"></div><p class="src" id="moveSrc"></p></div>
+        <div class="stack">
+          <div class="panel stack"><h3>Growth added</h3><p class="quote" id="growthQuote"></p><div id="growthList"></div><p class="src" id="growthSrc"></p></div>
+          <div class="panel stack"><h3>Savings</h3><div id="savingsList"></div><p class="src" id="savingsSrc"></p></div>
+        </div>
+      </div>
+      <div class="panel stack"><h3>Reserves</h3><div class="facts" id="resFacts"></div><div class="hbars" id="resBars"></div><p class="src" id="resSrc"></p></div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="2">Back</button><button class="btn" data-go="4">Next: start the game</button></div>
+  </section>
+
+  <!-- 4 THE COUNCIL'S GAP -->
+  <section class="step" data-step="4" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 4 of 6 &middot; The starting gap &middot; <span class="yr"></span></div>
+      <h2>The council's own gap for <span class="yr"></span></h2>
+      <p class="lede" id="gapLede"></p>
+      <div id="carryBox"></div>
+      <div class="grid2">
+        <div class="panel stack">
+          <div class="eyebrow">Budget gap <span class="yr"></span>, as the council prints it</div>
+          <div class="bignum num" id="gapBig"></div>
+          <div id="gapParts"></div>
+          <p class="note" id="gapNote"></p>
+          <p class="src" id="gapSrc"></p>
+        </div>
+        <div class="panel stack"><h3>What the council assumed</h3><div id="assume"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack">
+          <h3>Keep or change the assumptions</h3>
+          <p class="task"><span>Leave the dials where they are to keep the council's assumptions, or set your own for <span class="yr"></span>.</span></p>
+          <p class="note" id="scenarioNote"></p>
+          <div id="dials"></div>
+          <div id="dialSum"></div>
+        </div>
+        <div class="stack">
+          <div class="panel stack"><h3>The same gap at a higher council tax</h3><div id="altBox"></div></div>
+          <div class="panel stack"><h3>What the council has identified so far</h3><div id="identified"></div><p class="note" id="identifiedNote"></p><p class="src" id="identifiedSrc"></p></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack"><h3>The council's two tables</h3><div class="tscroll"><table class="t" id="gapTable"></table></div><p class="src" id="gapTableSrc"></p></div>
+        <div class="panel stack"><h3>Not in any held paper</h3><div id="blanks"></div></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" id="back4">Back</button><button class="btn" data-go="5">Next: close the gap</button></div>
+  </section>
+
+  <!-- 5 LEVERS -->
+  <section class="step" data-step="5" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 5 of 6 &middot; Your budget &middot; <span class="yr"></span></div>
+      <h2>Close the gap for <span class="yr"></span></h2>
+      <p class="lede" id="leverLede"></p>
+      <div class="board" id="board"></div>
+      <div class="panel tool">
+        <div class="toolhead"><span class="n">1</span><h3>Council tax</h3><span class="closes" id="tCt"></span></div>
+        <div class="lever">
+          <label for="ct"><b id="ctLabel">Borough council tax rise</b></label><span class="ctval num" id="ctVal"></span>
+          <input type="range" id="ct" min="-2" max="2.99" step="0.01">
+          <div class="chips" id="rateChips" role="group" aria-label="Council tax rise"></div>
+          <div class="meta" id="ctMeta"></div>
+        </div>
+        <p class="note">Your band, for the borough council's line of the bill:</p>
+        <div class="chips bandchips" role="group" aria-label="Council tax band"></div>
+        <div id="bandEffect"></div>
+        <p class="src" id="bandNote"></p>
+        <details><summary><b>The council tax cases</b> <span class="muted small">the model's cases with the tax base growing as the council assumes</span></summary>
+          <div class="tscroll" data-s="margin-top:10px"><table class="t" id="ctCases"></table></div><p class="src" id="ctCasesSrc"></p></details>
+      </div>
+      <div class="tool">
+        <div class="toolhead"><span class="n">2</span><h3>Spending</h3><span class="closes" id="tSp"></span></div>
+        <p class="note" id="cutNote"></p>
+        <p class="note" id="detailNote5"></p>
+        <div id="levers"></div>
+      </div>
+      <div class="panel tool">
+        <div class="toolhead"><span class="n">3</span><h3>Reserves, spent once</h3><span class="closes" id="tRes"></span></div>
+        <p class="note" id="resNote"></p>
+        <div id="resLevers"></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="4">Back</button><button class="btn" data-go="6">See your result</button></div>
+  </section>
+
+  <!-- 6 RESULT -->
+  <section class="step" data-step="6" hidden>
+    <div class="stack" id="result"></div>
+    <div class="nav"><button class="btn ghost" data-go="5">Back to your budget</button><span class="row"><button class="btn ghost" id="againBtn">Play again</button><button class="btn" id="nextYearBtn">Continue to <span class="ny"></span></button></span></div>
+  </section>
+
+  <footer>
+    <div class="eyebrow">About the figures</div>
+    <p class="src" id="labelNote"></p>
+    <details><summary>What is not held</summary><ul id="notHeld" class="small"></ul></details>
+    <details><summary>Documents</summary><ul id="docs" class="small"></ul></details>
+    <p class="src">Built from Burnley Borough Council's published committee papers, Budget Book and accounts, and from tables published by the Ministry of Housing, Communities and Local Government. Every figure names its document and page. This is a game: it shows the size of the choices, not what the council will decide.</p>
+  </footer>
+</div>
+
+<div class="meter" id="meter" hidden>
+  <div class="in">
+    <div><div class="lbl" id="mLbl">Gap to close</div><div class="gap num" id="mGap"></div></div>
+    <div class="gtrack" aria-hidden="true"></div>
+    <div class="lbl" id="mSub" data-s="text-align:right"></div>
+  </div>
+</div>
+
+<script>
+const D = {"meta": {"model_run_id": "run-f2ca9ce5ee34f595", "base_year": "2026/27", "play_year": "2027/28", "next_year": "2028/29", "cut_step": 0.5, "not_held": ["The 2027/28 budget papers: the council's budget for 2027/28, its final savings and its council tax decision.", "The 2027/28 settlement and any 2027/28 referendum principles.", "A split of the council's budget gap beyond the three parts printed with it.", "The council's gap at any council tax rate other than the two it prints.", "The council's figures for one per cent in 2028/29: they are printed for 2027/28 only.", "What follows the strategic partnership contract after 31 December 2027.", "A total for fees and charges income.", "The General Fund balance and the earmarked reserves expected at 31 March 2027.", "The county council's, the police's and the fire authority's council tax after 2026/27.", "Any effect of local government reorganisation: the council's figures assume it continues as it is."], "docs": ["Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109)", "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive, 25 February 2026 (s49110)", "Burnley Borough Council, Medium-Term Financial Strategy 2027-31, Appendix 1, Executive, 25 February 2026 (s49053)", "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890)", "Burnley Borough Council, Summary of savings, published with the report to the Executive of 16 September 2026 (s51892)", "Burnley Borough Council, Fees and Charges Tariff 2027-28, report to the Executive, 25 November 2026 (s52727)", "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council, 3 March 2026 (b12914)", "Burnley Borough Council, Revenue Final Outturn Report 2025/26 (the report is dated 8 July 2026), Appendix 2 (s50893)", "Burnley Borough Council, Budget Book 2026/27 (page numbers are those of the PDF)", "Burnley Borough Council, Draft Statement of Accounts 2025/26, Narrative Report and Note 8 (page numbers are those of the PDF)", "Ministry of Housing, Communities and Local Government (MHCLG), Council tax levels set by local authorities in England, council tax requirement tables, 2016/17 to 2026/27"]}, "review": {"service_detail": "The services and the lines inside them are those of the council's Budget Book 2026/27: its Summary by Service Unit, and the Unit Detail Analysis page for each service. With the Earmarked Reserves line they add up to the Net Budget Requirement, to the pound. The Revenue Budget report to the Executive sets the same total out on a different presentation, so the two lists do not match line for line.", "guess": "The guess covers the services with a net cost in the Budget Book. Property, which has a net income, the three services printed as nil and the draw on earmarked reserves sit outside it and are shown underneath.", "bands": "Each charge is from the council tax schedule the council resolved for 2026/27, for a home outside the parish and town council areas. The county council, the police and the fire authority set their own charges. Theirs for later years are not projected here, so no full bill is shown for a later year. Homes in a parish or town council area pay a further charge, which is in the schedule and is not shown here.", "band_rise": "Game arithmetic, not a schedule the council has set: your rise is applied to the borough council's printed charge for the band and rounded to the penny each year.", "cut_limit": "Each line can be cut by up to 10% of its 2026/27 budget. That limit is a rule of the game, not a finding: it is the same for every line with a net cost, and it is not a statement of what could lawfully or practically be cut. Lines with a net income, and lines printed as nil, cannot be cut in the game.", "delivery": "The game counts every cut in full. No record of savings delivered against savings planned is held for this council, so no delivery share is applied.", "scenario": "Your scenario, not a forecast. Each dial starts at the council's own assumption and moves the gap by the council's own printed figure for one per cent. The council prints pay and prices for a rise of one per cent only; using the same figure for a fall is the page's own assumption. Moving a dial does not predict pay, prices or fees.", "gap": "The starting figure is the council's own budget gap, from the mid-year update of its Medium-Term Financial Strategy in September 2026. It is printed in millions of pounds to three decimal places, that is to the nearest thousand pounds, and the game uses it as printed. It already assumes the council's own council tax rise, pay award, price rises and fees, and the savings the council had already approved. The council says the strategy remains subject to change: it is a planning figure, not a decision.", "carry": "A rule of the game: each choice is counted once, in the year it is made. What you closed in the first year with council tax and cuts stays closed; only what you left open or closed with reserves comes back in the second year.", "tax_future": "No 2027/28 referendum principles are in the papers this page is built from. The dial stops at 2.99%, the rate the council's alternative table uses; that is not a statement of the 2027/28 limit. The bottom of the dial, a cut of 2.0%, is a rule of the game.", "tax_cases": "Scenario arithmetic, not a forecast: the 2026/27 Band D is raised by the chosen rate and rounded to the penny each year, the 2026/27 tax base grows at the rate the council assumes, and the two are multiplied and rounded to the pound.", "reserves": "Reserves can be spent once. They pay for one year only: the spending is still there the year after, so they do not close a gap in later years. Two are offered: the General Fund balance at 31 March 2026, and the Revenue Support reserve as the outturn appendix prints it after a movement approved for 2026/27. The balances at 31 March 2027 are not held. The other earmarked reserves are shown, not offered.", "balance": "Game balance reached on the council's printed gap and your own settings only. Statutory duties, consultation and whether a cut can be delivered are outside the game.", "labels": "Line names are the council's own. Where a paper prints a spaced hyphen inside a name, the page shows a colon or the word to. Page numbers for the Budget Book are those of the PDF.", "tax_points": "For 2027/28, only the two printed points are the council's figures: its gap with a 1.99% rise and its gap with a 2.99% rise. Everything else is the page's own sum. Between the two rates the page shares out the difference between the two printed figures in proportion to the council tax raised. Below 1.99% it adds the council tax not raised. For 2028/29 the council's figure is its gap on its own path of 1.99% then 2.99%; the council's alternative table also prints a 2028/29 figure after 2.99% in both years, which the game shows and does not use, because the game counts a first year choice once.", "second_year": "The council prints its figures for one per cent for 2027/28 only. Using them for 2028/29 is the page's own assumption.", "identified": "What the council has identified so far, from its own savings summary. Only the savings approved at previous Council meetings are already inside the starting gap. The game does not take the rest off: they are proposals, some deferred or agreed in principle only.", "second_ct": "In the second year your council tax moves the gap only by the difference between what your rate adds and what the council's assumed rate would add, each worked on the Band D and tax base that follow from the first year.", "tax_sensitivity": "The page's own sum on the council's two gap tables gives about £87,000 for one per cent in 2027/28. The papers do not say how the two figures relate.", "history": "The percentages are the page's own arithmetic on the published Band D figures."}, "blocks": [{"id": "streets", "label": "Streets, waste and green spaces", "colour": "c1", "services": ["Streetscene", "Green Spaces and Amenities"]}, {"id": "corporate", "label": "Corporate budgets", "colour": "c2", "services": ["Corporate Budgets"]}, {"id": "running", "label": "Finance, legal and running the council", "colour": "c3", "services": ["Finance", "Legal & Democratic Services", "Policy & Engagement", "Revenues and Benefits"]}, {"id": "leisure", "label": "Leisure trust", "colour": "c4", "services": ["Leisure Trust Client"]}, {"id": "place", "label": "Housing, planning and the economy", "colour": "c5", "services": ["Housing and Development Control", "Economy & Growth"]}], "services": [{"name": "Management Team", "label": "Management Team", "block": null, "value": 0, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6", "note": "Printed as nil in the Budget Book."}, {"name": "Policy & Engagement", "label": "Policy & Engagement", "block": "running", "value": 793028, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "People & Development", "label": "People & Development", "block": null, "value": 0, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6", "note": "Printed as nil in the Budget Book."}, {"name": "Green Spaces and Amenities", "label": "Green Spaces and Amenities", "block": "streets", "value": 3392691, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Legal & Democratic Services", "label": "Legal & Democratic Services", "block": "running", "value": 990485, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Finance", "label": "Finance", "block": "running", "value": 2445579, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Property", "label": "Property", "block": null, "value": -2208383, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6", "note": "Net income in the Budget Book: the service brings in more than it costs."}, {"name": "Revenues and Benefits", "label": "Revenues and Benefits", "block": "running", "value": 274065, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Leisure Trust Client", "label": "Leisure Trust Client", "block": "leisure", "value": 2458274, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Streetscene", "label": "Streetscene", "block": "streets", "value": 5548401, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Housing and Development Control", "label": "Housing and Development Control", "block": "place", "value": 2515901, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Economy & Growth", "label": "Economy & Growth", "block": "place", "value": 1496120, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Strategic Partnership", "label": "Strategic Partnership", "block": null, "value": 0, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6", "note": "Printed as nil in the Budget Book."}, {"name": "Corporate Budgets", "label": "Corporate Budgets", "block": "corporate", "value": 6871696, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, {"name": "Earmarked Reserves", "label": "Earmarked Reserves", "block": null, "value": -2149171, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6", "note": "A draw on earmarked reserves, shown by the council as a negative line."}], "lines": [{"id": 0, "service": "Management Team", "name": "Management Team", "label": "Management Team", "block": null, "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Management Team, Unit Detail Analysis, p8"}, {"id": 1, "service": "Policy & Engagement", "name": "Policy & Engagement Holding Accounts", "label": "Policy & Engagement Holding Accounts", "block": "running", "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9"}, {"id": 2, "service": "Policy & Engagement", "name": "Emergency Planning", "label": "Emergency Planning", "block": "running", "value": 13095, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9", "max_cut": 10}, {"id": 3, "service": "Policy & Engagement", "name": "Communications", "label": "Communications", "block": "running", "value": 27095, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9", "max_cut": 10}, {"id": 4, "service": "Policy & Engagement", "name": "Community Engagement", "label": "Community Engagement", "block": "running", "value": 289317, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9", "max_cut": 10}, {"id": 5, "service": "Policy & Engagement", "name": "Ward Opportunities", "label": "Ward Opportunities", "block": "running", "value": 75011, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9", "max_cut": 10}, {"id": 6, "service": "Policy & Engagement", "name": "Performance and Policy", "label": "Performance and Policy", "block": "running", "value": 388510, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Policy and Engagement, Unit Detail Analysis, p9", "max_cut": 10}, {"id": 7, "service": "People & Development", "name": "People and Development", "label": "People and Development", "block": null, "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, People and Development, Unit Detail Analysis, p16"}, {"id": 8, "service": "Green Spaces and Amenities", "name": "Bereavement Service", "label": "Bereavement Service", "block": "streets", "value": -510429, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Green Spaces and Amenities, Unit Detail Analysis, p17"}, {"id": 9, "service": "Green Spaces and Amenities", "name": "Parks and Green Spaces", "label": "Parks and Green Spaces", "block": "streets", "value": 3253161, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Green Spaces and Amenities, Unit Detail Analysis, p17", "max_cut": 10}, {"id": 10, "service": "Green Spaces and Amenities", "name": "Art Gallery and Museums", "label": "Art Gallery and Museums", "block": "streets", "value": 649959, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Green Spaces and Amenities, Unit Detail Analysis, p17", "max_cut": 10}, {"id": 11, "service": "Green Spaces and Amenities", "name": "Transport", "label": "Transport", "block": "streets", "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Green Spaces and Amenities, Unit Detail Analysis, p17"}, {"id": 12, "service": "Legal & Democratic Services", "name": "Legal", "label": "Legal", "block": "running", "value": 187762, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Governance, Law & Regulation, Unit Detail Analysis, p22", "max_cut": 10}, {"id": 13, "service": "Legal & Democratic Services", "name": "Governance", "label": "Governance", "block": "running", "value": 802723, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Governance, Law & Regulation, Unit Detail Analysis, p22", "max_cut": 10}, {"id": 14, "service": "Finance", "name": "Finance Unit", "label": "Finance Unit", "block": "running", "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Finance, Unit Detail Analysis, p25"}, {"id": 15, "service": "Finance", "name": "External Audit", "label": "External Audit", "block": "running", "value": 264565, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Finance, Unit Detail Analysis, p25", "max_cut": 10}, {"id": 16, "service": "Finance", "name": "Mortgages, HA Loans and Miscellaneous", "label": "Mortgages, HA Loans and Miscellaneous", "block": "running", "value": -20458, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Finance, Unit Detail Analysis, p25"}, {"id": 17, "service": "Finance", "name": "Misc Income and Expenditure", "label": "Misc Income and Expenditure", "block": "running", "value": -15138, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Finance, Unit Detail Analysis, p25"}, {"id": 18, "service": "Finance", "name": "Treasury", "label": "Treasury", "block": "running", "value": 2216610, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Finance, Unit Detail Analysis, p25", "max_cut": 10}, {"id": 19, "service": "Property", "name": "Property Management", "label": "Property Management", "block": null, "value": 50951, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Property Services, Task Detail Analysis, p31", "max_cut": 10}, {"id": 20, "service": "Property", "name": "Operational Land and Buildings", "label": "Operational Land and Buildings", "block": null, "value": 168678, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Property Services, Task Detail Analysis, p31", "max_cut": 10}, {"id": 21, "service": "Property", "name": "Investment Properties", "label": "Investment Properties", "block": null, "value": -566541, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Property Services, Task Detail Analysis, p31"}, {"id": 22, "service": "Property", "name": "Other Properties", "label": "Other Properties", "block": null, "value": 80273, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Property Services, Task Detail Analysis, p31", "max_cut": 10}, {"id": 23, "service": "Property", "name": "Charter Walk Properties", "label": "Charter Walk Properties", "block": null, "value": -1941744, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Property Services, Task Detail Analysis, p31"}, {"id": 24, "service": "Revenues and Benefits", "name": "Revenues and Benefits Client", "label": "Revenues and Benefits Client", "block": "running", "value": 391603, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Revenues and Benefits, Unit Detail Analysis, p33", "max_cut": 10}, {"id": 25, "service": "Revenues and Benefits", "name": "Housing Benefit Payments & Subsidy", "label": "Housing Benefit Payments & Subsidy", "block": "running", "value": -68135, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Revenues and Benefits, Unit Detail Analysis, p33"}, {"id": 26, "service": "Revenues and Benefits", "name": "Council Tax Support", "label": "Council Tax Support", "block": "running", "value": 8036, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Revenues and Benefits, Unit Detail Analysis, p33", "max_cut": 10}, {"id": 27, "service": "Revenues and Benefits", "name": "Cost of Collection Accounts", "label": "Cost of Collection Accounts", "block": "running", "value": -57439, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Revenues and Benefits, Unit Detail Analysis, p33"}, {"id": 28, "service": "Leisure Trust Client", "name": "Burnley Mech & Arts Dev", "label": "Burnley Mech & Arts Dev", "block": "leisure", "value": 192388, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Leisure Trust Client, Unit Detail Analysis, p38", "max_cut": 10}, {"id": 29, "service": "Leisure Trust Client", "name": "Sports Development", "label": "Sports Development", "block": "leisure", "value": 5754, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Leisure Trust Client, Unit Detail Analysis, p38", "max_cut": 10}, {"id": 30, "service": "Leisure Trust Client", "name": "Leisure Centres", "label": "Leisure Centres", "block": "leisure", "value": 2260132, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Leisure Trust Client, Unit Detail Analysis, p38", "max_cut": 10}, {"id": 31, "service": "Streetscene", "name": "Streetscene Holding Accounts", "label": "Streetscene Holding Accounts", "block": "streets", "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42"}, {"id": 32, "service": "Streetscene", "name": "Engineering Services", "label": "Engineering Services", "block": "streets", "value": 282016, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42", "max_cut": 10}, {"id": 33, "service": "Streetscene", "name": "Community Safety", "label": "Community Safety", "block": "streets", "value": 422115, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42", "max_cut": 10}, {"id": 34, "service": "Streetscene", "name": "Car Parking", "label": "Car Parking", "block": "streets", "value": -395176, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42"}, {"id": 35, "service": "Streetscene", "name": "CCTV", "label": "CCTV", "block": "streets", "value": 215114, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42", "max_cut": 10}, {"id": 36, "service": "Streetscene", "name": "Environmental Services", "label": "Environmental Services", "block": "streets", "value": 4222462, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42", "max_cut": 10}, {"id": 37, "service": "Streetscene", "name": "Regulation", "label": "Regulation", "block": "streets", "value": 801870, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Streetscene, Unit Detail Analysis, p42", "max_cut": 10}, {"id": 38, "service": "Housing and Development Control", "name": "Housing", "label": "Housing", "block": "place", "value": 1741627, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Housing and Development Control, Unit Detail Analysis, p50", "max_cut": 10}, {"id": 39, "service": "Housing and Development Control", "name": "Development Control", "label": "Development Control", "block": "place", "value": 486214, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Housing and Development Control, Unit Detail Analysis, p50", "max_cut": 10}, {"id": 40, "service": "Housing and Development Control", "name": "Building Control", "label": "Building Control", "block": "place", "value": 185336, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Housing and Development Control, Unit Detail Analysis, p50", "max_cut": 10}, {"id": 41, "service": "Housing and Development Control", "name": "Selective Licensing", "label": "Selective Licensing", "block": "place", "value": 85715, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Housing and Development Control, Unit Detail Analysis, p50", "max_cut": 10}, {"id": 42, "service": "Housing and Development Control", "name": "Climate Change", "label": "Climate Change", "block": "place", "value": 17009, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Housing and Development Control, Unit Detail Analysis, p50", "max_cut": 10}, {"id": 43, "service": "Economy & Growth", "name": "E&G Holding Accounts", "label": "E&G Holding Accounts", "block": "place", "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Economy and Growth, Unit Detail Analysis, p56"}, {"id": 44, "service": "Economy & Growth", "name": "Markets", "label": "Markets", "block": "place", "value": 155434, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Economy and Growth, Unit Detail Analysis, p56", "max_cut": 10}, {"id": 45, "service": "Economy & Growth", "name": "Planning Policy", "label": "Planning Policy", "block": "place", "value": 350776, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Economy and Growth, Unit Detail Analysis, p56", "max_cut": 10}, {"id": 46, "service": "Economy & Growth", "name": "Economic Development", "label": "Economic Development", "block": "place", "value": 734939, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Economy and Growth, Unit Detail Analysis, p56", "max_cut": 10}, {"id": 47, "service": "Economy & Growth", "name": "Regeneration Development", "label": "Regeneration Development", "block": "place", "value": 254971, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Economy and Growth, Unit Detail Analysis, p56", "max_cut": 10}, {"id": 48, "service": "Strategic Partnership", "name": "Strategic Partnership", "label": "Strategic Partnership", "block": null, "value": 0, "cuttable": false, "src": "Burnley Borough Council, Budget Book 2026/27, Strategic Partnership, Unit Detail Analysis, p62"}, {"id": 49, "service": "Corporate Budgets", "name": "Democratic Representation and Management", "label": "Democratic Representation and Management", "block": "corporate", "value": 455585, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Corporate Budgets, Unit Detail Analysis, p63", "max_cut": 10}, {"id": 50, "service": "Corporate Budgets", "name": "Corporate Management", "label": "Corporate Management", "block": "corporate", "value": 976610, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Corporate Budgets, Unit Detail Analysis, p63", "max_cut": 10}, {"id": 51, "service": "Corporate Budgets", "name": "Corporate Costs", "label": "Corporate Costs", "block": "corporate", "value": 1266127, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Corporate Budgets, Unit Detail Analysis, p63", "max_cut": 10}, {"id": 52, "service": "Corporate Budgets", "name": "Statutory Adjustments", "label": "Statutory Adjustments", "block": "corporate", "value": 4173374, "cuttable": true, "src": "Burnley Borough Council, Budget Book 2026/27, Corporate Budgets, Unit Detail Analysis, p63", "max_cut": 10}], "services_total": {"value": 22428686, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, "requirement": {"value": 22428686, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), recommendation iv, p1"}, "other_summary": {"count": 16, "value": 22429000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, "band_d": {"value": 351.44, "prior": 344.58, "increase_pct": 1.99, "tax_base": 24497.0, "requirement": 8609226, "src": "MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, "ct_history": {"rows": [{"fy": "2015/16", "band_d": 272.58, "increase_pct": null}, {"fy": "2016/17", "band_d": 277.76, "increase_pct": 1.9}, {"fy": "2017/18", "band_d": 283.04, "increase_pct": 1.9}, {"fy": "2018/19", "band_d": 291.5, "increase_pct": 2.99}, {"fy": "2019/20", "band_d": 300.22, "increase_pct": 2.99}, {"fy": "2020/21", "band_d": 306.19, "increase_pct": 1.99}, {"fy": "2021/22", "band_d": 312.28, "increase_pct": 1.99}, {"fy": "2022/23", "band_d": 318.49, "increase_pct": 1.99}, {"fy": "2023/24", "band_d": 328.01, "increase_pct": 2.99}, {"fy": "2024/25", "band_d": 337.82, "increase_pct": 2.99}, {"fy": "2025/26", "band_d": 344.58, "increase_pct": 2.0}, {"fy": "2026/27", "band_d": 351.44, "increase_pct": 1.99}], "src": "MHCLG, Council tax levels set by local authorities in England 2016/17 to 2026/27, council tax requirement table, Burnley rows (each table gives its year and the one before)"}, "ct_cases": [{"fy": "2027/28", "rate": 0.0, "rate_case": "Freeze", "growth": 0.46, "band_d": 351.44, "yield": 8648828, "change": 39602, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, {"fy": "2028/29", "rate": 0.0, "rate_case": "Freeze", "growth": 0.46, "band_d": 351.44, "yield": 8688613, "change": 79387, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, {"fy": "2027/28", "rate": 1.99, "rate_case": "As 2026/27", "growth": 0.46, "band_d": 358.43, "yield": 8820850, "change": 211624, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, {"fy": "2028/29", "rate": 1.99, "rate_case": "As 2026/27", "growth": 0.46, "band_d": 365.56, "yield": 9037700, "change": 428474, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, {"fy": "2027/28", "rate": 2.99, "rate_case": "2026/27 referendum level", "growth": 0.46, "band_d": 361.95, "yield": 8907476, "change": 298250, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}, {"fy": "2028/29", "rate": 2.99, "rate_case": "2026/27 referendum level", "growth": 0.46, "band_d": 372.77, "yield": 9215952, "change": 606726, "src": "Scenario: arithmetic on the 2026/27 published tax base and Band D; not a forecast. MHCLG, Council tax levels set by local authorities in England 2026/27, council tax requirement table, Burnley row"}], "ct_sensitivity": {"assumption": "Council tax freeze", "sensitivity": "+/- 1%", "impact": "+/- £57k", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026, paragraph 10 (s51890), p9"}, "ct_assumed": {"2027/28": {"pct": 1.99, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption i, p5"}, "2028/29": {"pct": 2.99, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption i, p5"}}, "ct_range": {"min": -2.0, "max": 2.99, "step": 0.01, "src": "Top of the range: the rate in the council's alternative table (Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6). Bottom of the range: a rule of the game."}, "tax_base_growth": {"pct": 0.46, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption ii, p5"}, "bands": {"letters": ["A", "B", "C", "D", "E", "F", "G", "H"], "bodies": [{"name": "Burnley Borough Council", "label": "Burnley Borough Council", "borough": true, "values": {"A": 234.29, "B": 273.34, "C": 312.39, "D": 351.44, "E": 429.54, "F": 507.64, "G": 585.73, "H": 702.88}, "src": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council 3 March 2026 (b12914), p25"}, {"name": "Lancashire County Council", "label": "Lancashire County Council", "borough": false, "values": {"A": 1201.17, "B": 1401.36, "C": 1601.56, "D": 1801.75, "E": 2202.14, "F": 2602.53, "G": 3002.92, "H": 3603.5}, "src": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council 3 March 2026 (b12914), p25"}, {"name": "Lancashire Police Authority", "label": "Police (printed as Lancashire Police Authority)", "borough": false, "values": {"A": 194.93, "B": 227.42, "C": 259.91, "D": 292.4, "E": 357.38, "F": 422.36, "G": 487.33, "H": 584.8}, "src": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council 3 March 2026 (b12914), p25"}, {"name": "Lancs. Combined Fire Authority", "label": "Fire (printed as Lancs. Combined Fire Authority)", "borough": false, "values": {"A": 63.15, "B": 73.68, "C": 84.2, "D": 94.73, "E": 115.78, "F": 136.83, "G": 157.88, "H": 189.46}, "src": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council 3 March 2026 (b12914), p25"}], "total": {"label": "All Other Areas of the Borough", "values": {"A": 1693.54, "B": 1975.8, "C": 2258.06, "D": 2540.32, "E": 3104.84, "F": 3669.36, "G": 4233.86, "H": 5080.64}, "src": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Council Tax Schedule, Full Council 3 March 2026 (b12914), p25"}}, "funding": [{"label": "Revenue Support Grant", "plain": "Revenue Support Grant", "value": 6908000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Business Rate Baseline Funding", "plain": "Business rates baseline funding", "value": 4584000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Additional Business Rates above baseline", "plain": "Additional Business Rates above baseline", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Business Rate Growth Above Baseline", "plain": "Business Rate Growth Above Baseline", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Additional Retained Income: Renewable Energy Schemes", "plain": "Business rates kept from renewable energy schemes", "value": 352000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Council Tax Yield", "plain": "Council tax", "value": 8610000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Collection Fund Deficit: Council Tax", "plain": "Collection fund, council tax", "value": 5000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Collection Fund Deficit: NNDR", "plain": "Collection fund, business rates", "value": -148000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Parish Precepts *", "plain": "Parish precepts", "value": 223000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "New Homes Bonus", "plain": "New Homes Bonus", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Business Rates Multiplier Inflation Cap", "plain": "Business Rates Multiplier Inflation Cap", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Services Grant", "plain": "Services Grant", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Funding Guarantee", "plain": "Funding Guarantee", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Local Council Tax Support", "plain": "Local Council Tax Support", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Recovery Grant", "plain": "Recovery Grant", "value": 499000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Homelessness Prevention Grant", "plain": "Homelessness Prevention Grant", "value": 755000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "100% Income Floor Protection", "plain": "Income floor protection", "value": 227000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, {"label": "Adjustment Support Grant", "plain": "Adjustment Support Grant", "value": 414000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}], "funding_total": {"value": 22429000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p1"}, "movement": {"opening": {"label": "Net Revenue Budget: original 2025/26 (excluding parish precepts)", "value": 18520000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, "lines": [{"label": "2025/26 salary adjustments (including external partners)", "plain": "Salary adjustments from 2025/26", "value": 26000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Growth approved at previous Council Meetings", "plain": "Growth approved at previous Council Meetings", "value": 0, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Savings approved at previous Council Meetings", "plain": "Savings agreed earlier", "value": -171000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Proposed Growth: Appendix 2", "plain": "New growth (Appendix 2)", "value": 1393000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Additional Savings Identified: Appendix 3", "plain": "New savings (Appendix 3)", "value": -891000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Contractual inflation", "plain": "Contract price rises", "value": 474000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Salary inflation", "plain": "Pay rises", "value": 357000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Additional Fees & Charges income generation", "plain": "More income from fees and charges", "value": -84000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Treasury Interest Payments", "plain": "Interest payments", "value": 360000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Revenue Contribution to Capital Outlay", "plain": "Revenue paid into capital projects", "value": 3425000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Movements in Earmarked Reserves", "plain": "Movements in earmarked reserves", "value": -2934000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "MRP", "plain": "Minimum revenue provision (MRP)", "value": 184000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Council Tax Exemption: Care Leavers", "plain": "Council Tax Exemption: Care Leavers", "value": 3000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Council Tax Support for the Terminally Ill", "plain": "Council Tax Support for the Terminally Ill", "value": 7000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Homelessness Grant (now part of Settlement Funding)", "plain": "Homelessness grant, now inside the settlement", "value": 708000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Food Waste Contract", "plain": "Food waste contract", "value": 650000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Income reductions reported during 2025/26", "plain": "Income reductions reported during 2025/26", "value": 249000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Budget pressures reported during 2025/26", "plain": "Budget pressures reported during 2025/26", "value": 150000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Other minor variations", "plain": "Other minor variations", "value": -19000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, {"label": "Parish Precepts", "plain": "Parish Precepts", "value": 22000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}], "total": {"label": "Net Budget Requirement", "value": 22429000, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, paragraph 12 (s49109), p3"}, "growth": {"items": [{"label": "Replacement of Mobile Phones", "ongoing": 12000, "one_off": 0, "total": 12000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Ward Opportunities Fund", "ongoing": 0, "one_off": 75000, "total": 75000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Streetscene Initiatives", "ongoing": 0, "one_off": 214000, "total": 214000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Part Time Co-Ordinator Towneley Hall", "ongoing": 15000, "one_off": 0, "total": 15000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Business Development Officer Towneley Hall", "ongoing": 52000, "one_off": 0, "total": 52000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Alleygating", "ongoing": 5000, "one_off": 0, "total": 5000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Temporary Enforcement Officers (x2)", "ongoing": 42000, "one_off": 0, "total": 42000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Contribution to the running costs of Down Town (£30k in 2026/27 & £70k in 2027/28)", "ongoing": 0, "one_off": 30000, "total": 30000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "RCCO Barden Track", "ongoing": 0, "one_off": 200000, "total": 200000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Repairs & maintenance (due to condition and mechanical & engineering surveys)", "ongoing": 300000, "one_off": 0, "total": 300000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Treasury investment income (due to reducing interest rates and internal borrowing)", "ongoing": 400000, "one_off": 0, "total": 400000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, {"label": "Three additional Temporary Gardeners (April to September)", "ongoing": 48000, "one_off": 0, "total": 48000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}], "total": {"ongoing": 874000, "one_off": 519000, "total": 1393000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p2"}, "savings": {"items": [{"label": "Pension Surplus", "value": 891000, "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p3"}], "src": "Burnley Borough Council, Revenue Budget 2026/27, Appendices 1 to 3, Executive 25 February 2026 (s49110), p3"}, "dials": [{"id": "pay", "label": "Pay award", "unit": "%", "min": 0, "max": 6, "step": 0.5, "basis": "The council's gap already includes a pay award of 3%, so the dial starts there. The council prints the effect of one per cent more; the dial uses that figure for each one per cent above or below 3%.", "per_unit": 124000, "start": 3.0, "printed": "plus 1% is plus 124 thousand pounds in 2027/28", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026, paragraph 10 (s51890), p9"}, {"id": "prices", "label": "Contract and general price rises", "unit": "%", "min": 0, "max": 6, "step": 0.5, "basis": "The council's gap already includes price rises of an average 3%, so the dial starts there. The council prints the effect of one per cent more; the dial uses that figure for each one per cent above or below 3%.", "per_unit": 132000, "start": 3.0, "printed": "plus 1% is plus 132 thousand pounds in 2027/28", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026, paragraph 10 (s51890), p9"}, {"id": "fees", "label": "Rise in fees and charges", "unit": "%", "min": 0, "max": 4, "step": 0.5, "basis": "The council's gap already includes a 2% rise in fees and charges, so the dial starts there. Each one per cent more brings in the council's printed figure and each one per cent less loses it; nothing is a freeze. A later report on the 2027/28 tariff is quoted underneath: it is a proposal, and the starting gap is not adjusted for it.", "per_unit": -61000, "start": 2.0, "printed": "plus or minus 1% is plus or minus 61 thousand pounds in 2027/28", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026, paragraph 10 (s51890), p9"}], "gap": {"2027/28": {"assumed": {"fy": "2027/28", "value_m": 0.594, "value": 594000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 0.074}, {"label": "Funding", "value_m": 0.579}, {"label": "Savings already approved", "value_m": -0.059}], "rate": 1.99, "table": "Table 4"}, "alt": {"fy": "2027/28", "value_m": 0.507, "value": 507000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 0.074}, {"label": "Funding", "value_m": 0.492}, {"label": "Savings already approved", "value_m": -0.059}], "rate": 2.99, "table": "Table 5"}}, "2028/29": {"assumed": {"fy": "2028/29", "value_m": 0.727, "value": 727000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 0.671}, {"label": "Funding", "value_m": 0.107}, {"label": "Savings already approved", "value_m": -0.051}], "rate": 1.99, "table": "Table 4"}, "alt": {"fy": "2028/29", "value_m": 0.641, "value": 641000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 0.671}, {"label": "Funding", "value_m": 0.021}, {"label": "Savings already approved", "value_m": -0.051}], "rate": 2.99, "table": "Table 5"}}}, "gap_tables": [{"key": "assumed", "rate": 1.99, "table": "Table 4", "title": "Table 4: MTFS position including previously approved saving proposals as at September 2026 (assuming a 1.99% increase to Council Tax rather than 2.99% allowed under referendum rules)", "rows": [{"fy": "2027/28", "value_m": 0.594, "value": 594000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 0.074}, {"label": "Funding", "value_m": 0.579}, {"label": "Savings already approved", "value_m": -0.059}]}, {"fy": "2028/29", "value_m": 0.727, "value": 727000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 0.671}, {"label": "Funding", "value_m": 0.107}, {"label": "Savings already approved", "value_m": -0.051}]}, {"fy": "2029/30", "value_m": 0.361, "value": 361000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 0.286}, {"label": "Funding", "value_m": 0.125}, {"label": "Savings already approved", "value_m": -0.05}]}, {"fy": "Total", "value_m": 1.682, "value": 1682000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5", "parts": [{"label": "Continuation estimate", "value_m": 1.031}, {"label": "Funding", "value_m": 0.811}, {"label": "Savings already approved", "value_m": -0.16}]}], "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 4, p5"}, {"key": "alt", "rate": 2.99, "table": "Table 5", "title": "Table 5: Alternative MTFS position including previously approved saving proposals as at September 2026 (assuming a 2.99% increase to Council Tax)", "rows": [{"fy": "2027/28", "value_m": 0.507, "value": 507000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 0.074}, {"label": "Funding", "value_m": 0.492}, {"label": "Savings already approved", "value_m": -0.059}]}, {"fy": "2028/29", "value_m": 0.641, "value": 641000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 0.671}, {"label": "Funding", "value_m": 0.021}, {"label": "Savings already approved", "value_m": -0.051}]}, {"fy": "2029/30", "value_m": 0.274, "value": 274000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 0.286}, {"label": "Funding", "value_m": 0.038}, {"label": "Savings already approved", "value_m": -0.05}]}, {"fy": "Total", "value_m": 1.422, "value": 1422000, "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6", "parts": [{"label": "Continuation estimate", "value_m": 1.031}, {"label": "Funding", "value_m": 0.551}, {"label": "Savings already approved", "value_m": -0.16}]}], "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive 16 September 2026 (s51890), Table 5, p6"}], "gap_earlier": {"rows": [{"fy": "2027/28", "value_m": 0.3}, {"fy": "2028/29", "value_m": 0.5}, {"fy": "2029/30", "value_m": 0.9}], "src": "Burnley Borough Council, Medium-Term Financial Strategy 2027-31, Appendix 1, Executive 25 February 2026, paragraph 45 (s49053), p11"}, "identified": {"2027/28": {"rows": [{"label": "Budget gap identified", "value": 653178}, {"label": "Savings approved at previous Council meetings", "value": 58686}, {"label": "Savings in the current reporting process", "value": 0}, {"label": "New savings proposals", "value": 8000}, {"label": "Approval deferred pending request for further information", "value": 72840}, {"label": "Savings previously agreed in principle, for future approval", "value": 16000}, {"label": "TOTAL savings", "value": 155526}, {"label": "Adjusted Budget gap after savings proposals", "value": 497652}], "src": "Burnley Borough Council, Summary of savings, published with the report to the Executive of 16 September 2026 (s51892), p1"}, "2028/29": {"rows": [{"label": "Budget gap identified", "value": 778054}, {"label": "Savings approved at previous Council meetings", "value": 50965}, {"label": "Savings in the current reporting process", "value": 0}, {"label": "New savings proposals", "value": 0}, {"label": "Approval deferred pending request for further information", "value": 0}, {"label": "Savings previously agreed in principle, for future approval", "value": 0}, {"label": "TOTAL savings", "value": 50965}, {"label": "Adjusted Budget gap after savings proposals", "value": 727089}], "src": "Burnley Borough Council, Summary of savings, published with the report to the Executive of 16 September 2026 (s51892), p1"}}, "reserves": {"general_fund": {"label": "General Fund balance at 31 March 2026 (draft accounts)", "value": 1379000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Narrative Report, PDF page 9"}, "total": {"label": "Total earmarked reserves at 31 March 2026 (draft accounts, Note 8)", "value": 24339000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, "draw": {"label": "Earmarked Reserves line in the Budget Book 2026/27: a negative is a draw on reserves", "value": -2149171, "src": "Burnley Borough Council, Budget Book 2026/27, Summary by Service Unit, p6"}, "list": [{"label": "Regeneration", "value": 4080000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Business Rates Retention Volatility", "value": 2763000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Transformation", "value": 2346000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Growth", "value": 2197000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Revenue Support", "value": 1557000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Charter Walk Regeneration", "value": 1333000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Pension Strain", "value": 1113000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Collection Fund Deficit Reserve", "value": 1085000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Pioneer Place Smoothing", "value": 879000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}, {"label": "Dispersal Grant", "value": 805000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}], "levers": [{"label": "General Fund balance", "value": 1379000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Narrative Report, PDF page 9", "id": "gf", "note": "This is the level the council has set for its General Reserve. Spending any of it takes the reserve below that level."}, {"id": "rs", "label": "Revenue Support reserve", "value": 547000, "src": "Burnley Borough Council, Revenue Final Outturn Report 2025/26 (the report is dated 8 July 2026), Appendix 2 (s50893), p1", "qualified": "after the movements between reserves approved in March 2026 for 2026/27", "note": "The amount offered is the figure in the outturn appendix, which already takes off a movement out of this reserve approved in March 2026 for 2026/27. The draft accounts give the balance at 31 March 2026, before that movement. The two documents also differ slightly in the year's other transfers, so the amount offered is not exactly the accounts balance less the movement.", "movement": {"label": "Movement between reserves in the appendix, after the movements between reserves approved in March 2026 for 2026/27", "value": -1000000, "src": "Burnley Borough Council, Revenue Final Outturn Report 2025/26 (the report is dated 8 July 2026), Appendix 2 (s50893), p1", "qualified": "after the movements between reserves approved in March 2026 for 2026/27"}, "accounts": {"label": "Balance at 31 March 2026 (draft accounts, Note 8)", "value": 1557000, "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26, Note 8, Movements in Earmarked Reserves, p43"}}]}, "facts": {"nbr": {"value": "22428686", "unit": "gbp", "quote": "Set a Net Budget Requirement of £22,428,686 for 2026/27", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), recommendation iv, p1"}, "ctr": {"value": "8609226", "unit": "gbp", "quote": "Set a Council Tax Requirement of £8,609,226 for the financial year 2026/27", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), recommendation iii, p1"}, "band_d": {"value": "351.44", "unit": "gbp", "quote": "Approve a Council Tax (Band D) figure of £351.44 for this Council for the year commencing 1st April 2026 and adopt a 1.99% Council Tax increase.", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), recommendation vii, p1"}, "ct_increase": {"value": "1.99", "unit": "percent", "quote": "adopt a 1.99% Council Tax increase. This is below the statutory resolution level of 2.99%.", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), recommendation vii, p1"}, "little_growth": {"value": "", "unit": "text", "quote": "there is little scope for growth in service provision", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 11, p2"}, "indicative": {"value": "", "unit": "text", "quote": "these are indicative allocations only and future years' settlements will continue to be announced annually", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 13, p4"}, "food_waste": {"value": "650", "unit": "gbp_k", "quote": "the Council will have to find the £650k cost of providing this service on top of the reduction in Central Government funding", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 15, p4"}, "pay_assumption": {"value": "3.0", "unit": "percent", "quote": "Pay inflation projections have been increased by 3.0% in 2026/27 and future years.", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 51, p13"}, "pay_1pc": {"value": "122", "unit": "gbp_k", "quote": "1% fluctuation in the pay award will equate to +/- £122k", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 51, p13"}, "price_provision": {"value": "", "unit": "text", "quote": "A provision for price inflation on contracts has been factored into the estimates for non-salary budgets.", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 51, p13"}, "partnership_end": {"value": "", "unit": "text", "quote": "the remaining services being provided under the contract extension until 31 December 2027", "src": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026 (s49109), paragraph 53, p13"}, "gap_2027_28": {"value": "0.594", "unit": "gbp_m", "quote": "Budget Gap 0.594 0.727 0.361 1.682", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, Table 4, p5"}, "gap_2028_29": {"value": "0.727", "unit": "gbp_m", "quote": "Budget Gap 0.594 0.727 0.361 1.682", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, Table 4, p5"}, "gap_alt_2027_28": {"value": "0.507", "unit": "gbp_m", "quote": "Budget Gap 0.507 0.641 0.274 1.422", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, Table 5, p6"}, "gap_alt_2028_29": {"value": "0.641", "unit": "gbp_m", "quote": "Budget Gap 0.507 0.641 0.274 1.422", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, Table 5, p6"}, "gap_title": {"value": "", "unit": "text", "quote": "assuming a 1.99% increase to Council Tax rather than 2.99% allowed under referendum rules", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, Table 4, p5"}, "gap_subject": {"value": "", "unit": "text", "quote": "The MTFS is reviewed regularly and remains subject to change.", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, p3"}, "ct_2027_28": {"value": "1.99", "unit": "percent", "quote": "Council Tax will increase by 1.99% in 2027/28 increasing to 2.99% in 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption i, p5"}, "ct_2028_29": {"value": "2.99", "unit": "percent", "quote": "Council Tax will increase by 1.99% in 2027/28 increasing to 2.99% in 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption i, p5"}, "ct_alt": {"value": "2.99", "unit": "percent", "quote": "Council Tax will increase by 2.99% in each year for 2027/28, 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption x, p6"}, "tax_base": {"value": "0.46", "unit": "percent", "quote": "An increase to the council tax base of 0.46% in each year for 2027/28, 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption ii, p5"}, "pay_mtfs": {"value": "3", "unit": "percent", "quote": "Pay award has been assumed at 3% 2027/28, 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption vi, p5"}, "fees_mtfs": {"value": "2", "unit": "percent", "quote": "An increase of 2% to fees and charges in 2027/28, 2028/29 and 2029/30", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption vii, p5"}, "price_mtfs": {"value": "3", "unit": "percent", "quote": "Contractual and general inflationary increases of an average 3% in 2027/28 onwards", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 6, assumption viii, p6"}, "pay_1pc_2027": {"value": "124", "unit": "gbp_k", "quote": "assumed at 3% per annum + 1% + £124k", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 10, sensitivity table, p9"}, "price_1pc": {"value": "132", "unit": "gbp_k", "quote": "inflationary increases of an + 1% + £132k average 3%", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 10, sensitivity table, p9"}, "fees_1pc": {"value": "61", "unit": "gbp_k", "quote": "Fees & Charges freeze +/- 1% +/- £61k", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 10, sensitivity table, p9"}, "business_as_usual": {"value": "", "unit": "text", "quote": "The figures in this report are therefore based solely on Burnley continuing on a business-as-usual basis and do not take account of the proposed new authority.", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 9, p8"}, "fees_later": {"value": "15", "unit": "gbp_k", "quote": "The assumed increase in income from the proposed changes to the fees and charges tariff presented in this report is approximately £15k in 2027/28. This is significantly less than the £121k assumed in the MTFS Mid-Year Update presented to the Executive in September 2026 and will increase the budget gap for 2027/28.", "src": "Burnley Borough Council, Fees and Charges Tariff 2027-28, report to the Executive, 25 November 2026 (s52727), paragraph 22, p4"}, "fees_assumed": {"value": "121", "unit": "gbp_k", "quote": "This is significantly less than the £121k assumed in the MTFS Mid-Year Update presented to the Executive in September 2026", "src": "Burnley Borough Council, Fees and Charges Tariff 2027-28, report to the Executive, 25 November 2026 (s52727), paragraph 22, p4"}, "revenue_support": {"value": "", "unit": "text", "quote": "The Revenue Support Reserve will be required to provide temporary mitigation for some of these risks.", "src": "Burnley Borough Council, Medium-Term Financial Strategy 2027-31, Appendix 1, Executive, 25 February 2026 (s49053), paragraph 61, p16"}, "general_fund": {"value": "1.379", "unit": "gbp_m", "quote": "The level of the General Fund Balance has remained at the prescribed level of £1.379m", "src": "Burnley Borough Council, Draft Statement of Accounts 2025/26 (page of the PDF), Narrative Report, p9"}, "ct_1pc": {"value": "57", "unit": "gbp_k", "quote": "Council tax freeze +/- 1% +/- £57k", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 10, sensitivity table, p9"}, "unitary_date": {"value": "", "unit": "text", "quote": "Under the proposal, Burnley would join with Blackburn with Darwen, Hyndburn, Pendle and Rossendale Councils from 1 April 2028.", "src": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals (MTFS mid-year update), Executive, 16 September 2026 (s51890), paragraph 9, p8"}, "reserves_footnote": {"value": "", "unit": "text", "quote": "The Movements between reserves approved in March 2026 for the 2026/27 financial year have been included for completeness however they will be adjusted for in the 2026/27 financial year.", "src": "Burnley Borough Council, Revenue Final Outturn Report 2025/26 (the report is dated 8 July 2026), Appendix 2 (s50893), footnote, p1"}, "general_reserve": {"value": "1.379", "unit": "gbp_m", "quote": "The current level of the Council's General Reserve is set at £1.379m and has been reviewed as part of the re-assessment of the MTFS and it is proposed that it should remain at £1.379m.", "src": "Burnley Borough Council, Medium-Term Financial Strategy 2027-31, Appendix 1, Executive, 25 February 2026 (s49053), paragraph 59, p16"}}};
+const PY = D.meta.play_year, BY = D.meta.base_year, NY = D.meta.next_year;
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const BCOL = {c1:'var(--c1)', c2:'var(--c2)', c3:'var(--c3)', c4:'var(--c4)', c5:'var(--c5)', c6:'var(--c6)', c7:'var(--c7)'};
+/* ---------- chart kit (from the Lancashire game) ---------- */
+const tipEl = Object.assign(document.createElement('div'), {className:'tip', hidden:true});
+document.body.appendChild(tipEl);
+document.addEventListener('pointerover', e => { const t = e.target.closest?.('[data-tip]'); if (!t) { tipEl.hidden = true; return; } tipEl.textContent = t.dataset.tip; tipEl.hidden = false; });
+document.addEventListener('pointermove', e => { if (tipEl.hidden) return; tipEl.style.left = Math.max(8, Math.min(innerWidth-tipEl.offsetWidth-8, e.clientX + 14)) + 'px'; tipEl.style.top = Math.min(innerHeight-tipEl.offsetHeight-8, e.clientY + 16) + 'px'; });
+document.addEventListener('scroll', () => tipEl.hidden = true, {passive:true});
+const legendHTML = items => items.map(i => `<span><i class="${i.hatch?'hatch':''}" data-s="${i.hatch?'':`background:${i.color}`}"></i>${esc(i.label)}</span>`).join('');
+function waffleSVG(items, total){
+  const raw = items.map(i => i.val/total*100), cells = raw.map(Math.floor);
+  raw.map((r,i)=>[r-cells[i], i]).sort((a,b)=>b[0]-a[0]).slice(0, 100-cells.reduce((a,b)=>a+b,0)).forEach(([,i]) => cells[i]++);
+  const list = []; items.forEach((it,i) => { for (let k=0;k<cells[i];k++) list.push(it); });
+  const s = 10, g = 1.8;
+  return `<svg class="waffle" viewBox="0 0 ${10*s} ${10*s}" role="img" aria-label="${esc(items.map((it,i)=>`${it.label} ${cells[i]}%`).join(', '))}">` +
+    list.map((it,k) => `<rect x="${(k%10)*s + g/2}" y="${Math.floor(k/10)*s + g/2}" width="${s-g}" height="${s-g}" rx="1.6" fill="${it.color}" data-tip="${esc(it.label)}: ${esc(m(it.val))} (${(it.val/total*100).toFixed(1)}%)"></rect>`).join('') + '</svg>';
+}
+function donutSVG(items, total){
+  const r = 42, c = 2*Math.PI*r, gap = 1.2; let off = 0;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--sunk)" stroke-width="14"></circle>` +
+    items.map(it => { const len = it.val/total*c; const seg = `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${it.color}" stroke-width="14" stroke-dasharray="${Math.max(0.1,len-gap)} ${c}" stroke-dashoffset="${-off}" data-tip="${esc(it.tip||it.label)}"></circle>`; off += len; return seg; }).join('') + '</svg>';
+}
+function divBarsHTML(items, goodUp, dp=1){
+  const mx = Math.max(...items.map(i=>Math.abs(i.change))) || 1;
+  return items.map(i => { const w = Math.abs(i.change)/mx*(innerWidth < 560 ? 20 : 32), up = i.change > 0, bad = up !== !!goodUp;
+    return `<div class="drow"><span class="lab">${esc(i.plain||i.label)}${i.plain&&i.plain!==i.label?`<small>${esc(i.label)}</small>`:''}</span>
+      <div class="dchart" data-tip="${esc(i.plain||i.label)}: ${esc(sm(i.change,dp))}"><i class="${up?'r':'l'}" data-s="width:${w}%;background:${bad?'var(--press)':'var(--relief)'}"></i><em data-s="${up?`left:calc(50% + ${w}% + 6px)`:`right:calc(50% + ${w}% + 6px)`}">${sm(i.change,dp)}</em></div></div>`; }).join('');
+}
+function colsSVG(items, opts={}){
+  const W = 320, H = 170, pad = {t:22, b:34, l:6, r:6}, n = items.length, bw = Math.min(46, (W-pad.l-pad.r)/n*0.55);
+  const mx = opts.max || Math.max(...items.map(i=>i.val)) || 1, x = i => pad.l + (W-pad.l-pad.r)/n*(i+0.5), y = v => pad.t + (H-pad.t-pad.b)*(1-v/mx);
+  const bars = items.map((it,i) => { const x0 = x(i)-bw/2, y0 = y(it.val);
+    return `<path d="M${x0},${H-pad.b} V${y0+4} Q${x0},${y0} ${x0+4},${y0} H${x0+bw-4} Q${x0+bw},${y0} ${x0+bw},${y0+4} V${H-pad.b} Z" fill="${it.color}" ${it.dim?'opacity=".45"':''} data-tip="${esc(it.tip||it.label)}: ${esc(it.text||m(it.val))}"></path>
+      <text x="${x(i)}" y="${y0-7}" text-anchor="middle" font-weight="${it.dim?400:700}">${esc(it.text||m(it.val))}</text>
+      <text class="lbl" x="${x(i)}" y="${H-pad.b+16}" text-anchor="middle">${esc(it.label)}</text>`; }).join('');
+  const line = opts.line != null ? `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y(opts.line)}" y2="${y(opts.line)}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"></line><text x="${W-pad.r}" y="${y(opts.line)-5}" text-anchor="end" class="lbl">${esc(opts.lineLabel||'')}</text>` : '';
+  return `<svg class="cols" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||'')}"><line class="base" x1="${pad.l}" x2="${W-pad.r}" y1="${H-pad.b}" y2="${H-pad.b}"></line>${bars}${line}</svg>`;
+}
+function gapVizHTML(total, parts, title, scale){
+  const pos = parts.filter(p => p.val > 0.005), filled = pos.reduce((a,p)=>a+p.val,0), rem = Math.max(0, total-filled), over = Math.max(0, filled-total);
+  const segs = pos.map(p => `<div data-s="flex-grow:${p.val};background:${p.color}" data-tip="${esc(p.label)}: ${esc(m(p.val))}"></div>`).join('') +
+    (rem > 0.005 ? `<div class="rem" data-s="flex-grow:${rem}" data-tip="Still to close: ${esc(m(rem))}"></div>` : '');
+  const legend = parts.map(p => ({label:`${p.label} ${p.val<0?'adds '+m(-p.val):m(p.val)}`, color:p.color})).concat(rem > 0.005 ? [{label:`Still to close ${m(rem)}`, hatch:true}] : []);
+  return `<div class="gapviz"><div class="gaphead"><span class="small muted">${title||''}</span><b>${rem>0.05?m(rem)+' to go':over>0.05?m(over)+' spare':'Balanced'}</b></div>
+    <div class="gapbar" data-s="${scale ? `width:${Math.max(total, filled)/scale*100}%` : ''}">${segs || '<div class="rem" data-s="flex-grow:1"></div>'}${over > 0.05 ? `<s class="target" data-s="left:${total/filled*100}%" data-tip="The gap: ${esc(m(total))}"></s>` : ''}</div><div class="legend">${legendHTML(legend)}${over > 0.05 ? `<span><i data-s="background:var(--ink);width:3px;border-radius:0"></i>The gap (${m(total)})</span>` : ''}</div></div>`;
+}
+function hbarsHTML(items, max){
+  return items.map(i => `<div class="hb" data-tip="${esc(i.label)}: ${esc(i.text)}"><span class="l">${esc(i.label)}</span><span class="v">${i.text}</span><div class="t"><i class="${i.cls||''}" data-s="width:${Math.max(.8,Math.min(100,Math.abs(i.val)/max*100))}%;background:${i.color||'var(--mute)'}"></i></div></div>`).join('');
+}
+const TOOLCOL = {ct:'var(--c1)', sp:'var(--c2)', res:'var(--c3)'};
+/* Formats. Money is held in pounds. Figures the council prints in thousands show as millions to three places, which is exact. */
+const nf = (x, dp) => Math.abs(x).toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const m = (x, dp=3) => (x<0?'minus ':'') + '£' + nf(x,dp) + 'm';
+const sm = (x, dp=3) => (x>0?'+':x<0?'minus ':'') + '£' + nf(x,dp) + 'm';
+const k3 = x => m(x/1e6, 3);
+const p0 = x => (x<0?'minus ':'') + '£' + nf(Math.round(x),0);
+const sp0 = x => (x>0?'+':'') + p0(x);
+const gbp = (x, dp=2) => '£' + x.toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const gm = x => (x<0?'minus ':'') + '£' + Math.abs(x).toFixed(1) + 'm';
+const gm3 = x => (x<0?'minus ':'') + '£' + Math.abs(x).toFixed(3) + 'm';
+const pct = x => x<0 ? `a cut of ${(-x).toFixed(2)}%` : x === 0 ? '0.00%, a freeze' : x.toFixed(2) + '%';
+const F = D.facts, R = D.review;
+
+/* ---------- inline styles without style attributes ----------
+   The page writes data-s where it would write a style attribute, and this applies it through the style object,
+   so the page runs under a Content Security Policy that forbids inline styles. */
+const applyS = n => { if (n.nodeType !== 1) return; if (n.dataset && n.dataset.s != null) n.style.cssText = n.dataset.s; n.querySelectorAll('[data-s]').forEach(e => { e.style.cssText = e.dataset.s; }); };
+new MutationObserver(ms => ms.forEach(mu => mu.addedNodes.forEach(applyS))).observe(document.body, {childList:true, subtree:true});
+applyS(document.body);
+
+/* ---------- state ---------- */
+const YEARS = [PY, NY];
+const A = YEARS.map(fy => D.ct_assumed[fy].pct);   // the council's assumed council tax rise for each game year
+const blankYear = i => ({dials: Object.fromEntries(D.dials.map(d=>[d.id,d.start])), cuts: {}, ct: A[i], res: Object.fromEntries(D.reserves.levers.map(r=>[r.id,0]))});
+const S = {step:1, guess:{}, revealed:false, y:0, band:'D', years:[blankYear(0), blankYear(1)]};
+const st = yi => S.years[yi];
+const svcLabel = name => D.services.find(s => s.name===name).label;
+const blockVal = id => D.services.filter(s => s.block===id).reduce((a,s)=>a+s.value,0);
+const blocks = D.blocks.map(b => ({...b, val: blockVal(b.id)}));
+const cost = blocks.reduce((a,b)=>a+b.val,0);
+const nCost = D.services.filter(s => s.block).length;
+D.blocks.forEach(b => S.guess[b.id] = Math.round(100/D.blocks.length));
+S.guess[D.blocks[0].id] += 100-D.blocks.reduce((a,b)=>a+S.guess[b.id],0);
+
+/* ---------- stepper ---------- */
+const STEPS = ['Guess','Your bill','This year','The gap','Your budget','Result'];
+function renderStepper(){
+  $('#stepper').innerHTML = STEPS.map((s,i)=>`<button data-go="${i+1}" class="${S.step===i+1?'on':S.step>i+1?'done':''}" ${S.step===i+1?'aria-current="step"':''}><span class="n">${i+1}</span><b>${s}</b></button>`).join('');
+  if (S.step >= 4) $('#stepper').insertAdjacentHTML('beforeend', `<span class="yearchip">Year ${S.y+1} of 2 &middot; ${YEARS[S.y]}</span>`);
+  const on = $('#stepper .on'); if (on) $('#stepper').scrollLeft = on.offsetLeft-$('#stepper').offsetLeft-16;
+}
+function go(n){
+  S.step = n; $$('section.step').forEach(s => s.hidden = +s.dataset.step !== n);
+  $('#meter').hidden = n < 4; renderStepper();
+  $$('.yr').forEach(e => e.textContent = YEARS[S.y]);
+  if (n===4) renderKnown();
+  if (n===5) renderLevers();
+  if (n===6) renderResult();
+  if (n>=4) update();
+  window.scrollTo({top: $(`section.step[data-step="${n}"]`).offsetTop-$('#stepper').offsetHeight-8, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+}
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(+g.dataset.go); });
+$('#back4').addEventListener('click', () => { if (S.y === 1) { S.y = 0; go(6); } else go(3); });
+
+/* ---------- 1 guess ---------- */
+function renderGuess(){
+  $('#guessPanel').innerHTML = blocks.map(b => `
+    <div class="gslider">
+      <span class="sw" data-s="background:${BCOL[b.colour]}"></span>
+      <label for="g_${b.id}">${esc(b.label)}</label>
+      <span class="gval" id="gv_${b.id}">£${S.guess[b.id]}</span>
+      <input type="range" min="0" max="100" step="1" id="g_${b.id}" value="${S.guess[b.id]}" aria-label="${esc(b.label)}">
+    </div>`).join('');
+  blocks.forEach(b => $('#g_'+b.id).addEventListener('input', e => rebalance(b.id, +e.target.value)));
+  renderCmp();
+}
+function rebalance(id, v){
+  const others = blocks.filter(b => b.id!==id);
+  const rest = 100-v, cur = others.reduce((a,b)=>a+S.guess[b.id],0);
+  S.guess[id] = v;
+  let acc = 0;
+  others.forEach((b,i) => {
+    let nv = i===others.length-1 ? rest-acc : Math.round(cur ? S.guess[b.id]*rest/cur : rest/others.length);
+    nv = Math.max(0, nv); S.guess[b.id] = nv; acc += nv;
+  });
+  const tot = blocks.reduce((a,b)=>a+S.guess[b.id],0);
+  if (tot !== 100) { const fix = others.find(b => S.guess[b.id] + (100-tot) >= 0); if (fix) S.guess[fix.id] += 100-tot; }
+  blocks.forEach(b => { $('#g_'+b.id).value = S.guess[b.id]; $('#gv_'+b.id).textContent = '£'+S.guess[b.id]; });
+  renderCmp();
+}
+function renderCmp(){
+  const mx = Math.max(50, ...blocks.map(b => S.guess[b.id]));
+  $('#cmp').innerHTML = `<div class="dp">` + blocks.map(b => {
+    const real = b.val/cost*100;
+    return `<div class="dprow"><div class="h"><span><span class="sw" data-s="display:inline-block;vertical-align:-1px;margin-right:8px;background:${BCOL[b.colour]}"></span>${esc(b.label)}</span><span>you <b>£${S.guess[b.id]}</b>${S.revealed?` &middot; real <b>£${real.toFixed(0)}</b>`:''}</span></div>
+      <div class="dptrack"><div class="real" data-s="width:${S.revealed?real/mx*100:0}%;background:${BCOL[b.colour]}" data-tip="${esc(b.label)}: £${real.toFixed(1)} in every £100"></div><div class="you" data-s="left:${S.guess[b.id]/mx*100}%" data-tip="Your guess: £${S.guess[b.id]}"></div></div>
+      ${S.revealed?`<div class="small muted">${esc(b.services.map(svcLabel).join(', '))}: ${p0(b.val)}</div>`:''}</div>`;
+  }).join('') + `<div class="dpaxis"><span>£0</span><span>£${Math.round(mx/2)}</span><span>£${mx}</span></div><div class="legend"><span><i data-s="background:var(--surface);border:3px solid var(--ink);border-radius:50%;width:10px;height:10px"></i>Your guess</span><span><i data-s="background:var(--mute)"></i>Real share (after you reveal)</span></div></div>`;
+  if (S.revealed){
+    const err = blocks.reduce((a,b)=>a+Math.abs(S.guess[b.id]-b.val/cost*100),0)/2;
+    $('#scoreBox').hidden = false; $('#score').textContent = Math.max(0, Math.round(100-err*2)) + '%';
+    const big = blocks.reduce((a,b)=> Math.abs(S.guess[b.id]-b.val/cost*100) > Math.abs(S.guess[a.id]-a.val/cost*100) ? b : a);
+    const diff = S.guess[big.id]-big.val/cost*100;
+    $('#scoreTxt').innerHTML = `Your biggest miss was <b>${esc(big.label.toLowerCase())}</b>: you ${diff>0?'over':'under'}estimated it by £${Math.abs(diff).toFixed(0)} in every £100.`;
+    $('#revealBtn').textContent = 'Revealed'; $('#revealBtn').disabled = true;
+  }
+  $('#guessSrc').textContent = `${R.guess} Real split: budget ${BY} by service, ${D.services_total.src}. The ${nCost} services with a net cost add to ${p0(cost)}.`;
+}
+$('#revealBtn').addEventListener('click', () => { S.revealed = true; renderCmp(); });
+function renderBridge(){
+  const out = D.services.filter(s => !s.block);
+  $('#bridge').innerHTML = `<div class="gi"><span><b>${nCost} services with a net cost</b></span><span class="v">${p0(cost)}</span></div>` +
+    out.map(s => `<div class="gi"><span>${esc(s.label)}</span><span class="v">${p0(s.value)}</span><small>${esc(s.note)}</small></div>`).join('') +
+    `<div class="gi"><span><b>Total, as printed in the Budget Book</b></span><span class="v"><b>${p0(D.services_total.value)}</b></span><small>The budget report recommended the same figure as the Net Budget Requirement: ${p0(D.requirement.value)}. The Revenue Budget report to the Executive prints it in thousands, as ${k3(D.other_summary.value)}, across ${D.other_summary.count} lines.</small></div>`;
+  $('#bridgeSrc').textContent = `${D.services_total.src}; ${D.requirement.src}; ${D.other_summary.src}.`;
+  $('#detailNote1').textContent = R.service_detail;
+}
+
+/* ---------- 2 bill ---------- */
+const boro = D.bands.bodies.find(b => b.borough);
+function renderBandChips(){
+  $$('.bandchips').forEach(box => {
+    box.innerHTML = D.bands.letters.map(b => `<button class="chip ${b===S.band?'on':''}" data-band="${b}" aria-pressed="${b===S.band}">Band ${b}</button>`).join('');
+  });
+  $$('.bandname').forEach(e => e.textContent = S.band);
+}
+document.addEventListener('click', e => { const c = e.target.closest('[data-band]'); if (!c) return; S.band = c.dataset.band; renderBandChips(); renderBill(); if (S.step === 5) update(); });
+function renderBill(){
+  const B = D.band_d, b = S.band, v = boro.values[b], T = D.bands.total;
+  $('#billBig').textContent = gbp(v);
+  $('#billTxt').innerHTML = `${gbp(v/52)} a week (the yearly charge divided by 52), for the borough council's part of a Band ${b} bill. The council set its Band D at ${gbp(B.value)}, up ${B.increase_pct.toFixed(2)}% on ${gbp(B.prior)} in 2025/26. Band D is charged on a tax base of ${B.tax_base.toLocaleString('en-GB')} Band D equivalent homes, which gives the council tax requirement of ${p0(B.requirement)}.`;
+  $('#billQuote').textContent = `The budget report recommended: "${F.band_d.quote}"`;
+  $('#billSrc').textContent = `${boro.src}; ${F.band_d.src}; ${B.src}.`;
+  $('#fullBill').innerHTML = D.bands.bodies.map(x => `<div class="gi"><span>${x.borough?`<b>${esc(x.label)}</b>`:esc(x.label)}</span><span class="v">${x.borough?`<b>${gbp(x.values[b])}</b>`:gbp(x.values[b])}</span><small>${(x.values[b]/T.values[b]*100).toFixed(1)}% of the bill</small></div>`).join('') +
+    `<div class="gi"><span><b>Full bill outside the parish and town council areas</b></span><span class="v"><b>${gbp(T.values[b])}</b></span><small>Printed in the schedule as "${esc(T.label)}". The four lines above add up to it.</small></div>`;
+  $('#bandsNote').textContent = R.bands;
+  $('#fullBillSrc').textContent = `${T.src}.`;
+  const H = D.ct_history;
+  $('#histChart').innerHTML = colsSVG(H.rows.filter((h,i) => i%2===1).map(h => ({label:h.fy.slice(2), val:h.band_d, text:'£'+h.band_d.toFixed(0), color:'var(--c1)', tip:`${h.fy}: Band D ${gbp(h.band_d)}`})), {aria:'Band D for the borough council, every second year from 2016/17 to 2026/27'});
+  $('#histTxt').innerHTML = H.rows.filter(h => h.increase_pct != null).map(h => `${h.fy} ${gbp(h.band_d)} (+${h.increase_pct.toFixed(2)}%)`).join(' &middot; ');
+  $('#histSrc').textContent = `Band D excluding parish precepts. ${H.src}. The chart shows every second year; each year is listed underneath. ${R.history}`;
+  const tot = D.funding_total.value, ct = D.funding.find(f => f.label === 'Council Tax Yield');
+  $('#ctCash').textContent = `${k3(ct.value)} (${(ct.value/tot*100).toFixed(0)}%)`;
+  $('#reqB').textContent = k3(tot);
+  const fl = D.funding.filter(f => f.value !== 0).sort((x,y)=>y.value-x.value), fmax = fl[0].value;
+  $('#fundBar').innerHTML = hbarsHTML(fl.map(f => ({label:f.plain, val:f.value, text:`${k3(f.value)} <small>${(f.value/tot*100).toFixed(0)}%</small>`, color:f===ct?'var(--c1)':f.value<0?'var(--press)':'var(--mute)'})), fmax);
+  $('#fundSrc').textContent = `Funding ${BY}, printed in thousands: ${D.funding_total.src}. Lines printed as nil are left out.`;
+  $('#donutMid').textContent = gbp(v);
+  $('#billDonut').innerHTML = donutSVG(blocks.map(x => ({val:x.val, color:BCOL[x.colour], tip:`${x.label}: ${gbp(x.val/cost*v)} a year`})), cost);
+  $('#billBar').innerHTML = blocks.map(x => { const sh = x.val/cost*v; return `<div class="lrow"><i data-s="background:${BCOL[x.colour]}"></i><span>${esc(x.label)}</span><span class="v">${gbp(sh)}</span><small>£${(x.val/cost*100).toFixed(0)} in every £100 of net service cost</small></div>`; }).join('');
+}
+
+/* ---------- 3 this year ---------- */
+function renderThisYear(){
+  const M = D.movement, G = D.growth, Sv = D.savings, RS = D.reserves;
+  $('#moveLede').textContent = `The budget for 2025/26, before parish precepts, was ${k3(M.opening.value)}. The table the council printed takes it to ${k3(M.total.value)} for ${BY}.`;
+  $('#moveTotals').innerHTML = `<div class="t"><span>2025/26, before parish precepts</span><b>${k3(M.opening.value)}</b></div><span class="arrow">to</span><div class="t"><span>Net Budget Requirement ${BY}</span><b>${k3(M.total.value)}</b></div>`;
+  $('#moveLegend').innerHTML = legendHTML([{label:'Adds to the budget', color:'var(--press)'},{label:'Takes from it', color:'var(--relief)'}]);
+  $('#moveChart').innerHTML = divBarsHTML(M.lines.filter(l => l.value !== 0).map(l => ({label:l.label, plain:l.plain, change:l.value/1e6})).sort((a,b)=>b.change-a.change), false, 3);
+  $('#moveSrc').textContent = `Small grey text is the council's own line name. ${M.src}. The paper says of food waste: "${F.food_waste.quote}" (${F.food_waste.src}).`;
+  $('#growthQuote').textContent = `"${F.little_growth.quote}"`;
+  $('#growthList').innerHTML = G.items.map(g => `<div class="gi"><span>${esc(g.label)}</span><span class="v">${k3(g.total)}</span><small>${g.one_off ? 'One off' : 'Ongoing'}</small></div>`).join('') +
+    `<div class="gi"><span><b>Total growth</b></span><span class="v"><b>${k3(G.total.total)}</b></span><small>${k3(G.total.ongoing)} ongoing and ${k3(G.total.one_off)} one off</small></div>`;
+  $('#growthSrc').textContent = `${G.src}; ${F.little_growth.src}.`;
+  $('#savingsList').innerHTML = Sv.items.map(s => `<div class="gi"><span>${esc(s.label)}</span><span class="v">${k3(s.value)}</span></div>`).join('') + `<p class="small muted">The savings appendix for ${BY} lists one item.</p>`;
+  $('#savingsSrc').textContent = Sv.src + '.';
+  $('#resFacts').innerHTML = [[k3(RS.general_fund.value), RS.general_fund.label], [k3(RS.total.value), RS.total.label], [p0(RS.draw.value), RS.draw.label]]
+    .map(([a,b]) => `<div class="fact"><b class="num">${a}</b><span class="small">${esc(b)}</span></div>`).join('');
+  $('#resBars').innerHTML = hbarsHTML(RS.list.map(r => ({label:r.label, val:r.value, text:k3(r.value), color:'var(--c3)'})), RS.list[0].value);
+  $('#resSrc').textContent = `The ten largest earmarked reserves at 31 March 2026, from the draft accounts. ${RS.list[0].src}; ${RS.general_fund.src}; ${RS.draw.src}.`;
+}
+
+/* ---------- year engine: every figure in pounds ----------
+   Each year starts from the council's own budget gap, as printed at its assumed council tax rise. The dials count
+   only the difference from the council's own assumptions, so with nothing moved the gap is the council's figure. */
+const r2 = x => Math.round(x*100 + 1e-7)/100;
+// Council tax: Band D raised by each year's rate and rounded to the penny, the tax base grown at the chosen rate, multiplied and rounded to the pound.
+// The build checks that this reproduces every row of the model's council tax cases.
+function ctCalc(yi, rates, growth){
+  let bd = D.band_d.value, base = D.band_d.tax_base;
+  for (let i = 0; i <= yi; i++) { base = base * (1 + growth/100); bd = r2(bd * (1 + rates[i]/100)); }
+  const y = Math.round(base * bd);
+  return {band_d: bd, base, yield: y, change: y-D.band_d.requirement};
+}
+const GROW = D.tax_base_growth.pct;                // the growth in the tax base the council's tables assume
+const A0 = D.gap[PY].assumed.rate, ALT = D.gap[PY].alt.rate, A1 = D.ct_assumed[NY].pct;
+const ctY = (yi, rates) => ctCalc(yi, rates, GROW).yield;
+// The council's gap for a game year at your council tax.
+// First year: the council prints its gap at two rates (A0 and ALT), and at those two points this returns the printed
+// figure. Between them the difference between the two printed figures is shared out in proportion to the council tax
+// raised; below A0 the council tax not raised is added.
+// Second year: a council tax choice is counted once, in the year it is made. The council's printed gap counts on what
+// its assumed rise (A1) adds on the Band D and tax base that follow its first year assumption. The page takes that off
+// and puts on what your second year rate adds on the Band D and tax base that follow your first year rate.
+// Everything but the printed points is the page's own sum. The build runs the same sum and checks the printed points.
+function gapAt(yi, r0, r1){
+  if (yi === 0) {
+    const g = D.gap[PY];
+    return Math.round(r0 >= A0
+      ? g.assumed.value-(g.assumed.value-g.alt.value)*(ctY(0, [r0])-ctY(0, [A0]))/(ctY(0, [ALT])-ctY(0, [A0]))
+      : g.assumed.value + ctY(0, [A0])-ctY(0, [r0]));
+  }
+  return Math.round(D.gap[NY].assumed.value + (ctY(1, [A0, A1])-ctY(1, [A0, 0]))-(ctY(1, [r0, r1])-ctY(1, [r0, 0])));
+}
+const ctNow = yi => ctCalc(yi, [st(0).ct, st(1).ct], GROW);
+const gapNow = yi => gapAt(yi, st(0).ct, st(1).ct);
+// The figure the year starts from: the council's printed gap at its assumed rise. In the second year, if your first
+// year rate was not the council's, the same rise adds a little more or less on your Band D, and the start moves by that.
+const gapStart = yi => yi === 0 ? D.gap[PY].assumed.value : gapAt(1, st(0).ct, A1);
+const ctEffect = yi => gapNow(yi)-gapStart(yi);    // what your council tax does to the gap: a negative reduces it
+const same = (a, b) => Math.abs(a-b) < 1e-9;
+// Whether the year's starting figure is the council's printed one: always in the first year; in the second, only on the council's first year rate.
+const startPrinted = yi => yi === 0 || same(st(0).ct, A0);
+// Whether the gap at your council tax is a printed figure, and which table prints it.
+const printedTable = yi => yi === 0 ? (same(st(0).ct, A0) ? D.gap[PY].assumed : same(st(0).ct, ALT) ? D.gap[PY].alt : null) : (same(st(0).ct, A0) && same(st(1).ct, A1) ? D.gap[NY].assumed : null);
+const dialDep = (yi, d) => (st(yi).dials[d.id]-d.start) * d.per_unit;
+const dialsDep = yi => D.dials.reduce((a,d)=>a+dialDep(yi,d),0);
+const cutsIn = yi => D.lines.reduce((a,l)=>a + (st(yi).cuts[l.id]||0)/100*l.value, 0);
+const cutPct = (yi, l) => (st(0).cuts[l.id]||0) + (yi === 1 ? (st(1).cuts[l.id]||0) : 0);
+const cutMax = l => l.max_cut-(S.y === 1 ? (st(0).cuts[l.id]||0) : 0);
+const resUsed = yi => D.reserves.levers.reduce((a,r)=>a+st(yi).res[r.id],0);
+const resLeft = (yi, r) => r.value-st(0).res[r.id]-(yi === 1 ? st(1).res[r.id] : 0);
+const resLeftAll = yi => D.reserves.levers.reduce((a,r)=>a+resLeft(yi,r),0);
+// Carried into the second year: only what the first year left open or closed with reserves, which is the first year's
+// gap at your council tax and dial settings less the cuts. Council tax and cuts last, so what they closed stays closed.
+const carry = () => gapNow(0) + dialsDep(0)-cutsIn(0);
+const need = yi => gapNow(yi) + dialsDep(yi) + (yi === 1 ? carry() : 0);
+const closed = yi => cutsIn(yi) + resUsed(yi);
+const gapOf = yi => Math.round(need(yi)-closed(yi));
+// The borough council's charge for a band: the printed charge raised by each year's rate and rounded to the penny.
+function bandCalc(yi, band){ let v = boro.values[band]; for (let i = 0; i <= yi; i++) v = r2(v * (1 + st(i).ct/100)); return v; }
+const signed = v => Math.abs(v) < 0.5 ? '£0' : sp0(v);
+const startLabel = yi => yi === 0 ? `the council's printed figure at ${A0.toFixed(2)}%` : startPrinted(1) ? `the council's printed figure on ${A0.toFixed(2)}% then ${A1.toFixed(2)}%` : `the council's printed ${gm3(D.gap[NY].assumed.value_m)}, with what a ${A1.toFixed(2)}% rise adds worked on your ${PY} Band D`;
+
+/* ---------- 4 the council's gap ---------- */
+function partsHTML(G, fy){
+  return G.parts.map(p => `<div class="gi"><span>${esc(p.label)}</span><span class="v">${gm3(p.value_m)}</span><small>As the council prints it${p.value_m<0?'; a negative reduces the gap':''}</small></div>`).join('') +
+    `<div class="gi"><span><b>Budget gap ${fy}</b></span><span class="v"><b>${gm3(G.value_m)}</b></span></div>`;
+}
+function renderKnown(){
+  const yi = S.y, fy = YEARS[yi], G = D.gap[fy].assumed, G2 = D.gap[fy].alt, T = D.gap_tables;
+  $('#gapLede').textContent = `The council's latest figures give a budget gap of ${gm3(G.value_m)} for ${fy}, assuming council tax rises by ${A0.toFixed(2)}% in ${PY}${yi===1?` and ${A1.toFixed(2)}% in ${NY}`:''}. The game starts from that figure. It already includes the council's own assumptions, which you can keep or change.`;
+  $('#gapBig').textContent = gm3(G.value_m);
+  $('#gapParts').innerHTML = partsHTML(G, fy);
+  $('#gapNote').textContent = R.gap;
+  $('#gapSrc').textContent = `${T[0].title}. ${G.src}. "${F.gap_subject.quote}" (${F.gap_subject.src}).`;
+  $('#carryBox').innerHTML = yi === 1 ? `<p class="point">Carried in from ${PY}: <b>${signed(carry())}</b>. ${esc(R.carry)} ${esc(R.second_ct)} You used ${p0(resUsed(0))} of reserves in ${PY}${gapOf(0) > 0 ? ` and left ${p0(gapOf(0))} open` : gapOf(0) < 0 ? ` and had ${p0(-gapOf(0))} spare` : ''}.</p>` : '';
+  const as = [['Council tax', yi === 0 ? F.ct_2027_28 : F.ct_2028_29], ['Tax base', F.tax_base], ['Pay award', F.pay_mtfs], ['Fees and charges', F.fees_mtfs], ['Prices', F.price_mtfs], ['Reorganisation', F.business_as_usual], ['Reorganisation: the proposed date', F.unitary_date]];
+  $('#assume').innerHTML = as.map(([h,f]) => `<div class="blank"><b>${esc(h)}</b><span class="quote small">"${esc(f.quote)}"</span><span class="src">${esc(f.src)}.</span></div>`).join('');
+  $('#altBox').innerHTML = `<p>The council also prints the gap with a ${G2.rate.toFixed(2)}% rise in ${PY}: <b class="num">${gm3(G2.value_m)}</b> for ${fy}.</p>` + partsHTML(G2, fy) +
+    `<p class="note">${esc(R.tax_points)}</p><p class="src">${esc(T[1].title)}. ${esc(G2.src)}.</p>`;
+  $('#scenarioNote').textContent = R.scenario + (yi === 1 ? ' ' + R.second_year : '');
+  const I = D.identified[fy];
+  $('#identified').innerHTML = I.rows.map((r,i) => { const strong = i === 0 || i >= I.rows.length-2; return `<div class="gi"><span>${strong?`<b>${esc(r.label)}</b>`:esc(r.label)}</span><span class="v">${strong?`<b>${p0(r.value)}</b>`:p0(r.value)}</span></div>`; }).join('');
+  $('#identifiedNote').textContent = R.identified;
+  $('#identifiedSrc').textContent = `Figures for ${fy}, as printed to the pound. ${I.src}.`;
+  $('#blanks').innerHTML = `<ul class="small">${D.meta.not_held.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` +
+    `<p class="quote small" data-s="margin-top:10px">"${esc(F.partnership_end.quote)}" <span class="src">${esc(F.partnership_end.src)}.</span></p>`;
+  const fys = T[0].rows.map(g => g.fy);
+  $('#gapTable').innerHTML = `<thead><tr><th>Council tax rise in ${PY}</th>${fys.map(f => `<th class="n">${f === 'Total' ? 'All three years' : f}</th>`).join('')}</tr></thead><tbody>` +
+    T.map(t => `<tr><td>${t.rate.toFixed(2)}% (${esc(t.table)})</td>${t.rows.map(g => `<td class="n">${g.fy === fy ? `<b>${gm3(g.value_m)}</b>` : gm3(g.value_m)}</td>`).join('')}</tr>`).join('') + `</tbody>`;
+  $('#gapTableSrc').textContent = `The council's budget gap, printed in £ million to three decimal places. ${T[0].src}; ${T[1].src}. The game plays ${PY} and ${NY} only. An earlier strategy, in February 2026, printed ${D.gap_earlier.rows.map(g => `${gm(g.value_m)} for ${g.fy}`).join(', ')}, to one decimal place (${D.gap_earlier.src}); the September 2026 figures replace it.`;
+  $('#dials').innerHTML = D.dials.map(d => `<div class="dial"><label for="d_${d.id}"><b>${esc(d.label)}</b> <span class="muted small" id="dv_${d.id}"></span></label><span class="eff" id="de_${d.id}"></span>
+    <input type="range" id="d_${d.id}" min="${d.min}" max="${d.max}" step="${d.step}" value="${st(yi).dials[d.id]}"><div class="meta">${esc(d.basis)} As printed: ${esc(d.printed)}. ${esc(d.src)}.</div></div>`).join('') +
+    `<p class="quote small">"${esc(F.fees_later.quote)}" <span class="src">${esc(F.fees_later.src)}.</span></p>`;
+  D.dials.forEach(d => $('#d_'+d.id).addEventListener('input', e => { st(S.y).dials[d.id] = +e.target.value; paintKnown(); update(); }));
+  paintKnown();
+}
+function paintKnown(){
+  const yi = S.y, fy = YEARS[yi];
+  D.dials.forEach(d => { const v = st(yi).dials[d.id]; $('#dv_'+d.id).textContent = v + d.unit + (v === d.start ? ', the council\'s assumption' : ''); $('#de_'+d.id).textContent = signed(dialDep(yi,d)); });
+  const dep = dialsDep(yi), moved = Math.abs(dep) > 0.5 || Math.abs(ctEffect(yi)) > 0.5 || yi === 1;
+  $('#dialSum').innerHTML = `<div class="gi"><span>The council's budget gap for ${fy}</span><span class="v">${p0(gapStart(yi))}</span><small>${startPrinted(yi) ? `${gm3(gapStart(yi)/1e6)} as printed: ${startLabel(yi)}` : startLabel(yi)}</small></div>` +
+    (Math.abs(ctEffect(yi)) > 0.5 ? `<div class="gi"><span>Your council tax in ${fy}, set in step 5</span><span class="v">${signed(ctEffect(yi))}</span></div>` : '') +
+    (yi === 1 ? `<div class="gi"><span>Carried in from ${PY}</span><span class="v">${signed(carry())}</span></div>` : '') +
+    `<div class="gi"><span>Your pay, price and fee settings against the council's</span><span class="v">${signed(dep)}</span></div>` +
+    `<div class="gi"><span><b>To close in ${fy}</b></span><span class="v"><b>${p0(need(yi))}</b></span><small>${moved ? 'The council\'s figure with your changes.' : 'Nothing moved: this is the council\'s printed figure.'}</small></div>`;
+}
+
+/* ---------- 5 levers ---------- */
+function leverRow(l, yi){
+  const Y = st(yi), prev = yi===1 ? (st(0).cuts[l.id]||0) : 0;
+  if (!l.cuttable) return `<div class="lever"><span><b>${esc(l.label)}</b> <span class="muted small">${p0(l.value)}</span></span><span class="flag warn">${l.value < 0 ? 'Net income' : 'Nil'}</span><div class="meta">Not cut in the game. <span class="src">${esc(l.src)}.</span></div></div>`;
+  return `<div class="lever">
+      <label for="L_${l.id}"><b>${esc(l.label)}</b> <span class="muted small">${p0(l.value)}${prev?` &middot; already cut ${prev}% in ${PY}`:''}</span></label>
+      <span class="num" id="Lv_${l.id}"></span>
+      <input type="range" id="L_${l.id}" min="0" max="${Math.max(0,cutMax(l))}" step="${D.meta.cut_step}" value="${Y.cuts[l.id]||0}" data-line="${l.id}">
+      <div class="meta">Game limit: ${Math.max(0,cutMax(l))}%${prev?' more':''}. <span class="src">${esc(l.src)}.</span></div>
+    </div>`;
+}
+function serviceHTML(s, yi){
+  const ls = D.lines.filter(l => l.service===s.name).sort((a,c)=>c.value-a.value);
+  return `<div class="svc"><div class="svchead"><b>${esc(s.label)}</b><span class="num small">${p0(s.value)} &middot; <span id="ss_${D.services.indexOf(s)}"></span></span></div>
+    ${s.note?`<p class="src">${esc(s.note)}</p>`:''}<p class="src">${esc(s.src)}.</p>${ls.map(l => leverRow(l, yi)).join('')}</div>`;
+}
+function resLeverHTML(r, yi){
+  const Y = st(yi), avail = resLeft(yi,r) + Y.res[r.id], f = r.id === 'gf' ? F.general_reserve : F.reserves_footnote;
+  const what = r.qualified
+    ? `${p0(r.value)}, ${esc(r.qualified)} (${esc(r.src)}). The appendix shows a movement of ${p0(r.movement.value)} for this reserve. ${esc(r.accounts.label)}: ${p0(r.accounts.value)} (${esc(r.accounts.src)}).`
+    : `${p0(r.value)} at 31 March 2026 (${esc(r.src)}).`;
+  return `<div class="lever"><label for="r_${r.id}"><b>${esc(r.label)}</b><br><span class="small muted">${what} Available in ${YEARS[yi]}: ${p0(avail)}${yi===1?`, after the ${p0(st(0).res[r.id])} you used in ${PY}`:''}.</span></label><span class="num" id="rVal_${r.id}"></span>
+    <input type="range" id="r_${r.id}" min="0" max="${avail}" step="1000" value="${Y.res[r.id]}" data-res="${r.id}"><div class="meta" id="rMeta_${r.id}"></div>
+    <div class="meta"><b>${esc(r.note)}</b> <span class="quote">"${esc(f.quote)}"</span> <span class="src">${esc(f.src)}.</span></div></div>`;
+}
+function renderLevers(){
+  const yi = S.y, Y = st(yi);
+  $('#ct').value = Y.ct;
+  const chips = [[D.ct_range.min, 'lowest in the game'], [0, 'freeze'], [A0, 'page\'s own sum'], [ALT, 'the council\'s table at this rate']];
+  $('#rateChips').innerHTML = chips.map(([v,l]) => `<button class="chip" data-rate="${v}">${v<0?`Cut ${(-v).toFixed(2)}%`:v.toFixed(2)+'%'} &middot; ${esc(same(v, A[yi]) ? 'the council\'s assumption' : yi === 1 && v > 0 ? 'page\'s own sum' : l)}</button>`).join('');
+  $$('#rateChips .chip').forEach(c => c.addEventListener('click', () => { Y.ct = +c.dataset.rate; $('#ct').value = Y.ct; update(); }));
+  const rows = D.ct_cases;
+  $('#ctCases').innerHTML = `<thead><tr><th>Rise each year</th><th>Year</th><th class="n">Band D</th><th class="n">Council tax raised</th><th class="n">Change on ${BY}</th></tr></thead><tbody>` +
+    rows.map(c => `<tr><td>${c.rate.toFixed(2)}% (${esc(c.rate_case)})</td><td>${c.fy}</td><td class="n">${gbp(c.band_d)}</td><td class="n">${p0(c.yield)}</td><td class="n">${p0(c.change)}</td></tr>`).join('') + `</tbody>`;
+  $('#ctCasesSrc').textContent = `${R.tax_cases} ${D.ct_cases[0].src}. Tax base growing by ${D.tax_base_growth.pct.toFixed(2)}% a year: "${F.tax_base.quote}" (${D.tax_base_growth.src}).`;
+  $('#cutNote').textContent = `Open a service and cut a line with its slider. Cuts are measured against the ${BY} budget and last into the following year. ${R.delivery}`;
+  $('#detailNote5').textContent = R.service_detail;
+  $('#resNote').textContent = R.reserves;
+  $('#resLevers').innerHTML = D.reserves.levers.map(r => resLeverHTML(r, yi)).join('');
+  $$('#resLevers input[type=range]').forEach(inp => inp.addEventListener('input', () => { Y.res[inp.dataset.res] = +inp.value; update(); }));
+  const other = D.services.filter(s => !s.block);
+  $('#levers').innerHTML = blocks.map((b,bi) => {
+    const ss = D.services.filter(s => s.block===b.id).sort((a,c)=>c.value-a.value);
+    return `<details class="blk" ${bi===0?'open':''}><summary><h3><i data-s="background:${BCOL[b.colour]}"></i>${esc(b.label)}</h3><span class="num small">${p0(b.val)} in ${BY} &middot; <span id="bs_${b.id}"></span></span></summary>
+      ${ss.map(s => serviceHTML(s, yi)).join('')}</details>`;
+  }).join('') +
+    `<details class="blk"><summary><h3>Outside the guess</h3><span class="small muted">property, three services printed as nil, and earmarked reserves</span></summary>${other.map(s => serviceHTML(s, yi)).join('')}</details>` +
+    `<p class="note">${esc(R.cut_limit)}</p>`;
+  $$('#levers input[type=range]').forEach(inp => inp.addEventListener('input', () => { Y.cuts[inp.dataset.line] = +inp.value; update(); }));
+  update();
+}
+$('#ct').addEventListener('input', e => { st(S.y).ct = Math.round(+e.target.value*100)/100; update(); });
+
+function update(){
+  const yi = S.y, Y = st(yi), fy = YEARS[yi], nd = need(yi), c = ctNow(yi), ct = ctEffect(yi), sp = cutsIn(yi), rU = resUsed(yi), gap = gapOf(yi);
+  const dep = dialsDep(yi), start = gapStart(yi), target = Math.max(0, nd);
+  const startTxt = startPrinted(yi) ? gm3(start/1e6) : p0(start);
+  if (S.step === 5) {
+    $('#ctLabel').textContent = `Borough council tax rise in ${fy}`;
+    $('#ctVal').textContent = Y.ct < 0 ? `Cut ${(-Y.ct).toFixed(2)}%` : Y.ct.toFixed(2) + '%';
+    $$('#rateChips .chip').forEach(ch => { const on = Math.abs(+ch.dataset.rate-Y.ct) < 1e-9; ch.classList.toggle('on', on); ch.setAttribute('aria-pressed', on); });
+    const here = gapNow(yi), tbl = printedTable(yi), council = !!tbl, CS = D.ct_sensitivity;
+    $('#ctMeta').innerHTML = `<p>The council's tables assume ${A[yi].toFixed(2)}% for ${fy}, and its gap already counts on it. The dial starts there. ${esc(R.tax_future)}</p><div class="ctgrid">
+        <div><span>The gap at your rate</span><b>${council ? gm3(here/1e6) : p0(here)}</b></div>
+        <div><span>Whose figure</span><b class="who">${council ? `The council's, as printed (${esc(tbl.table)})` : 'The page\'s own sum'}</b></div>
+        <div><span>Against the council's assumed rate</span><b>${signed(ct)}</b></div>
+        <div><span>Council tax raised at your rate</span><b>${p0(c.yield)}</b></div>
+        <div><span>Band D, borough's part</span><b>${gbp(c.band_d)}</b></div>
+      </div><p class="note">${esc(R.tax_points)}${yi === 1 ? ' ' + esc(R.second_ct) : ''}</p>
+      <p class="note">The council's own sensitivity table prints: "${esc(CS.assumption)}", "${esc(CS.sensitivity)}", "${esc(CS.impact)}" (${esc(CS.src)}). ${esc(R.tax_sensitivity)}</p><p class="src">${esc(R.tax_cases)} ${esc(D.ct_assumed[fy].src)}; ${esc(D.gap[fy].assumed.src)}; ${esc(D.gap[fy].alt.src)}; "${esc(F.tax_base.quote)}" (${esc(D.tax_base_growth.src)}). ${esc(D.ct_range.src)}</p>`;
+    const b = S.band, was = yi === 0 ? boro.values[b] : bandCalc(0, b), now = bandCalc(yi, b);
+    $('#bandEffect').innerHTML = `<div class="gi"><span><b>${esc(boro.label)}, Band ${b}, ${fy}</b></span><span class="v"><b>${gbp(now)}</b></span><small>${gbp(boro.values[b])} in ${BY}${yi===1?`, ${gbp(was)} in ${PY} on your choice`:''}. Change on the year before: ${now-was < -0.005 ? 'minus ' : now-was > 0.005 ? '+' : ''}${gbp(Math.abs(now-was))} a year.</small></div>` +
+      D.bands.bodies.filter(x => !x.borough).map(x => `<div class="gi"><span>${esc(x.label)}</span><span class="v">not projected</span><small>${gbp(x.values[b])} in ${BY}. This body sets its own charge.</small></div>`).join('');
+    $('#bandNote').textContent = `${R.band_rise} ${R.bands} ${boro.src}.`;
+    const chip = (el, v, zero) => { el.textContent = Math.abs(v) < 0.5 ? zero : v > 0 ? `Closes ${p0(v)}` : `Adds ${p0(-v)}`; el.className = 'closes' + (v > 0.5 ? '' : ' zero'); };
+    chip($('#tCt'), -ct, 'As the council assumes'); chip($('#tSp'), sp, 'Nothing yet'); chip($('#tRes'), rU, 'Nothing yet');
+    const parts = [{label:'Cuts', val:sp, color:TOOLCOL.sp}, {label:'Reserves, once', val:rU, color:TOOLCOL.res}];
+    const filled = parts.reduce((a,p)=>a+p.val,0), rem = Math.max(0, target-filled);
+    $('#board').innerHTML = `<div class="panel" data-s="grid-column:1 / -1"><div class="gapviz"><div class="gaphead"><span class="small muted">To close in ${fy}: ${p0(nd)}</span><b>${gap>0?p0(gap)+' to go':gap<0?p0(-gap)+' spare':'Balanced'}</b></div>
+        <div class="gapbar">${parts.filter(p=>p.val>0).map(p => `<div data-s="flex-grow:${p.val};background:${p.color}" data-tip="${esc(p.label)}: ${p0(p.val)}"></div>`).join('')}${rem>0?`<div class="rem" data-s="flex-grow:${rem}" data-tip="Still to close: ${p0(rem)}"></div>`:''}</div>
+        <div class="legend">${legendHTML(parts.map(p => ({label:`${p.label} ${p0(p.val)}`, color:p.color})).concat(rem>0?[{label:`Still to close ${p0(rem)}`, hatch:true}]:[]))}</div></div></div>
+      <div><span>The council's budget gap: ${esc(startLabel(yi))}</span><b>${startTxt}</b></div>
+      <div><span>Your council tax against the council's assumption</span><b>${signed(ct)}</b></div>
+      ${yi===1?`<div><span>Carried in from ${PY}</span><b>${signed(carry())}</b></div>`:''}
+      <div><span>Your pay, price and fee settings</span><b>${signed(dep)}</b></div>
+      <div><span>Closed by cuts</span><b>${p0(sp)}</b></div><div><span>Closed by reserves, once</span><b>${p0(rU)}</b></div>
+      <div class="left ${gap<=0?'ok':''}"><span>${gap>0?'Still to close':'Result'}</span><b>${gap>0?p0(gap):gap<0?p0(-gap)+' spare':'Balanced'}</b></div>`;
+    $('#leverLede').textContent = `By law the council must set a balanced budget. The council's own budget gap for ${fy} is ${startTxt} (${startLabel(yi)})${yi===1?`, and ${signed(carry())} is carried in from ${PY}`:''}. Council tax starts at the council's assumed rise, so nothing is moved until you move it. ${R.gap}`;
+    D.lines.forEach(l => { const el = $(`#Lv_${l.id}`); if (el) { const v = Y.cuts[l.id]||0; el.innerHTML = v ? `minus ${v}% &middot; <b>${p0(v/100*l.value)}</b>` : '0%'; } });
+    D.services.forEach((s,i) => { const el = $('#ss_'+i); if (el) { const v = D.lines.filter(l=>l.service===s.name).reduce((a,l)=>a+(Y.cuts[l.id]||0)/100*l.value,0); el.textContent = v ? `cut ${p0(v)}` : 'no change'; } });
+    blocks.forEach(b2 => { const el = $('#bs_'+b2.id); if (el) { const v = D.lines.filter(l=>l.block===b2.id).reduce((a,l)=>a+(Y.cuts[l.id]||0)/100*l.value,0); el.textContent = v ? `cut ${p0(v)}` : 'no change'; } });
+    D.reserves.levers.forEach(r => { $('#rVal_'+r.id).textContent = p0(Y.res[r.id]); $('#rMeta_'+r.id).textContent = `Leaves ${p0(resLeft(yi,r))} of the ${p0(r.value)}.`; });
+  }
+  $('#mGap').textContent = gap > 0 ? p0(gap) : gap < 0 ? p0(-gap) + ' spare' : 'Balanced';
+  $('#mLbl').textContent = (gap > 0 ? 'Gap still to close' : 'Your budget') + ` (${fy})`;
+  const parts2 = [[sp, TOOLCOL.sp], [rU, TOOLCOL.res]], sc = Math.max(target, parts2.reduce((a,p)=>a+p[0],0)) || 1;
+  $('#meter .gtrack').innerHTML = parts2.filter(p=>p[0]>0).map(p => `<div data-s="width:${p[0]/sc*100}%;background:${p[1]}"></div>`).join('');
+  $('#mSub').textContent = `Council's gap ${startTxt} · reserves left ${p0(resLeftAll(yi))}`;
+}
+
+/* ---------- 6 result ---------- */
+function yearSummary(yi){
+  const c = ctNow(yi), printed = startPrinted(yi);
+  return {fy:YEARS[yi], start:gapStart(yi), startTxt: printed ? gm3(gapStart(yi)/1e6) : p0(gapStart(yi)), carry:yi===1?carry():0, dep:dialsDep(yi), assumed:A[yi], ct:ctEffect(yi), band_d:c.band_d, band:bandCalc(yi, S.band), rate:st(yi).ct, cuts:cutsIn(yi), res:resUsed(yi), gap:gapOf(yi), left:resLeftAll(yi), dials:D.dials.map(d => `${d.label.toLowerCase()} ${st(yi).dials[d.id]}%`).join(', ')};
+}
+function renderResult(){
+  const yi = S.y, ys = [0,1].slice(0, yi+1).map(yearSummary), y = ys[yi], ok = y.gap <= 0;
+  const cutList = D.lines.filter(l => l.cuttable && cutPct(yi,l) > 0).sort((a,b)=>cutPct(yi,b)/100*b.value-cutPct(yi,a)/100*a.value);
+  const share = `Hypothetical Burnley budget game result, not a council forecast. ${ys.map(s => `${s.fy}: started from the council's budget gap of ${s.startTxt}; borough council tax ${pct(s.rate)} against the council's assumed ${s.assumed.toFixed(2)}%, Band D ${gbp(s.band_d)}; ${s.dials}; new cuts ${p0(s.cuts)}; reserves used ${p0(s.res)}; ${s.gap>0?`${p0(s.gap)} still to close`:'game balance reached'}.`).join(' ')} ${R.balance} ${R.gap} ${R.tax_points} ${R.scenario} Sources: Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals, Executive, 16 September 2026, Tables 4 and 5 and paragraph 10; Budget Book 2026/27; Council Tax Resolution 2026/27, Appendix A.`;
+  $('#result').innerHTML = `<div class="eyebrow">Step 6 of 6 &middot; Result &middot; ${y.fy}</div>
+    <div class="row"><div class="stamp ${ok?'ok':'no'}">${ok?'Game balance reached':'Not balanced'}</div></div>
+    <h2>${ok ? `Your ${y.fy} budget closes the gap` : `${p0(y.gap)} still to close in ${y.fy}`}</h2>
+    <p class="note">${esc(R.balance)} ${esc(R.gap)}</p>
+    <div class="tscroll"><table class="t"><thead><tr><th></th>${ys.map(s=>`<th class="n">${s.fy}</th>`).join('')}</tr></thead><tbody>
+      <tr><td>The council's budget gap the year starts from</td>${ys.map(s=>`<td class="n">${s.startTxt}</td>`).join('')}</tr>
+      <tr><td>Borough council tax rise (the council assumed)</td>${ys.map(s=>`<td class="n">${s.rate.toFixed(2)}% (${s.assumed.toFixed(2)}%)</td>`).join('')}</tr>
+      <tr><td>Your council tax against the council's assumption</td>${ys.map(s=>`<td class="n">${signed(s.ct)}</td>`).join('')}</tr>
+      <tr><td>Carried in from the year before</td>${ys.map((s,i)=>`<td class="n">${i?signed(s.carry):'none'}</td>`).join('')}</tr>
+      <tr><td>Your pay, price and fee settings against the council's</td>${ys.map(s=>`<td class="n">${signed(s.dep)}</td>`).join('')}</tr>
+      <tr><td>New cuts in the year</td>${ys.map(s=>`<td class="n">${p0(s.cuts)}</td>`).join('')}</tr>
+      <tr><td>Reserves used in the year, once</td>${ys.map(s=>`<td class="n">${p0(s.res)}</td>`).join('')}</tr>
+      <tr><td><b>Still to close, or spare</b></td>${ys.map(s=>`<td class="n"><b>${s.gap>0?p0(s.gap):s.gap<0?p0(-s.gap)+' spare':'Balanced'}</b></td>`).join('')}</tr>
+      <tr><td>Band D, borough's part</td>${ys.map(s=>`<td class="n">${gbp(s.band_d)}</td>`).join('')}</tr>
+      <tr><td>Band ${S.band}, borough's part</td>${ys.map(s=>`<td class="n">${gbp(s.band)}</td>`).join('')}</tr>
+      <tr><td>Left in the two reserves offered</td>${ys.map(s=>`<td class="n">${p0(s.left)}</td>`).join('')}</tr>
+    </tbody></table></div>
+    <p class="src">${esc(R.tax_points)} ${esc(R.carry)} ${esc(R.second_ct)} ${esc(R.second_year)} ${esc(R.bands)}</p>
+    <div class="grid2">
+      <div class="panel stack"><h3>Your cuts</h3>${cutList.length ? cutList.map(l => `<div class="gi"><span>${esc(svcLabel(l.service))}: ${esc(l.label)}</span><span class="v">${p0(cutPct(yi,l)/100*l.value)}</span><small>${cutPct(yi,l)}% of ${p0(l.value)}</small></div>`).join('') : '<p>No line was cut.</p>'}<p class="src">${esc(R.cut_limit)} ${esc(R.delivery)}</p></div>
+      <div class="panel stack"><h3>What the game leaves out</h3><ul class="small">${D.meta.not_held.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="src">${esc(R.reserves)}</p></div>
+    </div>
+    <div class="panel stack"><h3>Copy your result</h3><p class="small" id="shareTxt">${esc(share)}</p><div class="row"><button class="btn ghost" id="copyBtn">Copy</button><span class="muted small" id="copied"></span></div></div>`;
+  $('#copyBtn').addEventListener('click', () => { const done = () => $('#copied').textContent = 'Copied'; if (navigator.clipboard) navigator.clipboard.writeText(share).then(done, () => {}); });
+  $('#nextYearBtn').hidden = yi === 1;
+}
+$('#nextYearBtn').addEventListener('click', () => { S.y = 1; go(4); });
+$('#againBtn').addEventListener('click', () => { S.years = [blankYear(0), blankYear(1)]; S.y = 0; go(4); });
+
+/* ---------- footer and start ---------- */
+function renderFooter(){
+  $('#labelNote').textContent = R.labels;
+  $('#notHeld').innerHTML = D.meta.not_held.map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#docs').innerHTML = D.meta.docs.map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#runid').textContent = `Model run ${D.meta.model_run_id}.`;
+}
+$$('.py').forEach(e => e.textContent = PY); $$('.ny').forEach(e => e.textContent = NY); $$('.by').forEach(e => e.textContent = BY);
+$('#hdrReq').textContent = p0(D.requirement.value);
+$('#heroWaffle').innerHTML = waffleSVG(blocks.map(b => ({label:b.label, val:b.val/1e6, color:BCOL[b.colour]})), cost/1e6);
+$('#heroLegend').innerHTML = legendHTML(blocks.map(b => ({label:b.label, color:BCOL[b.colour]})));
+$('#heroCap').textContent = `Each square is 1% of the ${p0(cost)} net cost of the ${nCost} services with a net cost, ${BY}.`;
+renderStepper(); renderGuess(); renderBridge(); renderBandChips(); renderBill(); renderThisYear(); renderFooter();
+</script>
+</body></html>
