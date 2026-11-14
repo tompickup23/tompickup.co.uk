@@ -658,6 +658,87 @@ const pageTitle =
     font-weight: 600;
   }
 
+  /* A paper offered as a PDF: cover thumbnail, title, plain facts, one button. */
+  .prose :global(.paper-download) {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--teal);
+    border-radius: var(--radius-sm);
+  }
+  .prose :global(.paper-download-cover) {
+    display: block;
+    line-height: 0;
+    border: 0;
+  }
+  .prose :global(.paper-download-cover img) {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(27, 48, 53, 0.12), 0 6px 16px -6px rgba(27, 48, 53, 0.28);
+    transition: transform 0.2s ease;
+  }
+  .prose :global(.paper-download-cover:hover img) { transform: translateY(-2px); }
+  .prose :global(.paper-download-body p) { margin: 0; }
+  .prose :global(.paper-download-kicker) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .prose :global(.paper-download-title) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1875rem;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-top: 0.3rem !important;
+  }
+  .prose :global(.paper-download-meta) {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--muted);
+    margin-top: 0.4rem !important;
+  }
+  .prose :global(.paper-download-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.9rem !important;
+    font-size: 0.9375rem;
+  }
+  .prose :global(.paper-download-button) {
+    display: inline-block;
+    padding: 0.55rem 1rem;
+    background: var(--teal);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+  .prose :global(.paper-download-button:hover),
+  .prose :global(.paper-download-button:focus-visible) {
+    background: var(--teal-deep);
+    color: #fff;
+  }
+  @media (max-width: 520px) {
+    .prose :global(.paper-download) {
+      grid-template-columns: 76px 1fr;
+      align-items: start;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .prose :global(.paper-download-title) { font-size: 1.0625rem; }
+  }
+
   .prose :global(.shareable-assets) {
     margin: 1rem auto;
     max-width: 360px;
