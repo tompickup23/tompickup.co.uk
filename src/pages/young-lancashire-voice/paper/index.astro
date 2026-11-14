@@ -1,0 +1,30 @@
+---
+// Young Lancashire Voice on paper: the list of printable meeting sheets, one per subject.
+// A paper twin of the game for a room with no screen. Draft, noindex, out of the sitemap
+// (astro.config.mjs filters /young-lancashire-voice/). No script, nothing collected.
+import Layout from '../../../layouts/Layout.astro';
+import { PROTOTYPE_NOTICE } from '../../../data/prototype-notice';
+import M from '../../../data/young-lancashire-voice/motions.json';
+import '../../../styles/paper.css';
+
+const title = 'Young Lancashire Voice on paper';
+const description = 'Printable sheets for running the Young Lancashire Voice council meeting with no screen. A prototype; nobody collects the sheets.';
+---
+
+<Layout title={`${title}: prototype | Tom Pickup`} description={description} breadcrumbLabel="On paper" noindex>
+  <div class="paper-wrap">
+    <div class="paper-screen">
+      <p class="paper-note" role="note"><b>Prototype</b>Built by Tom Pickup for his own website. Not a council service and not part of the UK Youth Parliament. {PROTOTYPE_NOTICE}</p>
+      <p class="paper-eyebrow"><a href="/young-lancashire-voice/">Young Lancashire Voice</a></p>
+      <h1>The meeting, on paper</h1>
+      <p>No screen in the room? Each sheet below is two sides of A4: a motion to fill in, the order of the meeting, the roles, a place to count the show of hands and questions to talk over afterwards.</p>
+      <p>On paper you can write the motion in your own words. Nobody collects the sheet: it stays in your room.</p>
+      <p>Pick the subject your class wants to change.</p>
+      <ul class="paper-list">
+        {M.subjects.map((s) => (
+          <li><a href={`/young-lancashire-voice/paper/${s.id}/`}><b>{s.name}</b><span>{s.service}</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Layout>

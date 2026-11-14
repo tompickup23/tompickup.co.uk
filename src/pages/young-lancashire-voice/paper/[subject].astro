@@ -1,0 +1,133 @@
+---
+// Young Lancashire Voice on paper: one printable meeting sheet per subject (two sides of A4).
+// A paper twin of the game. The motion parts come from motions.json and the order of business,
+// roles and questions from meeting.json, the same files the game reads, so the two cannot drift.
+// Draft, noindex, out of the sitemap. Nothing is collected: the only script opens the print dialog.
+import Layout from '../../../layouts/Layout.astro';
+import { PROTOTYPE_NOTICE } from '../../../data/prototype-notice';
+import { imprint as imp } from '../../../data/imprint';
+import M from '../../../data/young-lancashire-voice/motions.json';
+import MEET from '../../../data/young-lancashire-voice/meeting.json';
+import '../../../styles/paper.css';
+
+export function getStaticPaths() {
+  return M.subjects.map((s) => ({ params: { subject: s.id }, props: { s } }));
+}
+const { s } = Astro.props;
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+const title = `${s.name}: on paper`;
+const description = `A printable Young Lancashire Voice meeting sheet on ${s.name.toLowerCase()}. A prototype; nobody collects the sheet.`;
+const imprintLine = imp.show
+  ? `Promoted by ${imp.promoter} on behalf of ${imp.onBehalfOf}, both at ${imp.address}${imp.party ? `, and by ${imp.party}` : ''}.`
+  : '';
+const votes = ['The report', 'The amendment', 'The motion'];
+---
+
+<Layout title={`${title} | Tom Pickup`} description={description} breadcrumbLabel={s.name} noindex>
+  <div class="paper-wrap">
+    <div class="paper-screen">
+      <p class="paper-note" role="note"><b>Prototype</b>Built by Tom Pickup for his own website. Not a council service and not part of the UK Youth Parliament. {PROTOTYPE_NOTICE}</p>
+      <p class="paper-eyebrow"><a href="/young-lancashire-voice/">Young Lancashire Voice</a> · <a href="/young-lancashire-voice/paper/">On paper</a></p>
+      <h1>{s.name}</h1>
+      <p>This sheet prints on two sides of A4. Only the sheet prints, not this page's header or these notes.</p>
+      <p><button type="button" class="paper-btn" id="paper-print" hidden>Print this sheet</button> <span id="paper-how">Use your browser's Print command to print it.</span></p>
+    </div>
+
+    <article class="paper" aria-label="The printable sheet">
+      <section class="paper-side">
+        <p class="paper-top"><span>Young Lancashire Voice · on paper</span><span>Notice of Motion · {s.service}</span></p>
+        <h2>{s.name}</h2>
+        <p>Your class is the county council for one meeting. Fill in the motion together. Tick the words you want, or write your own.</p>
+
+        <h3>This Council notes that</h3>
+        <ul class="paper-ticks">
+          {s.notes.map((n) => <li><span class="paper-box"></span><span>{cap(n)}.</span></li>)}
+          <li><span class="paper-box"></span><span>In our own words:<span class="paper-rule"></span></span></li>
+        </ul>
+
+        <h3>This Council resolves to</h3>
+        <ul class="paper-ticks">
+          {s.actions.map((a) => <li><span class="paper-box"></span><span>{cap(a)}.</span></li>)}
+          <li><span class="paper-box"></span><span>In our own words:<span class="paper-rule"></span></span></li>
+        </ul>
+
+        <h3>Paid for</h3>
+        <ul class="paper-ticks">
+          {M.money.map((m) => <li><span class="paper-box"></span><span>{cap(m)}.</span></li>)}
+        </ul>
+
+        <p>Moved by <span class="paper-fill"></span> Seconded by <span class="paper-fill"></span></p>
+
+        <h3>A county council does not decide everything</h3>
+        <div class="paper-table-wrap">
+          <table>
+            <thead><tr><th>If you want to change</th><th>Ask</th></tr></thead>
+            <tbody>
+              {M.elsewhere.map((e) => <tr><td>{e.want}</td><td>{e.who}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The show of hands</h3>
+        <div class="paper-table-wrap">
+          <table>
+            <thead><tr><th>Vote on</th><th>For</th><th>Against</th><th>Not voting</th><th>Carried or lost</th></tr></thead>
+            <tbody>
+              {votes.map((v) => <tr><td class="w">{v}</td><td class="n"></td><td class="n"></td><td class="n"></td><td></td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <p>If the votes are equal, the Chairman has one more vote to settle it. This is called the casting vote.</p>
+
+        <div class="paper-foot">
+          <p>A prototype made by Tom Pickup for tompickup.co.uk. Not a council service. Nobody collects this sheet. {PROTOTYPE_NOTICE}</p>
+          {imprintLine && <p>{imprintLine}</p>}
+        </div>
+      </section>
+
+      <section class="paper-side">
+        <p class="paper-top"><span>Young Lancashire Voice · on paper</span><span>{s.name}</span></p>
+        <h2>Running the meeting</h2>
+
+        <h3>The order of the meeting</h3>
+        <ul class="paper-ticks paper-two">
+          {MEET.agenda.map((a, i) => <li><span class="paper-box"></span><span><b>{i + 1}. {a[0]}.</b> {a[1]}.</span></li>)}
+        </ul>
+
+        <h3>Who does what</h3>
+        <div class="paper-table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>What they do</th><th>Who</th></tr></thead>
+            <tbody>
+              {MEET.roles.map((r) => <tr><td class="w">{r[0]}</td><td>{r[2] ?? r[1]}</td><td class="n"></td></tr>)}
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Talk it over afterwards</h3>
+        <ul class="paper-ticks">
+          {MEET.debrief.map((q) => <li><span class="paper-box"></span><span>{q}</span></li>)}
+        </ul>
+
+        <h3>Reporters: what did the meeting decide?</h3>
+        <span class="paper-rule"></span>
+        <span class="paper-rule"></span>
+
+        <div class="paper-foot">
+          <p>The rules of the real meeting, with their sources, are on the How it works screen at tompickup.co.uk/young-lancashire-voice/</p>
+          {imprintLine && <p>{imprintLine}</p>}
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>
+
+<script>
+  // Show the button only when a script can run; otherwise the plain instruction stays.
+  const b = document.getElementById('paper-print');
+  if (b) {
+    b.hidden = false;
+    document.getElementById('paper-how')?.setAttribute('hidden', '');
+    b.addEventListener('click', () => window.print());
+  }
+</script>
