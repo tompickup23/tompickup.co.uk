@@ -19,7 +19,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
   title={`${title}: a training simulator | Tom Pickup`}
   description={description}
   ogImage={ogImage}
-  ogImageAlt="Lancashire Voice, a prototype engagement platform"
+  ogImageAlt="Budget Council, a prototype training simulator for councillors"
   ogImageWidth={1200}
   ogImageHeight={630}
   breadcrumbLabel={title}
@@ -40,7 +40,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     </header>
     <main id="bc-app" class="bc-app">
       <noscript>
-        <p>This simulator needs JavaScript. In short: you prepare for and sit through Lancashire County Council's Budget Meeting, as the Administration or an opposition group, using the real papers and amendments from 26 February 2026.</p>
+        <p>This simulator needs JavaScript. In short: you prepare for and sit through Lancashire County Council's Budget Meeting, as the Administration or an opposition group, using the real papers and amendments from 26 February 2026, with today's group sizes.</p>
       </noscript>
     </main>
     <p class="bc-sr" id="bc-sr" aria-live="polite"></p>
@@ -66,8 +66,8 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
 
   /* ---- words a councillor may want explained. [name, pattern, meaning] ---- */
   const TERMS = [
-    ['Section 151 Officer', 'Section 151 Officer|Chief Financial Officer|Director of Finance', 'The officer legally responsible for the council\'s finances. They must report on the budget, and approve any alternative budget before it can be moved.'],
-    ['Section 25 report', 'Section 25 report|Section 25', 'The finance officer\'s report, required by law, on whether the budget\'s estimates are robust and its reserves adequate.'],
+    ['Section 151 Officer', 'Section 151 Officer|Chief Financial Officer|Director of Finance', 'The officer legally responsible for the council\'s finances. They must report on the budget, and approve any alternative budget before it can be moved. The council\'s Standing Orders call this post the Chief Financial Officer.'],
+    ['Section 25 report', 'Section 25 report|Section 25', 'The Section 151 Officer\'s report, required by law, on whether the budget\'s estimates are robust and its reserves adequate.'],
     ['Monitoring Officer', 'Monitoring Officer', 'The officer responsible for the council acting lawfully and for the code of conduct.'],
     ['Revenue Support Grant', 'Revenue Support Grant', 'General government grant to the council. The final settlement for 2026/27 gave more than expected, and that extra became the money most amendments spent.'],
     ['Strategic Contingency', 'Strategic Contingency', 'Where the extra grant from the final settlement was held in the Budget, not yet allocated.'],
@@ -259,9 +259,9 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
         : `<button type="button" data-side="${id}" aria-pressed="${S.side === id}"><b>${esc(G[id].short)}</b><span>${G[id].seats} seats. You lead the group: you move its amendment, or make a statement.</span></button>`;
       return `<section class="bc-two">
         <div class="bc-stack">
-          <p class="bc-lede">Every February, Lancashire's 84 county councillors meet to set the next year's budget and council tax. It is the most rule-bound meeting of the year. This simulator puts you in it, using the real papers and the five real opposition amendments from 26 February 2026, in today's chamber.</p>
+          <p class="bc-lede">Miss the deadline by a day and your amendment is never debated. Every February, Lancashire's 84 county councillors set the budget and council tax under rules of their own. This simulator puts you in that meeting, with the real papers and the five real opposition amendments from 26 February 2026, and today's group sizes.</p>
           <ol class="bc-steps">
-            <li><b>The week before.</b> Build or choose your amendment, get the finance officer's approval, decide when to share it and who to talk to.</li>
+            <li><b>The week before.</b> Build or choose your amendment, get the Section 151 Officer's approval, decide when to share it and who to talk to.</li>
             <li><b>The meeting.</b> Declarations, the Budget moved, each group's amendment debated and put to a recorded vote, then the Budget itself.</li>
             <li><b>The debrief.</b> What moved votes, what you could have done differently, and what really happened on the night.</li>
           </ol>
@@ -296,7 +296,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
         <div class="bc-m-room">${roomBox}<ol class="bc-agenda" aria-label="Agenda">${meetingNow ? ag : `<li class="on"><b>The week before the meeting</b></li>`}</ol>${meters(s)}</div>
         <div class="bc-stack bc-m-words">
           <p class="bc-eyebrow">${s.role === 'admin' ? 'Administration' : esc(G[s.group].short)} · ${esc(agendaName(v.item))} · Meeting ${s.seed}</p>
-          ${v.say ? `<div class="bc-screen" id="bc-screen">${who ? `<span class="who">${esc(who)}</span>` : ''}<q>${words(v.say)}</q></div>` : ''}
+          ${v.say ? `<div class="bc-screen" id="bc-screen">${who ? `<span class="who">${esc(who)}<small> · words written for the simulator</small></span>` : ''}<q>${words(v.say)}</q></div>` : ''}
           ${v.plain ? `<p class="bc-plain">${words(v.plain)}</p>` : ''}
           <p class="bc-def" id="bc-def" role="status"></p>
           ${v.kind === 'build' ? builder(s) : ''}
@@ -502,6 +502,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
   .bc-agenda li.on { border-color: var(--teal); background: var(--panel); color: var(--ink); }
   .bc-agenda li.done b { text-decoration: line-through; font-weight: 600; }
   .bc-screen { background: #10201d; color: #fff; border-radius: var(--radius-xl); padding: 18px 20px; border-bottom: 5px solid #24509c; display: grid; gap: 8px; }
+  .bc-screen .who small { font-size: 0.86em; letter-spacing: 0.04em; text-transform: none; font-weight: 400; color: #c9d3cf; }
   .bc-screen .who { font: 600 0.8rem/1.2 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; color: #d9bd83; }
   .bc-screen q { font: 600 1.18rem/1.45 var(--font-display); quotes: '\201C' '\201D'; }
   .bc-screen .bc-term { color: #fff; }

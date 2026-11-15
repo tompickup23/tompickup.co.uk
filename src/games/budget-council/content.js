@@ -15,10 +15,10 @@ const THEME = {
 export function whoLabel(key, s, api) {
   const g = (id) => api.G[id]?.short || id;
   const map = {
-    chair: 'The Chairman', ce: 'The Chief Executive', mo: 'The Monitoring Officer', s151: 'The Director of Finance (Section 151 Officer)',
+    chair: 'The Chairman', ce: 'The Chief Executive', mo: 'The Monitoring Officer', s151: 'The Section 151 Officer (Director of Finance)',
     leader: 'The Leader of the Council', cm: s.role === 'admin' ? 'You, the Cabinet Member for Resources' : 'The Cabinet Member for Resources',
     me: s.role === 'admin' ? 'You, the Cabinet Member for Resources' : `You, Leader of the ${g(s.group)} Group`,
-    heckler: 'A councillor on the Administration benches', seconder: `Your seconder, ${g(s.group)} Group`, you: 'You', narrator: '',
+    heckler: s.role === 'admin' ? 'A councillor on the opposition benches' : 'A councillor across the chamber', seconder: `Your seconder, ${g(s.group)} Group`, you: 'You', narrator: '',
     group: 'Your group meeting', officer: 'An officer',
   };
   if (map[key] != null) return map[key];
@@ -70,12 +70,12 @@ function leaderStance(s, api, h) {
 const MINE = [
   {
     id: 'whopays', who: 'heckler', weight: (s) => 3 + (s.v.mood < 0 ? 3 : 0),
-    say: 'Councillor on the Administration benches, from a sedentary position: "And who pays for all this?"',
+    say: 'A councillor across the chamber calls out, without being called to speak: "And who pays for all this?"',
     plain: 'A heckle is not a question you have to answer. If you answer, do it through the Chair, and with a figure.',
     choices: [
       { id: 'figure', label: 'Answer through the Chair, with the figure from your funding table', fx: (s, a) => { a.add(s, 'cred', 6, 'You answered the heckle through the Chair with your own funding figures.'); a.score(s, 'faith', 1, 'You answered the question that was asked.'); a.lean(s, myQ(s), 'con', 3, 'Conservative members noted a costed answer.'); } },
       { id: 'ignore', label: 'Ignore it and carry on', fx: (s, a) => { a.add(s, 'chair', 0); a.score(s, 'proc', 1, 'You did not rise to a heckle.'); } },
-      { id: 'back', label: 'Shout back across the chamber', fx: (s, a) => { a.add(s, 'mood', -1, 'You traded shouts across the chamber.'); a.add(s, 'chair', -1, 'The Chairman had to call for order after your exchange.'); a.score(s, 'faith', -1, 'You answered a heckle with a heckle.'); } },
+      { id: 'back', label: 'Answer it straight back from your seat: "From the grant you are sitting on"', fx: (s, a) => { a.add(s, 'mood', -1, 'You traded shouts across the chamber.'); a.add(s, 'chair', -1, 'The Chairman had to call for order after your exchange.'); a.score(s, 'faith', -1, 'You answered a heckle with a heckle.'); } },
     ],
   },
   {
@@ -87,7 +87,7 @@ const MINE = [
     choices: [
       { id: 's25', label: 'Point to the Section 151 Officer\'s written statement on your amendment', when: (s) => s.amend.s151 === 'approved', fx: (s, a) => { a.add(s, 'cred', 6, 'You cited the Section 151 Officer\'s statement on your amendment.'); a.lean(s, myQ(s), 'con', 4, 'The written statement reassured Conservative members.'); a.lean(s, myQ(s), 'owl', 4, 'The written statement reassured Our West Lancashire members.'); } },
       { id: 'review', label: 'Accept the point is fair and say your group would review it in year', fx: (s, a) => { a.score(s, 'faith', 1, 'You conceded a fair point instead of denying it.'); a.add(s, 'mood', 1, 'The chamber warmed to an honest answer.'); } },
-      { id: 'dismiss', label: 'Say the Administration has no lessons to give anyone', fx: (s, a) => { a.add(s, 'cred', -6, 'You dismissed a money question instead of answering it.'); a.score(s, 'faith', -1, 'You avoided the question.'); } },
+      { id: 'dismiss', label: 'Turn it round: ask what the Administration plans for that year', fx: (s, a) => { a.add(s, 'cred', -6, 'You dismissed a money question instead of answering it.'); a.score(s, 'faith', -1, 'You avoided the question.'); } },
     ],
   },
   {
@@ -102,11 +102,11 @@ const MINE = [
   },
   {
     id: 'pointoforder', who: 'heckler', weight: () => 2,
-    say: 'A councillor on the Administration benches says your group voted against road repairs last year. You are sure that is wrong.',
+    say: 'A councillor across the chamber says, in passing, that your group voted against road repairs last year. You are sure that is wrong.',
     plain: 'A point of order is about the rules, and must name the Standing Order broken (Standing Order 19). Disagreeing with a fact is not one. If you have been misrepresented, you can ask for a point of personal explanation (Standing Order 18).',
     choices: [
-      { id: 'po', label: 'Rise on a point of order, without naming a Standing Order', fx: (s, a) => { a.add(s, 'chair', -1, 'The Chairman refused a point of order that named no Standing Order.'); a.score(s, 'proc', -2, 'A disagreement is not a point of order.'); } },
-      { id: 'pe', label: 'Ask for a point of personal explanation, as you were misrepresented', fx: (s, a) => { a.score(s, 'proc', 1, 'You used the right procedure for a misrepresentation.'); a.add(s, 'cred', 3, 'You corrected the record briefly.'); } },
+      { id: 'po', label: 'Rise on a point of order', fx: (s, a) => { a.add(s, 'chair', -1, 'The Chairman refused a point of order that named no Standing Order.'); a.score(s, 'proc', -2, 'A disagreement is not a point of order.'); } },
+      { id: 'pe', label: 'Ask for a point of personal explanation', fx: (s, a) => { a.score(s, 'proc', 1, 'You used the right procedure for a misrepresentation.'); a.add(s, 'cred', 3, 'You corrected the record briefly.'); } },
       { id: 'speech', label: 'Let it go now and correct it in your reply', fx: (s, a) => { a.flag(s, 'correct_in_reply'); a.score(s, 'proc', 1, 'You kept your correction for your right of reply.'); } },
     ],
   },
@@ -125,7 +125,7 @@ const MINE = [
     plain: 'A member who has an interest must declare it when the item comes up. Declaring late is better than not at all.',
     choices: [
       { id: 'declare', label: 'Apologise, and declare the interest now', fx: (s, a) => { a.flag(s, 'declared_late', 'You declared your interest late, when challenged.'); a.score(s, 'proc', -1, 'You declared late.'); a.add(s, 'cred', -4, 'The late declaration cost you some standing.'); } },
-      { id: 'deny', label: 'Say it is nobody\'s business', fx: (s, a) => { a.flag(s, 'named', 'You refused to declare an interest when challenged.'); a.add(s, 'chair', -3, 'The Chairman warned you about your conduct.'); a.score(s, 'proc', -3, 'You refused to declare an interest.'); } },
+      { id: 'deny', label: 'Say it is not an interest the code requires you to declare', fx: (s, a) => { a.flag(s, 'named', 'You refused to declare an interest when challenged.'); a.add(s, 'chair', -3, 'The Chairman warned you about your conduct.'); a.score(s, 'proc', -3, 'You refused to declare an interest.'); } },
     ],
   },
 ];
@@ -139,11 +139,11 @@ const THEIRS = [
       { id: 'speak', label: 'Speak in support of it', fx: (s, a, h) => { a.lean(s, myQ(s), h, 6, `You spoke for the ${a.G[h].short} amendment, and they remembered.`); a.lean(s, 'am_' + h, s.group, 6); a.add(s, 'mood', 1, 'A generous speech helped the mood.'); } },
       { id: 'question', label: 'Ask the mover how it is paid for in the third year', fx: (s, a, h) => { a.add(s, 'cred', 3, 'You asked a fair question about another group\'s money.'); a.score(s, 'faith', 1, 'You tested an amendment on its merits.'); } },
       { id: 'sit', label: 'Stay seated', fx: (s, a) => { a.add(s, 'chair', 0); s.clock -= 4; } },
-      { id: 'attack', label: 'Speak against it, to set your own amendment apart', fx: (s, a, h) => { a.lean(s, myQ(s), h, -8, `You attacked the ${a.G[h].short} amendment, and they remembered.`); a.add(s, 'mood', -1, 'Opposition groups fighting each other pleased only the Administration benches.'); } },
+      { id: 'attack', label: 'Speak against it, to set your own amendment apart', fx: (s, a, h) => { a.lean(s, myQ(s), h, -8, `You attacked the ${a.G[h].short} amendment, and they remembered.`); a.add(s, 'mood', -1, 'Speaking against another opposition group\'s amendment cost you goodwill with that group.'); } },
     ],
   },
   {
-    id: 'asks_cm', who: (s, a, h) => 'opp:' + h, when: (s) => s.role === 'admin', weight: () => 5,
+    id: 'asks_cm', who: (s, a, h) => 'opp:' + h, when: (s) => s.role === 'admin', weight: () => 9,
     say: (s, a, h) => `Chairman, I ask the Cabinet Member a simple question: if this amendment falls tonight, will the Administration look again at ${THEME[a.amendments.parts[a.amendments.amendments[h].parts[0]].theme]} during the year?`,
     plain: 'A direct question in debate is a test. A commitment goes in the minutes and is remembered; a refusal is remembered too.',
     choices: [
@@ -153,12 +153,33 @@ const THEIRS = [
     ],
   },
   {
+    // The Administration side gets heckled too: disruption is not one side's habit.
+    id: 'heckle_admin', who: 'heckler', when: (s) => s.role === 'admin', weight: (s) => 3 + (s.v.mood < 0 ? 3 : 0),
+    say: 'A councillor on the opposition benches calls out, without being called to speak: "And what happens to the people who rely on those services?"',
+    plain: 'A heckle is not a question you have to answer. If you answer, do it through the Chair, and with a figure from the papers.',
+    choices: [
+      { id: 'figure', label: 'Answer through the Chair, with the figure from the papers', fx: (s, a) => { a.add(s, 'cred', 5, 'You answered a heckle through the Chair with the papers\' figures.'); a.score(s, 'faith', 1, 'You answered the question that was asked.'); } },
+      { id: 'ignore', label: 'Carry on with your point', fx: (s, a) => a.score(s, 'proc', 1, 'You did not rise to a heckle.') },
+      { id: 'back', label: 'Answer it straight back from your seat: "Ask your own group what it voted for"', fx: (s, a) => { a.add(s, 'mood', -1, 'You traded remarks across the chamber.'); a.add(s, 'chair', -1, 'The Chairman had to call for order after your exchange.'); a.score(s, 'faith', -1, 'You answered a heckle with a heckle.'); } },
+    ],
+  },
+  {
+    id: 'po_admin', who: 'heckler', when: (s) => s.role === 'admin', weight: () => 2,
+    say: 'A councillor on the opposition benches says, in passing, that the Administration has cut every road budget this year. You are sure that is wrong.',
+    plain: 'A point of order is about the rules, and must name the Standing Order broken (Standing Order 19). Disagreeing with a fact is not one. If you have been misrepresented, you can ask for a point of personal explanation (Standing Order 18).',
+    choices: [
+      { id: 'po', label: 'Rise on a point of order', fx: (s, a) => { a.add(s, 'chair', -1, 'The Chairman refused a point of order that named no Standing Order.'); a.score(s, 'proc', -2, 'A disagreement is not a point of order.'); } },
+      { id: 'pe', label: 'Ask for a point of personal explanation', fx: (s, a) => { a.score(s, 'proc', 1, 'You used the right procedure for a misrepresentation.'); a.add(s, 'cred', 3, 'You corrected the record briefly.'); } },
+      { id: 'leave', label: 'Leave it for the Leader to answer in reply', fx: (s, a) => { a.score(s, 'proc', 1, 'You left the correction to the right of reply.'); a.add(s, 'disc.reform', 1); } },
+    ],
+  },
+  {
     id: 'closure', who: 'back:reform', when: (s) => s.clock > 170, weight: (s) => 2 + Math.floor(s.clock / 60),
     say: 'Chairman, I move that the question be now put.',
     plain: 'A closure motion (Standing Order 45) can only be moved by someone who has not spoken. The Chairman decides whether the item has been sufficiently discussed before putting it to the vote.',
     choices: [
-      { id: 'accept', label: 'Accept it: the arguments have been made', fx: (s, a) => { s.clock -= 10; a.score(s, 'proc', 1, 'You knew when a debate had run its course.'); } },
-      { id: 'object', label: 'Object loudly that the opposition is being gagged', fx: (s, a) => { a.add(s, 'chair', -1, 'The Chairman had to restore order over the closure motion.'); a.add(s, 'mood', -1, 'Tempers rose over the closure motion.'); } },
+      { id: 'accept', label: 'Do not object', fx: (s, a) => { s.clock -= 10; a.score(s, 'proc', 1, 'You knew when a debate had run its course.'); } },
+      { id: 'object', label: 'Rise to say some groups have not yet been heard on this item', fx: (s, a) => { a.add(s, 'chair', -1, 'The Chairman had to restore order over the closure motion.'); a.add(s, 'mood', -1, 'Tempers rose over the closure motion.'); } },
     ],
   },
   {
@@ -167,7 +188,7 @@ const THEIRS = [
     plain: 'The Chairman decides what is relevant, and their ruling is final (Standing Order 12). Members who keep to the point keep the Chairman\'s patience.',
     choices: [
       { id: 'nod', label: 'Nod, and make a note to keep your own remarks on the budget', fx: (s, a) => { a.score(s, 'proc', 1, 'You noted the Chairman\'s ruling on relevance.'); } },
-      { id: 'heckle', label: 'Call out "let them speak!"', fx: (s, a) => { a.add(s, 'chair', -1, 'You heckled the Chairman\'s ruling.'); } },
+      { id: 'heckle', label: 'Call out that the member is entitled to make the point', fx: (s, a) => { a.add(s, 'chair', -1, 'You heckled the Chairman\'s ruling.'); } },
     ],
   },
 ];
@@ -224,9 +245,9 @@ export function getBeat(id, s, api) {
     return {
       phase: 'prep', kind: 'build', who: 'narrator', mins: 0,
       say: 'Choose what your amendment would do. Every part is costed from an amendment a group really moved on 26 February.',
-      plain: 'The running balance must be zero or better in all three years, or the Chief Financial Officer cannot approve it (Standing Order 4.3). Spending that carries on into 2028/29 is the hard part: the extra grant runs out.',
+      plain: 'The running balance must be zero or better in all three years, or the Section 151 Officer cannot approve it (Standing Order 4.3). Spending that carries on into 2028/29 is the hard part: the extra grant runs out.',
       choices: [
-        { id: 'done', label: 'Take it to the Chief Financial Officer', when: (s, a) => !a.build(s).empty, fx: (s, a) => { const b = a.build(s); a.flag(s, b.balanced ? 'built_balanced' : 'built_gap', b.balanced ? 'Your amendment balanced in all three years.' : 'Your amendment did not balance in every year.'); }, go: 'prep:cfo' },
+        { id: 'done', label: 'Take it to the Section 151 Officer', when: (s, a) => !a.build(s).empty, fx: (s, a) => { const b = a.build(s); a.flag(s, b.balanced ? 'built_balanced' : 'built_gap', b.balanced ? 'Your amendment balanced in all three years.' : 'Your amendment did not balance in every year.'); }, go: 'prep:cfo' },
         { id: 'real', label: 'Use your group\'s real amendment instead', fx: (s, a) => { s.amend.kind = 'real'; s.amend.parts = realParts(a, s.group).slice(); a.flag(s, 'real'); }, go: 'prep:cfo' },
       ],
     };
@@ -245,7 +266,7 @@ export function getBeat(id, s, api) {
           s.amend.s151 = 'approved'; a.add(s, 'cred', 8, 'The Section 151 Officer approved your amendment in writing.'); a.score(s, 'proc', 2, 'You got written approval before the deadline.');
           if (b.usesSc) a.flag(s, 'sc_risk', 'The officer approved it but noted it draws on the savings delivery contingency.');
         }, go: (s) => s.amend.s151 === 'refused' ? 'prep:cfo_fix' : 'prep:notice' },
-        { id: 'skip', label: 'No: you are confident it adds up', fx: (s, a) => { s.amend.s151 = 'none'; a.flag(s, 'no_cfo', 'You did not get the Chief Financial Officer\'s written approval.'); }, go: 'prep:notice' },
+        { id: 'skip', label: 'No: you are confident it adds up', fx: (s, a) => { s.amend.s151 = 'none'; a.flag(s, 'no_cfo', 'You did not get the Section 151 Officer\'s written approval.'); }, go: 'prep:notice' },
       ],
     };
   }
@@ -294,7 +315,7 @@ export function getBeat(id, s, api) {
             if (!s.allyFor && (a.data.minutes.votes.find((v) => v.id === s.group)?.byGroup.for[g] || 0) + theirs > 0) s.allyFor = g;
           },
         })),
-        { id: 'cm', label: 'The Cabinet Member for Resources', when: (s) => !asked.includes('cm') && s.amend.kind !== 'none', fx: (s, a) => { (s.asked ||= []).push('cm'); a.flag(s, 'briefed_cm', 'You briefed the Cabinet Member for Resources before the meeting.'); a.add(s, 'cred', 5, 'Briefing the Administration privately showed you wanted the ideas, not just the headline.'); } },
+        { id: 'cm', label: 'The Cabinet Member for Resources', when: (s) => !asked.includes('cm') && s.amend.kind !== 'none', fx: (s, a) => { (s.asked ||= []).push('cm'); a.flag(s, 'briefed_cm', 'You briefed the Cabinet Member for Resources before the meeting.'); a.add(s, 'cred', 5, 'Briefing the Administration privately gave them time to consider your ideas.'); } },
         { id: 'none', label: 'Nobody: spend the time on your speech', fx: (s, a) => { (s.asked ||= []).push('none' + round); a.add(s, 'cred', 3, 'You spent the time preparing your figures.'); } },
       ],
       next: round === 1 ? 'prep:allies2' : 'prep:group',
@@ -344,10 +365,10 @@ export function getBeat(id, s, api) {
     return {
       phase: 'prep', who: 'narrator', mins: 0,
       say: 'Five opposition amendments are in. Two will not be shared with you until the meeting begins, as the rules allow. How do you prepare?',
-      plain: 'Each one has a written statement from the Section 151 Officer. Every one in February said much the same: it moves money around, and makes no appreciable difference to the council\'s financial resilience.',
+      plain: 'Each one has a written statement from the Section 151 Officer. In February, four said it "makes no appreciable impact on the financial resilience of the Council". The fifth, on the Our West Lancashire amendment, said it "presents no additional risks to the Council\'s Budget between 2026/27 and 2028/29".',
       choices: [
         { id: 'officers', label: 'Ask officers to brief your group on each amendment as it arrives', fx: (s, a) => { a.add(s, 'cred', 6, 'Your group knew what each amendment did.'); a.flag(s, 'prepared'); } },
-        { id: 'lines', label: 'Prepare attack lines on the late ones', fx: (s, a) => { a.flag(s, 'attack_lines'); a.add(s, 'disc.reform', 3, 'Attack lines rallied your group.'); } },
+        { id: 'lines', label: 'Prepare your group\'s lines on the two late ones from what you already know', fx: (s, a) => { a.flag(s, 'attack_lines'); a.add(s, 'disc.reform', 3, 'Prepared lines steadied your group.'); } },
       ],
       next: 'prep:a_attend',
     };
@@ -408,7 +429,7 @@ export function getBeat(id, s, api) {
     };
     if (s.personal === 'arrears') return { ...base, plain: 'Your direct debit failed in November and you missed the email. You are now more than two months behind. What do you do?', choices: [
       { id: 'declare', label: 'Rise and say so: you will speak but not vote', fx: (s, a) => { a.flag(s, 'arrears_declared', 'You declared council tax arrears and gave up your vote, as the law requires.'); a.score(s, 'proc', 2, 'You complied with section 106.'); } },
-      { id: 'quiet', label: 'Say nothing and settle it next week', fx: (s, a) => { a.flag(s, 'arrears_hidden', 'You voted while in council tax arrears.'); a.score(s, 'proc', -5, 'Voting in arrears breaks section 106 of the Local Government Finance Act 1992.'); } },
+      { id: 'quiet', label: 'Say nothing: the payment is already going through', fx: (s, a) => { a.flag(s, 'arrears_hidden', 'You voted while in council tax arrears.'); a.score(s, 'proc', -5, 'Voting in arrears breaks section 106 of the Local Government Finance Act 1992.'); } },
     ] };
     if (s.personal === 'interest') return { ...base, plain: 'A close relative of yours lives in one of the care homes named in the savings consultation. What do you do?', choices: [
       { id: 'declare', label: 'Declare a non-pecuniary interest, and stay to take part', fx: (s, a) => { a.flag(s, 'declared', 'You declared your interest at the start.'); a.score(s, 'proc', 2, 'You declared the interest at the right time.'); } },
@@ -453,13 +474,13 @@ export function getBeat(id, s, api) {
           ], next: (s, a) => nextGroupBeat(s, a, h) };
       }
       if (mine && ruledOut(s)) {
-        const why = s.amend.notice === 'late' ? 'it was not received five clear working days before the meeting' : 'it does not have the Chief Financial Officer\'s written approval';
+        const why = s.amend.notice === 'late' ? 'it was not received five clear working days before the meeting' : 'it does not have the Section 151 Officer\'s written approval';
         return { ...base, who: 'chair', mins: 4, rule: s.amend.notice === 'late' ? 'notice' : 'lawfulForm',
           say: `I am advised that the ${g.short} Group amendment cannot be moved, because ${why}. The Leader of the group may make a statement instead.`,
           plain: 'The rule is strict: late or unapproved alternative budgets are not allowed (Standing Order 4.2 and 4.3). The Chairman has no discretion to let it through.',
           choices: [
             { id: 'accept', label: 'Accept the ruling, and make a statement setting out your ideas', fx: (s, a) => { a.flag(s, 'ruled_out'); a.score(s, 'proc', 1, 'You accepted the Chairman\'s ruling.'); a.add(s, 'cred', 2); } },
-            { id: 'argue', label: 'Argue with the Chairman', fx: (s, a) => { a.flag(s, 'ruled_out'); a.add(s, 'chair', -2, 'You argued with the Chairman\'s ruling, which is final.'); a.score(s, 'proc', -2, 'The Chairman\'s ruling is final (Standing Order 12).'); a.add(s, 'mood', -1); } },
+            { id: 'argue', label: 'Ask the Chairman to reconsider, as the officers had the amendment in time', fx: (s, a) => { a.flag(s, 'ruled_out'); a.add(s, 'chair', -2, 'You argued with the Chairman\'s ruling, which is final.'); a.score(s, 'proc', -2, 'The Chairman\'s ruling is final (Standing Order 12).'); a.add(s, 'mood', -1); } },
           ], next: (s, a) => nextGroupBeat(s, a, h) };
       }
       if (mine) {
@@ -510,7 +531,7 @@ export function getBeat(id, s, api) {
           { id: 'money', label: 'Answer the hardest question raised, about the money', fx: (s, a) => { a.add(s, 'cred', 6, 'Your reply answered the money question.'); a.lean(s, myQ(s), 'con', 4); a.lean(s, myQ(s), 'owl', 4); a.score(s, 'faith', 1, 'You answered the debate, not just repeated your speech.'); } },
           { id: 'correct', label: 'Correct the record on what your group voted for last year', when: (s) => s.flags.includes('correct_in_reply'), fx: (s, a) => { a.add(s, 'cred', 4, 'You corrected the record calmly in your reply.'); a.score(s, 'proc', 1); } },
           { id: 'thank', label: 'Thank members and restate the amendment', fx: (s, a) => a.add(s, 'mood', 1, 'A gracious reply eased the room.') },
-          { id: 'attack', label: 'Use it to attack the Leader', fx: (s, a) => { a.add(s, 'mood', -1, 'Your reply turned personal.'); a.add(s, 'chair', -1, 'The Chairman asked you to address the amendment.'); a.score(s, 'faith', -1, 'Argue with the idea, not the person.'); } },
+          { id: 'attack', label: 'Use it to set the amendment against the Leader\'s record this year', fx: (s, a) => { a.add(s, 'mood', -1, 'Your reply turned personal.'); a.add(s, 'chair', -1, 'The Chairman asked you to address the amendment.'); a.score(s, 'faith', -1, 'Argue with the idea, not the person.'); } },
         ],
         next: `am:${h}:leader` };
     }
@@ -539,7 +560,7 @@ export function getBeat(id, s, api) {
         plain: admin ? 'You advise your group how to vote. In February the Administration voted against every amendment. Remember the arithmetic: if your group abstains, the opposition\'s votes for are likely to carry it, and it becomes part of the Budget.' :`How does your group vote? Each package is all or nothing: you cannot back some lines and not others.`,
         choices: admin ? [
           { id: 'against', label: 'Against', fx: (s, a) => { (s.adminLine ||= {})[h] = 'against'; s.myVote['am_' + h] = 'against'; } },
-          { id: 'abstain', label: 'Abstain: it has merit, but this is not the night', fx: (s, a) => { (s.adminLine ||= {})[h] = 'abstain'; s.myVote['am_' + h] = 'abstain'; a.score(s, 'faith', 1, 'You did not oppose an approved amendment for the sake of it.'); a.add(s, 'disc.reform', -3, 'Abstaining on an opposition amendment unsettled some of your group.'); } },
+          { id: 'abstain', label: 'Abstain', fx: (s, a) => { (s.adminLine ||= {})[h] = 'abstain'; s.myVote['am_' + h] = 'abstain'; a.score(s, 'faith', 1, 'You did not oppose an approved amendment for the sake of it.'); a.add(s, 'disc.reform', -3, 'Abstaining on an opposition amendment unsettled some of your group.'); } },
           { id: 'for', label: 'For', fx: (s, a) => { (s.adminLine ||= {})[h] = 'for'; s.myVote['am_' + h] = 'for'; a.add(s, 'disc.reform', -5, 'Backing an opposition amendment surprised your group.'); a.score(s, 'infl', 1); } },
         ] : [
           { id: 'for', label: 'For', fx: (s, a) => { s.myVote['am_' + h] = 'for'; a.lean(s, myQ(s), h, 0); } },
@@ -599,7 +620,7 @@ export function getBeat(id, s, api) {
         plain: 'This is the Section 25 warning in the papers (Budget Report, para. 48). Members have a duty to facilitate, rather than obstruct, a lawful budget (para. 78).',
         choices: [
           { id: 'withdraw', label: 'Withdraw what you said, and apologise to the chamber', fx: (s, a) => { a.add(s, 'cred', -12, 'You had to withdraw an unfunded promise in public.'); a.score(s, 'proc', -1); a.add(s, 'disc.reform', -6, 'The climbdown embarrassed your group.'); } },
-          { id: 'insist', label: 'Insist: Council can sort out the detail later', fx: (s, a) => { a.flag(s, 'reconvene', 'You insisted on an unlawful Budget against the Section 151 Officer\'s advice.'); a.score(s, 'proc', -4); } },
+          { id: 'insist', label: 'Say the saving can be replaced from contingencies after tonight', fx: (s, a) => { a.flag(s, 'reconvene', 'You insisted on an unlawful Budget against the Section 151 Officer\'s advice.'); a.score(s, 'proc', -4); } },
         ],
         next: (s) => (s.flags.includes('reconvene') ? 'end' : 'sub:vote') };
     }
@@ -627,7 +648,7 @@ export function getBeat(id, s, api) {
   }
   if (id === 'res') {
     return { phase: 'meeting', item: 6 + api.OPP.length, who: 'chair', mins: 2, figs: ['bandD', 'bandA', 'ctRequirement'],
-      say: `The Budget is agreed, and with it the council tax for 2026/27: ${P.bandD.value} at Band D, and ${P.bandA.value} at Band A, the band 35% of homes in the county are in. That concludes our business.`,
+      say: `The Budget is agreed, and with it the council tax for 2026/27: ${P.bandD.value} at Band D, and ${P.bandA.value} at Band A, the band for 35% of the county\'s chargeable properties. That concludes our business.`,
       plain: 'The county council does not send the bills. The district councils add the county\'s share to their own and send them out.',
       choices: [{ id: 'end', label: 'See how you did', fx: (s, a) => a.add(s, 'chair', 0) }],
       next: 'end' };
@@ -642,14 +663,14 @@ export function getBeat(id, s, api) {
 /* ---------------- endings ---------------- */
 export const ENDINGS = {
   misstep: { title: 'A procedural misstep', text: 'The Budget may have gone through, but your own conduct is now the story. Declarations of interest and the council tax rule are personal duties, and they come before anything you say about the Budget.' },
-  reconvene: { title: 'No lawful Budget tonight', text: 'Council could not set a lawful Budget, and must meet again. The county has a duty to set its budget before 1 March, and the district councils need the county\'s figure to send out bills before 11 March. Every day of delay costs money and confidence.' },
-  amended: { title: 'Budget agreed, as amended', text: 'The Budget was agreed with an opposition amendment in it. That is rare, and it happened because the amendment was small, costed, approved by the Section 151 Officer and shared in good time.' },
+  reconvene: { title: 'No lawful Budget tonight', text: 'Council could not set a lawful Budget, and must meet again. The county has a duty to set its budget before 1 March, and the district councils need the county\'s figure to send out bills before 11 March.' },
+  amended: { title: 'Budget agreed, as amended', text: 'The Budget was agreed with an opposition amendment in it. That is rare. The Budget now carries that group\'s spending and its funding, and every councillor\'s vote on it is in the minutes.' },
   concession: { title: 'Budget agreed, with a commitment on the record', text: 'The Budget was agreed as moved, and the minutes record a commitment to look again at an opposition idea during the year. Influence often looks like this.' },
   clean: { title: 'Budget agreed as moved', text: 'The Budget was agreed as moved. A majority wins the vote; how it wins is what the chamber, the officers and the public remember.' },
-  ruled_out: { title: 'Amendment ruled out', text: 'Your amendment was never debated. The rules on notice and the Chief Financial Officer\'s approval are strict, and the Chairman cannot waive them. Your ideas are in the minutes only as a statement.' },
+  ruled_out: { title: 'Amendment ruled out', text: 'Your amendment was never debated. The rules on notice and the Section 151 Officer\'s approval are strict, and the Chairman cannot waive them. Your ideas are in the minutes only as a statement.' },
   carried: { title: 'Your amendment carried', text: 'Your amendment is now part of the Budget. It happened because it was small, costed, approved in writing, shared early, and you briefed the Administration first.' },
   record: { title: 'Amendment lost, commitment won', text: 'Your amendment was lost, as opposition amendments usually are. But the Leader committed, on the record, to look at part of it during the year. That is a result you can hold them to.' },
-  defeated: { title: 'Amendment lost', text: 'Your amendment was lost. It is in the minutes, with every councillor\'s vote on it, and that record is what you can campaign on.' },
+  defeated: { title: 'Amendment lost', text: 'Your amendment was lost. It is in the minutes, with every councillor\'s vote on it, and that record is what you can point to when the issue returns during the year.' },
   statement: { title: 'A statement, not an amendment', text: 'Your group made a statement, so there was nothing to vote on. A costed amendment gives the chamber something concrete to accept or reject, and puts every vote on the record.' },
 };
 export function ending(s, api) {
@@ -674,7 +695,7 @@ export function counterfactual(s) {
   if (f('undeclared')) return 'Had you declared your interest at item 2, nobody could have used it against you in the debate.';
   if (f('reconvene')) return 'Had you withdrawn the unfunded promise when the Section 151 Officer first warned you, the Budget would have been agreed tonight.';
   if (f('missed_deadline')) return 'Had you sent the amendment five clear working days before the meeting, it would have been debated and voted on.';
-  if (f('no_cfo')) return 'Had you asked the Chief Financial Officer to approve it, the amendment would have been allowed, or you would have found the gap in time to fix it.';
+  if (f('no_cfo')) return 'Had you asked the Section 151 Officer to approve it, the amendment would have been allowed, or you would have found the gap in time to fix it.';
   if (s.role === 'opp' && !f('briefed_cm') && !s.record.length) return 'Had you briefed the Cabinet Member for Resources before the meeting, the Leader would have been more likely to commit to part of your amendment.';
   if (s.role === 'opp' && f('late_start')) return 'Had you shared the amendment early, other groups would have had time to back it, and the Leader would have lost the easy line about timing.';
   if (s.role === 'admin' && f('two_unhappy')) return 'Had you listened to the two uneasy members and got them a briefing, your margin would have been wider and your group happier.';
