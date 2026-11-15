@@ -1,0 +1,37 @@
+---
+// Burnley Budget Council: a training simulator of Burnley Borough Council's Budget Meeting.
+// A rehearsal of the 2027/28 meeting, due in March 2027, under the council's own Council Procedure
+// Rules and Budget and Policy Framework Rules, with the seats as listed after the May 2026 elections
+// (a coalition of 19 of 45) and the council's September 2026 budget position. Play as the
+// Administration (the Deputy Leader, who moves the Budget) or as the Reform UK, Labour or
+// Conservative group. Groups and offices only: no councillor is named, no group's 2027/28 position
+// is assumed, and every speech is written for the game.
+// Shared app: src/games/budget-council/app.js and engine.js. Burnley's words: burnley/content.js and
+// burnley/ui.js; data: src/data/budget-council/burnley/; room: src/games/rooms/burnley.js.
+// Research: docs/research/burnley-budget-council-facts-2026-11-15.md. Prototype, noindex.
+import Shell from '../../../components/budget-council/Shell.astro';
+---
+
+<Shell
+  title="Burnley Budget Council"
+  pageTitle="Burnley Budget Council: a training simulator | Tom Pickup"
+  description="A prototype training simulator for councillors: rehearse Burnley Borough Council's 2027/28 Budget Meeting, where a 19-seat coalition must pass its Budget."
+  ogImage="https://tompickup.co.uk/images/share/burnley-budget-game.png"
+  ogImageAlt="Burnley Budget Council, a prototype training simulator for councillors"
+  eyebrow="A borough council Budget Meeting, for councillors"
+  breadcrumbLabel="Burnley Budget Council"
+  noscript="This simulator needs JavaScript. In short: you rehearse Burnley Borough Council's 2027/28 Budget Meeting as the coalition or an opposition group, under the council's own rules, with today's seats and the council's September 2026 figures."
+/>
+
+<script>
+  import chamber from '../../../data/budget-council/burnley/chamber.json';
+  import minutes from '../../../data/budget-council/burnley/minutes.json';
+  import amendments from '../../../data/budget-council/burnley/amendments.json';
+  import papers from '../../../data/budget-council/burnley/papers.json';
+  import sources from '../../../data/budget-council/burnley/sources.json';
+  import * as content from '../../../games/budget-council/burnley/content.js';
+  import { ui } from '../../../games/budget-council/burnley/ui.js';
+  import { mount } from '../../../games/budget-council/app.js';
+
+  mount({ data: { chamber, minutes, amendments, papers, sources, priors: chamber.priors }, content, ui });
+</script>

@@ -1,0 +1,203 @@
+{
+  "_note": "Figures and rules for Burnley Budget Council. The meeting is a rehearsal of the 2027/28 Budget Meeting, due in March 2027; its papers are not yet published, so the figures are the council's latest published position (Executive, 16 September 2026) and last year's Budget (Full Council, 3 March 2026). Each figure says what it is a count of and where it is printed. Pages are PDF pages. src ids are in sources.json.",
+  "figures": {
+    "gap": {
+      "value": "£594,000",
+      "what": "the council's budget gap for 2027/28 after savings already approved, assuming a 1.99% council tax rise",
+      "src": "mtfs",
+      "at": "Table 4, p. 5"
+    },
+    "gap3": {
+      "value": "£1.682m",
+      "what": "the budget gap over three years, 2027/28 to 2029/30, on the same assumptions",
+      "src": "mtfs",
+      "at": "Table 4, p. 5"
+    },
+    "gap299": {
+      "value": "£507,000",
+      "what": "the 2027/28 gap if council tax rises 2.99% instead",
+      "src": "mtfs",
+      "at": "Table 5, p. 6"
+    },
+    "ctAssumed": {
+      "value": "1.99%",
+      "what": "the council tax rise for 2027/28 the council's figures assume, below the 2.99% the referendum rules allow",
+      "src": "mtfs",
+      "at": "para. 6, assumption i, p. 5"
+    },
+    "ctSens": {
+      "value": "£57k",
+      "what": "what one per cent on council tax is worth in 2027/28, either way, in the council's own sensitivity table",
+      "src": "mtfs",
+      "at": "para. 10, p. 9"
+    },
+    "feesSens": {
+      "value": "£61k",
+      "what": "what one per cent on fees and charges income is worth in 2027/28, either way; the figures assume fees rise 2% a year",
+      "src": "mtfs",
+      "at": "para. 10, p. 9; assumption vii, p. 5"
+    },
+    "paySens": {
+      "value": "£124k",
+      "what": "the cost in 2027/28 of a pay award one per cent above the 3% assumed",
+      "src": "mtfs",
+      "at": "para. 10, p. 9"
+    },
+    "approved": {
+      "value": "£59k",
+      "what": "savings for 2027/28 already approved at earlier Full Council meetings, counted in the gap",
+      "src": "mtfs",
+      "at": "Table 4, p. 5"
+    },
+    "nbr": {
+      "value": "£22,428,686",
+      "what": "last year's Net Budget Requirement, for 2026/27",
+      "src": "minutes",
+      "at": "minute 95, p. 10"
+    },
+    "bandD": {
+      "value": "£351.44",
+      "what": "the borough's Band D council tax for 2026/27, after a 1.99% rise; parish and county shares are extra",
+      "src": "minutes",
+      "at": "minute 95, p. 10"
+    },
+    "generalReserve": {
+      "value": "£1.379m",
+      "what": "the General Reserve, the council's fund of last resort, held at this level as the prudent minimum",
+      "src": "mtfsfeb",
+      "at": "para. 59, p. 16"
+    },
+    "revenueSupport": {
+      "value": "£1.741m",
+      "what": "the Revenue Support Reserve at 1 April 2025, the reserve last year's one-off additions were paid from",
+      "src": "mtfsfeb",
+      "at": "reserves table, p. 16"
+    },
+    "lastAmend": {
+      "value": "12 to 31",
+      "what": "the recorded vote on last year's Conservative amendment, to cut council tax by 1%: lost",
+      "src": "minutes",
+      "at": "minute 95, pp. 6 to 7"
+    },
+    "lastBudget": {
+      "value": "37 to 6",
+      "what": "the recorded vote on last year's Budget, as altered to take in Labour's proposals: carried",
+      "src": "minutes",
+      "at": "minute 95, pp. 7 to 8"
+    }
+  },
+  "quotes": {
+    "tough": {
+      "text": "To ensure a balanced position for 2027/28 and beyond the Council will have to take tough decisions balancing declining access to resources against emerging risks.",
+      "src": "cfo",
+      "at": "Statutory Report of the Chief Financial Officer, para. 7.2, p. 16"
+    },
+    "reserves": {
+      "text": "It is Council policy that earmarked reserves should not be used to pay for continuing expenditure.",
+      "src": "mtfsfeb",
+      "at": "para. 63, p. 16"
+    }
+  },
+  "rules": {
+    "recorded": {
+      "text": "Every vote on a budget decision at the budget meeting, including every amendment, is recorded by name: for, against or abstaining.",
+      "src": "cpr",
+      "at": "rule 16.7, pp. 15 to 16"
+    },
+    "majority": {
+      "text": "A question is decided by a simple majority of the members present and voting.",
+      "src": "cpr",
+      "at": "rule 16.1, p. 14"
+    },
+    "casting": {
+      "text": "If the votes are equal, the Mayor has a second or casting vote, with no restriction on how it is used.",
+      "src": "cpr",
+      "at": "rule 16.2, p. 14"
+    },
+    "speech": {
+      "text": "No speech may be longer than five minutes without the Mayor's consent. Members stand to speak and address the Mayor.",
+      "src": "cpr",
+      "at": "rules 14.4 and 20.1, pp. 11 and 17"
+    },
+    "reply": {
+      "text": "On an amendment, its mover replies first, then the mover of the motion, and the amendment is put to the vote straight away. A reply may not bring in new matter.",
+      "src": "cpr",
+      "at": "rule 14.9, p. 12"
+    },
+    "oneAtATime": {
+      "text": "Only one amendment may be moved and discussed at a time. An amendment must not negate the motion. If it is carried, the amended motion becomes the substantive motion.",
+      "src": "cpr",
+      "at": "rule 14.6, p. 11"
+    },
+    "alteration": {
+      "text": "The mover of a motion may alter it with the consent of the meeting, given without discussion, if the change could have been moved as an amendment. Last year Labour's proposals were taken into the Budget this way.",
+      "src": "cpr",
+      "at": "rule 14.7, p. 12; minutes, 3 March 2026, minute 95, p. 4"
+    },
+    "noNotice": {
+      "text": "An amendment may be moved without notice, though the Mayor may ask for it in writing first. The rules set no separate deadline for budget amendments; last year both were published in supplementary agendas.",
+      "src": "cpr",
+      "at": "rules 13(g) and 14.2, p. 10"
+    },
+    "closure": {
+      "text": "At the end of another member's speech a member may move that the question be now put. The Mayor decides whether the matter has been debated enough, and that ruling is final.",
+      "src": "cpr",
+      "at": "rule 14.11, p. 13"
+    },
+    "pointOfOrder": {
+      "text": "A point of order may only be about a breach of the Council Procedure Rules or the law, and must name the rule or law. The Mayor's ruling is final.",
+      "src": "cpr",
+      "at": "rule 14.12, pp. 13 to 14"
+    },
+    "personal": {
+      "text": "A personal explanation may only correct a part of the member's own earlier speech that seems to have been misunderstood. The Mayor's ruling is final.",
+      "src": "cpr",
+      "at": "rule 14.13, p. 14"
+    },
+    "threeHours": {
+      "text": "A meeting that has run for three hours adjourns unless a majority votes to carry on.",
+      "src": "cpr",
+      "at": "rule 8.1, p. 5"
+    },
+    "inPrinciple": {
+      "text": "If Council accepts the Executive's Budget without amendment, the decision has immediate effect. Any other decision, including an amended Budget, is an in-principle decision. Either way it is decided by a simple majority.",
+      "src": "bpfr",
+      "at": "rule 2(e), p. 1"
+    },
+    "objection": {
+      "text": "An in-principle decision takes effect five working days after it is published unless the Leader objects in writing, with reasons. If the Leader objects, Council meets again within a further ten working days and decides by simple majority.",
+      "src": "bpfr",
+      "at": "rules 2(g) and 2(h), p. 2"
+    },
+    "interests": {
+      "text": "Members declare Disclosable Pecuniary Interests and Other Interests under the Code of Conduct. Last year's budget declarations were minuted as other interests (non-prejudicial).",
+      "src": "cpr",
+      "at": "rule 20.A, p. 16; minutes, 3 March 2026, minute 88, p. 2"
+    },
+    "arrears": {
+      "text": "A member with council tax unpaid for at least two months must say so at the start of the meeting and must not vote on the Budget or the council tax.",
+      "src": "act1992",
+      "at": "section 106(1) and (2)"
+    },
+    "mayor": {
+      "text": "The Mayor chairs Council and must remain apolitical during the term of office.",
+      "src": "articles",
+      "at": "Article 5.01, p. 8"
+    },
+    "reserves": {
+      "text": "Earmarked reserves should not be used to pay for continuing spending. A reserve can pay for something once; spending that carries on needs a saving or income that carries on.",
+      "src": "mtfsfeb",
+      "at": "para. 63, p. 16"
+    },
+    "s25": {
+      "text": "The Chief Finance Officer must report on how robust the budget estimates are and whether reserves are adequate, and Council must have regard to that report.",
+      "src": "cfo",
+      "at": "para. 4, p. 15"
+    },
+    "confirm": {
+      "text": "No rule requires the Section 151 Officer to approve an amendment. Last year's Conservative amendment said the Director of Resources had confirmed its items were possible and realistic.",
+      "src": "conamend",
+      "at": "pp. 3 to 4"
+    }
+  }
+}

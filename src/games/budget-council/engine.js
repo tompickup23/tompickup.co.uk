@@ -1,8 +1,9 @@
 // Budget Council: the rules engine. No DOM. The page and the test both drive it through
-// createEngine(data) -> { start(opts), view(state), act(state, choiceId, payload) }.
+// createEngine(data, content) -> { start(opts), view(state), act(state, choiceId, payload) }.
+// content is a council's words module (lancashire/content.js, burnley/content.js): it supplies
+// getBeat and FIRST, and may supply buildCheck for its own amendment builder.
 // State is plain JSON, so a run can be replayed exactly from its seed and its choices.
 // Every change to a variable is logged with the reason, and the debrief reads that log.
-import { getBeat, FIRST } from './content.js';
 
 /* Seeded randomness: Mulberry32. The state carries the generator's position, so the same seed
    and the same choices always give the same meeting. */
@@ -14,17 +15,22 @@ export function rand(s) {
 }
 export const pick = (s, list) => list[Math.floor(rand(s) * list.length)];
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-const r3 = (v) => Math.round(v * 1000) / 1000;
 export const money = (v) => `£${Math.abs(v) < 1 ? Math.round(Math.abs(v) * 1000).toLocaleString('en-GB') + ',000' : Math.abs(v).toFixed(3) + 'm'}`;
 
-export const ORDER_NOTE = 'Opposition groups are called in order of group size (Standing Order 4.9(c)).';
+export const r3 = (v) => Math.round(v * 1000) / 1000;
 
-export function createEngine(data) {
+export function createEngine(data, content) {
+  const { getBeat, FIRST } = content;
   const { chamber, minutes, amendments } = data;
   const G = Object.fromEntries(chamber.groups.map((g) => [g.id, g]));
-  const OPP = chamber.groups.filter((g) => g.id !== chamber.administration).sort((a, b) => b.seats - a.seats).map((g) => g.id);
+  // The Administration is one group, or a coalition: its first group leads it.
+  const ADMIN = [].concat(chamber.administration);
+  const isAdmin = (id) => ADMIN.includes(id);
+  const OPP = chamber.groups.filter((g) => !isAdmin(g.id)).sort((a, b) => b.seats - a.seats).map((g) => g.id);
   const PRIOR = {};
-  for (const v of minutes.votes) {
+  // A pack may set starting tendencies directly (priors), as Burnley does for a meeting not yet held.
+  for (const [id, byG] of Object.entries(data.priors || {})) PRIOR[id] = byG;
+  for (const v of minutes.votes || []) {
     PRIOR[v.id] = {};
     for (const g of chamber.groups) {
       const n = (k) => v.byGroup[k][g.id] || 0;
@@ -32,19 +38,29 @@ export function createEngine(data) {
       PRIOR[v.id][g.id] = tot ? { for: n('for') / tot, against: n('against') / tot, abstain: n('abstain') / tot } : { for: 0.1, against: 0.2, abstain: 0.7 };
     }
   }
+  const DEFAULT_PRIOR = { for: 0.1, against: 0.2, abstain: 0.7 };
+  // A chair who is also a councillor (Burnley's Mayor) sits at the top table, not on a bench,
+  // and votes as a member of their group; on a tie they also have the casting vote.
+  const CHAIR_G = chamber.chair?.group || null;
 
   /* Seats: an invented plan. Opposition groups fill the Chairman's left from the front, the
      Administration the rest. Index order is the order the plan in the page draws them. */
   function seatGroups() {
     const out = [];
-    const opp = OPP.flatMap((id) => Array(G[id].seats).fill(id));
-    const rows = [11, 14, 17, 20, 22];
+    const benches = (id) => G[id].seats - (CHAIR_G === id ? 1 : 0);
+    const opp = OPP.flatMap((id) => Array(benches(id)).fill(id));
+    const adm = ADMIN.flatMap((id) => Array(benches(id)).fill(id));
+    const rows = chamber.rows || [11, 14, 17, 20, 22];
     let k = 0;
     const left = [];
     rows.forEach((n) => { const h = Math.ceil(n / 2); for (let i = 0; i < n; i++) { out.push(null); if (i < h) left.push(k); k++; } });
     const leftByRow = left; // front row first
     leftByRow.forEach((idx, j) => { if (j < opp.length) out[idx] = opp[j]; });
-    for (let i = 0; i < out.length; i++) if (!out[i]) out[i] = chamber.administration;
+    // Opposition seats beyond the left half, if any, take the right from the back.
+    let j = Math.min(leftByRow.length, opp.length);
+    for (let i = out.length - 1; i >= 0 && j < opp.length; i--) if (!out[i]) out[i] = opp[j++];
+    let a = 0;
+    for (let i = 0; i < out.length; i++) if (!out[i]) out[i] = adm[a++] || ADMIN[0];
     return out;
   }
   const SEATS = seatGroups();
@@ -52,7 +68,7 @@ export function createEngine(data) {
   /* -------- state helpers, used by content.js -------- */
   function log(s, text, tag) { s.log.push({ at: s.beat, text, tag: tag || '' }); }
   const api = {
-    G, OPP, amendments, data, money, rand, pick,
+    G, OPP, ADMIN, isAdmin, amendments, data, money, rand, pick,
     add(s, key, delta, because) {
       // key: 'cred', 'mood', 'chair', 'score.proc' etc, or 'lean.<question>.<group>' / 'disc.<group>'
       const path = key.split('.');
@@ -76,7 +92,9 @@ export function createEngine(data) {
   };
 
   /* -------- the amendment builder -------- */
+  // A council's content may bring its own (Burnley's has no public health reserve or extra grant).
   function buildCheck(s) {
+    if (content.buildCheck) return content.buildCheck(s, api);
     const A = amendments;
     const parts = (s.amend.parts || []).map((id) => ({ id, ...A.parts[id] })).filter((p) => p.label && !p.realOnly);
     const years = [0, 1, 2].map((y) => {
@@ -102,7 +120,7 @@ export function createEngine(data) {
   // Each councillor present and able to vote votes for, against or abstains. Their group's
   // starting tendency comes from the real recorded votes; leans and whips move it.
   function runVote(s, q) {
-    const prior = PRIOR[q.prior] || PRIOR.budget;
+    const prior = PRIOR[q.prior] || PRIOR.budget || {};
     const tally = [];
     const n = { for: 0, against: 0, abstain: 0, absent: 0, remote: 0, why: [] };
     const byGroup = {};
@@ -115,28 +133,41 @@ export function createEngine(data) {
       if (!me && s.remote.group === g && idx === at.present) { tally.push('absent'); n.remote++; byGroup[g].out++; return; }
       let choice;
       if (me) {
-        // You. A member who has declared council tax arrears may not vote (Standing Order 4.9(j)).
+        // You. A member who has declared council tax arrears may not vote (section 106, Local Government Finance Act 1992).
         choice = api.has(s, 'arrears_declared') ? 'none' : s.myVote[q.id] || q.whip?.[g] || 'abstain';
       } else {
-        const whip = q.whip?.[g];
-        let p = { ...prior[g] };
-        if (whip) {
-          const d = (s.v.disc[g] ?? 80) / 100;
-          p = { for: (1 - d) * p.for, against: (1 - d) * p.against, abstain: (1 - d) * p.abstain };
-          p[whip] += d;
-        }
-        const lean = (s.v.lean[q.id]?.[g] || 0) + (s.v.lean.all?.[g] || 0);
-        const k = Math.exp(lean / 25);
-        const w = { for: (p.for + 0.01) * k, against: (p.against + 0.01) / k, abstain: p.abstain + 0.01 };
-        const tot = w.for + w.against + w.abstain;
-        const r = rand(s) * tot;
-        choice = r < w.for ? 'for' : r < w.for + w.against ? 'against' : 'abstain';
+        choice = decide(s, q, prior, g);
       }
       if (choice === 'none') { tally.push('abstain'); n.abstain++; byGroup[g].out++; return; }
       tally.push(choice);
       n[choice]++;
       byGroup[g][choice]++;
     });
+    if (CHAIR_G) {
+      const c = decide(s, q, prior, CHAIR_G);
+      n[c]++; (byGroup[CHAIR_G] ??= { for: 0, against: 0, abstain: 0, out: 0 })[c]++;
+      n.chairVote = c;
+    }
+    return finish(s, q, n, tally, byGroup);
+  }
+  function decide(s, q, prior, g) {
+    let choice;
+    const whip = q.whip?.[g];
+    let p = { ...(prior[g] || DEFAULT_PRIOR) };
+    if (whip) {
+      const d = (s.v.disc[g] ?? 80) / 100;
+      p = { for: (1 - d) * p.for, against: (1 - d) * p.against, abstain: (1 - d) * p.abstain };
+      p[whip] += d;
+    }
+    const lean = (s.v.lean[q.id]?.[g] || 0) + (s.v.lean.all?.[g] || 0);
+    const k = Math.exp(lean / 25);
+    const w = { for: (p.for + 0.01) * k, against: (p.against + 0.01) / k, abstain: p.abstain + 0.01 };
+    const tot = w.for + w.against + w.abstain;
+    const r = rand(s) * tot;
+    choice = r < w.for ? 'for' : r < w.for + w.against ? 'against' : 'abstain';
+    return choice;
+  }
+  function finish(s, q, n, tally, byGroup) {
     let carried = n.for > n.against;
     let cast = null;
     if (n.for === n.against) { cast = q.chairCasts; carried = cast === 'for'; }
@@ -146,22 +177,24 @@ export function createEngine(data) {
   }
 
   /* -------- the run -------- */
-  function start({ seed = 1, role = 'opp', group = 'pl', facilitator = false } = {}) {
+  function start({ seed = 1, role = 'opp', group = OPP[0], facilitator = false } = {}) {
     const s = {
-      seed: seed >>> 0, rng: seed >>> 0, role, group: role === 'admin' ? chamber.administration : group, facilitator,
+      seed: seed >>> 0, rng: seed >>> 0, role, group: role === 'admin' ? ADMIN[0] : group, facilitator,
       beat: FIRST, flags: [], log: [], record: [], votes: {}, myVote: {}, hist: [],
       amend: { kind: null, parts: [], notice: null, circulate: null, s151: 'none' },
       v: { cred: 50, mood: 0, chair: 5, disc: {}, lean: {}, score: { proc: 5, faith: 5, infl: role === 'admin' ? 4 : 3 } },
       att: {}, remote: { group: null },
       clock: 0, ended: null,
     };
-    for (const g of chamber.groups) s.v.disc[g.id] = g.id === chamber.administration ? 92 : 80;
+    for (const g of chamber.groups) s.v.disc[g.id] = isAdmin(g.id) ? 92 : 80;
     // Attendance varies run to run: a few apologies, and one member joins remotely.
     for (const g of chamber.groups) {
-      const away = g.id === chamber.administration ? Math.floor(rand(s) * 4) + 1 : rand(s) < 0.25 ? 1 : 0;
-      s.att[g.id] = { seats: g.seats, present: g.seats - (g.id === s.group ? Math.min(away, g.seats - 1) : away) };
+      const away = g.id === ADMIN[0] ? Math.floor(rand(s) * (chamber.adminAway || 4)) + 1 : rand(s) < 0.25 ? 1 : 0;
+      const seats = g.seats - (g.id === CHAIR_G ? 1 : 0);
+      s.att[g.id] = { seats, present: Math.max(0, seats - (g.id === s.group ? Math.min(away, seats - 1) : Math.min(away, seats))) };
     }
     s.remote.group = pick(s, OPP);
+    if (chamber.remote === false) s.remote.group = null; // no remote attendance (Burnley)
     // Which personal declaration this councillor faces: an interest, council tax arrears, or none.
     s.personal = pick(s, ['interest', 'arrears', 'none', 'interest']);
     return s;
@@ -213,5 +246,5 @@ export function createEngine(data) {
     return s;
   }
 
-  return { start, view, act, roomVote, SEATS, OPP, G, PRIOR, api, buildCheck };
+  return { start, view, act, roomVote, SEATS, OPP, ADMIN, G, PRIOR, api, buildCheck };
 }
