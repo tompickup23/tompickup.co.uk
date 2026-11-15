@@ -205,8 +205,8 @@ export function mount({ data, content, ui }) {
     const pc = (n) => (voting ? (n / voting) * 100 : 0).toFixed(1);
     return `<div class="bc-card"><h3>The recorded vote${v.room ? ', as counted in your room' : ''}</h3>
       <p class="bc-result ${v.carried ? 'yes' : 'no'}">${v.for} for, ${v.against} against <b>${v.carried ? 'carried' : 'lost'}</b></p>
-      <div class="ck-votebar" role="img" aria-label="${v.for} for and ${v.against} against; the line marks half of those voting"><span class="f" style="width:${pc(v.for)}%"></span><span class="a" style="width:${pc(v.against)}%"></span></div>
-      <p class="ck-votekey"><span><i style="background:var(--ck-yes)"></i>For ${v.for}</span><span><i style="background:var(--ck-no)"></i>Against ${v.against}</span><span>Abstaining ${v.abstain}</span><span>The line is half of those voting</span></p>
+      <div class="ck-votebar" role="img" aria-label="${v.for} for and ${v.against} against; the line marks half of the votes cast for or against"><span class="f" style="width:${pc(v.for)}%"></span><span class="a" style="width:${pc(v.against)}%"></span></div>
+      <p class="ck-votekey"><span><i style="background:var(--ck-yes)"></i>For ${v.for}</span><span><i style="background:var(--ck-no)"></i>Against ${v.against}</span><span>Abstaining ${v.abstain}</span><span>The line is half of the votes cast for or against</span></p>
       <p class="bc-small">A simple majority of those present and voting decides it: ${voting} voted for or against, so ${Math.floor(voting / 2) + 1} were needed. Abstentions count towards neither side. ${ui.majoritySource(H)}</p>
       ${v.room ? '' : `<details><summary>How each group voted</summary><div class="bc-tablewrap"><table><thead><tr><th>Group</th><th class="n">For</th><th class="n">Against</th><th class="n">Abstain</th><th class="n">Absent or not voting</th></tr></thead><tbody>${groups}</tbody></table></div></details>`}
       ${S.fac ? `<details><summary>Use the hands counted in your room instead</summary><p class="bc-hands"><label>For <input id="bc-h-f" type="number" min="0" max="${N}" inputmode="numeric" value="${v.for}"></label><label>Against <input id="bc-h-a" type="number" min="0" max="${N}" inputmode="numeric" value="${v.against}"></label><label>Abstain <input id="bc-h-n" type="number" min="0" max="${N}" inputmode="numeric" value="${v.abstain}"></label><button class="ck-btn ghost" data-room="${v.id}">Use these</button></p></details>` : ''}
@@ -231,9 +231,9 @@ export function mount({ data, content, ui }) {
         <div class="ck-panel">
           <fieldset class="ck-sides"><legend>Which side of the chamber?</legend>${SIDES.map(side).join('')}</fieldset>
           <div class="ck-field" role="group" aria-labelledby="bc-how-l"><span id="bc-how-l">How are you playing?</span>
-            <div class="ck-seg"><button type="button" data-fac="0" aria-pressed="${!S.fac}">On my own</button><button type="button" data-fac="1" aria-pressed="${S.fac}">Training session, one screen</button></div></div>
+            <div class="ck-seg"><button type="button" data-fac="0" aria-pressed="${!S.fac}">On my own</button><button type="button" data-fac="1" aria-pressed="${S.fac}">As a group, one screen</button></div></div>
           ${S.fac ? `<div class="bc-card" id="bc-roles"><h3>Role cards</h3><p class="bc-small">Hand these out. The screen shows the words; people in the room can read them or use their own. At each recorded vote you can type in the hands counted in the room.</p><dl class="bc-roles">${ROLE_CARDS.map((r) => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl><p><button class="ck-btn ghost" data-print="#bc-roles">${icon('print')}Print the role cards</button></p></div>` : ''}
-          <details><summary>Meeting number ${S.seed}</summary><p class="bc-small"><label for="bc-seed">Meeting number</label> <input id="bc-seed" type="number" min="1" max="999999999" inputmode="numeric" value="${S.seed}"><br>The same number, side and choices always give the same meeting, so a group can replay one together.</p></details>
+          <details><summary>Meeting number ${S.seed}, to replay it together</summary><p class="bc-small"><label for="bc-seed">Meeting number</label> <input id="bc-seed" type="number" min="1" max="999999999" inputmode="numeric" value="${S.seed}"><br>The same number, side and choices always give the same meeting, so a group can replay one together.</p></details>
           <button class="ck-btn big" data-start>${icon('play')}${esc(ui.startLabel || 'Start the week before')}</button>
         </div>
         <div class="ck-glass ck-hero ck-span bc-credit">${ui.startFooter(H)}</div>` };
@@ -321,7 +321,7 @@ export function mount({ data, content, ui }) {
     if (S.run && !S.run.ended && S.tab !== 1) meeting.push({ icon: 'arrow', label: 'Back to the meeting', attrs: 'data-tab="1"' });
     if (S.run && S.run.ended && S.tab !== 1) meeting.push({ icon: 'flag', label: 'Back to the debrief', attrs: 'data-tab="1"' });
     meeting.push({ icon: 'people', label: S.run ? 'Choose a side and start again' : 'Choose a side', attrs: 'data-tab="0"' });
-    if (S.run) meeting.push({ icon: 'link', label: 'Copy a link to this meeting', note: 'Same number, same side, same meeting', attrs: 'data-copy' });
+    if (S.run) meeting.push({ icon: 'link', label: 'Copy a link to this meeting', note: 'Same number, side and choices give the same meeting', attrs: 'data-copy' });
     if (S.fac) meeting.push({ icon: 'print', label: 'Print the role cards', attrs: 'data-tab="0" data-then-print="#bc-roles"' });
     const read = [
       { icon: 'doc', label: ui.tab2, attrs: 'data-tab="2"' },
@@ -333,7 +333,7 @@ export function mount({ data, content, ui }) {
       ...(S.d3 ? ['seat', 'chair', 'over'].map((c) => ({ icon: CAM_ICON[c], label: names[c], attrs: `data-cam="${c}"`, pressed: S.cam === c })) : []),
       { icon: S.d3 ? 'layers' : 'cube', label: S.d3 ? 'Show the flat plan' : 'Show the room in 3D', attrs: `data-d3="${S.d3 ? 0 : 1}"` },
     ];
-    sheet.open('Menu', menuList([{ title: 'The meeting', items: meeting }, { title: 'Read', items: read }, { title: 'The room', items: roomItems }]) + `<p class="bc-small" style="margin-top:14px">The room and the seating are modelled by eye, not measured. Figures dressed in a group's colour stand for no real person.</p>`);
+    sheet.open('Menu', menuList([{ title: 'The meeting', items: meeting }, { title: 'Background', items: read }, { title: 'The room', items: roomItems }]) + `<p class="bc-small" style="margin-top:14px">The room and the seating are modelled by eye, not measured. Figures dressed in a group's colour stand for no real person.</p>`);
   }
 
   /* ---- render and events ---- */
