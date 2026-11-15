@@ -1,0 +1,42 @@
+{
+  "_note": "Figures from the papers for the Budget Meeting of 26 February 2026. Each says what it is a count of and where it is printed. Page numbers are the printed pages of each document. src ids are in sources.json.",
+  "figures": {
+    "netBudget": { "value": "£1,329.312m", "what": "the General Fund net budget for 2026/27 (the budget requirement)", "src": "report", "at": "recommendation iv, p. 4; Table 7, p. 22" },
+    "ctRise": { "value": "3.80%", "what": "the total rise in the county council's share of council tax for 2026/27: 1.80% general council tax and 2.00% Adult Social Care precept", "src": "report", "at": "recommendations vi and vii, p. 4; Table 7, p. 22" },
+    "bandD": { "value": "£1,801.75", "what": "the county council's Band D council tax for 2026/27, up from £1,735.79 in 2025/26", "src": "report", "at": "Table 7, p. 22" },
+    "bandA": { "value": "£1,201.17", "what": "the county council's Band A council tax for 2026/27, up £43.98 a year; 35% of chargeable properties in the county are in Band A", "src": "report", "at": "para. 54 and Table 8, p. 22" },
+    "ctRequirement": { "value": "£717.078m", "what": "the council tax cash needed, after grants, business rates and other income are taken from the budget requirement", "src": "report", "at": "Table 7, p. 22" },
+    "taxBase": { "value": "397,989.95", "what": "the council tax base, in Band D equivalent properties", "src": "report", "at": "recommendation i, p. 3; Table 7, p. 22" },
+    "onePercent": { "value": "about £7.2m", "what": "what each 1% of council tax raises", "src": "report", "at": "para. 74, p. 27" },
+    "grossShortfall": { "value": "£72.298m", "what": "the gap in 2026/27 before savings", "src": "report", "at": "Table 4, p. 8" },
+    "savings": { "value": "£61.891m", "what": "the savings in the 2026/27 budget, earlier and new together", "src": "report", "at": "Table 8, p. 16" },
+    "newSavings": { "value": "£21.608m", "what": "the additional savings agreed for 2026/27", "src": "report", "at": "Table 11, p. 25" },
+    "extraRsg": { "value": "£3.956m", "what": "the additional Revenue Support Grant in 2026/27 from the final finance settlement (£1.999m in 2027/28), held in a Strategic Contingency", "src": "report", "at": "p. 7; Table 4, p. 8" },
+    "savingsContingency": { "value": "£5.000m", "what": "the savings delivery contingency in the 2026/27 budget", "src": "report", "at": "Table 8, p. 16; Table 11, p. 25" },
+    "reserve": { "value": "£66.3m", "what": "the General Fund Unearmarked Reserve at 31 March 2026 and, as planned, at 31 March 2027", "src": "mtfs", "at": "Table 1, p. 15" },
+    "reservePolicy": { "value": "at least 5%", "what": "the level of net revenue spending the council seeks to hold as its General Fund Unearmarked Reserve", "src": "mtfs", "at": "Guiding Principle j, p. 8" },
+    "noReserves": { "value": "nil", "what": "the use of reserves to balance the 2026/27 budget", "src": "report", "at": "Table 11, p. 25" }
+  },
+  "quotes": {
+    "s25reserves": { "text": "the level of Reserves is currently adequate", "src": "report", "at": "para. 45, p. 20" },
+    "s25robust": { "text": "based on the best available information", "src": "report", "at": "para. 46, p. 20" },
+    "lawful": { "text": "a duty to facilitate, rather than obstruct, the setting of a lawful budget", "src": "report", "at": "para. 78, p. 28" },
+    "deadline": { "text": "a duty to set a budget before 1 March", "src": "report", "at": "para. 78, p. 28" },
+    "amendStatement": { "text": "makes no appreciable impact on the financial resilience of the Council", "src": "annexes", "at": "the Section 151 Officer's statement on each of Annexes 1 to 4" }
+  },
+  "rules": {
+    "notice": { "text": "Alternative budgets must be in final form, with the prior written approval of the Chief Financial Officer, at least five clear working days before the Budget meeting. Late ones are not allowed.", "src": "so", "at": "Standing Order 4.2 and 4.5" },
+    "lawfulForm": { "text": "A proposal that the Chief Financial Officer does not accept as capable of being adopted as a lawful budget is not allowed.", "src": "so", "at": "Standing Order 4.3" },
+    "package": { "text": "Each group's list of amendments is proposed, seconded, debated and voted on as if it were a single amendment.", "src": "so", "at": "Standing Order 4.4" },
+    "circulate": { "text": "The group leader decides when the Monitoring Officer shares the amendment with other councillors, but no later than the start of the meeting.", "src": "so", "at": "Standing Order 4.5" },
+    "order": { "text": "The Leader moves the Budget, then the other group leaders are called in order of group size.", "src": "so", "at": "Standing Order 4.9(b) and (c)" },
+    "reply": { "text": "The proposer of an alternative budget has a right of reply, and so does the proposer of the Administration's Budget before each vote. Every vote is a recorded vote.", "src": "so", "at": "Standing Order 4.9(f)" },
+    "noNew": { "text": "No new amendments once the debate returns to the substantive motion. The mover of the Budget replies last, for up to five minutes.", "src": "so", "at": "Standing Order 4.9(h) and (i)" },
+    "arrears": { "text": "A member more than two months behind with council tax must say so and may not vote on the Budget. Failing to do so is a criminal offence.", "src": "so", "at": "Standing Order 4.9(j); Local Government Finance Act 1992, s.106" },
+    "remote": { "text": "A member attending remotely may be allowed to speak but may not vote.", "src": "so", "at": "Standing Order 9" },
+    "recorded": { "text": "There must be a recorded vote on decisions at the Budget meeting.", "src": "so", "at": "Standing Order 46.7" },
+    "majority": { "text": "Decided by a simple majority of members present and voting. On equal votes the Chair may use a casting vote; if not, the matter falls.", "src": "so", "at": "Standing Order 46.2 and 46.8" },
+    "closure": { "text": "A member who has not yet spoken may move that the question be now put; the Chair decides whether the matter has been sufficiently discussed.", "src": "so", "at": "Standing Order 45" },
+    "billing": { "text": "Standing Order 4.1 says the Budget meeting must be held before 11 March, the deadline for the district councils that send the bills; the Budget Report gives the county's own duty as before 1 March.", "src": "so", "at": "Standing Order 4.1; Budget Report para. 78, p. 28" }
+  }
+}

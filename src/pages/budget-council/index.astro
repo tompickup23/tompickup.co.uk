@@ -1,0 +1,553 @@
+---
+// Budget Council: a training simulator of Lancashire County Council's Budget Meeting.
+// The worked example is the real meeting of 26 February 2026 (Budget 2026/27): its papers, its
+// five group amendments and its six recorded votes, set in today's chamber (Reform UK 51 of 84).
+// Play as the Administration or as one of the five opposition groups. Opponents move from
+// weighted tables on a seeded generator, so runs differ but replay exactly from the seed.
+// Groups and offices only: no councillor is named, and every speech is written for the game.
+// Engine: src/games/budget-council/engine.js; words: content.js; data: src/data/budget-council/.
+// Test: scripts/budget-council.test.mjs. Prototype, noindex. It collects, stores and sends nothing.
+import Layout from '../../layouts/Layout.astro';
+import { PROTOTYPE_NOTICE } from '../../data/prototype-notice';
+
+const title = 'Budget Council';
+const description = 'A prototype training simulator for councillors: sit through Lancashire County Council\'s 2026/27 Budget Meeting from either side of the chamber.';
+const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
+---
+
+<Layout
+  title={`${title}: a training simulator | Tom Pickup`}
+  description={description}
+  ogImage={ogImage}
+  ogImageAlt="Lancashire Voice, a prototype engagement platform"
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  breadcrumbLabel={title}
+  noindex
+>
+  <div class="bc">
+    <p class="bc-proto" role="note">
+      <b>Prototype</b>
+      A training simulator built by Tom Pickup for his own website. Not a council service, and not council training material. Nothing you choose is collected, stored or sent.
+      {PROTOTYPE_NOTICE}
+    </p>
+    <header class="bc-head">
+      <div>
+        <p class="bc-eyebrow">A county council Budget Meeting, for councillors</p>
+        <h1>Budget Council</h1>
+      </div>
+      <nav class="bc-tabs" id="bc-tabs" aria-label="Sections"></nav>
+    </header>
+    <main id="bc-app" class="bc-app">
+      <noscript>
+        <p>This simulator needs JavaScript. In short: you prepare for and sit through Lancashire County Council's Budget Meeting, as the Administration or an opposition group, using the real papers and amendments from 26 February 2026.</p>
+      </noscript>
+    </main>
+    <p class="bc-sr" id="bc-sr" aria-live="polite"></p>
+  </div>
+</Layout>
+
+<script>
+  import chamber from '../../data/budget-council/chamber.json';
+  import minutes from '../../data/budget-council/minutes.json';
+  import amendments from '../../data/budget-council/amendments.json';
+  import papers from '../../data/budget-council/papers.json';
+  import sources from '../../data/budget-council/sources.json';
+  import { createEngine, money } from '../../games/budget-council/engine.js';
+  import { whoLabel, ENDINGS, counterfactual, DEBRIEF_QUESTIONS, ROLE_CARDS } from '../../games/budget-council/content.js';
+
+  const data = { chamber, minutes, amendments, papers, sources };
+  const E = createEngine(data);
+  const G = E.G;
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const TABS = ['Start', 'The meeting', 'The real meeting', 'How it works'];
+  const SIDES = ['admin', ...E.OPP];
+
+  /* ---- words a councillor may want explained. [name, pattern, meaning] ---- */
+  const TERMS = [
+    ['Section 151 Officer', 'Section 151 Officer|Chief Financial Officer|Director of Finance', 'The officer legally responsible for the council\'s finances. They must report on the budget, and approve any alternative budget before it can be moved.'],
+    ['Section 25 report', 'Section 25 report|Section 25', 'The finance officer\'s report, required by law, on whether the budget\'s estimates are robust and its reserves adequate.'],
+    ['Monitoring Officer', 'Monitoring Officer', 'The officer responsible for the council acting lawfully and for the code of conduct.'],
+    ['Revenue Support Grant', 'Revenue Support Grant', 'General government grant to the council. The final settlement for 2026/27 gave more than expected, and that extra became the money most amendments spent.'],
+    ['Strategic Contingency', 'Strategic Contingency', 'Where the extra grant from the final settlement was held in the Budget, not yet allocated.'],
+    ['Savings delivery contingency', 'savings delivery contingency|savings contingency', 'Money held in case planned savings are not delivered in full.'],
+    ['Recorded vote', 'recorded votes?', 'A vote where each councillor\'s name and vote is written in the minutes. The law requires one for every Budget decision.'],
+    ['Substantive motion', 'substantive motion', 'The motion being decided after any amendments have been dealt with: here, the Budget, amended or not.'],
+    ['Right of reply', 'right of reply', 'A last speech in answer to the debate, before the vote.'],
+    ['Administration', 'Administration', 'The group running the council. Here, Reform UK, with 51 of the 84 seats.'],
+    ['Band D', 'Band D', 'The middle council tax band, used to compare council tax between councils.'],
+    ['Point of order', 'points? of order', 'A claim that the rules are being broken. It must name the Standing Order concerned.'],
+    ['Closure motion', 'closure motion|question be now put', 'A motion to end the debate and vote now. The Chairman decides whether the matter has been discussed enough.'],
+    ['Non-pecuniary interest', 'non-pecuniary interest', 'An interest that is not financial, such as a relative affected by a decision. You declare it, and can usually still take part.'],
+    ['Abstain', 'abstain(?:ing)?|abstentions?', 'To be present and vote neither for nor against. Abstentions do not count towards either side.'],
+    ['Standing Order', 'Standing Orders?', 'The council\'s own rules of procedure for meetings.'],
+  ];
+  const TERM_RE = new RegExp('\\b(?:' + TERMS.map((t) => `(${t[1]})`).join('|') + ')\\b', 'g');
+  function words(text) {
+    const seen = new Set();
+    return esc(text).replace(TERM_RE, (hit, ...g) => {
+      const i = g.findIndex((x, k) => k < TERMS.length && x != null);
+      if (i < 0 || seen.has(i)) return hit;
+      seen.add(i);
+      return `<button type="button" class="bc-term" data-term="${i}">${hit}</button>`;
+    });
+  }
+
+  /* ---- run state and the link that replays it ---- */
+  const S = { tab: 0, side: 'pl', seed: newSeed(), fac: false, run: null, d3: true, cam: 'seat' };
+  function newSeed() { return Math.floor(Math.random() * 90000) + 10000; }
+  (function fromHash() {
+    const h = new URLSearchParams(location.hash.slice(1));
+    const seed = h.get('seed'), side = h.get('side');
+    if (seed && /^\d{1,9}$/.test(seed)) S.seed = +seed;
+    if (side && SIDES.includes(side)) S.side = side;
+    if (h.get('fac') === '1') S.fac = true;
+  })();
+  const link = () => `${location.pathname}#seed=${S.seed}&side=${S.side}${S.fac ? '&fac=1' : ''}`;
+
+  /* ---- the room: a flat plan coloured by group, and the 3D room when it loads ---- */
+  const PLAN = (() => {
+    const rows = [11, 14, 17, 20, 22], seats = [];
+    rows.forEach((n, r) => {
+      const rad = 112 + r * 29, half = n / 2;
+      for (let i = 0; i < n; i++) {
+        const left = i < half, k = left ? i : i - Math.ceil(half), span = left ? Math.ceil(half) : Math.floor(half);
+        const a0 = left ? 166 : 84, a1 = left ? 96 : 14;
+        const a = ((a0 + (a1 - a0) * (span === 1 ? 0.5 : k / (span - 1))) * Math.PI) / 180;
+        seats.push({ x: 300 + rad * Math.cos(a), y: 118 + rad * Math.sin(a) });
+      }
+    });
+    return seats;
+  })();
+  const mySeat = (s) => E.SEATS.indexOf(s.group);
+  function seatOf(who, s) {
+    const nth = (g, n) => { let c = -1; return E.SEATS.findIndex((x) => x === g && ++c === n); };
+    if (!who) return null;
+    if (who === 'me' || who === 'you' || (who === 'cm' && s.role === 'admin')) return 'me';
+    if (who === 'chair') return 84;
+    if (who === 'ce') return 85;
+    if (who === 'mo' || who === 's151' || who === 'officer') return 86;
+    if (who === 'leader') return nth('reform', s.role === 'admin' ? 1 : 0);
+    if (who === 'cm') return nth('reform', 2);
+    if (who === 'heckler' || who === 'back:reform') return nth('reform', 40);
+    if (who === 'seconder') return nth(s.group, 1);
+    if (who.startsWith('opp:')) return nth(who.slice(4), who.slice(4) === s.group ? 1 : 0);
+    if (who.startsWith('back:')) return nth(who.slice(5), 2);
+    return null;
+  }
+  function plan(s, tally) {
+    const me = s ? mySeat(s) : -1;
+    const sp = s ? seatOf(E.view(s).who, s) : null;
+    const spAt = sp === 'me' ? PLAN[me] : typeof sp === 'number' && sp < 84 ? PLAN[sp] : sp === 84 ? { x: 300, y: 40 } : sp === 85 ? { x: 252, y: 46 } : sp === 86 ? { x: 348, y: 46 } : null;
+    const dots = PLAN.map((p, i) => {
+      const g = E.SEATS[i];
+      const t = tally ? tally[i] : null;
+      const fill = t === 'for' ? '#2e6b30' : t === 'against' ? '#b3261e' : t === 'abstain' ? '#c9c4b6' : t === 'absent' ? 'none' : G[g].colour;
+      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="6.4" fill="${fill}" stroke="${t === 'absent' ? '#aeb4ad' : '#3b2a1a'}" stroke-width="${i === me ? 3.5 : 1.2}" ${i === me ? 'class="me"' : ''}><title>${esc(G[g].short)}${t ? ': ' + t : ''}</title></circle>`;
+    }).join('');
+    return `<svg class="bc-plan" viewBox="0 0 600 372" role="img" aria-label="Plan of the council chamber, seats coloured by group${tally ? ', showing how each seat voted' : ''}. The seating is invented, not the council's real plan.">
+      <rect x="6" y="6" width="588" height="360" rx="10" fill="#f3ecdb" stroke="#aeb4ad"/>
+      <rect x="196" y="18" width="208" height="46" rx="6" fill="#7a4f2a"/>
+      <ellipse cx="300" cy="150" rx="46" ry="22" fill="#7a4f2a"/>
+      <text x="300" y="362" text-anchor="middle" class="lbl">Public gallery</text>
+      ${dots}
+      <circle cx="300" cy="40" r="8" fill="#d9bd83"><title>The Chairman</title></circle>
+      <circle cx="252" cy="46" r="7" fill="#d9bd83"><title>The Chief Executive</title></circle>
+      <circle cx="348" cy="46" r="7" fill="#d9bd83"><title>An officer</title></circle>
+      ${spAt ? `<circle class="talk" cx="${spAt.x.toFixed(1)}" cy="${spAt.y.toFixed(1)}" r="13"/>` : ''}
+    </svg>`;
+  }
+  let room = null, roomHost = null, roomLoading = null;
+  function roomState() {
+    const s = S.run, v = E.view(s);
+    const vt = v.tally && s.votes[v.tally];
+    const sp = seatOf(v.who, s);
+    return { seat: mySeat(s), speaker: sp, tally: vt ? vt.tally : null, mode: vt ? 'chair' : S.cam, pick: false, item: agendaName(v.item), who: whoLabel(v.who, s, E.api) };
+  }
+  function mountRoom() {
+    const slot = $('#bc-room');
+    if (!slot) return;
+    if (room) { slot.replaceChildren(roomHost); room.set(roomState()); room.resize(); return; }
+    if (roomLoading) return;
+    roomLoading = import('../../games/ylv/chamber.js').then((mod) => {
+      roomHost = document.createElement('div');
+      roomHost.className = 'bc-roomhost';
+      roomHost.tabIndex = 0;
+      roomHost.setAttribute('role', 'img');
+      roomHost.setAttribute('aria-label', 'The council chamber as a room, figures dressed in their group\'s colour. Drag, or use the arrow keys, to look round.');
+      room = mod.createRoom(roomHost, { plan: PLAN, reduced: matchMedia('(prefers-reduced-motion: reduce)').matches, colours: E.SEATS.map((g) => G[g].colour), title: 'BUDGET MEETING' });
+      mountRoom();
+    }).catch(() => { S.d3 = false; room = null; if (S.tab === 1) render(); });
+  }
+
+  /* ---- agenda ---- */
+  function agenda() {
+    return ['Welcome', 'Apologies', 'Declarations of interest', 'The Budget moved and seconded', ...E.OPP.map((g) => `${G[g].short} amendment`), 'Debate on the Budget', 'Recorded vote on the Budget', 'Council tax resolution'];
+  }
+  const agendaName = (i) => (i == null ? 'The week before' : agenda()[i]);
+
+  /* ---- small pieces ---- */
+  const src = (id, at) => `<span class="bc-src">${esc(sources[id].cite)}${at ? ', ' + esc(at) : ''}</span>`;
+  function ruleCard(id) {
+    const r = papers.rules[id];
+    return r ? `<aside class="bc-rule"><b>The rule</b> ${words(r.text)} ${src(r.src, r.at)}</aside>` : '';
+  }
+  function figChips(ids) {
+    return ids ? `<ul class="bc-figs">${ids.map((k) => { const f = papers.figures[k]; return `<li><b>${esc(f.value)}</b><span>${esc(f.what)}</span>${src(f.src, f.at)}</li>`; }).join('')}</ul>` : '';
+  }
+  function meters(s) {
+    const bar = (label, v, max, note) => `<div class="bc-meter"><span>${label}</span><i style="--w:${Math.round((v / max) * 100)}%"></i><em>${note}</em></div>`;
+    const moodWord = ['bitter', 'hostile', 'tense', 'businesslike', 'cordial', 'warm', 'generous'][s.v.mood + 3];
+    const s151 = s.role === 'admin' ? '' : `<p class="bc-small">Your amendment: ${s.amend.kind === 'none' ? 'none, a statement only' : s.amend.kind == null ? 'not chosen yet' : s.amend.s151 === 'approved' ? 'approved in writing by the Section 151 Officer' : s.amend.s151 === 'refused' ? 'not approved' : 'not yet approved'}${s.amend.notice === 'late' ? ', and late' : ''}.</p>`;
+    return `<div class="bc-card bc-meters"><h3>Where you stand</h3>
+      ${bar('Your credibility', s.v.cred, 100, s.v.cred)}
+      ${bar('Chamber mood', s.v.mood + 3, 6, moodWord)}
+      ${bar('The Chairman\'s patience', s.v.chair, 5, s.v.chair + ' of 5')}
+      ${bar('Your group\'s discipline', s.v.disc[s.group], 100, s.v.disc[s.group])}
+      ${s151}
+      ${s.record.length ? `<p class="bc-small"><b>On the record:</b> ${esc(s.record[s.record.length - 1])}</p>` : ''}
+      <p class="bc-small">Meeting clock: ${Math.floor(s.clock / 60)}h ${String(s.clock % 60).padStart(2, '0')}m. The real meeting ran about five and a half hours.</p></div>`;
+  }
+  function amendCard(h) {
+    const a = amendments.amendments[h];
+    const rows = a.parts.map((id) => { const p = amendments.parts[id]; return `<tr><td>${esc(p.label)}</td>${p.cost.map((c) => `<td class="n">${c ? (c < 0 ? '(' + c.toFixed(3).slice(1) + ')' : c.toFixed(3)) : ''}</td>`).join('')}</tr>`; }).join('');
+    return `<details class="bc-card"><summary>The ${esc(G[h].short)} amendment, line by line (£m)</summary>
+      <div class="bc-tablewrap"><table><thead><tr><th>Line</th>${amendments.years.map((y) => `<th class="n">${y}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="bc-small">Savings in brackets. ${src('annexes', 'Annex ' + a.annex)}</p></details>`;
+  }
+  function builder(s) {
+    const b = E.buildCheck(s);
+    const sel = new Set(s.amend.parts);
+    const byGroup = E.OPP.map((g) => {
+      const ids = Object.keys(amendments.parts).filter((id) => amendments.parts[id].group === g && !amendments.parts[id].realOnly);
+      return `<fieldset class="bc-parts"><legend>From the ${esc(G[g].short)} amendment</legend>${ids.map((id) => { const p = amendments.parts[id]; return `<label><input type="checkbox" data-part="${id}" ${sel.has(id) ? 'checked' : ''}><span>${esc(p.label)}</span><em>${p.cost.map((c) => (c ? (c < 0 ? '−' : '') + Math.abs(c).toFixed(3) : '0')).join(' · ')}</em></label>`; }).join('')}</fieldset>`;
+    }).join('');
+    const yr = (k, f = (x) => (x < 0 ? '(' + Math.abs(x).toFixed(3) + ')' : x.toFixed(3))) => b.years.map((y) => `<td class="n">${f(y[k])}</td>`).join('');
+    const partsList = `<div class="bc-stack">${byGroup}<p class="bc-small">Costs are £m for ${amendments.years.join(', ')}. ${src('annexes')}</p></div>`;
+    return `<div class="bc-build">
+      <aside class="bc-card bc-balance"><h3>Running balance (£m)</h3>
+        <div class="bc-tablewrap"><table><thead><tr><th></th>${amendments.years.map((y) => `<th class="n">${y}</th>`).join('')}</tr></thead><tbody>
+          <tr><td>Net spending (a saving in brackets)</td>${yr('spend')}</tr>
+          <tr><td>From the Public Health Grant Reserve</td>${yr('ph')}</tr>
+          <tr><td>From the extra Revenue Support Grant</td>${yr('rsg')}</tr>
+          <tr><td>From the savings delivery contingency</td>${yr('sc')}</tr>
+          <tr class="${b.balanced ? 'ok' : 'gap'}"><td>Still to find</td>${yr('gap')}</tr>
+        </tbody></table></div>
+        <p class="bc-small">${b.busgates ? 'Two different bus gate proposals: choose one. ' : ''}${b.balanced ? (b.empty ? 'Choose at least one thing to spend on.' : 'It balances in every year.') : 'It does not balance yet. Spending that runs into 2028/29 needs a saving or the contingency to cover it.'}${b.usesSc ? ' It uses the savings delivery contingency, which the Administration will say is there for a reason.' : ''}</p>
+        <details><summary class="bc-small">Where the limits come from</summary><p class="bc-small">${Object.values(amendments.funds).filter((f) => f.label).map((f) => `${esc(f.label)}: ${esc(f.at)}.`).join(' ')}</p></details>
+      </aside>
+      ${partsList}
+      <p class="bc-gapbar ${b.balanced && !b.empty ? 'ok' : 'gap'}" aria-hidden="true">Still to find: ${b.years.map((y, i) => `${amendments.years[i]} ${y.gap.toFixed(3)}`).join(' · ')}</p></div>`;
+  }
+  function tallyBox(v) {
+    if (!v) return '';
+    const groups = chamber.groups.map((g) => { const x = v.byGroup[g.id] || {}; return `<tr><td><i class="bc-dot" style="background:${g.colour}"></i>${esc(g.short)}</td><td class="n">${x.for || 0}</td><td class="n">${x.against || 0}</td><td class="n">${x.abstain || 0}</td><td class="n">${x.out || 0}</td></tr>`; }).join('');
+    const voting = v.for + v.against;
+    return `<div class="bc-card"><h3>The recorded vote${v.room ? ', as counted in your room' : ''}</h3>
+      <p class="bc-result ${v.carried ? 'yes' : 'no'}">${v.for} for · ${v.against} against · ${v.abstain} abstaining: <b>${v.carried ? 'carried' : 'lost'}</b></p>
+      <p class="bc-small">A simple majority of those present and voting decides it: ${voting} voted for or against, so ${Math.floor(voting / 2) + 1} were needed. Abstentions count towards neither side. ${src('so', 'Standing Order 46.2')}</p>
+      ${v.room ? '' : `<div class="bc-tablewrap"><table><thead><tr><th>Group</th><th class="n">For</th><th class="n">Against</th><th class="n">Abstain</th><th class="n">Absent or not voting</th></tr></thead><tbody>${groups}</tbody></table></div>`}
+      ${S.fac ? `<details><summary>Use the hands counted in your room instead</summary><p class="bc-hands"><label>For <input id="bc-h-f" type="number" min="0" max="84" inputmode="numeric" value="${v.for}"></label><label>Against <input id="bc-h-a" type="number" min="0" max="84" inputmode="numeric" value="${v.against}"></label><label>Abstain <input id="bc-h-n" type="number" min="0" max="84" inputmode="numeric" value="${v.abstain}"></label><button class="bc-btn ghost" data-room="${v.id}">Use these</button></p></details>` : ''}
+    </div>`;
+  }
+
+  /* ---- views ---- */
+  const views = {
+    0() {
+      const side = (id) => id === 'admin' ? `<button type="button" data-side="admin" aria-pressed="${S.side === 'admin'}"><b>The Administration</b><span>Reform UK, 51 seats. You are the Cabinet Member for Resources: you second the Budget and answer for the money.</span></button>`
+        : `<button type="button" data-side="${id}" aria-pressed="${S.side === id}"><b>${esc(G[id].short)}</b><span>${G[id].seats} seats. You lead the group: you move its amendment, or make a statement.</span></button>`;
+      return `<section class="bc-two">
+        <div class="bc-stack">
+          <p class="bc-lede">Every February, Lancashire's 84 county councillors meet to set the next year's budget and council tax. It is the most rule-bound meeting of the year. This simulator puts you in it, using the real papers and the five real opposition amendments from 26 February 2026, in today's chamber.</p>
+          <ol class="bc-steps">
+            <li><b>The week before.</b> Build or choose your amendment, get the finance officer's approval, decide when to share it and who to talk to.</li>
+            <li><b>The meeting.</b> Declarations, the Budget moved, each group's amendment debated and put to a recorded vote, then the Budget itself.</li>
+            <li><b>The debrief.</b> What moved votes, what you could have done differently, and what really happened on the night.</li>
+          </ol>
+          <p class="bc-small">Opponents react to what you do, with some chance in it, so no two meetings are the same. A run takes 20 to 30 minutes.</p>
+        </div>
+        <div class="bc-stack">
+          <fieldset class="bc-sides"><legend>Which side of the chamber?</legend>${SIDES.map(side).join('')}</fieldset>
+          <fieldset class="bc-pick"><legend>How are you playing?</legend>
+            <button type="button" data-fac="0" aria-pressed="${!S.fac}">On my own</button>
+            <button type="button" data-fac="1" aria-pressed="${S.fac}">As a training session, on one screen</button>
+          </fieldset>
+          ${S.fac ? `<div class="bc-card" id="bc-roles"><h3>Role cards</h3><p class="bc-small">Hand these out. The screen shows the words; people in the room can read them or use their own. At each recorded vote you can type in the hands counted in the room.</p><dl class="bc-roles">${ROLE_CARDS.map((r) => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl><p><button class="bc-btn ghost" data-print="#bc-roles">Print the role cards</button></p></div>` : ''}
+          <p class="bc-seed"><label for="bc-seed">Meeting number</label> <input id="bc-seed" type="number" min="1" max="999999999" inputmode="numeric" value="${S.seed}"> <span class="bc-small">The same number, side and choices always give the same meeting, so a group can replay one together.</span></p>
+          <p><button class="bc-btn" data-start>Start the week before</button></p>
+        </div>
+      </section>
+      <section class="bc-card"><h2>Whose idea was this?</h2><p>The idea of a virtual council meeting came from Wayne Walsh, who lives in Burnley. This adult version follows the one for young people, <a href="/young-lancashire-voice/">Young Lancashire Voice</a>.</p></section>`;
+    },
+    1() {
+      const s = S.run;
+      if (!s) return `<section class="bc-stack"><h2>The meeting</h2><p>Choose a side on the Start tab first.</p><p><button class="bc-btn" data-tab="0">Choose a side</button></p></section>`;
+      if (s.ended) return debrief(s);
+      const v = E.view(s);
+      const vt = v.tally && s.votes[v.tally];
+      const meetingNow = v.phase === 'meeting';
+      const ag = agenda().map((a, i) => `<li class="${i === v.item ? 'on' : v.item != null && i < v.item ? 'done' : ''}"><b>${esc(a)}</b></li>`).join('');
+      const who = whoLabel(v.who, s, E.api);
+      const roomTools = vt ? `<span class="bc-chip is-note">The vote, seen from the Chairman's bench</span>` : ['seat', 'chair', 'over'].map((c) => `<button type="button" class="bc-chip" data-cam="${c}" aria-pressed="${S.cam === c}">${{ seat: 'Your seat', chair: 'Chairman\'s bench', over: 'Public gallery' }[c]}</button>`).join('');
+      const roomBox = S.d3 ? `<div class="bc-room" id="bc-room">${plan(s, vt?.tally)}</div><p class="bc-tools">${roomTools}<button type="button" class="bc-chip" data-d3="0">Flat plan</button></p>` : `${plan(s, vt?.tally)}<p class="bc-tools"><button type="button" class="bc-chip" data-d3="1">Show the room in 3D</button></p>`;
+      const choices = v.choices.map((c) => `<button type="button" class="bc-btn ${v.choices.length > 1 ? 'ghost' : ''}" data-choice="${esc(c.id)}">${esc(c.label)}</button>`).join('');
+      return `<section class="bc-two bc-meet">
+        <div class="bc-m-room">${roomBox}<ol class="bc-agenda" aria-label="Agenda">${meetingNow ? ag : `<li class="on"><b>The week before the meeting</b></li>`}</ol>${meters(s)}</div>
+        <div class="bc-stack bc-m-words">
+          <p class="bc-eyebrow">${s.role === 'admin' ? 'Administration' : esc(G[s.group].short)} · ${esc(agendaName(v.item))} · Meeting ${s.seed}</p>
+          ${v.say ? `<div class="bc-screen" id="bc-screen">${who ? `<span class="who">${esc(who)}</span>` : ''}<q>${words(v.say)}</q></div>` : ''}
+          ${v.plain ? `<p class="bc-plain">${words(v.plain)}</p>` : ''}
+          <p class="bc-def" id="bc-def" role="status"></p>
+          ${v.kind === 'build' ? builder(s) : ''}
+          ${v.card && v.group ? amendCard(v.group) : ''}
+          ${figChips(v.figs)}
+          ${vt ? tallyBox(vt) : ''}
+          ${v.rule ? ruleCard(v.rule) : ''}
+          <div class="bc-choices" role="group" aria-label="Your choice">${choices}</div>
+        </div>
+      </section>`;
+    },
+    2() {
+      const b = minutes.votes.find((v) => v.id === 'budget');
+      return `<section class="bc-stack bc-real">
+        <h2>The real meeting: 26 February 2026</h2>
+        <p>The Budget Meeting began at 1pm in the council chamber at County Hall, Preston. The Leader moved the Budget and the Cabinet Member for Resources seconded it. Five opposition groups moved amendments, each debated and put to a recorded vote. All five were lost. The Budget was carried by ${b.totals.for} votes to ${b.totals.against}, with ${b.totals.abstain} abstaining. ${src('minutes', 'item 3')}</p>
+        ${figChips(['netBudget', 'ctRise', 'bandD', 'savings', 'newSavings', 'reserve'])}
+        <div class="bc-tablewrap"><table><thead><tr><th>Vote</th><th class="n">For</th><th class="n">Against</th><th class="n">Abstain</th><th>Result</th></tr></thead><tbody>
+          ${minutes.votes.map((v) => `<tr><td>${esc(v.label)}</td><td class="n">${v.totals.for}</td><td class="n">${v.totals.against}</td><td class="n">${v.totals.abstain}</td><td>${v.result === 'carried' ? 'Carried' : 'Lost'}</td></tr>`).join('')}
+        </tbody></table></div>
+        <p class="bc-small">${esc(minutes.absent)} ${esc(minutes.february)} Source: ${src('minutes', 'item 3')}.</p>
+        <h3>The five amendments</h3>
+        ${E.OPP.map((g) => { const a = amendments.amendments[g]; return `<div class="bc-card"><h4>${esc(G[g].name)}: ${esc(a.title)}</h4><p>${esc(a.summary)}</p><p class="bc-small">The Section 151 Officer's statement: it ${esc(a.s151)}. ${src('annexes', 'Annex ' + a.annex)}</p>${amendCard(g)}</div>`; }).join('')}
+        <p class="bc-small">In the simulator the groups are called in order of today's group size, so the order differs from February's, when Progressive Lancashire, the Conservatives, the Liberal Democrats, Labour and Our West Lancashire were taken in that order.</p>
+      </section>`;
+    },
+    3() {
+      return `<section class="bc-stack bc-how">
+        <h2>How it works</h2>
+        <p>Budget Council is a prototype training simulator. It is not a council service and has not been made with or approved by Lancashire County Council.</p>
+        <h3>What is real and what is made up</h3>
+        <div class="bc-tablewrap"><table><thead><tr><th>Real, from the public record</th><th>Made up for the simulator</th></tr></thead><tbody>
+          <tr><td>The Budget's figures, the five amendments and their costs, and the Section 151 Officer's statements</td><td>Every speech, question and answer</td></tr>
+          <tr><td>The rules of the meeting, from the council's Standing Orders</td><td>How opponents react, and every vote count in the game</td></tr>
+          <tr><td>Today's group sizes: Reform UK 51 of 84</td><td>The seating plan, and the faces in the room</td></tr>
+          <tr><td>The real result of each vote on 26 February, shown after each simulated one</td><td>Your credibility, the chamber's mood and the scores</td></tr>
+        </tbody></table></div>
+        <p>No councillor is named, and nobody's words are quoted. Offices and political groups appear because the rules give them their roles.</p>
+        <h3>How the votes work</h3>
+        <p>Each of the 84 seats votes on its own. Its starting tendency comes from how its group voted on the same question on 26 February. What you do moves that: who you talk to, how you open, how you answer, how the room feels. Groups with a strong whip vote together. Absent members and the member online cannot vote. A seeded generator decides the close calls, so a meeting replays exactly from its number.</p>
+        <h3>How you are scored</h3>
+        <p>Not on winning. The Administration has a majority, so a score for winning would only teach that. You are scored out of 10 on three things: procedure (did you follow the rules), good faith (did you answer questions and argue with ideas, not people) and influence (did you change anything, or get anything on the record).</p>
+        <h3>The rules used</h3>
+        <ul class="bc-rules">${Object.values(papers.rules).map((r) => `<li>${esc(r.text)} ${src(r.src, r.at)}</li>`).join('')}</ul>
+        <h3>Words</h3>
+        <dl>${TERMS.slice().sort((a, b) => a[0].localeCompare(b[0])).map((t) => `<dt>${t[0]}</dt><dd>${esc(t[2])}</dd>`).join('')}</dl>
+        <h3>Where the idea came from</h3>
+        <p>The idea of a virtual council meeting came from Wayne Walsh, who lives in Burnley. The design, the wording and any mistakes are Tom Pickup's.</p>
+        <h3>Your information</h3>
+        <p>There are no accounts and no text boxes. Nothing is stored or sent. The link to a meeting holds its number, the side and whether it is a training session.</p>
+        <h3>Sources</h3>
+        <ul class="bc-sources">${Object.entries(sources).filter(([k]) => !k.startsWith('_')).map(([, x]) => `<li>${esc(x.text)} Available at: <a href="${esc(x.url)}">${esc(x.url.replace(/^https?:\/\//, '').split('/')[0])}</a>.</li>`).join('')}</ul>
+      </section>`;
+    },
+  };
+
+  function debrief(s) {
+    const e = ENDINGS[s.ended];
+    const sc = s.v.score;
+    const moved = s.log.filter((l) => /^(lean|disc|cred|mood|chair|score)/.test(l.tag) || l.tag.startsWith('flag:')).slice(-10);
+    const realB = minutes.votes.find((v) => v.id === 'budget');
+    const yours = Object.values(s.votes);
+    const bar = (label, v) => `<div class="bc-meter"><span>${label}</span><i style="--w:${v * 10}%"></i><em>${v} of 10</em></div>`;
+    return `<section class="bc-stack bc-debrief">
+      <p class="bc-eyebrow">Meeting ${s.seed} · ${s.role === 'admin' ? 'Administration' : esc(G[s.group].short)}</p>
+      <h2>${esc(e.title)}</h2>
+      <p class="bc-lede">${esc(e.text)}</p>
+      <div class="bc-two">
+        <div class="bc-card"><h3>Your scores</h3>${bar('Procedure', sc.proc)}${bar('Good faith', sc.faith)}${bar('Influence', sc.infl)}
+          <p class="bc-small">Scored on conduct, not on winning: a majority wins the vote either way.</p></div>
+        <div class="bc-card"><h3>What you could have done differently</h3><p>${esc(counterfactual(s))}</p>
+          ${s.record.length ? `<h4>On the record</h4><ul>${s.record.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}</div>
+      </div>
+      <div class="bc-card"><h3>What moved things</h3><ol class="bc-moved">${moved.map((l) => `<li>${esc(l.text)}</li>`).join('') || '<li>Nothing much: the meeting went to form.</li>'}</ol></div>
+      <div class="bc-card"><h3>Your meeting and the real one</h3><div class="bc-tablewrap"><table><thead><tr><th>Vote</th><th class="n">Yours</th><th class="n">26 February</th></tr></thead><tbody>
+        ${yours.map((v) => { const real = minutes.votes.find((x) => 'am_' + x.id === v.id || x.id === v.id); return `<tr><td>${esc(v.label)}</td><td class="n">${v.for} to ${v.against}, ${v.abstain} abst. ${v.carried ? 'Carried' : 'Lost'}</td><td class="n">${real ? `${real.totals.for} to ${real.totals.against}, ${real.totals.abstain} abst. ${real.result === 'carried' ? 'Carried' : 'Lost'}` : ''}</td></tr>`; }).join('')}
+      </tbody></table></div><p class="bc-small">Real results: ${src('minutes', 'item 3')}. The real Budget was carried ${realB.totals.for} to ${realB.totals.against}. Today's groups are not the same size as February's.</p></div>
+      <div class="bc-card"><h3>Talk about it</h3><ol class="bc-debriefq">${DEBRIEF_QUESTIONS.map((q) => `<li>${esc(q)}</li>`).join('')}</ol>
+        <p class="bc-small">Further reading: ${src('lgaworkbook')}; the <a href="${sources.report.url}">Budget Report</a>, paras 28 to 49 (the Section 25 report) and 78 to 81 (members' duties).</p></div>
+      <p><button class="bc-btn" data-again>Play this meeting again</button> <button class="bc-btn ghost" data-other>Try the other side</button> <button class="bc-btn ghost" data-copy>Copy a link to this meeting</button></p>
+    </section>`;
+  }
+
+  /* ---- render and events ---- */
+  function render(focus) {
+    $('#bc-tabs').innerHTML = TABS.map((t, i) => `<button type="button" data-tab="${i}" ${i === S.tab ? 'aria-current="page"' : ''}>${t}</button>`).join('');
+    $('#bc-app').innerHTML = views[S.tab]();
+    if (focus) { const el = $(focus); if (el) el.focus({ preventScroll: true }); }
+    const q = $('#bc-screen');
+    if (q) $('#bc-sr').textContent = q.textContent;
+    if (S.tab === 1 && S.run && !S.run.ended && S.d3) mountRoom();
+  }
+  function start() {
+    const seedIn = $('#bc-seed');
+    if (seedIn && /^\d{1,9}$/.test(seedIn.value)) S.seed = +seedIn.value;
+    S.run = E.start({ seed: S.seed, role: S.side === 'admin' ? 'admin' : 'opp', group: S.side === 'admin' ? undefined : S.side, facilitator: S.fac });
+    history.replaceState(null, '', link());
+    S.tab = 1; render('[data-choice]');
+    window.scrollTo({ top: $('.bc').offsetTop, behavior: 'auto' });
+  }
+  function printOnly(sel) {
+    const el = $(sel); if (!el) return;
+    el.classList.add('bc-printme'); document.documentElement.classList.add('bc-print');
+    addEventListener('afterprint', () => { el.classList.remove('bc-printme'); document.documentElement.classList.remove('bc-print'); }, { once: true });
+    window.print();
+  }
+  $('.bc').addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const d = b.dataset;
+    if (d.tab != null) { S.tab = +d.tab; render(); window.scrollTo({ top: $('.bc').offsetTop, behavior: 'auto' }); }
+    else if (d.side) { S.side = d.side; render(`[data-side="${d.side}"]`); }
+    else if (d.fac != null) { S.fac = d.fac === '1'; render(`[data-fac="${d.fac}"]`); }
+    else if ('start' in d) start();
+    else if (d.choice) {
+      const before = S.run.beat;
+      S.run = E.act(S.run, d.choice);
+      if (S.run.ended && before) history.replaceState(null, '', link());
+      render('[data-choice], [data-again]');
+      const w = $('.bc-m-words') || $('.bc-debrief');
+      if (w && w.getBoundingClientRect().top < 0) w.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+    else if (d.term != null) { const t = TERMS[+d.term]; $('#bc-def').innerHTML = `<b>${t[0]}.</b> ${esc(t[2])}`; }
+    else if (d.d3 != null) { S.d3 = d.d3 === '1'; render('[data-d3]'); }
+    else if (d.cam) { S.cam = d.cam; render(`[data-cam="${d.cam}"]`); }
+    else if (d.room) {
+      const n = (id) => Math.max(0, Math.min(84, Math.floor(+$('#bc-h-' + id).value || 0)));
+      S.run = E.roomVote(S.run, d.room, { for: n('f'), against: n('a'), abstain: n('n') });
+      render('[data-choice]');
+    }
+    else if (d.print) printOnly(d.print);
+    else if ('again' in d) start();
+    else if ('other' in d) { S.side = S.side === 'admin' ? 'pl' : 'admin'; S.seed = newSeed(); S.tab = 0; render(`[data-side="${S.side}"]`); }
+    else if ('copy' in d) { navigator.clipboard?.writeText(location.origin + link()).then(() => { b.textContent = 'Link copied'; }, () => { b.textContent = 'Copy failed'; }); }
+  });
+  $('.bc').addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.dataset.part && S.run) {
+      const parts = new Set(S.run.amend.parts);
+      t.checked ? parts.add(t.dataset.part) : parts.delete(t.dataset.part);
+      S.run = E.act(S.run, 'parts', [...parts]);
+      render(`[data-part="${t.dataset.part}"]`);
+    }
+  });
+  render();
+</script>
+
+<style is:global>
+  .bc { max-width: 1160px; margin: 0 auto; padding: 0 var(--gutter) 72px; }
+  .bc-proto { margin: 16px 0 0; padding: 9px 14px; border: 1px solid var(--gold); background: var(--panel); color: var(--ink); font-size: 0.88rem; border-radius: var(--radius-lg); }
+  .bc-proto b { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; color: var(--gold); margin-right: 8px; }
+  .bc-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; padding: 22px 0 14px; border-bottom: 1px solid var(--line); }
+  .bc-head h1 { margin: 2px 0 0; font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.1; }
+  .bc-eyebrow { margin: 0; font: 600 0.74rem/1.4 var(--font-sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .bc-tabs { display: flex; gap: 4px; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .bc-tabs button { border: 0; background: none; padding: 0 12px; min-height: var(--touch); border-radius: 999px; font: 600 0.92rem/1 var(--font-sans); color: var(--muted); white-space: nowrap; cursor: pointer; }
+  .bc-tabs button[aria-current] { background: var(--ink); color: var(--paper); }
+  .bc-app { padding-top: 24px; }
+  .bc-app h2 { margin: 0; font-size: 1.5rem; }
+  .bc-app h3 { margin: 0 0 8px; font-size: 1.1rem; }
+  .bc-app h4 { margin: 0 0 6px; font-size: 1rem; }
+  .bc-app p, .bc-app li, .bc-app dd { max-width: 66ch; }
+  .bc-lede { font-size: 1.15rem; line-height: 1.5; }
+  .bc-stack { display: grid; gap: 16px; align-content: start; min-width: 0; }
+  .bc-two { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 860px) { .bc-two { grid-template-columns: minmax(0, 1fr); } }
+  .bc-meet { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); }
+  @media (max-width: 860px) { .bc-meet { grid-template-columns: minmax(0, 1fr); } .bc-m-words { order: -1; } .bc-m-room .bc-room, .bc-m-room > .bc-plan { max-height: 46vh; } }
+  .bc-steps { display: grid; gap: 10px; padding-left: 1.3em; margin: 0; }
+  .bc-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 16px 18px; min-width: 0; }
+  .bc-card p { margin: 0 0 8px; }
+  .bc-small { font-size: 0.86rem; color: var(--muted); }
+  .bc-src { display: inline; font: 400 0.78rem/1.4 var(--font-mono); color: var(--muted); }
+  .bc-btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--touch); padding: 8px 18px; border: 2px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--paper); font: 700 1rem/1.25 var(--font-sans); text-decoration: none; cursor: pointer; text-align: left; }
+  .bc-btn.ghost { background: transparent; color: var(--ink); }
+  .bc-btn:hover { background: var(--teal-deep); border-color: var(--teal-deep); color: #fff; }
+  .bc-choices { display: grid; gap: 8px; }
+  .bc-choices .bc-btn { justify-content: flex-start; border-radius: var(--radius-xl); padding: 10px 16px; }
+  .bc-sides, .bc-pick { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .bc-pick { display: flex; flex-wrap: wrap; }
+  .bc-sides legend, .bc-pick legend, .bc-parts legend { font-weight: 700; padding: 0 0 8px; }
+  .bc-sides button, .bc-pick button { display: grid; gap: 2px; border: 1.5px solid var(--line-strong); background: var(--surface); border-radius: var(--radius-xl); padding: 10px 14px; min-height: var(--touch); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+  .bc-sides button span { font-size: 0.88rem; color: var(--muted); }
+  .bc-sides button[aria-pressed='true'], .bc-pick button[aria-pressed='true'] { border-color: var(--teal); background: var(--teal); color: #fff; }
+  .bc-sides button[aria-pressed='true'] span { color: #e6f0ee; }
+  .bc-seed input, .bc-hands input { width: 7em; min-height: var(--touch); font: inherit; padding: 0 8px; border: 1.5px solid var(--line-strong); border-radius: var(--radius-lg); }
+  .bc-seed .bc-small { display: block; margin-top: 4px; }
+  .bc-room { position: relative; aspect-ratio: 16 / 10; border-radius: var(--radius-xl); overflow: hidden; background: #1a1512; }
+  .bc-room > svg { width: 100%; height: 100%; }
+  .bc-roomhost { position: absolute; inset: 0; touch-action: pan-y; }
+  .bc-roomhost canvas { width: 100%; height: 100%; display: block; }
+  .bc .ylv-room-label { position: absolute; left: 12px; bottom: 10px; padding: 5px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.62); color: #fff; font: 700 0.95rem/1.2 var(--font-sans); pointer-events: none; }
+  .bc .ylv-room-label:empty { display: none; }
+  .bc-plan { width: 100%; height: auto; display: block; }
+  .bc-plan .lbl { font: 600 9px var(--font-sans); letter-spacing: 0.12em; fill: #5b4a36; }
+  .bc-plan .talk { fill: none; stroke: #111; stroke-width: 3; stroke-dasharray: 5 4; }
+  .bc-app .bc-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; max-width: none; }
+  .bc-chip { display: inline-flex; align-items: center; min-height: var(--touch); padding: 0 14px; border: 1.5px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink); font: 600 0.9rem/1.2 var(--font-sans); cursor: pointer; }
+  .bc-chip[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .bc-chip.is-note { border-style: dashed; cursor: default; }
+  .bc-agenda { list-style: none; margin: 14px 0; padding: 0; display: grid; gap: 2px; font-size: 0.9rem; }
+  .bc-agenda li { padding: 5px 10px; border-left: 3px solid var(--line); color: var(--muted); max-width: none; }
+  .bc-agenda li.on { border-color: var(--teal); background: var(--panel); color: var(--ink); }
+  .bc-agenda li.done b { text-decoration: line-through; font-weight: 600; }
+  .bc-screen { background: #10201d; color: #fff; border-radius: var(--radius-xl); padding: 18px 20px; border-bottom: 5px solid #24509c; display: grid; gap: 8px; }
+  .bc-screen .who { font: 600 0.8rem/1.2 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; color: #d9bd83; }
+  .bc-screen q { font: 600 1.18rem/1.45 var(--font-display); quotes: '\201C' '\201D'; }
+  .bc-screen .bc-term { color: #fff; }
+  .bc-plain { background: var(--panel); border-radius: var(--radius-xl); padding: 12px 16px; margin: 0; }
+  .bc-term { border: 0; background: none; padding: 0; margin: 0; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .bc-def { margin: 0; padding: 10px 16px; border-left: 4px solid var(--gold); background: var(--surface); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+  .bc-def:empty { display: none; }
+  .bc-rule { border-left: 4px solid var(--teal); background: var(--surface); padding: 10px 14px; border-radius: 0 var(--radius-lg) var(--radius-lg) 0; font-size: 0.94rem; }
+  .bc-rule b { text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--teal); margin-right: 6px; }
+  .bc-figs { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+  .bc-figs li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 10px 12px; display: grid; gap: 4px; max-width: none; }
+  .bc-figs b { font: 700 1.3rem/1.1 var(--font-sans); font-variant-numeric: tabular-nums; }
+  .bc-figs span { font-size: 0.86rem; }
+  .bc-meters { display: grid; gap: 6px; }
+  .bc-meter { display: grid; grid-template-columns: 11em 1fr 6em; gap: 10px; align-items: center; font-size: 0.88rem; }
+  .bc-meter i { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--teal) var(--w), var(--chart-track) var(--w)); }
+  .bc-meter em { font-style: normal; color: var(--muted); font-variant-numeric: tabular-nums; }
+  @media (max-width: 480px) { .bc-meter { grid-template-columns: 1fr 5em; } .bc-meter i { grid-column: 1 / -1; grid-row: 2; } }
+  .bc-tablewrap { overflow-x: auto; max-width: 100%; }
+  .bc-app table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .bc-app th, .bc-app td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .bc-app .n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bc-app tr.gap td { color: var(--text-red); font-weight: 700; }
+  .bc-app tr.ok td { color: var(--text-green); font-weight: 700; }
+  .bc-app summary { cursor: pointer; font-weight: 700; min-height: 32px; }
+  .bc-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+  .bc-result { font: 700 1.1rem/1.3 var(--font-sans); font-variant-numeric: tabular-nums; }
+  .bc-result.yes b { color: var(--text-green); } .bc-result.no b { color: var(--text-red); }
+  .bc-hands { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .bc-build { display: grid; gap: 16px; }
+  .bc-parts { border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 10px 12px; margin: 0; display: grid; gap: 6px; }
+  .bc-parts label { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: start; min-height: 32px; cursor: pointer; }
+  .bc-parts input { width: 20px; height: 20px; margin-top: 2px; }
+  .bc-parts em { grid-column: 2; font: 400 0.78rem/1.3 var(--font-mono); color: var(--muted); font-style: normal; }
+  .bc-gapbar { position: sticky; bottom: 8px; margin: 0; padding: 8px 14px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 700 0.86rem/1.3 var(--font-sans); font-variant-numeric: tabular-nums; justify-self: start; max-width: 100%; }
+  .bc-gapbar.ok { background: var(--text-green); }
+  .bc-roles { display: grid; gap: 10px; margin: 0 0 12px; }
+  .bc-roles dt, .bc-how dt { font-weight: 700; } .bc-roles dd, .bc-how dd { margin: 0 0 6px; }
+  .bc-moved, .bc-debriefq, .bc-rules, .bc-sources { display: grid; gap: 6px; padding-left: 1.3em; margin: 0; }
+  .bc-sources a { overflow-wrap: anywhere; }
+  @media print {
+    html.bc-print body * { visibility: hidden !important; }
+    html.bc-print .bc-printme, html.bc-print .bc-printme * { visibility: visible !important; }
+    html.bc-print .bc-printme { position: fixed; left: 0; top: 0; width: 100%; border: 0; background: #fff; color: #000; }
+    html.bc-print .bc-printme button { display: none; }
+    html.bc-print .bc-roles > div { break-inside: avoid; border: 1px solid #000; padding: 10px 14px; }
+  }
+  .bc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+</style>
