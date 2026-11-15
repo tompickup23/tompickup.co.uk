@@ -5,11 +5,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createEngine } from '../src/games/budget-council/engine.js';
-import { ENDINGS } from '../src/games/budget-council/content.js';
+import * as content from '../src/games/budget-council/lancashire/content.js';
+const { ENDINGS } = content;
 
-const J = (p) => JSON.parse(readFileSync(new URL('../src/data/budget-council/' + p, import.meta.url)));
+const J = (p) => JSON.parse(readFileSync(new URL('../src/data/budget-council/lancashire/' + p, import.meta.url)));
 const data = { chamber: J('chamber.json'), minutes: J('minutes.json'), amendments: J('amendments.json'), papers: J('papers.json'), sources: J('sources.json') };
-const E = createEngine(data);
+const E = createEngine(data, content);
 const GROUPS = E.OPP;
 
 // A separate generator for the walker's own choices, so it never disturbs the game's.
@@ -134,13 +135,13 @@ test('every figure and rule names a source that exists', () => {
     assert.ok(f.at, `${k} has no page, paragraph or table`);
   }
   for (const f of Object.values(data.amendments.funds)) if (f.max) assert.ok(data.sources[f.src] && f.at);
-  const content = readFileSync(new URL('../src/games/budget-council/content.js', import.meta.url), 'utf8');
+  const content = readFileSync(new URL('../src/games/budget-council/lancashire/content.js', import.meta.url), 'utf8');
   assert.ok(!/£\d/.test(content), 'content.js has a £ figure typed in; take it from papers.json or amendments.json');
 });
 
 test('no em dashes or en dashes in the game\'s words', () => {
-  const files = ['src/games/budget-council/content.js', 'src/games/budget-council/engine.js', 'src/pages/budget-council/index.astro',
-    'src/data/budget-council/papers.json', 'src/data/budget-council/amendments.json', 'src/data/budget-council/minutes.json', 'src/data/budget-council/chamber.json', 'src/data/budget-council/sources.json'];
+  const files = ['src/games/budget-council/lancashire/content.js', 'src/games/budget-council/lancashire/ui.js', 'src/games/budget-council/engine.js', 'src/games/budget-council/app.js', 'src/pages/budget-council/index.astro',
+    ...['papers', 'amendments', 'minutes', 'chamber', 'sources'].map((f) => `src/data/budget-council/lancashire/${f}.json`)];
   for (const f of files) {
     let t;
     try { t = readFileSync(new URL('../' + f, import.meta.url), 'utf8'); } catch { continue; }

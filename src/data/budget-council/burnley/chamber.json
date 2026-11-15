@@ -1,0 +1,171 @@
+{
+  "_note": "Seats by party as the council's website listed them on 15 November 2026, after the May 2026 elections (Labour includes 2 Labour and Co-operative councillors). The Administration is the coalition of Independent, The Independent Group, Liberal Democrat and Green councillors who form the Executive, as described to the author on 15 November 2026: 19 of 45, a minority. The Liberal Democrat Deputy Leader holds the resources portfolio, so the Administration side is played from that group. The Mayor chairs the meeting, is an Independent and votes as a councillor. Colours are for the game only. The seating plan is invented, not the council's real plan.",
+  "source": "party",
+  "seats": 45,
+  "majorityOfAll": 23,
+  "administration": [
+    "ld",
+    "ind",
+    "tig",
+    "grn"
+  ],
+  "chair": {
+    "group": "ind"
+  },
+  "remote": false,
+  "rows": [
+    8,
+    11,
+    12,
+    13
+  ],
+  "adminAway": 2,
+  "groups": [
+    {
+      "id": "ref",
+      "name": "Reform UK",
+      "short": "Reform UK",
+      "seats": 12,
+      "colour": "#12a4ba",
+      "mover": true
+    },
+    {
+      "id": "lab",
+      "name": "Labour",
+      "short": "Labour",
+      "seats": 10,
+      "colour": "#c8202f",
+      "mover": true
+    },
+    {
+      "id": "ind",
+      "name": "Independent",
+      "short": "Independent",
+      "seats": 6,
+      "colour": "#6b6f73"
+    },
+    {
+      "id": "ld",
+      "name": "Liberal Democrats",
+      "short": "Liberal Democrat",
+      "seats": 6,
+      "colour": "#e8961e"
+    },
+    {
+      "id": "tig",
+      "name": "The Independent Group",
+      "short": "The Independent Group",
+      "seats": 5,
+      "colour": "#8e5aa8"
+    },
+    {
+      "id": "con",
+      "name": "Conservative",
+      "short": "Conservative",
+      "seats": 3,
+      "colour": "#1f5fbf",
+      "mover": true
+    },
+    {
+      "id": "grn",
+      "name": "Green Party",
+      "short": "Green",
+      "seats": 2,
+      "colour": "#4f8a3c"
+    },
+    {
+      "id": "rb",
+      "name": "Restore Britain",
+      "short": "Restore Britain",
+      "seats": 1,
+      "colour": "#1d3557"
+    }
+  ],
+  "priors": {
+    "_note": "Starting tendencies for each group's councillors, made up for the game: there is no group-by-group record of past votes (the minutes list names only). The coalition backs its own Budget; the opposition starts against or abstaining; groups start cool on each other's amendments. What you do moves these.",
+    "budget": {
+      "ind": {
+        "for": 0.97,
+        "against": 0.01,
+        "abstain": 0.02
+      },
+      "ld": {
+        "for": 0.97,
+        "against": 0.01,
+        "abstain": 0.02
+      },
+      "tig": {
+        "for": 0.93,
+        "against": 0.02,
+        "abstain": 0.05
+      },
+      "grn": {
+        "for": 0.9,
+        "against": 0.03,
+        "abstain": 0.07
+      },
+      "ref": {
+        "for": 0.1,
+        "against": 0.75,
+        "abstain": 0.15
+      },
+      "lab": {
+        "for": 0.35,
+        "against": 0.3,
+        "abstain": 0.35
+      },
+      "con": {
+        "for": 0.15,
+        "against": 0.65,
+        "abstain": 0.2
+      },
+      "rb": {
+        "for": 0.05,
+        "against": 0.85,
+        "abstain": 0.1
+      }
+    },
+    "other": {
+      "ind": {
+        "for": 0.03,
+        "against": 0.92,
+        "abstain": 0.05
+      },
+      "ld": {
+        "for": 0.03,
+        "against": 0.92,
+        "abstain": 0.05
+      },
+      "tig": {
+        "for": 0.05,
+        "against": 0.88,
+        "abstain": 0.07
+      },
+      "grn": {
+        "for": 0.05,
+        "against": 0.85,
+        "abstain": 0.1
+      },
+      "ref": {
+        "for": 0.25,
+        "against": 0.35,
+        "abstain": 0.4
+      },
+      "lab": {
+        "for": 0.2,
+        "against": 0.45,
+        "abstain": 0.35
+      },
+      "con": {
+        "for": 0.35,
+        "against": 0.3,
+        "abstain": 0.35
+      },
+      "rb": {
+        "for": 0.4,
+        "against": 0.3,
+        "abstain": 0.3
+      }
+    }
+  }
+}
