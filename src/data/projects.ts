@@ -100,6 +100,14 @@ export const ON_THIS_SITE: Project[] = [
     desc: 'A prototype for young people: take a seat in the county council chamber, bring your own motion and put it to Lancashire. Not a council service; nothing is collected.',
     inFooter: false,
   },
+  {
+    // The adult counterpart: a training simulator of the Budget Meeting. Prototype, noindex.
+    href: '/budget-council/',
+    accent: '#1f4e5a',
+    title: 'Budget Council',
+    desc: 'A prototype training simulator for councillors: prepare for and sit through Lancashire County Council’s Budget Meeting, from either side of the chamber, using the 2026/27 papers and amendments. Nothing is collected.',
+    inFooter: false,
+  },
 ];
 
 /* Separate publications, each on its own domain, each with its own method and
@@ -214,7 +222,7 @@ export const PROJECT_GROUPS = [
   { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
   { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
   { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'Burnley Budget Challenge', 'The Padiham Job', 'Reform UK Burnley') },
-  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Budget Challenge', 'Lancashire Voice', 'Young Lancashire Voice') },
+  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Budget Challenge', 'Lancashire Voice', 'Young Lancashire Voice', 'Budget Council') },
 ];
 
 /** Related reading is labelled as such, rather than presented as a launch article. */
@@ -240,6 +248,7 @@ export const PROJECT_DETAILS: Record<string, {
   "Lancashire's new councils": { mark: 'LC', subject: 'Interactive council model', article: { slug: 'lancashire-four-unitaries-model', label: 'Read the introduction to the model' }, section: { href: '/lgr/contracts/', label: 'Explore the contracts register' } },
   'Lancashire Voice': { mark: 'LV', subject: 'Prototype, not a council service' },
   'Young Lancashire Voice': { mark: 'YV', subject: 'Prototype, not a council service' },
+  'Budget Council': { mark: 'BC', subject: 'Training simulator prototype' },
   'Reform UK Burnley': { mark: 'RB', subject: 'Political website' },
 };
 

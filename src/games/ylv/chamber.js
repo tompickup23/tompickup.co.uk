@@ -114,7 +114,10 @@ function sector(r0, r1, y0, y1, a0, a1, n = 14) {
   return g;
 }
 
-export function createRoom(host, { plan, reduced = false }) {
+// Options added for Budget Council (15 Nov 2026), all optional so Young Lancashire Voice is unchanged:
+// colours, one colour per seat, dresses each seat's figure in its group colour; title replaces the
+// FULL COUNCIL header on the screen; a tally value of 'absent' leaves that seat empty.
+export function createRoom(host, { plan, reduced = false, colours = null, title = 'FULL COUNCIL' }) {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -294,7 +297,7 @@ export function createRoom(host, { plan, reduced = false }) {
   function drawScreen(item, who) {
     const g = scr.getContext('2d');
     const bg = g.createLinearGradient(0, 0, 0, 360); bg.addColorStop(0, '#18365f'); bg.addColorStop(1, '#0d1f3a'); g.fillStyle = bg; g.fillRect(0, 0, 640, 360);
-    g.fillStyle = '#9fb6d6'; g.font = '600 24px Arial, sans-serif'; g.fillText('FULL COUNCIL', 32, 50);
+    g.fillStyle = '#9fb6d6'; g.font = '600 24px Arial, sans-serif'; g.fillText(title, 32, 50);
     g.fillStyle = '#fff'; g.font = '700 52px Georgia, serif';
     const words = String(item || '').split(' '); let line = '', y = 150;
     words.forEach((w) => { if (g.measureText(line + w).width > 570) { g.fillText(line, 32, y); y += 60; line = ''; } line += w + ' '; });
@@ -324,7 +327,8 @@ export function createRoom(host, { plan, reduced = false }) {
   const HAIR = [0x2a1d14, 0x4a3524, 0x6e6e6e, 0xb9a57a, 0x151515, 0xc8c8c8, 0x7a4a2a];
   const col = new THREE.Color(), rr = rng(41);
   for (let i = 0; i < N; i++) {
-    const c = people[i].guest ? 0x24509c : CLOTH[Math.floor(rr() * CLOTH.length)];
+    const shuffled = CLOTH[Math.floor(rr() * CLOTH.length)];
+    const c = people[i].guest ? 0x24509c : colours && colours[i] ? colours[i] : shuffled;
     torso.setColorAt(i, col.set(c)); arm.setColorAt(i, col.set(c));
     const sk = SKIN[Math.floor(rr() * SKIN.length)];
     head.setColorAt(i, col.set(sk)); palm.setColorAt(i, col.set(sk));
@@ -347,7 +351,7 @@ export function createRoom(host, { plan, reduced = false }) {
     const watch = st.speaker === 'me' ? people[st.seat] : sp != null && sp >= 0 ? people[sp] : null;
     for (let i = 0; i < N; i++) {
       const p = people[i];
-      const show = i !== seatedMe && (!p.guest || sp === i);
+      const show = i !== seatedMe && (!p.guest || sp === i) && !(st.tally && i < seats.length && st.tally[i] === 'absent');
       const up = sp === i && i !== OFFICE.chair ? 0.44 : 0;
       // Heads turn towards whoever is speaking, as far as a neck allows. During a vote they face front.
       let turn = 0;

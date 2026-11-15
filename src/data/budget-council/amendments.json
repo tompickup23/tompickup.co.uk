@@ -1,0 +1,90 @@
+{
+  "_note": "The five group amendments moved on 26 February 2026, from Annexes 1 to 5 to the minutes. Costs are £m for 2026/27, 2027/28 and 2028/29, as printed in each annex's Table A (revenue). Capital schemes appear here as their revenue cost: a revenue contribution to capital, or the cost of borrowing, as the annex states it. Savings are negative. Parts can be reused to build your own amendment; each keeps its source.",
+  "src": "annexes",
+  "years": ["2026/27", "2027/28", "2028/29"],
+  "amendments": {
+    "pl": {
+      "group": "pl", "annex": 1, "title": "Two amendments: a revenue and capital package, and one-off public health spending",
+      "summary": "A £2m fund to modernise care homes and day centres, £5.551m of community safety and highways schemes, more gully clearing, bigger members' grants, the young person's travel scheme and £1 disabled fare for a year, two energy posts, a parking permit team and an Olympics bid team, paid for from the extra Revenue Support Grant, more income from County Hall and the Exchange conference centre, and fewer management posts. A second amendment spends £0.920m of the Public Health Grant Reserve once.",
+      "parts": ["pl_carehomes", "pl_safety_borrow", "pl_safety_oneoff", "pl_gullies", "pl_grants", "pl_energy", "pl_travel", "pl_parking", "pl_olympics", "pl_income", "pl_managers", "pl_ph_mh", "pl_ph_drugs", "pl_ph_dementia", "pl_ph_welfare", "pl_ph_vcs", "pl_ph_measles", "pl_ph_research"],
+      "funding": { "rsg": [3.956, 2.0, 0], "ph": [0.92, 0, 0] },
+      "s151": "makes no appreciable impact on the financial resilience of the Council"
+    },
+    "con": {
+      "group": "con", "annex": 2, "title": "Six grants and funds, with a £5m pothole fund over two years",
+      "summary": "Bring back the public rights of way grant for parish councils, a new war memorial grant, three more utility permit inspectors, more for the Culture and Sport Fund and the County Book Fund, and a £5m pothole fund over two years, paid for from the extra Revenue Support Grant and, in 2028/29, the savings contingency.",
+      "parts": ["con_prow", "con_memorial", "con_permits", "con_culture", "con_books", "con_potholes"],
+      "funding": { "rsg": [3.898, 1.901, 0.156], "sc": [0, 0, 0.249] },
+      "s151": "makes no appreciable impact on the financial resilience of the Council"
+    },
+    "ld": {
+      "group": "ld", "annex": 3, "title": "Mental health support, parking enforcement, two bus gates paused, and £8m for roads and pavements",
+      "summary": "A mental health advocates team, a mental health awareness programme, six more parking enforcement officers, the two Preston bus gates scrapped for two years and reviewed, more responsive gully work, and £8m of road, pavement, crossing and traffic light schemes paid for by borrowing, funded from the extra Revenue Support Grant, the Public Health Grant Reserve and, in 2028/29, the savings contingency.",
+      "parts": ["ld_advocates", "ld_awareness", "ld_parking", "ld_busgates", "ld_gullies", "ld_roads"],
+      "funding": { "rsg": [3.23, 2.517, 0.208], "ph": [0.25, 0, 0], "sc": [0, 0, 0.817] },
+      "s151": "makes no appreciable impact on the financial resilience of the Council"
+    },
+    "lab": {
+      "group": "lab", "annex": 4, "title": "Seed funding for two new schools, a school bus fare cap and a bus gate trial",
+      "summary": "Borrowing to seed two new schools, removing Preston bus gate fines on a trial basis, a scheme to cap school bus fares at £1.50 return a day, a Fair Work Charter, an ownership hub for democratic businesses, and studies of council land for housing and of bringing adult social care in house, funded from the extra Revenue Support Grant and £1m of the savings contingency.",
+      "parts": ["lab_schools", "lab_busgates", "lab_charter", "lab_hub", "lab_fares", "lab_land", "lab_insource"],
+      "funding": { "rsg": [2.331, 1.218, 2.406], "sc": [1.0, 0, 0] },
+      "s151": "makes no appreciable impact on the financial resilience of the Council"
+    },
+    "owl": {
+      "group": "owl", "annex": 5, "title": "Four more flood risk staff and clearing West Lancashire's pavement backlog",
+      "summary": "Four more posts in the county flood risk team and £135,000 a year for two years to clear an estimated 45 miles of overgrown pavements in West Lancashire, with the rest of the extra Revenue Support Grant held in the Strategic Contingency.",
+      "parts": ["owl_flood", "owl_pavements", "owl_contingency"],
+      "funding": { "rsg": [3.956, 2.0, 0], "stc": [0, 0, 0.21] },
+      "s151": "presents no additional risks to the Council's Budget between 2026/27 and 2028/29"
+    }
+  },
+  "parts": {
+    "pl_carehomes":     { "group": "pl", "label": "£2m fund to modernise care homes and day centres", "cost": [2.0, 0, 0], "theme": "care", "at": "Annex 1, first amendment, Table A, ref 1.a" },
+    "pl_safety_borrow": { "group": "pl", "label": "£5m of community safety and highways schemes, borrowed", "cost": [0.475, 0.475, 0.475], "theme": "roads", "at": "Annex 1, first amendment, Table A, ref 1.b" },
+    "pl_safety_oneoff": { "group": "pl", "label": "£0.551m more for community safety schemes, once", "cost": [0.551, 0, 0], "theme": "roads", "at": "Annex 1, first amendment, Table A, ref 2.c" },
+    "pl_gullies":       { "group": "pl", "label": "More gully clearing and surface water work", "cost": [0.7, 1.895, 0.225], "theme": "roads", "at": "Annex 1, first amendment, Table A, ref 1.c" },
+    "pl_grants":        { "group": "pl", "label": "Members' grants up £3,000 per councillor", "cost": [0.25, 0.25, 0], "theme": "local", "at": "Annex 1, first amendment, Table A, ref 1.d" },
+    "pl_energy":        { "group": "pl", "label": "Two invest to save energy efficiency posts", "cost": [0.08, 0.08, 0], "theme": "running", "at": "Annex 1, first amendment, Table A, ref 1.e" },
+    "pl_travel":        { "group": "pl", "label": "Young person's travel scheme and £1 disabled fare, for one year", "cost": [0.42, 0, 0], "theme": "transport", "at": "Annex 1, first amendment, Table A, ref 1.f" },
+    "pl_parking":       { "group": "pl", "label": "More capacity in the parking permit team, for one year", "cost": [0.08, 0, 0], "theme": "transport", "at": "Annex 1, first amendment, Table A, ref 1.g" },
+    "pl_olympics":      { "group": "pl", "label": "A team for a northern Olympics bid", "cost": [0.1, 0, 0], "theme": "growth", "at": "Annex 1, first amendment, Table A, ref 1.h" },
+    "pl_income":        { "group": "pl", "label": "More income from County Hall and the Exchange conference centre", "cost": [-0.2, -0.2, -0.2], "theme": "running", "saving": true, "at": "Annex 1, first amendment, Table A, ref 1.i" },
+    "pl_managers":      { "group": "pl", "label": "Fewer management posts", "cost": [-0.5, -0.5, -0.5], "theme": "running", "saving": true, "at": "Annex 1, first amendment, Table A, ref 1.j" },
+    "pl_ph_mh":         { "group": "pl", "label": "Mental health support for young people", "cost": [0.3, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_drugs":      { "group": "pl", "label": "Drug misuse prevention with young people", "cost": [0.2, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_dementia":   { "group": "pl", "label": "Work towards a Dementia Friendly County", "cost": [0.1, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_welfare":    { "group": "pl", "label": "Welfare rights campaign for children with SEND", "cost": [0.02, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_vcs":        { "group": "pl", "label": "Match funding pot for the voluntary sector", "cost": [0.15, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_measles":    { "group": "pl", "label": "Measles immunisation campaign", "cost": [0.05, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "pl_ph_research":   { "group": "pl", "label": "Study of ME/CFS, long Covid and other post-viral conditions", "cost": [0.1, 0, 0], "theme": "health", "ph": true, "at": "Annex 1, second amendment, Table A" },
+    "con_prow":         { "group": "con", "label": "Public rights of way grant for parish councils, back", "cost": [0.103, 0.103, 0.103], "theme": "local", "at": "Annex 2, Table A, ref a" },
+    "con_memorial":     { "group": "con", "label": "A war memorial grant scheme", "cost": [0.1, 0.1, 0.1], "theme": "local", "at": "Annex 2, Table A, ref b" },
+    "con_permits":      { "group": "con", "label": "Three more utility permit inspectors", "cost": [0.111, 0.114, 0.118], "theme": "roads", "at": "Annex 2, Table A, ref c" },
+    "con_culture":      { "group": "con", "label": "£40,000 more for the Culture and Sport Fund", "cost": [0.04, 0.04, 0.04], "theme": "local", "at": "Annex 2, Table A, ref d" },
+    "con_books":        { "group": "con", "label": "£44,000 more for the County Book Fund", "cost": [0.044, 0.044, 0.044], "theme": "local", "at": "Annex 2, Table A, ref e" },
+    "con_potholes":     { "group": "con", "label": "A £5m pothole fund over two years", "cost": [3.5, 1.5, 0], "theme": "roads", "at": "Annex 2, Table A, ref f" },
+    "ld_advocates":     { "group": "ld", "label": "A mental health advocates team, as a trial", "cost": [0.47, 0, 0], "theme": "care", "at": "Annex 3, Table A, ref a" },
+    "ld_awareness":     { "group": "ld", "label": "A mental health awareness programme", "cost": [0.25, 0, 0], "theme": "health", "ph": true, "at": "Annex 3, Table A, ref b" },
+    "ld_parking":       { "group": "ld", "label": "Six more parking enforcement officers", "cost": [0.25, 0.257, 0.265], "theme": "transport", "at": "Annex 3, Table A, ref c" },
+    "ld_busgates":      { "group": "ld", "label": "Scrap two Preston bus gates for two years, then review", "cost": [1.5, 1.5, 0], "theme": "transport", "busgate": true, "at": "Annex 3, Table A, ref d" },
+    "ld_gullies":       { "group": "ld", "label": "More responsive gully maintenance", "cost": [0.25, 0, 0], "theme": "roads", "at": "Annex 3, Table A, ref e" },
+    "ld_roads":         { "group": "ld", "label": "£8m of road, pavement, crossing and traffic light schemes, borrowed", "cost": [0.76, 0.76, 0.76], "theme": "roads", "at": "Annex 3, Table A, ref f; Table B" },
+    "lab_schools":      { "group": "lab", "label": "Borrowing to seed two new schools", "cost": [0, 1.188, 2.376], "theme": "schools", "at": "Annex 4, Table A, ref a; Table B" },
+    "lab_busgates":     { "group": "lab", "label": "No Preston bus gate fines, as a trial", "cost": [1.5, 0, 0], "theme": "transport", "busgate": true, "at": "Annex 4, Table A, ref b" },
+    "lab_charter":      { "group": "lab", "label": "A Fair Work Charter for Lancashire", "cost": [0.04, 0, 0], "theme": "growth", "at": "Annex 4, Table A, ref c" },
+    "lab_hub":          { "group": "lab", "label": "An ownership hub for democratic businesses", "cost": [0.03, 0.03, 0.03], "theme": "growth", "at": "Annex 4, Table A, ref d" },
+    "lab_fares":        { "group": "lab", "label": "A scheme to cap school bus fares at £1.50 return a day", "cost": [1.691, 0, 0], "theme": "transport", "at": "Annex 4, Table A, ref e" },
+    "lab_land":         { "group": "lab", "label": "A study of council land for social housing and energy", "cost": [0.05, 0, 0], "theme": "growth", "at": "Annex 4, Table A, ref f" },
+    "lab_insource":     { "group": "lab", "label": "A study of bringing adult social care in house", "cost": [0.02, 0, 0], "theme": "care", "at": "Annex 4, Table A, ref g" },
+    "owl_flood":        { "group": "owl", "label": "Four more flood risk team staff", "cost": [0.198, 0.204, 0.21], "theme": "roads", "at": "Annex 5, Table A, ref a" },
+    "owl_pavements":    { "group": "owl", "label": "Clear West Lancashire's pavement backlog over two years", "cost": [0.135, 0.135, 0], "theme": "roads", "at": "Annex 5, Table A, ref b" },
+    "owl_contingency":  { "group": "owl", "label": "Hold the rest of the extra grant in the Strategic Contingency", "cost": [3.623, 1.661, 0], "theme": "running", "realOnly": true, "at": "Annex 5, Table A, ref c" }
+  },
+  "funds": {
+    "_note": "What a home-made amendment can draw on, with the most each source can give in each year. Only sums the papers or the amendments' own funding tables show are offered; a year with no sourced sum offers nothing.",
+    "rsg": { "label": "The extra Revenue Support Grant (Strategic Contingency)", "max": [3.956, 2.0, 0], "at": "Budget Report p. 7 and Table 4, p. 8; the amendments used £2.000m for 2027/28 (Annexes 1 and 5)", "src": "report" },
+    "sc":  { "label": "The savings delivery contingency", "max": [5.0, 0, 0.817], "at": "Budget Report Table 11, p. 25 (2026/27); 2028/29 is the most any amendment drew (Annex 3, Table A)", "src": "report", "risk": true },
+    "ph":  { "label": "The Public Health Grant Reserve, once only, for public health items", "max": [0.92, 0, 0], "at": "the most any amendment drew, which the Section 151 Officer said the reserve could meet (Annex 1, second amendment)", "src": "annexes", "phOnly": true }
+  }
+}
