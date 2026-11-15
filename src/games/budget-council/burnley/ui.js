@@ -2,6 +2,8 @@
 
 export const ui = {
   room: 'burnley',
+  // Colours for the chamber kit, taken from the Town Hall chamber as modelled: deep red walls, a gold cornice.
+  theme: { stage: '#1c0d0f', 'stage-2': '#371418', accent: '#e0bd6a', 'accent-ink': '#1d1305', primary: '#7a2430' },
   architecture: () => import('../../rooms/burnley.js').then((m) => m.BURNLEY),
   sides: ['ref', 'lab', 'con'],
   defaultSide: 'lab',

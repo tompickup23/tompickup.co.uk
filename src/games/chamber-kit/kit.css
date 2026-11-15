@@ -1,0 +1,236 @@
+/* Chamber kit: the look every council chamber game shares (16 November 2026).
+   A dark stage the width of the page, with the council's 3D room behind it and paper panels in
+   front, an agenda as numbered steps, choices as drawn tiles, and sheets for the menu and the
+   papers. The menus and sheets follow the Virtual Cat Cafe; the bold stage title follows the
+   Lancashire Budget Challenge. Each council sets its colours with the --ck-* tokens below, taken
+   from its own room as modelled (see docs/COUNCIL-SIMULATOR-KIT.md). Nothing here is budget
+   specific: Young Lancashire Voice can take the same classes. */
+
+.ck {
+  --ck-stage: #13201c;
+  --ck-stage-2: #1d302a;
+  --ck-accent: #dcb866;
+  --ck-accent-ink: #1d1606;
+  --ck-primary: #2f5247;
+  --ck-paper: #fbf8f1;
+  --ck-paper-2: #f0ebdf;
+  --ck-paper-3: #e6dfcf;
+  --ck-ink: #1d2422;
+  --ck-muted: #57605c;
+  --ck-line: #dbd3c2;
+  --ck-glass: rgba(9, 11, 11, 0.66);
+  --ck-on: #f5f0e5;
+  --ck-on-muted: #cfc7b5;
+  --ck-yes: #2e6b30;
+  --ck-no: #b3261e;
+  --ck-top: var(--ek-header-offset, 64px);
+  --ck-pad: clamp(12px, 2.4vw, 28px);
+  --ck-r: 18px;
+  --ck-r-sm: 12px;
+  --ck-display: 'Big Shoulders Display', 'Source Sans 3', 'Arial Narrow', sans-serif;
+  --ck-shadow: 0 12px 36px rgba(0, 0, 0, 0.34);
+  background: var(--ck-stage);
+  color: var(--ck-on);
+}
+.ck *, .ck *::before, .ck *::after { box-sizing: border-box; }
+.ck-i { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ck :focus-visible { outline: 3px solid var(--ck-accent); outline-offset: 2px; }
+.ck .ck-panel :focus-visible, .ck-sheet :focus-visible { outline-color: var(--ck-primary); }
+
+/* The notice that it is a prototype: always visible, quiet. */
+.ck-proto { max-width: none; margin: 0; padding: 8px var(--ck-pad); background: var(--ck-stage-2); color: var(--ck-on-muted); font-size: 0.8rem; line-height: 1.45; }
+.ck-proto b { color: var(--ck-accent); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.7rem; margin-right: 8px; }
+
+/* The bar: title, menu, and the agenda as numbered steps. */
+.ck-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px 16px; max-width: 1440px; margin: 0 auto; padding: 16px var(--ck-pad) 12px; }
+.ck-kicker { margin: 0; font: 700 0.72rem/1.3 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ck-accent); }
+.ck-bar h1 { margin: 4px 0 0; font: 800 clamp(1.9rem, 4.4vw, 3rem)/0.92 var(--ck-display); text-transform: uppercase; letter-spacing: 0.01em; color: var(--ck-on); }
+.ck-menubtn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 12px; border: 1.5px solid rgba(255, 255, 255, 0.22); border-radius: 999px; background: rgba(255, 255, 255, 0.06); color: var(--ck-on); font: 700 0.92rem/1 var(--font-sans); cursor: pointer; }
+.ck-menubtn:hover { background: rgba(255, 255, 255, 0.14); }
+.ck-steps { grid-column: 1 / -1; display: flex; gap: 6px; margin: 4px 0 0; padding: 2px 0; list-style: none; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+.ck-steps::-webkit-scrollbar { display: none; }
+.ck-steps li { flex: none; display: flex; align-items: center; gap: 8px; padding: 5px 13px 5px 5px; border-radius: 999px; background: rgba(255, 255, 255, 0.07); color: var(--ck-on-muted); font: 600 0.82rem/1.2 var(--font-sans); white-space: nowrap; }
+.ck-steps li i { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, 0.12); font: 700 0.72rem/1 var(--font-sans); font-style: normal; font-variant-numeric: tabular-nums; }
+.ck-steps li.done { color: var(--ck-on); }
+.ck-steps li.done i { background: var(--ck-primary); color: var(--ck-accent); }
+.ck-steps li.on { background: var(--ck-accent); color: var(--ck-accent-ink); }
+.ck-steps li.on i { background: var(--ck-accent-ink); color: var(--ck-accent); }
+
+/* The stage body: the room behind, held in view while the words scroll; the layer in front. */
+.ck-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); min-height: calc(100svh - var(--ck-top)); }
+.ck-backdrop { grid-area: 1 / 1; position: sticky; top: var(--ck-top); height: calc(100svh - var(--ck-top)); align-self: start; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, var(--ck-stage-2), var(--ck-stage)); transition: filter 0.4s; }
+.ck-backdrop::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, color-mix(in srgb, var(--ck-stage) 55%, transparent) 0, transparent 18%, transparent 62%, color-mix(in srgb, var(--ck-stage) 70%, transparent) 100%); }
+.ck-roomhost { position: absolute; inset: 0; touch-action: pan-y; }
+.ck-roomhost canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+.ck-backdrop > .ck-flat { position: absolute; inset: 0; display: grid; place-items: center; padding: 4vh 4vw; }
+.ck-backdrop > .ck-flat svg { width: 100%; height: 100%; max-width: 980px; }
+.ck .ylv-room-label { position: absolute; left: 12px; bottom: 10px; padding: 5px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.62); color: #fff; font: 700 0.9rem/1.2 var(--font-sans); pointer-events: none; z-index: 1; }
+.ck .ylv-room-label:empty { display: none; }
+.ck[data-mode='read'] .ck-backdrop, .ck[data-mode='end'] .ck-backdrop { filter: blur(4px) brightness(0.45) saturate(0.8); }
+
+.ck-layer { grid-area: 1 / 1; position: relative; z-index: 1; display: grid; gap: 18px; align-items: start; width: 100%; max-width: 1440px; margin: 0 auto; padding: 12px var(--ck-pad) 40px; pointer-events: none; }
+.ck-layer > * { pointer-events: auto; min-width: 0; }
+.ck-layer > .ck-pass { pointer-events: none; }
+.ck-pass > * { pointer-events: auto; }
+.ck-layer[data-mode='start'] { grid-template-columns: minmax(0, 1fr) minmax(320px, 28rem); padding-top: 4vh; }
+.ck-layer[data-mode='meet'] { grid-template-columns: minmax(0, 1fr) minmax(340px, 31rem); }
+.ck-layer[data-mode='meet'].wide { grid-template-columns: minmax(280px, 1fr) minmax(0, 46rem); }
+.ck-layer[data-mode='read'], .ck-layer[data-mode='end'] { grid-template-columns: minmax(0, 62rem); justify-content: center; padding-top: 3vh; }
+.ck-pass { position: sticky; top: calc(var(--ck-top) + 12px); height: calc(100svh - var(--ck-top) - 24px); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+.ck-passtop { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px; }
+
+/* Glass over the room, and paper in front of it. */
+.ck-glass { background: var(--ck-glass); -webkit-backdrop-filter: blur(10px) saturate(1.1); backdrop-filter: blur(10px) saturate(1.1); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--ck-r); color: var(--ck-on); }
+.ck-hero { padding: 24px 26px; max-width: 40rem; display: grid; gap: 12px; }
+.ck-hero p, .ck-hero li { margin: 0; color: var(--ck-on); }
+.ck-hero .bc-lede { font-size: 1.12rem; line-height: 1.5; }
+.ck-hero .bc-steps { display: grid; gap: 8px; margin: 0; padding-left: 1.3em; }
+.ck-hero .bc-steps b { color: var(--ck-accent); }
+.ck-hero .bc-small { color: var(--ck-on-muted); font-size: 0.86rem; }
+.ck-hero a { color: var(--ck-accent); }
+.ck-panel { display: grid; gap: 14px; align-content: start; padding: 20px 22px; border-radius: var(--ck-r); background: var(--ck-paper); color: var(--ck-ink); box-shadow: var(--ck-shadow); }
+.ck-panel h2 { margin: 0; font: 800 1.7rem/1 var(--ck-display); text-transform: uppercase; letter-spacing: 0.01em; }
+.ck-panel h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.ck-panel a { color: var(--ck-primary); }
+.ck-eyebrow { margin: 0; font: 700 0.72rem/1.4 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ck-muted); }
+.ck-glass .ck-eyebrow { color: var(--ck-accent); }
+
+/* Choices: drawn tiles, one per thing you can do. A lone choice is the way on. */
+.ck-choices { display: grid; gap: 8px; }
+.ck-choices > p { margin: 0 0 2px; }
+.ck-choice { display: grid; grid-template-columns: 40px minmax(0, 1fr) 18px; align-items: center; gap: 12px; width: 100%; min-height: 58px; padding: 9px 12px 9px 9px; border: 1.5px solid transparent; border-radius: 14px; background: var(--ck-paper-2); color: var(--ck-ink); font: 600 0.98rem/1.3 var(--font-sans); text-align: left; cursor: pointer; transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), background 0.15s, border-color 0.15s; }
+.ck-choice .ico { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; background: var(--ck-primary); color: var(--ck-accent); }
+.ck-choice > .ck-i { width: 18px; height: 18px; color: var(--ck-muted); }
+.ck-choice:hover { background: var(--ck-paper-3); border-color: var(--ck-primary); }
+.ck-choice:active { transform: scale(0.985); }
+.ck-choice.go { background: var(--ck-primary); color: #fff; }
+.ck-choice.go .ico { background: rgba(255, 255, 255, 0.14); }
+.ck-choice.go > .ck-i { color: var(--ck-accent); }
+.ck-choice.go:hover { background: color-mix(in srgb, var(--ck-primary) 86%, #000); border-color: transparent; }
+@media (prefers-reduced-motion: reduce) { .ck-choice { transition: none; } }
+
+/* Big buttons and small ones. */
+.ck-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--ck-primary); color: #fff; font: 700 1rem/1.2 var(--font-sans); text-decoration: none; cursor: pointer; }
+.ck-btn .ck-i { color: var(--ck-accent); }
+.ck-btn:hover { background: color-mix(in srgb, var(--ck-primary) 86%, #000); }
+.ck-btn.big { width: 100%; min-height: 56px; font-size: 1.08rem; }
+.ck-btn.ghost { background: transparent; color: var(--ck-ink); box-shadow: inset 0 0 0 1.5px var(--ck-line); }
+.ck-btn.ghost .ck-i { color: var(--ck-primary); }
+.ck-btn.ghost:hover { background: var(--ck-paper-2); }
+.ck-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ck-iconbtn { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--ck-paper-2); color: var(--ck-ink); cursor: pointer; }
+.ck-iconbtn:hover { background: var(--ck-paper-3); }
+.ck-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ck-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 13px 0 10px; border: 0; border-radius: 999px; background: var(--ck-glass); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--ck-on); font: 600 0.84rem/1.2 var(--font-sans); cursor: pointer; }
+.ck-chip .ck-i { width: 18px; height: 18px; color: var(--ck-accent); }
+.ck-chip[aria-pressed='true'] { background: var(--ck-accent); color: var(--ck-accent-ink); }
+.ck-chip[aria-pressed='true'] .ck-i { color: var(--ck-accent-ink); }
+.ck-chip.note { cursor: default; }
+
+/* Choosing a side: cards with the group's colour, its seats, and what you would do. */
+.ck-sides { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ck-sides legend, .ck-field > span { padding: 0 0 8px; font-weight: 700; }
+.ck-side { display: grid; grid-template-columns: 6px minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; width: 100%; padding: 10px 12px 10px 10px; border: 2px solid transparent; border-radius: 14px; background: var(--ck-paper-2); color: var(--ck-ink); font: inherit; text-align: left; cursor: pointer; }
+.ck-side::before { content: ''; grid-row: 1 / span 2; align-self: stretch; border-radius: 3px; background: var(--g, var(--ck-primary)); }
+.ck-side b { font-size: 1rem; }
+.ck-side em { font: 700 0.76rem/1 var(--font-sans); font-style: normal; font-variant-numeric: tabular-nums; padding: 5px 9px; border-radius: 999px; background: var(--ck-paper); color: var(--ck-muted); }
+.ck-side span { grid-column: 2 / -1; font-size: 0.86rem; color: var(--ck-muted); line-height: 1.35; }
+.ck-side:hover { background: var(--ck-paper-3); }
+.ck-side:not([aria-pressed='true']) span { display: none; }
+.ck-side[aria-pressed='true'] { border-color: var(--ck-primary); background: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-primary) 22%, transparent); }
+.ck-side[aria-pressed='true'] em { background: var(--ck-primary); color: #fff; }
+.ck-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 13px; background: var(--ck-paper-2); }
+.ck-seg button { min-height: 44px; padding: 6px 10px; border: 0; border-radius: 10px; background: transparent; color: var(--ck-muted); font: 600 0.9rem/1.2 var(--font-sans); cursor: pointer; }
+.ck-seg button[aria-pressed='true'] { background: #fff; color: var(--ck-ink); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12); }
+.ck-field { display: grid; gap: 0; }
+.ck-panel details > summary { cursor: pointer; font-weight: 700; min-height: 36px; display: flex; align-items: center; }
+.ck-panel input[type='number'] { width: 8em; min-height: 44px; padding: 0 10px; border: 1.5px solid var(--ck-line); border-radius: 10px; font: inherit; background: #fff; color: var(--ck-ink); }
+
+/* The speech, set like a subtitle over the room. */
+.ck-say { display: grid; gap: 8px; max-width: 46rem; padding: 16px 20px 18px; border-left: 4px solid var(--ck-accent); }
+.ck-say .who { font: 700 0.74rem/1.3 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ck-accent); }
+.ck-say .who small { font-size: 0.92em; letter-spacing: 0.02em; text-transform: none; font-weight: 400; color: var(--ck-on-muted); }
+.ck-say q { display: block; font: 500 clamp(1.05rem, 1.55vw, 1.32rem)/1.45 var(--font-display); color: #fff; quotes: '\201C' '\201D'; }
+.ck-say .bc-term { color: #fff; }
+@media (prefers-reduced-motion: no-preference) { .ck-say { animation: ck-in 0.35s cubic-bezier(0.05, 0.7, 0.1, 1); } }
+@keyframes ck-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* Where you stand: small bars on glass. */
+.ck-hud { width: min(19rem, 100%); padding: 8px 14px 12px; font-size: 0.82rem; }
+.ck-hud > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 32px; cursor: pointer; font: 700 0.72rem/1 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ck-accent); }
+.ck-hud > summary::-webkit-details-marker { display: none; }
+.ck-hud > summary::after { content: ''; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform 0.2s; }
+.ck-hud[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
+.ck-hud p { margin: 8px 0 0; color: var(--ck-on-muted); }
+.ck-hud p b { color: var(--ck-on); }
+.ck-meter { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; margin-top: 8px; }
+.ck-meter i { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--ck-accent) var(--w), rgba(255, 255, 255, 0.14) var(--w)); }
+.ck-meter em { font-style: normal; color: var(--ck-on-muted); font-variant-numeric: tabular-nums; }
+
+/* Scores as rings, and a vote as a bar with the line it had to pass. */
+.ck-rings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ck-ring { display: grid; justify-items: center; gap: 8px; text-align: center; font: 600 0.9rem/1.2 var(--font-sans); }
+.ck-ring b { width: min(96px, 100%); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(closest-side, var(--ck-paper) 78%, transparent 79%), conic-gradient(var(--ck-primary) calc(var(--v) * 36deg), var(--ck-line) 0); font: 800 2.1rem/1 var(--ck-display); color: var(--ck-ink); }
+.ck-ring b small { font: 600 0.8rem/1 var(--font-sans); color: var(--ck-muted); }
+.ck-votebar { position: relative; display: flex; height: 18px; margin: 4px 0 2px; border-radius: 9px; overflow: hidden; background: var(--ck-line); }
+.ck-votebar span { height: 100%; }
+.ck-votebar .f { background: var(--ck-yes); }
+.ck-votebar .a { background: var(--ck-no); }
+.ck-votebar::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--ck-ink); box-shadow: 0 0 0 1px var(--ck-paper); }
+.ck-votekey { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.82rem; color: var(--ck-muted); }
+.ck-votekey i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+/* Sheets: the menu, words, papers. Centred on a wide screen, rising from the bottom on a phone. */
+dialog.ck-sheet { border: 0; padding: 0; width: min(30rem, calc(100vw - 24px)); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; border-radius: 22px; background: var(--ck-paper, #fbf8f1); color: var(--ck-ink, #1d2422); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45); }
+dialog.ck-sheet.wide { width: min(48rem, calc(100vw - 24px)); }
+dialog.ck-sheet::backdrop { background: rgba(8, 10, 10, 0.6); }
+.ck-sheet-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 10px 20px; background: var(--ck-paper); }
+.ck-sheet-head h2 { margin: 0; font: 800 1.5rem/1 var(--ck-display); text-transform: uppercase; letter-spacing: 0.01em; }
+.ck-sheet-body { padding: 0 20px 22px; }
+.ck-sheet-body > p { margin: 0.4rem 0; }
+.ck-sheet h3 { margin: 16px 0 7px; font: 700 0.7rem/1.3 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ck-primary); }
+.ck-sheet-body > h3:first-child { margin-top: 2px; }
+.ck-list { list-style: none; margin: 0; padding: 0; border-radius: 14px; background: var(--ck-paper-2); overflow: hidden; }
+.ck-list li + li { border-top: 1px solid var(--ck-line); }
+.ck-list button, .ck-list a { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 50px; padding: 8px 14px; border: 0; background: none; color: var(--ck-ink); font: 500 0.98rem/1.3 var(--font-sans); text-align: left; text-decoration: none; cursor: pointer; }
+.ck-list .ck-i { width: 20px; height: 20px; color: var(--ck-primary); }
+.ck-list span { flex: 1; display: grid; }
+.ck-list small { font-size: 0.8rem; color: var(--ck-muted); }
+.ck-list .ck-tick { color: var(--ck-primary); }
+.ck-list button:hover, .ck-list a:hover { background: var(--ck-paper-3); }
+.ck-sheet dl dt { font-weight: 700; margin-top: 10px; }
+.ck-sheet dl dd { margin: 2px 0 0; }
+@media (max-width: 700px) {
+  dialog.ck-sheet, dialog.ck-sheet.wide { margin: auto auto 0; width: 100%; max-width: none; max-height: 88dvh; border-radius: 22px 22px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+  dialog.ck-sheet::before { content: ''; position: sticky; top: 0; display: block; z-index: 2; width: 42px; height: 4px; margin: 8px auto -12px; border-radius: 999px; background: rgba(0, 0, 0, 0.18); }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: no-preference) { dialog.ck-sheet[open] { animation: ck-rise 0.28s cubic-bezier(0.05, 0.7, 0.1, 1); } }
+@keyframes ck-rise { from { transform: translateY(40%); opacity: 0.4; } }
+
+/* A phone: the room on top, the words below it, nothing held still. */
+@media (max-width: 860px) {
+  .ck-bar { padding-top: 12px; }
+  .ck-body { grid-template-rows: minmax(44svh, auto); min-height: 0; }
+  .ck-backdrop { position: relative; top: auto; height: auto; min-height: 44svh; }
+  .ck-layer, .ck-layer[data-mode] { display: contents; }
+  .ck-layer > * { grid-column: 1; z-index: 1; margin: 12px 12px 0; }
+  .ck-body { padding-bottom: 16px; }
+  .ck-layer > .ck-pass { grid-area: 1 / 1; position: relative; top: auto; height: auto; align-self: stretch; margin: 0; padding: 10px 10px 12px; }
+  .ck-hud { width: auto; max-width: 15rem; }
+  .ck-say { padding: 12px 14px 14px; }
+  .ck[data-mode='start'] .ck-body { grid-template-rows: minmax(30svh, auto); }
+  .ck[data-mode='start'] .ck-backdrop { min-height: 30svh; }
+  .ck[data-mode='read'] .ck-body, .ck[data-mode='end'] .ck-body { grid-template-rows: 0; }
+  .ck[data-mode='read'] .ck-backdrop, .ck[data-mode='end'] .ck-backdrop { visibility: hidden; min-height: 0; }
+  .ck-panel { padding: 16px; }
+  .ck-pass .ck-chip { padding: 0 11px; }
+  .ck-pass .ck-chip > span { display: none; }
+  .ck-hero { padding: 18px; }
+}
+@media print { .ck-backdrop, .ck-bar .ck-menubtn, .ck-steps { display: none !important; } .ck { background: #fff; color: #000; } }
+
+/* A row that spans the stage, such as the credit under the start screen. */
+.ck-span { grid-column: 1 / -1; max-width: none; }
+.bc-credit .bc-card { background: none; padding: 0; }
+.bc-credit h2 { margin: 0 0 4px; font: 800 1.2rem/1 var(--ck-display); text-transform: uppercase; color: var(--ck-accent); }
+.bc-credit p { margin: 0; color: var(--ck-on-muted); }
