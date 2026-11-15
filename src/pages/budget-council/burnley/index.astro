@@ -10,9 +10,12 @@
 // burnley/ui.js; data: src/data/budget-council/burnley/; room: src/games/rooms/burnley.js.
 // Research: docs/research/burnley-budget-council-facts-2026-11-15.md. Prototype, noindex.
 import Shell from '../../../components/budget-council/Shell.astro';
+import { ui } from '../../../games/budget-council/burnley/ui.js';
 ---
 
 <Shell
+  council="burnley"
+  theme={ui.theme}
   title="Burnley Budget Council"
   pageTitle="Burnley Budget Council: a training simulator | Tom Pickup"
   description="A prototype training simulator for councillors: rehearse Burnley Borough Council's 2027/28 Budget Meeting, where a 19-seat coalition must pass its Budget."

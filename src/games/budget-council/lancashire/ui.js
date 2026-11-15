@@ -3,6 +3,9 @@
 
 export const ui = {
   room: 'county-hall',
+  // Colours for the chamber kit, taken from County Hall as modelled: green leather benches, gold.
+  theme: { stage: '#0f1d19', 'stage-2': '#1b3029', accent: '#e2be5a', 'accent-ink': '#1c1504', primary: '#2f5247' },
+  prepShort: 'The week before',
   defaultSide: 'pl',
   tab2: 'The real meeting',
   clockNote: 'The real meeting ran about five and a half hours.',

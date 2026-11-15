@@ -9,9 +9,12 @@
 // and lancashire/ui.js; data: src/data/budget-council/lancashire/. Burnley's version: ./burnley/.
 // Test: scripts/budget-council.test.mjs. Prototype, noindex. It collects, stores and sends nothing.
 import Shell from '../../components/budget-council/Shell.astro';
+import { ui } from '../../games/budget-council/lancashire/ui.js';
 ---
 
 <Shell
+  council="lancashire"
+  theme={ui.theme}
   title="Budget Council"
   pageTitle="Budget Council: a training simulator | Tom Pickup"
   description="A prototype training simulator for councillors: sit through Lancashire County Council's 2026/27 Budget Meeting from either side of the chamber."
