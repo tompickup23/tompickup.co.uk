@@ -51,6 +51,8 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
 
 <script>
   import M from '../../data/young-lancashire-voice/motions.json';
+  // The order of business, the roles and the questions, shared with the paper sheets.
+  import MEET from '../../data/young-lancashire-voice/meeting.json';
 
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -193,26 +195,8 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
     addEventListener('afterprint', () => { el.classList.remove('ylv-printme'); document.documentElement.classList.remove('ylv-print'); }, { once: true });
     window.print();
   }
-  const ROLES = [
-    ['The Chairman', 'Runs the meeting. Reads the Chairman\'s words, calls each speaker and announces every result.'],
-    ['The Chief Executive', 'Reads the apologies, and helps the Chairman count the hands.'],
-    ['A Cabinet Member', 'Answers the questions and moves the report on library rules.'],
-    ['The questioner', 'Asks the public question about the crossing, from the public seats.'],
-    ['The mover', 'Sits in the chosen seat. Asks a question, moves the class motion and has the last word. Makes the choices on the screen, with help from the room.'],
-    ['The seconder', 'Backs the report, and then the motion, so that each can be debated.'],
-    ['A councillor with an amendment', 'Asks for one change to the motion.'],
-    ['A speaker for the motion', 'Makes a short speech for it. Read the words on the screen or use your own.'],
-    ['A speaker against the motion', 'Makes a short speech against it. Argue with the idea, never the person.'],
-    ['Councillors', 'Everyone else. Listen to the debate, then vote by raising a hand.'],
-    ['Reporters', 'One or two people who do not vote. Write one sentence that says what the meeting decided.'],
-  ];
-  const DEBRIEF = [
-    'Did anyone change their mind during the debate? What changed it?',
-    'Was the amendment a fair change, or did it weaken the motion?',
-    'Who did not speak, and what would they have said?',
-    'If this cost money, what would you spend less on to pay for it?',
-    'Which of the real ways to be heard would you use to take this further?',
-  ];
+  const ROLES = MEET.roles;
+  const DEBRIEF = MEET.debrief;
 
   /* The chamber, drawn as a plan. Seat positions are not the real seating plan. */
   const PLAN = (() => {
@@ -423,16 +407,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
       { item: 7, who: 'chair', say: 'That brings us to the end of today\'s business. Thank you for your attendance and your contributions.', plain: 'The meeting is over. Real meetings are much longer, with many more items.', close: true },
     ];
   }
-  const AGENDA = [
-    ['Welcome', 'The Chairman opens the meeting'],
-    ['Apologies', 'Who could not come today'],
-    ['Declarations of interest', 'Say so if a decision could affect you'],
-    ['Public Question Time', 'Anyone can ask the council a question'],
-    ['Question Time', 'Councillors ask the people in charge'],
-    ['Report for decision', 'The council agrees a rule'],
-    ['Notice of Motion', 'A councillor asks the council to act'],
-    ['Close', 'What was decided'],
-  ];
+  const AGENDA = MEET.agenda;
 
   const views = {
     0() {
@@ -444,7 +419,7 @@ const ogImage = 'https://tompickup.co.uk/images/share/lancashire-voice.png';
           <li><b>Ask Lancashire.</b> See your motion put to young people, and to adults on Lancashire Voice.</li>
           <li><b>See what happens next.</b> Find the real ways to be heard.</li>
         </ol>
-        <p>You can play on your own, or run the meeting as a class on one screen, with role cards and a real show of hands.</p>
+        <p>You can play on your own, or run the meeting as a class on one screen, with role cards and a real show of hands. No screen in the room? <a href="/young-lancashire-voice/paper/">Print the meeting on paper</a>.</p>
         <p><button class="ylv-btn" data-tab="1">Start with your motion</button> <button class="ylv-btn ghost" data-tab="2">Go straight to the chamber</button></p>
       </section>
       <section class="ylv-card"><h2>In Concilio Consilium</h2><p>These words are over the Chairman's chair in the real chamber. They are Latin, and are usually read as: in council there is wisdom. The idea is that a room of people who disagree, and who follow fair rules, decides better than one person alone.</p></section>
