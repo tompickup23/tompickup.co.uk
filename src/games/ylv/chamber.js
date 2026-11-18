@@ -5,14 +5,16 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-const K = 0.04, CX = 300, CY = 118, STEP = 0.2, DEG = Math.PI / 180;
-const W = 11, ZF = -4.9, ZB = 12.5, H = 8.6;
-const R0 = 112 * K, RGAP = 29 * K;
+import { ROOMS } from '../rooms/plans.js';
+
+const DEG = Math.PI / 180;
+// Offices sit after the councillors' seats: chair, chief executive, officer, guest. In County Hall's
+// 84-seat plan that is 84 to 87; a room with another seat count shifts them.
 export const OFFICE = { chair: 84, ce: 85, officer: 86, pupil: 87 };
 
-const rng = (seed) => { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
+export const rng = (seed) => { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
 
-function tex(w, h, draw, repeat) {
+export function tex(w, h, draw, repeat) {
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
   draw(c.getContext('2d'), w, h);
@@ -22,7 +24,7 @@ function tex(w, h, draw, repeat) {
   if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]); }
   return t;
 }
-const woodTex = (base, streak, seed) => tex(256, 256, (g, w, h) => {
+export const woodTex = (base, streak, seed) => tex(256, 256, (g, w, h) => {
   const r = rng(seed);
   g.fillStyle = base; g.fillRect(0, 0, w, h);
   for (let i = 0; i < 110; i++) {
@@ -96,7 +98,7 @@ const clockTex = () => tex(128, 128, (g) => {
 });
 
 // A curved block: the piece between two radii and two angles. Benches, desks and tiers are all this.
-function sector(r0, r1, y0, y1, a0, a1, n = 14) {
+export function sector(r0, r1, y0, y1, a0, a1, n = 14) {
   const pos = [], uv = [];
   const P = (r, a, y) => [r * Math.cos(a), y, r * Math.sin(a)];
   const quad = (p, u) => [0, 1, 2, 0, 2, 3].forEach((k) => { pos.push(...p[k]); uv.push(...u[k]); });
@@ -114,7 +116,16 @@ function sector(r0, r1, y0, y1, a0, a1, n = 14) {
   return g;
 }
 
-export function createRoom(host, { plan, reduced = false }) {
+// Options added for Budget Council (15 Nov 2026), all optional so Young Lancashire Voice is unchanged:
+// colours, one colour per seat, dresses each seat's figure in its group colour; title replaces the
+// FULL COUNCIL header on the screen; a tally value of 'absent' leaves that seat empty.
+// room and architecture (Burnley, 15 Nov 2026): room names the seat geometry in rooms/plans.js;
+// architecture builds everything that is not a councillor's bench (see COUNTY_HALL below).
+export function createRoom(host, { plan, reduced = false, colours = null, title = 'FULL COUNCIL', room = 'county-hall', architecture = COUNTY_HALL }) {
+  const R = ROOMS[room], AR = architecture;
+  const K = R.K, CX = R.CX, CY = R.CY, STEP = R.STEP, R0 = R.R0 * K, RGAP = R.RGAP * K;
+  const { W, ZF, ZB } = AR.bounds;
+  const OF = { chair: plan.length, ce: plan.length + 1, officer: plan.length + 2, pupil: plan.length + 3 };
   const canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -126,7 +137,7 @@ export function createRoom(host, { plan, reduced = false }) {
   host.append(canvas, label);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1a1512);
+  scene.background = new THREE.Color(AR.bg ?? 0x1a1512);
   const camera = new THREE.PerspectiveCamera(66, 1.6, 0.08, 60);
   camera.rotation.order = 'YXZ';
   scene.add(new THREE.HemisphereLight(0xfff3dc, 0x6a5848, 2.3), new THREE.AmbientLight(0xffffff, 0.55));
@@ -149,6 +160,7 @@ export function createRoom(host, { plan, reduced = false }) {
     black: L(0x1b1b1b),
     crest: L(0x8a3b32),
     glass: L(0xdfe8ec),
+    ...(AR.mats ? AR.mats(L) : {}),
   };
   const bins = {};
   const put = (m, g) => { (bins[m] ||= []).push(g.index ? g.toNonIndexed() : g); return g; };
@@ -168,14 +180,14 @@ export function createRoom(host, { plan, reduced = false }) {
     const uv = g.attributes.uv, p = g.attributes.position; for (let i = 0; i < uv.count; i++) uv.setXY(i, p.getX(i), p.getZ(i)); put('carpet', g); }
   for (let r = 1; r < rows; r++) {
     const rin = R0 + r * RGAP - 0.62;
-    put('carpet', sector(rin, 17, 0, r * STEP, 6 * DEG, 174 * DEG, 30));
+    put('carpet', sector(rin, 17, 0, r * STEP, R.tierArc[0] * DEG, R.tierArc[1] * DEG, 30));
     const half = 0.62 / rin;
     put('brass', sector(rin - 0.012, rin + 0.05, r * STEP - 0.035, r * STEP + 0.004, Math.PI / 2 - half, Math.PI / 2 + half, 4));
   }
   /* Benches: a desk in front, a green leather seat and back, a numbered plate and a microphone at each place. */
   for (let r = 0; r < rows; r++) {
     const rad = R0 + r * RGAP, fy = r * STEP;
-    for (const [a0, a1] of [[11 * DEG, 85.5 * DEG], [94.5 * DEG, 169 * DEG]]) {
+    for (const [a0, a1] of R.benchArcs.map(([a, b]) => [a * DEG, b * DEG])) {
       put('wood', sector(rad - 0.62, rad - 0.56, fy, fy + 0.72, a0, a1));
       put('wood', sector(rad - 0.68, rad - 0.3, fy + 0.72, fy + 0.78, a0, a1));
       put('dark', sector(rad - 0.08, rad + 0.34, fy, fy + 0.4, a0, a1));
@@ -203,98 +215,16 @@ export function createRoom(host, { plan, reduced = false }) {
   });
   scene.add(new THREE.Mesh(mergeGeometries(plateGeo), new THREE.MeshBasicMaterial({ map: platesTex(seats.length) })));
 
-  /* The dais: the Chairman's bench, high-backed chairs and the canopy with the motto. */
-  box('dark', 9.2, 0.9, 2.7, 0, 0, -3.55);
-  box('carpet', 9.2, 0.02, 2.7, 0, 0.9, -3.55);
-  box('wood', 8.8, 1.64, 0.1, 0, 0, -2.3);
-  box('wood', 8.9, 0.05, 0.55, 0, 1.62, -2.5);
-  box('dark', 8.9, 0.1, 0.14, 0, 1.5, -2.26);
-  for (let i = -3; i <= 3; i++) {
-    box('light', 0.92, 0.72, 0.02, i * 1.22, 0.55, -2.24);
-    const g = new THREE.BoxGeometry(0.24, 0.24, 0.02); g.rotateZ(Math.PI / 4); g.translate(i * 1.22, 0.91, -2.225); put('gold', g);
-  }
-  for (let i = -4; i <= 4; i++) {
-    const x = i * 0.96, tall = i === 0 ? 1.7 : 1.35;
-    box('dark', 0.58, 0.08, 0.5, x, 1.32, -3.12);
-    box('dark', 0.6, tall, 0.07, x, 1.32, -3.42);
-    box('leather', 0.46, tall - 0.42, 0.03, x, 1.5, -3.375);
-    arch('dark', 0.3, 0.07, 0.6, x, 1.32 + tall, -3.42);
-    cyl('dark', 0.05, 0.05, 0.1, x, 1.32 + tall + 0.16, -3.42, 8);
-  }
-  for (const x of [-1.92, 0, 1.92]) box('black', 0.46, 0.3, 0.03, x + 0.45, 1.67, -2.62);
-  for (const s of [-1, 1]) { box('dark', 0.34, 3.5, 0.3, s * 1.0, 0.9, -4.72); box('gold', 0.4, 0.14, 0.34, s * 1.0, 4.3, -4.72); }
-  box('dark', 2.5, 0.42, 0.36, 0, 4.44, -4.7);
-  box('wood', 1.66, 3.4, 0.08, 0, 0.9, -4.84);
-  arch('dark', 1.25, 0.36, 0.5, 0, 4.86, -4.7);
-  arch('wood', 1.02, 0.4, 0.5, 0, 4.86, -4.7);
-  { const g = new THREE.CylinderGeometry(0.3, 0.3, 0.06, 24); g.rotateX(Math.PI / 2); g.scale(0.85, 1.1, 1); g.translate(0, 5.2, -4.48); put('gold', g);
-    const c = new THREE.CylinderGeometry(0.2, 0.2, 0.07, 24); c.rotateX(Math.PI / 2); c.scale(0.85, 1.1, 1); c.translate(0, 5.2, -4.47); put('crest', c); }
-  { const m = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.25), new THREE.MeshBasicMaterial({ map: mottoTex() })); m.position.set(0, 4.65, -4.51); scene.add(m); }
-  /* The table in the well. */
-  { const top = new THREE.CylinderGeometry(1, 1, 0.07, 36); top.scale(1.84, 1, 0.88); top.translate(0, 0.74, 1.28); put('wood', top);
-    const ap = new THREE.CylinderGeometry(1, 1, 0.14, 36); ap.scale(1.7, 1, 0.76); ap.translate(0, 0.62, 1.28); put('dark', ap);
-    for (const [x, z] of [[-1.2, 0.95], [1.2, 0.95], [-1.2, 1.6], [1.2, 1.6]]) box('dark', 0.1, 0.62, 0.1, x, 0, z);
-    cyl('black', 0.01, 0.01, 0.3, 0, 0.81, 1.28, 6); cyl('black', 0.07, 0.07, 0.012, 0, 0.81, 1.28, 12); box('black', 0.05, 0.03, 0.14, 0, 1.1, 1.28); }
-
-  /* Walls, wainscot, columns, windows, the gallery and the coffered ceiling. */
   const plane = (m, w, h, x, y, z, ry) => { const g = new THREE.PlaneGeometry(w, h); g.rotateY(ry); g.translate(x, y, z); return put(m, g); };
-  plane('wall', 2 * W, H, 0, H / 2, ZF, 0); plane('wall', 2 * W, H, 0, H / 2, ZB, Math.PI);
-  plane('wall', ZB - ZF, H, -W, H / 2, (ZB + ZF) / 2, Math.PI / 2); plane('wall', ZB - ZF, H, W, H / 2, (ZB + ZF) / 2, -Math.PI / 2);
-  { const g = new THREE.PlaneGeometry(2 * W, ZB - ZF); g.rotateX(Math.PI / 2); g.translate(0, H, (ZB + ZF) / 2); put('white', g); }
-  for (const s of [-1, 1]) {
-    box('wood', 0.08, 1.35, ZB - ZF, s * (W - 0.04), 0, (ZB + ZF) / 2);
-    box('dark', 0.12, 0.08, ZB - ZF, s * (W - 0.06), 1.35, (ZB + ZF) / 2);
-    for (const z of [-3.9, 0.9, 5.6]) {
-      const x = s * (W - 0.95);
-      box('black', 1.0, 0.95, 1.0, x, 0, z);
-      cyl('marble', 0.47, 0.54, 0.2, x, 0.95, z); cyl('marble', 0.37, 0.41, 5.3, x, 1.15, z, 20);
-      cyl('gold', 0.52, 0.37, 0.5, x, 6.45, z, 12); cyl('gold', 0.44, 0.4, 0.1, x, 6.4, z, 12); box('gold', 0.98, 0.12, 0.98, x, 6.95, z);
-      box('white', 1.0, H - 7.07, 1.0, x, 7.07, z);
-    }
-  }
-  box('wood', 2 * W, 1.35, 0.08, 0, 0, ZF + 0.04);
-  for (const s of [-1, 1]) for (let i = 0; i < 3; i++) box('white', 2.6, 1.9, 0.03, s * (3.2 + i * 3.1), 2.0, ZF + 0.02);
-  const winMat = new THREE.MeshBasicMaterial({ map: windowTex(), transparent: true, alphaTest: 0.5 });
-  const winGeo = [];
-  for (const s of [-1, 1]) for (const z of [-1.5, 3.25, 8.0]) { const g = new THREE.PlaneGeometry(3.3, 6.2); g.rotateY((-s * Math.PI) / 2); g.translate(s * (W - 0.03), 4.5, z); winGeo.push(g); }
-  scene.add(new THREE.Mesh(mergeGeometries(winGeo), winMat));
-  // Gallery across the back, with its panelled front, clock and brass rail.
-  box('white', 2 * W, 0.3, ZB - 9.9, 0, 3.6, (ZB + 9.9) / 2);
-  box('wood', 2 * W, 1.35, 0.16, 0, 3.45, 9.9);
-  box('dark', 2 * W, 0.1, 0.24, 0, 4.8, 9.9); box('dark', 2 * W, 0.12, 0.22, 0, 3.4, 9.9);
-  for (let i = 0; i < 8; i++) { const x = (i - 3.5) * 2.7; box('light', 2.0, 0.62, 0.02, x, 3.82, 9.81); if (i < 7 && i !== 3) { box('gold', 0.36, 0.36, 0.02, x + 1.35, 3.95, 9.81); box('crest', 0.28, 0.28, 0.02, x + 1.35, 3.99, 9.8); } }
-  box('brass', 2 * W, 0.04, 0.04, 0, 5.12, 9.9);
-  for (let x = -10; x <= 10; x += 2) cyl('brass', 0.02, 0.02, 0.24, x, 4.9, 9.9, 6);
-  { const m = new THREE.Mesh(new THREE.CircleGeometry(0.36, 28), new THREE.MeshBasicMaterial({ map: clockTex() })); m.rotation.y = Math.PI; m.position.set(0, 4.13, 9.8); scene.add(m); }
-  // Doors: one under the gallery with a curved pediment, one pair at gallery level with lattice glass.
-  box('dark', 2.3, 2.7, 0.14, 0, 0.8, ZB - 0.07); box('wood', 1.7, 2.3, 0.04, 0, 0.8, ZB - 0.16); arch('dark', 1.3, 0.2, 0.42, 0, 3.5, ZB - 0.1);
-  box('dark', 2.5, 2.9, 0.1, 0, 3.9, ZB - 0.05);
-  for (const s of [-1, 1]) { box('wood', 1.0, 2.6, 0.04, s * 0.53, 3.9, ZB - 0.12); box('glass', 0.34, 0.5, 0.02, s * 0.53, 5.4, ZB - 0.15); box('brass', 0.05, 0.4, 0.04, s * 0.08, 5.0, ZB - 0.16); }
-  // Ceiling: grey beams making coffers, a white cornice and a Greek key band.
-  for (const z of [-0.55, 3.8, 8.15]) box('beam', 2 * W, 0.5, 0.55, 0, H - 0.5, z);
-  for (const x of [-3.67, 3.67]) box('beam', 0.55, 0.5, ZB - ZF, x, H - 0.5, (ZB + ZF) / 2);
-  box('white', 2 * W, 0.35, 0.35, 0, H - 0.35, ZF + 0.17); box('white', 2 * W, 0.35, 0.35, 0, H - 0.35, ZB - 0.17);
-  for (const s of [-1, 1]) box('white', 0.35, 0.35, ZB - ZF, s * (W - 0.17), H - 0.35, (ZB + ZF) / 2);
-  { const a = new THREE.MeshBasicMaterial({ map: keyTex(44) }), b = new THREE.MeshBasicMaterial({ map: keyTex(35) });
-    const fr = (mat, w, x, z, ry) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 0.5), mat); m.position.set(x, H - 0.75, z); m.rotation.y = ry; scene.add(m); };
-    fr(a, 2 * W, 0, ZF + 0.02, 0); fr(a, 2 * W, 0, ZB - 0.02, Math.PI); fr(b, ZB - ZF, -W + 0.02, (ZB + ZF) / 2, Math.PI / 2); fr(b, ZB - ZF, W - 0.02, (ZB + ZF) / 2, -Math.PI / 2); }
-  const bulbs = [];
-  for (const x of [-7.3, 0, 7.3]) for (const z of [-2.7, 1.6, 6.0]) {
-    cyl('black', 0.012, 0.012, 1.3, x, H - 1.3, z, 6); cyl('black', 0.34, 0.34, 0.02, x, H - 1.32, z, 12);
-    for (let k = 0; k < 8; k++) { const a = (k * Math.PI) / 4, bx = x + 0.46 * Math.cos(a), bz = z + 0.46 * Math.sin(a), by = H - 1.85 - (k % 2) * 0.32;
-      cyl('black', 0.005, 0.005, H - 1.32 - by, bx, by, bz, 4);
-      const g = new THREE.SphereGeometry(0.1, 10, 8); g.scale(1, 1.5, 1); g.translate(bx, by, bz); bulbs.push(g.toNonIndexed()); }
-  }
-  scene.add(new THREE.Mesh(mergeGeometries(bulbs), new THREE.MeshBasicMaterial({ color: 0xfffaf0 })));
-  // The drop-down screen beside the canopy. It shows who is speaking, as the real one does.
+  AR.build({ THREE, scene, mats, put, box, cyl, arch, plane, sector, tex, woodTex, rng, mergeGeometries, DEG, ...AR.bounds });
+  // The screen. It shows the item and who is speaking, as the real ones do.
   const scr = document.createElement('canvas'); scr.width = 640; scr.height = 360;
   const scrTex = new THREE.CanvasTexture(scr); scrTex.colorSpace = THREE.SRGBColorSpace;
-  box('black', 4.3, 0.2, 0.2, -5.4, 7.15, ZF + 0.12);
-  { const m = new THREE.Mesh(new THREE.PlaneGeometry(4.0, 2.25), new THREE.MeshBasicMaterial({ map: scrTex })); m.position.set(-5.4, 5.95, ZF + 0.1); scene.add(m); }
+  { const S = AR.screen, m = new THREE.Mesh(new THREE.PlaneGeometry(S.w, S.h), new THREE.MeshBasicMaterial({ map: scrTex })); m.position.set(S.x, S.y, S.z); m.rotation.y = S.ry || 0; scene.add(m); }
   function drawScreen(item, who) {
     const g = scr.getContext('2d');
     const bg = g.createLinearGradient(0, 0, 0, 360); bg.addColorStop(0, '#18365f'); bg.addColorStop(1, '#0d1f3a'); g.fillStyle = bg; g.fillRect(0, 0, 640, 360);
-    g.fillStyle = '#9fb6d6'; g.font = '600 24px Arial, sans-serif'; g.fillText('FULL COUNCIL', 32, 50);
+    g.fillStyle = '#9fb6d6'; g.font = '600 24px Arial, sans-serif'; g.fillText(title, 32, 50);
     g.fillStyle = '#fff'; g.font = '700 52px Georgia, serif';
     const words = String(item || '').split(' '); let line = '', y = 150;
     words.forEach((w) => { if (g.measureText(line + w).width > 570) { g.fillText(line, 32, y); y += 60; line = ''; } line += w + ' '; });
@@ -307,10 +237,7 @@ export function createRoom(host, { plan, reduced = false }) {
 
   /* People. Plain figures in quiet colours: no one is a real person and no colour stands for a party. */
   const people = seats.map((s) => ({ x: s.x, z: s.z, fy: s.fy, ry: s.ry }));
-  people[OFFICE.chair] = { x: 0, z: -3.12, fy: 0.92, ry: 0 };
-  people[OFFICE.ce] = { x: -1.92, z: -3.12, fy: 0.92, ry: 0 };
-  people[OFFICE.officer] = { x: 1.92, z: -3.12, fy: 0.92, ry: 0 };
-  people[OFFICE.pupil] = { x: -2.6, z: 1.3, fy: -0.5, ry: Math.PI, guest: true };
+  for (const k of ['chair', 'ce', 'officer', 'pupil']) people[OF[k]] = { ...AR.office[k] };
   const N = people.length;
   const inst = (geo, color) => { const m = new THREE.InstancedMesh(geo, new THREE.MeshLambertMaterial({ color }), N); m.frustumCulled = false; scene.add(m); return m; };
   const torsoGeo = new THREE.CapsuleGeometry(0.2, 0.3, 4, 10); torsoGeo.scale(1.08, 1, 0.68);
@@ -324,14 +251,15 @@ export function createRoom(host, { plan, reduced = false }) {
   const HAIR = [0x2a1d14, 0x4a3524, 0x6e6e6e, 0xb9a57a, 0x151515, 0xc8c8c8, 0x7a4a2a];
   const col = new THREE.Color(), rr = rng(41);
   for (let i = 0; i < N; i++) {
-    const c = people[i].guest ? 0x24509c : CLOTH[Math.floor(rr() * CLOTH.length)];
+    const shuffled = CLOTH[Math.floor(rr() * CLOTH.length)];
+    const c = people[i].guest ? 0x24509c : colours && colours[i] ? colours[i] : shuffled;
     torso.setColorAt(i, col.set(c)); arm.setColorAt(i, col.set(c));
     const sk = SKIN[Math.floor(rr() * SKIN.length)];
     head.setColorAt(i, col.set(sk)); palm.setColorAt(i, col.set(sk));
     hair.setColorAt(i, col.set(HAIR[Math.floor(rr() * HAIR.length)]));
   }
   // The Chairman's figure is set by hand, not by the shuffle, so it does not misdescribe the office holder.
-  head.setColorAt(OFFICE.chair, col.set(SKIN[0])); hair.setColorAt(OFFICE.chair, col.set(HAIR[2]));
+  head.setColorAt(OF.chair, col.set(SKIN[0])); hair.setColorAt(OF.chair, col.set(HAIR[2]));
   const legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.92, 0.2), new THREE.MeshLambertMaterial({ color: 0x2a2d33 })); scene.add(legs);
   const pointer = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.24, 4), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); pointer.rotation.x = Math.PI; scene.add(pointer);
   const mine = new THREE.Mesh(new THREE.OctahedronGeometry(0.13), new THREE.MeshBasicMaterial({ color: 0xffcf33 })); scene.add(mine);
@@ -347,8 +275,8 @@ export function createRoom(host, { plan, reduced = false }) {
     const watch = st.speaker === 'me' ? people[st.seat] : sp != null && sp >= 0 ? people[sp] : null;
     for (let i = 0; i < N; i++) {
       const p = people[i];
-      const show = i !== seatedMe && (!p.guest || sp === i);
-      const up = sp === i && i !== OFFICE.chair ? 0.44 : 0;
+      const show = i !== seatedMe && (!p.guest || sp === i) && !(st.tally && i < seats.length && st.tally[i] === 'absent');
+      const up = sp === i && i !== OF.chair ? 0.44 : 0;
       // Heads turn towards whoever is speaking, as far as a neck allows. During a vote they face front.
       let turn = 0;
       if (show && watch && watch !== p && !st.tally) {
@@ -371,28 +299,28 @@ export function createRoom(host, { plan, reduced = false }) {
     [torso, head, hair, eyes, arm, palm].forEach((m) => { m.instanceMatrix.needsUpdate = true; });
     const sh = sp != null && sp >= 0 ? people[sp] : null;
     pointer.visible = !!sh;
-    if (sh) pointer.position.set(sh.x, sh.fy + 1.2 + (sp === OFFICE.chair ? 1.0 : 0.82), sh.z);
+    if (sh) pointer.position.set(sh.x, sh.fy + 1.2 + (sp === OF.chair ? 1.0 : 0.82), sh.z);
     const mk = st.pick ? st.hover : st.mode !== 'seat' ? st.seat : -1;
     mine.visible = mk >= 0 && mk !== sp;
     if (mk >= 0) mine.position.set(people[mk].x, people[mk].fy + 1.62, people[mk].z);
   }
 
   /* Camera: your own seat, or the public gallery. It turns to whoever is speaking. */
-  const cam = { pos: new THREE.Vector3(0, 6.5, 11.4), yaw: 0, pitch: -0.5, tp: new THREE.Vector3(), tyaw: 0, tpitch: 0, oy: 0, op: 0, fov: 56, tfov: 56, first: true };
+  const cam = { pos: new THREE.Vector3(...AR.cams.start), yaw: 0, pitch: -0.5, tp: new THREE.Vector3(), tyaw: 0, tpitch: 0, oy: 0, op: 0, fov: 56, tfov: 56, first: true };
   const tmp = new THREE.Vector3();
   function aim() {
     let look;
     if (st.mode === 'seat' && st.seat >= 0) {
       const s = seats[st.seat], standing = st.speaker === 'me';
       cam.tp.set(s.x * (1 + 0.1 / s.rad), s.fy + 1.2 + (standing ? 0.42 : 0), s.z * (1 + 0.1 / s.rad));
-      const sp = st.speaker != null && st.speaker !== 'me' ? people[st.speaker] : people[OFFICE.chair];
+      const sp = st.speaker != null && st.speaker !== 'me' ? people[st.speaker] : people[OF.chair];
       look = tmp.set(sp.x, sp.fy + 1.25, sp.z);
-      if (st.tally) look.set(0, 0.9, 1.5);
+      if (st.tally) look.set(...AR.cams.vote);
       cam.tfov = 68;
     } else if (st.mode === 'chair') {
-      cam.tp.set(0, 3.5, -1.9); look = tmp.set(0, 1.1, 6.5); cam.tfov = camera.aspect < 1.2 ? 84 : 72;
+      cam.tp.set(...AR.cams.chair.pos); look = tmp.set(...AR.cams.chair.look); cam.tfov = camera.aspect < 1.2 ? 84 : 72;
     } else {
-      cam.tp.set(0, 7.3, 10.15); look = tmp.set(0, 0.2, 4.3); cam.tfov = camera.aspect < 1.2 ? 82 : 70;
+      cam.tp.set(...AR.cams.over.pos); look = tmp.set(...AR.cams.over.look); cam.tfov = camera.aspect < 1.2 ? 82 : 70;
     }
     const d = look.sub(cam.tp);
     cam.tyaw = Math.atan2(-d.x, -d.z); cam.tpitch = Math.asin(d.y / d.length());
@@ -492,3 +420,98 @@ export function createRoom(host, { plan, reduced = false }) {
   resize();
   return api;
 }
+
+/* County Hall, Preston: the dais and canopy, marble columns, arched windows, the gallery with its
+   clock, and the coffered ceiling with its chandeliers. Everything the benches are not. */
+export const COUNTY_HALL = {
+  bounds: { W: 11, ZF: -4.9, ZB: 12.5, H: 8.6 },
+  office: { chair: { x: 0, z: -3.12, fy: 0.92, ry: 0 }, ce: { x: -1.92, z: -3.12, fy: 0.92, ry: 0 }, officer: { x: 1.92, z: -3.12, fy: 0.92, ry: 0 }, pupil: { x: -2.6, z: 1.3, fy: -0.5, ry: Math.PI, guest: true } },
+  cams: { start: [0, 6.5, 11.4], chair: { pos: [0, 3.5, -1.9], look: [0, 1.1, 6.5] }, over: { pos: [0, 7.3, 10.15], look: [0, 0.2, 4.3] }, vote: [0, 0.9, 1.5] },
+  screen: { w: 4.0, h: 2.25, x: -5.4, y: 5.95, z: -4.9 + 0.1 },
+  build({ THREE, scene, put, box, cyl, arch, plane, mergeGeometries, W, ZF, ZB, H }) {
+  /* The dais: the Chairman's bench, high-backed chairs and the canopy with the motto. */
+  box('dark', 9.2, 0.9, 2.7, 0, 0, -3.55);
+  box('carpet', 9.2, 0.02, 2.7, 0, 0.9, -3.55);
+  box('wood', 8.8, 1.64, 0.1, 0, 0, -2.3);
+  box('wood', 8.9, 0.05, 0.55, 0, 1.62, -2.5);
+  box('dark', 8.9, 0.1, 0.14, 0, 1.5, -2.26);
+  for (let i = -3; i <= 3; i++) {
+    box('light', 0.92, 0.72, 0.02, i * 1.22, 0.55, -2.24);
+    const g = new THREE.BoxGeometry(0.24, 0.24, 0.02); g.rotateZ(Math.PI / 4); g.translate(i * 1.22, 0.91, -2.225); put('gold', g);
+  }
+  for (let i = -4; i <= 4; i++) {
+    const x = i * 0.96, tall = i === 0 ? 1.7 : 1.35;
+    box('dark', 0.58, 0.08, 0.5, x, 1.32, -3.12);
+    box('dark', 0.6, tall, 0.07, x, 1.32, -3.42);
+    box('leather', 0.46, tall - 0.42, 0.03, x, 1.5, -3.375);
+    arch('dark', 0.3, 0.07, 0.6, x, 1.32 + tall, -3.42);
+    cyl('dark', 0.05, 0.05, 0.1, x, 1.32 + tall + 0.16, -3.42, 8);
+  }
+  for (const x of [-1.92, 0, 1.92]) box('black', 0.46, 0.3, 0.03, x + 0.45, 1.67, -2.62);
+  for (const s of [-1, 1]) { box('dark', 0.34, 3.5, 0.3, s * 1.0, 0.9, -4.72); box('gold', 0.4, 0.14, 0.34, s * 1.0, 4.3, -4.72); }
+  box('dark', 2.5, 0.42, 0.36, 0, 4.44, -4.7);
+  box('wood', 1.66, 3.4, 0.08, 0, 0.9, -4.84);
+  arch('dark', 1.25, 0.36, 0.5, 0, 4.86, -4.7);
+  arch('wood', 1.02, 0.4, 0.5, 0, 4.86, -4.7);
+  { const g = new THREE.CylinderGeometry(0.3, 0.3, 0.06, 24); g.rotateX(Math.PI / 2); g.scale(0.85, 1.1, 1); g.translate(0, 5.2, -4.48); put('gold', g);
+    const c = new THREE.CylinderGeometry(0.2, 0.2, 0.07, 24); c.rotateX(Math.PI / 2); c.scale(0.85, 1.1, 1); c.translate(0, 5.2, -4.47); put('crest', c); }
+  { const m = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.25), new THREE.MeshBasicMaterial({ map: mottoTex() })); m.position.set(0, 4.65, -4.51); scene.add(m); }
+  /* The table in the well. */
+  { const top = new THREE.CylinderGeometry(1, 1, 0.07, 36); top.scale(1.84, 1, 0.88); top.translate(0, 0.74, 1.28); put('wood', top);
+    const ap = new THREE.CylinderGeometry(1, 1, 0.14, 36); ap.scale(1.7, 1, 0.76); ap.translate(0, 0.62, 1.28); put('dark', ap);
+    for (const [x, z] of [[-1.2, 0.95], [1.2, 0.95], [-1.2, 1.6], [1.2, 1.6]]) box('dark', 0.1, 0.62, 0.1, x, 0, z);
+    cyl('black', 0.01, 0.01, 0.3, 0, 0.81, 1.28, 6); cyl('black', 0.07, 0.07, 0.012, 0, 0.81, 1.28, 12); box('black', 0.05, 0.03, 0.14, 0, 1.1, 1.28); }
+
+  /* Walls, wainscot, columns, windows, the gallery and the coffered ceiling. */
+  plane('wall', 2 * W, H, 0, H / 2, ZF, 0); plane('wall', 2 * W, H, 0, H / 2, ZB, Math.PI);
+  plane('wall', ZB - ZF, H, -W, H / 2, (ZB + ZF) / 2, Math.PI / 2); plane('wall', ZB - ZF, H, W, H / 2, (ZB + ZF) / 2, -Math.PI / 2);
+  { const g = new THREE.PlaneGeometry(2 * W, ZB - ZF); g.rotateX(Math.PI / 2); g.translate(0, H, (ZB + ZF) / 2); put('white', g); }
+  for (const s of [-1, 1]) {
+    box('wood', 0.08, 1.35, ZB - ZF, s * (W - 0.04), 0, (ZB + ZF) / 2);
+    box('dark', 0.12, 0.08, ZB - ZF, s * (W - 0.06), 1.35, (ZB + ZF) / 2);
+    for (const z of [-3.9, 0.9, 5.6]) {
+      const x = s * (W - 0.95);
+      box('black', 1.0, 0.95, 1.0, x, 0, z);
+      cyl('marble', 0.47, 0.54, 0.2, x, 0.95, z); cyl('marble', 0.37, 0.41, 5.3, x, 1.15, z, 20);
+      cyl('gold', 0.52, 0.37, 0.5, x, 6.45, z, 12); cyl('gold', 0.44, 0.4, 0.1, x, 6.4, z, 12); box('gold', 0.98, 0.12, 0.98, x, 6.95, z);
+      box('white', 1.0, H - 7.07, 1.0, x, 7.07, z);
+    }
+  }
+  box('wood', 2 * W, 1.35, 0.08, 0, 0, ZF + 0.04);
+  for (const s of [-1, 1]) for (let i = 0; i < 3; i++) box('white', 2.6, 1.9, 0.03, s * (3.2 + i * 3.1), 2.0, ZF + 0.02);
+  const winMat = new THREE.MeshBasicMaterial({ map: windowTex(), transparent: true, alphaTest: 0.5 });
+  const winGeo = [];
+  for (const s of [-1, 1]) for (const z of [-1.5, 3.25, 8.0]) { const g = new THREE.PlaneGeometry(3.3, 6.2); g.rotateY((-s * Math.PI) / 2); g.translate(s * (W - 0.03), 4.5, z); winGeo.push(g); }
+  scene.add(new THREE.Mesh(mergeGeometries(winGeo), winMat));
+  // Gallery across the back, with its panelled front, clock and brass rail.
+  box('white', 2 * W, 0.3, ZB - 9.9, 0, 3.6, (ZB + 9.9) / 2);
+  box('wood', 2 * W, 1.35, 0.16, 0, 3.45, 9.9);
+  box('dark', 2 * W, 0.1, 0.24, 0, 4.8, 9.9); box('dark', 2 * W, 0.12, 0.22, 0, 3.4, 9.9);
+  for (let i = 0; i < 8; i++) { const x = (i - 3.5) * 2.7; box('light', 2.0, 0.62, 0.02, x, 3.82, 9.81); if (i < 7 && i !== 3) { box('gold', 0.36, 0.36, 0.02, x + 1.35, 3.95, 9.81); box('crest', 0.28, 0.28, 0.02, x + 1.35, 3.99, 9.8); } }
+  box('brass', 2 * W, 0.04, 0.04, 0, 5.12, 9.9);
+  for (let x = -10; x <= 10; x += 2) cyl('brass', 0.02, 0.02, 0.24, x, 4.9, 9.9, 6);
+  { const m = new THREE.Mesh(new THREE.CircleGeometry(0.36, 28), new THREE.MeshBasicMaterial({ map: clockTex() })); m.rotation.y = Math.PI; m.position.set(0, 4.13, 9.8); scene.add(m); }
+  // Doors: one under the gallery with a curved pediment, one pair at gallery level with lattice glass.
+  box('dark', 2.3, 2.7, 0.14, 0, 0.8, ZB - 0.07); box('wood', 1.7, 2.3, 0.04, 0, 0.8, ZB - 0.16); arch('dark', 1.3, 0.2, 0.42, 0, 3.5, ZB - 0.1);
+  box('dark', 2.5, 2.9, 0.1, 0, 3.9, ZB - 0.05);
+  for (const s of [-1, 1]) { box('wood', 1.0, 2.6, 0.04, s * 0.53, 3.9, ZB - 0.12); box('glass', 0.34, 0.5, 0.02, s * 0.53, 5.4, ZB - 0.15); box('brass', 0.05, 0.4, 0.04, s * 0.08, 5.0, ZB - 0.16); }
+  // Ceiling: grey beams making coffers, a white cornice and a Greek key band.
+  for (const z of [-0.55, 3.8, 8.15]) box('beam', 2 * W, 0.5, 0.55, 0, H - 0.5, z);
+  for (const x of [-3.67, 3.67]) box('beam', 0.55, 0.5, ZB - ZF, x, H - 0.5, (ZB + ZF) / 2);
+  box('white', 2 * W, 0.35, 0.35, 0, H - 0.35, ZF + 0.17); box('white', 2 * W, 0.35, 0.35, 0, H - 0.35, ZB - 0.17);
+  for (const s of [-1, 1]) box('white', 0.35, 0.35, ZB - ZF, s * (W - 0.17), H - 0.35, (ZB + ZF) / 2);
+  { const a = new THREE.MeshBasicMaterial({ map: keyTex(44) }), b = new THREE.MeshBasicMaterial({ map: keyTex(35) });
+    const fr = (mat, w, x, z, ry) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 0.5), mat); m.position.set(x, H - 0.75, z); m.rotation.y = ry; scene.add(m); };
+    fr(a, 2 * W, 0, ZF + 0.02, 0); fr(a, 2 * W, 0, ZB - 0.02, Math.PI); fr(b, ZB - ZF, -W + 0.02, (ZB + ZF) / 2, Math.PI / 2); fr(b, ZB - ZF, W - 0.02, (ZB + ZF) / 2, -Math.PI / 2); }
+  const bulbs = [];
+  for (const x of [-7.3, 0, 7.3]) for (const z of [-2.7, 1.6, 6.0]) {
+    cyl('black', 0.012, 0.012, 1.3, x, H - 1.3, z, 6); cyl('black', 0.34, 0.34, 0.02, x, H - 1.32, z, 12);
+    for (let k = 0; k < 8; k++) { const a = (k * Math.PI) / 4, bx = x + 0.46 * Math.cos(a), bz = z + 0.46 * Math.sin(a), by = H - 1.85 - (k % 2) * 0.32;
+      cyl('black', 0.005, 0.005, H - 1.32 - by, bx, by, bz, 4);
+      const g = new THREE.SphereGeometry(0.1, 10, 8); g.scale(1, 1.5, 1); g.translate(bx, by, bz); bulbs.push(g.toNonIndexed()); }
+  }
+  scene.add(new THREE.Mesh(mergeGeometries(bulbs), new THREE.MeshBasicMaterial({ color: 0xfffaf0 })));
+  // The bar of the drop-down screen beside the canopy; the screen itself is drawn by createRoom.
+  box('black', 4.3, 0.2, 0.2, -5.4, 7.15, ZF + 0.12);
+  },
+};

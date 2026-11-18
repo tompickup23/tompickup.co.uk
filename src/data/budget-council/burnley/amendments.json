@@ -1,0 +1,26 @@
+{
+  "_note": "What a home-made amendment can be built from, for 2027/28 only (£m; a saving or extra income is negative). Every figure is one the council printed. Council tax and fees lines use the council's own sensitivity figures or the difference between its Table 4 and Table 5. Savings options are the items in Appendix 2 to the September 2026 report that are not yet approved. Spending options are last year's proposals at the cost their proposers gave for 2026/27, labelled as such. recurring: true if it carries on into later years. risk names a reason the Section 151 Officer would flag.",
+  "src": "savings",
+  "years": ["2027/28"],
+  "amendments": {},
+  "funds": {
+    "_note": "One-off spending may come from the Revenue Support Reserve; continuing spending may not (council policy). No cap is set beyond that, because the reserve's 2027/28 balance is not published.",
+    "reserve": { "label": "The Revenue Support Reserve (one-off spending only)", "at": "MTFS 2027-31, reserves table and para. 63, p. 16", "src": "mtfsfeb" }
+  },
+  "parts": {
+    "ct299": { "group": "council", "set": "tax", "label": "Raise council tax by 2.99%, not 1.99%", "cost": [-0.087], "recurring": true, "theme": "tax", "src": "mtfs", "at": "Table 4 (gap £0.594m) less Table 5 (gap £0.507m), pp. 5 to 6" },
+    "ct099": { "group": "council", "set": "tax", "label": "Raise council tax by 0.99%, not 1.99%", "cost": [0.057], "recurring": true, "theme": "tax", "src": "mtfs", "at": "sensitivity, 1% = £57k, para. 10, p. 9" },
+    "fees3": { "group": "council", "set": "tax", "label": "Raise fees and charges by 3%, not 2%", "cost": [-0.061], "recurring": true, "theme": "fees", "src": "mtfs", "at": "sensitivity, 1% = £61k, para. 10, p. 9" },
+    "fees1": { "group": "council", "set": "tax", "label": "Raise fees and charges by 1%, not 2%", "cost": [0.061], "recurring": true, "theme": "fees", "src": "mtfs", "at": "sensitivity, 1% = £61k, para. 10, p. 9" },
+    "s05": { "group": "council", "set": "save", "label": "Stop the annual subscription to Growth Lancashire (agreed in principle)", "cost": [-0.016], "recurring": true, "theme": "growth", "src": "savings", "at": "Appendix 2, p. 2" },
+    "s06": { "group": "council", "set": "save", "label": "Replace printed bin calendars with a digital one (new proposal)", "cost": [-0.008], "recurring": true, "theme": "waste", "src": "savings", "at": "Appendix 2, p. 2" },
+    "s07": { "group": "council", "set": "save", "label": "Cut the council from 45 councillors to 33 (deferred, needs a Boundary Commission review)", "cost": [-0.04284], "recurring": true, "risk": "It depends on a Boundary Commission review, so the council cannot deliver it on its own in 2027/28.", "theme": "running", "src": "savings", "at": "Appendix 2, p. 2" },
+    "s08": { "group": "council", "set": "save", "label": "Move to all-out elections every four years (deferred, needs legislation)", "cost": [-0.03], "recurring": true, "risk": "It needs legislation, and the paper calls the saving indicative.", "theme": "running", "src": "savings", "at": "Appendix 2, p. 2" },
+    "p01": { "group": "con", "set": "save", "label": "Make the Towneley Hall business development post at least pay for itself (proposed last year)", "cost": [-0.05], "recurring": true, "risk": "It was costed for 2026/27 and depends on income not yet earned.", "theme": "culture", "src": "conamend", "at": "Table A, p. 3 (costed for 2026/27)" },
+    "p02": { "group": "con", "set": "save", "label": "A 0.7% procurement saving on central non-pay budgets (proposed last year)", "cost": [-0.052], "recurring": true, "theme": "running", "src": "conamend", "at": "Table A, p. 3 (costed for 2026/27)" },
+    "p04": { "group": "lab", "set": "spend", "label": "A food and essentials service in Padiham, for a year (adopted last year)", "cost": [0.05], "recurring": false, "theme": "poverty", "src": "labamend", "at": "p. 3 (costed for 2026/27)" },
+    "p05": { "group": "lab", "set": "spend", "label": "Free swimming for children with a paying adult, for a year (adopted last year)", "cost": [0.04], "recurring": false, "theme": "leisure", "src": "labamend", "at": "p. 4 (costed for 2026/27)" },
+    "p06": { "group": "lab", "set": "spend", "label": "Holiday swimming lessons for children on free school meals, for a year (adopted last year)", "cost": [0.0375], "recurring": false, "theme": "leisure", "src": "labamend", "at": "p. 4 (costed for 2026/27)" },
+    "p05r": { "group": "lab", "set": "spend", "label": "Free swimming for children with a paying adult, every year", "cost": [0.04], "recurring": true, "theme": "leisure", "src": "labamend", "at": "p. 4 (costed for 2026/27, as a continuing cost)" }
+  }
+}

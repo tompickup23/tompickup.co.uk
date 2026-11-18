@@ -17,6 +17,8 @@ sources:
     url: "https://assets.publishing.service.gov.uk/media/6ae36c6ed22fc5fecb3eb7f9/Local_government_reorganisation_-_withdrawn_letter_to_9_areas.pdf"
 data:
   links:
+    - label: "The paper as a PDF, version 3.2, typeset from the deposited text (125 pages, 5.2 MB)"
+      url: "https://tompickup.co.uk/documents/pickup-2026-lgr-lancashire-working-paper-v3-2.pdf"
     - label: "Zenodo: working paper, data and code, version 3.2 (DOI 10.5281/zenodo.24208546)"
       url: "https://doi.org/10.5281/zenodo.24208546"
     - label: "Version 3.1, unchanged and still citable (DOI 10.5281/zenodo.23016761)"
@@ -29,6 +31,16 @@ data:
 Version 3.2 of my working paper on the finances of council reorganisation in Lancashire is on Zenodo, with its data and code: [10.5281/zenodo.24208546](https://doi.org/10.5281/zenodo.24208546).<sup class="cite"><a href="#source-1">1</a></sup>
 
 It asks one new question. Lancashire's councils put forward plans for two, three, four and five unitaries. Nobody proposed a single council. On 29 October the Government withdrew its choice of four and said all options and proposals remain under consideration.<sup class="cite"><a href="#source-2">2</a></sup> So the paper now runs the same model on two forms that were never on the table: one new council for the whole area, and the county council continuing with its twelve districts.
+
+<aside class="paper-download" aria-label="Read the full paper">
+  <a class="paper-download-cover" href="/documents/pickup-2026-lgr-lancashire-working-paper-v3-2.pdf" tabindex="-1" aria-hidden="true"><img src="/images/papers/lgr-working-paper-v3-2-cover.webp" width="480" height="680" alt="" loading="lazy" decoding="async"></a>
+  <div class="paper-download-body">
+    <p class="paper-download-kicker">The full paper</p>
+    <p class="paper-download-title">The Financial Case for Local Government Reorganisation in Lancashire</p>
+    <p class="paper-download-meta">Working paper, version 3.2, 13 November 2026. A4, 125 pages, with contents, every table and the references. Typeset from the text deposited at Zenodo, unchanged.</p>
+    <p class="paper-download-actions"><a class="paper-download-button" href="/documents/pickup-2026-lgr-lancashire-working-paper-v3-2.pdf">Read the paper (PDF, 5.2 MB)</a> <a href="https://doi.org/10.5281/zenodo.24208546">Data and code on Zenodo</a></p>
+  </div>
+</aside>
 
 ## What the model gives
 
@@ -69,7 +81,7 @@ Three things in the paper cut against reading the table as a ranking to act on.
 
 ## What is in the deposit
 
-- **The paper**, version 3.2, as a Markdown file.
+- **The paper**, version 3.2, as a Markdown file. The [PDF above](/documents/pickup-2026-lgr-lancashire-working-paper-v3-2.pdf) is typeset from that file, with the text unchanged.
 - **Source data and derived tables**, each described in the package README with its source.
 - **Code**: `reproduce.py` rebuilds every model table; `tools/check_paper.py` checks the figures in the paper against that output; `tools/check_published_four.py` checks version 3.1's figures have not changed.
 - **Review records** in `review/`: the rules for each test and the reviews of this version. Those reviews were carried out by AI agents working for me. No human peer review has taken place.

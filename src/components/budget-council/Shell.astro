@@ -1,0 +1,65 @@
+---
+// Budget Council: the page frame every council's simulator shares, built on the chamber kit
+// (src/games/chamber-kit/). The council page passes its words and its theme (from its ui.js);
+// its own <script> mounts the app (src/games/budget-council/app.js) into #bc-app.
+import Layout from '../../layouts/Layout.astro';
+import { PROTOTYPE_NOTICE } from '../../data/prototype-notice';
+import '@fontsource/big-shoulders-display/latin-800';
+import '../../games/chamber-kit/kit.css';
+import '../../games/budget-council/budget-council.css';
+
+interface Props {
+  title: string;
+  pageTitle: string;
+  description: string;
+  ogImage: string;
+  ogImageAlt: string;
+  eyebrow: string;
+  noscript: string;
+  breadcrumbLabel?: string;
+  council: string;
+  theme?: Record<string, string>;
+}
+const { title, pageTitle, description, ogImage, ogImageAlt, eyebrow, noscript, breadcrumbLabel, council, theme = {} } = Astro.props;
+// Theme keys are the kit's tokens without the prefix: { stage: '#1f0e10' } sets --ck-stage.
+const style = Object.entries(theme).map(([k, v]) => `--ck-${k}:${v}`).join(';');
+---
+
+<Layout
+  title={pageTitle}
+  description={description}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  breadcrumbLabel={breadcrumbLabel || title}
+  noindex
+>
+  <div class="ck bc" data-council={council} data-mode="start" style={style}>
+    <p class="ck-proto" role="note">
+      <b>Prototype</b>
+      A training simulator built by Tom Pickup for his own website. Not a council service, and not council training material. Nothing you choose is collected, stored or sent.
+      {PROTOTYPE_NOTICE}
+    </p>
+    <header class="ck-bar">
+      <div>
+        <p class="ck-kicker">{eyebrow}</p>
+        <h1>{title}</h1>
+      </div>
+      <button type="button" class="ck-menubtn" id="bc-menu" aria-haspopup="dialog">
+        <svg class="ck-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        Menu
+      </button>
+      <ol class="ck-steps" id="bc-steps" aria-label="Where you are"></ol>
+    </header>
+    <div class="ck-body">
+      <div class="ck-backdrop" id="bc-room"></div>
+      <main id="bc-app" class="ck-layer" data-mode="start">
+        <noscript>
+          <p class="ck-panel">{noscript}</p>
+        </noscript>
+      </main>
+    </div>
+    <p class="bc-sr" id="bc-sr" aria-live="polite"></p>
+  </div>
+</Layout>

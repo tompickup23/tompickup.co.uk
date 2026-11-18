@@ -50,6 +50,12 @@ policy goes in.
 - No Cloudflare beacon on this page. Links to `council.lancashire.gov.uk` are plain anchors and need no directive.
 - Inline `<style>` blocks in the wrapper and the game.
 
+### `/burnley-budget-game/`
+
+- Wrapper `src/pages/burnley-budget-game/index.astro`; the game is `src/data/burnley-budget-game/game.html`, generated in Reports (`Burnley_Budget_Model_work/game/build.py`) and inlined with `set:html`. It must not be edited by hand; `scripts/sync-burnley-game.sh` copies it in.
+- One inline classic script and inline `<style>` blocks, as the Lancashire game. No web fonts, no external links and no request outside the page. No beacon.
+- Reports also builds the same game as three files (`game/dist/`: `index.html`, `game.css`, `game.js`) with nothing inline, made for a strict policy. When the policy goes in, the wrapper can serve those instead of the one-file form.
+
 ### `/lancashire-voice/` (noindex, unlinked prototype)
 
 - Wrapper `src/pages/lancashire-voice/index.astro`; the page is `src/data/lancashire-voice/prototype.html`, generated in Reports (`Lancashire_Voice_Game/build.py`), whose build already rejects any network, storage or form call.

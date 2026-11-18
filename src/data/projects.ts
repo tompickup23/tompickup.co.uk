@@ -59,6 +59,14 @@ export const ON_THIS_SITE: Project[] = [
     inFooter: true,
   },
   {
+    href: '/burnley-budget-game/',
+    accent: '#2c5f9e',
+    title: 'Burnley Budget Challenge',
+    desc: 'Where Burnley Borough Council’s money goes, the council’s own budget gap for the next two years, and whether you can close it.',
+    source: 'Burnley Borough Council budget papers',
+    inFooter: false,
+  },
+  {
     href: '/lgr/',
     accent: '#ff9f0a',
     title: "Lancashire's new councils",
@@ -67,6 +75,14 @@ export const ON_THIS_SITE: Project[] = [
     unit: 'councils in the July proposal',
     source: 'MHCLG decision, LCC budget books, Contracts Finder',
     inFooter: true,
+  },
+  {
+    href: '/lcc-budget-game/',
+    accent: '#b3122e',
+    title: 'Lancashire Budget Challenge',
+    desc: 'Where Lancashire County Council’s money goes, what has changed since May 2025, and whether you can balance next year’s budget.',
+    source: 'Lancashire County Council budget papers',
+    inFooter: false,
   },  {
     // Linked from here and the homepage, but noindex and out of the sitemap
     // (plan of 8 November 2026, decision 3 (b)): Cabinet has not agreed the product.
@@ -82,6 +98,22 @@ export const ON_THIS_SITE: Project[] = [
     accent: '#2f5d50',
     title: 'Young Lancashire Voice',
     desc: 'A prototype for young people: take a seat in the county council chamber, bring your own motion and put it to Lancashire. Not a council service; nothing is collected.',
+    inFooter: false,
+  },
+  {
+    // The adult counterpart: a training simulator of the Budget Meeting. Prototype, noindex.
+    href: '/budget-council/',
+    accent: '#1f4e5a',
+    title: 'Budget Council',
+    desc: 'A prototype training simulator for councillors: prepare for and sit through Lancashire County Council’s Budget Meeting, from either side of the chamber, using the 2026/27 papers and amendments. Nothing is collected.',
+    inFooter: false,
+  },
+  {
+    // The same simulator for Burnley Borough Council's Budget Meeting, a rehearsal of March 2027. Prototype, noindex.
+    href: '/budget-council/burnley/',
+    accent: '#8e2f2c',
+    title: 'Burnley Budget Council',
+    desc: 'A prototype training simulator for councillors: rehearse Burnley Borough Council’s 2027/28 Budget Meeting under the council’s own rules, where a coalition with 19 of 45 seats has to pass its Budget. Nothing is collected.',
     inFooter: false,
   },
 ];
@@ -197,8 +229,8 @@ function projectsNamed(...titles: string[]): Project[] {
 export const PROJECT_GROUPS = [
   { id: 'public-data', title: 'Public money & democracy', shortTitle: 'Public data', description: 'Follow the money, understand the decisions and check the record.', projects: projectsNamed('AI DOGE', 'UK Councils', 'UK Elections', 'Asylum Stats') },
   { id: 'everyday-tools', title: 'Places & everyday life', shortTitle: 'Everyday tools', description: 'Find your area, understand its population and look up practical local information.', projects: projectsNamed('UK Places', 'UK Demographics', 'UK Food Hygiene', 'UK School Holiday Dates') },
-  { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'The Padiham Job', 'Reform UK Burnley') },
-  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Voice', 'Young Lancashire Voice') },
+  { id: 'burnley', title: 'Burnley', shortTitle: 'Burnley', description: 'Local history, charitable work, politics and investigations into the life of the town.', projects: projectsNamed('Stocks Massey', "Burnley's economy", 'Burnley Budget Challenge', 'Burnley Budget Council', 'The Padiham Job', 'Reform UK Burnley') },
+  { id: 'lancashire', title: 'Lancashire', shortTitle: 'Lancashire', description: 'The county’s new councils, public services and the decisions shaping its future.', projects: projectsNamed("Lancashire's new councils", 'Lancashire Budget Challenge', 'Lancashire Voice', 'Young Lancashire Voice', 'Budget Council') },
 ];
 
 /** Related reading is labelled as such, rather than presented as a launch article. */
@@ -211,6 +243,8 @@ export const PROJECT_DETAILS: Record<string, {
   'Stocks Massey': { mark: 'SM', subject: 'History & charitable legacy', section: { href: '/stocks-massey/#articles', label: 'Read the award articles' } },
   "Burnley's economy": { mark: 'BE', subject: 'Economy & jobs', section: { href: '/burnley-economy/method/', label: 'How the figures are built' } },
   'The Padiham Job': { mark: 'PJ', subject: 'Browser game' },
+  'Burnley Budget Challenge': { mark: 'BB', subject: 'Council budget game' },
+  'Lancashire Budget Challenge': { mark: 'LB', subject: 'Council budget game' },
   'AI DOGE': { mark: 'DG', subject: 'Public spending', article: { slug: 'where-burnley-councils-money-goes', label: 'Where Burnley Council’s money goes' }, section: { href: '/aidoge/', label: 'How AI DOGE works' } },
   'UK Councils': { mark: 'UC', subject: 'Local government' },
   'UK Elections': { mark: 'UE', subject: 'Elections & forecasts' },
@@ -222,6 +256,8 @@ export const PROJECT_DETAILS: Record<string, {
   "Lancashire's new councils": { mark: 'LC', subject: 'Interactive council model', article: { slug: 'lancashire-four-unitaries-model', label: 'Read the introduction to the model' }, section: { href: '/lgr/contracts/', label: 'Explore the contracts register' } },
   'Lancashire Voice': { mark: 'LV', subject: 'Prototype, not a council service' },
   'Young Lancashire Voice': { mark: 'YV', subject: 'Prototype, not a council service' },
+  'Budget Council': { mark: 'BC', subject: 'Training simulator prototype' },
+  'Burnley Budget Council': { mark: 'BU', subject: 'Training simulator prototype' },
   'Reform UK Burnley': { mark: 'RB', subject: 'Political website' },
 };
 

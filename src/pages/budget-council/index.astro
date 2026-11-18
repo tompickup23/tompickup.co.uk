@@ -1,0 +1,38 @@
+---
+// Budget Council: a training simulator of Lancashire County Council's Budget Meeting.
+// The worked example is the real meeting of 26 February 2026 (Budget 2026/27): its papers, its
+// five group amendments and its six recorded votes, set in today's chamber (Reform UK 51 of 84).
+// Play as the Administration or as one of the five opposition groups. Opponents move from
+// weighted tables on a seeded generator, so runs differ but replay exactly from the seed.
+// Groups and offices only: no councillor is named, and every speech is written for the game.
+// Shared app: src/games/budget-council/app.js and engine.js. Lancashire's words: lancashire/content.js
+// and lancashire/ui.js; data: src/data/budget-council/lancashire/. Burnley's version: ./burnley/.
+// Test: scripts/budget-council.test.mjs. Prototype, noindex. It collects, stores and sends nothing.
+import Shell from '../../components/budget-council/Shell.astro';
+import { ui } from '../../games/budget-council/lancashire/ui.js';
+---
+
+<Shell
+  council="lancashire"
+  theme={ui.theme}
+  title="Budget Council"
+  pageTitle="Budget Council: a training simulator | Tom Pickup"
+  description="A prototype training simulator for councillors: sit through Lancashire County Council's 2026/27 Budget Meeting from either side of the chamber."
+  ogImage="https://tompickup.co.uk/images/share/lancashire-voice.png"
+  ogImageAlt="Budget Council, a prototype training simulator for councillors"
+  eyebrow="A county council Budget Meeting, for councillors"
+  noscript="This simulator needs JavaScript. In short: you prepare for and sit through Lancashire County Council's Budget Meeting, as the Administration or an opposition group, using the real papers and amendments from 26 February 2026, with today's group sizes."
+/>
+
+<script>
+  import chamber from '../../data/budget-council/lancashire/chamber.json';
+  import minutes from '../../data/budget-council/lancashire/minutes.json';
+  import amendments from '../../data/budget-council/lancashire/amendments.json';
+  import papers from '../../data/budget-council/lancashire/papers.json';
+  import sources from '../../data/budget-council/lancashire/sources.json';
+  import * as content from '../../games/budget-council/lancashire/content.js';
+  import { ui } from '../../games/budget-council/lancashire/ui.js';
+  import { mount } from '../../games/budget-council/app.js';
+
+  mount({ data: { chamber, minutes, amendments, papers, sources }, content, ui });
+</script>
