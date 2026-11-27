@@ -334,6 +334,7 @@ HEADLINE_CARDS = [
     dict(slug="burnley-ketamine-prevention-video", eyebrow="Burnley  ·  Health"),
     dict(slug="combined-authority-spending-scrutiny-video", eyebrow="Lancashire  ·  Public debates"),
     dict(slug="debenhams-jobs-return-to-burnley", eyebrow="Burnley  ·  Jobs"),
+    dict(slug="happy-lancashire-day-2026", eyebrow="Lancashire  ·  Lancashire Day"),
     dict(slug="lancashire-flag-policy-video", eyebrow="Lancashire  ·  Public debates"),
     dict(slug="lancashire-four-unitaries-model", eyebrow="Lancashire  ·  Reorganisation"),
     dict(slug="lancashire-growth-plan-scrutiny-video", eyebrow="Lancashire  ·  Public debates"),
