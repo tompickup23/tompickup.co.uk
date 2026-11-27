@@ -53,6 +53,9 @@ export interface Meta {
   generated: string;
   latest_period?: string;
   neighbour_period?: string;
+  survival_cohort?: string;
+  survival_to_year?: string;
+  survival_previous_cohort?: string;
 }
 
 export interface Contract {

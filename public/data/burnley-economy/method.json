@@ -6,8 +6,8 @@
   "measures": [],
   "publisher": "this collection",
   "table": "contracts and their sources",
-  "edition": "contracts of 2026-10-25",
-  "access_date": "2026-10-25",
+  "edition": "contracts of 2026-11-27",
+  "access_date": "2026-11-27",
   "citation": "this collection",
   "sources": [
    {
@@ -16,13 +16,13 @@
    },
    {
     "file": "Burnley_Growth_work/H_collection/revision_log.csv",
-    "sha256": "58051c4753cc5ba90e568b800c99c119384f9bc4094707578d99ce107f345f54"
+    "sha256": "cfc483b3e74c742316dabaa064091a589daa26a4aca845315e31b4974c2a77cd"
    }
   ],
   "vintage": "",
   "caveat": "Every panel's file carries the SHA-256 of each file it was built from; each official source row carries the SHA-256 of the file downloaded from the publisher.",
   "next_release": "",
-  "generated": "2026-10-25",
+  "generated": "2026-11-27",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
   "methodologyVersion": "1.0",
   "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
@@ -353,7 +353,7 @@
   },
   {
    "file": "Burnley_Growth_work/A_labour_pay/series/bdem.csv",
-   "sha256": "019fbc476b55206d188b50395c4654a93baa580c2fd64898a68d0aa9e1919d4a"
+   "sha256": "da6fd2b58580bc8f0a16a92033ad5808fd2099f7a7deb0605951dee6ba13e891"
   },
   {
    "file": "Burnley_Growth_work/A_labour_pay/series/claimant_2.csv",
@@ -393,10 +393,14 @@
   },
   {
    "file": "Burnley_Growth_work/B_business_sectors/INPUTS.csv",
-   "sha256": "2abf72c2854d97bf8cb2c3de983d61daada13dca46451ff0201ac42220ae3efd"
+   "sha256": "4ca3383c5a0ce02a59e2ea2bceea407ede33ef1ad12ccd3bbd0199516155af65"
   },
   {
    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+   "sha256": "ea43a329a2f9e352231c41fa6897cd4098fe584d7e715736512af445b21f2e0b"
+  },
+  {
+   "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
    "sha256": "b7962824753520f4bf9ff8c4425dd56724e147f9d7050a86d8b7c34f58e1690e"
   },
   {
@@ -480,10 +484,10 @@
   {
    "publisher": "Office for National Statistics",
    "title": "Business demography, UK: reference tables",
-   "edition": "2024 edition, released 20 November 2025 (amended); 2025 due 19 November 2026",
-   "url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2024.xlsx",
-   "sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
-   "access_date": "2026-10-25"
+   "edition": "2025 edition, released 19 November 2026",
+   "url": "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable/current/businessdemographyexceltables2025.xlsx",
+   "sha256": "b66846ef8336f87342a3feac75bf809c0a5a535360d9150c135dcedb2411b430",
+   "access_date": "2026-11-27"
   },
   {
    "publisher": "Office for National Statistics",
@@ -937,8 +941,8 @@
   },
   {
    "workstream": "B",
-   "file": "business_demography_2024.xlsx",
-   "sha256": "d0687054646be98c0b7ba0f476888111523cc7ead380e07ecf609f0c5e2cde37",
+   "file": "businessdemographyexceltables2025.xlsx",
+   "sha256": "b66846ef8336f87342a3feac75bf809c0a5a535360d9150c135dcedb2411b430",
    "used_for": "demography"
   },
   {
@@ -1186,6 +1190,34 @@
    "change": "Companies reporting 50 or more employees are named, 33 of them, with their headcount and accounts year end.",
    "reason": "Naming companies beside figures was approved on 25 October 2026. Each headcount was checked against the company's own filed accounts; one company is not named because its filing is internally inconsistent.",
    "source": "H_collection/named_companies_check.csv"
+  },
+  {
+   "date": "2026-11-27",
+   "panel": "bu-demography",
+   "change": "Five year survival now shows the 2020 birth cohort, not the 2019 cohort: Burnley 33.3% (was 27.5% for 2019), England 37.5% (was 38.3%), gap 4.2 points (was 10.8). Comparators for the 2020 cohort: Pendle 32.1%, Hyndburn 38.5%, Rossendale 37.3%, Blackburn with Darwen 38.1%, Lancashire county 37.2%, Lancashire 14 areas 36.7%, Great Britain 37.5%.",
+   "reason": "The 2025 edition replaces the 2024 edition and carries cohorts 2020 to 2024; the 2019 cohort is no longer in the tables. Burnley Table 5.1a: 345 births in 2020, 115 still active five years on.",
+   "source": "ONS (2026) Business demography, UK: 2025, reference tables, published 19 November 2026; build_contracts.py; check_contracts.py PASS; Table 5.1a"
+  },
+  {
+   "date": "2026-11-27",
+   "panel": "bu-demography",
+   "change": "Yearly counts now run 2020 to 2025, not 2019 to 2024. New for 2025: 2,975 active, 405 births, 295 deaths, 15 high growth. Revised: deaths in 2023 are 360 (was 355). The 2019 rows leave the panel.",
+   "reason": "The 2025 edition's tables cover 2020 to 2025; deaths in the latest two years are provisional and the 2023 figure was revised by ONS.",
+   "source": "ONS (2026) Business demography, UK: 2025, reference tables, published 19 November 2026; build_contracts.py; check_contracts.py PASS; Tables 1.1a to 1.1c, 2.1a to 2.1c, 3.1a to 3.1c, 7.1a to 7.1c"
+  },
+  {
+   "date": "2026-11-27",
+   "panel": "tile-enterprises",
+   "change": "No value changed: 2,895 active enterprises in 2024 and the three densities are as before. The edition, table reference (Table 3.1c), hash and access date now point to the 2025 edition.",
+   "reason": "The tile stays on 2024 so that the count and the density share a year; no mid-2025 population aged 16 to 64 is held, so a 2025 density is not computed.",
+   "source": "ONS (2026) Business demography, UK: 2025, reference tables, published 19 November 2026; build_contracts.py; check_contracts.py PASS; Table 3.1c; LI01 mid-2024"
+  },
+  {
+   "date": "2026-11-27",
+   "panel": "bu-demography",
+   "change": "Five year survival is shown for two birth cohorts side by side: 2020 from the 2025 edition and 2019 from the 2024 edition, each with its own gap to England (4.2 and 10.8 points).",
+   "reason": "Decided on 27 November 2026: the earlier cohort stays visible, cited to its own edition, so the reader sees that the gap narrowed and that one year's births is a small group.",
+   "source": "B_business_sectors/demography.csv and demography_2024_edition.csv; build_contracts.py; check_contracts.py PASS"
   }
  ],
  "derived": []

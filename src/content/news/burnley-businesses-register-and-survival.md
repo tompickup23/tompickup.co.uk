@@ -2,7 +2,7 @@
 title: "Burnley's businesses: a steady base, and new firms that struggle to last"
 ogImage: "/images/share/burnley-businesses-register-and-survival.png"
 date: 2026-10-25T23:09:56Z
-updated: 2026-10-26
+updated: 2026-11-27
 description: "The official figures on Burnley's businesses: how long new firms last, how many companies are active, the largest employers registered here, and the town's shops and premises."
 seoTitle: "Burnley's businesses: survival, size and premises"
 seoDescription: "Burnley's businesses in official figures: new firms less likely to last five years than anywhere nearby, a steady, mostly small base, and shops worth less."
@@ -20,6 +20,8 @@ sources:
     url: "https://www.gov.uk/government/statistics/national-non-domestic-rates-collected-by-councils-in-england-2025-to-2026"
   - text: "Food Standards Agency, Food Hygiene Rating Scheme open data, Burnley council area, releases of 24 July and 27 September 2026"
     url: "https://ratings.food.gov.uk/open-data"
+  - text: "ONS, Business demography, UK: reference tables, 2025 edition (released 19 November 2026), Table 5.1a, Burnley, Pendle and England rows"
+    url: "https://www.ons.gov.uk/businessindustryandtrade/business/activitysizeandlocation/datasets/businessdemographyreferencetable"
 data:
   links:
     - label: "ONS business demography reference tables"
@@ -73,14 +75,20 @@ The ONS follows each year's new businesses to see how many survive. Of the 400 b
 <div class="viz-panel">
 <div class="viz-label teal">Businesses born in 2019 still trading five years later</div>
 <div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink); font-weight:600;">Burnley</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:55.0%; background:var(--chart-1);"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">27.5%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Hyndburn</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:76.6%; background:#8b928d;"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">38.3%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Blackburn with Darwen</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:85.2%; background:#8b928d;"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">42.6%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Rossendale</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:86.6%; background:#8b928d;"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">43.3%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Pendle</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:89.2%; background:#8b928d;"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">44.6%</div></div><div style="display:flex; align-items:center; gap:8px; margin-top:5px;"><div style="flex:0 0 42%; font-size:0.875rem; text-align:right; color:var(--ink);">Lancashire, fourteen areas</div><div style="flex:1; position:relative; height:14px; background:var(--panel);"><div style="position:absolute; left:0; top:0; bottom:0; width:80.4%; background:#8b928d;"></div><div style="position:absolute; top:-2px; bottom:-2px; left:76.6%; border-left:2px solid var(--ink);"></div></div><div style="flex:0 0 3.6rem; font-size:0.875rem; font-variant-numeric:tabular-nums;">40.2%</div></div>
-<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">The black line is England, 38.3%. Source: ONS, Business demography, UK, 2024 edition (released 20 November 2025), five year survival table. The 2025 edition is due on 19 November 2026.</div>
+<div class="text-dim" style="font-size:0.875rem; margin-top:12px;">The black line is England, 38.3%. Source: ONS, Business demography, UK, 2024 edition (released 20 November 2025), five year survival table. The 2025 edition is covered in the update below.</div>
 </div>
 
 The businesses born in 2021 show the same pattern: 48.4% were still going three years later, against 53.5% for England.
 
 New firms keep starting. 375 were born in 2024 and 300 closed. The number of active businesses has hardly moved, from 2,845 in 2019 to 2,895 in 2024. What Burnley is short of is firms that start, last and grow. The count of high growth businesses fell from 20 to 10 over the same years.
 
-These figures are from the ONS's 2024 edition. The 2025 edition is due on 19 November 2026, and this article will be updated then.
+These figures are from the ONS's 2024 edition and are left as first published.
+
+### Update: the businesses born in 2020
+
+The ONS published its 2025 edition on 19 November 2026. It follows the businesses born in 2020. Of the 345 born in Burnley that year, 115 were still trading five years later: 33.3%. For England the figure is 37.5%. The gap is 4.2 points, where it was 10.8 points for the businesses born in 2019. Pendle's figure for the 2020 group is 32.1%, below Burnley's.<sup class="cite"><a href="#source-6">6</a></sup>
+
+One year's births in a town this size is a small group, and the ONS rounds each count to the nearest five. The 2020 group also started in the first year of the pandemic. Two years do not make a trend. Burnley was below England in both.
 
 ---
 
