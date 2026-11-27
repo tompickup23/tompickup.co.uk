@@ -47,55 +47,31 @@
   ],
   "publisher": "Office for National Statistics",
   "table": "Business demography, UK: reference tables, Tables 1.1a to 5.1a",
-  "edition": "2024 edition, published 20 November 2025",
-  "access_date": "2026-07-26",
-  "citation": "ONS (2025) Business demography, UK: 2024, reference tables, published 20 November 2025",
+  "edition": "2025 edition, published 19 November 2026",
+  "access_date": "2026-11-27",
+  "citation": "ONS (2026) Business demography, UK: 2025, reference tables, published 19 November 2026",
   "sources": [
    {
     "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "sha256": "ea43a329a2f9e352231c41fa6897cd4098fe584d7e715736512af445b21f2e0b"
+   },
+   {
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "sha256": "b7962824753520f4bf9ff8c4425dd56724e147f9d7050a86d8b7c34f58e1690e"
    }
   ],
-  "vintage": "2024 edition; replaced by the 2025 edition on 19 November 2026",
-  "caveat": "Counts use controlled rounding and survival periods are rounded independently. Deaths in the latest two years are provisional.",
-  "next_release": "19 November 2026",
-  "generated": "2026-10-25",
+  "vintage": "2025 edition; survival is shown for the 2020 birth cohort and, from the 2024 edition (held file of 26 July 2026), for the 2019 cohort, which the 2025 edition no longer carries",
+  "caveat": "Counts use controlled rounding to 5 and survival periods are rounded independently, so one rounding step moves Burnley's five year rate by more than a point. Each cohort is one year's births. Deaths in the latest two years are provisional.",
+  "next_release": "to be announced (ONS)",
+  "generated": "2026-11-27",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
   "methodologyVersion": "1.0",
-  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
+  "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic.",
+  "survival_cohort": "2020",
+  "survival_to_year": "2025",
+  "survival_previous_cohort": "2019"
  },
  "rows": [
-  {
-   "geography_code": "E07000117",
-   "geography_name": "Burnley",
-   "geography_type": "local authority district",
-   "measure": "births",
-   "period": "2019",
-   "period_type": "calendar year",
-   "value": 400,
-   "unit": "enterprises",
-   "source_publisher": "Office for National Statistics",
-   "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1a",
-   "source_edition": "2024 edition, published 20 November 2025",
-   "source_url": "",
-   "source_sha256": "",
-   "access_date": "",
-   "derived": "no",
-   "derivation": "",
-   "note": "",
-   "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
-    "key": {
-     "geography_code": "E07000117",
-     "measure": "births",
-     "year_or_birth_cohort": "2019",
-     "survival_to_year": ""
-    },
-    "column": "value"
-   },
-   "rid": "r0"
-  },
   {
    "geography_code": "E07000117",
    "geography_name": "Burnley",
@@ -107,8 +83,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1b",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -125,7 +101,7 @@
     },
     "column": "value"
    },
-   "rid": "r1"
+   "rid": "r0"
   },
   {
    "geography_code": "E07000117",
@@ -138,8 +114,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -156,7 +132,7 @@
     },
     "column": "value"
    },
-   "rid": "r2"
+   "rid": "r1"
   },
   {
    "geography_code": "E07000117",
@@ -169,8 +145,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -187,7 +163,7 @@
     },
     "column": "value"
    },
-   "rid": "r3"
+   "rid": "r2"
   },
   {
    "geography_code": "E07000117",
@@ -200,8 +176,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -218,7 +194,7 @@
     },
     "column": "value"
    },
-   "rid": "r4"
+   "rid": "r3"
   },
   {
    "geography_code": "E07000117",
@@ -231,8 +207,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 1.1d",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -249,38 +225,38 @@
     },
     "column": "value"
    },
-   "rid": "r5"
+   "rid": "r4"
   },
   {
    "geography_code": "E07000117",
    "geography_name": "Burnley",
    "geography_type": "local authority district",
-   "measure": "deaths",
-   "period": "2019",
+   "measure": "births",
+   "period": "2025",
    "period_type": "calendar year",
-   "value": 270,
+   "value": 405,
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1a",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 1.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
    "derived": "no",
    "derivation": "",
-   "note": "deaths in the latest two years are provisional",
+   "note": "",
    "src": {
     "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
     "key": {
      "geography_code": "E07000117",
-     "measure": "deaths",
-     "year_or_birth_cohort": "2019",
+     "measure": "births",
+     "year_or_birth_cohort": "2025",
      "survival_to_year": ""
     },
     "column": "value"
    },
-   "rid": "r6"
+   "rid": "r5"
   },
   {
    "geography_code": "E07000117",
@@ -293,8 +269,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1b",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -311,7 +287,7 @@
     },
     "column": "value"
    },
-   "rid": "r7"
+   "rid": "r6"
   },
   {
    "geography_code": "E07000117",
@@ -324,8 +300,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -342,7 +318,7 @@
     },
     "column": "value"
    },
-   "rid": "r8"
+   "rid": "r7"
   },
   {
    "geography_code": "E07000117",
@@ -355,8 +331,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -373,7 +349,7 @@
     },
     "column": "value"
    },
-   "rid": "r9"
+   "rid": "r8"
   },
   {
    "geography_code": "E07000117",
@@ -382,12 +358,12 @@
    "measure": "deaths",
    "period": "2023",
    "period_type": "calendar year",
-   "value": 355,
+   "value": 360,
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -404,7 +380,7 @@
     },
     "column": "value"
    },
-   "rid": "r10"
+   "rid": "r9"
   },
   {
    "geography_code": "E07000117",
@@ -417,8 +393,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 2.1d",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -435,38 +411,38 @@
     },
     "column": "value"
    },
-   "rid": "r11"
+   "rid": "r10"
   },
   {
    "geography_code": "E07000117",
    "geography_name": "Burnley",
    "geography_type": "local authority district",
-   "measure": "active_enterprises",
-   "period": "2019",
+   "measure": "deaths",
+   "period": "2025",
    "period_type": "calendar year",
-   "value": 2845,
+   "value": 295,
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1a",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 2.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
    "derived": "no",
    "derivation": "",
-   "note": "",
+   "note": "deaths in the latest two years are provisional",
    "src": {
     "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
     "key": {
      "geography_code": "E07000117",
-     "measure": "active_enterprises",
-     "year_or_birth_cohort": "2019",
+     "measure": "deaths",
+     "year_or_birth_cohort": "2025",
      "survival_to_year": ""
     },
     "column": "value"
    },
-   "rid": "r12"
+   "rid": "r11"
   },
   {
    "geography_code": "E07000117",
@@ -479,8 +455,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1b",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -497,7 +473,7 @@
     },
     "column": "value"
    },
-   "rid": "r13"
+   "rid": "r12"
   },
   {
    "geography_code": "E07000117",
@@ -510,8 +486,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -528,7 +504,7 @@
     },
     "column": "value"
    },
-   "rid": "r14"
+   "rid": "r13"
   },
   {
    "geography_code": "E07000117",
@@ -541,8 +517,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -559,7 +535,7 @@
     },
     "column": "value"
    },
-   "rid": "r15"
+   "rid": "r14"
   },
   {
    "geography_code": "E07000117",
@@ -572,8 +548,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -590,7 +566,7 @@
     },
     "column": "value"
    },
-   "rid": "r16"
+   "rid": "r15"
   },
   {
    "geography_code": "E07000117",
@@ -603,8 +579,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 3.1d",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -621,21 +597,21 @@
     },
     "column": "value"
    },
-   "rid": "r17"
+   "rid": "r16"
   },
   {
    "geography_code": "E07000117",
    "geography_name": "Burnley",
    "geography_type": "local authority district",
-   "measure": "high_growth_enterprises",
-   "period": "2019",
+   "measure": "active_enterprises",
+   "period": "2025",
    "period_type": "calendar year",
-   "value": 20,
+   "value": 2975,
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1a",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 3.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -646,13 +622,13 @@
     "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
     "key": {
      "geography_code": "E07000117",
-     "measure": "high_growth_enterprises",
-     "year_or_birth_cohort": "2019",
+     "measure": "active_enterprises",
+     "year_or_birth_cohort": "2025",
      "survival_to_year": ""
     },
     "column": "value"
    },
-   "rid": "r18"
+   "rid": "r17"
   },
   {
    "geography_code": "E07000117",
@@ -665,8 +641,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1b",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 7.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -683,7 +659,7 @@
     },
     "column": "value"
    },
-   "rid": "r19"
+   "rid": "r18"
   },
   {
    "geography_code": "E07000117",
@@ -696,8 +672,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 7.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -714,7 +690,7 @@
     },
     "column": "value"
    },
-   "rid": "r20"
+   "rid": "r19"
   },
   {
    "geography_code": "E07000117",
@@ -727,8 +703,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 7.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -745,7 +721,7 @@
     },
     "column": "value"
    },
-   "rid": "r21"
+   "rid": "r20"
   },
   {
    "geography_code": "E07000117",
@@ -758,8 +734,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1c",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 7.1b",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -776,7 +752,7 @@
     },
     "column": "value"
    },
-   "rid": "r22"
+   "rid": "r21"
   },
   {
    "geography_code": "E07000117",
@@ -789,8 +765,8 @@
    "unit": "enterprises",
    "source_publisher": "Office for National Statistics",
    "source_title": "Business demography, UK: reference tables",
-   "source_table": "Table 7.1d",
-   "source_edition": "2024 edition, published 20 November 2025",
+   "source_table": "Table 7.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
    "source_url": "",
    "source_sha256": "",
    "access_date": "",
@@ -807,7 +783,317 @@
     },
     "column": "value"
    },
+   "rid": "r22"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "local authority district",
+   "measure": "high_growth_enterprises",
+   "period": "2025",
+   "period_type": "calendar year",
+   "value": 15,
+   "unit": "enterprises",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 7.1c",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "measure": "high_growth_enterprises",
+     "year_or_birth_cohort": "2025",
+     "survival_to_year": ""
+    },
+    "column": "value"
+   },
    "rid": "r23"
+  },
+  {
+   "geography_code": "E07000117",
+   "geography_name": "Burnley",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 33.3,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E07000117",
+     "geography_name": "Burnley",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r24"
+  },
+  {
+   "geography_code": "E07000122",
+   "geography_name": "Pendle",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 32.1,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E07000122",
+     "geography_name": "Pendle",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r25"
+  },
+  {
+   "geography_code": "E07000120",
+   "geography_name": "Hyndburn",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 38.5,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E07000120",
+     "geography_name": "Hyndburn",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r26"
+  },
+  {
+   "geography_code": "E07000125",
+   "geography_name": "Rossendale",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 37.3,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E07000125",
+     "geography_name": "Rossendale",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r27"
+  },
+  {
+   "geography_code": "E06000008",
+   "geography_name": "Blackburn with Darwen",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 38.1,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E06000008",
+     "geography_name": "Blackburn with Darwen",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r28"
+  },
+  {
+   "geography_code": "E10000017",
+   "geography_name": "Lancashire county (12 districts)",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 37.2,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births; aggregates are sums of rounded district counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E10000017",
+     "geography_name": "Lancashire county (12 districts)",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r29"
+  },
+  {
+   "geography_code": "LANCS14",
+   "geography_name": "Lancashire 14-area total",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 36.7,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births; aggregates are sums of rounded district counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "LANCS14",
+     "geography_name": "Lancashire 14-area total",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r30"
+  },
+  {
+   "geography_code": "E92000001",
+   "geography_name": "England",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 37.5,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "E92000001",
+     "geography_name": "England",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r31"
+  },
+  {
+   "geography_code": "K03000001",
+   "geography_name": "Great Britain",
+   "geography_type": "as the source gives",
+   "measure": "survival_5yr_pct",
+   "period": "2020 cohort",
+   "period_type": "birth cohort, survival to 2025",
+   "value": 37.5,
+   "unit": "%",
+   "source_publisher": "Office for National Statistics",
+   "source_title": "Business demography, UK: reference tables",
+   "source_table": "Table 5.1a",
+   "source_edition": "2025 edition, published 19 November 2026",
+   "source_url": "",
+   "source_sha256": "",
+   "access_date": "",
+   "derived": "no",
+   "derivation": "",
+   "note": "computed as survivors over births from the table's counts",
+   "src": {
+    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "key": {
+     "geography_code": "K03000001",
+     "geography_name": "Great Britain",
+     "measure": "survival_5yr_pct",
+     "year_or_birth_cohort": "2020"
+    },
+    "column": "value"
+   },
+   "rid": "r32"
   },
   {
    "geography_code": "E07000117",
@@ -829,7 +1115,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E07000117",
      "geography_name": "Burnley",
@@ -838,7 +1124,7 @@
     },
     "column": "value"
    },
-   "rid": "r24"
+   "rid": "r33"
   },
   {
    "geography_code": "E07000122",
@@ -860,7 +1146,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E07000122",
      "geography_name": "Pendle",
@@ -869,7 +1155,7 @@
     },
     "column": "value"
    },
-   "rid": "r25"
+   "rid": "r34"
   },
   {
    "geography_code": "E07000120",
@@ -891,7 +1177,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E07000120",
      "geography_name": "Hyndburn",
@@ -900,7 +1186,7 @@
     },
     "column": "value"
    },
-   "rid": "r26"
+   "rid": "r35"
   },
   {
    "geography_code": "E07000125",
@@ -922,7 +1208,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E07000125",
      "geography_name": "Rossendale",
@@ -931,7 +1217,7 @@
     },
     "column": "value"
    },
-   "rid": "r27"
+   "rid": "r36"
   },
   {
    "geography_code": "E06000008",
@@ -953,7 +1239,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E06000008",
      "geography_name": "Blackburn with Darwen",
@@ -962,7 +1248,7 @@
     },
     "column": "value"
    },
-   "rid": "r28"
+   "rid": "r37"
   },
   {
    "geography_code": "E10000017",
@@ -984,7 +1270,7 @@
    "derivation": "",
    "note": "computed as survivors over births; aggregates are sums of rounded district counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E10000017",
      "geography_name": "Lancashire county (12 districts)",
@@ -993,7 +1279,7 @@
     },
     "column": "value"
    },
-   "rid": "r29"
+   "rid": "r38"
   },
   {
    "geography_code": "LANCS14",
@@ -1015,7 +1301,7 @@
    "derivation": "",
    "note": "computed as survivors over births; aggregates are sums of rounded district counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "LANCS14",
      "geography_name": "Lancashire 14-area total",
@@ -1024,7 +1310,7 @@
     },
     "column": "value"
    },
-   "rid": "r30"
+   "rid": "r39"
   },
   {
    "geography_code": "E92000001",
@@ -1046,7 +1332,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "E92000001",
      "geography_name": "England",
@@ -1055,7 +1341,7 @@
     },
     "column": "value"
    },
-   "rid": "r31"
+   "rid": "r40"
   },
   {
    "geography_code": "K03000001",
@@ -1077,7 +1363,7 @@
    "derivation": "",
    "note": "computed as survivors over births from the table's counts",
    "src": {
-    "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
     "key": {
      "geography_code": "K03000001",
      "geography_name": "Great Britain",
@@ -1086,20 +1372,33 @@
     },
     "column": "value"
    },
-   "rid": "r32"
+   "rid": "r41"
   }
  ],
  "derived": [
   {
    "id": "survival_gap_england",
-   "label": "England minus Burnley, five year survival, percentage points",
+   "label": "England minus Burnley, five year survival of the 2020 birth cohort, percentage points",
+   "value": 4.2,
+   "decimals": 1,
+   "unit": "percentage points",
+   "arithmetic": "37.5 minus 33.3",
+   "inputs": [
+    "r24",
+    "r31"
+   ],
+   "note": ""
+  },
+  {
+   "id": "survival_gap_england_2019",
+   "label": "England minus Burnley, five year survival of the 2019 birth cohort, percentage points",
    "value": 10.8,
    "decimals": 1,
    "unit": "percentage points",
    "arithmetic": "38.3 minus 27.5",
    "inputs": [
-    "r24",
-    "r31"
+    "r33",
+    "r40"
    ],
    "note": ""
   }

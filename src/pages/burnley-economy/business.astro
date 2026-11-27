@@ -13,15 +13,21 @@ const BOR = 'E07000117', ENG = 'E92000001';
 const dem = contract('bu-demography');
 const years = Array.from(new Set(rows(dem, { geography_code: BOR, measure: 'births' }).map((r) => r.period))).sort();
 const dv = (m: string, y: string) => row(dem, { geography_code: BOR, measure: m, period: y }).value;
-const surv = rows(dem, { measure: 'survival_5yr_pct' });
-const sb = row(dem, { geography_code: BOR, measure: 'survival_5yr_pct' });
-const se = row(dem, { geography_code: ENG, measure: 'survival_5yr_pct' });
-const survRow = (code: string) => rows(dem, { measure: 'survival_5yr_pct', geography_code: code })[0];
+/* Five year survival is shown for two birth cohorts: the latest, and the one before from the edition before. */
 const survOrder = ['E07000117', 'E07000122', 'E07000120', 'E07000125', 'E06000008'];
-const survItems = [
-  ...survOrder.map(survRow).filter(Boolean),
-  ...surv.filter((r) => !survOrder.includes(r.geography_code) && r.geography_code !== ENG && !r.geography_name.startsWith('Great Britain')),
-].map((r) => ({ label: r.geography_name, value: r.value, display: fmt(r.value, '%', 1), strong: r.geography_code === BOR }));
+const cohortView = (cohort: string) => {
+  const period = `${cohort} cohort`;
+  const all = rows(dem, { measure: 'survival_5yr_pct', period });
+  const one = (code: string) => all.find((r) => r.geography_code === code);
+  const items = [
+    ...survOrder.map(one).filter(Boolean),
+    ...all.filter((r) => !survOrder.includes(r.geography_code) && r.geography_code !== ENG && !r.geography_name.startsWith('Great Britain')),
+  ].map((r) => ({ label: r!.geography_name, value: r!.value, display: fmt(r!.value, '%', 1), strong: r!.geography_code === BOR }));
+  return { cohort, b: one(BOR)!, e: one(ENG)!, items };
+};
+const latest = cohortView(dem.$meta.survival_cohort!);
+const before = cohortView(dem.$meta.survival_previous_cohort!);
+const gap = (id: string) => num(derived(dem, id).value as number, 1);
 const lastYear = years[years.length - 1];
 
 /* 2. the register */
@@ -89,11 +95,13 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
   <section aria-labelledby="dem-title">
     <h2 id="dem-title">Firms born, firms lost, firms that last</h2>
     <div class="prose">
-      <p>Of the businesses born in Burnley in 2019, {fmt(sb.value, '%', 1)} were still trading five years later. For England the figure is {fmt(se.value, '%', 1)}, {num(derived(dem, 'survival_gap_england').value as number, 1)} points higher. Burnley had {num(dv('active_enterprises', lastYear))} active enterprises in {lastYear}, {num(dv('births', lastYear))} births and {num(dv('deaths', lastYear))} deaths.</p>
+      <p>Of the businesses born in Burnley in {latest.cohort}, {fmt(latest.b.value, '%', 1)} were still trading five years later. For England the figure is {fmt(latest.e.value, '%', 1)}, {gap('survival_gap_england')} points higher. For the businesses born in {before.cohort} the figures were {fmt(before.b.value, '%', 1)} and {fmt(before.e.value, '%', 1)}, a gap of {gap(`survival_gap_england_${before.cohort}`)} points, so the gap narrowed. Burnley was below England in both. Each group is one year's births and the counts are small, so two years do not make a trend. Burnley had {num(dv('active_enterprises', lastYear))} active enterprises in {lastYear}, {num(dv('births', lastYear))} births and {num(dv('deaths', lastYear))} deaths.</p>
     </div>
     <Panel c={dem}>
-      <h3 class="chart-h">Five year survival of businesses born in 2019</h3>
-      <BarList items={survItems} max={50} marker={{ value: se.value as number, label: `England ${fmt(se.value, '%', 1)}` }} label="Five year survival of the 2019 birth cohort, Burnley and comparators, with England marked" />
+      {[latest, before].map((v) => <>
+        <h3 class="chart-h">Businesses born in {v.cohort} still trading five years later</h3>
+        <BarList items={v.items} max={50} marker={{ value: v.e.value as number, label: `England ${fmt(v.e.value, '%', 1)}` }} label={`Five year survival of the ${v.cohort} birth cohort, Burnley and comparators, with England marked`} />
+      </>)}
       <h3 class="chart-h">Births and deaths in Burnley each year</h3>
       <LineChart series={[
         { key: 'b', label: 'Births', color: 'var(--chart-1)', dots: true, points: years.map((y) => ({ x: y, y: dv('births', y), tip: `Births ${y}: ${num(dv('births', y))}` })), endLabel: `Births ${num(dv('births', lastYear))}` },
