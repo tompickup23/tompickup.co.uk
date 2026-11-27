@@ -82,11 +82,11 @@ The businesses born in 2021 show the same pattern: 48.4% were still going three 
 
 New firms keep starting. 375 were born in 2024 and 300 closed. The number of active businesses has hardly moved, from 2,845 in 2019 to 2,895 in 2024. What Burnley is short of is firms that start, last and grow. The count of high growth businesses fell from 20 to 10 over the same years.
 
-These figures are from the ONS's 2024 edition and are left as first published.
+The figures above are from the ONS's 2024 edition and are left as first published. The update below adds the 2025 edition.
 
 ### Update: the businesses born in 2020
 
-The ONS published its 2025 edition on 19 November 2026. It follows the businesses born in 2020. Of the 345 born in Burnley that year, 115 were still trading five years later: 33.3%. For England the figure is 37.5%. The gap is 4.2 points, where it was 10.8 points for the businesses born in 2019. Pendle's figure for the 2020 group is 32.1%, below Burnley's.<sup class="cite"><a href="#source-6">6</a></sup>
+The ONS published its 2025 edition on 19 November 2026. It follows the businesses born in 2020. Of the 345 born in Burnley that year, 115 were still trading five years later: 33.3%. For England the figure is 37.5%. The gap narrowed to 4.2 points, from 10.8 points for the businesses born in 2019. Pendle's figure for the 2020 group is 32.1%, below Burnley's. For the 2019 group it was 44.6%, which shows how far one year can move a small area.<sup class="cite"><a href="#source-6">6</a></sup>
 
 One year's births in a town this size is a small group, and the ONS rounds each count to the nearest five. The 2020 group also started in the first year of the pandemic. Two years do not make a trend. Burnley was below England in both.
 

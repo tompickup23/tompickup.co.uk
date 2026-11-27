@@ -95,11 +95,11 @@ const foodItems = types.filter((t) => fv(t, lastRel) !== null).map((t) => ({ lab
   <section aria-labelledby="dem-title">
     <h2 id="dem-title">Firms born, firms lost, firms that last</h2>
     <div class="prose">
-      <p>Of the businesses born in Burnley in {latest.cohort}, {fmt(latest.b.value, '%', 1)} were still trading five years later. For England the figure is {fmt(latest.e.value, '%', 1)}, {gap('survival_gap_england')} points higher. For the businesses born in {before.cohort} the figures were {fmt(before.b.value, '%', 1)} and {fmt(before.e.value, '%', 1)}, a gap of {gap(`survival_gap_england_${before.cohort}`)} points. Each group is one year's births and the counts are small, so two years do not make a trend. Burnley had {num(dv('active_enterprises', lastYear))} active enterprises in {lastYear}, {num(dv('births', lastYear))} births and {num(dv('deaths', lastYear))} deaths.</p>
+      <p>Of the businesses born in Burnley in {latest.cohort}, {fmt(latest.b.value, '%', 1)} were still trading five years later. For England the figure is {fmt(latest.e.value, '%', 1)}, {gap('survival_gap_england')} points higher. For the businesses born in {before.cohort} the figures were {fmt(before.b.value, '%', 1)} and {fmt(before.e.value, '%', 1)}, a gap of {gap(`survival_gap_england_${before.cohort}`)} points, so the gap narrowed. Burnley was below England in both. Each group is one year's births and the counts are small, so two years do not make a trend. Burnley had {num(dv('active_enterprises', lastYear))} active enterprises in {lastYear}, {num(dv('births', lastYear))} births and {num(dv('deaths', lastYear))} deaths.</p>
     </div>
     <Panel c={dem}>
       {[latest, before].map((v) => <>
-        <h3 class="chart-h">Five year survival of businesses born in {v.cohort}</h3>
+        <h3 class="chart-h">Businesses born in {v.cohort} still trading five years later</h3>
         <BarList items={v.items} max={50} marker={{ value: v.e.value as number, label: `England ${fmt(v.e.value, '%', 1)}` }} label={`Five year survival of the ${v.cohort} birth cohort, Burnley and comparators, with England marked`} />
       </>)}
       <h3 class="chart-h">Births and deaths in Burnley each year</h3>
