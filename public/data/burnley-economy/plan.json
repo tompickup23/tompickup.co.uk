@@ -6,13 +6,13 @@
   "measures": [],
   "publisher": "Burnley targeted growth plan, part B",
   "table": "Burnley_Growth_Plan_2026-10.md sections 1, 2.2 and 4; workstream D levers.csv",
-  "edition": "evidence document of October 2026; T2 rebased on three year means, 27 November 2026; T5 reset on pooled birth cohorts, proposed 28 November 2026",
+  "edition": "evidence document of October 2026; T2 rebased on three year means, 27 November 2026; T5 reset as a gap to England, 28 November 2026",
   "access_date": "2026-11-28",
   "citation": "Burnley targeted growth plan, part B, October 2026",
   "sources": [
    {
     "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
-    "sha256": "3dfcc695f05642451374a9c8d324db36e3aa4d0914c63df12ada677144e61f91"
+    "sha256": "93dd8383a36795aa0e40035fe54114661bc7fa16b583e8621200abbf9a4baf6e"
    },
    {
     "file": "Burnley_Growth_work/D_policy_levers/levers.csv",
@@ -20,23 +20,23 @@
    },
    {
     "file": "Burnley_Growth_Plan_2026-10.md",
-    "sha256": "843500f54a383787873ee05853f001d60f75633d7a5927e28a9ea7830d0b7187"
+    "sha256": "8ec09262aad21420303a1a81f2d480a09dc09e0e39658cb16847256fa9a6a329"
    },
    {
     "file": "Burnley_Growth_work/A_labour_pay/series/li01.csv",
     "sha256": "bfb90669f479ca2624f2f8c88e1447a6852885b42d7dd218d0a170658f00afb8"
    },
    {
-    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
-    "sha256": "b7962824753520f4bf9ff8c4425dd56724e147f9d7050a86d8b7c34f58e1690e"
-   },
-   {
     "file": "Burnley_Growth_work/B_business_sectors/demography.csv",
     "sha256": "ea43a329a2f9e352231c41fa6897cd4098fe584d7e715736512af445b21f2e0b"
+   },
+   {
+    "file": "Burnley_Growth_work/B_business_sectors/demography_2024_edition.csv",
+    "sha256": "b7962824753520f4bf9ff8c4425dd56724e147f9d7050a86d8b7c34f58e1690e"
    }
   ],
-  "vintage": "targets set on the baselines of October 2026, except T2, which uses the mean of the three yearly readings to June 2026, and T5, which uses the 2019 and 2020 birth cohorts pooled",
-  "caveat": "Each target is a range from a named baseline towards a named comparator, with the arithmetic shown. No target is a forecast. Levers are listed with their evidence status; a nil employment weight means no measured effect on jobs, not no effect.",
+  "vintage": "targets set on the baselines of October 2026, except T2, which uses the mean of the three yearly readings to June 2026, and T5, which uses the 2019 and 2020 birth cohorts together",
+  "caveat": "Levers are listed with their evidence status. A nil employment weight means no measured effect on jobs, not no effect.",
   "next_release": "reviewed after the November 2026 releases",
   "generated": "2026-11-28",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
@@ -53,7 +53,7 @@
    },
    {
     "title": "Resilience",
-    "text": "Widen and steady the business base. A smaller share of new firms lasts five years in Burnley than in England, wholesale and retail output is falling, and one sector carries a large share of output."
+    "text": "Widen and steady the business base. A smaller share of Burnley's new firms is still trading five years on than in England. Retail output is falling. One sector carries a large share of output."
    }
   ]
  },
@@ -61,10 +61,10 @@
   {
    "id": "T1",
    "title": "Long term sickness",
-   "target": "Reduce the excess of residents inactive through long term sickness or disability by a quarter to a half by the 2031 Census, and hold the gain to 2036.",
+   "target": "Reduce the excess of residents inactive through long term sickness or disability by a quarter to a half by the 2031 Census. Hold the gain to 2036.",
    "baseline": "5,046 residents, 6.7% of those aged 16 and over (Census 2021)",
    "comparator": "England 4.1%",
-   "arithmetic": "At England's 4.1% Burnley would have about 3,083 of its 75,205 residents aged 16 and over in this group, so the excess is about 1,960. A quarter to a half is about 490 to 980.",
+   "arithmetic": "At England's rate of 4.1%, about 3,083 of Burnley's 75,205 residents aged 16 and over would be in this group. The excess is about 1,960. A quarter to a half is about 490 to 980.",
    "indicator": "Census 2031; in between, the Universal Credit health caseload and PIP cases as exposure counts",
    "kind": "target",
    "src": {
@@ -91,7 +91,7 @@
    "target": "Close a third to a half of the inactivity gap to England by 2036.",
    "baseline": "Inactivity 23.5%, the mean of the three yearly readings to June 2026 (single years 17.4%, 26.4% and 26.6%)",
    "comparator": "England 20.9% on the same basis",
-   "arithmetic": "The gap of 2.6 points is about 1,570 of Burnley's 61,010 residents aged 16 to 64. A third to a half of that is about 520 to 790. T1's excess of about 1,960 is larger than this gap because it is a different count: residents aged 16 and over, past working age included, from the 2021 Census, not the yearly survey. The two figures do not add and should not be compared.",
+   "arithmetic": "The gap of 2.6 points is about 1,570 of Burnley's 61,010 residents aged 16 to 64. A third to a half of that is about 520 to 790. T1's excess of about 1,960 is a different count: long term sickness only, among residents aged 16 and over, at the 2021 Census. It is measured differently, which is why it can be larger than this gap, and the two do not add.",
    "indicator": "Three year means of the yearly survey readings; payroll each month as the check",
    "kind": "target",
    "src": {
@@ -169,11 +169,11 @@
   {
    "id": "T5",
    "title": "Business resilience",
-   "target": "Close about half of the five year survival gap to England, on pooled pairs of birth cohorts: from 7.7 points (2019 and 2020 cohorts) to 4 points or fewer (2030 and 2031 cohorts). Separately, hold wholesale and retail output at or above £523m, its 2024 level.",
-   "baseline": "30.2% five year survival, 225 of the 745 businesses born in Burnley in 2019 and 2020 (single cohorts 27.5% and 33.3%)",
-   "comparator": "England 37.9% on the same basis; the fourteen Lancashire areas 38.4%",
-   "arithmetic": "England's 37.9% minus Burnley's 30.2% is a gap of 7.7 points. Half of it is about 3.9. Whole points are the finest step the data can bear, so the target is a gap of 4 points or fewer. If England stays at 37.9%, that means Burnley at about 34% or more. Counts are rounded to 5 and a pair of cohorts is about 750 births, so whole points are the finest step the target can bear.",
-   "indicator": "ONS business demography each November (the 2031 cohort's five year figure comes in November 2037); three year survival on pooled cohorts as the interim check; regional GVA each autumn",
+   "target": "Narrow the gap to England in five year business survival by about half: from 7.7 points for businesses born in 2019 and 2020 to 4 points or fewer for those born in 2030 and 2031. Hold wholesale and retail output at or above its 2024 level of £523m.",
+   "baseline": "30.2% five year survival: 225 of the 745 businesses born in 2019 and 2020 (single cohorts 27.5% and 33.3%)",
+   "comparator": "England 37.9% on the same basis (single cohorts 38.3% and 37.5%)",
+   "arithmetic": "The gap is 37.9 minus 30.2, or 7.7 points. Half of it is about 3.9; in whole points, the target is a gap of 4 points or fewer. ONS rounds the counts, so one year's rate can jump. That is why the target uses two cohorts together and whole points.",
+   "indicator": "ONS business demography each November, two cohorts pooled, with both rates shown beside the gap; the 2031 cohort's figure is due in November 2037, after the plan ends. Regional GVA each autumn",
    "kind": "target",
    "src": {
     "file": "Burnley_Growth_work/H_collection/plan_targets.csv",
@@ -1262,52 +1262,52 @@
   },
   {
    "id": "t5_survival_pooled_burnley",
-   "label": "T5: Burnley five year survival, 2019 and 2020 birth cohorts pooled",
+   "label": "T5: five year survival of Burnley's 2019 and 2020 birth cohorts together",
    "value": 30.2,
    "decimals": 1,
    "unit": "%",
    "arithmetic": "(110 + 115) / (400 + 345) * 100",
    "inputs": [
-    "r36",
-    "r40",
     "r35",
-    "r39"
+    "r36",
+    "r39",
+    "r40"
    ],
-   "note": ""
+   "note": "Counts summed across the two cohorts, each from the edition that carries its five year figure"
   },
   {
    "id": "t5_survival_pooled_england",
-   "label": "T5: England five year survival, 2019 and 2020 birth cohorts pooled",
+   "label": "T5: five year survival of England's 2019 and 2020 birth cohorts together",
    "value": 37.9,
    "decimals": 1,
    "unit": "%",
    "arithmetic": "(124660 + 112230) / (325355 + 299115) * 100",
    "inputs": [
-    "r38",
-    "r42",
     "r37",
-    "r41"
+    "r38",
+    "r41",
+    "r42"
    ],
    "note": ""
   },
   {
    "id": "t5_gap_points",
-   "label": "T5: England's pooled five year survival minus Burnley's, percentage points",
+   "label": "T5: England minus Burnley, five year survival, 2019 and 2020 cohorts together, percentage points",
    "value": 7.7,
    "decimals": 1,
    "unit": "percentage points",
    "arithmetic": "(124660 + 112230) / (325355 + 299115) * 100 minus (110 + 115) / (400 + 345) * 100",
    "inputs": [
-    "r38",
-    "r42",
-    "r37",
-    "r41",
-    "r36",
-    "r40",
     "r35",
-    "r39"
+    "r36",
+    "r37",
+    "r38",
+    "r39",
+    "r40",
+    "r41",
+    "r42"
    ],
-   "note": "The target is a gap of 4 points or fewer for the 2030 and 2031 cohorts, about half of this figure"
+   "note": "The target is a gap of 4 points or fewer for the 2030 and 2031 cohorts together, about half of this figure"
   }
  ]
 }

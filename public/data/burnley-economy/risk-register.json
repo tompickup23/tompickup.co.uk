@@ -21,13 +21,13 @@
   "sources": [
    {
     "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",
-    "sha256": "1c2a436b1ccbfaf01bc669dac4fa58abfc1bcb8d7e833ab3e5afb9a10402257f"
+    "sha256": "d3466a92ebcc775e6171c33d86210d176ae533cd69da2512f46850e7348a7abc"
    }
   ],
   "vintage": "each row's latest indicator reading, dated in the row",
   "caveat": "Scores are a reading aid on stated scales, not decisions. Likelihood is over the row's horizon (five years unless it says otherwise): 1 remote (under 10%), 2 unlikely (10 to 30%), 3 possible (30 to 50%), 4 likely (50 to 80%), 5 almost certain or already happening. Impact on employment, pay and resilience runs from 1 negligible to 5 severe.",
   "next_release": "each row's review date",
-  "generated": "2026-10-25",
+  "generated": "2026-11-28",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
   "methodologyVersion": "1.0",
   "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
@@ -401,7 +401,7 @@
    "owner": "Lancashire Combined County Authority (Growth Plan)",
    "horizon": "5 years",
    "evidence_grade": "A",
-   "review_due": "ONS productivity 5 November 2026; regional GVA autumn 2027",
+   "review_due": "ONS productivity, next release to be announced; regional GVA autumn 2027",
    "band": "amber",
    "src": {
     "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",
@@ -654,9 +654,9 @@
    "title": "Weak business survival",
    "category": "demand and sector concentration",
    "objective_at_risk": "employment; resilience",
-   "indicator": "Five year survival rate, 2019 birth cohort",
-   "indicator_latest_value": "27.5% (England 38.3%, Pendle 44.6%, ONS business demography)",
-   "indicator_date": "2019 cohort",
+   "indicator": "Five year survival rate, latest birth cohort (2020), with the 2019 cohort beside it",
+   "indicator_latest_value": "33.3%, 115 of 345 births (England 37.5%, Pendle 32.1%); 2019 cohort 27.5% (England 38.3%, Pendle 44.6%)",
+   "indicator_date": "2020 cohort (2025 edition, 19 November 2026); 2019 cohort (2024 edition)",
    "indicator_geography": "Burnley borough (E07000117)",
    "likelihood": 4,
    "impact": 3,
@@ -665,7 +665,7 @@
    "owner": "Lancashire County Council and LCCA (business support)",
    "horizon": "5 years",
    "evidence_grade": "A",
-   "review_due": "Business demography 19 November 2026",
+   "review_due": "Business demography 2026 edition, November 2027",
    "band": "amber",
    "src": {
     "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",

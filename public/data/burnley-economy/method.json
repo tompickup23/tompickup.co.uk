@@ -6,8 +6,8 @@
   "measures": [],
   "publisher": "this collection",
   "table": "contracts and their sources",
-  "edition": "contracts of 2026-11-27",
-  "access_date": "2026-11-27",
+  "edition": "contracts of 2026-11-28",
+  "access_date": "2026-11-28",
   "citation": "this collection",
   "sources": [
    {
@@ -16,13 +16,13 @@
    },
    {
     "file": "Burnley_Growth_work/H_collection/revision_log.csv",
-    "sha256": "44ddb2f0948e3384b497875de4ba195f5531be7a99f7fc1b8d497f124bd57229"
+    "sha256": "36008440c241dcaa7fdb1a801357528777243800a2a70947804afc10b7a7a70f"
    }
   ],
   "vintage": "",
   "caveat": "Every panel's file carries the SHA-256 of each file it was built from; each official source row carries the SHA-256 of the file downloaded from the publisher.",
   "next_release": "",
-  "generated": "2026-11-27",
+  "generated": "2026-11-28",
   "builder": "Burnley_Growth_work/H_collection/scripts/build_contracts.py",
   "methodologyVersion": "1.0",
   "rules": "No person is named. Companies are named only in the largest filers panel, from their own filed accounts. No estimate is shown as fact. Derived figures carry their arithmetic."
@@ -413,7 +413,7 @@
   },
   {
    "file": "Burnley_Growth_work/B_business_sectors/largest_companies.csv",
-   "sha256": "e4e26ae591e0b8967bd336cddfdfe94b97a22628fcc43e5b72a93d225fa7dfee"
+   "sha256": "6498ebd9f36e7853a002bd4cce747237e9d3da6f13953e2a2c34e791d6be7c4e"
   },
   {
    "file": "Burnley_Growth_work/B_business_sectors/premises.csv",
@@ -437,7 +437,7 @@
   },
   {
    "file": "Burnley_Growth_work/E_risk_register/risk_register.csv",
-   "sha256": "1c2a436b1ccbfaf01bc669dac4fa58abfc1bcb8d7e833ab3e5afb9a10402257f"
+   "sha256": "d3466a92ebcc775e6171c33d86210d176ae533cd69da2512f46850e7348a7abc"
   },
   {
    "file": "Burnley_Growth_work/H_collection/ch_postcode_check.csv",
@@ -445,7 +445,7 @@
   },
   {
    "file": "Burnley_Growth_work/H_collection/named_companies_check.csv",
-   "sha256": "ea5f0750b825fb11c66f83685d691ed2103b766e6b3058e09c283d11746ed659"
+   "sha256": "04102d3c5a3d897c4ec60f1ac860d0d48cf4aa9512a7d743079658705fc473d1"
   }
  ],
  "official_sources": [
@@ -1211,6 +1211,20 @@
    "change": "No value changed. The edition, table reference, hash and access date now point to the 2025 edition. The tile stays on 2024.",
    "reason": "A count and a density from different years do not belong on one tile, and no mid-2025 population aged 16 to 64 is held, so a 2025 density is not computed.",
    "source": "ONS (2026) Business demography, UK: 2025, reference tables, published 19 November 2026; build_contracts.py; check_contracts.py PASS; LI01 mid-2024"
+  },
+  {
+   "date": "2026-11-28",
+   "panel": "bu-largest-filers",
+   "change": "Headcounts for the named companies were rechecked against the newest accounts each has filed. Fifteen companies have newer accounts and their figures and year ends are updated. The same companies are named as before.",
+   "reason": "Company accounts are filed through the year, so the figures on the page had fallen behind the register. The business article keeps the figures it quoted when written, from accounts filed by July 2026.",
+   "source": "H_collection/named_companies_check.csv; B_business_sectors/accounts_check_2026-11-28.csv; B_business_sectors/largest_companies_2026-10_edition.csv; check_contracts.py PASS"
+  },
+  {
+   "date": "2026-11-28",
+   "panel": "risk-register",
+   "change": "The evidence for the output and business survival risks now quotes the new editions of the productivity and business demography figures, with the earlier editions beside them. No score or trend changed.",
+   "reason": "ONS revised subregional productivity on 24 November 2026 and published the 2025 business demography edition on 19 November 2026. Whether either score should change is a decision not yet taken.",
+   "source": "log/2026-11-28_part_a_risk_revisions.md; E_risk_register/second_read_results.csv"
   }
  ],
  "derived": []
